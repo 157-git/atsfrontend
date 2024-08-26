@@ -240,7 +240,7 @@ function DailyWork({
         `${API_BASE_URL}/fetch-work-id/${employeeId}/${userType}`
       );
       setFetchWorkId(response.data);
-      console.log(response.data +"----->");
+      console.log(response.data + "----->");
     } catch (error) {
       console.error("Error fetching work ID:", error);
     }
@@ -262,7 +262,7 @@ function DailyWork({
       const login = new Date(today.toDateString() + " " + loginTime);
       const logout = logoutTime
         ? new Date(today.toDateString() + " " + logoutTime)
-        : new Date(); 
+        : new Date();
 
       console.log(`Login Date: ${login}`);
       console.log(`Logout Date: ${logout}`);
@@ -605,31 +605,31 @@ function DailyWork({
           </button>
 
           <Modal
-  show={showPauseModal}
-  onHide={() => {
-    if (allowCloseModal) {
-      setShowPauseModal(false);
-    }
-  }}
-  className="dw-modal"
->
-  <div onClick={(e) => e.stopPropagation()} className="dw-modal-content">
-    <Modal.Header closeButton>
-      <Modal.Title className="dw-modal-title">Break Runing...</Modal.Title>
-    </Modal.Header>
-    <div>
-      <img src={watingImg} alt="Waiting" className="dw-waiting-img" />
-    </div>
-    <Modal.Footer className="dw-modal-footer">
-   <div  className="dw-resume-div">
-   <h3>Timer is paused. Click Resume to continue.</h3>
-      <div className="profile-back-button" >
-        <button className="profile-back-button"  onClick={handleResume}>Resume</button>
-      </div>
-   </div>
-    </Modal.Footer>
-  </div>
-</Modal>
+            show={showPauseModal}
+            onHide={() => {
+              if (allowCloseModal) {
+                setShowPauseModal(false);
+              }
+            }}
+            className="dw-modal"
+          >
+            <div onClick={(e) => e.stopPropagation()} className="dw-modal-content">
+              <Modal.Header closeButton>
+                <Modal.Title className="dw-modal-title">Break Runing...</Modal.Title>
+              </Modal.Header>
+              <div>
+                <img src={watingImg} alt="Waiting" className="dw-waiting-img" />
+              </div>
+              <Modal.Footer className="dw-modal-footer">
+                <div className="dw-resume-div">
+                  <h3>Timer is paused. Click Resume to continue.</h3>
+                  <div className="profile-back-button" >
+                    <button className="profile-back-button" onClick={handleResume}>Resume</button>
+                  </div>
+                </div>
+              </Modal.Footer>
+            </div>
+          </Modal>
 
         </>
       ) : null}

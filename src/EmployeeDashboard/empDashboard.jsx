@@ -67,7 +67,7 @@ import AddTeamLeader from "../EmployeeSection/addTeamLeader";
 import AddManager from "../EmployeeSection/addManager";
 
 const EmpDashboard = ({ userGroup }) => {
-  const {userType} = useParams();
+  const { userType } = useParams();
   const [showInterviewDate, setShowInterviewDate] = useState(userType === 'SuperUser' ? false : true);
   const [addCandidate, setAddCandidate] = useState(false);
   const [candidateIdForUpdate, setCandidateIdForUpdate] = useState(0);
@@ -147,14 +147,16 @@ const EmpDashboard = ({ userGroup }) => {
   const [showCandidateHistory, setShowCandidateHistory] = useState(false);
   const [showInterviewForm, setShowInterviewForm] = useState(false);
   const [showPerformanceImprovement, setShowPerformanceImprovement] = useState(false)
-  const [showAddManager,setShowAddManager]=useState(false)
-  const [showAddTeamLeader,setShowAddTeamLeader]=useState(false)
+  const [showAddManager, setShowAddManager] = useState(false)
+  const [showAddTeamLeader, setShowAddTeamLeader] = useState(false)
 
 
   const handleLogoutTime = (timestamp) => {
     setLogoutTimestamp(timestamp);
   };
   const handleSuccessfulDataAdditions = (check) => {
+    console.log(check);
+
     setSuccessfulDataAdditions(check);
   };
 
@@ -481,11 +483,11 @@ const EmpDashboard = ({ userGroup }) => {
     setShowAddedResumes(!showAddedResumes);
   };
 
-  
+
   const toggleExcelCalling = () => {
     resetAllToggles();
     setShowCallingExcel(!showCallingExcel);
-  }; 
+  };
 
   const toggeExcelCallingData = () => {
     resetAllToggles();
@@ -572,18 +574,18 @@ const EmpDashboard = ({ userGroup }) => {
     setShowPerformanceImprovement(!showPerformanceImprovement)
   }
 
-  const displayCandidateForm = () =>{
+  const displayCandidateForm = () => {
     resetAllToggles();
     setShowCallingExcel(false)
     setShowCallingTrackerForm(!showCallingTrackerForm)
   }
 
-  const toggeleAddManager = () =>{
+  const toggeleAddManager = () => {
     resetAllToggles();
     setShowAddManager(true)
   }
 
-  const toggeleAddTeamLeader = () =>{
+  const toggeleAddTeamLeader = () => {
     resetAllToggles();
     setShowAddTeamLeader(true)
   }
@@ -755,7 +757,7 @@ const EmpDashboard = ({ userGroup }) => {
             <HoldCandidate loginEmployeeName={loginEmployeeName} />
           )}
         </div>
-        <div>{showCallingExcel && <CallingExcel  />}</div>
+        <div>{showCallingExcel && <CallingExcel />}</div>
         <div>{showLineupExcelList && <LineupExcelData loginEmployeeName={loginEmployeeName}></LineupExcelData>}</div>
         <div>
           {showResumeData && <ResumeList loginEmployeeName={loginEmployeeName}></ResumeList>}

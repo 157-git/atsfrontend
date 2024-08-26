@@ -21,7 +21,7 @@ import Loader from "./loader";
 
 const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
-  initialData={},
+  initialData = {},
   loginEmployeeName,
   // toggelCandidateHistory
 }) => {
@@ -71,8 +71,8 @@ const CallingTrackerForm = ({
     availabilityForInterview: "",
     interviewTime: "",
     finalStatus: "",
-    resume:[]
-    };
+    resume: []
+  };
   const [callingTracker, setCallingTracker] = useState(
     initialCallingTrackerState
   );
@@ -91,22 +91,22 @@ const CallingTrackerForm = ({
   const [convertedCurrentCTC, setConvertedCurrentCTC] = useState("");
   const [startpoint, setStartPoint] = useState("");
   const [endpoint, setendPoint] = useState("");
-  const [resumeFile,setResumeFile] = useState(null);
+  const [resumeFile, setResumeFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+
 
   useEffect(() => {
     // fetchRecruiterName();
     fetchRequirementOptions();
   }, [employeeId]);
-  
+
   useEffect(() => {
     if (initialData) {
       console.log(initialData);
-      
+
       const updatedCallingTracker = { ...initialCallingTrackerState };
       const updatedLineUpData = { ...initialLineUpState };
-  
+
       Object.keys(initialData).forEach((key) => {
         if (key === "date") {
           // Set date to current date if it is present in initialData
@@ -122,14 +122,14 @@ const CallingTrackerForm = ({
           updatedLineUpData[key] = ensureStringValue(initialData[key]);
         }
       });
-  
+
       setCallingTracker(updatedCallingTracker);
       setLineUpData(updatedLineUpData);
     }
   }, [initialData]);
-  
-  
-  
+
+
+
 
   useEffect(() => {
     const updateTimer = () => {
@@ -138,23 +138,23 @@ const CallingTrackerForm = ({
       const minutes = String(now.getMinutes()).padStart(2, "0");
       const seconds = String(now.getSeconds()).padStart(2, "0");
       const time = `${hours}:${minutes}:${seconds}`;
-      
+
       setCandidateAddedTime(time);
       setCallingTracker((prevState) => ({
         ...prevState,
         candidateAddedTime: time,
       }));
     };
-  
+
     updateTimer();
     const timerInterval = setInterval(updateTimer, 1000);
     return () => clearInterval(timerInterval);
   }, []);
 
 
-    // Helper function to only update with non-null and non-undefined values
-    const ensureStringValue = (value) => (value !== undefined && value !== null ? String(value) : "");
-  
+  // Helper function to only update with non-null and non-undefined values
+  const ensureStringValue = (value) => (value !== undefined && value !== null ? String(value) : "");
+
   const fetchRecruiterName = async () => {
     try {
       const response = await axios.get(
@@ -288,7 +288,7 @@ const CallingTrackerForm = ({
 
   const handleLineUpChange = (e) => {
     const { name, value } = e.target;
-  
+
     // Restrict non-numeric input for specific fields
     if (
       (name === "contactNumber" ||
@@ -311,27 +311,27 @@ const CallingTrackerForm = ({
     ) {
       return;
     }
-  
+
     const updatedLineUpData = { ...lineUpData, [name]: value };
-  
+
     if (name === "currentCTCLakh" || name === "currentCTCThousand") {
       const lakhValue = parseFloat(updatedLineUpData.currentCTCLakh) || 0;
       const thousandValue = parseFloat(updatedLineUpData.currentCTCThousand) || 0;
       const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
       setConvertedCurrentCTC(combinedCTC.toFixed(2));
     }
-  
+
     if (name === "expectedCTCLakh" || name === "expectedCTCThousand") {
       const lakhValue = parseFloat(updatedLineUpData.expectedCTCLakh) || 0;
       const thousandValue = parseFloat(updatedLineUpData.expectedCTCThousand) || 0;
       const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
       setConvertedExpectedCTC(combinedCTC.toFixed(2));
     }
-  
+
     setLineUpData(updatedLineUpData);
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
-  
+
 
 
   const handleSubmit = async (e) => {
@@ -339,91 +339,93 @@ const CallingTrackerForm = ({
     let callingTrackerErrors = validateCallingTracker();
     let lineUpDataErrors = validateLineUpData();
     if (Object.keys(callingTrackerErrors).length > 0 || Object.keys(lineUpDataErrors).length > 0) {
-        setErrors({ ...callingTrackerErrors, ...lineUpDataErrors });
-        return;
+      setErrors({ ...callingTrackerErrors, ...lineUpDataErrors });
+      return;
     }
 
     let formFillingTime = null;
     if (startTime) {
-        const endTime = new Date().getTime(); // Get the current time in milliseconds
-        const timeTaken = (endTime - startTime) / 1000; // Time in seconds
-        const minutes = Math.floor(timeTaken / 60);
-        const seconds = Math.floor(timeTaken % 60);
-        console.log(`Time taken to fill the form: ${minutes} minutes and ${seconds} seconds`);
-        formFillingTime = `${minutes} minutes and ${seconds} seconds`;
+      const endTime = new Date().getTime(); // Get the current time in milliseconds
+      const timeTaken = (endTime - startTime) / 1000; // Time in seconds
+      const minutes = Math.floor(timeTaken / 60);
+      const seconds = Math.floor(timeTaken % 60);
+      console.log(`Time taken to fill the form: ${minutes} minutes and ${seconds} seconds`);
+      formFillingTime = `${minutes} minutes and ${seconds} seconds`;
     }
 
     setSubmited(true);
-    setLoading(true); 
+    setLoading(true);
 
     try {
-        let dataToUpdate = {
-           callingTracker:{ ...callingTracker},
-            performanceIndicator: {
-                employeeId: employeeId,
-                employeeName: loginEmployeeName,
-                jobRole: userType,
-                candidateName: callingTracker.candidateName,
-                jobId: callingTracker.requirementId,
-                salary: convertedCurrentCTC,
-                experience: `${lineUpData.experienceYear} years ${lineUpData.experienceMonth} months`,
-                companyName: callingTracker.requirementCompany,
-                designation: callingTracker.jobDesignation,
-                candidateFormFillingDuration: formFillingTime,
-                callingTacker: new Date(),
-                lineup: new Date(),
-                mailToClient: null,
-                mailResponse: null,
-                sendingDocument: null,
-                issueOfferLetter: null,
-                letterResponse: null,
-                joiningProcess: null,
-                joinDate: null,
-                interviewRoundList: []
-            },
-        };
-        console.log(dataToUpdate);
-        if (userType === "Recruiters") {
-            dataToUpdate.callingTracker.employee = { employeeId: employeeId };
-        } else if (userType === "TeamLeader") {
-            dataToUpdate.callingTracker.teamLeader = { teamLeaderId: employeeId };
-        }
+      let dataToUpdate = {
+        callingTracker: { ...callingTracker },
+        performanceIndicator: {
+          employeeId: employeeId,
+          employeeName: loginEmployeeName,
+          jobRole: userType,
+          candidateName: callingTracker.candidateName,
+          jobId: callingTracker.requirementId,
+          salary: convertedCurrentCTC,
+          experience: `${lineUpData.experienceYear} years ${lineUpData.experienceMonth} months`,
+          companyName: callingTracker.requirementCompany,
+          designation: callingTracker.jobDesignation,
+          candidateFormFillingDuration: formFillingTime,
+          callingTacker: new Date(),
+          lineup: new Date(),
+          mailToClient: null,
+          mailResponse: null,
+          sendingDocument: null,
+          issueOfferLetter: null,
+          letterResponse: null,
+          joiningProcess: null,
+          joinDate: null,
+          interviewRoundList: []
+        },
+      };
+      console.log(dataToUpdate);
+      if (userType === "Recruiters") {
+        dataToUpdate.callingTracker.employee = { employeeId: employeeId };
+      } else if (userType === "TeamLeader") {
+        dataToUpdate.callingTracker.teamLeader = { teamLeaderId: employeeId };
+      }
 
+      if (callingTracker.selectYesOrNo === "Interested") {
+        dataToUpdate.lineUp = lineUpData;
+      }
+
+      // Make API call
+      const response = await axios.post(
+        `${API_BASE_URL}/calling-tracker`,
+        dataToUpdate,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+
+      if (response) {
         if (callingTracker.selectYesOrNo === "Interested") {
-            dataToUpdate.lineUp = lineUpData;
+          onsuccessfulDataAdditions(true);
+        } else {
+          onsuccessfulDataAdditions(false);
         }
 
-        // Make API call
-        const response = await axios.post(
-            `${API_BASE_URL}/calling-tracker`,
-            dataToUpdate,
-            {
-              headers: {
-                  'Content-Type': 'application/json'
-              }
-          }
-        );
-
-        if (response.status === 200) { 
-          if (callingTracker.selectYesOrNo === "Interested") {
-            onsuccessfulDataAdditions=true;
-          } else {
-            onsuccessfulDataAdditions=false;
-          }
-            setSubmited(false);
-            setShowConfetti(true);
-            setTimeout(() => setShowConfetti(false), 4000);
-            toast.success("Candidate Added Successfully..")
-            setCallingTracker(initialCallingTrackerState);
-            setLineUpData(initialLineUpState);
-        }
-    } catch (error) {
         setSubmited(false);
-        toast.error("An error occurred: " + error.message);
-    }finally {
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 4000);
+        toast.success("Candidate Added Successfully..")
+        setCallingTracker(initialCallingTrackerState);
+        setLineUpData(initialLineUpState);
+      }
+    } catch (error) {
+      setSubmited(false);
+      toast.error("An error occurred: " + error.message);
+    } finally {
       setLoading(false); // Hide loader
-  }
-};
+    }
+  };
 
 
   const handleLocationChange = (e) => {
@@ -450,32 +452,32 @@ const CallingTrackerForm = ({
 
   const handleResumeFileChange = (e) => {
     const file = e.target.files[0];
-    
+
     if (file) {
       const reader = new FileReader();
-      
+
       reader.onloadend = () => {
         const arrayBuffer = reader.result;
         const byteArray = new Uint8Array(arrayBuffer);
         const byteNumbers = Array.from(byteArray);
-  
+
         // Convert the byte array to a Base64 string
         const base64String = btoa(String.fromCharCode(...byteNumbers));
-  
+
         console.log(base64String); // Print the Base64 string
-  
+
         // Update the lineUpData state with the Base64 string of the resume file
         setLineUpData((prevState) => ({
           ...prevState,
           resume: base64String, // Store the Base64 string
         }));
       };
-  
+
       reader.readAsArrayBuffer(file); // Read the file as an ArrayBuffer
     }
   };
-  
-  
+
+
 
   const handleRequirementChange = (e) => {
     const { value } = e.target;
@@ -546,7 +548,7 @@ const CallingTrackerForm = ({
   return (
     <div className="calling-tracker-main">
       <section className="calling-tracker-submain">
-      {loading && <Loader />}
+        {loading && <Loader />}
         <form onSubmit={handleSubmit}>
           {showConfetti && (
             <Confetti

@@ -657,8 +657,6 @@ strong {
   background-color: var(--Bg-color) !important;
 }
 
-
-
 .loader-overlay {
   position: fixed;
   top: 0;
@@ -669,30 +667,40 @@ strong {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   z-index: 1050; /* Make sure it appears above everything */
 }
 
 .loader-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
-  color: #fff; 
+  color: #fff;
 }
 
 .spinner {
-  border: 12px solid transparent; /* Make border transparent */
+  border: 10px solid transparent; /* Make border transparent */
   border-radius: 50%;
-  border-top: 12px solid rgb(226, 123, 123); /* Top color */
-  border-right: 12px solid rgb(88, 88, 180); /* Right color */
-  border-bottom: 12px solid rgb(73, 160, 73); /* Bottom color */
-  border-left: 12px solid rgb(222, 222, 95); /* Left color */
-  width: 100px;
-  height: 100px;
+  border-color: var(--Bg-color);
+  border-top: 10px solid rgb(0, 0, 0);
+  /* border-right: 12px solid rgb(88, 88, 180);
+  border-bottom: 12px solid rgb(73, 160, 73);
+  border-left: 12px solid rgb(222, 222, 95); */
+  width: 80px;
+  height: 80px;
   animation: spin 1.5s linear infinite; /* Faster spin for better visual */
   margin-bottom: 10px;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-text {
