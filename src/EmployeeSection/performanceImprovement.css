@@ -1,0 +1,243 @@
+.PIE-App{
+    padding: 10px;
+  }
+  .PIE-maintable{
+    overflow-x: auto;
+  }
+  .PIE-maintable::-webkit-scrollbar{
+    display: none;
+  }
+  
+  .PIE-timetrackertable{
+    /* width: 100%; */
+    border-collapse: collapse !important;
+    margin-bottom: 20px;
+    color: gray;
+  }
+  .PIE-timetrackertabledata {
+    border: 1px solid gray;
+    padding: 4px;
+    white-space: nowrap;
+    font-size: 16px;
+    text-align: center;
+    overflow: hidden;
+  }
+  
+  .PIE-timetrackertablehead {
+    white-space: nowrap;
+    width: auto !important;
+    color: gray;
+    border: 1px solid gray;
+    padding: 0 10px;
+    font-size: 16px;
+    /* padding: 0%; */
+    background-color: var(--Bg-color);
+    text-align: center;
+    font-weight: 500;
+  }
+  .PIE-timetrackertable-heading{
+    padding: 0%;
+  }
+  
+  .PIE-timetrackre-btn{
+    font-size: 16px;
+        border-radius: 15px;
+        height: 30px;
+        color: white;
+        padding-left: 15px;
+        padding-right: 15px;
+        background-color: var(--button-color);
+        border: 1px solid gray;
+        cursor: pointer;
+  }
+  
+  .PIE-timetrackre-btn:hover{
+    background-color: var(--button-hover-color);
+    color: var(--text-hover-color);
+  opacity: 0.8;}
+  tr:hover {
+    background-color: #ddd;
+  }
+  
+  .PIE-Header-Section{
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  
+  .PIE-grid-dropdown{
+    grid-column: span 1 / span 1;
+    background-color: #f2f2f2;
+    padding: 10px;
+    border-radius: 15px;
+  }
+  .PIE-grid-date{
+    grid-column: span 2 / span 2;
+    width: 100%;
+    background-color: #f2f2f2;
+    padding: 10px;
+    border-radius: 15px;
+  }
+  .PIE-date-container{
+    color: gray;
+    /* min-width: 450px; */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .PIE-radio-group1 {
+    display: flex;
+    flex-direction: column;
+  }
+  .PIE-radio-group2{
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .PIE-radio-option {
+   margin-left: 5px;
+  }
+  .PIE-custom-date-input {
+    border: 1px solid gray;
+    margin: 5px 8px;
+    border-radius: 5px;
+  }
+  
+  .PIE-date-display {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  .PIE-date-display p {
+    margin: 5px 0;
+  }
+  
+  .PIE-job-filter{
+    margin-top: 15px;
+    color: gray;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .PIE-client-desg-role{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; 
+    align-items: center;
+  }
+  .PIE-client-desg-role p{
+    margin: 0;
+  }
+  .PIE-job-filter-options{
+    color: gray;
+    border: 1px solid #ccc;
+    display: inline-block;
+  }
+  .PIE-Apply-Filter-Btn{
+    margin-top: 10px;
+  }
+  .PIE-filter-Btn{
+    background-color: var(--button-color);
+    border-radius: 15px;
+    padding: 0 10px;
+    color: white;
+  }
+  .PIE-filter-Btn:hover{
+    background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+   border: 1px solid #ffcb9b;
+  }
+  
+  .PIE-dropdown-container {
+    position: relative;
+    max-width: 250px; /* Maximum width */
+  }
+  
+  .PIE-Dropdown {
+    padding: 5px;
+    border-radius: 15px;
+    color: gray;
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .PIE-dropdown-icon {
+    margin-left: 10px;
+    transition: transform 0.3s ease;
+  }
+  .PIE-process-dropdown-content {
+    border-radius: 15px;
+    color: gray;
+    background-color: white;
+    border: 1px solid #ced4da;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 5px;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+    padding: 5px;
+  }
+  .PIE-process-dropdown-content-Okbtn,.PIE-process-dropdown-content-Resetbtn{
+    float: right;
+    margin-left: 5px;
+    background-color: var(--button-color);
+    border-radius: 15px;
+    padding: 0 10px;
+    /* margin: 5px; */
+    color: white;
+    border: 1px solid #ffcb9b;
+  }
+  .PIE-process-dropdown-content-Okbtn:hover,.PIE-process-dropdown-content-Resetbtn:hover{
+    /* margin: 5px; */
+    background-color: var(--button-hover-color);
+    color: var(--text-hover-color);
+   border: 1px solid #ffcb9b;
+  }
+  
+  .PIE-dropdown-section {
+    margin-bottom: 5px;
+    padding-left: 10px; /* Indent each hierarchy level */
+  }
+  
+  .PIE-dropdown-row {
+    /* padding: 5px 10px; */
+    display: flex;
+    align-items: center;
+  }
+  
+  .PIE-dropdown-column {
+    padding-left: 20px; /* Indent nested items */
+    border-left: 1px solid #ced4da; /* Optional: add a visual line to indicate hierarchy */
+    margin-top: 5px; /* Add space above nested items */
+  }
+  
+  .PIE-clickable-label {
+    cursor: pointer;
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .PIE-dropdown-arrow {
+    margin-left: 5px;
+    font-size: 12px;
+  }
+  .PIE-employee-count{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .PIE-employee-count p{
+    color: gray;
+    font-size: 16px;
+  }

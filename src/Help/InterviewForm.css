@@ -1,0 +1,271 @@
+/* Dhanashree_InterviewForm_Date(27/07)_Css Start line no. 4*/
+/* RecruiterReminder.css */
+/* General Styles */
+
+.dhann-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto; /* Ensure container takes full viewport height */
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
+.card {
+  background-color: #f2f2f2;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin: 10px;
+  box-sizing: border-box; /* Ensure padding and border are included in element's total width and height */
+  overflow: hidden; /* Prevent content from overflowing the card */
+  display: flex; /* Use flexbox for internal layout */
+  flex-direction: column; /* Stack children vertically */
+}
+
+/* Left and Right Cards */
+.left-card {
+  height: 100%; /* Ensure it takes full height of the container */
+  background-color: var(--Bg-color);
+ width: 500px;
+}
+
+/* Right Card with Fixed Width */
+.right-card {
+  flex: 0 0 75%; /* 75% width for right card */
+  width: 750px; /* Set a fixed width for the right card */
+  height: 100%; /* Ensure it takes full height of the container */
+  max-width: 100%; /* Ensure it does not exceed the container width */
+}
+
+/* Ensure text within the card remains on a single line */
+.dhansform-group {
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden; /* Hide any overflowing text */
+  text-overflow: ellipsis; /* Add ellipsis if text overflows */
+  word-wrap: break-word; /* Ensure long words break */
+}
+
+.dhansform-label-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dhansform-label {
+  font-size: 18px;
+  font-weight: bold;
+  color: gray; /* Set color to gray for labels */
+}
+
+.dhansform-input {
+  margin: 10px;
+  margin-left: 10px;
+  font-size: 16px;
+  overflow: hidden; /* Hide any overflowing content */
+  color: gray; /* Set text color to gray for input fields */
+  background-color: #f9f9f9; /* Light gray background for input fields */
+  width: 55%; /* Adjust the width as needed */
+}
+
+.job-id-side-input{
+  margin: 10px;
+  width: 210px;
+}
+
+.dhanssform-input {
+  margin: 16px;
+  margin-left: 10px;
+  font-size: 16px;
+  overflow: hidden; /* Hide any overflowing content */
+  color: gray; /* Set text color to gray for input fields */
+  background-color: #f9f9f9; /* Light gray background for input fields */
+  width: 100%; /* Adjust the width as needed */
+}
+
+.bhagyainput {
+  width: 100%; /* Adjust the width as needed */
+  padding: 3px;
+}
+
+.bhagyashreeinput {
+  width: 100%;
+  padding: 3px;
+}
+
+/* Input and Textarea styling */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  color: gray; /* Set text color to gray */
+  background-color: #f9f9f9; /* Light gray background */
+  border: 1px solid #ccc; /* Light gray border */
+  box-sizing: border-box; /* Ensure padding and border are included in element's total width and height */
+  overflow: hidden; /* Hide any overflowing content */
+}
+
+/* Ensure text fields adjust */
+input:-webkit-autofill {
+  color: gray !important; /* Set auto-filled text color to gray */
+  background-color: #f9f9f9 !important; /* Ensure background color remains consistent */
+}
+
+/* Status styling */
+.status {
+  color: gray; /* Set text color for status elements to gray */
+}
+
+.status-text {
+  color: gray;
+}
+
+/* Select Box styling */
+select {
+  color: gray; /* Set text color for select box */
+  background-color: #f9f9f9; /* Light gray background */
+  border: 1px solid #ccc; /* Light gray border */
+  padding: 5px; /* Add padding for better appearance */
+  box-sizing: border-box; /* Ensure padding and border are included in element's total width and height */
+  overflow: hidden; /* Hide any overflowing content */
+}
+
+/* Heading styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: gray; /* Set color to gray for all headings */
+  overflow-wrap: break-word; /* Break long words */
+}
+
+/* Responsive Design */
+
+/* Dhanashree_InterviewForm_Date(27/07)_Css End line no. 148*/
+
+/* Dhanashree_InterviewForm_Date(29/07)_Css Start line no. 164*/
+
+/* Additional Responsive Styles */
+
+/* Adjust card layout for smaller screens */
+@media (max-width: 1200px) {
+  .right-card {
+    flex: 1 1 100%;
+    width: auto; /* Remove fixed width */
+    max-width: 100%;
+    height: auto;
+    max-height: fit-content;
+  }
+
+  .left-card {
+    height: 100vh; /* Allow height to adjust */
+    max-height: fit-content;
+  }
+
+  .dhann-container {
+    flex-direction: column; /* Stack cards vertically */
+  }
+}
+
+@media (max-width: 768px) {
+  .dhann-container {
+    flex-direction: column;
+  }
+
+  .left-card,
+  .right-card {
+    flex: 1 1 100%;
+    width: auto; /* Remove fixed width */
+    height: auto; /* Allow height to adjust */
+    margin: 10px 0; /* Add margin for separation */
+  }
+
+  .card {
+    padding: 15px;
+    margin: 10px 5px; /* Reduce margin for smaller screens */
+  }
+
+  .dhansform-input,
+  .dhanssform-input {
+    width: 100%; /* Ensure inputs take full width */
+    font-size: 14px; /* Reduce font size for better fit */
+  }
+
+  .dhansform-label {
+    font-size: 16px; /* Adjust label font size */
+  }
+}
+
+@media (max-width: 480px) {
+  .submit-button {
+    font-size: 14px; /* Reduce button font size */
+    padding: 5px 8px; /* Adjust padding */
+  }
+
+  .dhansform-label {
+    font-size: 14px; /* Further adjust label font size */
+  }
+
+  .dhansform-input,
+  .dhanssform-input {
+    font-size: 12px; /* Further reduce input font size */
+  }
+
+  .card {
+    padding: 10px; /* Further reduce padding */
+  }
+}
+
+/* Dhanashree_InterviewForm_Date(29/07)_Css End line no. 228*/
+
+/* Dhanashree_InterviewForm_Date(27/07)_Css Start line no. 242*/
+
+/* Flexbox for footer */
+.submit-container {
+  margin-top: auto; /* Push submit button to the bottom */
+  /* padding: 20px; */
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.submit-button {
+  background-color: var(--button-color); /* Background color */
+  color: white; /* Text color */
+  border: 1px solid gray;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center; /* Center text */
+  text-decoration: none; /* Remove underline */
+  display: inline-block; /* Align with other inline elements */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Cursor pointer */
+  border-radius: 15px; /* Rounded corners */
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease,
+    border-color 0.3s ease; /* Transition effects */
+}
+
+.submit-button:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);/* Text color on hover */
+  border: 1px solid gray;
+}
+
+.SampleBhagyashree {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+ 
+}
+
+/* Dhanashree_InterviewForm_Date(27/07)_Css End line no. 279*/
+
+.interview-question-view-btn {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}

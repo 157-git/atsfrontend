@@ -1,0 +1,101 @@
+/* Akash_Pawar_SendClientEmail_09/07 */
+.SCE-list-container {
+  position: relative;
+}
+
+.select-button {
+  position: absolute;
+  top: 2px;
+  right: 10px;
+  padding: 5px 10px;
+  background-color: #ffcb9b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 15px;
+}
+
+.select-button:hover {
+  background-color: white;
+  color: #ffcb9b;
+}
+
+.button-group {
+  position: absolute;
+  top: 40px;
+  right: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.select-all-button,
+.share-button {
+  padding: 5px;
+  background-color: #ffcb9b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  font-size: 16px;
+  border-radius: 15px;
+}
+
+.select-all-button:hover,
+.share-button:hover {
+  background-color: white;
+  color: #ffcb9b;
+}
+
+.SCE-Filter-btn,
+.SCE-share-btn,
+.SCE-share-close-btn,
+.SCE-share-select-btn,
+.SCE-forward-btn,
+.SCE-share-forward-popup-btn,
+.SCE-close-forward-popup-btn {
+  font-size: 16px;
+  border-radius: 15px;
+  height: 30px;
+  color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: var(--button-color);
+  border: 1px solid gray;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.SCE-Filter-btn:hover,
+.SCE-share-close-btn:hover,
+.SCE-share-btn:hover,
+.SCE-share-select-btn:hover,
+.SCE-forward-btn:hover,
+.SCE-share-forward-popup-btn:hover,
+.SCE-close-forward-popup-btn:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+  opacity: 0.8;
+}
+
+.SCE-close-forward-popup-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.SCE_Loading_Animation {
+  width: 100%;
+  background: #00000052;
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100vh;
+  z-index: 759845455622656;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}

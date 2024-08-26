@@ -1,0 +1,72 @@
+  
+  .rejectedcandidatetable {
+    width: 1500px;
+    height: 100%;
+    background: white;
+    border-radius: 5px;
+    padding-top: 0%;
+    
+  }
+  
+    /* padding: 10px; */
+  .rejectedcandidatetable .rejectedcandidatetabledata{
+    /* padding: 10px; */
+    border: 1px solid gray;
+   
+    font-size: 16px;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 16px;
+    border: 1px solid gray;
+    padding: 10px 15px;
+    
+    position: sticky;
+    
+   
+  }
+  
+  .rejectedcandidatetable .rejectedcandidateheading {
+    background-color: #ffcb9b;
+    color: gray;
+    font-weight:100;
+    text-align: center;
+    font-size: 18px;
+    /* font-weight: bold; */
+    border: 1px solid gray;
+    padding: 10px 15px;
+    position: static;
+  }
+  
+ 
+  .tr{
+    margin-right: 10px;
+    width: 1500px;
+    border: 1px solid gray;
+    white-space: nowrap;
+  }
+  .rejectedcandidatetable .rejectedcandidatetabledata:hover {
+    background-color: #F2F2F2; /* Change this to the desired hover color */
+  }
+  
+  /* .summary {
+    margin-top: 20px;
+  } */
+  .rejectedcan-Filter-btn,.rejectedcan-share-btn,.rejectedcan-share-close-btn,
+.rejectedcan-share-select-btn,.rejectedcan-forward-btn
+,.rejectedcan-share-forward-popup-btn,.rejectedcan-close-forward-popup-btn{
+  font-size: 16px;
+    border-radius: 15px;
+    height: 30px;
+    color: white;
+    padding-left: 15px;
+    padding-right: 15px;
+    background: var(--button-color);
+    border: 1px solid gray;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.rejectedcan-Filter-btn:hover,.rejectedcan-share-close-btn:hover,.rejectedcan-share-btn:hover,.rejectedcan-share-select-btn:hover,.rejectedcan-forward-btn:hover,.rejectedcan-share-forward-popup-btn:hover,.rejectedcan-close-forward-popup-btn:hover{
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+    opacity: 0.8;
+}

@@ -1,0 +1,22 @@
+.data-table-div {
+    width: 400px;
+    margin-top: 20px;
+}
+
+.table-data-row {
+    align-items: center;
+    color: gray;
+}
+.data-table th {
+    background-color: #ffcb9b;
+    color: gray;
+    font-size: 18px;
+
+}
+
+.data-table tr td {
+    background-color: #f2f2f2;
+    color: gray;
+    font-size: 18px;
+
+}

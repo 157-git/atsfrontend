@@ -1,0 +1,180 @@
+/* 
+
+.birthday-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ffffff;
+  }
+  
+  .gift-box {
+    cursor: pointer;
+  }
+  
+  .gift-image {
+    width: 150px; 
+    height: auto;
+  }
+  
+  .balloon-container {
+    position: relative;
+    margin-top: 20px;
+  }
+  
+  .balloon {
+    width: 30px;
+    height: 60px;
+    background-color: red;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    position: absolute;
+    left: calc(50% - 15px);
+    bottom: 0;
+  }
+  
+  .message {
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+    margin-top: 10px;
+    background-color: lightpink;
+  }
+   */
+   /* .birthday-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden; /
+    height: 100vh; 
+  }
+  
+  .gift-box {
+    cursor: pointer;
+  }
+  
+  .gift-image {
+    width: 200px;
+    height: auto;
+  }
+  
+  .balloon {
+    position: absolute;
+    bottom: 0;
+    animation: floatUp 5s linear forwards; 
+    font-size: 100px;
+  }
+  
+  @keyframes floatUp {
+    0% {
+      bottom: 0;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      bottom: 100%;
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+  }
+  
+
+  .balloon:nth-child(1) { left: 10%; }
+  .balloon:nth-child(2) { right: 20%; }
+  .balloon:nth-child(3) { left: 30%; }
+  .balloon:nth-child(4) { left: 40%; }
+  .balloon:nth-child(5) { left: 50%; }
+  .balloon:nth-child(6) { left: 60%; }
+  .balloon:nth-child(7) { right: 70%; }
+  .balloon:nth-child(8) { left: 80%; }
+  .balloon:nth-child(9) { left: 90%; }
+  .balloon:nth-child(10) { left: 100%; }
+  
+  .message-container {
+    position: relative;
+    margin-top: 20px;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  }
+  
+  .birthday-page .message-container {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .message {
+    font-size: 40px;
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(230, 177, 133, 0.9); 
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+   */
+
+
+   .birthday-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden; /* Ensure balloons stay within the container */
+    height: 100vh; /* Full screen height for balloons to move */
+  }
+  
+  .gift-box {
+    cursor: pointer;
+  }
+  
+  .gift-image {
+    width: 200px;
+    height: auto;
+  }
+  
+  .balloon {
+    position: absolute;
+    bottom: 0;
+    animation: floatUp 5s linear forwards; /* Animation for balloons */
+    font-size: 80px;
+  }
+  
+  @keyframes floatUp {
+    0% {
+      bottom: 0;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      bottom: 100%;
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+  }
+  
+  .message-container {
+    position: relative;
+    margin-top: 20px;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  }
+  
+  .birthday-page .message-container {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .message {
+    font-size: 40px;
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(230, 177, 133, 0.9); /* Message background color with opacity */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  

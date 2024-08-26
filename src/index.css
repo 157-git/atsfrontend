@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --Bg-color: #ffe5b5;
+  --button-color:#ffcb9b;
+  --button-hover-color:white;
+  --text-color:gray;
+  --text-hover-color:gray;
+  --hover-effect:#ffcb9b;
+  --filter-color:#ffcb9b;
+}
+
+.accordion {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .accordion-item {
+    margin-bottom: 10px;
+    overflow: hidden;
+    border-radius: 15px;
+  } 
+  .accordion-header {
+    cursor: pointer;
+    padding: 10px;
+    background-color: var(--hover-effect);
+    font-size: 18px;
+}
+.accordion-title {
+    font-weight: bold;
+    color: white;
+  }
+  
+  .accordion-content {
+    padding: 10px;
+    color: gray;
+    font-size: 16px;
+  }
+
+  .accordion-item-SU,.accordion-item-M{
+    margin: 15px;
+    overflow: hidden;
+    border-radius: 15px;
+  }
+  .accordion-header-SU,.accordion-header-M{
+    cursor: pointer;
+    padding: 10px;
+    background-color: var(--Bg-color);
+    font-size: 16px;
+    color: gray;
+  }
+
+  .manager-data-transfer,.teamleader-data-transfer{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .old-manager-data,.new-manager-data,.old-teamleader-data,.new-teamleader-data{
+    grid-column: span 1 / span 1;
+    padding: 10px;
+    background-color: white;
+    margin: 5px;
+    border-radius: 15px;
+    color: gray;
+  }
+  .old-manager-data h1,.new-manager-data h1,.old-teamleader-data h1,.new-teamleader-data h1{
+   font-size: 18px;
+   font-weight: bold;
+  }
+
+  .ShareFunc_Loading_Animation {
+    width: 100%;
+    background: #00000052;
+    top: 0;
+    left: 0;
+    position: fixed;
+    height: 100vh;
+    z-index: 759845455622656;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .input-error {
+    border: 1px solid rgba(255, 0, 0, 0.497);  
+    box-shadow: 0 0 5px red;
+  }
+  .error-message {
+    color: red;
+    font-size: 0.875em;
+  }
+
+  .Toastify__toast {
+    background-color: black ;
+    color: white !important;
+  }
+  

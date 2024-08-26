@@ -1,0 +1,53 @@
+.ActionCol {
+    width: 250px;
+    border: 1px solid gray;
+}
+
+.tableActionCol {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 2px 0px;
+}
+
+.action-button {
+    padding: 2px 2px;
+    background-color:var(--button-color) ;
+    font-size: 16px;
+    border-radius: 15px;
+    border: 1px solid gray;
+    padding: 0px 10px;
+}
+.action-button:hover{
+    background-color: var(--button-hover-color);
+    color: var(--text-hover-color);
+}
+
+.emp-details-act-btn {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/* EmployeeDetails.css */
+
+.custom-tooltip .tooltip-inner {
+    background-color: #ffcb9b; /* Background color */
+    color: #000; /* Text color */
+    font-size: 16px; /* Font size */
+    /* height: 2px; */
+    text-align: center;
+    /* position: fixed; */
+    border-radius: 5px; /* Border radius */
+    /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); Box shadow */
+    /* opacity: 0; */
+    transition: opacity 0.3s;
+    text-overflow: clip;
+    z-index: 1000;
+  }
+  
+  .custom-tooltip .arrow::before {
+    /* border-top-color: #ffcb9b;
+     */
+  }
+  

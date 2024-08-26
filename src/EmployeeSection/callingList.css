@@ -1,0 +1,137 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.calling-list-container {
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.selfCallingUpdateBtn {
+  height: 30px;
+  background-color: var(--button-color);
+  border-radius: 13px;
+  border: 1px solid #f2f2f2;
+  color: grey;
+  padding: 7px 6px;
+  margin: 2px 20px;
+}
+
+
+.calling-table {
+  width: 2700px;
+  border-collapse: collapse;
+}
+
+.table-container_forselfcalling tr td {
+  padding: 1px;
+}
+
+
+.table-container_forselfcalling th,
+.table-container_forselfcalling td {
+  border: 1px solid gray;
+  text-align: center;
+  color: gray;
+  white-space: unset;
+}
+
+.table-container_forselfcalling th {
+  background-color: #ffcb9b;
+  position: static;
+  color: gray;
+  padding: 4px;
+}
+
+
+.table-container_forselfcalling select {
+  width: 100%;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: white;
+}
+
+
+.table-container_forselfcalling option {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: white;
+}
+
+
+.table-container_forselfcalling td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* max-width: 200px;  */
+  background-color: white;
+}
+
+body::-webkit-scrollbar {
+  width: 0;
+}
+
+body {
+  scrollbar-width: none;
+}
+
+/* /////////////////////////////////_______Ajhar Tamboli Started work from here...... _____________________///////////////////*/
+.selfcalling-filter-value {
+  display: flex;
+  gap: 4px;
+  color: gray;
+}
+
+.selfcalling-filter-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.filter-options-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  /* Optional: Adds space between buttons */
+}
+
+
+.callingList-Filter-btn,
+.callingList-share-btn,
+.callingList-share-close-btn .callingList-share-select-btn,
+.callingList-forward-btn,
+.callingList-share-forward-popup-btn,
+.callingList-close-forward-popup-btn {
+  font-size: 16px;
+  border-radius: 15px;
+  height: 30px;
+  color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: var(--button-color);
+  border: 1px solid gray;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.callingList-Filter-btn:hover,
+.callingList-share-close-btn:hover,
+.callingList-share-btn:hover,
+.callingList-share-select-btn:hover,
+.callingList-forward-btn:hover,
+.callingList-share-forward-popup-btn:hover,
+.callingList-close-forward-popup-btn:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+  opacity: 0.8;
+}

@@ -1,0 +1,232 @@
+/* General Styles */
+:root {
+  --gray-color: gray;
+}
+
+body {
+  color: var(--gray-color);
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.maintable,
+.studTables {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  overflow-x: auto;
+}
+
+.maintable {
+  height: 100%;
+  padding: 10px;
+}
+
+.maintable::-webkit-scrollbar {
+  display: none;
+}
+
+.table-striped th,
+.studTables th,
+.studTables td {
+  color: var(--gray-color);
+}
+
+.update-page-head {
+  width: 100%;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+  align-self: center;
+}
+
+.studTables th,
+.studTables td {
+  border: 1px solid var(--gray-color);
+  padding: 10px;
+  vertical-align: middle;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.studTables th {
+  background-color: white;
+  font-size: 1em;
+  text-align: left;
+}
+
+.studTables td {
+  text-align: center;
+  font-size: 1em;
+}
+
+.studTables input[type="text"],
+.studTables input[type="email"],
+.studTables select,
+.form-group input[type="text"],
+.form-group select,
+.PhoneInputInput,
+#resumeUpload,
+#currentDate {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1em;
+}
+
+.PhoneInputInput,
+#resumeUpload,
+#currentDate {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  padding: 8px;
+  margin: 20px;
+  text-align: center;
+}
+
+.ctf-btn {
+  background-color: #ffcb9b;
+  color: white;
+  border: 1px solid var(--gray-color);
+  border-radius: 15px;
+  font-size: 16px;
+  height: 30px;
+  line-height: 0.7;
+  text-align: center;
+  transition: 0.5s;
+}
+
+.ctf-btn:hover {
+  background-color: white;
+  color: #ffcb9b;
+}
+
+.buttonDiv,
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.gender-checkboxes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gender-checkboxes input[type="checkbox"] {
+  margin-right: 0;
+}
+
+.upload-success-icon,
+.upload-success-icons {
+  color: green;
+}
+
+.custom-datepicker-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+
+  .studTables th,
+  .studTables td {
+    font-size: 0.9em;
+  }
+
+  .studTables input[type="text"],
+  .studTables input[type="email"],
+  .studTables select,
+  .form-group input[type="text"],
+  .form-group select,
+  .PhoneInputInput,
+  #resumeUpload,
+  #currentDate {
+    font-size: 0.9em;
+  }
+
+  .ctf-btn {
+    font-size: 14px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .update-page-head {
+    padding-top: 5px;
+  }
+
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .studTables th,
+  .studTables td {
+    font-size: 0.8em;
+    padding: 8px;
+  }
+
+  .studTables input[type="text"],
+  .studTables input[type="email"],
+  .studTables select,
+  .form-group input[type="text"],
+  .form-group select,
+  .PhoneInputInput,
+  #resumeUpload,
+  #currentDate {
+    font-size: 0.8em;
+  }
+
+  .ctf-btn {
+    font-size: 12px;
+    height: 26px;
+  }
+}
+
+@media (max-width: 480px) {
+  .update-page-head {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .buttons {
+    width: 90%;
+    margin: 10px auto;
+  }
+
+  .studTables th,
+  .studTables td {
+    font-size: 0.7em;
+    padding: 6px;
+  }
+
+  .studTables input[type="text"],
+  .studTables input[type="email"],
+  .studTables select,
+  .form-group input[type="text"],
+  .form-group select,
+  .PhoneInputInput,
+  #resumeUpload,
+  #currentDate {
+    font-size: 0.7em;
+  }
+
+  .ctf-btn {
+    font-size: 10px;
+    height: 24px;
+  }
+}

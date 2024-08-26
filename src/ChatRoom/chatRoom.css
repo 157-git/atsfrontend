@@ -1,0 +1,295 @@
+/* Container styles */
+.chat-container {
+  position: relative;
+  height: 100%;
+  width: auto;
+}
+
+.register {
+  position: fixed;
+  padding: 30px;
+  top: 45%;
+  left: 52%;
+  display: flex;
+  flex-direction: row;
+  background-color: transparent;
+}
+
+/* Chat box styles */
+.chat-box {
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12);
+  margin: 40px 50px;
+  height: 600px;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+/* Member list styles */
+.member-list {
+  width: 15%;
+}
+
+/* Chat content styles */
+.chat-content {
+  width: 80%;
+  margin-left: 10px;
+}
+.chat-messages {
+  height: 80%;
+  overflow-x: scroll;
+  border: 1px solid #000;
+}
+
+/* Chat messages styles */
+.chat-messages {
+  border-radius: 10px;
+  height: 80%;
+  overflow-y: auto;
+  border: 1px solid #000;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  /* background-color: #ccc; */
+}
+
+.send-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding-top: 10px;
+}
+
+.input-message {
+  flex: 1;
+  padding: 10px;
+  border-radius: 15px;
+  /* margin-right: 10px; */
+  font-size: 16px;
+  border: 1px solid #ccc;
+}
+
+.chat-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.chat-actions button {
+  border: none; /* Remove the border */
+  background-color: transparent; /* Set background color to transparent if needed */
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+  color: gray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* .chat-actions button:hover {
+  background-color: #f0f0f0;
+} */
+
+/* .send-btn i, .attach-btn i {
+  color: gray;
+} */
+
+/* Message styles */
+.message {
+  display: flex;
+  align-items: flex-start;
+  max-width: 70%;
+  margin-bottom: 10px;
+  /* padding: 5px; */
+  /* box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  word-wrap: break-word; */
+}
+
+.message-data {
+  padding: 5px;
+  font-size: 16px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  color: gray;
+  max-width: fit-content;
+  word-break: break-word;
+}
+
+/* Sent message styles */
+.message.self {
+  align-self: flex-end;
+  margin-left: auto;
+
+  /* background-color: #ffffff; */
+}
+
+.message.self .message-data {
+  background-color: #ffffff;
+  font-size: 16px;
+  color: gray;
+  margin-top: 10px;
+  /* margin-left: 0; */
+  margin-right: 10px;
+}
+
+/* Received message styles */
+.message:not(.self) {
+  align-self: flex-start;
+  margin-right: auto;
+}
+
+.message:not(.self) .message-data {
+  background-color: #ffffff;
+  font-size: 16px;
+  color: gray;
+
+  /* margin-left: 10px; */
+}
+
+/* Avatar styles */
+/* .avatar {
+  background-color: cornflowerblue;
+  padding: 3px 5px;
+  border-radius: 5px;
+  color: #fff;
+  margin-right: 10px;
+}
+
+.avatar.self {
+  color: #000;
+  background-color: greenyellow;
+  margin-right: 0;
+}
+ */
+/* File preview styles */
+.file-preview {
+  margin-top: 10px;
+}
+
+.file-preview img {
+  max-width: 100%;
+  max-height: 200px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+/* .user-img {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.user-img img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+} */
+
+/* .avatar {
+  width: 40px; 
+  height: 40px; 
+  border-radius: 50%; 
+  overflow: hidden; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e0f7fa; 
+}
+
+.avatar img {
+  width: 100%; 
+  height: 100%; 
+  border-radius: 50%; 
+
+}
+ */
+/* Mohini_chatRoom_Date_6/7/2024_CSS_217_to_310*/
+
+.member {
+  padding: 5px;
+  font-size: 16px;
+  background: var(--button-color);
+  color: white;
+  /* border:white; */
+  cursor: pointer;
+  margin: 5px 2px;
+  font-size: 16px;
+  box-shadow: 0 8px 8px -4px lightblue;
+}
+.member.active {
+  font-size: 16px;
+  background: var(--button-color);
+  color: white;
+}
+.member:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+}
+.member.active:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+}
+
+.send-message .input-message::placeholder {
+  padding-left: 10px;
+}
+
+.avatar {
+  background-color: cornflowerblue;
+  padding: 3px 5px;
+  border-radius: 5px;
+  color: #fff;
+}
+.avatar.self {
+  color: #000;
+  background-color: greenyellow;
+}
+
+.attach-options ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.attach-options li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* padding: 5px 10px;  */
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  font-size: 16px;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.attach-options li:last-child {
+  margin-bottom: 0;
+}
+
+.attach-options li.document-button {
+  background-color: #ffcb9b;
+}
+
+.attach-options li.document-button:hover {
+  background-color: white;
+  color: #ffcb9b;
+}
+
+.attach-options li.gallery-button {
+  background-color: #ffcb9b;
+}
+
+.attach-options li.gallery-button:hover {
+  background-color: white;
+  color: #ffcb9b;
+}
+
+.attach-options li:active {
+  background-color: #e0e0e0;
+}
+/* Mohini_chatRoom_Date_6/7/2024_CSS_217_to_310*/

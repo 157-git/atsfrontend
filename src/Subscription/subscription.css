@@ -1,0 +1,124 @@
+.Container {
+  width: 100%;
+  /* height: 100vh; */
+  padding: 25px 0px;
+  display: flex;
+  justify-content: center;
+  /* border: 1px solid gray; */
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.PlanCard {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  width: 300px;
+  text-align: center;
+  border: 5px solid #e0e0e0;
+  position: relative;
+
+  &:nth-child(2) {
+    border-color: #ffffff;
+    border: 5px solid #e0e0e0;
+
+  }
+}
+
+.MostPopular {
+  background-color: #ffcb9b;
+  color: #fff;
+  padding: 10px 15px;
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.PlanName {
+  margin: 5px 0px;
+  font-size: 28px;
+  /* color: black; */
+  font-weight: bold;
+}
+
+.Price {
+  font-size: 24px;
+  margin: 5px 0;
+}
+
+.OldPrice {
+  font-size: 16px;
+  color: #888;
+  text-decoration: line-through;
+}
+
+.DiscountBadge {
+  background-color: #ffcb9b;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 5px;
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+.FeatureList {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  text-align: left;
+}
+
+.FeatureItem {
+  margin: 10px 0;
+  color: #333;
+  display: flex;
+  align-items: center;
+
+}
+
+.FeatureItem::before {
+  content: '';
+  margin-right: 5px;
+}
+
+.FeatureItem.correct::before {
+  content: '✓';
+  color: green;
+  /* Color for correct */
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.FeatureItem.incorrect::before {
+  content: '✗';
+  color: red;
+  /* Color for incorrect */
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.Subscription-btn {
+  border: 1px solid gray;
+  border-radius: 15px;
+  background-color: white;
+  color: #ffcb9b;
+  font-size: 16px;
+  height: 40px;
+  width: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.Subscription-btn:hover {
+  background-color: #ffcb9b;
+  color: white;
+  border: 1px solid gray;
+}

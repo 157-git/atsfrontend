@@ -1,0 +1,285 @@
+/* header.css */
+/* neha_homepage_content_23/07_line_no_3_to_276*/
+.bigb {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+  /* position: relative; /for page overflow/ */
+  overflow: hidden;
+  background: url("../LogoImages/vecteezy_abstract-glowing-blue-electric-power-energy-spark-animation_27989120.mp4");
+}
+
+.bigb {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+  position: relative;
+  overflow: hidden;
+  /* padding: 20px; added padding for smaller screens */
+}
+
+.Clint img,
+.main-homepage-Member img,
+.main-homepage-candidate img {
+  width: 100%; /* Adjusted for responsiveness */
+}
+
+.main-homepage-heading h1 {
+  position: absolute;
+  left: 43%;
+  top: 10px;
+  font-size: 18px; /* Responsive font size */
+  color: gray;
+  z-index: 999;
+  padding-top: 20px;
+}
+
+.main-homepage-heading {
+  text-align: center; /* Adjusted for center alignment */
+}
+
+.main-homepage-main-div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  background-color: #ffe5b5;
+  height: 100vh;
+  width: 100%;
+  position: relative;   
+  overflow: hidden;   
+ /* bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb */
+}
+
+.main-homepage-Member,
+.main-homepage-candidate {
+  flex: 1; /* Adjusted for equal distribution */
+  max-width: 50%; /* Adjusted to fit better on smaller screens */
+  height: 180vh;
+  margin-top: 0;
+ 
+}
+
+.main-homepage-Member {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: #ffd8a8;
+  margin-top: 0px;
+}
+
+.main-homepage-candidate:hover,
+.main-homepage-Member:hover {
+  background-color: #ffcb9b;
+}
+
+.main-homepage-candidate {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.main-homepage-Member img,
+.main-homepage-candidate img {
+  width: 60%;
+}
+
+.main-homepage-Member h1,
+.main-homepage-candidate h1 {
+  text-align: center;
+  font-size: 18px; /* Responsive font size */
+  color: gray;
+  z-index: 5;
+  font-weight: 500;
+}
+
+.btn {
+  font-size: 16px; /* Responsive font size */
+  width: 50%; /* Adjusted for responsiveness */
+  padding: 10px;
+}
+/* Media Queries */
+
+
+.main-homepage-btn {
+  border: 1px solid gray;
+  border-radius: 5px;
+  font-size: 16px;
+  color: white;
+  width: auto;
+  height: 30px;
+  background-color: #ffcb9b;
+  padding-left: 10px;
+  padding-right: 10px;
+  z-index: 5; /* Adjusted z-index to be above clouds */
+  position: relative; /* Ensure position context for z-index */
+}
+
+.main-homepage-btn:hover {
+  background-color: white;
+  color: #ffcb9b;
+}
+
+.main-homepage-clouds {
+  position: absolute;
+  top: -550px;
+  left: 0;
+  width: 200%;
+  height: 200vh;
+  background: url('/src/LogoImages/clouds.png') repeat-x;
+  background-size: cover;
+  background-position: center;
+  animation: moveclouds 30s linear infinite;
+  z-index: 4; /* Adjusted z-index to be below other elements */
+}
+
+@keyframes moveclouds {
+  0% {
+      transform: translateX(0);
+  }
+  100% {
+      transform: translateX(-50%);
+  }
+}
+@media screen and (max-width: 768px) {
+  .main-homepage-Member,
+  .main-homepage-candidate {
+      max-width: 100%; /* Adjusted for smaller screens */
+  }
+
+  .main-homepage-main-div {
+      flex-direction: column;
+  }
+    .main-homepage-clouds{
+        top: -850px;
+    }
+}
+.Choose-color-container{
+  width: 100%;
+  display: flex;
+  /* border: 1px solid red; */
+}
+.Choose-Color-Btn {
+  background-color: #fff;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.Choose-Color-Btn:hover {
+  background-color: #e0e0e0; /* Change background color on hover */
+  transform: scale(1.1); /* Slightly scale the button */
+}
+
+/* header.css */
+
+.main-homepage-heading h1 {
+    font-size: 50px;
+    font-weight: 700;
+    color: #c40b0b;
+}
+.main-homepage-heading {
+    text-align: center; 
+}
+.main-homepage-main-div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    background-color: #ffe5b5;
+    height: 100vh;
+    width: 100%;
+    position: relative;   
+    overflow: hidden;   
+  
+}
+.main-homepage-candidate {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.main-homepage-btn {
+    border: 1px solid gray;
+    border-radius: 15px;
+    margin-left: 40px;
+    font-size: 20px;
+    font-weight: 400;
+    color: white;
+    width: 200px;
+    height: 35px;
+    background-color: #c40b0b;
+    padding-left: 10px;
+    padding-right: 10px;
+    z-index: 5; 
+    position: relative; 
+}
+
+.main-homepage-btn:hover {
+    background-color: #c40b0b;
+    color: white;
+}
+
+.main-homepage-clouds {
+    position: absolute;
+    top: -550px;
+    left: 0;
+    width: 200%;
+    height: 200vh;
+    background: url('/src/LogoImages/clouds.png') repeat-x;
+    background-size: cover;
+    background-position: center;
+    animation: moveclouds 30s linear infinite;
+    z-index: 1; 
+    top: -600px;
+}
+
+@keyframes moveclouds {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.landing-content {
+    position: relative;
+    z-index: 1; 
+    max-width: 100%;
+    justify-content: center;
+    margin: auto;
+    text-align: center;
+    /* margin-right: 330px; */
+    margin-top: 220px;
+  }
+
+  .landing-content h1 {
+    font-size: 50px;
+    font-weight: 700;
+    color: #c40b0b;
+    white-space: nowrap;
+    margin: auto;
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    .landing-content h1 {
+      font-size: 35px;
+    }
+  
+    .main-homepage-btn {
+      font-size: 14px;
+      padding: 6px 12px;
+    }
+  }

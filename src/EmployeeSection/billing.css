@@ -1,0 +1,117 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 16px;
+}
+
+.cards {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.card-dhanu h3,
+.card-dhanu2 h3 {
+  color: gray;
+}
+
+.card-dhanu {
+  flex: 7;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+
+}
+
+.card-dhanu2 {
+  flex: 2;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #f2f2f2;
+}
+
+.month-table {
+  width: auto;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.view-details-button {
+  background-color: #ffcb9b;
+  /* color: #000; */
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.highlight {
+  background-color: yellow;
+  font-weight: bold;
+}
+
+.month-table th,
+.month-table td {
+  padding: 5px;
+  text-align: center;
+  border: 1px solid gray;
+  color: gray;
+  white-space: nowrap;
+}
+
+.table-container {
+  width: auto;
+}
+
+
+
+.table-container th {
+  background-color: var(--Bg-color);
+  /* padding: 5px; */
+  text-align: center;
+  border: 1px solid gray;
+  color: gray;
+  white-space: nowrap;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 16px;
+}
+
+.table-container td {
+  /* padding: 1px; */
+  margin: 2px;
+  font-size: 16px;
+  padding-right: 5px;
+  padding-left: 5px;
+  text-align: center;
+  border: 1px solid gray;
+  color: gray;
+  white-space: nowrap;
+}
+
+.table-container tbody tr:hover {
+  background-color: #f2f2f2;
+  color: white;
+}
+
+.status-button,
+.view-details-button {
+  padding: 1px 10px;
+  margin: 1px;
+  background-color: var(--button-color);
+  color: white;
+  border: 1px solid gray;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.status-button:hover,
+.view-details-button:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+}

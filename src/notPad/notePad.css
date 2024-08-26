@@ -1,0 +1,174 @@
+.notepad-alert-success {
+  color: grey;
+  font-size: 18px;
+  background-color: #ffcb9b;
+  border-radius: 0.5rem;
+
+}
+
+.note-container {
+  width: 100%;
+  height: 100vh;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.note-submit-btn {
+  width: auto;
+  height: 30px;
+  border: 1px solid gray;
+  border-radius: 15px;
+  margin-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: white;
+  background-color: var(--button-color);
+  font-size: 16px;
+}
+
+.note-submit-btn:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+  border: 1px solid gray;
+
+}
+
+.note-pad-text {
+  border: 1px solid grey;
+  width: 90%;
+  height: 120px;
+  margin-top: 30px;
+  padding-top: 8px;
+  padding-left: 5px;
+  color: grey;
+  border-radius: 1.5rem;
+  font-size: 18px;
+}
+
+.note-form-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.notePadData {
+  margin-top: 10px;
+  width: 80%;
+  border: 1px solid grey;
+  /* height: 800px; */
+  overflow-y: scroll !important;
+  align-items: center;
+  margin-left: 10%;
+
+}
+
+.notepad-modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid #ffcb9b;
+}
+
+.notepad-modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #ffcb9b;
+  width: 80%;
+  color: grey;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.notepad-table-data {
+  width: 100%;
+}
+
+.notepad-table-data tr td {
+  padding: 5px;
+
+}
+
+.notepad-table-data th,
+.notepad-table-data td {
+
+  text-align: center;
+
+  white-space: unset;
+  border-bottom: 1px solid grey;
+  border-right: 1px solid grey;
+  border-collapse: collapse
+}
+
+.notepad-table-data th {
+  background-color: var(--Bg-color);
+  position: static;
+  color: gray;
+  padding: 4px;
+  font-size: 18px;
+}
+
+.notepad-table-data td {
+  font-size: 18px;
+  color: grey;
+
+}
+
+.tabledata {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+  padding: 3px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.tooltip {
+  visibility: hidden;
+  background-color: #ffcb9b;
+  color: #000;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: fixed;
+  /* Use fixed positioning */
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tabledata:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltiptext {
+  white-space: nowrap;
+}

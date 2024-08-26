@@ -1,0 +1,259 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.mainDashboard-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--Bg-color);
+    font-family: 'Arial', sans-serif;
+    position: relative;
+
+    overflow: hidden;
+    /* flex-wrap: wrap; */
+}
+
+.main-clouds {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: 150%;
+    background: url('/src/LogoImages/clouds.png') repeat-x;
+    background-size: cover;
+    background-position: center;
+    animation: moveClouds 60s linear infinite;
+}
+
+@keyframes moveClouds {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Keyframes for flip animation */
+@keyframes flipCard {
+    0% {
+        transform: rotateY(0);
+    }
+
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+
+/* Pricing Plan */
+.pricing-plan {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* border: 2px solid blue; */
+    flex-wrap: nowrap;
+    width: 100%;
+    height: 100%;
+    text-align: justify;
+    /* gap: 50px; */
+    /* margin-left: 120px; */
+    z-index: 1;
+    /* Ensure the content is above the clouds */
+}
+
+.square-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid white;
+    border-radius: 10px;
+    box-shadow: 0 7px 10px rgba(0, 0, 0, 0.1);
+    background-color: var(--Bg-color);
+    /* background: linear-gradient(135deg, #ffe5b5, #ffd8a8, #ffcb9b, #fec08e, #ffb281); */
+    position: absolute;
+    width: 30vw;
+    height: 32vh;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.4s ease-in-out;
+    color: white;
+    z-index: 2;
+    animation: flipCard 2s ease;
+
+}
+
+/* .square-box.flip {
+    animation: flipCard 2s ease;
+} */
+
+.square-box:first-child {
+    top: 10%;
+    left: 7.5%;
+}
+
+.square-box:nth-child(2) {
+    top: 10%;
+    left: 40%;
+}
+
+.square-box:nth-child(3) {
+    top: 60%;
+    left: 30%;
+    background: white;
+    border: 3px solid var(--button-color);
+    color: #ffb281;
+}
+
+.square-box:nth-child(4) {
+    top: 60%;
+    left: 62%;
+    background: white;
+    border: 3px solid var(--Bg-color);
+    color: #ffb281;
+}
+
+.square-box:hover {
+    background: white;
+    color: var(--Bg-color);
+    border: 3px solid var(--Bg-color);
+    transform: scale(1.03);
+    box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.5);
+}
+
+.square-box:hover .login,
+.square-box:hover .login1 {
+    background-color: var(--Bg-color);
+    color: white;
+    border-color: gray;
+}
+
+.square-box:nth-child(3):hover .login1,
+.square-box:nth-child(4):hover .login1 {
+    background-color: white;
+    color: var(--Bg-color);
+    border-color: gray;
+}
+
+.square-box:nth-child(3):hover,
+.square-box:nth-child(4):hover {
+    background-color: var(--Bg-color);
+    /* background: linear-gradient(135deg, #ffb281, #fec08e, #ffcb9b, #ffd8a8, #ffe5b5); */
+    border: 3px solid white;
+    color: white;
+}
+
+.square-box .content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.square-box h1 {
+    font-size: 28px;
+    margin: 0;
+    margin-right: 20px;
+}
+
+/* Login Buttons */
+.login,
+.login1 {
+    text-align: center;
+    padding: 3px 40px;
+    border-radius: 15px;
+    border: 1px solid gray;
+    cursor: pointer;
+    font-size: 16px;
+    /* text-align: center; */
+    text-decoration: none;
+    transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+    overflow: hidden;
+    position: relative;
+    background-color: white;
+    color: var(--Bg-color);
+}
+
+.login:hover,
+.login1:hover {
+    background-color: #ffcb9b;
+    color: white;
+    border-color: gray;
+}
+
+.login::before,
+.login1::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 100%;
+    background: var(--button-color);
+    transform: skewX(45deg) translateX(150px);
+    transition: transform 0.8s;
+}
+
+.login:hover::before,
+.login1:hover::before {
+    transform: skewX(45deg) translateX(-150px);
+}
+
+.login1 {
+    background-color: var(--button-color);
+    color: white;
+    margin-left: 0;
+}
+@media (max-width: 768px) {
+    .pricing-plan {
+        flex-direction: column;
+        align-items: center;
+        margin-left: 0;
+    }
+
+    .square-box {
+        width: 100%;
+        height: auto;
+        position: static;
+        margin-bottom: 20px;
+    }
+
+    .square-box:first-child {
+        top: auto;
+        left: auto;
+    }
+
+    .square-box:nth-child(2) {
+        top: auto;
+        left: auto;
+    }
+
+    .square-box:nth-child(3) {
+        top: auto;
+        left: auto;
+    }
+
+    .square-box:nth-child(4) {
+        top: auto;
+        left: auto;
+    }
+
+    .square-box .content {
+        padding: 20px;
+    }
+
+    .square-box h1 {
+        font-size: 16pt;
+        margin-bottom: 20px;
+    }
+
+}

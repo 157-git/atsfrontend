@@ -1,0 +1,116 @@
+.attendanceTableHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  position: sticky;
+  left: 5px;
+  margin-bottom: 10px;
+
+
+}
+
+.shorttext {
+  align-items: center;
+}
+
+.attendanceTableHeader h6 {
+  text-align: center;
+
+}
+
+.attendanceTableHeader button {
+  font-size: 16px;
+  border-radius: 15px;
+  /* width: 120px; */
+  padding: 0 10px;
+  background-color: #ffb281;
+  color: white;
+  border: 1px solid gray;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.attendanceTableHeader button:hover {
+  background-color: white;
+  color: #ffb281;
+}
+
+.shortlistedheading th {
+  background-color: #ffcb9b;
+  color: gray;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 16px;
+  padding: 4px 15px;
+  font-weight: 100;
+  border: 1px solid gray;
+
+}
+
+.shortlisted-tablehead {
+  font-size: 16px;
+  color: gray;
+  font-weight: 100;
+}
+
+.tabledaterow td {
+  background-color: white;
+  font-size: 18px;
+  border: 1px solid gray;
+  text-align: center;
+}
+
+.shortlistedcandidate td {
+  text-align: center;
+  font-size: 16px;
+  border: 1px solid gray;
+  padding: 1px 15px;
+}
+
+.shortlistedcandidate .tabledaterow:hover {
+  background-color: #F2F2F2;
+}
+
+.shortlistedcan-share-btn,
+.shortlistedcan-share-close-btn,
+.shortlistedcan-share-select-btn,
+.shortlistedcan-forward-btn,
+.shortlistedcan-share-forward-popup-btn,
+.shortlistedcan-close-forward-popup-btn {
+  font-size: 16px;
+  border-radius: 15px;
+  height: 30px;
+  color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: var(--button-color);
+  border: 1px solid gray;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.shortlistedcan-share-btn:hover,
+.shortlistedcan-share-select-btn:hover,
+.shortlistedcan-forward-btn:hover,
+.shortlistedcan-share-forward-popup-btn:hover,
+.shortlistedcan-close-forward-popup-btn:hover,
+.shortlistedcan-share-close-btn:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+  opacity: 0.8;
+}
+
+/* today */
+.updatebtn {
+  background-color: #ffcb9b;
+  color: white;
+  height: 30px;
+}
+
+.App-after {
+  background-color: white;
+  transition: background-color 0.3s, filter 0.3s;
+}
+
+.App-after.blurred {
+  background-color: #f2f2f2;
+}

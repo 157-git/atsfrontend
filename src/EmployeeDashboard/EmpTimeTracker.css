@@ -1,0 +1,30 @@
+.employee-card {
+  padding-top: 20px;
+  border-radius: 8px;
+  width: 250px;
+  height: 100px;
+  text-align: center;
+
+}
+
+.timer {
+  font-size: 30px;
+  font-weight: bold;
+  display: block;
+  color: black;
+}
+
+
+.login-btn {
+  background-color: #4CAF50;
+  color: black;
+}
+
+.break-btn.on-break {
+  background-color: green;
+}
+
+.logout-btn {
+  background-color: #FF5733;
+  color: black;
+}

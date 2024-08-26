@@ -1,0 +1,151 @@
+/* Global Styles */
+
+
+
+.Payment-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Payment Options */
+
+.payment-options {
+  margin-bottom: 20px;
+}
+
+.payment-option {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  width: 50%;
+  border: 2px solid black;
+  padding: 10px;
+}
+
+.payment-option input[type="radio"] {
+  margin-right: 10px;
+  width: 20px;
+  height: 30px;
+}
+
+.payment-option label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 20px;
+  cursor: pointer;
+  gap: 20px;
+  width: 100%;
+}
+
+.payment-option img {
+  width: 50px;
+  height: 20px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+/* Order Details */
+
+.order-details {
+  margin-bottom: 20px;
+}
+
+.order-details h3 {
+  margin-top: 0;
+}
+
+.order-details ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.order-details li {
+  margin-bottom: 10px;
+}
+
+.order-details li i {
+  color: #666;
+  margin-right: 10px;
+}
+
+/* Billing Information */
+
+.billing-information {
+  margin-bottom: 20px;
+}
+
+.billing-information label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.billing-information input[type="text"],
+.billing-information input[type="tel"],
+.billing-information select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+}
+
+.billing-information input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+/* Order Summary */
+
+.order-summary {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.order-summary .item {
+  margin-bottom: 10px;
+}
+
+.order-summary .item span:first-child {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.order-summary .total {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Guarantee and Terms */
+
+.guarantee {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.guarantee i {
+  color: #666;
+  margin-right: 10px;
+}
+
+.terms {
+  font-size: 14px;
+  color: #666;
+}
+
+.terms a {
+  text-decoration: none;
+  color: #337ab7;
+}
+
+.terms a:hover {
+  color: #23527c;
+}

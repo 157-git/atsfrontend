@@ -1,0 +1,435 @@
+.PI-attendance-table {
+  border-collapse: collapse;
+}
+
+.status-poor {
+  border-radius: 10px;
+  background-color: #f87171;
+  color: black; /* Red */
+}
+
+.status-average {
+  border-radius: 10px;
+  color: black;
+  background-color: #fb923c; /* Orange */
+}
+
+.status-yellow {
+  border-radius: 10px;
+  color: black;
+  background-color: #facc15; /* Yellow */
+}
+
+.status-green {
+  color: black;
+  border-radius: 10px;
+  background-color: #4ade80; /* Green */
+}
+
+.attendance-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #ffcb9b;
+  color: gray;
+  z-index: 1;
+  height: 30px;
+  white-space: nowrap;
+  color: gray;
+  max-width: auto !important;
+  font-size: 16px;
+  font-weight: 500;
+}
+.PI-attendanceheading {
+  border: 1px solid gray;
+  padding: 4px;
+  color: gray;
+  white-space: nowrap;
+  width: auto;
+  height: 30px;
+
+  /* text-overflow: ellipsis; */
+}
+.PI-filters {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  align-items: center;
+}
+.PI-filters-item {
+  padding: 2px 4px;
+  color: white;
+  background: #ffcb9b;
+  border: 1px solid gray;
+  border-radius: 15px;
+}
+.tabledata {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+  padding: 2px;
+  color: gray;
+  max-width: 50px;
+  border: 1px solid #ddd;
+  /* width: auto; */
+}
+.tooltip {
+  visibility: hidden;
+  background-color: #ffcb9b;
+  color: #000;
+  text-align: center;
+  border-radius: 5px;
+  /* padding: 5px; */
+  position: fixed; /* Use fixed positioning */
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s;
+  text-overflow: clip;
+  visibility: visible;
+  /* white-space: nowrap; */
+  /* width: 200px; */
+}
+
+.tabledata:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltiptext {
+  white-space: nowrap;
+}
+
+.PI-attendancerows-head {
+  background-color: var(--Bg-color);
+  color: var(--);
+  /* font-weight: 100; */
+  text-align: center;
+  font-size: 18px;
+  border: 1px solid gray;
+  max-width: 300px;
+  /* padding: 10px 15px; */
+  /* text-overflow: clip; */
+  /* width: 100px; */
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* .attendancerowsdata,
+.tabledata {
+  text-align: center;
+  font-size: 16px;
+  border: 1px solid gray;
+  padding: 1px;
+  overflow: hidden;
+  max-width: 200px;
+  text-overflow: clip;
+  visibility: visible;
+} */
+
+.attendanceTableData::-webkit-scrollbar {
+  display: none;
+}
+.attendanceTableData {
+  height: 85vh;
+  width: 100%;
+  overflow-y: auto;
+}
+.PI-attendancerows {
+  height: 30px;
+}
+
+.PI-attendancerows:hover {
+  background-color: #f2f2f2;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+.attendence-btn {
+  background: var(--button-color);
+  border: 1px solid grey;
+  padding: 0px 3px;
+  height: 30px;
+  width: auto;
+  border: 1px solid gray;
+  border-radius: 15px;
+  color: white;
+  /* margin-top: 5px; */
+  font-size: 16px;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+}
+.attendence-btn:hover {
+  background-color: var(button-hover-color);
+  color: var(--text-hover-color);
+}
+
+.PI-Ok,
+.PI-reset,
+.update-assign-column-btn,
+.update-assign-column-close-btn {
+  font-size: 16px;
+  border-radius: 15px;
+  height: 30px;
+  color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: var(--button-color);
+  border: 1px solid gray;
+  cursor: pointer;
+}
+
+.ok-button:hover,
+.reset-selectTL-button:hover,
+.update-assign-column-btn:hover,
+.update-assign-column-close-btn:hover {
+  background-color: var(button-hover-color);
+  color: var(--text-hover-color);
+  border: 1px solid gray;
+}
+.select-div {
+  display: flex;
+  gap: 5px;
+}
+.selected-btn {
+  font-size: 16px;
+  border-radius: 15px;
+  height: 30px;
+  color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: var(--button-color);
+  border: 1px solid gray;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.selected-btn:hover {
+  background-color: var(button-hover-color);
+  color: var(--text-hover-color);
+}
+
+.PI-full-width {
+  width: 100%;
+}
+.PI-Count {
+  width: 100%;
+  display: flex;
+  gap: 2px;
+}
+.PI-container {
+  width: 100%;
+  height: auto;
+  padding-top: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.info {
+  width: 100%;
+}
+
+.PI-table-container {
+  width: 100%;
+  padding: 5px;
+}
+
+.summary-table {
+  width: 100%;
+  /* border: 1px solid gray; */
+}
+
+#total-Performance-percentage {
+  display: flex;
+  height: 30px;
+  width: 500px;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 18px;
+  border-radius: 2px;
+  margin-top: 20px;
+}
+.text-gray {
+  color: gray;
+  border: 1px solid gray;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.PI-attendance-form {
+  width: 65%;
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid gray;
+}
+.PI-radio-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.PI-radio-label {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  gap: 2px;
+  align-items: center;
+}
+
+.PI-date-inputs {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0px;
+  gap: 8px;
+}
+
+.PI-date-input {
+  width: 40%;
+  height: 30px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.date-info {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  gap: 10%;
+}
+.date-info-p-s {
+  width: 40%;
+  display: flex;
+  justify-content: start;
+}
+.date-info-p {
+  width: 40%;
+}
+.PI-attendence-btn {
+  font-size: 16px;
+  border-radius: 15px;
+  height: 30px;
+  color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: var(--button-color);
+  border: 1px solid gray;
+  cursor: pointer;
+}
+
+.PI-filter-options-container {
+  width: 50%;
+  display: flex;
+  gap: 5px;
+}
+.PI-white-Btn {
+  border: 1px solid gray;
+  border-radius: 15px;
+  padding: 2px 5px;
+}
+.PI-option-filter {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.PI-optionDiv {
+  z-index: 9;
+  position: absolute;
+  border: 1px solid gray;
+  display: flex;
+  padding: 5px;
+  border-radius: 15px;
+  flex-direction: column;
+  background: white;
+  width: 150px;
+}
+.PI-dropdown-container {
+  position: relative;
+  width: 100%;
+}
+.PI-dropdown-container-main {
+  width: 25%;
+}
+.PI-Dropdown {
+  padding: 10px;
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  cursor: pointer;
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dropdown-icon {
+  margin-left: 10px;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-icon.open {
+  transform: rotate(180deg);
+}
+
+.PI-dropdown-content {
+  background-color: white;
+  border: 1px solid #ced4da;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-height: 500px;
+  padding: 3px;
+  overflow-y: auto;
+  border-radius: 15px;
+  margin-top: 5px;
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+}
+
+.PI-dropdown-section {
+  margin-bottom: 5px;
+  padding-left: 10px; /* Indent each hierarchy level */
+}
+
+.PI-dropdown-row {
+  /* padding: 5px 10px; */
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.PI-dropdown-column {
+  padding-left: 20px; /* Indent nested items */
+  border-left: 1px solid #ced4da; /* Optional: add a visual line to indicate hierarchy */
+  margin-top: 5px; /* Add space above nested items */
+}
+
+.clickable-label {
+  width: 100%;
+  cursor: pointer;
+
+  padding: 0px 5px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown-arrow {
+  margin-left: 5px;
+  font-size: 12px;
+}
+.PI-attendance-container{
+  width: 100%;
+  height: 70vh;
+  overflow-x: scroll;
+}
+

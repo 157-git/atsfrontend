@@ -1,0 +1,82 @@
+.selected-candidate-table th{
+    background-color: #ffcb9b;
+    color: gray;
+    font-weight: 500;
+    text-align: center;
+    font-size: 18px;
+    border: 1px solid gray;
+    padding: 10px 15px;
+    position: static;
+}
+
+.selectFlowBtn{
+  height: 35px;
+  margin: 2px 20px;
+  background-color: #ffcb9b;
+  border:1px solid #F2F2F2;
+  color: grey;
+  padding: 4px;
+  border-radius: 8px ;
+}
+
+  .selected-candidate-table {
+    width: 1500px;
+    height: 100%;
+    background: white;
+    border-radius: 5px;
+    padding-top: 0%;
+    
+  }
+  
+  .selected-candidate-table th,
+  .selected-candidate-table td{
+    border: 1px solid gray;
+    color: rgb(84, 84, 84);
+    font-size: 16px;
+    white-space: nowrap;
+   
+  }
+  
+
+  
+  .selected-candidate-table .selectedcandidaterows {
+    text-align: center;
+    font-size: 16px;
+    border: 1px solid gray;
+    padding: 10px 15px;
+    white-space: nowrap;
+    position: sticky;
+    
+  }
+  tr{
+    margin-right: 10px;
+    /* width: 1500px; */
+    border: 1px solid gray;
+    white-space: nowrap;
+  }
+  .selected-candidate-table .selectedcandidaterows:hover {
+    background-color: #F2F2F2; 
+  }
+  .selectedcan-Filter-btn,.selectedcan-share-btn,
+  .selectedcan-share-close-btn,
+.selectedcan-share-select-btn,.selectedcan-forward-btn
+,.selectedcan-share-forward-popup-btn,.selectedcan-close-forward-popup-btn{
+  font-size: 16px;
+    border-radius: 15px;
+    height: 30px;
+    color: white;
+    padding-left: 15px;
+    padding-right: 15px;
+    background: var(--button-color);
+    border: 1px solid gray;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.selectedcan-Filter-btn:hover,.selectedcan-share-btn:hover,.selectedcan-share-select-btn:hover,.selectedcan-forward-btn:hover,.selectedcan-share-forward-popup-btn:hover,.selectedcan-close-forward-popup-btn:hover,.selectedcan-share-close-btn:hover{
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+    opacity: 0.8;
+}
+  
+  
+

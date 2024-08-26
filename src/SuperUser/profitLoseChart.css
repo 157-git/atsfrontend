@@ -1,0 +1,43 @@
+/* Dhanashree_LineGraph_Date(11/07)_Css Start line no. 7*/
+
+
+/* Styles for the wrapper div */
+.wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Styles for the container div */
+.container {
+  width: 90%;
+}
+
+/* Styles for the headings */
+.container h2,
+.chart-container h3 {
+  text-align: center;
+}
+
+/* Styles for the chart containers */
+.chart-container {
+  width: 50%;
+}
+
+.chart-container.left {
+  padding-right: 10px;
+}
+
+.chart-container.right {
+  padding-left: 10px;
+}
+
+/* Styles for the chart divs */
+.chart {
+  height: 300px;
+}
+
+
+/* Dhanashree_LineGraph_Date(11/07)_Css End line no. 42*/
