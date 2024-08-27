@@ -885,8 +885,8 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                         onClick={() => handleSort("date")}
                       >
                         Date
-                      </th>
-                      <th className="attendanceheading">Time</th>
+                     &
+                      Time</th>
                       <th className="attendanceheading">Candidate's Id</th>
                       <th
                         className="attendanceheading"
@@ -935,9 +935,14 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                       </th>
                       <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">Notice Period</th>
+                      {userType ==='TeamLeader' && 
                       <th className="attendanceheading">
-                        Message For Team Leader
-                      </th>
+                      Message For Manager
+                    </th>}
+                    {userType ==='Recruiters' && 
+                      <th className="attendanceheading">
+                      Message For Team Leader
+                    </th>}
                       <th className="attendanceheading">
                         Availability For Interview
                       </th>
@@ -973,24 +978,19 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                           {index + 1}
                         </td>
                         <td
-                          className="tabledata "
+                          className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.date}{" "}
+                          {item.date}
                           <div className="tooltip">
                             <span className="tooltiptext">{item.date}</span>
                           </div>
-                        </td>
-                        <td
-                          className="tabledata "
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.candidateAddedTime || "0"}{" "}
+                      
+                          {item.candidateAddedTime || "-"}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.candidateAddedTime || "0"}
+                              {item.candidateAddedTime}
                             </span>
                           </div>
                         </td>

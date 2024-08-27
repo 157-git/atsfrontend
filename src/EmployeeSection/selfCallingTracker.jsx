@@ -822,7 +822,7 @@ const CallingList = ({
                         Source Name
                       </th>
 
-                      <th className="attendanceheading">Disignation</th>
+                      <th className="attendanceheading">Job Designation</th>
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("requirementId")}

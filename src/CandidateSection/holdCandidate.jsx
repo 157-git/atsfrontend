@@ -887,8 +887,8 @@ const HoldCandidate = ({
                         onClick={() => handleSort("date")}
                       >
                         Date
-                      </th>
-                      <th className="attendanceheading">Time</th>
+                     &
+                      Time</th>
                       <th className="attendanceheading">Candidate's Id</th>
                       <th
                         className="attendanceheading"
@@ -935,9 +935,14 @@ const HoldCandidate = ({
                       </th>
                       <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">NoticePeriod</th>
+                      {userType ==='TeamLeader' && 
                       <th className="attendanceheading">
-                        Message For Team Leader
-                      </th>
+                      Message For Manager
+                    </th>}
+                    {userType ==='Recruiters' && 
+                      <th className="attendanceheading">
+                      Message For Team Leader
+                    </th>}
                       <th className="attendanceheading">
                         Availability For Interview
                       </th>
@@ -974,13 +979,7 @@ const HoldCandidate = ({
                           <div className="tooltip">
                             <span className="tooltiptext">{item.date}</span>
                           </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
+                      
                           {item.candidateAddedTime || "-"}
                           <div className="tooltip">
                             <span className="tooltiptext">

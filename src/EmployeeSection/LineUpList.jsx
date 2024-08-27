@@ -920,8 +920,8 @@ const LineUpList = ({
                         onClick={() => handleSort("date")}
                       >
                         Date
-                      </th>
-                      <th className="attendanceheading">Time</th>
+                     &
+                      Time</th>
                       <th className="attendanceheading">Candidate Id</th>
                       <th
                         className="attendanceheading"
@@ -934,7 +934,7 @@ const LineUpList = ({
                       <th className="attendanceheading">Contact Number</th>
                       <th className="attendanceheading">Whatsapp Number</th>
                       <th className="attendanceheading">Source Name</th>
-                      <th className="attendanceheading">job Designation</th>
+                      <th className="attendanceheading">Job Designation</th>
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("requirementId")}
@@ -967,9 +967,14 @@ const LineUpList = ({
                       <th className="attendanceheading">Offer Letter Msg</th>
                       <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">Notice Period</th>
+                     {userType ==='TeamLeader' && 
                       <th className="attendanceheading">
-                        Message For Team Leader
-                      </th>
+                      Message For Manager
+                    </th>}
+                    {userType ==='Recruiters' && 
+                      <th className="attendanceheading">
+                      Message For Team Leader
+                    </th>}
                       <th className="attendanceheading">
                         Availability For Interview
                       </th>
@@ -1009,13 +1014,7 @@ const LineUpList = ({
                           <div className="tooltip">
                             <span className="tooltiptext">{item.date}</span>
                           </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
+                      
                           {item.candidateAddedTime || "-"}
                           <div className="tooltip">
                             <span className="tooltiptext">

@@ -900,8 +900,8 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                         onClick={() => handleSort("date")}
                       >
                         Date
-                      </th>
-                      <th className="attendanceheading">Time</th>
+                     &
+                      Time</th> <th className="attendanceheading">Time</th>
                       <th className="attendanceheading">Candidate Id</th>
                       <th
                         className="attendanceheading"
@@ -945,7 +945,14 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                       <th className="attendanceheading">Offer Letter Msg</th>
                       <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">NoticePeriod</th>
-                      <th className="attendanceheading">Msg For TeamLeader</th>
+                      {userType ==='TeamLeader' && 
+                      <th className="attendanceheading">
+                      Message For Manager
+                    </th>}
+                    {userType ==='Recruiters' && 
+                      <th className="attendanceheading">
+                      Message For Team Leader
+                    </th>}
                       <th className="attendanceheading">
                         Availability For Interview
                       </th>
@@ -981,13 +988,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                           <div className="tooltip">
                             <span className="tooltiptext">{item.date}</span>
                           </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
+                      
                           {item.candidateAddedTime || "-"}
                           <div className="tooltip">
                             <span className="tooltiptext">
@@ -995,7 +996,6 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                             </span>
                           </div>
                         </td>
-
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}

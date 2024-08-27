@@ -99,7 +99,6 @@ function Sidebar({
   ];
 
   useEffect(() => {
-    // Check if there's a saved color in the session storage
     const savedColor = localStorage.getItem("selectedColor");
 
     if (savedColor) {
@@ -130,6 +129,22 @@ function Sidebar({
     document.documentElement.style.setProperty("--filter-color", color);
   };
 
+  // const handleLogoutLocal = () => {
+  //   const logoutTime = new Date().toLocaleTimeString("en-IN");
+  //   onLogout(logoutTime);
+  // };.
+
+  const temproryLogout = () =>{
+    localStorage.removeItem(`loginTimeSaved_${employeeId}`);
+    localStorage.removeItem(`loginDetailsSaved_${employeeId}`);
+    localStorage.removeItem(`stopwatchTime_${employeeId}`);
+    localStorage.removeItem(`dailyWorkData_${employeeId}`);
+    localStorage.removeItem(`breaks_${employeeId}`);
+    localStorage.removeItem('employeeId')
+    console.log("Temp Logout Successfully");
+    navigate(`/login/${userType}`,{ replace: true })
+  }
+  
   const handleColorClick = (color) => {
     applyColor(color);
     setShowColor(false);
@@ -200,12 +215,6 @@ function Sidebar({
     window.open("https://in.indeed.com/?from=gnav-homepage", "_blank");
   };
 
-  // const handleButtonClick = (buttonKey, callback) => (e) => {
-  //   e.stopPropagation();
-  //   setActiveButton(buttonKey);
-  //   setActiveSubMenu(getParentSubMenu(buttonKey)); // Keep parent submenu open
-  //   callback(e);
-  // };
 
   //Dhanshree Code 
   const handleButtonClick = (buttonKey, callback) => (e) => {
@@ -236,10 +245,7 @@ function Sidebar({
     activeButton
   );
 
-  const handleLogoutLocal = () => {
-    const logoutTime = new Date().toLocaleTimeString("en-IN");
-    onLogout(logoutTime);
-  };
+
 
   useEffect(() => {
     if (window.innerWidth <= 980) {
@@ -1593,9 +1599,14 @@ function Sidebar({
                   justifyContent: "center",
                 }}
               >
-                <button onClick={handleLogoutLocal} className="buttoncss">
+                {/* <button onClick={handleLogoutLocal} className="buttoncss">
+                  Yes
+                </button> */}
+
+                <button onClick={temproryLogout} className="buttoncss">
                   Yes
                 </button>
+
                 <button
                   onClick={() => setShowConfirmation(false)}
                   className="buttoncss"

@@ -208,13 +208,16 @@ const Attendance = () => {
   };
 
   const fetchData = async (id, roles, startDate, endDate) => {
+    console.log(id + "-- idd "+ roles+ " Job "+  startDate+ " Start Date "+  endDate + " -- End Date " );
     try {
+      
       const response = await fetch(
         `${API_BASE_URL}/attendance-data/${id}/${roles}/${startDate}/${endDate}`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+      
       const data = await response.json();
       setAttendanceData(data);
       console.log(data);

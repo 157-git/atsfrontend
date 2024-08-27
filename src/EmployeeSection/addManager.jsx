@@ -56,7 +56,7 @@ const AddManager = () => {
         managerPanNo: "",
         managerQualification: "",
         managerSalary: "",
-        jobRole: "Manager",
+        jobRole: "",
         professionalPtNo: "",
         esIcNo: "",
         pfNo: "",
@@ -255,7 +255,7 @@ const AddManager = () => {
                     managerPanNo: "",
                     managerQualification: "",
                     managerSalary: "",
-                    jobRole: "Manager",
+                    jobRole: "",
                     professionalPtNo: "",
                     esIcNo: "",
                     pfNo: "",
@@ -353,15 +353,18 @@ const AddManager = () => {
 
 
                 <div className="addRec-form-row">
-                    <label>Job Role:</label>
-                    <input
-                        type="text"
-                        name="jobRole"
-                        value={formData.jobRole}
-                        onChange={handleInputChange}
+  <label>Job Role:</label>
+  <select
+    name="jobRole"
+    value={formData.jobRole}
+    onChange={handleInputChange}
+    className="readonly-input"
+  >
+     <option value="" >Select</option>
+    <option value="Manager">Manager</option>
+  </select>
+</div>
 
-                    />
-                </div>
 
                 <div className="addRec-form-row">
                     <label>Official Email:</label>

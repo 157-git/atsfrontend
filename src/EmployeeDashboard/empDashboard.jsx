@@ -594,6 +594,7 @@ const EmpDashboard = ({ userGroup }) => {
     <div
       className={`grid-container ${openSidebarToggle ? "sidebar-open" : "sidebar-closed"
         }`}
+        style={{backgroundColor:"white",  minHeight: "100vh"}}
     >
       <Sidebar
         userGroup={userGroup}

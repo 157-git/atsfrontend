@@ -390,10 +390,10 @@ const EmployeeMasterSheet = () => {
               <th className="attendanceheading">Contact Number</th>
               <th className="attendanceheading">Current Location</th>
               <th className="attendanceheading">Date</th>
-              <th className="attendanceheading">Position</th>
+              <th className="attendanceheading">Job Designation</th>
               <th className="attendanceheading">Recruiter Name</th>
               <th className="attendanceheading">Applying Company</th>
-              <th className="attendanceheading">Requirement ID</th>
+              <th className="attendanceheading">Job Id</th>
               <th className="attendanceheading">Interested Or Not</th>
               <th className="attendanceheading">Source Name</th>
               <th className="attendanceheading">Line Up ID</th>
@@ -409,7 +409,14 @@ const EmployeeMasterSheet = () => {
               <th className="attendanceheading">Final Status</th>
               <th className="attendanceheading">Gender</th>
               <th className="attendanceheading">Holding Any Offer</th>
-              <th className="attendanceheading">Message for Team Leader</th>
+              {userType ==='TeamLeader' && 
+                      <th className="attendanceheading">
+                      Message For Manager
+                    </th>}
+                    {userType ==='Recruiters' && 
+                      <th className="attendanceheading">
+                      Message For Team Leader
+                    </th>}  
               <th className="attendanceheading">Notice Period</th>
 
               <th className="attendanceheading">Qualification</th>

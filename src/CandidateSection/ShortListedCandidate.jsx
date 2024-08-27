@@ -733,8 +733,7 @@ const ShortListedCandidates = ({
                   </th>
                 ) : null}
                 <th className="attendanceheading"> No.</th>
-                <th className="attendanceheading">Date</th>
-                <th className="attendanceheading">Time</th>
+                <th className="attendanceheading">Date & Time</th>
                 <th className="attendanceheading">Candidate's Id</th>
                 <th className="attendanceheading">Recruiter's Name</th>
                 <th className="attendanceheading">Candidate's Name</th>
@@ -767,7 +766,14 @@ const ShortListedCandidates = ({
                 <th className="attendanceheading">Offer Letter Message</th>
                 <th className="attendanceheading">Resume</th>
                 <th className="attendanceheading">Notice Period</th>
-                <th className="attendanceheading">Message For Team Leader</th>
+                {userType ==='TeamLeader' && 
+                      <th className="attendanceheading">
+                      Message For Manager
+                    </th>}
+                    {userType ==='Recruiters' && 
+                      <th className="attendanceheading">
+                      Message For Team Leader
+                    </th>}
                 <th className="attendanceheading">Interview Slot</th>
                 <th className="attendanceheading">Interview Time</th>
                 <th className="attendanceheading">Final Status</th>
@@ -797,13 +803,7 @@ const ShortListedCandidates = ({
                     <div className="tooltip">
                       <span className="tooltiptext">{item.date}</span>
                     </div>
-                  </td>
-
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
+            
                     {item.candidateAddedTime}
                     <div className="tooltip">
                       <span className="tooltiptext">

@@ -174,7 +174,6 @@ function DailyWork({
     const saveLoginDetails = async () => {
       if (loginDetailsSaved) {
         fetchCurrentEmployerWorkId();
-        console.log(userType + "   " + employeeId + " " + name);
         console.log("Login details already saved.");
         return; // Exit early if login details are already saved
       }
@@ -514,7 +513,7 @@ function DailyWork({
         </div>
         <div className="user-details">
           <p>
-            {employeeData.name} - {employeeData.jobRole}
+            {employeeData.name}
             <br />
             157{employeeId}
           </p>

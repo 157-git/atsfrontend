@@ -57,7 +57,7 @@ const AddEmployee = () => {
     panNo: "",
     educationalQualification: "",
     offeredSalary: "",
-    jobRole: "Recruiters",
+    jobRole: "",
     professionalPtNo: "",
     esIcNo: "",
     pfNo: "",
@@ -275,7 +275,7 @@ const AddEmployee = () => {
           panNo: "",
           educationalQualification: "",
           offeredSalary: "",
-          jobRole: "Recruiters",
+          jobRole: "",
           professionalPtNo: "",
           esIcNo: "",
           pfNo: "",
@@ -297,6 +297,14 @@ const AddEmployee = () => {
       toast.error("Error occurred while adding employee data.");
     }
   };
+
+  // const handleJobRoleChange = (e) => {
+  //   const { value } = e.target;
+  //   setFormData((prevState) => ({
+  //     ...prevState,
+  //     jobRole: value,
+  //   }));
+  // };
 
 
   const togglePasswordVisibility = () => {
@@ -380,15 +388,18 @@ const AddEmployee = () => {
         </div>
 
         <div className="addRec-form-row">
-          <label>Job Role:</label>
-          <input
-            type="text"
-            name="jobRole"
-            value={formData.jobRole} 
-            readOnly 
-            className="readonly-input" 
-          />
-        </div>
+  <label>Job Role:</label>
+  <select
+    name="jobRole"
+    value={formData.jobRole}
+    onChange={handleInputChange}
+    className="readonly-input"
+  >
+     <option value="" >Select</option>
+    <option value="Recruiters">Recruiters</option>
+  </select>
+</div>
+
 
 
         <div className="addRec-form-row">

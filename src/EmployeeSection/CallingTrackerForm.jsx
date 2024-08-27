@@ -29,6 +29,7 @@ const CallingTrackerForm = ({
   const [submited, setSubmited] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const { userType } = useParams();
+
   const initialCallingTrackerState = {
     date: new Date().toISOString().slice(0, 10),
     candidateAddedTime: "",
@@ -96,7 +97,6 @@ const CallingTrackerForm = ({
 
 
   useEffect(() => {
-    // fetchRecruiterName();
     fetchRequirementOptions();
   }, [employeeId]);
 
@@ -155,25 +155,6 @@ const CallingTrackerForm = ({
   // Helper function to only update with non-null and non-undefined values
   const ensureStringValue = (value) => (value !== undefined && value !== null ? String(value) : "");
 
-  const fetchRecruiterName = async () => {
-    try {
-      const response = await axios.get(
-        `${API_BASE_URL}/employeeName/${employeeId}/${userType}`
-      );
-      const { data } = response;
-      setCallingTracker((prevState) => ({
-        ...prevState,
-        recruiterName: data,
-      }));
-      setLineUpData((prevState) => ({
-        ...prevState,
-        recruiterName: data,
-      }));
-    } catch (error) {
-      console.error("Error fetching employee name:", error);
-    }
-  };
-
   const fetchRequirementOptions = async () => {
     try {
       const response = await axios.get(
@@ -209,7 +190,7 @@ const CallingTrackerForm = ({
     let errors = {};
 
     if (callingTracker.selectYesOrNo === "Interested") {
-      if (!lineUpData.requirementId) {
+      if (!callingTracker.requirementId) {
         errors.requirementId = "Requirement ID is required";
       }
       if (!lineUpData.dateOfBirth) {
@@ -221,13 +202,13 @@ const CallingTrackerForm = ({
       if (!lineUpData.relevantExperience) {
         errors.relevantExperience = "Relevent Experience is required";
       }
-      if (!lineUpData.currentLocation) {
+      if (!callingTracker.currentLocation) {
         errors.currentLocation = "Location is required";
       }
       if (!lineUpData.qualification) {
         errors.qualification = "Education is required";
       }
-      if (!lineUpData.communicationRating) {
+      if (!callingTracker.communicationRating) {
         errors.communicationRating = "Communication Rating is required";
       }
       if (!lineUpData.expectedCTCLakh && !lineUpData.expectedCTCThousand) {
@@ -432,13 +413,20 @@ const CallingTrackerForm = ({
     const value = e.target.value;
     if (value === "Other") {
       setIsOtherLocationSelected(true);
-      setLineUpData({ ...lineUpData, currentLocation: "" });
+      setCallingTracker((prevState) => ({
+        ...prevState,
+        currentLocation: "", 
+      }));
     } else {
       setIsOtherLocationSelected(false);
-      setLineUpData({ ...lineUpData, currentLocation: value });
+      setCallingTracker((prevState) => ({
+        ...prevState,
+        currentLocation: value, 
+      }));
     }
     setErrors((prevErrors) => ({ ...prevErrors, currentLocation: "" }));
   };
+
 
   const handleEducationChange = (e) => {
     const value = e.target.value;
@@ -479,32 +467,34 @@ const CallingTrackerForm = ({
 
 
 
-  const handleRequirementChange = (e) => {
-    const { value } = e.target;
-    const selectedRequirement = requirementOptions.find(
-      (requirement) => requirement.requirementId === parseInt(value)
-    );
+const handleRequirementChange = (e) => {
+  const { value } = e.target;
+  const selectedRequirement = requirementOptions.find(
+    (requirement) => requirement.requirementId === parseInt(value)
+  );
 
-    if (selectedRequirement) {
-      setLineUpData((prevState) => ({
-        ...prevState,
-        requirementId: selectedRequirement.requirementId,
-        jobDesignation: selectedRequirement.designation,
-        requirementCompany: selectedRequirement.companyName,
-        incentive: selectedRequirement.incentive,
-      }));
-      setendPoint(selectedRequirement.detailAddress);
-    } else {
-      setLineUpData((prevState) => ({
-        ...prevState,
-        requirementId: value,
-        jobDesignation: "",
-        requirementCompany: "",
-        incentive: "",
-      }));
-    }
-    setErrors((prevErrors) => ({ ...prevErrors, requirementId: "" }));
-  };
+  if (selectedRequirement) {
+    setCallingTracker((prevState) => ({
+      ...prevState,
+      requirementId: selectedRequirement.requirementId,
+      jobDesignation: selectedRequirement.designation,
+      requirementCompany: selectedRequirement.companyName,
+      incentive: selectedRequirement.incentive,
+    }));
+  } else {
+    setCallingTracker((prevState) => ({
+      ...prevState,
+      requirementId: value,
+      jobDesignation: "",
+      requirementCompany: "",
+      incentive: "",
+    }));
+  }
+
+  setErrors((prevErrors) => ({ ...prevErrors, requirementId: "" }));
+};
+
+
   const handleShow = () => {
     setShowModal(true);
   };
@@ -709,99 +699,101 @@ const CallingTrackerForm = ({
                   )}
                 </div>
               </div>
+
               <div className="calling-tracker-field">
                 <label>Job Id</label>
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
-                    <select
-                      id="requirementId"
-                      name="requirementId"
-                      value={lineUpData.requirementId}
-                      onChange={handleRequirementChange}
-                    >
-                      <option value="">Select Job Id</option>
-                      {requirementOptions.map((option) => (
-                        <option
-                          key={option.requirementId}
-                          value={option.requirementId}
-                        >
-                          {option.requirementId}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.requirementId && (
-                      <div className="error-message">
-                        {errors.requirementId}
-                      </div>
-                    )}
+                  <select
+        id="requirementId"
+        name="requirementId"
+        value={callingTracker.requirementId}
+        onChange={handleRequirementChange}
+      >
+        <option value="">Select Job Id</option>
+        {requirementOptions.map((option) => (
+          <option
+            key={option.requirementId}
+            value={option.requirementId}
+          >
+            {option.requirementId}
+          </option>
+        ))}
+      </select>
+      {errors.requirementId && (
+        <div className="error-message">{errors.requirementId}</div>
+      )}
                   </div>
                   <div className="calling-tracker-two-input">
-                    <input
-                      placeholder=" Your Incentive"
-                      value={lineUpData.incentive}
-                      readOnly
-                      type="text"
-                    />
+                  <input
+        placeholder="Your Incentive"
+        value={callingTracker.incentive}
+        readOnly
+        type="text"
+      />
                   </div>
                 </div>
               </div>
+
             </div>
             <div className="calling-tracker-row-gray">
               <div className="calling-tracker-field">
                 <label>Applying For Position</label>
                 <div className="calling-tracker-two-input-container">
-                  <input
-                    type="text"
-                    id="jobDesignation"
-                    name="jobDesignation"
-                    className="calling-tracker-two-input"
-                    value={lineUpData.jobDesignation}
-                    placeholder="Enter Position"
-                    readOnly
-                  />
-                  <input
-                    type="text"
-                    placeholder="Company"
-                    id="requirementCompany"
-                    name="requirementCompany"
-                    className="calling-tracker-two-input"
-                    value={lineUpData.requirementCompany}
-                    readOnly
-                  />
+                <input
+        type="text"
+        id="jobDesignation"
+        name="jobDesignation"
+        className="calling-tracker-two-input"
+        value={callingTracker.jobDesignation}
+        placeholder="Enter Position"
+        readOnly
+      />
+      <input
+        type="text"
+        placeholder="Company"
+        id="requirementCompany"
+        name="requirementCompany"
+        className="calling-tracker-two-input"
+        value={callingTracker.requirementCompany}
+        readOnly
+      />
                 </div>
               </div>
+
               <div className="calling-tracker-field">
                 <label style={{ color: "gray" }}>Current Location</label>
+
                 <div className="calling-tracker-two-input-container">
-                  <div className="calling-tracker-two-input">
-                    {!isOtherLocationSelected ? (
-                      <select
-                        name="currentLocation"
-                        value={lineUpData.currentLocation}
-                        onChange={handleLocationChange}
-                      >
-                        <option value="" style={{ color: "gray" }}>
-                          Select Location
-                        </option>
-                        <option value="Pune City">Pune City</option>
-                        <option value="PCMC">PCMC</option>
-                        <option value="Other">Other</option>
-                      </select>
-                    ) : (
-                      <input
-                        type="text"
-                        name="currentLocation"
-                        value={lineUpData.currentLocation}
-                        onChange={handleLineUpChange}
-                        placeholder="Enter your location"
-                      />
-                    )}
-                    {errors.currentLocation && (
-                      <div className="error-message">
-                        {errors.currentLocation}
-                      </div>
-                    )}
-                  </div>
+                   <div className="calling-tracker-two-input">
+      {!isOtherLocationSelected ? (
+        <select
+          name="currentLocation"
+          value={callingTracker.currentLocation}
+          onChange={handleLocationChange}
+        >
+          <option value="" style={{ color: "gray" }}>
+            Select Location
+          </option>
+          <option value="Pune City">Pune City</option>
+          <option value="PCMC">PCMC</option>
+          <option value="Other">Other</option>
+        </select>
+      ) : (
+        <input
+          type="text"
+          name="currentLocation"
+          value={callingTracker.currentLocation}
+          onChange={(e) =>
+            setCallingTracker({ ...callingTracker, currentLocation: e.target.value })
+          }
+          placeholder="Enter your location"
+        />
+      )}
+      {errors.currentLocation && (
+        <div className="error-message">{errors.currentLocation}</div>
+      )}
+    </div>
                   <div className="calling-tracker-two-input">
                     <input
                       type="text"
@@ -1425,13 +1417,13 @@ const CallingTrackerForm = ({
                 <div className="calling-tracker-field-sub-div">
                   <input
                     type="text"
-                    name="currentcompany"
-                    placeholder="Current Company"
-                    value={lineUpData.currentcompany}
+                    name="companyName  "
+                    placeholder="Current company"
+                    value={lineUpData.companyName}
                     onChange={(e) =>
                       setLineUpData({
                         ...lineUpData,
-                        currentcompany: e.target.value,
+                        companyName: e.target.value,
                       })
                     }
                     className="plain-input"
@@ -1497,7 +1489,6 @@ const CallingTrackerForm = ({
                       placeholder="Notice Period"
                       value={lineUpData.noticePeriod}
                       onChange={handleLineUpChange}
-
                       min="0"
                       max="90"
                     />
@@ -1510,10 +1501,11 @@ const CallingTrackerForm = ({
                   <input
                     type="text"
                     name="communicationRating"
-                    value={lineUpData.communicationRating}
-                    onChange={handleLineUpChange}
+                    value={callingTracker.communicationRating}
+                    onChange={handleChange}
                     className="plain-input"
-                    placeholder="Enter Communication Rating"
+                    placeholder="communicationRating"
+
                   />
                   {errors.communicationRating && (
                     <div className="error-message error-two-input-box">
@@ -2050,7 +2042,6 @@ const ModalComponent = ({
                     id="jobId"
                     className="form-control"
                     placeholder="Enter Job Id"
-
                   />
                 </div>
 

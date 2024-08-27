@@ -56,7 +56,7 @@ const AddTeamLeader = () => {
     tlPanNo: "",
     tlQualification: "",
     tlSalary: "",
-    jobLevel: "TeamLeader",
+    jobLevel: "",
     professionalPtNo: "",
     esIcNo: "",
     pfNo: "",
@@ -254,7 +254,7 @@ const AddTeamLeader = () => {
             tlPanNo: "",
             tlQualification: "",
             tlSalary: "",
-            jobLevel: "TeamLeader",
+            jobLevel: "",
             professionalPtNo: "",
             esIcNo: "",
             pfNo: "",
@@ -351,16 +351,20 @@ const AddTeamLeader = () => {
           )}
         </div>
 
+       
         <div className="addRec-form-row">
-        <label>Job Role:</label>
-        <input
-            type="text"
-            name="jobLevel"
-            value={formData.jobLevel} 
-            readOnly 
-            className="readonly-input" 
-        />
-        </div>
+  <label>Job Role:</label>
+  <select
+    name="jobLevel"
+    value={formData.jobLevel}
+    onChange={handleInputChange}
+    className="readonly-input"
+  >
+     <option value="" >Select</option>
+    <option value="TeamLeader">TeamLeader</option>
+  </select>
+</div>
+
 
         <div className="addRec-form-row">
           <label>Official Email:</label>
