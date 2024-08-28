@@ -8,6 +8,8 @@ import "./EmployeeMasterSheet.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
+import Loader from "../EmployeeSection/loader";
+
 
 const EmployeeMasterSheet = () => {
   const [data, setData] = useState([]);
@@ -26,6 +28,7 @@ const EmployeeMasterSheet = () => {
   const [allSelected, setAllSelected] = useState(false); // New state to track if all rows are selected
   const [showForwardPopup, setShowForwardPopup] = useState(false);
   const [isDataSending, setIsDataSending] = useState(false);
+  const [loading,setLoading]=useState(true)
 
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_39
   const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
@@ -108,8 +111,8 @@ const EmployeeMasterSheet = () => {
         `${API_BASE_URL}/master-sheet/${employeeId}/${userType}`
       );
       const data = await response.json();
-
       setData(data);
+      setLoading(false)
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
     }
@@ -312,6 +315,15 @@ const EmployeeMasterSheet = () => {
 
   return (
     <div className="App-after">
+      {
+        loading ? (
+          <div className="register">
+          <Loader></Loader>
+        </div>
+        ) :(
+          <>
+          
+     
       <div
         style={{
           display: "flex",
@@ -320,6 +332,7 @@ const EmployeeMasterSheet = () => {
           padding: "10px",
         }}
       >
+        
         <h5 style={{ color: "gray" }}>Employee Master Sheet</h5>
         {userType !== "Recruiters" && (
           <div>
@@ -409,14 +422,19 @@ const EmployeeMasterSheet = () => {
               <th className="attendanceheading">Final Status</th>
               <th className="attendanceheading">Gender</th>
               <th className="attendanceheading">Holding Any Offer</th>
-              {userType ==='TeamLeader' && 
-                      <th className="attendanceheading">
-                      Message For Manager
-                    </th>}
                     {userType ==='Recruiters' && 
                       <th className="attendanceheading">
                       Message For Team Leader
-                    </th>}  
+                    </th>} 
+                    {userType ==='TeamLeader' && 
+                      <th className="attendanceheading">
+                      Message For Manager
+                    </th>}
+                    {userType ==='Manager' && 
+                      <th className="attendanceheading">
+                      Message Form Team Leader
+                    </th>} 
+
               <th className="attendanceheading">Notice Period</th>
 
               <th className="attendanceheading">Qualification</th>
@@ -979,6 +997,12 @@ const EmployeeMasterSheet = () => {
           <ClipLoader size={50} color="#ffb281" />
         </div>
       )}
+
+
+</>
+        )
+      }
+
     </div>
   );
 };

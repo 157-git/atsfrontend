@@ -40,11 +40,11 @@ const AddJobDescription = () => {
     preferredQualifications: [
       { employeeId: "", preferredQualificationMsg: "" },
     ],
-    RoundOfInterView: [
-      {
-        round: "",
-      },
-    ],
+    // RoundOfInterView: [
+    //   {
+    //     round: "",
+    //   },
+    // ],
   });
 
   const handleChange = (e) => {
@@ -164,11 +164,11 @@ const AddJobDescription = () => {
           preferredQualifications: [
             { employeeId: "", preferredQualificationMsg: "" },
           ],
-          RoundOfInterView: [
-            {
-              round: "",
-            },
-          ],
+          // RoundOfInterView: [
+          //   {
+          //     round: "",
+          //   },
+          // ],
         });
       } else {
         toast.error(`Error: ${errorText}`);
@@ -219,7 +219,7 @@ const AddJobDescription = () => {
                 <div className="field">
                   <label>Position:</label>
                   <input
-                    type="text"
+                    type="number"
                     name="position"
                     value={formData.position}
                     onChange={handleChange}
@@ -516,9 +516,8 @@ const AddJobDescription = () => {
                   />
                 </div>
               </div>
-
+              {/* 
               <div className="bg-gray-100 multi-field">
-                {/* <h3>Preferred Qualifications</h3> */}
                 {formData.RoundOfInterView.map((item, index) => (
                   <div key={index}>
                     <div className="field">
@@ -552,10 +551,10 @@ const AddJobDescription = () => {
                     Add More Interview Rounds
                   </button>
                 </div>
-              </div>
+              </div> */}
+
 
               <div className="bg-white multi-field">
-                {/* <h3>Responsibilities</h3> */}
                 {formData.responsibilities.map((item, index) => (
                   <div key={index}>
                     <div className="field" hidden>
@@ -604,7 +603,6 @@ const AddJobDescription = () => {
               </div>
 
               <div className="bg-gray-100 multi-field">
-                {/* <h3>Job Requirements</h3> */}
                 {formData.jobRequirements.map((item, index) => (
                   <div key={index}>
                     <div className="field" hidden>
@@ -653,7 +651,6 @@ const AddJobDescription = () => {
               </div>
 
               <div className="multi-field">
-                {/* <h3>Preferred Qualifications</h3> */}
                 {formData.preferredQualifications.map((item, index) => (
                   <div key={index}>
                     <div className="field" hidden>

@@ -7,6 +7,8 @@ import Button from "react-bootstrap/Button";
 import HashLoader from "react-spinners/HashLoader";
 import * as XLSX from "xlsx";
 import { API_BASE_URL } from "../api/api";
+import Loader from "../EmployeeSection/loader";
+
 
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
@@ -707,14 +709,12 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
 
   return (
     <div className="calling-list-container">
+
       {loading ? (
         <div className="register">
-          <HashLoader
-             color={`${localStorage.getItem("selectedColor")}`}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
+          <Loader></Loader>
         </div>
+        
       ) : (
         <>
           {!showUpdateCallingTracker ? (
@@ -1853,6 +1853,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
           )}
         </>
       )}
+
       {isDataSending && (
         <div className="ShareFunc_Loading_Animation">
           <ClipLoader size={50} color="#ffb281" />

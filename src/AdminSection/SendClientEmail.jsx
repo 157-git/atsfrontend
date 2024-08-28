@@ -12,6 +12,7 @@ import { Form, Table } from "react-bootstrap";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
+import Loader from "../EmployeeSection/loader";
 // SwapnilRokade_SendClientEmail_ModifyFilters_11/07
 // SwapnilROkade_AddingErrorAndSuccessMessage_19/07
 
@@ -366,11 +367,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
     <div className="SCE-list-container">
       {loading ? (
         <div className="register">
-          <HashLoader
+          {/* <HashLoader
              color={`${localStorage.getItem("selectedColor")}`}
             aria-label="Loading Spinner"
             data-testid="loader"
-          />
+          /> */}
+          <Loader></Loader>
         </div>
       ) : (
         <>

@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import { API_BASE_URL } from "../api/api";
 
 
-
 function ShareEDM({ Descriptions, onShareEdm }) {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);

@@ -9,6 +9,7 @@ import HashLoader from "react-spinners/HashLoader";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
+import Loader from "./loader";
 
 // SwapnilRokade_lineUpList_ModifyFilters_47to534_11/07
 const LineUpList = ({
@@ -121,11 +122,13 @@ const LineUpList = ({
   const { userType } = useParams();
   console.log(userType);
 
+  
   //akash_pawar_LineUpList_ShareFunctionality_16/07_128
   const fetchCallingTrackerData = async () => {
-    const url = `${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`;
+
     try {
-      const response = await fetch(url);
+      const response = await fetch(
+        `${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -138,6 +141,8 @@ const LineUpList = ({
       // Handle error scenarios or show error messages to the user
       setLoading(false);
     }
+    console.log(employeeIdnew + "----------->");
+    console.log(userType + "----------->");
   };
 
   useEffect(() => {
@@ -736,11 +741,12 @@ const LineUpList = ({
     <div className="calling-list-container">
       {loading ? (
         <div className="register">
-          <HashLoader
+          {/* <HashLoader
             color={`${localStorage.getItem("selectedColor")}`}
             aria-label="Loading Spinner"
             data-testid="loader"
-          />
+          /> */}
+          <Loader></Loader>
         </div>
       ) : (
         <>
@@ -974,6 +980,10 @@ const LineUpList = ({
                     {userType ==='Recruiters' && 
                       <th className="attendanceheading">
                       Message For Team Leader
+                    </th>}
+                    {userType ==='Manager' && 
+                      <th className="attendanceheading">
+                      Message For Super User
                     </th>}
                       <th className="attendanceheading">
                         Availability For Interview

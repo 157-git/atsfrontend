@@ -114,11 +114,12 @@ const EmployeeProfileData = ({
                   </p>
                   <p className="m-1">
                     <b>Job Role : </b>
-                    {employeeData.jobRole}
+                    {employeeData.gender}
                   </p>
                   <p className="m-1">
                     <b>Gender : </b>
-                    {employeeData.gender}
+                    {employeeData.jobRole}
+              
                   </p>
                   <p className="m-1">
                     <b>Blood Group : </b>
@@ -299,9 +300,9 @@ const EmployeeProfileData = ({
                     <li>
                       Reason For Leaving : {employeeData.reasonForLeaving}
                     </li>
-                    <li>
+                    {/* <li>
                       Employee Experience : {employeeData.employeeExperience}
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
                 <div className="employee-profile-reportingmanager-details">
@@ -311,11 +312,11 @@ const EmployeeProfileData = ({
                   <ul>
                     <li>
                       Reporting Manager Name :{" "}
-                      {employeeData.reportingMangerName}
+                      {employeeData.reportingPersonName}
                     </li>
                     <li>
                       Reporting Manager Designation :{" "}
-                      {employeeData.reportingMangerDesignation}
+                      {employeeData.reportingPersonDesignation}
                     </li>
                   </ul>
                 </div>
@@ -405,20 +406,20 @@ const EmployeeProfileData = ({
                   <ul>
                     <li>
                       LinkedIn :{" "}
-                      <a href={`${employeeData.linkedInURl}`}>
-                        {employeeData.linkedInURl}
+                      <a href={`${employeeData.linkedInURL}`} target="_blank">
+                        {employeeData.linkedInURL}
                       </a>
                     </li>
                     <li>
                       Facebook :{" "}
-                      <a href={`${employeeData.faceBookURL}`}>
+                      <a href={`${employeeData.faceBookURL}`} target="_blank">
                         {employeeData.faceBookURL}
                       </a>
                     </li>
                     <li>
                       Twitter :{" "}
-                      <a href={`${employeeData.twitterURl}`}>
-                        {employeeData.twitterURl}
+                      <a href={`${employeeData.twitterURl}`} target="_blank">
+                        {employeeData.twitterURL}
                       </a>
                     </li>
                   </ul>
@@ -493,7 +494,7 @@ const EmployeeProfileData = ({
           <Modal.Header
             style={{ fontSize: "18px", backgroundColor: "#f2f2f2" }}
           >
-            Employee Profile
+            Employee Profile 
             <button
               onClick={onClose}
               style={{

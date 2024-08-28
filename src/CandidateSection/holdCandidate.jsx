@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import HashLoader from "react-spinners/HashLoader";
 import * as XLSX from "xlsx";
 import { API_BASE_URL } from "../api/api";
+import Loader from "../EmployeeSection/loader";
 
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
@@ -704,11 +705,13 @@ const HoldCandidate = ({
     <div className="App-after">
       {loading ? (
         <div className="register">
-          <HashLoader
+          {/* <HashLoader
              color={`${localStorage.getItem("selectedColor")}`}
             aria-label="Loading Spinner"
             data-testid="loader"
-          />
+          /> */}
+          <Loader></Loader>
+
         </div>
       ) : (
         <>

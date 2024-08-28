@@ -9,6 +9,7 @@ import * as XLSX from "xlsx";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
+import Loader from "../EmployeeSection/loader";
 
 // SwapnilRokade_SelectedCandidate_ModifyFilters_47to534_11/07
 const SelectedCandidate = ({ loginEmployeeName }) => {
@@ -699,11 +700,12 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     <div className="App-after">
       {loading ? (
         <div className="register">
-          <HashLoader
+          {/* <HashLoader
              color={`${localStorage.getItem("selectedColor")}`}
             aria-label="Loading Spinner"
             data-testid="loader"
-          />
+          /> */}
+          <Loader></Loader>
         </div>
       ) : (
         <>

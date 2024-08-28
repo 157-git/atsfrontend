@@ -9,6 +9,7 @@ import * as XLSX from "xlsx";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
+import Loader from "./loader";
 
 const CallingList = ({
   updateState,
@@ -619,11 +620,12 @@ const CallingList = ({
     <div className="calling-list-container">
       {loading ? (
         <div className="register">
-          <HashLoader
+          {/* <HashLoader
             color={`${localStorage.getItem("selectedColor")}`}
             aria-label="Loading Spinner"
             data-testid="loader"
-          />
+          /> */}
+          <Loader></Loader>
         </div>
       ) : (
         <>

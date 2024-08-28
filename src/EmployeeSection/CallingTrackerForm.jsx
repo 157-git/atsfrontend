@@ -193,9 +193,7 @@ const CallingTrackerForm = ({
       if (!callingTracker.requirementId) {
         errors.requirementId = "Requirement ID is required";
       }
-      if (!lineUpData.dateOfBirth) {
-        errors.dateOfBirth = "Date of Birth is required";
-      }
+      
       if (!lineUpData.experienceYear || !lineUpData.experienceMonth) {
         errors.experienceYear = "Experience is required";
       }
@@ -593,6 +591,7 @@ const handleRequirementChange = (e) => {
                       type="button"
                       onClick={handleShow}
                       className="calling-tracker-popup-open-btn"
+                      style={{width:"100px"}}
                     >
                       Help
                     </button>
@@ -1656,6 +1655,7 @@ const handleRequirementChange = (e) => {
                     >
                       <option value="">Select</option>
                       <option value="Interested">Interested</option>
+                      <option value="Interested, will confirm later">Interested, will confirm later</option>
                       <option value="No Interested">No Interested</option>
                       <option value="Interested But Not Eligible">
                         Intersted But Not Eligible
@@ -1680,13 +1680,13 @@ const handleRequirementChange = (e) => {
                       }
                     >
                       <option value="">Whats Now</option>
-                      <option value="Interview schedule">
+                      <option value="Interview Schedule">
                         Interview schedule
                       </option>
                       <option value="Attending After Some time">
                         Attending After Some time
                       </option>
-                      <option value="">Response On Hold</option>
+                      <option value="Response On Hold">Response On Hold</option>
                     </select>
                   </div>
                 </div>

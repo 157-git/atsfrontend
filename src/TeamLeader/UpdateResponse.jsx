@@ -5,6 +5,8 @@ import UpdateResponseFrom from "./UpdateResponseFrom";
 import HashLoader from "react-spinners/HashLoader";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
+import Loader from "../EmployeeSection/loader";
+
 
 const UpdateResponse = ({ onSuccessAdd, date }) => {
   const [updateResponseList, setUpdateResponseList] = useState([]);
@@ -22,6 +24,9 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
   const [selectedFilters, setSelectedFilters] = useState({});
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [activeFilterOption, setActiveFilterOption] = useState(null);
+
+
+
   const filterOptions = [
     "candidateId",
     "candidateName",
@@ -63,7 +68,9 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
         setFilteredCallingList([]);
         setUpdateResponseList([]);
       }
-      setLoading(false);
+      // setLoading(false);
+      setLoading(false)
+
     } catch (err) {
       console.log("Error fetching shortlisted data:", err);
       setLoading(false);
@@ -227,11 +234,12 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     <div className="TeamLead-main">
       {loading ? (
         <div className="register">
-          <HashLoader
+          {/* <HashLoader
              color={`${localStorage.getItem("selectedColor")}`}
             aria-label="Loading Spinner"
             data-testid="loader"
-          />
+          /> */}
+          <Loader></Loader>
         </div>
       ) : (
         <>
