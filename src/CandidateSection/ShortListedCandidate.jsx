@@ -732,7 +732,7 @@ const ShortListedCandidates = ({
                     />
                   </th>
                 ) : null}
-                <th className="attendanceheading"> No.</th>
+                <th className="attendanceheading">Sr No.</th>
                 <th className="attendanceheading">Date & Time</th>
                 <th className="attendanceheading">Candidate's Id</th>
                 <th className="attendanceheading">Recruiter's Name</th>
@@ -802,15 +802,13 @@ const ShortListedCandidates = ({
                     {item.date}
                     <div className="tooltip">
                       <span className="tooltiptext">{item.date}</span>
-                    </div>
-            
-                    {item.candidateAddedTime}
-                    <div className="tooltip">
+                      --
                       <span className="tooltiptext">
                         {item.candidateAddedTime}
                       </span>
                     </div>
-                  </td>
+                    </td>
+                  
                   <td
                     className="tabledata"
                     onMouseOver={handleMouseOver}

@@ -657,18 +657,19 @@ strong {
   background-color: var(--Bg-color) !important;
 }
 
+
 .loader-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Shadow effect like Bootstrap modal */
+  background: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  z-index: 1050; /* Make sure it appears above everything */
+  z-index: 1050; 
 }
 
 .loader-container {
@@ -681,16 +682,13 @@ strong {
 }
 
 .spinner {
-  border: 10px solid transparent; /* Make border transparent */
+  border: 8px solid transparent; 
   border-radius: 50%;
   border-color: var(--Bg-color);
-  border-top: 10px solid rgb(0, 0, 0);
-  /* border-right: 12px solid rgb(88, 88, 180);
-  border-bottom: 12px solid rgb(73, 160, 73);
-  border-left: 12px solid rgb(222, 222, 95); */
+  border-top: 8px solid rgb(0, 0, 0);
   width: 80px;
   height: 80px;
-  animation: spin 1.5s linear infinite; /* Faster spin for better visual */
+  animation: spin 1.5s linear infinite; 
   margin-bottom: 10px;
 }
 

@@ -910,7 +910,7 @@ function Sidebar({
                           </a>
                         </li>
 
-                        {/* <li
+                        <li
                           onClick={handleButtonClick(
                             "questionPaper",
                             toggleQuestionPaper
@@ -925,8 +925,9 @@ function Sidebar({
                               Create Question paper
                             </span>
                           </a>
-                        </li> */}
+                        </li> 
                         {/* neha_add_scheduleinterview_page_line_no511_523 */}
+                        
                         <li
                           onClick={handleButtonClick(
                             "scheduleinterview",
@@ -944,7 +945,7 @@ function Sidebar({
                             </span>
                           </a>
                         </li>
-                        <li
+                        {/* <li
                           onClick={handleButtonClick(
                             "invoiceReport",
                             toggleInvoiceReport
@@ -955,12 +956,11 @@ function Sidebar({
                           }
                         >
                           <a href="#">
-                            {/* <img src={Circle} style={{ width: "10px" }} alt="" /> */}
                             <span className="sidebar-text">
                               Create Question paper
                             </span>
                           </a>
-                        </li>
+                        </li> */}
 
                         <li
                           onClick={handleButtonClick(
@@ -1599,10 +1599,6 @@ function Sidebar({
                   justifyContent: "center",
                 }}
               >
-                {/* <button onClick={handleLogoutLocal} className="buttoncss">
-                  Yes
-                </button> */}
-
                 <button onClick={temproryLogout} className="buttoncss">
                   Yes
                 </button>

@@ -187,7 +187,6 @@ const JobListing = () => {
 
   const toggleEdm2 = () => {
     setShowEDM(!showEDM);
-    // document.querySelector(".main-description-share2").style.display = "block";
   };
 
 
@@ -231,8 +230,10 @@ const JobListing = () => {
 
   return (
     <>
+    <div className="jd-header-search">
       <div className="search-container">
         <div className="search-bar">
+
           <input
             className="search-input"
             placeholder=" Enter keyword/Designation/Companies"
@@ -273,8 +274,9 @@ const JobListing = () => {
           </button>
         </div>
       </div>
+
       <div className="filter-section">
-        <div className="filter-options-container">
+        <div className="jd-filter-options-container">
           {filterOptions.map((option) => {
             const uniqueValues = Array.from(
               new Set(jobDescriptions.map((item) => item[option]))
@@ -311,12 +313,13 @@ const JobListing = () => {
           })}
         </div>
       </div>
+
+      </div>
       {!showViewMore && (
         <div className="jdCards">
           {filteredJobDescriptions.map((item, job, index) => (
             <div className="job-listing" key={index}>
               <div className="job-header">
-                {/* <h3 >{item.requirementId}</h3> */}
                 <h2 className="job-title">{item.designation} </h2>
                 <div className="job-company">{item.companyName}</div>
               </div>
@@ -337,14 +340,6 @@ const JobListing = () => {
                   <i class="fa-solid fa-indian-rupee-sign"></i>
                   {item.incentive}
                 </div>
-                {/* <div className="job-posted">
-          <i className="fas fa-clock"></i>
-          {item.fild}
-        </div> */}
-                {/* <div className="job-posted">
-          <i className="fas fa-clock"></i>
-          {item.requirementId}
-        </div> */}
               </div>
               {/* Arshad Added this button to share edm  */}
 
@@ -372,10 +367,10 @@ const JobListing = () => {
                 </button>
                 {/* <button className='daily-tr-btn' onClick={()=>toggleEdm(index)}> EDM  <i id='edm-share-icon'  className="fa-solid fa-eye"></i></button> */}
               </div>
-              {heldJobId === job.requirementId && (
+              {/* {heldJobId === job.requirementId && (
                 <p style={{ color: "red", display: "flex", justifyContent: "center" }}>
                   This Job Id Hold By Manager</p>
-              )}
+              )} */}
             </div>
           ))}
         </div>

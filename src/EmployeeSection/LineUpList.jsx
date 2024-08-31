@@ -122,7 +122,7 @@ const LineUpList = ({
   const { userType } = useParams();
   console.log(userType);
 
-  
+
   //akash_pawar_LineUpList_ShareFunctionality_16/07_128
   const fetchCallingTrackerData = async () => {
 
@@ -138,11 +138,8 @@ const LineUpList = ({
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
-      // Handle error scenarios or show error messages to the user
       setLoading(false);
     }
-    console.log(employeeIdnew + "----------->");
-    console.log(userType + "----------->");
   };
 
   useEffect(() => {
@@ -773,9 +770,13 @@ const LineUpList = ({
                   }}
                 >
                   <div>
-                    <button className="lineUp-share-btn" onClick={showPopup}>
-                      Create Excel
-                    </button>
+
+                    {(userType === 'Manager' || userType === 'TeamLeader') && (
+                      <button className="lineUp-share-btn" onClick={showPopup}>
+                        Create Excel
+                      </button>
+                    )}
+
 
                     {showExportConfirmation && (
                       <div className="popup-containers">
@@ -904,6 +905,7 @@ const LineUpList = ({
                   </div>
                 </div>
               )}
+              
               <div className="attendanceTableData">
                 <table className="attendance-table">
                   <thead>
@@ -920,14 +922,15 @@ const LineUpList = ({
                           />
                         </th>
                       ) : null}
+
                       <th className="attendanceheading">No.</th>
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("date")}
                       >
                         Date
-                     &
-                      Time</th>
+                        &
+                        Time</th>
                       <th className="attendanceheading">Candidate Id</th>
                       <th
                         className="attendanceheading"
@@ -953,7 +956,8 @@ const LineUpList = ({
                       </th>
                       <th className="attendanceheading">Current Location</th>
                       <th className="attendanceheading">Full Address</th>
-                      <th className="attendanceheading">Calling Feedback</th>
+                      <th className="attendanceheading">Calling Remark</th>
+                      <th className="attendanceheading">Call Summary</th>
                       <th className="attendanceheading">
                         Recruiter's Incentive
                       </th>
@@ -973,18 +977,18 @@ const LineUpList = ({
                       <th className="attendanceheading">Offer Letter Msg</th>
                       <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">Notice Period</th>
-                     {userType ==='TeamLeader' && 
-                      <th className="attendanceheading">
-                      Message For Manager
-                    </th>}
-                    {userType ==='Recruiters' && 
-                      <th className="attendanceheading">
-                      Message For Team Leader
-                    </th>}
-                    {userType ==='Manager' && 
-                      <th className="attendanceheading">
-                      Message For Super User
-                    </th>}
+                      {userType === 'TeamLeader' &&
+                        <th className="attendanceheading">
+                          Message For Manager
+                        </th>}
+                      {userType === 'Recruiters' &&
+                        <th className="attendanceheading">
+                          Message For Team Leader
+                        </th>}
+                      {userType === 'Manager' &&
+                        <th className="attendanceheading">
+                          Message For Super User
+                        </th>}
                       <th className="attendanceheading">
                         Availability For Interview
                       </th>
@@ -1024,7 +1028,7 @@ const LineUpList = ({
                           <div className="tooltip">
                             <span className="tooltiptext">{item.date}</span>
                           </div>
-                      
+
                           {item.candidateAddedTime || "-"}
                           <div className="tooltip">
                             <span className="tooltiptext">
@@ -1220,6 +1224,19 @@ const LineUpList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
+                          {item.feedBack || "-"}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.feedBack}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
                           {item.incentive || "-"}
                           <div className="tooltip">
                             <span className="tooltiptext">
@@ -1227,6 +1244,8 @@ const LineUpList = ({
                             </span>
                           </div>
                         </td>
+
+                    
 
                         <td
                           className="tabledata"
@@ -1543,7 +1562,7 @@ const LineUpList = ({
                               className="fa-regular fa-pen-to-square"
                             ></i>
                           </td>
-                          
+
                         </>
                       </tr>
                     ))}

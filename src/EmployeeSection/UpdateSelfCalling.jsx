@@ -9,11 +9,12 @@ import { toast } from "react-toastify";
 import "../EmployeeSection/UpdateSelfCalling.css"
 import { API_BASE_URL } from "../api/api";
 
-const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) => {
+const UpdateCallingTracker = ({ initialData, candidateId, onCancel }) => {
   const [isOtherEducationSelected, setIsOtherEducationSelected] =
     useState(false);
   const [callingTracker, setCallingTracker] = useState({
     date: new Date().toISOString().slice(0, 10),
+    candidateId:candidateId,
     candidateAddedTime: "",
     recruiterName: "",
     candidateName: "",
@@ -29,16 +30,15 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
     fullAddress: "",
     communicationRating: "",
     selectYesOrNo: "No",
-
     lineUp: {
       companyName: "",
       experienceYear: "",
       experienceMonth: "",
       relevantExperience: "",
-      currentCtCLakh: "",
-      currentCtCThousand: "",
-      expectedCtCLakh: "",
-      expectedCtCThousand: "",
+      currentCTCLakh: "",
+      currentCTCThousand: "",
+      expectedCTCLakh: "",
+      expectedCTCThousand: "",
       dateOfBirth: "",
       gender: "",
       qualification: "",
@@ -56,9 +56,6 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
   });
 
   const { employeeId } = useParams();
-  console.log(employeeId + "Id In Update Form....");
-  console.log(candidateId + "Candidate Id In Update Form...");
-
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [recruiterName, setRecruiterName] = useState("");
   const [resumeUploaded, setResumeUploaded] = useState(false);
@@ -67,7 +64,6 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
   const [requirementOptions, setRequirementOptions] = useState([]);
 
   useEffect(() => {
-    fetchEmployeeName();
     fetchCandidateData(candidateId);
     fetchRequirementOptions();
   }, [candidateId]);
@@ -79,25 +75,13 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
       setCandidateFetched(true);
     }
   }, [initialData]);
-
-  const fetchEmployeeName = async () => {
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/employeeName/${newCandidateId}`
-      );
-      const data = await response.text();
-      setRecruiterName(data);
-    } catch (error) {
-      console.error("Error fetching employee name:", error);
-    }
-  };
-
   const fetchCandidateData = async (candidateId) => {
     try {
       const response = await fetch(
         `${API_BASE_URL}/specific-data/${candidateId}`
       );
       const data = await response.json();
+      console.log(data);
       setCallingTracker(data);
       setCandidateFetched(true);
     } catch (error) {
@@ -119,15 +103,27 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name.includes("lineUp")) {
-      setCallingTracker((prevState) => ({
-        ...prevState,
-        lineUp: { ...prevState.lineUp, [name.split(".")[1]]: value },
-      }));
-    } else {
-      setCallingTracker((prevState) => ({ ...prevState, [name]: value }));
-    }
+    setCallingTracker((prevState) => {
+      if (name.includes("lineUp")) {
+        const lineUpField = name.split(".")[1];
+        return {
+          ...prevState,
+          lineUp: {
+            ...prevState.lineUp,
+            [lineUpField]: value, // Update only the specific lineUp field
+          },
+        };
+      } 
+      else {
+        return {
+          ...prevState,
+          [name]: value,
+        };
+      }
+    });
   };
+  
+  
 
   const handleEducationChange = (e) => {
     const value = e.target.value;
@@ -142,31 +138,37 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     try {
+      // Extract data from callingTracker to ensure it's in the correct format
       const dataToUpdate = {
         ...callingTracker,
-        recruiterName: recruiterName,
+        candidateAddedTime: callingTracker.candidateAddedTime, // Add additional properties if necessary
+        lineUp: {
+          ...callingTracker.lineUp,
+          resume: "", // Include resume if needed or remove if it's not part of the current submission
+        }
       };
 
+      console.log(dataToUpdate);
+      
+  
       const response = await fetch(
         `${API_BASE_URL}/update-calling-data/${candidateId}`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(dataToUpdate),
         }
       );
-
-      console.log(candidateId + "  candidateId  in updated method.. After  ");
+  
       if (response.ok) {
-        const data = await response.text();
-        toast.success("Data updated successfully:");
+        toast.success("Data updated successfully");
         setFormSubmitted(true);
-        setShowAlert(true);
+        onCancel();
         setTimeout(() => {
-          setShowAlert(false);
           setFormSubmitted(false);
         }, 4000);
       } else {
@@ -176,6 +178,9 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
       toast.error("Error updating data:", error);
     }
   };
+  
+  
+  
 
   const handleRequirementChange = (e) => {
     const { value } = e.target;
@@ -201,10 +206,42 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
       }));
     }
   };
-
-
-
-
+  // const handleResumeFileChange = (e) => {    
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+      
+  //     reader.onloadend = () => {
+  //       const arrayBuffer = reader.result;
+  //       const byteArray = new Uint8Array(arrayBuffer);
+  //       const byteNumbers = Array.from(byteArray);
+  
+        // Convert the byte array to a Base64 string
+        // const base64String = btoa(String.fromCharCode(...byteNumbers));
+  
+        // Set the resume field in callingTracker state
+        // setCallingTracker((prevState) => ({
+          // ...prevState,
+          // resume: base64String, // Store the Base64 string
+        // }));
+  
+        // Set the resumeUploaded state to true to show success icon
+        // setResumeUploaded(true);
+      // };
+  
+      // reader.onerror = () => {
+      //   console.error("Error reading file");
+      //   toast.error("Error reading the file.");
+      // };
+  
+      // reader.readAsArrayBuffer(file); // Read the file as an ArrayBuffer
+  //   } else {
+  //     console.log("No file selected");
+  //     toast.error("No file selected.");
+  //   }
+  // };
+  
+  
   //neha_updateselfcalling_designing_start_lineno_205_date_16/07/24
   return (
     <div className="update-main-div">
@@ -228,7 +265,7 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                   type="text"
                   id="candidateAddedTime"
                   name="candidateAddedTime"
-                  value={callingTracker.candidateAddedTime}
+                  value={callingTracker?.candidateAddedTime}
                   className="update-calling-tracker-two-input"
                   readOnly
                 />
@@ -260,7 +297,7 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                   type="text"
                   name="candidateName"
                   className={`plain-input`}
-                  value={callingTracker?.candidateName}
+                  value={callingTracker.candidateName || ""}
                   onChange={handleChange}
 
                 />
@@ -272,7 +309,7 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                 <input
                   type="email"
                   name="candidateEmail"
-                  value={callingTracker?.candidateEmail}
+                  value={callingTracker?.candidateEmail || ""}
                   onChange={handleChange}
                   className={`plain-input`}
                 />
@@ -286,7 +323,7 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
               <div className="update-calling-tracker-field-sub-div">
                 <input
                   name="contactNumber"
-                  value={callingTracker?.contactNumber}
+                  value={callingTracker?.contactNumber || ""}
                   onChange={handleChange}
                   required={callingTracker.selectYesOrNo !== "Interested"}
                   defaultCountry="IN"
@@ -301,9 +338,9 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
 
                   placeholder="Enter phone number"
                   name="alternateNumber"
-                  value={callingTracker.alternateNumber}
+                  value={callingTracker?.alternateNumber || ""}
                   onChange={handleChange}
-                  required={callingTracker.selectYesOrNo !== "Interested"}
+                  // required={callingTracker.selectYesOrNo !== "Interested"}
                   defaultCountry="IN"
                   maxLength={11}
                 />
@@ -318,7 +355,7 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                 <select
                   name="sourceName"
                   className={`plain-input`}
-                  value={callingTracker.sourceName}
+                  value={callingTracker?.sourceName || ""}
                   onChange={handleChange}
                   required={callingTracker.selectYesOrNo !== "Interested"}
                 >
@@ -342,7 +379,7 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                   className="update-calling-tracker-two-input"
                   id="requirementId"
                   name="requirementId"
-                  value={callingTracker?.requirementId}
+                  value={callingTracker?.requirementId || ""}
                   onChange={handleRequirementChange}
                   required={callingTracker.selectYesOrNo === "Interested"}
                 >
@@ -359,7 +396,7 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
 
                 <input
                   placeholder=" Your Incentive"
-                  value={callingTracker?.incentive}
+                  value={callingTracker?.incentive || ""}
                   readOnly
                   className="update-calling-tracker-two-input"
                   type="text"
@@ -377,7 +414,7 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                   name="jobDesignation"
                   className="calling-tracker-two-input"
                   // className="form-control"
-                  value={callingTracker?.jobDesignation}
+                  value={callingTracker?.jobDesignation || ""}
                   // readOnly
                   onChange={handleChange}
                 />
@@ -386,7 +423,7 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                   placeholder="Company"
                   id="requirementCompany"
                   name="requirementCompany"
-                  value={callingTracker?.requirementCompany}
+                  value={callingTracker?.requirementCompany || ""}
                   // readOnly
                   onChange={handleChange}
                 />
@@ -397,7 +434,7 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
               <div className="update-calling-check-box-main-container">
                 <select
                   name="currentLocation"
-                  value={callingTracker.currentLocation}
+                  value={callingTracker?.currentLocation || ""}
                   onChange={handleChange}
                 >
                   <option value="" style={{ color: "gray" }}>
@@ -411,7 +448,7 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                   type="text"
                   name="fullAddress"
                   placeholder="Full Address"
-                  value={callingTracker?.fullAddress}
+                  value={callingTracker?.fullAddress || ""}
                   onChange={handleChange}
                 />
               </div>
@@ -425,8 +462,8 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                 <select
                   required={callingTracker.selectYesOrNo === "Interested"}
                   className="plain-input"
-                  name="feedBack"
-                  value={callingTracker.feedBack}
+                  name="lineUp.feedBack"
+                  value={callingTracker?.lineUp.feedBack ||""}
                   onChange={handleChange}
                 >
                   <option value="">Feedback</option>
@@ -446,8 +483,8 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
               <div className="update-calling-check-box-main-container">
                 <input
                   type="date"
-                  name="dateOfBirth"
-                  value={callingTracker.dateOfBirth}
+                  name="lineUp.dateOfBirth "
+                  value={callingTracker.lineUp.dateOfBirth ||""}
                   onChange={handleChange}
                   className="update-calling-tracker-two-input"
                 />
@@ -457,9 +494,9 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                     <div className="calling-check-box">
                       <input
                         type="checkbox"
-                        name="gender"
+                        name="lineUp.gender"
                         className="gender"
-                        checked={callingTracker.gender === "Male"}
+                        checked={callingTracker?.lineUp.gender === "male"}
                         onChange={handleChange}
                       />
 
@@ -471,10 +508,10 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                     <div className="calling-check-box">
                       <input
                         type="checkbox"
-                        name="female"
+                        name="lineUp.gender"
                         value="female"
                         className="gender"
-                        checked={callingTracker.gender === "Female"}
+                        checked={callingTracker?.lineUp.gender === "female"}
                         onChange={handleChange}
                       />
 
@@ -494,7 +531,7 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                   type="text"
                   name="msgForTeamLeader"
                   placeholder="Enter Call Summary"
-                  value={callingTracker.msgForTeamLeader}
+                  value={callingTracker.msgForTeamLeader || ""}
                   onChange={handleChange}
                   className="plain-input"
                 />
@@ -514,7 +551,7 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                       marginRight: "10px",
                       color: "gray"
                     }}
-                    value={callingTracker.qualification}
+                    value={callingTracker?.lineUp.qualification || ""}
                   >
                     <option value="">Select</option>
                     <option value="Other">Other</option>
@@ -919,17 +956,17 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                 ) : (
                   <input
                     type="text"
-                    name="education"
-                    value={callingTracker.qualification}
+                    name="lineUp.qualification"
+                    value={callingTracker?.lineUp.qualification || ""}
                     onChange={handleChange}
                   />
                 )}
                 <input
                   type="text"
-                  name="yearOfPassing"
-                  placeholder="YOP"
-                  value={callingTracker.yearOfPassing}
-                  required={callingTracker.selectYesOrNo === "Interested"}
+                  name="lineUp.yearOfPassing"
+                  placeholder="Year Of PassOut"
+                  value={callingTracker?.lineUp.yearOfPassing || ""}
+                  // required={callingTracker.selectYesOrNo === "Interested"}
                   onChange={handleChange}
                 />
               </div>
@@ -959,8 +996,8 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
               <div className="update-calling-tracker-field-sub-div">
                 <input
                   type="text"
-                  name="extraCertification"
-                  value={callingTracker.extraCertification}
+                  name="lineUp.extraCertification"
+                  value={callingTracker?.lineUp.extraCertification || ""}
                   onChange={handleChange}
                   className="plain-input"
                   placeholder="Enter Extra Certification"
@@ -975,9 +1012,9 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
               <div className="update-calling-tracker-field-sub-div">
                 <input
                   type="text"
-                  name="companyName"
+                  name="lineUp.companyName"
                   placeholder="Current Company"
-                  value={callingTracker.companyName}
+                  value={callingTracker?.lineUp.companyName || ""}
                   onChange={handleChange}
                   required={callingTracker.selectYesOrNo === "Interested"}
                   className="plain-input"
@@ -989,28 +1026,28 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
               <label>Total Experience</label>
               <div
                 className="update-calling-tracker-two-input-container"
-                required={callingTracker.selectYesOrNo === "Interested"}
-              >
+                >
 
                 <input
                   type="text"
-                  name="experienceYear"
-                  value={callingTracker.experienceYear}
+                  name="lineUp.experienceYear"
+                  value={callingTracker?.lineUp.experienceYear || ""}
                   onChange={handleChange}
                   className="update-calling-tracker-two-input"
+                  required={callingTracker.selectYesOrNo === "Interested"}
                   placeholder="Years"
                   maxLength="2"
                 />
                 <div className="calling-tracker-two-input">
                   <input
                     type="number"
-                    name="experienceMonth"
+                    name="lineUp.experienceMonth"
                     onChange={handleChange}
-                    value={callingTracker.experienceMonth}
+                    value={callingTracker?.lineUp.experienceMonth || ""}
                     placeholder="Months"
-                    maxLength="2"
-                    min="1"
-                    max="12"
+                    // maxLength="2"
+                    // min="1"
+                    // max="12"
                   />
                 </div>
               </div>
@@ -1024,8 +1061,8 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                 <div className="update-calling-tracker-two-input">
                   <input
                     type="text"
-                    name="relevantExperience"
-                    value={callingTracker.relevantExperience}
+                    name="lineUp.relevantExperience"
+                    value={callingTracker?.lineUp.relevantExperience || ""}
                     onChange={handleChange}
                     placeholder="Enter Relevant Experience"
                     required={callingTracker.selectYesOrNo === "Interested"}
@@ -1034,9 +1071,9 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                 <div className="update-calling-tracker-two-input">
                   <input
                     type="text"
-                    name="noticePeriod"
+                    name="lineUp.noticePeriod"
                     placeholder="Notice Period"
-                    value={callingTracker.noticePeriod}
+                    value={callingTracker?.lineUp.noticePeriod || ""}
                     onChange={handleChange}
                     min="0"
                     max="90"
@@ -1051,11 +1088,11 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                 <input
                   type="text"
                   name="communicationRating"
-                  value={callingTracker.communicationRating}
+                  value={callingTracker?.communicationRating || ""}
                   onChange={handleChange}
                   className="plain-input"
                   placeholder="Enter Communication Rating"
-                  required={callingTracker.selectYesOrNo === "Interested"}
+                  // required={callingTracker.selectYesOrNo === "Interested"}
                 />
               </div>
             </div>
@@ -1065,22 +1102,22 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
               <label>Current CTC(LPA)</label>
               <div
                 className="update-calling-tracker-two-input-container"
-                required={callingTracker.selectYesOrNo === "Interested"}
-              >
+                >
                 <input
                   type="text"
-                  name="currentCtCLakh"
-                  value={callingTracker.currentCtCLakh}
+                  name="lineUp.currentCTCLakh"
+                  value={callingTracker?.lineUp.currentCTCLakh || ""}
                   onChange={handleChange}
                   className="update-calling-tracker-two-input"
                   placeholder="Lakh"
                   maxLength="2"
+                  required={callingTracker.selectYesOrNo === "Interested"}
                   pattern="\d*"
-                />
+                  />
                 <input
                   type="text"
-                  name="currentCtCThousand"
-                  value={callingTracker.currentCtCThousand}
+                  name="lineUp.currentCTCThousand"
+                  value={callingTracker?.lineUp.currentCTCThousand || ""}
                   onChange={handleChange}
                   className="update-calling-tracker-two-input"
                   placeholder="Thousand"
@@ -1094,22 +1131,22 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
               <label>Expected CTC (LPA)</label>
               <div
                 className="update-calling-tracker-two-input-container"
-                required={callingTracker.selectYesOrNo === "Interested"}
-              >
+                >
                 <input
                   type="text"
-                  name="expectedCtCLakh"
-                  value={callingTracker.expectedCtCLakh}
+                  name="lineUp.expectedCTCLakh"
+                  value={callingTracker?.lineUp.expectedCTCLakh || ""}
                   onChange={handleChange}
                   className="update-calling-tracker-two-input"
                   placeholder="Lakh"
+                  required={callingTracker.selectYesOrNo === "Interested"}
                   maxLength="2"
                   pattern="\d*"
                 />
                 <input
                   type="text"
-                  name="expectedCtCThousand"
-                  value={callingTracker.expectedCtCThousand}
+                  name="lineUp.expectedCTCThousand"
+                  value={callingTracker?.lineUp.expectedCTCThousand || ""}
                   onChange={handleChange}
                   className="update-calling-tracker-two-input"
                   placeholder="Thousand"
@@ -1126,8 +1163,8 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
               <div className="update-calling-tracker-two-input-container">
                 <select
                   type="text"
-                  name="holdingAnyOffer"
-                  value={callingTracker.holdingAnyOffer}
+                  name="lineUp.holdingAnyOffer"
+                  value={callingTracker?.lineUp.holdingAnyOffer || ""}
                   required={callingTracker.selectYesOrNo === "Interested"}
                   onChange={handleChange}
                 >
@@ -1137,9 +1174,9 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                 </select>
                 <input
                   type="text"
-                  name="offerLetterMsg"
+                  name="lineUp.offerLetterMsg"
                   placeholder="Letter Message"
-                  value={callingTracker.offerLetterMsg}
+                  value={callingTracker?.lineUp.offerLetterMsg || ""}
                   // onChange={handleLineUpChange}
                   onChange={handleChange}
                 />
@@ -1150,9 +1187,9 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
               <div className="update-calling-tracker-field-sub-div">
                 <input
                   type="text"
-                  name="msgForTeamLeader"
+                  name="lineUp.msgForTeamLeader"
                   placeholder="Comment For TL"
-                  value={callingTracker.msgForTeamLeader}
+                  value={callingTracker?.lineUp.msgForTeamLeader || ""}
                   //onChange={handleLineUpChange}
                   onChange={handleChange}
                   className="plain-input"
@@ -1171,7 +1208,7 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                   className="update-calling-tracker-two-input"
                   name="selectYesOrNo"
                   placeholder="Candidate Interested"
-                  value={callingTracker.selectYesOrNo}
+                  value={callingTracker?.selectYesOrNo}
                   onChange={handleChange}
                 >
                   <option value="">Select</option>
@@ -1188,8 +1225,8 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
                 </select>
                 <select
                   type="text"
-                  name="finalStatus"
-                  value={callingTracker.finalStatus}
+                  name="lineUp.finalStatus"
+                  value={callingTracker?.lineUp.finalStatus}
                   onChange={handleChange}
                   required={callingTracker.selectYesOrNo === "Interested"}
                 >
@@ -1207,16 +1244,16 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
               <div className="update-calling-tracker-two-input-container">
                 <input
                   type="date"
-                  name="availabilityForInterview"
-                  value={callingTracker.availabilityForInterview}
+                  name="lineUp.availabilityForInterview"
+                  value={callingTracker?.lineUp.availabilityForInterview}
                   //onChange={handleLineUpChange}
                   onChange={handleChange}
                   className="update-calling-tracker-two-input"
                 />
                 <input
                   type="time"
-                  name="interviewTime"
-                  value={callingTracker.interviewTime}
+                  name="lineUp.interviewTime"
+                  value={callingTracker?.lineUp.interviewTime}
                   onChange={handleChange}
                   className="update-calling-tracker-two-input"
                 />
@@ -1228,7 +1265,7 @@ const UpdateCallingTracker = ({ initialData, candidateId, showLastComponenet }) 
           <button type="submit" className="ctf-btn">
             Update Data
           </button>
-          <button className="ctf-btn" onClick={showLastComponenet} id="uploadbtn2">
+          <button className="ctf-btn" onClick={onCancel} id="uploadbtn2">
             Cancel
           </button>
         </div>

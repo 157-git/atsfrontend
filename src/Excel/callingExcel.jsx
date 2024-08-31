@@ -8,6 +8,7 @@ import ResumeList from "./resumeList";
 import { toast } from "react-toastify";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
 import { API_BASE_URL } from "../api/api";
+import Loader from "../EmployeeSection/loader";
 
 const CallingExcel = ({ onClose, displayCandidateForm }) => {
   const [file, setFile] = useState(null);
@@ -21,7 +22,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showCards, setShowCards] = useState(true);
   const [showCallingTrackerForm, setShowCallingTrackerForm] = useState(false);
-
+  const [loading, setLoading] = useState(false)
   const fileInputRef = useRef(null);
   const lineupFileInputRef = useRef(null);
   const resumeFileInputRef = useRef(null);
@@ -81,6 +82,8 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
       }
     } catch (error) {
       toast.error("Upload error:", error);
+    }finally {
+      setLoading(false); // Hide loader
     }
   };
 
@@ -91,6 +94,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
     }
     const formData = new FormData();
     formData.append("file", file);
+    setLoading(true);
     try {
       await axios.post(
 
@@ -112,6 +116,8 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
       resetFileInput(lineupFileInputRef);
     } catch (error) {
       toast.error("Upload error:", error);
+    }finally {
+      setLoading(false); // Hide loader
     }
   };
 
@@ -120,6 +126,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
     for (let i = 0; i < selectedFiles.length; i++) {
       formData.append("files", selectedFiles[i]);
     }
+    setLoading(true);
     try {
       await axios.post(
         `${API_BASE_URL}/add-multiple-resume/${employeeId}/${userType}`,
@@ -134,6 +141,8 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
       resetFileInput(resumeFileInputRef);
     } catch (error) {
       toast.error("Error uploading files:", error);
+    }finally {
+      setLoading(false); // Hide loader
     }
   };
 
@@ -254,6 +263,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
         </div>
       )}
 
+    {loading && <Loader />} 
       {activeTable === "CallingExcelList" && (
         <CallingExcelList
           onCloseTable={() => setActiveTable("")}

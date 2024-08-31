@@ -34,12 +34,15 @@ const AddJobDescription = () => {
     documentation: "",
     ageCriteria: "",
     note: "",
+    // contactRecruiterEmail:"",
+    // contactRecruiterMobileNumber:"",
+    // contactRecruiterName:"",
     positionOverview: { overview: "", employeeId: "" },
     responsibilities: [{ employeeId: "", responsibilitiesMsg: "" }],
     jobRequirements: [{ employeeId: "", jobRequirementMsg: "" }],
     preferredQualifications: [
       { employeeId: "", preferredQualificationMsg: "" },
-    ],
+    ]
     // RoundOfInterView: [
     //   {
     //     round: "",
@@ -115,6 +118,8 @@ const AddJobDescription = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData);
+    
     try {
       const response = await fetch(
         `${API_BASE_URL}/add-requirement`,
@@ -158,12 +163,15 @@ const AddJobDescription = () => {
           documentation: "",
           ageCriteria: "",
           note: "",
+          // contactRecruiterEmail:"",
+          // contactRecruiterMobileNumber:"",
+          // contactRecruiterName:"",
           positionOverview: { overview: "", employeeId: "" },
           responsibilities: [{ employeeId: "", responsibilitiesMsg: "" }],
           jobRequirements: [{ employeeId: "", jobRequirementMsg: "" }],
           preferredQualifications: [
             { employeeId: "", preferredQualificationMsg: "" },
-          ],
+          ]
           // RoundOfInterView: [
           //   {
           //     round: "",
@@ -172,7 +180,7 @@ const AddJobDescription = () => {
         });
       } else {
         toast.error(`Error: ${errorText}`);
-      }
+      } 
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     }
@@ -219,7 +227,7 @@ const AddJobDescription = () => {
                 <div className="field">
                   <label>Position:</label>
                   <input
-                    type="number"
+                    type="text"
                     name="position"
                     value={formData.position}
                     onChange={handleChange}
@@ -504,55 +512,16 @@ const AddJobDescription = () => {
                 </div>
 
                 <div className="field">
-                  
                   <label>Position Overview:</label>
-                
                   <textarea
                     name="overview"
                     className="textarea"
                     value={formData.positionOverview.overview}
                     onChange={handlePositionOverviewChange}
-                    placeholder="Describe in only 50 Words"
+                    placeholder="Describe Position Overview "
                   />
                 </div>
               </div>
-              {/* 
-              <div className="bg-gray-100 multi-field">
-                {formData.RoundOfInterView.map((item, index) => (
-                  <div key={index}>
-                    <div className="field">
-                      <label>Interview Round:</label>
-                      <textarea
-                        className="textarea"
-                        name="RoundOfInterView"
-                        value={item.preferredQualificationMsg}
-                        onChange={(e) =>
-                          handleInputChange(e, "RoundOfInterView", index)
-                        }
-                        placeholder="Enter Round Of Interview"
-                      />
-                      <button
-                        type="button"
-                        className="job-remove-button"
-                        onClick={() => handleRemove("RoundOfInterView", index)}
-                      >
-                        X
-                      </button>
-                    </div>
-
-                  </div>
-                ))}
-                <div className="ajd-btndiv-div">
-                  <button
-                    type="button"
-                    className="job-button"
-                    onClick={() => handleAddMore("RoundOfInterView")}
-                  >
-                    Add More Interview Rounds
-                  </button>
-                </div>
-              </div> */}
-
 
               <div className="bg-white multi-field">
                 {formData.responsibilities.map((item, index) => (
@@ -651,6 +620,7 @@ const AddJobDescription = () => {
               </div>
 
               <div className="multi-field">
+                {/* <h3>Preferred Qualifications</h3> */}
                 {formData.preferredQualifications.map((item, index) => (
                   <div key={index}>
                     <div className="field" hidden>

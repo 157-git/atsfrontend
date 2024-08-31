@@ -737,9 +737,12 @@ const HoldCandidate = ({
                   }}
                 >
                   <div>
+
+                    {(userType === 'Manager' || userType === 'TeamLeader') && (
                     <button className="lineUp-share-btn" onClick={showPopup}>
-                      Create Excel
+                    Create Excel
                     </button>
+                     )}
 
                     {showExportConfirmation && (
                       <div className="popup-containers">
@@ -884,15 +887,17 @@ const HoldCandidate = ({
                           />
                         </th>
                       ) : null}
-                      <th className="attendanceheading">No.</th>
+
+                      
+<th className="attendanceheading">No.</th>
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("date")}
                       >
                         Date
-                     &
-                      Time</th>
-                      <th className="attendanceheading">Candidate's Id</th>
+                        &
+                        Time</th>
+                      <th className="attendanceheading">Candidate Id</th>
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("recruiterName")}
@@ -917,7 +922,8 @@ const HoldCandidate = ({
                       </th>
                       <th className="attendanceheading">Current Location</th>
                       <th className="attendanceheading">Full Address</th>
-                      <th className="attendanceheading">Calling Feedback</th>
+                      <th className="attendanceheading">Calling Remark</th>
+                      <th className="attendanceheading">Call Summary</th>
                       <th className="attendanceheading">
                         Recruiter's Incentive
                       </th>
@@ -929,33 +935,37 @@ const HoldCandidate = ({
                       <th className="attendanceheading">Expected CTC</th>
                       <th className="attendanceheading">Date Of Birth</th>
                       <th className="attendanceheading">Gender</th>
-                      <th className="attendanceheading">Qualification</th>
+                      <th className="attendanceheading">Education</th>
                       <th className="attendanceheading">Year Of Passing</th>
-                      <th className="attendanceheading">Extra Certification</th>
-                      <th className="attendanceheading">Holding any offer</th>
-                      <th className="attendanceheading">
-                        Offer Letter Message
-                      </th>
+                      <th className="attendanceheading">Any Extra Certification</th>
+                      {/* <th className="attendanceheading">Feedback</th> */}
+                      <th className="attendanceheading">Holding Any Offer</th>
+                      <th className="attendanceheading">Offer Letter Msg</th>
                       <th className="attendanceheading">Resume</th>
-                      <th className="attendanceheading">NoticePeriod</th>
-                      {userType ==='TeamLeader' && 
-                      <th className="attendanceheading">
-                      Message For Manager
-                    </th>}
-                    {userType ==='Recruiters' && 
-                      <th className="attendanceheading">
-                      Message For Team Leader
-                    </th>}
+                      <th className="attendanceheading">Notice Period</th>
+                      {userType === 'TeamLeader' &&
+                        <th className="attendanceheading">
+                          Message For Manager
+                        </th>}
+                      {userType === 'Recruiters' &&
+                        <th className="attendanceheading">
+                          Message For Team Leader
+                        </th>}
+                      {userType === 'Manager' &&
+                        <th className="attendanceheading">
+                          Message For Super User
+                        </th>}
                       <th className="attendanceheading">
                         Availability For Interview
                       </th>
                       <th className="attendanceheading">Interview Time</th>
-                      <th className="attendanceheading">Final Status</th>
-                      <th className="attendanceheading">Employee Id</th>
-                      
+                      <th className="attendanceheading">Interview Status</th>
+                      <th className="attendanceheading">Employee ID</th>
+
                       {(userType === 'TeamLeader' || userType === 'Manager') && (
                         <th className="attendanceheading">Team Leader Id</th>
                       )}
+
                       <th className="attendanceheading">Action</th>
                     </tr>
                   </thead>
@@ -1169,6 +1179,19 @@ const HoldCandidate = ({
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {item.callingFeedback}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.feedBack || "-"}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.feedBack}
                             </span>
                           </div>
                         </td>

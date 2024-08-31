@@ -513,9 +513,9 @@ function DailyWork({
         </div>
         <div className="user-details">
           <p>
-            {employeeData.name}
+            {employeeData.name} - {userType}
             <br />
-            157{employeeId}
+            157{employeeId} 
           </p>
         </div>
       </div>

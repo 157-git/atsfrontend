@@ -322,6 +322,7 @@ const EmpDashboard = ({ userGroup }) => {
     setShowPerformanceImprovement(false)
     setShowAddManager(false)
     setShowAddTeamLeader(false)
+    setShowUpdateCallingTracker(false)
   };
 
   /* ArshadAttar_EmpDashboa_Added_showProfitLoss_11/07/2024_LineNo_221-225 */
@@ -664,6 +665,7 @@ const EmpDashboard = ({ userGroup }) => {
         toggeleAddManager={toggeleAddManager}
       />
 
+
       <div className="empDash-main-content">
         <div className="time-and-data">
           <DailyWork
@@ -775,15 +777,10 @@ const EmpDashboard = ({ userGroup }) => {
             <CallingTrackerForm
               loginEmployeeName={loginEmployeeName}
               onsuccessfulDataAdditions={handleSuccessfulDataAdditions}
-
             />
           )}
         </div>
-        <div>
-          {updateSelfCalling && (
-            <UpdateCallingTracker candidateId={candidateIdForUpdate} />
-          )}
-        </div>
+     
         <div>{addJobDescription && <AddJobDescription />}</div>
         <div>{showJobDiscriptions && <Home />}</div>
         <div>{showHome && <Home />}</div>
