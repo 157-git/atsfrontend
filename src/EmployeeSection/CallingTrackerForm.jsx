@@ -71,7 +71,7 @@ const CallingTrackerForm = ({
     availabilityForInterview: "",
     interviewTime: "",
     finalStatus: "",
-    feedBack:"",
+    feedBack: "",
     resume: []
   };
   const [callingTracker, setCallingTracker] = useState(
@@ -94,6 +94,7 @@ const CallingTrackerForm = ({
   const [endpoint, setendPoint] = useState("");
   const [resumeFile, setResumeFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false)
 
 
   useEffect(() => {
@@ -186,37 +187,37 @@ const CallingTrackerForm = ({
 
   const validateLineUpData = () => {
     let errors = {};
-    if (callingTracker.selectYesOrNo==="Interested"){
-    if (!callingTracker.requirementId) {
-      errors.requirementId = "Requirement ID is required";
-    }
+    if (callingTracker.selectYesOrNo === "Interested") {
+      if (!callingTracker.requirementId) {
+        errors.requirementId = "Requirement ID is required";
+      }
 
-    if (!lineUpData.experienceYear || !lineUpData.experienceMonth) {
-      errors.experienceYear = "Experience is required";
+      if (!lineUpData.experienceYear || !lineUpData.experienceMonth) {
+        errors.experienceYear = "Experience is required";
+      }
+      if (!lineUpData.relevantExperience) {
+        errors.relevantExperience = "Relevent Experience is required";
+      }
+      if (!callingTracker.currentLocation) {
+        errors.currentLocation = "Location is required";
+      }
+      if (!lineUpData.qualification) {
+        errors.qualification = "Education is required";
+      }
+      if (!callingTracker.communicationRating) {
+        errors.communicationRating = "Communication Rating is required";
+      }
+      if (!lineUpData.expectedCTCLakh && !lineUpData.expectedCTCThousand) {
+        errors.expectedCTCLakh = "Expected CTC is required";
+      }
+      if (!lineUpData.currentCTCLakh && !lineUpData.currentCTCThousand) {
+        errors.currentCTCLakh = "Current CTC is required";
+      }
+      if (!lineUpData.holdingAnyOffer) {
+        errors.holdingAnyOffer = "Holding Any Offer is required";
+      }
     }
-    if (!lineUpData.relevantExperience) {
-      errors.relevantExperience = "Relevent Experience is required";
-    }
-    if (!callingTracker.currentLocation) {
-      errors.currentLocation = "Location is required";
-    }
-    if (!lineUpData.qualification) {
-      errors.qualification = "Education is required";
-    }
-    if (!callingTracker.communicationRating) {
-      errors.communicationRating = "Communication Rating is required";
-    }
-    if (!lineUpData.expectedCTCLakh && !lineUpData.expectedCTCThousand) {
-      errors.expectedCTCLakh = "Expected CTC is required";
-    }
-    if (!lineUpData.currentCTCLakh && !lineUpData.currentCTCThousand) {
-      errors.currentCTCLakh = "Current CTC is required";
-    }
-    if (!lineUpData.holdingAnyOffer) {
-      errors.holdingAnyOffer = "Holding Any Offer is required";
-    }
-  }
-  return errors;
+    return errors;
   };
 
   const handleChange = (e) => {
@@ -306,10 +307,11 @@ const CallingTrackerForm = ({
 
 
   const handleSubmit = async (e) => {
+    setShowConfirmation(false)
     e.preventDefault();
     let callingTrackerErrors = validateCallingTracker() || {};
     let lineUpDataErrors = validateLineUpData() || {};
-    
+
     if (Object.keys(callingTrackerErrors).length > 0 || Object.keys(lineUpDataErrors).length > 0) {
       setErrors({ ...callingTrackerErrors, ...lineUpDataErrors });
       return;
@@ -389,7 +391,7 @@ const CallingTrackerForm = ({
       setSubmited(false);
       toast.error("An error occurred: " + error.message);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -1627,7 +1629,7 @@ const CallingTrackerForm = ({
                       <option value="Interested, will confirm later">Interested, will confirm later</option>
                       <option value="No Interested">No Interested</option>
                       <option value=" Interested But Not Eligible">
-                      Interested But Not Eligible
+                        Interested But Not Eligible
                       </option>
                       <option value="Eligible">Eligible</option>
                       <option value="Not Eligible">Not Eligible</option>
@@ -1698,14 +1700,60 @@ const CallingTrackerForm = ({
           <center>
             <div className="buttonDiv">
               {callingTracker.selectYesOrNo !== "Interested" && (
-                <button type="submit" disabled={loading} className="ctf-btn">
+                <button type="button" onClick={() => setShowConfirmation(true)} className="ctf-btn">
                   Add To Calling
                 </button>
               )}
               {callingTracker.selectYesOrNo === "Interested" && (
-                <button type="submit" disabled={loading} className="ctf-btn" id="uploadbtn2">
+                <button type="button" onClick={() => setShowConfirmation(true)} className="ctf-btn" id="uploadbtn2">
                   Add To LineUp
                 </button>
+              )}
+              {showConfirmation && (
+                <div
+                  className="bg-black bg-opacity-50 modal show"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    position: "fixed",
+                    width: "100%",
+                    height: "100vh",
+                  }}
+                >
+                  <Modal.Dialog
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Modal.Body>
+                      <p className="confirmation-text">
+                      Are you sure you want to save this candidate's information ?
+                      </p>
+                      <p>{callingTracker.errors}</p>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <button type="submit" disabled={loading} className="buttoncss">
+                          Yes
+                        </button>
+
+                        <button
+                          onClick={() => setShowConfirmation(false)}
+                          className="buttoncss"
+                        >
+                          No
+                        </button>
+                      </div>
+                    </Modal.Body>
+                  </Modal.Dialog>
+                </div>
               )}
             </div>
           </center>

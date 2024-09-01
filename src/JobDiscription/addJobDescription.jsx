@@ -119,7 +119,7 @@ const AddJobDescription = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
-    
+
     try {
       const response = await fetch(
         `${API_BASE_URL}/add-requirement`,
@@ -180,7 +180,7 @@ const AddJobDescription = () => {
         });
       } else {
         toast.error(`Error: ${errorText}`);
-      } 
+      }
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     }
@@ -510,17 +510,25 @@ const AddJobDescription = () => {
                     placeholder="Enter Note"
                   />
                 </div>
-
                 <div className="field">
                   <label>Position Overview:</label>
                   <textarea
                     name="overview"
                     className="textarea"
                     value={formData.positionOverview.overview}
-                    onChange={handlePositionOverviewChange}
-                    placeholder="Describe Position Overview "
+                    onChange={(e) => {
+                      handlePositionOverviewChange(e);
+                      e.target.style.height = 'auto';
+                      e.target.style.height = `${e.target.scrollHeight}px`;
+                    }}
+                    placeholder="Describe Position Overview"
+                    style={{
+                      resize: 'none',
+                      overflow: 'hidden',
+                    }}
                   />
                 </div>
+
               </div>
 
               <div className="bg-white multi-field">
@@ -539,24 +547,31 @@ const AddJobDescription = () => {
                       />
                     </div>
                     <div className="field">
-                      <label>Responsibility Message:</label>
-                      <textarea
-                        className="textarea"
-                        name="responsibilitiesMsg"
-                        value={item.responsibilitiesMsg}
-                        onChange={(e) =>
-                          handleInputChange(e, "responsibilities", index)
-                        }
-                        placeholder="Enter Responsibility Message"
-                      />
-                      <button
-                        type="button"
-                        className="job-remove-button"
-                        onClick={() => handleRemove("responsibilities", index)}
-                      >
-                        X
-                      </button>
-                    </div>
+  <label>Responsibility Message:</label>
+  <textarea
+    className="textarea"
+    name="responsibilitiesMsg"
+    value={item.responsibilitiesMsg}
+    onChange={(e) => {
+      handleInputChange(e, "responsibilities", index);
+      e.target.style.height = 'auto'; // Reset the height
+      e.target.style.height = `${e.target.scrollHeight}px`; // Adjust the height based on content
+    }}
+    placeholder="Enter Responsibility Message"
+    style={{
+      resize: 'none', // Prevent manual resizing
+      overflow: 'hidden', // Hide scrollbars
+    }}
+  />
+  <button
+    type="button"
+    className="job-remove-button"
+    onClick={() => handleRemove("responsibilities", index)}
+  >
+    X
+  </button>
+</div>
+
                   </div>
                 ))}
 
@@ -592,10 +607,16 @@ const AddJobDescription = () => {
                         className="textarea"
                         name="jobRequirementMsg"
                         value={item.jobRequirementMsg}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           handleInputChange(e, "jobRequirements", index)
-                        }
+                          e.target.style.height = 'auto'; 
+                          e.target.style.height = `${e.target.scrollHeight}px`; 
+                        }}
                         placeholder="Enter Job Requirement Message"
+                        style={{
+                          resize: 'none', // Prevent manual resizing
+                          overflow: 'hidden', // Hide scrollbars
+                        }}
                       />
                       <button
                         type="button"
@@ -613,6 +634,7 @@ const AddJobDescription = () => {
                     type="button"
                     className="job-button"
                     onClick={() => handleAddMore("jobRequirements")}
+
                   >
                     Add More Job Requirements
                   </button>
@@ -640,10 +662,16 @@ const AddJobDescription = () => {
                         className="textarea"
                         name="preferredQualificationMsg"
                         value={item.preferredQualificationMsg}
-                        onChange={(e) =>
+                        onChange={(e) =>{
                           handleInputChange(e, "preferredQualifications", index)
-                        }
+                          e.target.style.height = 'auto'; 
+                          e.target.style.height = `${e.target.scrollHeight}px`;
+                        }}
                         placeholder="Enter Preferred Qualification Message"
+                        style={{
+                          resize: 'none', // Prevent manual resizing
+                          overflow: 'hidden', // Hide scrollbars
+                        }}
                       />
                       <button
                         type="button"
@@ -658,8 +686,9 @@ const AddJobDescription = () => {
                 <div className="ajd-btndiv-div">
                   <button
                     type="button"
-                    className="job-button"
+                    className="job-button-add-Preferred"
                     onClick={() => handleAddMore("preferredQualifications")}
+
                   >
                     Add More Preferred Qualifications
                   </button>

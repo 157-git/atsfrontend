@@ -72,7 +72,7 @@ const ShareDescription = ({ Descriptions }) => {
           <hr />
           <div className="job-details-share">
             <div className="job-details-firstsection-share">
-              <h2 style={{fontWeight:"bold"}} >!!!  We are Hiring !!! </h2>
+              <h2 style={{fontWeight:"bold"}} >!!..  We are Hiring For  {Descriptions.designation} ..!! </h2>
               <p>
                 <b>Company:</b>
                 <a href={`${Descriptions.companyLink}`}>

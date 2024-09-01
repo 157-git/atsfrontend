@@ -175,7 +175,7 @@
 
 .job-button {
   margin-left: 2px;
-  width: 265px;
+  width: 280px;
   height: 30px;
   background-color: var(--button-color);
   border-radius: 15px;
@@ -184,7 +184,20 @@
   padding: 2px 15px;
 }
 
-.job-button:hover {
+.job-button-add-Preferred{
+  width: 280px;
+  height: 30px;
+  background-color: var(--button-color);
+  border-radius: 15px;
+  color: white;
+  border: 1px solid gray;
+  padding-left: 10px;
+  padding-right: 10px;
+
+}
+
+.job-button:hover ,
+.job-button-add-Preferred:hover{
   background-color: var(--button-hover-color);
   color: var(--text-hover-color);
 }
