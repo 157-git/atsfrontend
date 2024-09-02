@@ -653,7 +653,7 @@ const ShortListedCandidates = ({
         </div>
       </div>
       {!showUpdateCallingTracker ? (
-        <div className="attendanceTableData">
+        <div className="attendanceTableData" >
           {showSearchBar && (
             <input
               type="text"
@@ -666,10 +666,10 @@ const ShortListedCandidates = ({
           )}
           {showFilterSection && (
             <div className="filter-section">
-              <div className="filter-dropdowns">
+              <div className="filter-dropdowns" >
                 {showFilterSection && (
                   <div className="filter-section">
-                    <div className="filter-options-container">
+                    <div className="filter-options-container" style={{display: "flex", flexWrap: "wrap", gap: "10px" }}>
                       {filterOptions.map((option) => {
                         const uniqueValues = Array.from(
                           new Set(shortListedData.map((item) => item[option]))
@@ -732,7 +732,7 @@ const ShortListedCandidates = ({
                     />
                   </th>
                 ) : null}
-                <th className="attendanceheading">Sr No.</th>
+                <th className="attendanceheading">Sr  No.</th>
                 <th className="attendanceheading">Date & Time</th>
                 <th className="attendanceheading">Candidate's Id</th>
                 <th className="attendanceheading">Recruiter's Name</th>
@@ -766,14 +766,14 @@ const ShortListedCandidates = ({
                 <th className="attendanceheading">Offer Letter Message</th>
                 <th className="attendanceheading">Resume</th>
                 <th className="attendanceheading">Notice Period</th>
-                {userType ==='TeamLeader' && 
-                      <th className="attendanceheading">
-                      Message For Manager
-                    </th>}
-                    {userType ==='Recruiters' && 
-                      <th className="attendanceheading">
-                      Message For Team Leader
-                    </th>}
+                {userType === 'TeamLeader' &&
+                  <th className="attendanceheading">
+                    Message For Manager
+                  </th>}
+                {userType === 'Recruiters' &&
+                  <th className="attendanceheading">
+                    Message For Team Leader
+                  </th>}
                 <th className="attendanceheading">Interview Slot</th>
                 <th className="attendanceheading">Interview Time</th>
                 <th className="attendanceheading">Final Status</th>
@@ -807,8 +807,8 @@ const ShortListedCandidates = ({
                         {item.candidateAddedTime}
                       </span>
                     </div>
-                    </td>
-                  
+                  </td>
+
                   <td
                     className="tabledata"
                     onMouseOver={handleMouseOver}
@@ -999,7 +999,7 @@ const ShortListedCandidates = ({
                     </div>
                   </td>
                   <td className="tabledata">
-                  
+
                     <i
                       onClick={() => handleUpdate(item.candidateId)}
                       className="fa-regular fa-pen-to-square"
