@@ -436,25 +436,7 @@ const ShortListedCandidates = ({
     let filteredData = [...shortListedData];
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
-        if (option === "candidateId") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
-          );
-        } else if (option === "requirementId") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
-          );
-        } else if (option === "employeeId") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
-          );
-        } else if (option === "contactNumber") {
+        if (option === "requirementId") {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
               item[option]?.toString().toLowerCase().includes(value)
@@ -669,7 +651,7 @@ const ShortListedCandidates = ({
               <div className="filter-dropdowns" >
                 {showFilterSection && (
                   <div className="filter-section">
-                    <div className="filter-options-container" style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+                    <div className="filter-options-container" style={{ display: "flex", flexWrap: "wrap"}}>
                       {filterOptions.map((option) => {
                         const uniqueValues = Array.from(
                           new Set(shortListedData.map((item) => item[option]))

@@ -20,7 +20,7 @@
 .attendance-table ::-webkit-scrollbar {
   width: 100%;
   border-collapse: collapse;
-  overflow-x: auto;
+  overflow-x: scroll;
   white-space: nowrap;
   background-color: #000;
 }

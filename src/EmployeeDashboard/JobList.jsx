@@ -54,11 +54,16 @@ const JobListing = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data); // Log the fetched data to inspect its structure
-        setJobDescriptions(data);
-        setFilteredJobDescriptions(data); // Show all jobs initially
+
+        // Sort the data by requirementId in descending order
+        const sortedData = data.sort((a, b) => b.requirementId - a.requirementId);
+
+        setJobDescriptions(sortedData);
+        setFilteredJobDescriptions(sortedData); // Show all jobs initially
       })
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
+
   useEffect(() => {
     handleFilter();
   }, [searchQuery, selectedFilters, jobDescriptions]);
@@ -230,89 +235,89 @@ const JobListing = () => {
 
   return (
     <>
-    <div className="jd-header-search">
-      <div className="search-container">
-        <div className="search-bar">
+      <div className="jd-header-search" >
+        <div className="search-container" >
+          <div className="search-bar" >
 
-          <input
-            className="search-input"
-            placeholder=" Enter keyword/Designation/Companies"
-            type="text"
-            name="designation"
-            value={searchQuery.designation}
-            onChange={handleInputSearch}
-          />
-          <input
-            className="search-input"
-            list="experienceOptions"
-            placeholder="  Select Experience"
-            type="text"
-            name="experience"
-            value={searchQuery.experience}
-            onChange={handleInputSearch}
-          />
-          <datalist id="experienceOptions">
-            <option value="0-1 years" />
-            <option value="1-3 years" />
-            <option value="3-5 years" />
-            <option value="5+ years" />
-          </datalist>
+            <input
+              className="search-input"
+              placeholder=" Enter keyword/Designation/Companies"
+              type="text"
+              name="designation"
+              value={searchQuery.designation}
+              onChange={handleInputSearch}
+            />
+            <input
+              className="search-input"
+              list="experienceOptions"
+              placeholder="  Select Experience"
+              type="text"
+              name="experience"
+              value={searchQuery.experience}
+              onChange={handleInputSearch}
+            />
+            <datalist id="experienceOptions">
+              <option value="0-1 years" />
+              <option value="1-3 years" />
+              <option value="3-5 years" />
+              <option value="5+ years" />
+            </datalist>
 
-          <input
-            className="search-input"
-            placeholder="  Enter Location"
-            type="text"
-            name="location"
-            value={searchQuery.location}
-            onChange={handleInputSearch}
-          />
-          <button className="search-button" onClick={filterData}>
-            <span className="search-icon">
-              <i className="fas fa-search"></i>
-              Search
-            </span>
-          </button>
+            <input
+              className="search-input"
+              placeholder="  Enter Location"
+              type="text"
+              name="location"
+              value={searchQuery.location}
+              onChange={handleInputSearch}
+            />
+            <button className="search-button" onClick={filterData}>
+              <span className="search-icon">
+                <i className="fas fa-search"></i>
+                Search
+              </span>
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div className="filter-section">
-        <div className="jd-filter-options-container">
-          {filterOptions.map((option) => {
-            const uniqueValues = Array.from(
-              new Set(jobDescriptions.map((item) => item[option]))
-            );
-            return (
-              <div key={option} className="filter-option">
-                <button
-                  className="white-Btn"
-                  onClick={() => handleFilterOptionClick(option)}
-                >
-                  {option}
-                  <span className="filter-icon">&#x25bc;</span>
-                </button>
-                {activeFilterOption === option && (
-                  <div className="city-filter">
-                    <div className="optionDiv">
-                      {uniqueValues.map((value) => (
-                        <label key={value} className="selfcalling-filter-value">
-                          <input
-                            type="checkbox"
-                            checked={
-                              selectedFilters[option]?.includes(value) || false
-                            }
-                            onChange={() => handleFilterSelect(option, value)}
-                          />
-                          {value}
-                        </label>
-                      ))}
+        <div className="jd-filter-section">
+          <div className="jd-filter-options-container" >
+            {filterOptions.map((option) => {
+              const uniqueValues = Array.from(
+                new Set(jobDescriptions.map((item) => item[option]))
+              );
+              return (
+                <div key={option} className="filter-option">
+                  <button
+                    className="white-Btn"
+                    onClick={() => handleFilterOptionClick(option)}
+                  >
+                    {option}
+                    <span className="filter-icon">&#x25bc;</span>
+                  </button>
+                  {activeFilterOption === option && (
+                    <div className="city-filter">
+                      <div className="optionDiv">
+                        {uniqueValues.map((value) => (
+                          <label key={value} className="selfcalling-filter-value">
+                            <input
+                              type="checkbox"
+                              checked={
+                                selectedFilters[option]?.includes(value) || false
+                              }
+                              onChange={() => handleFilterSelect(option, value)}
+                            />
+                            {value}
+                          </label>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
       </div>
       {!showViewMore && (
@@ -344,7 +349,7 @@ const JobListing = () => {
               {/* Arshad Added this button to share edm  */}
 
               <div className="job-actions">
-                {userType === "Manager" ||  userType === "TeamLeader"  ? (
+                {userType === "Manager" || userType === "TeamLeader" ? (
                   <div className="jd-edit-hold-div">
                     <button className="daily-tr-btn"
                     >

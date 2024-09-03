@@ -13,7 +13,7 @@
   align-items: center;
 }
 
-.white-Btn {
+.white-Btn { 
   border: 1px solid gray;
   border-radius: 15px;
   background-color: white;
@@ -21,12 +21,11 @@
   color: var(--filter-color);
   height: 30px;
   width: auto;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  text-transform: capitalize;
 }
 
 .name {
@@ -249,6 +248,9 @@ padding-top: 120px;
   flex-wrap: wrap;
   background-color: #f2f2f2;
   margin-top: 10px;
+    margin-top: 60px; /* Adjust this based on your header's height */
+  overflow-y: auto; /* Allow scrolling */
+  height: calc(100vh - 100px); /* Adjust based on header height */
 }
 
 .city-list {
@@ -498,24 +500,17 @@ padding-top: 120px;
 
 .jd-filter-options-container{
   display: flex;           /* Flexbox layout for responsive design */
-  flex-wrap: wrap;        /* Allow items to wrap onto the next line */
-  justify-content: space-between;            /* Space between options */
-  padding: 5px; 
-gap: 3px; }
+  flex-wrap: wrap;    
+  margin-top: 5px;
+}
 
 
 
 .jd-header-search {
   position: fixed;
-  top: 70px;
+  top: 75px;
   background-color: white; /* Adjust as needed */
   z-index: 1000; /* Ensure it's on top */
   padding: 10px;
+  width: 95%;
 }
-
-.jdCards {
-  margin-top: 130px; /* Adjust this based on your header's height */
-  overflow-y: auto; /* Allow scrolling */
-  height: calc(100vh - 100px); /* Adjust based on header height */
-}
-
