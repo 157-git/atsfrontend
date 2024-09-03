@@ -1,188 +1,183 @@
- /* Name:-Prachi Parab Component:-Line Up Data Report data page css
+/* Name:-Prachi Parab Component:-Line Up Data Report data page css
          End LineNo:-4 to 250 Date:-05/07 */
 
-         .filter-section {
-          margin-bottom: 20px;
-        }
-        
-        .filter-dropdowns {
-          display: flex;
-          flex-wrap: wrap;
-        }
-        
-        .filter-dropdown {
-          margin-right: 20px;
-        }
-        
-        .filter-dropdown label {
-          display: block;
-          margin-bottom: 5px;
-        }
-        
-        .filter-dropdown select {
-          width: 150px; /* Adjust as needed */
-          padding: 5px;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          
-        }
-        
-        /* Style the filter section */
-        .filter-section {
-          margin-top: 20px;
-        }
-        
-        /* Style the filter dropdowns */
-        .filter-dropdown {
-          margin-bottom: 10px;
-        }
-        
-        /* Style the dropdown button */
-        .dropbtn { 
-          cursor: pointer;
-          border: 1px solid gray ;
-            border-radius: 15px;
-            background-color: white;
-            font-size: 16px ;
-            color: #ffcb9b;
-            height: 30px;
-            width: auto;
-            padding-left: 15px;
-            padding-right: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        /* .dropbtn:hover{
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.filter-dropdowns {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.filter-dropdown {
+  margin-right: 20px;
+}
+
+.filter-dropdown label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.filter-dropdown select {
+  width: 150px; /* Adjust as needed */
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Style the filter section */
+.filter-section {
+  margin-top: 20px;
+}
+
+/* Style the filter dropdowns */
+.filter-dropdown {
+  margin-bottom: 10px;
+}
+
+/* Style the dropdown button */
+.dropbtn {
+  cursor: pointer;
+  border: 1px solid gray;
+  border-radius: 15px;
+  background-color: white;
+  font-size: 16px;
+  color: #ffcb9b;
+  height: 30px;
+  width: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* .dropbtn:hover{
           background-color: white;
         
           border: 1px solid gray;
         } */
-        
-        /* Style the dropdown content (hidden by default) */
-        .dropdown-content {
-          display: none;
-          position: absolute;
-          background-color: #f9f9f9;
-          min-width: 160px;
-          box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-          z-index: 1;
-        }
-        
-        /* Style the dropdown options */
-        .dropdown-content div {
-          padding: 0px 10px;
-          cursor: pointer;
-        }
-        
-        /* Show the dropdown content when the dropdown button is clicked */
-        .filter-dropdown:hover .dropdown-content {
-          display: block;
-          width: 100%;
-          z-index: 99999999999999999;
-        }
-        
-        /* Style the checkbox input */
-        .dropdown-content input[type="checkbox"] {
-          margin-right: 5px;
-        }
-        
-        /* Style the checkbox label */
-        .dropdown-content label {
-          cursor: pointer;
-        }
-        
-        
-        
-        .App-after {
-          width: 100%;
-          background-attachment: fixed;
-          height: 92vh;
-          overflow: hidden !important;
-        }
-        
-        .attendance-table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-        
-        .attendance-table thead th {
-          position: sticky;
-          top: 0;
-          background-color: #ffcb9b;
-          color: gray;
-          z-index: 1;
-          height: 30px;
-          white-space: nowrap;
-          color: gray;
-          max-width: auto !important;
-          font-size: 16px;
-          font-weight: 500;
-        }
-        .attendanceheading {
-          border: 1px solid gray;
-          padding: 4px;
-          white-space: nowrap;
-          width: auto !important;
-          height: 30px;
-          
-          /* text-overflow: ellipsis; */
-        }
-        .tabledata {
-          
-          overflow: hidden;
-          text-overflow: ellipsis;
-          position: relative;
-          padding: 2px;
-          max-width: 50px;
-          border: 1px solid #ddd;
-          text-align: center;
-          /* width: auto; */
-        }
-        .tooltip {
-          visibility: hidden;
-          background-color: #ffcb9b;
-          color: #000;
-          text-align: center;
-          border-radius: 5px;
-          /* padding: 5px; */
-          position: fixed;  /* Use fixed positioning */
-          z-index: 1000;
-          opacity: 0;
-          transition: opacity 0.3s;
-          text-overflow: clip;
-          visibility: visible;
-          /* white-space: nowrap; */
-          /* width: 200px; */
-        }
-        
-        
-        .tabledata:hover .tooltip {
-          visibility: visible;
-          opacity: 1;
-        }
-        
-        .tooltiptext {
-          white-space: nowrap;
-        }
-        
-        
-          
-        .attendancerows-head {
-          background-color: var(--Bg-color);
-          color: gray;
-          /* font-weight: 100; */
-          text-align: center;
-          font-size: 18px;
-          border: 1px solid gray;
-          max-width: 300px ;
-          /* padding: 10px 15px; */
-          /* text-overflow: clip; */
-          /* width: 100px; */
-        }
-        
-        /* .attendancerowsdata,
+
+/* Style the dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Style the dropdown options */
+.dropdown-content div {
+  padding: 0px 10px;
+  cursor: pointer;
+}
+
+/* Show the dropdown content when the dropdown button is clicked */
+.filter-dropdown:hover .dropdown-content {
+  display: block;
+  width: 100%;
+  z-index: 99999999999999999;
+}
+
+/* Style the checkbox input */
+.dropdown-content input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* Style the checkbox label */
+.dropdown-content label {
+  cursor: pointer;
+}
+
+.App-after {
+  width: 100%;
+  background-attachment: fixed;
+  height: 92vh;
+  overflow: hidden !important;
+}
+
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.attendance-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #ffcb9b;
+  color: gray;
+  z-index: 1;
+  height: 30px;
+  white-space: nowrap;
+  color: gray;
+  max-width: auto !important;
+  font-size: 16px;
+  font-weight: 500;
+}
+.attendanceheading {
+  border: 1px solid gray;
+  padding: 4px;
+  white-space: nowrap;
+  width: auto !important;
+  height: 30px;
+
+  /* text-overflow: ellipsis; */
+}
+.tabledata {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+  padding: 2px;
+  max-width: 50px;
+  border: 1px solid #ddd;
+  text-align: center;
+  /* width: auto; */
+}
+.tooltip {
+  visibility: hidden;
+  background-color: #ffcb9b;
+  color: #000;
+  text-align: center;
+  border-radius: 5px;
+  /* padding: 5px; */
+  position: fixed; /* Use fixed positioning */
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s;
+  text-overflow: clip;
+  visibility: visible;
+  /* white-space: nowrap; */
+  /* width: 200px; */
+}
+
+.tabledata:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltiptext {
+  white-space: nowrap;
+}
+
+.attendancerows-head {
+  background-color: var(--Bg-color);
+  color: gray;
+  /* font-weight: 100; */
+  text-align: center;
+  font-size: 18px;
+  border: 1px solid gray;
+  max-width: 300px;
+  /* padding: 10px 15px; */
+  /* text-overflow: clip; */
+  /* width: 100px; */
+}
+
+/* .attendancerowsdata,
         .tabledata {
           text-align: center;
           font-size: 16px;
@@ -193,58 +188,57 @@
           text-overflow: clip;
           visibility: visible;
         } */
-        
-        .attendanceTableData::-webkit-scrollbar {
-          display: none;
-        }
-        .attendanceTableData {
-          height: 85vh;
-          width: 100%;
-          overflow-y: auto;
-        }
-        .attendancerows{
-          height: 30px;
-        }
-        
-        
-        .attendancerows:hover {
-          background-color: #f2f2f2;
-        }
-        
-        html::-webkit-scrollbar{
-          display: none;
-        }  
-        .attendancerows i{
-          font-size: 15px;
-          /* color: #ffcb9b; */
-          margin-left: 15px;
-        }
-      
-        .attendanceTableData h3{
-          color: grey;
-          text-align: center;
-        }
-      
-        .shortlisted-candidates-css{
-          margin-top: 30px;
-        }
-      
-        .shareDownloadbtn {
-          background: #ffcb9b;
-          border: 1px solid grey;
-          height: 30px;
-          width: auto; /* Adjust width as needed */
-          border-radius: 15px;
-          color: white;
-          padding: 0 20px; /* Adjust padding for text alignment */
-          font-size: 16px;
-          cursor: pointer;
-         margin-top:40px;
-          justify-content: center;
-          align-items: center;
-        }
-      
-        .shareDownloadbtn:hover {
-          background: white;
-          color: #ffcb9b;
-        }
+
+.attendanceTableData::-webkit-scrollbar {
+  display: none;
+}
+.attendanceTableData {
+  height: 85vh;
+  width: 100%;
+  overflow-y: auto;
+}
+.attendancerows {
+  height: 30px;
+}
+
+.attendancerows:hover {
+  background-color: #f2f2f2;
+}
+
+/* html::-webkit-scrollbar {
+  display: none;
+} */
+.attendancerows i {
+  font-size: 15px;
+  /* color: #ffcb9b; */
+  margin-left: 15px;
+}
+
+.attendanceTableData h3 {
+  color: grey;
+  text-align: center;
+}
+
+.shortlisted-candidates-css {
+  margin-top: 30px;
+}
+
+.shareDownloadbtn {
+  background: #ffcb9b;
+  border: 1px solid grey;
+  height: 30px;
+  width: auto; /* Adjust width as needed */
+  border-radius: 15px;
+  color: white;
+  padding: 0 20px; /* Adjust padding for text alignment */
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 40px;
+  justify-content: center;
+  align-items: center;
+}
+
+.shareDownloadbtn:hover {
+  background: white;
+  color: #ffcb9b;
+}

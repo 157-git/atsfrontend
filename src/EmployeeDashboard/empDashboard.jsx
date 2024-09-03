@@ -140,6 +140,7 @@ const EmpDashboard = ({ userGroup }) => {
 
   //Name:-Akash Pawar Component:-empDashboard Subcategory:-AddedLogoutTimeStamp and successfulDataAdditions Start LineNo:-80 Date:-01/07
   const [successfulDataAdditions, setSuccessfulDataAdditions] = useState(false);
+  const [successfulDataUpdation, setSuccessfulDataUpdation] = useState(false);
   const [logoutTimestamp, setLogoutTimestamp] = useState(null);
   const [showSubscription, setShowSubscription] = useState(false);
   const [showBilling, setShowBilling] = useState(false);
@@ -154,15 +155,28 @@ const EmpDashboard = ({ userGroup }) => {
   const handleLogoutTime = (timestamp) => {
     setLogoutTimestamp(timestamp);
   };
-  const handleSuccessfulDataAdditions = (check) => {
-    console.log(check);
 
+  const handleSuccessfulDataAdditions = (check) => {
     setSuccessfulDataAdditions(check);
   };
 
   useEffect(() => {
-    setSuccessfulDataAdditions(false);
+    setSuccessfulDataAdditions(true);
   }, [successfulDataAdditions]);
+
+
+  const handleSuccessfulDataUpdation = (check) => {
+    console.log("------From Update.....001");
+    setSuccessfulDataUpdation(check);
+  }
+
+  useEffect(() => {
+    console.log("------From Update.....003");
+    setSuccessfulDataUpdation(true);
+  }, [successfulDataUpdation]);
+
+
+ 
 
   useEffect(() => {
     setSuccessUpdateResponse(false);
@@ -595,7 +609,7 @@ const EmpDashboard = ({ userGroup }) => {
     <div
       className={`grid-container ${openSidebarToggle ? "sidebar-open" : "sidebar-closed"
         }`}
-        style={{backgroundColor:"white",  minHeight: "100vh"}}
+      style={{ backgroundColor: "white", minHeight: "100vh" }}
     >
       <Sidebar
         userGroup={userGroup}
@@ -678,6 +692,7 @@ const EmpDashboard = ({ userGroup }) => {
             onCurrentEmployeeJobRoleSet={handleJobRoles}
             jobRole={jobRoles}
             emailSenderInformation={handleEmailSenderInformation}
+            successfulDataUpdation={successfulDataUpdation}
           />
         </div>
         <div>
@@ -780,7 +795,6 @@ const EmpDashboard = ({ userGroup }) => {
             />
           )}
         </div>
-     
         <div>{addJobDescription && <AddJobDescription />}</div>
         <div>{showJobDiscriptions && <Home />}</div>
         <div>{showHome && <Home />}</div>
@@ -794,7 +808,10 @@ const EmpDashboard = ({ userGroup }) => {
         <div>{showInvoicePdf && <InvoicePdf />}</div>
         <div>
           {showUpdateCallingTracker && (
-            <UpdateCallingTracker candidateId={candidateIdForUpdate} />
+            <UpdateCallingTracker
+              candidateId={candidateIdForUpdate}
+              onsuccessfulDataUpdation={handleSuccessfulDataUpdation}
+            />
           )}
         </div>
         <div>{assignColumns && <Team_Leader />}</div>

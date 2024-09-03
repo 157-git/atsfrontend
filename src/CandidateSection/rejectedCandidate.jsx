@@ -831,7 +831,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                   <div className="filter-dropdowns">
                     {showFilterSection && (
                       <div className="filter-section">
-                        <div className="filter-options-container">
+                    
                           {filterOptions.map((option) => {
                             const uniqueValues = Array.from(
                               new Set(callingList.map((item) => item[option]))
@@ -876,7 +876,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                             );
                           })}
                         </div>
-                      </div>
+                      
                     )}
                   </div>
                 </div>

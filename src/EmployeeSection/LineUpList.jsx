@@ -860,7 +860,7 @@ const LineUpList = ({
               )}
               {showFilterSection && (
                 <div className="filter-section">
-                  <div className="filter-options-container">
+                
                     {filterOptions.map((option) => {
                       const uniqueValues = Array.from(
                         new Set(callingList.map((item) => item[option]))
@@ -903,7 +903,7 @@ const LineUpList = ({
                       );
                     })}
                   </div>
-                </div>
+              
               )}
               
               <div className="attendanceTableData">

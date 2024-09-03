@@ -67,12 +67,13 @@ const ShareDescription = ({ Descriptions }) => {
         <section className="job-details-section-share">
 
           <div className="job-title-share">
-            <p className="job-title-share-title">Job Description</p>
+            <p className="job-title-share-title">!!..  We are Hiring For  {Descriptions.designation} ..!!</p>
           </div>
           <hr />
           <div className="job-details-share">
             <div className="job-details-firstsection-share">
-              <h2 style={{fontWeight:"bold"}} >!!..  We are Hiring For  {Descriptions.designation} ..!! </h2>
+              <h2 style={{ fontWeight: "bold", textDecoration: 'underline', marginRight: '10px' }} >Job Description</h2>
+
               <p>
                 <b>Company:</b>
                 <a href={`${Descriptions.companyLink}`}>
@@ -155,7 +156,7 @@ const ShareDescription = ({ Descriptions }) => {
           <div>
             {Descriptions.responsibilities.map((responsibilites) => (
               <div key={responsibilites.responsibilitiesId}>
-              <i className="fa-solid fa-arrow-right"></i> {responsibilites.responsibilitiesMsg}{" "}
+                <i className="fa-solid fa-arrow-right"></i> {responsibilites.responsibilitiesMsg}{" "}
               </div>
             ))}
           </div>
@@ -167,24 +168,24 @@ const ShareDescription = ({ Descriptions }) => {
           <div>
             {Descriptions.jobRequirements.map((requirements) => (
               <div key={requirements.jobRequirementId}>
-               <i className="fa-solid fa-arrow-right"></i>  {requirements.jobRequirementMsg}{" "}
+                <i className="fa-solid fa-arrow-right"></i>  {requirements.jobRequirementMsg}{" "}
               </div>
             ))}
           </div>
-          </section>
+        </section>
 
-          <section className="preferred-qualifications-share">
-            <h2>
-              <b className="jd-sub-headings">Preferred Qualifications</b>
-            </h2>
-            <div>
-              {Descriptions.preferredQualifications.map((qualifications) => (
-                <div key={qualifications.preferredQualificationId}>
-                  <i className="fa-solid fa-arrow-right"></i>  {qualifications.preferredQualificationMsg}
-                </div>
-              ))}
-            </div>
-          </section>
+        <section className="preferred-qualifications-share">
+          <h2>
+            <b className="jd-sub-headings">Preferred Qualifications</b>
+          </h2>
+          <div>
+            {Descriptions.preferredQualifications.map((qualifications) => (
+              <div key={qualifications.preferredQualificationId}>
+                <i className="fa-solid fa-arrow-right"></i>  {qualifications.preferredQualificationMsg}
+              </div>
+            ))}
+          </div>
+        </section>
 
         <section className="preferred-qualifications-share">
           <h2 className="jd-sub-headings">
@@ -192,13 +193,14 @@ const ShareDescription = ({ Descriptions }) => {
           </h2>
           <div className="jd-employeeinfo">
             <h2>
-              <span className="label">Name : </span> - {data?.name || "Not available"}
+              <span className="label">Name : </span> - {data?.name?.split(' ')[0] || "Not available"}
             </h2>
+
             <h2>
               <span className="label">Email : </span> - {data?.email || "Not available"}
             </h2>
             <h2>
-              <span className="label">Contact Number : </span> - {data?.contactNumber || "Not available"}
+              <span className="label">Contact Number : </span> - {data?.contact || "Not available"}
             </h2>
           </div>
 

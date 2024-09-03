@@ -18,13 +18,10 @@ import Confetti from "react-confetti";
 import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
+import TimePicker from 'react-time-picker';
 
-const CallingTrackerForm = ({
-  onsuccessfulDataAdditions,
-  initialData = {},
-  loginEmployeeName,
-  // toggelCandidateHistory
-}) => {
+const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEmployeeName,}) => {
+
   const { employeeId } = useParams();
   const [submited, setSubmited] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -110,15 +107,12 @@ const CallingTrackerForm = ({
 
       Object.keys(initialData).forEach((key) => {
         if (key === "date") {
-          // Set date to current date if it is present in initialData
           updatedCallingTracker[key] = new Date().toISOString().slice(0, 10);
           updatedLineUpData[key] = new Date().toISOString().slice(0, 10);
         } else if (["candidateId", "candidateAddedTime"].includes(key)) {
-          // Set candidateId and candidateAddedTime to empty string if present
           updatedCallingTracker[key] = "";
           updatedLineUpData[key] = "";
         } else {
-          // Ensure the value is a string for other fields
           updatedCallingTracker[key] = ensureStringValue(initialData[key]);
           updatedLineUpData[key] = ensureStringValue(initialData[key]);
         }
@@ -153,7 +147,6 @@ const CallingTrackerForm = ({
   }, []);
 
 
-  // Helper function to only update with non-null and non-undefined values
   const ensureStringValue = (value) => (value !== undefined && value !== null ? String(value) : "");
 
   const fetchRequirementOptions = async () => {
@@ -299,7 +292,6 @@ const CallingTrackerForm = ({
       const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
       setConvertedExpectedCTC(combinedCTC.toFixed(2));
     }
-
     setLineUpData(updatedLineUpData);
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
@@ -354,6 +346,7 @@ const CallingTrackerForm = ({
           interviewRoundList: []
         },
       };
+
       console.log(dataToUpdate);
       if (userType === "Recruiters") {
         dataToUpdate.callingTracker.employee = { employeeId: employeeId };
@@ -362,7 +355,6 @@ const CallingTrackerForm = ({
       }
 
       dataToUpdate.lineUp = lineUpData;
-
       const response = await axios.post(
         `${API_BASE_URL}/calling-tracker`,
         dataToUpdate,
@@ -377,8 +369,10 @@ const CallingTrackerForm = ({
       if (response) {
         if (callingTracker.selectYesOrNo === "Interested") {
           onsuccessfulDataAdditions(true);
+        console.log("-------Yes Add Calling Tracker-----------");
         } else {
           onsuccessfulDataAdditions(false);
+        console.log("-------No Add Calling Tracker-----------");
         }
         setSubmited(false);
         setShowConfetti(true);
@@ -394,6 +388,8 @@ const CallingTrackerForm = ({
       setLoading(false);
     }
   };
+
+
 
 
   const handleLocationChange = (e) => {
@@ -689,7 +685,7 @@ const CallingTrackerForm = ({
                           key={option.requirementId}
                           value={option.requirementId}
                         >
-                          {option.requirementId}
+                          {option.requirementId} - {option.designation}
                         </option>
                       ))}
                     </select>
@@ -736,7 +732,6 @@ const CallingTrackerForm = ({
 
               <div className="calling-tracker-field">
                 <label style={{ color: "gray" }}>Current Location</label>
-
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
                     {!isOtherLocationSelected ? (
@@ -829,10 +824,10 @@ const CallingTrackerForm = ({
                       <div className="calling-check-box">
                         <input
                           type="checkbox"
-                          name="male"
-                          value="male"
+                          name="Male"
+                          value="Male"
                           className="gender"
-                          checked={lineUpData.gender === "male"}
+                          checked={lineUpData.gender === "Male"}
                           onChange={(e) =>
                             setLineUpData({
                               ...lineUpData,
@@ -848,11 +843,11 @@ const CallingTrackerForm = ({
                       <div className="calling-check-box">
                         <input
                           type="checkbox"
-                          name="female"
-                          value="female"
+                          name="Female"
+                          value="Female"
                           className="gender"
                           style={{ paddingLeft: "auto" }}
-                          checked={lineUpData.gender === "female"}
+                          checked={lineUpData.gender === "Female"}
                           onChange={(e) =>
                             setLineUpData({
                               ...lineUpData,
@@ -1670,7 +1665,6 @@ const CallingTrackerForm = ({
                       type="date"
                       name="availabilityForInterview"
                       value={lineUpData.availabilityForInterview}
-                      //onChange={handleLineUpChange}
                       onChange={(e) =>
                         setLineUpData({
                           ...lineUpData,
@@ -1679,12 +1673,12 @@ const CallingTrackerForm = ({
                       }
                     />
                   </div>
+                  
                   <div className="calling-tracker-two-input">
                     <input
                       type="time"
                       name="interviewTime"
                       value={lineUpData.interviewTime}
-                      //onChange={handleLineUpChange}
                       onChange={(e) =>
                         setLineUpData({
                           ...lineUpData,

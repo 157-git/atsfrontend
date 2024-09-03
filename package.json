@@ -54,6 +54,7 @@
     "react-spinner": "^0.2.7",
     "react-spinners": "^0.13.8",
     "react-stomp": "^5.1.0",
+    "react-time-picker": "^7.0.0",
     "react-to-print": "^2.15.1",
     "react-toastify": "^10.0.5",
     "react-tooltip": "^5.27.1",

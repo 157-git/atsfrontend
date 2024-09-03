@@ -669,7 +669,7 @@ const ShortListedCandidates = ({
               <div className="filter-dropdowns" >
                 {showFilterSection && (
                   <div className="filter-section">
-                    <div className="filter-options-container" style={{display: "flex", flexWrap: "wrap", gap: "10px" }}>
+                    <div className="filter-options-container" style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
                       {filterOptions.map((option) => {
                         const uniqueValues = Array.from(
                           new Set(shortListedData.map((item) => item[option]))
@@ -949,24 +949,142 @@ const ShortListedCandidates = ({
                     </div>
                   </td>
 
-                  <td className="tabledata">{item.callingFeedback}</td>
-                  <td className="tabledata">{item.incentive}</td>
-                  <td className="tabledata">{item.selectYesOrNo}</td>
-                  <td className="tabledata">{item.companyName}</td>
-                  <td className="tabledata">{item.experienceYear} Year {item.experienceMonth} Month</td>
-                  <td className="tabledata">{item.relevantExperience}</td>
-                  <td className="tabledata">{item.currentCtcLakh} Lakh {item.currentCtcThousand} Thousand</td>
-                  <td className="tabledata">{item.expectedCtcLakh} Lakh {item.expectedCtcThousand} Thousand </td>
-                  <td className="tabledata">{item.dateOfBirth}</td>
-                  <td className="tabledata">{item.gender}</td>
-                  <td className="tabledata">{item.qualification}</td>
-                  <td className="tabledata">{item.yearOfPassing}</td>
-                  <td className="tabledata">
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}
+                  >
+                    {item.callingFeedback}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.callingFeedback}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.incentive}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.incentive}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.selectYesOrNo}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.selectYesOrNo}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.companyName}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.companyName}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.experienceYear}
+                    Year {item.experienceMonth}
+                    Month
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.experienceYear}{item.experienceMonth}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.relevantExperience}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.companyName}</span>
+                    </div>
+                  </td>
+
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.currentCtcLakh} Lakh {item.currentCtcThousand} Thousand
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.currentCtcLakh}{item.currentCtcThousand}</span>
+                    </div>
+                  </td>
+
+
+
+                  <td className="tabledata" onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.expectedCtcLakh} Lakh {item.expectedCtcThousand} Thousand
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.expectedCtcLakh}Lakh{item.expectedCtcThousand}Thousand</span>
+                    </div>
+                  </td>
+
+
+                  <td className="tabledata" onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.dateOfBirth}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.dateOfBirth}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata" onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.gender}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.gender}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata" onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.qualification}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.qualification}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata" onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.yearOfPassing}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.yearOfPassing}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
                     {item.extraCertification}
+                    <div className="tooltip">
+                      <span className="tooltiptext"> {item.extraCertification}</span>
+                    </div>
                   </td>
                   {/* <td className="tabledata">{item.feedback}</td> */}
-                  <td className="tabledata">{item.holdingAnyOffer}</td>
-                  <td className="tabledata">{item.offerLetterMsg}</td>
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>{item.holdingAnyOffer}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.holdingAnyOffer}</span>
+                    </div>
+                  </td>
+
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.offerLetterMsg}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.offerLetterMsg}</span>
+                    </div>
+                  </td>
                   {/* <td className="tabledata">{item.lineUp.resume}</td> */}
                   {/* Name:-Akash Pawar Component:-ShortListedCandidate
                   Subcategory:-ResumeViewButton(added) start LineNo:-546
@@ -982,10 +1100,41 @@ const ShortListedCandidates = ({
                   {/* Name:-Akash Pawar Component:-ShortListedCandidate
                   Subcategory:-ResumeViewButton(added) End LineNo:-558
                   Date:-02/07 */}
-                  <td className="tabledata">{item.noticePeriod}</td>
-                  <td className="tabledata">{item.msgForTeamLeader}</td>
-                  <td className="tabledata">{item.availabilityForInterview}</td>
-                  <td className="tabledata">{item.interviewTime}</td>
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.noticePeriod}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.noticePeriod}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.msgForTeamLeader}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.msgForTeamLeader}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.availabilityForInterview}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.availabilityForInterview}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.interviewTime}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.interviewTime}</span>
+                    </div>
+                  </td>
                   {/* <td className="tabledata">{item.finalStatus}</td> */}
 
                   <td

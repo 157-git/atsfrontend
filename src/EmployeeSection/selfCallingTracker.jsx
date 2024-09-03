@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../EmployeeSection/LineUpList.css";
+import "../Reports/LineUpDataReport.css"
+// import "../AdminSection/Team_Leader.css"
 import UpdateCallingTracker from "./UpdateSelfCalling";
 import * as XLSX from "xlsx";
 import Modal from "react-bootstrap/Modal";
@@ -860,52 +862,52 @@ const CallingList = ({
               )}
               {showFilterSection && (
                 <div className="filter-section">
-                  <div className="filter-options-container">
-                    {filterOptions.map((option) => {
-                      const uniqueValues = Array.from(
-                        new Set(callingList.map((item) => item[option]))
-                      );
-                      return (
-                        <div key={option} className="filter-option">
-                          <button
-                            className="white-Btn"
-                            onClick={() => handleFilterOptionClick(option)}
-                          >
-                            {option.toUpperCase()}
-                            <span className="filter-icon">&#x25bc;</span>
-                          </button>
-                          {activeFilterOption === option && (
-                            <div className="city-filter">
-                              <div className="optionDiv">
-                                {uniqueValues.map((value) => (
-                                  <label
-                                    key={value}
-                                    className="selfcalling-filter-value"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      checked={
-                                        selectedFilters[option]?.includes(
-                                          value
-                                        ) || false
-                                      }
-                                      onChange={() =>
-                                        handleFilterSelect(option, value)
-                                      }
-                                    />
-                                    {value}
-                                  </label>
-                                ))}
-                              </div>
+
+                  {filterOptions.map((option) => {
+                    const uniqueValues = Array.from(
+                      new Set(callingList.map((item) => item[option]))
+                    );
+                    return (
+                      <div key={option} className="filter-option">
+                        <button
+                          className="white-Btn"
+                          onClick={() => handleFilterOptionClick(option)}
+                        >
+                          {option.toUpperCase()}
+                          <span className="filter-icon">&#x25bc;</span>
+                        </button>
+                        {activeFilterOption === option && (
+                          <div className="city-filter">
+                            <div className="optionDiv">
+                              {uniqueValues.map((value) => (
+                                <label
+                                  key={value}
+                                  className="selfcalling-filter-value"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={
+                                      selectedFilters[option]?.includes(
+                                        value
+                                      ) || false
+                                    }
+                                    onChange={() =>
+                                      handleFilterSelect(option, value)
+                                    }
+                                  />
+                                  {value}
+                                </label>
+                              ))}
                             </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
+
               )}
-              
+
               <div className="attendanceTableData">
                 <table className="attendance-table">
                   <thead>
@@ -1245,7 +1247,7 @@ const CallingList = ({
                           </div>
                         </td>
 
-                    
+
 
                         <td
                           className="tabledata"

@@ -1,10 +1,13 @@
-.filter-section {
+.filter-sectiontl {
   margin-bottom: 20px;
+  display: flex;
+
 }
 
 .filter-dropdowns {
   display: flex;
   flex-wrap: wrap;
+  
 }
 
 .filter-dropdown {
@@ -18,21 +21,9 @@
 
 .filter-dropdown select {
   width: 150px;
-  /* Adjust as needed */
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
-
-}
-
-/* Style the filter section */
-.filter-section {
-  margin-top: 20px;
-}
-
-/* Style the filter dropdowns */
-.filter-dropdown {
-  margin-bottom: 10px;
 }
 
 /* Style the dropdown button */
@@ -122,7 +113,6 @@
 }
 
 .tabledata {
-
   overflow: hidden;
   text-overflow: ellipsis;
   position: relative;
@@ -182,7 +172,6 @@
   height: 30px;
 }
 
-
 .attendancerows:hover {
   background-color: #f2f2f2;
 }
@@ -193,45 +182,7 @@ html::-webkit-scrollbar {
 
 /* Team_Leader.css */
 
-
 /* CSS for table already added so no need to add */
-
-.filter-section {
-  margin-bottom: 20px;
-}
-
-.filter-dropdowns {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.filter-dropdown {
-  margin-right: 20px;
-}
-
-.filter-dropdown label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.filter-dropdown select {
-  width: 150px;
-  /* Adjust as needed */
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-
-}
-
-/* Style the filter section */
-.filter-section {
-  margin-top: 20px;
-}
-
-/* Style the filter dropdowns */
-.filter-dropdown {
-  margin-bottom: 10px;
-}
 
 /* Style the dropdown button */
 .dropbtn {
@@ -299,13 +250,6 @@ html::-webkit-scrollbar {
 
 /*End Prachi ChatSection 28/06 line no 235 to 244 */
 
-
-
-
-
-
-
-
 /* Overall container */
 .AppsTL {
   display: flex;
@@ -322,7 +266,6 @@ html::-webkit-scrollbar {
   margin-bottom: 20px;
 }
 
-
 .assignments-tableTL {
   width: 100%;
 }
@@ -333,7 +276,6 @@ html::-webkit-scrollbar {
   width: 100%;
   /* Prachi TeamLeader 1/7 */
   margin-right: 20px;
-
 }
 
 .dropdown-headerTL {
@@ -347,7 +289,6 @@ html::-webkit-scrollbar {
   border: 1px solid gray;
   border-radius: 15px;
   font-size: 18px;
-
 }
 
 /* Prachi parab TeamLeader 1/7 */
@@ -358,7 +299,6 @@ html::-webkit-scrollbar {
   flex-direction: column;
   /* margin-left: 13%;
     margin-right: 13%; */
-
 }
 
 .dropdown-bodyTL {
@@ -382,7 +322,6 @@ html::-webkit-scrollbar {
 }
 
 .select-all-buttonTL {
-  
   background-color: var(--button-color);
   color: #fff;
   border: 1px solid gray;
@@ -489,8 +428,6 @@ html::-webkit-scrollbar {
   max-height: 70vh;
   overflow-y: auto;
   text-transform: capitalize;
-
-
 }
 
 .options-category.most-important-assign {
@@ -506,7 +443,6 @@ html::-webkit-scrollbar {
   max-height: 70vh;
   overflow-y: auto;
   text-transform: capitalize;
-
 }
 
 .category-header {
@@ -530,8 +466,6 @@ html::-webkit-scrollbar {
   height: 15px;
   width: 15px;
   margin-right: 9px;
-
-
 }
 
 .form-check-input {
@@ -567,13 +501,11 @@ html::-webkit-scrollbar {
   height: 30px;
   /* width: 100%; */
   /* margin-top: 10px; */
-
 }
 
 .hierarchy-sectionTL {
   height: 30px;
   color: #ffcb9b;
-
 }
 
 .assignoptionbtn:hover {
@@ -583,10 +515,8 @@ html::-webkit-scrollbar {
 
 /* Assignments table */
 
-
 .all_assignbtn,
 .remove_assignbtn {
-
   background-color: var(--button-color);
   color: white;
   align-items: center;
@@ -597,7 +527,6 @@ html::-webkit-scrollbar {
   border-radius: 15px;
   height: 30px;
   /* width: 100px; */
-
 }
 
 .all_assignbtn:hover {
@@ -608,7 +537,6 @@ html::-webkit-scrollbar {
 /* Prachi ChatSection 28/06 line no 521 to 548 */
 
 .all_assignbtn1 {
-
   background-color: var(--button-color);
   color: white;
   align-items: center;
@@ -619,7 +547,6 @@ html::-webkit-scrollbar {
   border-radius: 15px;
   height: auto;
   width: 100%;
-
 }
 
 .all_assignbtn1:hover {
@@ -632,7 +559,6 @@ html::-webkit-scrollbar {
 }
 
 .all_assignbtn-Action {
-
   background-color: var(--button-color);
   color: white;
   align-items: center;
@@ -646,7 +572,6 @@ html::-webkit-scrollbar {
   /* width: 100%; */
   margin: 2px;
   padding: 0px 12px 0px 0px;
-
 }
 
 .all_assignbtn-Action:hover {
@@ -656,7 +581,6 @@ html::-webkit-scrollbar {
   cursor: pointer;
   /* padding-bottom: 10px; */
   border-radius: 15px;
-
 }
 
 /*End Prachi TeamLeader line no 622 to 675 */
@@ -668,7 +592,6 @@ html::-webkit-scrollbar {
   flex-direction: column;
   float: right;
   margin-right: 10px;
-
 }
 
 .dropdown-icon_open {
@@ -682,8 +605,6 @@ html::-webkit-scrollbar {
 .dropdown-icon.open {
   transform: rotate(180deg);
 }
-
-
 
 .TLR-buttons-div {
   display: flex;

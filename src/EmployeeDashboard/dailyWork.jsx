@@ -19,6 +19,7 @@ function DailyWork({
   logoutTimestamp,
   jobRole,
   emailSenderInformation,
+  successfulDataUpdation
 }) {
 
   const { employeeId } = useParams();
@@ -375,7 +376,9 @@ function DailyWork({
 
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-updateArchieved(changed) Start LineNo:-334 Date:-01/07
   const updateArchieved = () => {
-    if (data.pending > 0 && successfulDataAdditions) {
+    console.log(successfulDataUpdation);
+
+    if (data.pending > 0 && successfulDataAdditions || successfulDataUpdation) {
       // Assuming updateCount is a function that updates states like archived and pending
       const updatedData = JSON.parse(
         localStorage.getItem(`dailyWorkData_${employeeId}`)
@@ -387,7 +390,7 @@ function DailyWork({
   };
   useEffect(() => {
     updateArchieved();
-  }, [successfulDataAdditions]);
+  }, [successfulDataAdditions, successfulDataUpdation]);
 
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-updateArchieved(changed) End LineNo:-351 Date:-01/07
   const handlePause = () => {
@@ -515,7 +518,7 @@ function DailyWork({
           <p>
             {employeeData.name} - {userType}
             <br />
-            157{employeeId} 
+            157{employeeId}
           </p>
         </div>
       </div>

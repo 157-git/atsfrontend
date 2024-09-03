@@ -251,12 +251,13 @@ const EmployeeProfileData = ({
               <div className="employee-profile-emergency-education-details">
                 <div className="profile-back-button">
                   <button onClick={onClose}>
-                    Edit Profile
-                  </button>
-                  <button onClick={handleEditProfile}>
-                    Close
+                    Close 
                     <i className="fas fa-times"></i>
                   </button>
+                  {/* <button onClick={handleEditProfile}>
+                    Close
+                    <i className="fas fa-times"></i>
+                  </button> */}
                 </div>
 
                 {/*End Prachi EmployeeProfile 1/07 line no 205 to 210  */}

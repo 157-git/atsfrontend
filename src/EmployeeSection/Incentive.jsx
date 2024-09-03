@@ -15,12 +15,13 @@ const Incentive = () => {
           `${API_BASE_URL}/fetch-incentive/${employeeId}/${userType}`
         );
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          const errorMessage = `Error: ${response.status} ${response.statusText}`;
+          throw new Error(errorMessage);
         }
         const fetchedData = await response.json();
         setData(fetchedData);
       } catch (error) {
-        setError(error);
+        setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -28,62 +29,45 @@ const Incentive = () => {
     fetchData();
   }, [employeeId, userType]);
 
-  //Arshad_Attar_ IncentiveTable_Dates_Calculations_LineNo_30 to 35 25/07/2024
   const calculateAfter90DaysDate = (joinDate) => {
     const date = new Date(joinDate);
     date.setDate(date.getDate() + 90);
     return date.toISOString().split('T')[0];
   };
 
-
-  //Arshad_Attar_ IncentiveTable_Dates_Calculations_LineNo_38 to 48 25/07/2024
   const calculateRemainingDays = (futureDateString) => {
     const futureDate = new Date(futureDateString);
-    const future = new Date(Date.UTC(futureDate.getFullYear(), futureDate.getMonth(), futureDate.getDate()));
     const currentDate = new Date(); 
-    const diffTime = Math.abs(currentDate.getTime() - future.getTime());
+    const diffTime = Math.abs(currentDate.getTime() - futureDate.getTime());
     let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    diffDays = diffDays <= 0 ? 0 : diffDays;
-    return diffDays;
+    return diffDays <= 0 ? 0 : diffDays;
   };
-  
-  
+
   if (loading) {
     return <div>Loading...</div>;
   }
+
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div className="error-message">Error: {error}</div>;
   }
 
-  const grantTotalIncentives = data.reduce(
-    (total, row) => total + row.incentive,
-    0
-  );
+  if (data.length === 0) {
+    return <div>No data available for the selected employee and job role.</div>;
+  }
 
+  const grantTotalIncentives = data.reduce((total, row) => total + row.incentive, 0);
   const grantTotalYourIncentives = data
     .filter((row) => row.activeStatus === "Active")
     .reduce((total, row) => total + row.yourIncentives, 0);
-
-  const grantTotalLossIncentives =
-    grantTotalIncentives - grantTotalYourIncentives;
+  const grantTotalLossIncentives = grantTotalIncentives - grantTotalYourIncentives;
 
   const handleMouseOver = (event) => {
     const tableData = event.currentTarget;
     const tooltip = tableData.querySelector(".tooltip");
-    const tooltiptext = tableData.querySelector(".tooltiptext");
 
-    if (tooltip && tooltiptext) {
-      const textOverflowing =
-        tableData.offsetWidth < tableData.scrollWidth ||
-        tableData.offsetHeight < tableData.scrollHeight;
-      if (textOverflowing) {
-        const rect = tableData.getBoundingClientRect();
-        tooltip.style.top = `${rect.top - 10}px`;
-        tooltip.style.left = `${rect.left + rect.width / 100}px`;
-        tooltip.style.visibility = "visible";
-      } else {
-        tooltip.style.visibility = "hidden";
-      }
+    if (tooltip) {
+      const textOverflowing = tableData.offsetWidth < tableData.scrollWidth;
+      tooltip.style.visibility = textOverflowing ? "visible" : "hidden";
     }
   };
 
@@ -94,6 +78,7 @@ const Incentive = () => {
     }
   };
 
+  
   return (
     <div className="container-after1">
       <div className="attendanceTableData">

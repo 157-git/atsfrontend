@@ -3,9 +3,6 @@
   color: gray;
 }
 
-
-
-
 .select-button {
   position: absolute;
   top: 2px;
@@ -35,7 +32,7 @@
 
 .select-all-button,
 .share-button {
-  padding: 5px ;
+  padding: 5px;
   background-color: #ffcb9b;
   color: white;
   border: none;
@@ -51,24 +48,34 @@
   background-color: white;
   color: #ffcb9b;
 }
-.lineUp-Filter-btn,.lineUp-share-btn,.lineUp-share-close-btn,
-.lineUp-share-select-btn,.lineUp-forward-btn
-,.lineUp-share-forward-popup-btn,.lineUp-close-forward-popup-btn{
+.lineUp-Filter-btn,
+.lineUp-share-btn,
+.lineUp-share-close-btn,
+.lineUp-share-select-btn,
+.lineUp-forward-btn,
+.lineUp-share-forward-popup-btn,
+.lineUp-close-forward-popup-btn {
   font-size: 16px;
-    border-radius: 15px;
-    height: 30px;
-    color: white;
-    padding-left: 15px;
-    padding-right: 15px;
-    background: var(--button-color);
-    border: 1px solid gray;
-    cursor: pointer;
-    margin-bottom: 10px;
+  border-radius: 15px;
+  height: 30px;
+  color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: var(--button-color);
+  border: 1px solid gray;
+  cursor: pointer;
+  margin-bottom: 10px;
 }
-.lineUp-Filter-btn:hover,.lineUp-share-close-btn:hover,.lineUp-share-btn:hover,.lineUp-share-select-btn:hover,.lineUp-forward-btn:hover,.lineUp-share-forward-popup-btn:hover,.lineUp-close-forward-popup-btn:hover{
+.lineUp-Filter-btn:hover,
+.lineUp-share-close-btn:hover,
+.lineUp-share-btn:hover,
+.lineUp-share-select-btn:hover,
+.lineUp-forward-btn:hover,
+.lineUp-share-forward-popup-btn:hover,
+.lineUp-close-forward-popup-btn:hover {
   background-color: var(--button-hover-color);
   color: var(--text-hover-color);
-    opacity: 0.8;
+  opacity: 0.8;
 }
 
 /* Mohini_LineUpList_17/07/2024_Css_startLine_246_EndLine_305 */
@@ -87,7 +94,6 @@
   text-align: center;
   border: 1.5px solid gray;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Add shadow for highlighting */
-
 }
 
 .confirmation-texts {
@@ -127,14 +133,113 @@
 }
 
 .calling-list-container {
-background-color: white;
-transition: background-color 0.3s, filter 0.3s;}
+  background-color: white;
+  transition: background-color 0.3s, filter 0.3s;
+}
 
 .calling-list-container.blurred {
-background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
-  /* Mohini_LineUpList_17/07/2024_Css_startLine_246_EndLine_305 */
+/* Mohini_LineUpList_17/07/2024_Css_startLine_246_EndLine_305 */
+
+.filter-section {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  width: 100%;
+  margin-right: 10px;
+}
+
+.filter-dropdowns {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.filter-dropdown {
+  margin-right: 20px;
+}
+
+.filter-dropdown label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.filter-dropdown select {
+  width: 150px; /* Adjust as needed */
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Style the filter section */
+.filter-section {
+  margin-top: 20px;
+}
+
+/* Style the filter dropdowns */
+.filter-dropdown {
+  margin-bottom: 10px;
+}
+.white-Btn {
+  margin: 5px;
+  text-transform: lowercase;
+}
 
 
 
+/* Style the dropdown button */
+.dropbtn {
+  cursor: pointer;
+  border: 1px solid gray;
+  border-radius: 15px;
+  background-color: white;
+  font-size: 16px;
+  color: #ffcb9b;
+  height: 30px;
+  width: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+/* .dropbtn:hover{
+    background-color: white;
+  
+    border: 1px solid gray;
+  } */
+
+/* Style the dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Style the dropdown options */
+.dropdown-content div {
+  padding: 0px 10px;
+  cursor: pointer;
+}
+
+/* Show the dropdown content when the dropdown button is clicked */
+.filter-dropdown:hover .dropdown-content {
+  display: block;
+  width: 100%;
+  z-index: 99999999999999999;
+}
+
+/* Style the checkbox input */
+.dropdown-content input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* Style the checkbox label */
+.dropdown-content label {
+  cursor: pointer;
+}
