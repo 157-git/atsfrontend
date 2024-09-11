@@ -105,9 +105,11 @@ const EmployeeProfileData = ({
                   <p className="m-0">
                     <b>Designation: {employeeData.designation}</b>
                   </p>
-
+                  <div className="emp-profile-details-subdiv"></div>
                 </div>
+                
                 <div className="employee-profile-basic-details">
+                  
                   <p className="m-1">
                     <b>Resume : </b>Resume.pdf{" "}
                     <i onClick={openModal} className="fas fa-eye"></i>

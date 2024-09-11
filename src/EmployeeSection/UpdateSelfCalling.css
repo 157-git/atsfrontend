@@ -65,6 +65,22 @@
   align-items: center;
 }
 
+.update-tracker-popup-open-btn {
+  border: none;
+  padding: 2px 5px;
+  width: fit-content;
+  border-radius: 15px;
+  background-color: var(--button-color);
+  border: 1px solid #ccc;
+  color: white;
+}
+
+.update-tracker-popup-open-btn:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+  border: 1px solid #ccc;
+}
+
 .update-calling-tracker-field-inner-sub-div {
   width: 48%;
   display: flex;
