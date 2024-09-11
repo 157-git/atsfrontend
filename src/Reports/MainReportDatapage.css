@@ -1,0 +1,976 @@
+ /* Name:-Prachi Parab Component:-Report data page css
+         End LineNo:-1 to 145 Date:-04/07 */
+.month-report {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: grey;
+  }
+  
+  .month-selector {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .month-selector label {
+    margin: 0 10px;
+    font-size: 16px;
+    color: grey;
+  }
+  
+  .report {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+  
+  .report h3 {
+    margin-bottom: 10px;
+    color: grey;
+  }
+  
+  .report p {
+    font-size: 18px;
+    margin: 0;
+    color: grey;
+  }
+
+  .date-inputs{
+    text-align: center;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    gap:5px;
+  }
+
+  .date-inputs input[type="date"] {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensures padding is included in element's total width and height */
+    width: 100%;
+    
+  }
+
+  
+  /* Optional: Additional styles for when the input is focused */
+  .date-inputs input[type="date"]:focus {
+    outline: none; /* Remove default focus outline */
+    border-color: #007bff; /* Example: Change border color when focused */
+
+  }
+
+  .filterDataButton button {
+    background: #ffcb9b;
+    border: 1px solid grey;
+    height: 35px;
+    width: auto; /* Adjust width as needed */
+    border-radius: 15px;
+    color: white;
+    padding: 0 20px; /* Adjust padding for text alignment */
+    font-size: 16px;
+    cursor: pointer;
+   margin-top:25px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .filterDataButton button:hover {
+    background: white;
+    color: #ffcb9b;
+  }
+  .filterDataButton1 button {
+    background: #ffcb9b;
+    border: 1px solid grey;
+    height: 35px;
+    width: auto; /* Adjust width as needed */
+    border-radius: 15px;
+    color: white;
+    padding: 0 20px; /* Adjust padding for text alignment */
+    font-size: 16px;
+    cursor: pointer;
+   margin-top: 5px;
+    justify-content: center;
+    align-items: center;
+    
+  }
+
+  .filterDataButton1 button:hover {
+    background: white;
+    color: #ffcb9b;
+  }
+  .filterDataButton{
+    text-align: center;
+  }
+ 
+  
+ .candidate-report select{
+    word-wrap: normal;
+  padding:2px;
+  height: 35px;
+  width: 30%;
+  border: 1px solid gray;
+  border-radius: 15px;
+}
+
+.candidate-report select:hover{
+ background-color:#ffcb9b;
+color: grey;
+}
+
+.candidate-report{
+    text-align: center;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    gap:40px;
+}
+
+.month-selector input[type="radio" i] {
+  margin-right: 5px;
+}
+
+/* Azar css */
+
+/* Ajhar-reports.css-10-07-2024-lineNo-1-to-821 */
+
+
+.kingmaker{
+  display: flex;
+  align-items:center;
+  flex-direction: column;
+  /* justify-content: space-between; */
+  /* flex-wrap: wrap; */
+}
+  
+  /* Style the dropdown content (hidden by default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  /* Style the dropdown options */
+  .dropdown-content div {
+    padding: 0px 10px;
+    cursor: pointer;
+  }
+  
+  /* Show the dropdown content when the dropdown button is clicked */
+  .filter-dropdown:hover .dropdown-content {
+    display: block;
+    width: 100%;
+    /* z-index: 99999999999999999; */
+  }
+  
+  /* Style the checkbox input */
+ 
+  /* Style the checkbox label */
+  .dropdown-content label {
+    cursor: pointer;
+  }
+  
+  
+  .App-after {
+    width: 100%;
+    background-attachment: fixed;
+    height: 100vh;
+    overflow: hidden !important;
+  }
+  
+  .attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .attendance-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #ffcb9b;
+    color:var(--text-color);
+    z-index: 1;
+    height: 30px;
+    white-space: nowrap;
+    color:var(--text-color);
+    max-width: auto !important;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .attendanceheading {
+    border: 1px solid gray;
+    padding: 4px;
+    white-space: nowrap;
+    width: auto !important;
+    height: 30px;
+    
+    /* text-overflow: ellipsis; */
+  }
+  .tabledata {
+    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    padding: 2px;
+    width: 50px;
+    border: 1px solid #ddd;
+    /* width: auto; */
+  }
+  .tooltip {
+    visibility: hidden;
+    background-color: #ffcb9b;
+    color: #000;
+    text-align: center;
+    border-radius: 5px;
+    /* padding: 5px; */
+    position: fixed;  /* Use fixed positioning */
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s;
+    text-overflow: clip;
+    visibility: visible;
+    /* white-space: nowrap; */
+    /* width: 200px; */
+  }
+  
+  
+  .tabledata:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  .tooltiptext {
+    white-space: nowrap;
+  }
+  
+  
+    
+  .attendancerows-head {
+    background-color: var(--Bg-color);
+    color:var(--text-color);
+    /* font-weight: 100; */
+    text-align: center;
+    font-size: 18px;
+    border: 1px solid gray;
+    max-width: 300px ;
+    /* padding: 10px 15px; */
+    /* text-overflow: clip; */
+    /* width: 100px; */
+  }
+  
+  
+  .attendanceTableData::-webkit-scrollbar {
+    display: none;
+  }
+  .attendanceTableData {
+    height: 85vh;
+    width: 100%;
+    overflow-y: auto;
+  }
+  .attendancerows{
+    height: 30px;
+  }
+  
+  
+  .attendancerows:hover {
+    background-color: #f2f2f2;
+  }
+  
+  html::-webkit-scrollbar{
+    display: none;
+  }
+   /* Team_Leader.css */
+  
+  
+  /* CSS for table already added so no need to add */
+  
+  .filter-section {
+      margin-bottom: 20px;
+    }
+    
+   
+    
+    .filter-dropdown {
+      margin-right: 20px;
+    }
+    
+    .filter-dropdown label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    .filter-dropdown select {
+      width: 150px; /* Adjust as needed */
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      
+    }
+    
+    /* Style the filter section */
+    .filter-section {
+      margin-top: 20px;
+    }
+    
+    /* Style the filter dropdowns */
+    .filter-dropdown {
+      margin-bottom: 10px;
+    }
+    
+    /* Style the dropdown button */
+    .dropbtn { 
+      cursor: pointer;
+      border: 1px solid gray ;
+        border-radius: 15px;
+        background-color: white;
+        font-size: 16px ;
+        color: #ffcb9b;
+        height: 30px;
+        width: auto;
+        padding-left: 15px;
+        padding-right: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    /* .dropbtn:hover{
+      background-color: white;
+    
+      border: 1px solid gray;
+    } */
+    
+    /* Style the dropdown content (hidden by default) */
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+    
+    /* Style the dropdown options */
+    .dropdown-content div {
+      padding: 0px 10px;
+      cursor: pointer;
+    }
+    
+    /* Show the dropdown content when the dropdown button is clicked */
+    .filter-dropdown:hover .dropdown-content {
+      display: block;
+      width: 100%;
+      z-index: 99999999999999999;
+    }
+    
+    /* Style the checkbox input */
+    .dropdown-content input[type="checkbox"] {
+      margin-right: 5px;
+    }
+    
+    /* Style the checkbox label */
+    .dropdown-content label {
+      cursor: pointer;
+    }
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  /* End of CSS table */
+  
+  
+  
+  
+  
+  /* Prachi ChatSection 28/06 line no 235 to 244 */
+  
+  
+  
+  .attendanceTableData1::-webkit-scrollbar {
+    display: none;
+  }
+  .attendanceTableData1 {
+    height: 85vh;
+    width: 95%;   
+    
+    margin-right: 2px;
+  }
+  /*End Prachi ChatSection 28/06 line no 235 to 244 */
+  
+  
+  
+  
+  
+  
+  
+  
+  /* Overall container */
+  .report-AppsTL {
+      display: flex;
+      flex-direction: row;
+      /* align-items: center; */
+      margin-top: 20px;
+      height: 83vh;
+      
+    }
+    
+    /* Selection container */
+    .reports-selection-containerTL {
+      display: flex;
+      /* justify-content: space-around; */
+      /* width:00px; */
+      /* width: 50%; */
+      flex-direction: column;
+      /* margin-bottom: 20px; */
+      /* margin-left: 5%; */
+    }
+  
+  
+    .assignments-tableTL{
+          width: 100%;
+    }
+    
+    /* Dropdown container */
+    .report-custom-dropdownTL {
+      position: relative;
+      width: 30%;   /* Prachi TeamLeader 1/7 */
+      margin-right: 20px;
+      
+    }
+    
+    .reports-Admin-Dropdown {
+      background-color: white;
+      padding: 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      width: 100px;
+      height: 30px;
+      border: 1px solid gray;
+      border-radius: 15px;
+      font-size: 16px;
+     
+    }
+  /* Prachi parab TeamLeader 1/7 */
+    .report-DetailsReport-btn{
+      margin-top: -20px;
+      margin-left: 35px;
+      width: 130px;
+  
+    }
+    
+    .report-dropdown-bodyTL {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 280px;   
+      height: 450px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      margin-top: 4px;
+    }
+    
+    .search-inputTL {
+      width: calc(100% - 20px);
+      padding: 5px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+    }
+    
+    /* .select-all-buttonTL {
+      background-color: #ffcb9b;
+      color: #fff;
+      border: none;
+      padding: 0px 10px 0px 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    } */
+    
+    .team-leadersTL {
+      /* max-height: 200px; */
+      overflow-y: auto;
+    }
+    
+    .team-leaderTL {
+      margin-bottom: 10px;
+    }
+    
+    .team-leaderTL label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+  
+    
+    .recruitersTL label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    /* Options section */
+    .options-section {
+      width: 100%;
+      display: flex;
+      margin-top: 20px;
+      flex-direction: column;
+      margin-top: 30px;
+    }
+    
+    .options-listTL {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      margin-bottom: 20px;
+      flex-direction: column;
+      gap: 20px;
+      
+    }
+    
+    .options-category {
+      display: flex;
+      flex-direction: row;
+      /* margin-right: 10px; */
+      text-align: center;
+      border: 1px solid gray;
+      border-radius: 15px;
+      
+     
+      
+    }
+    .options-category.common-assign {
+      display: flex;
+      flex-direction: column;
+      width: 100%;    /* Prachi TeamLeader 1/7 */
+      cursor: pointer;
+      background-color: #ffcb9b;
+      color:var(--text-color);
+      border: 1px solid gray;
+      border-radius: 15px;
+     text-align: center;
+     font-size: 18px;
+    }
+    
+    .options-category.important-assign {
+      display: flex;
+      flex-direction: column;
+      width: 100%;    /* Prachi TeamLeader 1/7 */
+      cursor: pointer;
+      color:var(--text-color);
+      background-color: #ffcb9b;
+      text-align: center;
+      font-size: 18px;
+      
+    }
+    
+    .options-category.most-important-assign {
+      display: flex;
+      flex-direction: column;
+      width: 100%;    /* Prachi TeamLeader 1/7 */
+      cursor: pointer;
+      color:var(--text-color);
+      background-color: #ffcb9b;
+      text-align: center;
+      font-size: 18px;
+    }
+    
+    .category-headerTL {
+      background-color: #ffcb9b;
+      color: white;
+      border-radius: 15px;
+      text-align: center;
+    
+    
+    
+    }
+
+    .checkbox-teamleader-assign input[type="checkbox" i] {
+      height: 25px;
+      width: 25px;
+     margin-right: 22px;
+     /* margin-left:20px; */
+      margin-bottom: 5px;
+    }
+  
+    .radio-teamleader-assign input[type="radio" i] {
+      height: 20px;
+      width: 20px;
+     margin-right: 9px;
+   
+  
+    }
+    .form-check-input{
+      height: 30px;
+      width: 30px;
+    }
+    /*End Prachi ChatSection 28/06 line no 431 to 449 */
+  
+    .option-itemTL {
+      margin-bottom: 5px;
+      display: flex;
+    }
+    
+    .option-dropdown {
+      width: 100%;
+      height: 150px;
+      border: 1px solid gray;
+    }
+    
+    .report-assign-optionbtn {
+      background-color: #ffcb9b;
+      color: white; 
+      align-items: center;
+      cursor: pointer;
+      border-radius: 15px;
+      border: 1px solid gray;
+      font-size: 16px;
+      border-radius: 15px;
+      height: 30px;
+      width: 100%;
+     
+    }
+    
+    .report-hierarchy-sectionTL{
+      height: 30px;
+      color: #ffcb9b;
+    
+    }
+    .report-assign-optionbtn:hover {
+      background-color: white;
+      color: #ffcb9b;
+      cursor: pointer;
+      border-radius: 15px;
+    }
+    
+    /* Assignments table */
+    
+    
+    .all_assignbtn,
+    .remove_assignbtn {
+     
+      background-color: #ffcb9b;
+      color: white; 
+      align-items: center;
+      cursor: pointer;
+      border-radius: 15px;
+      border: 1px solid gray;
+      font-size: 18px;
+      border-radius: 15px;
+      height: 40px;
+      width: 100px;
+     
+    }
+  
+    .all_assignbtn:hover{
+      background-color: white;
+      color: #ffcb9b;
+      padding: 10px 10px;
+      cursor: pointer;
+      margin-top: 10px;
+      border-radius: 15px;
+    }
+  /* Prachi ChatSection 28/06 line no 521 to 548 */
+  
+    .all_assignbtn1
+    {
+     
+      background-color: #ffcb9b;
+      color: white; 
+      align-items: center;
+      cursor: pointer;
+      border-radius: 15px;
+      border: 1px solid gray;
+      font-size: 18px;
+      border-radius: 15px;
+      height: auto;
+      width: 100%;
+     
+    }
+  
+    .all_assignbtn1:hover{
+      background-color: white;
+      color: #ffcb9b;
+      padding: 10px 10px;
+      cursor: pointer;
+      margin-top: 10px;
+      border-radius: 15px;
+    }
+  
+    .all_assignbtn-Action
+       {
+     
+      background-color: #ffcb9b;
+      color: white; 
+      align-items: center;
+      cursor: pointer;
+      border-radius: 15px;
+      border: 1px solid gray;
+      font-size: 16px;
+      border-radius: 15px;
+      height:40px;
+      width: 100%;
+      margin: 2px;
+     
+    }
+  
+    .all_assignbtn-Action:hover{
+      background-color: white;
+      color: #ffcb9b;
+      /* padding: 10px 10px; */
+      cursor: pointer;
+      padding-bottom: 10px;
+      border-radius: 15px;
+   
+    }
+  
+  /*End Prachi TeamLeader line no 622 to 675 */
+    /* Dropdown icon */
+    .dropdown-icon {
+      display: flex;
+      font-size: 16px;
+      color: white;
+      flex-direction: column;
+      float:right;
+      margin-right: 10px;
+      
+    }
+    .dropdown-icon_open {
+      display: flex;
+      font-size: 16px;
+      color: #Ffcb9b;
+      flex-direction: column;
+      float: right;}
+    
+    .dropdown-icon.open {
+      transform: rotate(180deg);
+    }
+
+    .report-category-share-btn{
+      font-size: 16px;
+      border-radius: 15px;
+      height: 30px;
+      width: auto;
+      /* width: 85px; */
+      margin-top: 2px;
+      color: var(--button-color); 
+      padding-left: 8px;
+      padding-right:8px;
+      background-color: white;
+      border: 1px solid gray;
+      cursor: pointer;
+    }
+    .report-category-share-btn:hover{
+      background-color: var(--button-hover-color);
+      color: var(--text-hover-color);
+    }
+    .report-buttons-div{
+      display: flex;
+      justify-content: end;
+      gap: 5px;
+      /* padding: 10px; */
+    }
+    .report-ok-button,.report-reset-selectTL-button{
+      font-size: 16px;
+      border-radius: 15px;
+      height: 30px;
+      color: white;
+      padding-left: 7px;
+      padding-right:7px;
+      background: var(--button-color);
+      border: 1px solid gray;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+  
+    .report-ok-button:hover,.report-reset-selectTL-button:hover{
+      background-color: var(--button-hover-color);
+      color: var(--text-hover-color);
+      border: #f2f2f2;
+      border: 1px solid gray;
+    }
+  
+
+    /* --------------------------------------------------- */
+
+    .month-report {
+      /* width: auto; */
+      width: 980px;
+      margin: 0px ;
+      padding: 12px 0 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      /* margin-left: -10px; */
+    }
+    
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: grey;
+    }
+    
+    .month-selector {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+    
+    .month-selector label {
+      margin: 0 7px;
+      font-size: 16px;
+      color: grey;
+    }
+    .month-selector input[type="radio" i] {
+      margin-right: 5px;
+    }
+    
+    .report {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+    }
+    
+    .report h3 {
+      margin-bottom: 10px;
+      color: grey;
+    }
+    
+    .report p {
+      font-size: 18px;
+      margin: 0;
+      color: grey;
+    }
+  
+    .date-inputs{
+      text-align: center;
+      width: 100%;
+  
+      display: flex;
+      justify-content: center;
+      gap:5px;
+    }
+  
+    .date-inputs input[type="date"] {
+      padding: 8px 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box; /* Ensures padding is included in element's total width and height */
+      width: 100%;
+      
+    }
+  
+    
+    /* Optional: Additional styles for when the input is focused */
+    .date-inputs input[type="date"]:focus {
+      outline: none; /* Remove default focus outline */
+      border-color: #007bff; /* Example: Change border color when focused */
+  
+    }
+  
+    .filterDataButton button {
+      background: var(--button-color);
+      border: 1px solid grey;
+      height: 30px;
+      width: auto; /* Adjust width as needed */
+      border-radius: 15px;
+      color: white;
+      padding: 0 10px;
+       /* Adjust padding for text alignment */
+      font-size: 16px;
+      cursor: pointer;
+     margin-top:0px;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .filterDataButton button:hover {
+      background-color: var(--button-hover-color);
+      color: var(--text-hover-color);
+    }
+    .filterDataButton1 button {
+      background: var(--button-color);
+      border: 1px solid grey;
+      height: 30px;
+      width: auto; /* Adjust width as needed */
+      border-radius: 15px;
+      color: white;
+      padding: 0 20px; /* Adjust padding for text alignment */
+      font-size: 16px;
+      cursor: pointer;
+     margin-top: 5px;
+     display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .filterDataButton1 button:hover {
+      background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+    }
+    .filterDataButton{
+      text-align: center;
+    }
+   
+    
+   .candidate-report select{
+      word-wrap: normal;
+    padding:2px;
+    height: 35px;
+    width: 30%;
+    border: 1px solid gray;
+    border-radius: 15px;
+  }
+  
+  .candidate-report select:hover{
+   background-color:var(--Bg-color);
+  color: var(--text-color);
+  }
+  
+  .candidate-report{
+      text-align: center;
+      width: 100%;
+  
+      display: flex;
+      justify-content: center;
+      gap:40px;
+  }
+  
+  .reports-heading-report{
+    font-size: 18px;
+    margin-top: -10px;
+  }
+ 

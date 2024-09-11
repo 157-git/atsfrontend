@@ -1,0 +1,58 @@
+.shareLink-mainDiv{
+    display: flex;
+   
+    justify-content: space-evenly;
+    align-content: center;
+    margin-top: 20px;
+
+}
+
+.shareLink-view-btn-Div,
+    .shareLink-share-btn-Div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    border: 1px solid gray;
+    border-radius: 10px;
+    box-shadow: 0 7px 10px rgba(0, 0, 0, 0.1);
+    width: 27vw;
+    height: 27vh;
+    cursor: pointer;
+    color: white;
+    gap: 20px;
+    background-color: var(--Bg-color);
+    
+}
+.shareLink-view-btn,
+.shareLink-share-btn{
+    text-align: center;
+    padding: 3px 10px;
+    border-radius: 15px;
+    height: 30px;
+    width: auto;
+    border: 1px solid gray;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+    overflow: hidden;
+    position: relative;
+    color: white;
+    background-color: var(--button-color);
+}
+
+.shareLink-view-btn:hover,
+.shareLink-share-btn:hover{
+    background-color: var(--button-hover-color);
+    color: var(--text-hover-color);   
+
+}
+
+
+.shareLink-view-btn-Div h1,
+.shareLink-share-btn-Div h1,
+.shareLink-share-btn-Div h4{
+    font-size: 18px;
+    color:var(--text-color);
+}

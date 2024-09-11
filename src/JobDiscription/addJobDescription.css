@@ -1,0 +1,205 @@
+/* Swapnil_JobDescription_FullPageDesign_1to175_02/07 */
+/* Swapnil_JobDescription_ResponsivePage_1to77_04/07 */
+/* Swapnil_JobDescription_Adding PlaceHolder_05/07 */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.job-desc {
+  font-family: Arial, sans-serif;
+  /* background-color:var(--text-color); */
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* padding: 20px; */
+}
+
+.job-desc-form {
+  /* border: 1px solid gray; */
+  margin-bottom: 5px;
+}
+
+.job-performance {
+  /* background-color: #ffe5b5; */
+  border-radius: 5px;
+  width: 100%;
+}
+
+.job-performance article {
+  text-align: center;
+  color:var(--text-color);
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+
+.field-column {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* justify-content: space-between; */
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 1px;
+  white-space: nowrap;
+  /* height: 650px; */
+  /* max-height: 100vh; */
+}
+
+.field-Row-Gray {
+  width: 100%;
+  display: flex;
+  background-color: #F2F2F2;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0%;
+
+  /* padding: 3px 0px ; */
+}
+
+.field-Row-white {
+  width: 100%;
+  display: flex;
+  background-color: white;
+  justify-content: space-around;
+  align-items: center;
+  /* padding: 3px 0px ; */
+
+}
+
+.field {
+  width: 100%;
+  display: flex;
+  padding: 5px 0px;
+  /* border: 1px solid gray; */
+}
+
+.field label {
+  width: 28%;
+  display: flex;
+  align-items: center;
+  color:var(--text-color);
+  height: 30px;
+  font-size: 16px;
+  padding: 0px 5px;
+  display: flex;
+  border-radius: 5px;
+  font-weight: 500;
+  align-items: center;
+
+}
+
+.field input {
+  width: 68%;
+  /* border: 1px solid #ccc; */
+  border-radius: 5px;
+  height: 29px;
+
+}
+
+.field select {
+  padding: 5.5px 5px 5.5px 5px;
+  font-size: 16px;
+  color:var(--text-color);
+  /* border: 1px solid #ccc; */
+  border-radius: 5px;
+  width: 69%;
+  padding-left: 5px;
+}
+
+.save {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.apply {
+  padding: 10px 20px;
+  margin: 5px;
+  background-color: white;
+  color:var(--text-color);
+  cursor: pointer;
+  border-radius: 15px;
+  font-size: 1em;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+  /* border: 1px solid #ccc; */
+  height: 35px;
+}
+
+.textarea {
+  width: 69%;
+  height: 34px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  margin-bottom: 0;
+  resize: vertical;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  padding-left: 5px;
+  padding-top: 4px;
+}
+
+.multi-field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* border: 1px solid gray; */
+  gap: 2px;
+  padding-bottom: 5px;
+  margin-bottom: 2px;
+  overflow: hidden;
+}
+
+.inner-field label {
+  width: 20%;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  border-radius: 5px;
+  align-items: center;
+  color:var(--text-color);
+}
+
+.inner-field input {
+  width: 80%;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.job-button {
+  height: 30px;
+  background-color: var(--button-color);
+  border-radius: 15px;
+  color: white;
+  border: 1px solid gray;
+  padding: 2px 15px;
+}
+
+.job-button:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+}
+
+.job-submit-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.job-remove-button{
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 0 10px 0 10px;
+  color: red;
+  margin: 0px 14px 0px 8px;
+}
+.ajd-btndiv-div{
+  display: flex;
+  justify-content: center;
+}

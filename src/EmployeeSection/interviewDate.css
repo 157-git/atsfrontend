@@ -1,0 +1,291 @@
+.react-datepicker-wrapper {
+  display: none;
+}
+
+.react-calendar {
+  width: 100%;
+  padding: 10px;
+}
+
+.custom-calendar .react-datepicker__month-container {
+  /* border: 1px solid red; */
+  width: 350px;
+}
+
+.custom-calendar .react-datepicker {
+  width: 100%;
+}
+
+.custom-calendar .react-datepicker__header {
+  padding: 10px 0;
+}
+
+.custom-calendar .react-datepicker__day {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+  position: relative;
+}
+
+.custom-calendar .react-datepicker__current-month {
+  font-size: 18px;
+}
+
+.custom-calendar .react-datepicker__day--selected {
+  background-color: #fa668d;
+}
+
+.custom-calendar .react-datepicker__day--keyboard-selected {
+  background-color: rgba(32, 17, 252, 0.5);
+  color: #ffffff;
+}
+
+.highlighted-date {
+  position: relative;
+  width: 180%;
+  height: 100%;
+  right: 18px;
+  background-color: black;
+  top: 20%;
+}
+
+.react-calendar .react-calendar__tile--highlighted {
+  background-color: rgba(0, 128, 0, 0.1);
+  border-radius: 50%;
+}
+
+.react-calendar .react-calendar__tile--note {
+  background-color: rgba(255, 0, 0, 0.2);
+}
+
+.abbr {
+  position: absolute !important;
+  z-index: 999 !important;
+}
+
+.fa-regular {
+  color:var(--text-color);
+}
+
+.calendar {
+  display: flex;
+  flex-direction: row;
+  margin-top: -60px;
+}
+
+#finalColumn {
+  width: 200px;
+  background-color: #fa668d;
+}
+
+.calender-saveresponse {
+  background-color: #ffe5ec;
+  border: 2px solid white;
+  border-radius: 15px;
+  height: 40px;
+}
+
+.react-calendar__month-view__days {
+  display: flex;
+}
+
+button.react-calendar__tile.react-calendar__month-view__days__day {
+  color:var(--text-color);
+  border: 1px solid #ccc;
+  border-radius: 15px;
+
+}
+
+.calendar-div {
+  padding-top: 55px;
+}
+
+button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--range.react-calendar__tile--rangeStart.react-calendar__tile--rangeEnd.react-calendar__tile--rangeBothEnds.react-calendar__month-view__days__day {
+  background-color: var(--Bg-color);
+}
+
+button.react-calendar__tile.react-calendar__tile--now.react-calendar__month-view__days__day {
+  background-color: var(--Bg-color);
+}
+
+.calender-main-div {
+  margin-top: 20px;
+  width: 40%;
+  display: flex;
+}
+
+#table-shortlisted {
+  height: 150px;
+
+}
+
+@media screen and (max-width: 992px) {
+  .react-calendar {
+    width: 300px;
+  }
+
+}
+
+.shortlist-table-div {
+  margin-top: 20px;
+  padding-top: 30px;
+  padding-left: 10px;
+  padding-right: 20px;
+}
+
+.shortlist-table-div table {
+  padding: 10px;
+}
+
+.interview-response-update {
+  margin-bottom: 20px;
+}
+
+.interview-response-update h6 {
+  color:var(--text-color);
+  margin-top: 5px;
+  margin-bottom: -15px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#table-shortlisted {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffcb9b;
+  margin-bottom: 2px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#table-shortlisted th,
+#table-shortlisted td {
+  padding: 12px;
+  border: 1px solid gray;
+  /* Darker border for better contrast */
+  font-size: 16px;
+  transition: background-color 0.3s, color 0.3s;
+  /* Smooth transitions for hover effects */
+}
+
+#table-shortlisted thead th {
+  color:var(--text-color);
+  padding: 12px;
+  text-align: center;
+  font-size: 16px;
+  /* font-weight: bold;  */
+}
+
+#table-shortlisted tbody td {
+  background-color: white;
+  color:var(--text-color);
+  text-align: center;
+  font-size: 16px;
+}
+
+#table-shortlisted tbody tr:hover td {
+  background-color: #f2f2f2;
+  color:var(--text-color);
+}
+
+.shortlisted-submite-btn {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.shortlisted-submite-btn button {
+  height: 30px;
+  width: auto;
+  border-radius: 15px;
+  padding: 0 20px;
+  margin: 5px;
+  margin-top: -10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  background-color: var(--button-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  border: 1px solid gray;
+}
+
+.shortlisted-submite-btn button:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+  border: 1px solid gray;
+  /* transform: translateY(-2px); */
+}
+
+.shortlisted-submite-btn button:focus {
+  outline: none;
+}
+
+/* Table */
+#table-shortlisted {
+  width: 100%;
+  height: auto;
+  border-collapse: collapse;
+}
+
+.react-calendar__month-view__weekdays {
+  color: black;
+  font-weight: 300;
+  text-decoration: none !important;
+}
+
+
+#table-shortlisted thead {
+  background-color:var(--text-color);
+  color: white;
+}
+
+/* Table Body */
+#table-shortlisted tbody {
+  background-color: white;
+}
+
+/* Table Rows */
+#table-shortlisted tbody tr {
+  height: 10px;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  max-width: 100%;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Table Cells */
+#table-shortlisted td,
+#table-shortlisted th {
+  padding: 6px;
+  height: 20px;
+}
+
+#table-shortlisted select,
+#table-shortlisted input[type="date"],
+#table-shortlisted input[type="time"],
+#table-shortlisted input[type="text"] {
+  width: 100%;
+  height: 30px;
+
+  padding: 5px;
+
+
+}
+
+.highlighted-row {
+  background-color: #ffd8a8;
+  /* or any other highlighting style */
+}
+
+.interview-data-div {
+  overflow-x: auto; /* Enable horizontal scrolling */
+  margin-top: 20px; /* Space above the table */
+}
+
+
+  

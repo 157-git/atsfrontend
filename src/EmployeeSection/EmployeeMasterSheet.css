@@ -1,0 +1,44 @@
+.EmployeeMasterSheet-share-btn,
+.EmployeeMasterSheet-share-close-btn,
+.EmployeeMasterSheet-share-select-btn,
+.EmployeeMasterSheet-forward-btn,
+.EmployeeMasterSheet-share-forward-popup-btn,
+.EmployeeMasterSheet-close-forward-popup-btn {
+  font-size: 16px;
+  border-radius: 15px;
+  height: 30px;
+  color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: var(--button-color);
+  border: 1px solid gray;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.EmployeeMasterSheet-share-close-btn:hover,
+.EmployeeMasterSheet-share-btn:hover,
+.EmployeeMasterSheet-share-select-btn:hover,
+.EmployeeMasterSheet-forward-btn:hover,
+.EmployeeMasterSheet-share-forward-popup-btn:hover,
+.EmployeeMasterSheet-close-forward-popup-btn:hover,
+.View-Interview-History:hover,
+.FollowUp-History:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+  opacity: 0.8;
+}
+
+.View-Interview-History,
+.FollowUp-History {
+  font-size: 16px;
+  border-radius: 15px;
+  color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: #ffcb9b;
+  border: 1px solid gray;
+  cursor: pointer;
+
+  /* margin-bottom: 10px; */
+}

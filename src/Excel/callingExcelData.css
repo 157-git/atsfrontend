@@ -1,0 +1,183 @@
+.excel-calling-data-heading {
+  color: grey;
+  font-size: 18px;
+}
+
+
+.page-container {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+}
+
+.App-after1 {
+  width: 100%;
+  height: 82vh;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  align-items: center;
+}
+
+.card-body {
+  flex: 1 1 auto;
+  margin-top: -10px;
+  margin-bottom: -10px;
+  /* height: 10px; */
+
+}
+
+.fixed-card {
+
+  z-index: 1000;
+  background-color: #ffe5b5;
+  color: gray;
+  width: 80%;
+  /* height: 100px; */
+  max-width: 400px;
+  border: 1px solid gray;
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
+  /* padding: 10px; */
+}
+
+.text-success {
+  color: gray;
+}
+
+.text-danger {
+  color: gray;
+  margin-bottom: -5px;
+
+}
+
+
+.card-header {
+  padding: 10px;
+}
+
+.card-title {
+  /* margin-bottom: 0; */
+  font-size: 18px;
+}
+
+/* Add media queries to handle smaller screens */
+@media (max-width: 576px) {
+  .fixed-card {
+    width: 90%;
+  }
+}
+
+@media (max-width: 400px) {
+  .fixed-card {
+    width: 100%;
+    padding: 15px;
+  }
+}
+
+.card .button-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card .button-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.d-grid {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.d-grid button {
+  background: #ffcb9b;
+  border: none;
+  height: 30px;
+  width: 100%;
+  /* Adjust width as needed */
+  border-radius: 15px;
+  color: white;
+  padding: 0 20px;
+  /* Adjust padding for text alignment */
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mt-3 {
+  margin-top: 0rem !important;
+}
+
+.d-grid button:hover {
+  background: white;
+  color: #ffcb9b;
+}
+
+.text-danger {
+  --bs-text-opacity: 1;
+  color: gray !important;
+  font-size: 16px;
+}
+
+.text-success {
+  color: gray;
+  /* Success message color */
+}
+
+.text-danger {
+  color: gray;
+  /* Error message color */
+}
+
+.center {
+  text-align: center;
+  /* Center align text */
+}
+
+@media (max-width: 576px) {
+  .d-grid button {
+    font-size: 16px;
+  }
+}
+
+
+.filter-heading {
+  border-radius: 15px;
+  color: gray;
+  /* Text color */
+  padding-top: 5px;
+  /* Top padding */
+  margin-bottom: 10px;
+  /* Bottom margin for spacing */
+}
+
+/* close button */
+.close-button {
+  font-size: 16px;
+  border-radius: 15px;
+  height: 30px;
+
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: #ffcb9b;
+  color: white;
+  border: 1px solid gray;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  position: sticky;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.close-button:hover {
+  background-color: white;
+  color: #ffcb9b;
+}

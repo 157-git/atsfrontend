@@ -1,0 +1,94 @@
+.container-after {
+  width: 2150px;
+  height: 100%;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #ffe5b5;
+  gap: 0%;
+}
+
+.holdingcandidate-table {
+  width: 1500px;
+  height: 100%;
+  background: white;
+  border-radius: 5px;
+  padding-top: 0%;
+  border: 1px solid gray;
+
+}
+
+.holdingcandidate-table .hodlcandidateheading,
+.holdingcandidate-table .holdcandidatetabledata {
+  /* padding: 10px; */
+  border: 1px solid gray;
+  color: rgb(84, 84, 84);
+  font-size: 16px;
+  white-space: nowrap;
+  border: 1px solid gray;
+
+}
+
+.holdingcandidate-table .hodlcandidateheading {
+  background-color: #ffcb9b;
+  color:var(--text-color);
+  font-weight: 500;
+  text-align: center;
+  font-size: 18px;
+  /* font-weight: bold; */
+  border: 1px solid gray;
+  padding: 10px 15px;
+
+}
+
+.holdingcandidate-table {
+  text-align: center;
+  font-size: 16px;
+  border: 1px solid gray;
+  padding: 10px 15px;
+  white-space: nowrap;
+  position: sticky;
+
+}
+
+.holdingcandidate-table .holdcandidatetabledata:hover {
+  background-color: #F2F2F2;
+  /* Change this to the desired hover color */
+}
+
+/* .summary {
+  margin-top: 20px;
+} */
+
+
+.holdCan-Filter-btn,
+.hold-share-btn,
+.hold-share-close-btn,
+.hold-share-select-btn,
+.hold-forward-btn,
+.hold-share-forward-popup-btn,
+.hold-close-forward-popup-btn {
+  font-size: 16px;
+  border-radius: 15px;
+  height: 30px;
+  color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: var(--button-color);
+  border: 1px solid gray;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.holdCan-Filter-btn:hover,
+.hold-share-close-btn:hover,
+.hold-share-btn:hover,
+.hold-share-select-btn:hover,
+.hold-forward-btn:hover,
+.hold-share-forward-popup-btn:hover,
+.hold-close-forward-popup-btn:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+  opacity: 0.8;
+}

@@ -1,0 +1,327 @@
+/* Dhanashree_Lokhande_EmployeeProfileData_changing_performace indicator color/11/09 */
+.maintable {
+  height: 80vh;
+  /* Allow height to adjust based on content */
+  width: auto;
+  /* Allow width to adjust based on content */
+  border-collapse: collapse;
+  overflow-x: auto;
+  /* Adds horizontal scroll if table is too wide */
+  margin: 0 auto;
+  /* Center align if needed */
+  max-width: 100%;
+  /* Ensures it doesn't exceed the container width */
+  padding: 10px;
+  color: gray;
+  /* Set font color to gray */
+}
+
+.maintable::-webkit-scrollbar {
+  display: none;
+}
+
+.table-striped th {
+  color: gray;
+}
+
+.update-page-head {
+  width: 100%;
+  color: gray;
+  /* Set font color to gray */
+  text-transform: uppercase;
+  align-self: center;
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+.studTables {
+  width: 100%;
+  max-width: 100%;
+  border-color: black;
+  background-color: #ffb281;
+  color: white;
+  cursor: pointer;
+  border-radius: 15px;
+  font-size: 16px;
+  height: 30px;
+  width: auto;
+  border: 1px solid #ccc;
+}
+
+.display-more-profile-btn:hover,
+.close-profile-popup-btn:hover {
+  background-color: white;
+  color: #ffcb9b;
+  border: #f2f2f2;
+}
+
+.employee-profile-section {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  height: 85vh;
+
+  padding: 15px;
+  gap: 20px;
+}
+
+.profile-back-button {
+  grid-column: 1/-1;
+  display: flex;
+  justify-content: end;
+}
+
+.profile-back-button button {
+  /* margin: 5px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 15px;
+  /* margin-top: 15px; */
+  border-color: black;
+  background-color: var(--button-color);
+  color: white;
+  cursor: pointer;
+  border-radius: 15px;
+  font-size: 16px;
+  height: 30px;
+  width: auto;
+  border: 1px solid #ccc;
+}
+
+.profile-back-button button:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+  border: #f2f2f2;
+}
+
+.employee-profile-staticsection {
+  grid-column: span 1;
+  display: flex;
+  flex-direction: column;
+  max-height: 74%;
+  /* prachi EmployeeProfile 1/7 */
+}
+
+.employee-profile-static {
+  position: fixed;
+
+  padding: 0px 10px;
+  height: auto;
+  /* Prachi EmployeeProfile 1/7 line no 130 to 134 */
+  width: 100%;
+  overflow: none;
+  /* Ensures content doesn't overflow */
+  position: relative;
+  /* Establishes a stacking context */
+
+  margin: 0 auto;
+
+  overflow-y: scroll;
+  /* Enable vertical scrolling */
+  background-color: #f2f2f2;
+
+  margin: 0 auto;
+  border-radius: 15px;
+}
+
+.employee-profile-static::-webkit-scrollbar,
+.employee-profile-scrollsection::-webkit-scrollbar {
+  width: 0px;
+  /* Width of the scrollbar */
+}
+
+.employee-profile-static::-webkit-scrollbar-track,
+.employee-profile-scrollsection::-webkit-scrollbar-track {
+  background: transparent;
+  /* Track color (background of the scrollbar) */
+}
+
+.employee-profile-static::-webkit-scrollbar-thumb,
+.employee-profile-scrollsection::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  /* Color of the scrollbar thumb */
+  border-radius: 5px;
+  /* Rounded corners of the thumb */
+}
+
+.employee-profile-scrollsection {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 15px;
+  overflow-y: auto;
+  /* Enable scrolling */
+  max-height: 74%;
+  /* prachi EmployeeProfile 1/7  */
+}
+
+.employee-profile-details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+  color: gray;
+  margin-bottom: 15px;
+
+  /* Prachi EmployeeProfile 1/7 line no 179 to 181 */
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  overflow-y: hidden;
+  background-color: #f2f2f2;
+}
+
+.employee-profile-details img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-top: 15px;
+  /* Prachi EmployeeProfile 1/7 */
+}
+
+.employee-profile-basic-details {
+  color: gray;
+}
+
+.employee-profile-document-social-details,
+.employee-profile-interview-traning-details,
+.employee-profile-induction-message-details,
+.employee-profile-emergency-education-details,
+.employee-profile-previouscompany-reportingmanager-details {
+  /* .employee-profile-current-last-company-details */
+  background-color: #f2f2f2;
+  padding: 15px;
+  border-radius: 15px;
+  color: gray;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.employee-profile-performance-indicator h1,
+.employee-profile-document-social-details h1,
+.employee-profile-previouscompany-details h1,
+.employee-profile-interview-details h1,
+.employee-profile-traning-details h1,
+.employee-profile-induction-details h1,
+.employee-profile-message-details h1,
+.employee-profile-emergency-details h1,
+.employee-profile-education-details h1,
+.employee-profile-reportingmanager-details h1 {
+  font-size: 18px;
+}
+
+.employee-profile-main-div {
+  margin-top: 60px;
+  height: 80vh;
+}
+
+.employee-profile-emergency-details {
+  width: 100%;
+  display: block;
+}
+
+.employee-profile-education-details {
+  width: 100%;
+}
+
+/* Ajhar-11-07-2024 cssLineNo-241  */
+
+.employee-profile-performance-indicator {
+  background-color: #f2f2f2;
+  padding: 15px;
+  border-radius: 15px;
+  color: gray;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Dhanashree_Lokhande_EmployeeSection_employeeProfileData_10/09/2024 */
+
+.emp-pro-data-progress-bar {
+  width: 550px;
+  height: 40px;
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.emp-pro-data-progress-bar-inner {
+  display: flex;
+  height: 100%;
+}
+
+.emp-pro-data-poor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F7C6C7;
+    width: 25%;
+    color: black;
+    font-size: 16px;
+  
+  }
+  
+  .emp-pro-data-average {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color:  #FAD4B7;
+    width: 25%;
+    color: black;
+    font-size: 16px;
+  
+  }
+  
+  .emp-pro-data-good {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FDFDCD;
+    width: 25%;
+    color: black;
+    font-size: 16px;
+  
+  }
+  
+  .emp-pro-data-best {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #C8E6C9 ;
+    width: 25%;
+    color: black;
+    font-size: 16px;
+  
+  }
+  
+
+.indicator-123 {
+  font-size: 50px;
+  position: relative;
+  top: -45px;
+}
+
+.emp-pro-incentive {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid gray;
+  border-radius: 15px;
+  background-color: var(--button-color);
+  color: white;
+  padding: 0 10px 0 10px;
+  height: 30px;
+  width: auto;
+}
+
+.emp-pro-incentive:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+}

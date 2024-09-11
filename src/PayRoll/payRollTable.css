@@ -1,0 +1,51 @@
+
+.payroll-table {
+  width: 100%;
+  margin-top: 20px;
+
+}
+
+.payroll-table-layout {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.payroll-table th,
+.payroll-table td {
+  padding: 10px;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+}
+
+.payroll-table-heading {
+  background-color: var(--Bg-color);
+}
+
+.payroll-table-heading th {
+  text-align: center;
+ 
+}
+
+.payroll-table-data td {
+  text-align: center;
+}
+
+.payroll-table button {
+  padding: 0 8px 0 8px;
+  height: 30px;
+  background-color: var(--button-color);
+  color: white;
+  border: 1px solid gray;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.payroll-table button:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+}
+
+.payroll-table-layout th {
+  color: var(--heading-text-color);
+}

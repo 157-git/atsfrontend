@@ -1,0 +1,211 @@
+/* Mohini_InvoiceTable_WholePage_09/07/2024_StartLine_1 _to_EndLine_189 */
+
+/* callingList.css */
+
+.table-container {
+  width: 100%;
+  border-collapse: collapse;
+  padding-top: 10px;
+}
+
+.table-header {
+  background-color: #ffcb9b;
+}
+
+.table-header-cell {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+.sub-heading {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}
+
+.sub-heading-cell {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+
+.filter-dropdowns {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.filter-dropdown label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.filter-dropdown select {
+  width: 150px;
+  /* Adjust as needed */
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+
+}
+
+.dropbtn {
+  cursor: pointer;
+  border: 1px solid gray;
+  border-radius: 15px;
+  background-color: white;
+  font-size: 16px;
+  color: #ffcb9b;
+  height: 30px;
+  width: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Style the dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Style the dropdown options */
+.dropdown-content div {
+  padding: 0px 10px;
+  cursor: pointer;
+}
+
+/* Show the dropdown content when the dropdown button is clicked */
+.filter-dropdown:hover .dropdown-content {
+  display: block;
+  width: 100%;
+  z-index: 99999999999999999;
+}
+
+/* Style the checkbox input */
+.dropdown-content input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* Style the checkbox label */
+.dropdown-content label {
+  cursor: pointer;
+}
+
+.App-after {
+  width: 100%;
+  background-attachment: fixed;
+  height: 92vh;
+  overflow: hidden !important;
+}
+
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.attendance-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: var(--Bg-color);
+  color:var(--heading-text-color);
+  z-index: 1;
+  height: 30px;
+  white-space: nowrap;
+  max-width: auto !important;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.attendanceheading {
+  border: 1px solid gray;
+  padding: 4px;
+  white-space: nowrap;
+  width: auto !important;
+  height: 30px;
+
+  /* text-overflow: ellipsis; */
+}
+
+.tabledata {
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+  padding: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  max-width: 50px;
+  font-size: 16px;
+  height: 10px;
+  border: 1px solid #ddd;
+  /* width: auto; */
+}
+
+.tooltip {
+  visibility: hidden;
+  background-color: var(--Bg-color);
+  color: #000;
+  text-align: center;
+  border-radius: 5px;
+  /* padding: 5px; */
+  position: fixed;
+  /* Use fixed positioning */
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s;
+  text-overflow: clip;
+  visibility: visible;
+}
+.tabledata:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltiptext {
+  white-space: nowrap;
+}
+
+
+
+.attendancerows-head {
+  background-color: var(--Bg-color);
+  color:var(--text-color);
+  /* font-weight: 100; */
+  text-align: center;
+  font-size: 18px;
+  border: 1px solid gray;
+  max-width: 300px;
+}
+
+.attendanceTableData::-webkit-scrollbar {
+  display: none;
+}
+
+.attendanceTableData {
+  height: 85vh;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.attendancerows {
+  height: 30px;
+}
+
+
+.attendancerows:hover {
+  background-color: #f2f2f2;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+/* Mohini_InvoiceTable_WholePage_09/07/2024_StartLine_1 _to_EndLine_189 */

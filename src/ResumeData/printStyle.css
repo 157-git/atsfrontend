@@ -1,0 +1,10 @@
+@page {
+    size: A4;
+    margin: 1mm;
+  }
+  
+  @media print {
+    body {
+      padding: 10mm;
+    }
+  }

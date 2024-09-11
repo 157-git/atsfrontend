@@ -1,0 +1,120 @@
+/* Base container for the entire notification */
+.dhannotification-container {
+  padding: 10px; /* Reduced padding for smaller screens */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f5f5f5; /* Light gray background */
+}
+
+/* Style for the popup container */
+.dhann-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffe5b5;
+  border: 1px solid #ccc;
+  padding: 15px; /* Reduced padding for smaller screens */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensure it appears above other content */
+  animation: fadeIn 0.5s ease-in-out;
+  width: 90%; /* Adjust width for better fit on mobile */
+  max-width: 400px; /* Maximum width for larger screens */
+}
+
+/* Keyframes for fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Style for each candidate block */
+.dhancandidate {
+  margin-bottom: 15px; /* Reduced margin for smaller screens */
+  width: 100%;
+  max-width: 100%; /* Ensure it fits within the parent container */
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: white; /* Light gray background for candidate info */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for text inside candidate block */
+.dhancandidate p {
+  font-size: 16px; /* Reduced font size for smaller screens */
+  margin-bottom: 8px; /* Reduced margin for smaller screens */
+  color: gray; /* Text color */
+}
+
+/* Style for availability info section */
+.availability-info p {
+  margin: 4px 0; /* Reduced margin for smaller screens */
+  font-size: 16px; /* Reduced font size for smaller screens */
+  color: gray; /* Gray text color for all information */
+}
+
+/* Style for the reminder text */
+.reminder-text {
+  color: gray; /* Gray color for reminder text */
+  font-size: 24px; /* Reduced font size for smaller screens */
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Style for the buttons (removed as per requirement) */
+.dhanbtn-yes-no,
+.dhanbtn-no {
+  display: none; /* Hide buttons */
+}
+
+/* Style for the label in the availability section */
+.dhancandidate label {
+  display: none; /* Hide label as per requirement */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  /* For tablets and smaller devices */
+  .dhannotification-container {
+    padding: 5px; /* Further reduced padding for smaller devices */
+  }
+
+  .dhann-popup {
+    padding: 10px; /* Further reduced padding for smaller devices */
+    width: 95%; /* Increased width for better fit on very small screens */
+  }
+
+  .dhancandidate {
+    padding: 8px; /* Reduced padding for smaller devices */
+  }
+
+  .dhancandidate p {
+    font-size: 16px; /* Further reduced font size for very small screens */
+  }
+
+  .availability-info p {
+    font-size: 16px; /* Further reduced font size for very small screens */
+  }
+
+  .reminder-text {
+    font-size: 16px; /* Further reduced font size for very small screens */
+  }
+}
+
+@media (max-width: 480px) {
+  /* For very small devices like phones in portrait mode */
+  .dhann-popup {
+    width: 100%; /* Full width on very small devices */
+  }
+}

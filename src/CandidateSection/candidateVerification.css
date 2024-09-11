@@ -1,0 +1,68 @@
+.main-verification-div {
+    background-color: #f2f2f2;
+    color: #6C757D;
+  }
+  .verification-section{
+    background-color: #ffe5b5;
+    width: 100%;
+    height: 40vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .verification-details{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 20px;
+  }
+  .Calender{
+    width: 100px;
+    height: 70px;
+    
+  }
+  .Calender-Month{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 25px;
+    background-color: #fec08e;
+    font-weight: bold;  
+  }
+  .Calender-Date{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 30px;
+    width: 100%;
+    height: 100%;
+    background-color: aliceblue;
+  }
+  .interview-details{
+    /* width: %; */
+    text-align: justify;
+    padding: 0 10px;
+    font-size: 16px;
+  }
+  .interview-details p{
+    display: flex;
+    flex-direction: column;
+  }
+.verification-paragraph{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+  @media screen and (min-width:300px) and (max-width: 768px){
+    .verification-details{
+      /* gap: 10px; */
+      gap: 50px;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+

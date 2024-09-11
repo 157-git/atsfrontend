@@ -1,0 +1,99 @@
+.form-main-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:var(--text-color);
+}
+
+.addUser-form-container {
+  max-width: 600px;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-group-main {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group-main label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group-main input,
+.form-group-main textarea {
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.form-group-main textarea {
+  resize: vertical;
+  min-height: 35px;
+}
+
+.form-row-container {
+  display: flex;
+  gap: 10px;
+}
+
+.form-row-container .form-group-main {
+  flex: 1;
+}
+
+.error {
+  color: red;
+  font-size: 0.9em;
+  margin-bottom: 10px;
+}
+
+.success-message {
+  color: green;
+  font-size: 1em;
+  margin-top: 10px;
+}
+
+.form-group-main button {
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ffcb9b;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.form-group-main button:hover {
+  background-color: white;
+  color: #ffcb9b;
+  border: 1px solid #ffcb9b;
+}
+
+.pay-now-button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.pay-now-button:hover {
+  background-color: white;
+  color: #4caf50;
+  border: 1px solid #4caf50;
+}

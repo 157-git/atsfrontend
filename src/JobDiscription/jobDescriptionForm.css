@@ -1,0 +1,233 @@
+/* Container for the form to center it */
+.form-container {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    /* background-color: #ffcb9b; */
+    min-height: 100vh;
+    height: 100%;
+    width: 100%;
+    overflow: hidden; /* Prevent horizontal scrolling */
+  }
+  
+  .clouds {
+    position: absolute;
+    top: -500px;
+    left: 0;
+    width: 200%;
+    height: 177%;
+    background: url(../LoginPage/clouds123.png) repeat-x;
+    animation: moveClouds 60s linear infinite;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  @keyframes moveClouds {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+  /* Animation for fading in the card */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Style for the main card */
+  .card-main-form {
+    padding: 10px;
+    width: 100%; /* Adjust this as needed */
+    max-width: 800px; /* Adjust this as needed */
+  
+    animation: fadeIn 1s ease-in-out;
+    overflow: hidden; /* Prevent content overflow */
+    height: 700%;
+    position: relative;
+  }
+  
+  /* Header style for the card */
+  .card-header {
+    font-size: 16px;
+    margin-bottom: 5px;
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  /* Section header style */
+  .section-header {
+    font-size: 15px;
+    margin-bottom: 5px;
+    color:var(--text-color);
+  }
+  
+  /* General styling for form fields */
+  .form-field {
+    margin-bottom: 10px;
+  }
+  
+  /* Textarea styling */
+  /* Textarea styling */
+  textarea {
+    width: calc(100% - 130px); /* Adjust for padding and button width */
+    height: 40px;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    resize: vertical;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+  }
+  
+  
+  
+  textarea::placeholder {
+    color:var(--text-color);
+    font-size: 14px; 
+  }
+  
+  /* Error message styling */
+  .error-message {
+    color: red;
+    font-size: 16px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+  }
+  
+  
+  .add-more-container {
+    text-align: right;
+  }
+  
+  /* Add more button styling */
+  /* .add-more-button {
+    background-color: #ffcb9b;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-right: 20px;
+    margin-left: 20px; /* Adjusted margin-right */
+    /* text-align: center; Center button text */
+  /* } /* */
+  
+  
+  .submit-button {
+    background-color: #ffcb9b;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    text-align: center; 
+  }
+  
+  
+  .add-more-button:hover,
+  .submit-button:hover {
+    background-color: white;
+    color: #ffcb9b;
+  }
+  
+  
+  .modal-background {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  
+  .modal-content {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 500px;
+    width: 600px;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  
+  .close-button {
+    background-color: #ffcb9b;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .close-button:hover {
+    background-color: white;
+    color: #ffcb9b;
+  }
+  
+  
+  textarea::spelling-error {
+    text-decoration: red wavy underline;
+  }
+  
+  .add-more-button {
+    background-color: #ffcb9b;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-right: 20px;
+    margin-top: -10px; 
+    margin-left: auto; 
+    text-align: center; 
+  }
+  
+  
+  .add-more-container {
+    position: relative; 
+    text-align: right;
+  }
+  
+  
+  textarea {
+    width: calc(100% - 150px); 
+    height: 40px;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 15px;
+    margin-bottom: 0; 
+    resize: vertical;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+  }
+  
+  
+  .add-more-button {
+    margin-left: 10px;
+  }
