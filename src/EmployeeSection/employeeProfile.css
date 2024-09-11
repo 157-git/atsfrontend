@@ -69,6 +69,8 @@
   grid-column: 1/-1;
   display: flex;
   justify-content: end;
+  gap: 20px;
+  margin-top: 10px;
 }
 
 .profile-back-button button {
@@ -124,6 +126,7 @@
 
   margin: 0 auto;
   border-radius: 15px;
+ 
 }
 
 .employee-profile-static::-webkit-scrollbar,
@@ -174,6 +177,11 @@
   overflow-y: hidden;
   background-color: #f2f2f2;
 }
+.emp-profile-details-subdiv{
+  background-color: #f2f2f2;
+  width: auto;
+  height: 10px;
+}
 
 .employee-profile-details img {
   width: 150px;
@@ -213,6 +221,7 @@
 .employee-profile-education-details h1,
 .employee-profile-reportingmanager-details h1 {
   font-size: 18px;
+  margin-bottom: 10px;
 }
 
 .employee-profile-main-div {
@@ -299,6 +308,7 @@
   font-size: 50px;
   position: relative;
   top: -45px;
+
 }
 
 .emp-pro-incentive {

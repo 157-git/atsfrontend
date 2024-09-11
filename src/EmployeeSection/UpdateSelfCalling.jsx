@@ -8,6 +8,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "../EmployeeSection/UpdateSelfCalling.css"
 import { API_BASE_URL } from "../api/api";
+import { Button, Modal } from "react-bootstrap";
+import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker";
 
 const UpdateCallingTracker = ({
   onsuccessfulDataUpdation,
@@ -17,7 +19,7 @@ const UpdateCallingTracker = ({
 }) => {
 
   const [isOtherEducationSelected, setIsOtherEducationSelected] = useState(false);
-  const [callingTracker, setCallingTracker] = useState({
+  const [callingTracker, setCallingTracker] = useState({ 
     date: new Date().toISOString().slice(0, 10),
     candidateId: candidateId,
     candidateAddedTime: "",
@@ -60,7 +62,31 @@ const UpdateCallingTracker = ({
       finalStatus: "",
     },
   });
-
+  
+  const initialLineUpState = {
+    companyName: "",
+    experienceYear: "",
+    experienceMonth: "",
+    relevantExperience: "",
+    currentCTCLakh: "",
+    currentCTCThousand: "",
+    expectedCTCLakh: "",
+    expectedCTCThousand: "",
+    dateOfBirth: "",
+    gender: "",
+    qualification: "",
+    yearOfPassing: "",
+    extraCertification: "",
+    holdingAnyOffer: "",
+    offerLetterMsg: "",
+    noticePeriod: "",
+    msgForTeamLeader: "",
+    availabilityForInterview: "",
+    interviewTime: "",
+    finalStatus: "",
+    feedBack: "",
+    resume: []
+  };
   const { employeeId } = useParams();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [recruiterName, setRecruiterName] = useState("");
@@ -69,18 +95,27 @@ const UpdateCallingTracker = ({
   const [showAlert, setShowAlert] = useState(false);
   const [requirementOptions, setRequirementOptions] = useState([]);
   const [isOtherLocationSelected, setIsOtherLocationSelected] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [convertedExpectedCTC, setConvertedExpectedCTC] = useState("");
+  const [convertedCurrentCTC, setConvertedCurrentCTC] = useState("");
+  const [startpoint, setStartPoint] = useState("");
+  const [endpoint, setendPoint] = useState(""); 
+  const [lineUpData, setLineUpData] = useState(initialLineUpState);
 
+  // const handleClose = () => setShowModal(false);
+  // useEffect(() => {
+  //   fetchCandidateData(candidateId);
+  //   fetchRequirementOptions();
+  // }, [candidateId]);
 
-  useEffect(() => {
-    fetchCandidateData(candidateId);
-    fetchRequirementOptions();
-  }, [candidateId]);
 
   useEffect(() => {
     if (initialData) {
       setCallingTracker(initialData);
       setRecruiterName(initialData.recruiterName);
       setCandidateFetched(true);
+      const updatedCallingTracker = { ...initialCallingTrackerState };
+      const updatedLineUpData = { ...initialLineUpState };
     }
   }, [initialData]);
   const fetchCandidateData = async (candidateId) => {
@@ -130,6 +165,8 @@ const UpdateCallingTracker = ({
       }
     });
   };
+
+  
 
 
   const handleEducationChange = (e) => {
@@ -186,7 +223,9 @@ const UpdateCallingTracker = ({
         }, 4000);
       } else {
         toast.error("Failed to update data");
+        
       }
+      setLineUpData(initialLineUpState);
     } catch (error) {
       toast.error(`Error updating data: ${error.message}`);
     }
@@ -234,6 +273,35 @@ const UpdateCallingTracker = ({
     }
   };
 
+  
+  const handleShow = () => {
+    setShowModal(true);
+  };
+  const handleClose = () => setShowModal(false);
+
+  const updateCurrentCTC = (lakh, thousand) => {
+    const lakhValue = parseFloat(lakh) || 0;
+    const thousandValue = parseFloat(thousand) || 0;
+    const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
+    setconvertedCurrentCTC(combinedCTC.toFixed(2));
+  };
+
+  const updateExpectedCTC = (lakh, thousand) => {
+    const lakhValue = parseFloat(lakh) || 0;
+    const thousandValue = parseFloat(thousand) || 0;
+    const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
+    setconvertedExpectedCTC(combinedCTC.toFixed(2));
+  };
+  const handleUpdateExpectedCTCLakh = (value) => {
+    setLineUpData({ ...lineUpData, expectedCTCLakh: value });
+  };
+
+  const handleUpdateExpectedCTCThousand = (value) => {
+    setLineUpData({ ...lineUpData, expectedCTCThousand: value });
+  };
+
+  
+
   return (
     <div className="update-main-div">
       <form onSubmit={handleSubmit}>
@@ -273,6 +341,16 @@ const UpdateCallingTracker = ({
                   onChange={handleChange}
                   className="plain-input"
                 />
+                <div className="calling-tracker-two-input">
+                    <button
+                      type="button"
+                      onClick={handleShow}
+                      className="update-tracker-popup-open-btn"
+                      style={{ width: "100px" }}
+                    >
+                      Help
+                    </button>
+                  </div>
               </div>
             </div>
           </div>
@@ -1272,8 +1350,342 @@ const UpdateCallingTracker = ({
           </button>
         </div>
       </form>
+      <ModalComponent
+        show={showModal}
+        handleClose={handleClose}
+        startingPoint={startpoint}
+        endingPoint={endpoint}
+        currentCTCInLakh={lineUpData.currentCTCLakh}
+        currentCTCInThousand={lineUpData.currentCTCThousand}
+        expectedCTCInLakh={lineUpData.expectedCTCLakh}
+        expectedCTCInThousand={lineUpData.expectedCTCThousand}
+        convertedCurrentCTC={convertedCurrentCTC}
+        convertedExpectedCTC={convertedExpectedCTC}
+        onUpdateExpectedCTCLakh={handleUpdateExpectedCTCLakh}
+        onUpdateExpectedCTCThousand={handleUpdateExpectedCTCThousand}
+      />
 
     </div>
+  );
+};
+
+const ModalComponent = ({
+  show,
+  handleClose,
+  startingPoint,
+  endingPoint,
+  expectedCTCInLakh = "",
+  expectedCTCInThousand = "",
+  convertedCurrentCTC,
+  onUpdateExpectedCTCLakh,
+  onUpdateExpectedCTCThousand,
+}) => {
+  const [activeField, setActiveField] = useState("distance");
+  const [origin, setOrigin] = useState(startingPoint);
+  const [destination, setDestination] = useState(endingPoint);
+  const [expectedHike, setExpectedHike] = useState("");
+  const [calculatedHike, setCalculatedHike] = useState("");
+  const [expectedCTC, setExpectedCTC] = useState("");
+  const [expectedCTCLakh, setExpectedCTCLakh] = useState(expectedCTCInLakh);
+  const [expectedCTCThousand, setExpectedCTCThousand] = useState(expectedCTCInThousand);
+  const [showHikeInput, setShowHikeInput] = useState(false);
+
+  useEffect(() => {
+    setOrigin(startingPoint);
+    setDestination(endingPoint);
+    setExpectedCTCLakh(expectedCTCInLakh);
+    setExpectedCTCThousand(expectedCTCInThousand);
+    setExpectedCTC("");
+    setShowHikeInput(true); // Reset hike input visibility on prop change
+  }, [startingPoint, endingPoint, expectedCTCInLakh, expectedCTCInThousand]);
+
+  useEffect(() => {
+    if (expectedHike) {
+      const currentCTCNum = parseFloat(convertedCurrentCTC);
+      const expectedHikeNum = parseFloat(expectedHike);
+      const expectedCTCNum =
+        currentCTCNum + (currentCTCNum * expectedHikeNum) / 100;
+      setExpectedCTC(expectedCTCNum.toFixed(2));
+      setCalculatedHike("");
+    }
+    setCalculatedHike("");
+  }, [expectedHike, convertedCurrentCTC]);
+
+  useEffect(() => {
+    if (expectedCTCLakh || expectedCTCThousand) {
+      const lakhValue = parseFloat(expectedCTCLakh) || 0;
+      const thousandValue = parseFloat(expectedCTCThousand) || 0;
+      const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
+      const currentCTCNum = parseFloat(convertedCurrentCTC);
+      const expectedCTCNum = parseFloat(combinedCTC);
+      const hikePercentage =
+        ((expectedCTCNum - currentCTCNum) / currentCTCNum) * 100;
+      setCalculatedHike(hikePercentage.toFixed(2));
+    }
+  }, [expectedCTCLakh, expectedCTCThousand, convertedCurrentCTC]);
+
+  return (
+    <Modal size="xl" centered show={show} onHide={handleClose}>
+      <Modal.Body className="p-0">
+        <div className="calling-tracker-popup">
+          <div className="calling-tracker-popup-sidebar">
+            <p
+              className={`sidebar-item ${activeField === "distance" ? "active" : ""
+                }`}
+              onClick={() => setActiveField("distance")}
+            >
+              Distance Calculation
+            </p>
+            <p
+              className={`sidebar-item ${activeField === "salary" ? "active" : ""
+                }`}
+              onClick={() => setActiveField("salary")}
+            >
+              Salary Calculation
+            </p>
+            <p
+              className={`sidebar-item ${activeField === "historyTracker" ? "active" : ""
+                }`}
+              onClick={() => setActiveField("historyTracker")}
+            >
+              History Tracker
+            </p>
+            <p
+              className={`sidebar-item ${activeField === "previousQuestion" ? "active" : ""
+                }`}
+              onClick={() => setActiveField("previousQuestion")}
+            >
+              Previous Question
+            </p>
+          </div>
+          <div className="calling-tracker-popup-dashboard">
+            {activeField === "distance" && (
+              <div className="distance-calculation">
+                <h5>Distance Calculation</h5>
+                <div className="form-group">
+                  <label htmlFor="origin">Origin</label>
+                  <input
+                    type="text"
+                    id="origin"
+                    className="form-control"
+                    placeholder="Enter origin"
+                    value={origin}
+                    onChange={(e) => setOrigin(e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="destination">Destination</label>
+                  <input
+                    type="text"
+                    id="destination"
+                    className="form-control"
+                    placeholder="Enter destination"
+                    value={destination}
+                    onChange={(e) => setDestination(e.target.value)}
+                  />
+                </div>
+                {origin && destination && (
+                  <iframe
+                    title="Google Maps"
+                    width="100%"
+                    height="450"
+                    frameBorder="0"
+                    style={{ border: 0 }}
+                    src={`https://maps.google.com/maps?q=${origin}+to+${destination}&output=embed`}
+                    allowFullScreen
+                  ></iframe>
+                )}
+              </div>
+            )}
+            {activeField === "salary" && (
+              <div className="salary-calculation">
+                <table className="table table-bordered text-secondary">
+                  <thead>
+                    <tr>
+                      <th className="sal-cal-th">Current Salary</th>
+                      <th className="sal-cal-th">Hike (%)</th>
+                      <th className="sal-cal-th">Calculated Expected CTC</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="text-secondary">
+                        <div className="form-group">
+                          {/* <label htmlFor="currentCTCLakh"></label> */}
+                          <input
+                            type="number"
+                            id="currentCTCLakh"
+                            name="currentCTCLack"
+                            className="form-control"
+                            placeholder="Enter current CTC in lakh"
+                            value={convertedCurrentCTC}
+                            // readOnly
+                          />
+                        </div>
+                      </td>
+                      <td className="text-secondary">
+                        <div className="form-group">
+                          {/* <label htmlFor="expectedHike">Hike (%)</label> */}
+                          <input
+                            type="number"
+                            id="expectedHike"
+                            className="form-control"
+                            placeholder="Enter expected hike percentage"
+                            value={expectedHike}
+                            onChange={(e) => setExpectedHike(e.target.value)}
+                          />
+                        </div>
+                      </td>
+                      <td className="text-secondary">
+                        <input
+                          type="text"
+                          className="form-control"
+                          readOnly
+                          value={expectedCTC}
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table className="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th className="sal-cal-th">Current Salary</th>
+                      <th className="sal-cal-th">Expected Salary</th>
+                      <th className="sal-cal-th">Calculated Hike (%)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="text-secondary">
+                        <input
+                          type="number"
+                          id="currentCTCLakh"
+                          name="currentCTCLakh"
+                          className="form-control"
+                          placeholder="Enter current CTC in lakh"
+                          value={convertedCurrentCTC}
+                          // readOnly
+                        />
+                      </td>
+                      <td className="text-secondary">
+                        <div>
+                          <div className="form-group">
+                            {/* <label htmlFor="expectedCTCLakh">Lakh</label> */}
+                            <input
+                              type="text"
+                              id="expectedCTCLakh"
+                              name="enterexpectedCTCLakh"
+                              className="form-control"
+                              placeholder="Enter expected CTC in lakh"
+                              value={expectedCTCLakh}
+                              maxLength="2"
+                              pattern="\d*"
+                              inputMode="numeric"
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                setExpectedCTCLakh(value);
+                                onUpdateExpectedCTCLakh(value); // Send to parent
+                              }}
+                            />
+                          </div>
+                          <div className="form-group">
+                            {/* <label htmlFor="expectedCTCThousand">
+                              Thousand
+                            </label> */}
+                            <input
+                              type="text"
+                              id="expectedCTCThousand"
+                              name="expectedCTCLakh"
+                              className="form-control"
+                              placeholder="Enter expected CTC in thousand"
+                              maxLength="2"
+                              pattern="\d*"
+                              inputMode="numeric"
+                              value={expectedCTCThousand}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                setExpectedCTCThousand(value);
+                                onUpdateExpectedCTCThousand(value); // Send to parent
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </td>
+                      <td className="text-secondary">
+                        <input
+                          type="text"
+                          name="hike"
+                          className="form-control"
+                          // readOnly
+                          value={calculatedHike}
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {activeField === "historyTracker" && (
+              <div className="history-Tracker">
+
+                <div className="form-group">
+
+                  < CandidateHistoryTracker />
+                  <div>
+
+                  </div>
+                </div>
+
+              </div>
+            )}
+            {activeField === "previousQuestion" && (
+              <div className="previousQuestion">
+                <h5>Previous Question</h5>
+                <div className="form-group">
+                  <label htmlFor="jobId">Job Id</label>
+                  <input
+                    type="text"
+                    id="jobId"
+                    className="form-control"
+                    placeholder="Enter Job Id"
+                  />
+                </div>
+
+                <div className="card">
+                  <h2 className="card-title">Previous Question</h2>
+                  <p className="card-content">Q.1. What is Java Full Stack Development?</p>
+                  <p className="card-content">Q.2. Explain the difference between front-end and back-end development.</p>
+                  <p className="card-content">Q.3. What do you need to build a typical web application?</p>
+                  <p className="card-content">Q.4. What is the Java Virtual Machine (JVM), and why is it important?</p>
+                  <p className="card-content">Q.5. What's a servlet, and why is it used in Java web development?</p>
+
+                </div>
+                <div className="card">
+                  <h2 className="card-title">Previous Question</h2>
+                  <p className="card-content">Q.1. What's the Spring Framework, and why is it useful for Java?</p>
+                  <p className="card-content">Q.2. What are RESTful web services, and why are they important in Java?</p>
+                  <p className="card-content">Q.3. What's Hibernate, and how does it help with databases in Java?</p>
+                  <p className="card-content">Q.4. Can you explain what dependency injection means in Spring?</p>
+                  <p className="card-content">Q.5. What's a singleton pattern, and why does it matter in Java?</p>
+
+                </div>
+
+
+              </div>
+            )}
+          </div>
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <button
+          className="callingTracker-popup-close-btn"
+          onClick={handleClose}
+        >
+          Close
+        </button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
