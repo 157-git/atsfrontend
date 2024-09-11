@@ -171,13 +171,6 @@ const UpdateCallingTracker = ({
 
       if (response.ok) {
 
-        // if (callingTracker.selectYesOrNo === "Interested") {
-        //   console.log("-------Yes Update Calling-----------");
-        //   onsuccessfulDataUpdation(true);
-        // } else {
-        //   console.log("-------No  Update Calling-----------");
-        //   onsuccessfulDataUpdation(false);
-        // }
         toast.success("Data updated successfully");
         setFormSubmitted(true);
         onCancel();
@@ -531,7 +524,7 @@ const UpdateCallingTracker = ({
               <div className="update-calling-tracker-field-sub-div">
                 <input
                   type="text"
-                  name="lineUp.gende"
+                  name="lineUp.feedBack"
                   placeholder="Enter Call Summary"
                   value={callingTracker?.lineUp.feedBack || ""}
                   onChange={handleChange}
@@ -1018,7 +1011,7 @@ const UpdateCallingTracker = ({
                   placeholder="Current Company"
                   value={callingTracker?.lineUp.companyName || ""}
                   onChange={handleChange}
-                  required={callingTracker.selectYesOrNo === "Interested"}
+                  // required={callingTracker.selectYesOrNo === "Interested"}
                   className="plain-input"
 
                 />

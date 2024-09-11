@@ -1024,16 +1024,9 @@ const LineUpList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.date}
+                          {item.date}   -  {item.candidateAddedTime || "-"}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.date}</span>
-                          </div>
-
-                          {item.candidateAddedTime || "-"}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.candidateAddedTime}
-                            </span>
+                            <span className="tooltiptext">{item.date} -  {item.candidateAddedTime}</span>
                           </div>
                         </td>
 

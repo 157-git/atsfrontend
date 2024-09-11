@@ -105,8 +105,12 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
 
       try {
         const response = await fetch(
-          `${API_BASE_URL}/fetch-by-month?id=${employeeIdNew}&month=${monthString}`
+          `${API_BASE_URL}/fetch-by-month/${userType}?id=${employeeIdNew}&month=${monthString}`
         );
+        console.log(userType + "---------- userType");
+        console.log(employeeIdNew + "-----Id ");
+        console.log( monthString + "--------monthString");
+        
         const data = await response.json();
         if (data.length === 0) {
           setNoDataMessage(true);
@@ -242,7 +246,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
         <tr className="attendancerows-head">
                 <th className="attendanceheading">No</th>
                 <th className="attendanceheading">Candidate Id</th>
-                <th className="attendanceheading">Added Date</th>
+                <th className="attendanceheading">Candidate Added</th>
                 <th className="attendanceheading">Interview Date</th>
                 <th className="attendanceheading">Interview Time </th>
                 <th className="attendanceheading">Candidate Name</th>

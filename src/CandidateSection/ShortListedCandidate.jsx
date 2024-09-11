@@ -70,48 +70,17 @@ const ShortListedCandidates = ({
   //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_62
 
   const limitedOptions = [
-    "alternateNumber",
-    "availabilityForInterview",
-    "callingFeedback",
-    "callingTrackerId",
-    "candidateAddedTime",
-    "candidateEmail",
-    "candidateId",
-    "candidateName",
-    "communicationRating",
-    "companyName",
-    "contactNumber",
-    "currentCtcLakh",
-    "currentCtcThousand",
-    "currentLocation",
-    "date",
-    "dateOfBirth",
-    "empId",
-    "expectedCtcLakh",
-    "expectedCtcThousand",
-    "experienceMonth",
-    "experienceYear",
-    "extraCertification",
-    "feedBack",
-    "finalStatus",
-    "fullAddress",
-    "gender",
-    "holdingAnyOffer",
-    "incentive",
-    "interviewTime",
-    "jobDesignation",
-    "msgForTeamLeader",
-    "noticePeriod",
-    "offerLetterMsg",
-    "oldEmployeeId",
-    "qualification",
-    "recruiterName",
-    "relevantExperience",
-    "requirementCompany",
-    "requirementId",
-    "selectYesOrNo",
-    "sourceName",
-    "yearOfPassing",
+    ["alternateNumber", "Alternate Number"],
+    ["availabilityForInterview", "Availability For Interview"],
+    ["callingFeedback", "Calling Feedback"],
+    ["callingTrackerId", "Calling Tracker Id"],
+    ["candidateAddedTime", "Candidate Added Time"],
+    ["candidateEmail", "Candidate Email"],
+    ["candidateId", "Candidate Id"],
+    ["candidateName", "Candidate Name"],
+    ["communicationRating", "Communication Rating"],
+    ["companyName", "Company Name"],
+    ["contactNumber", "Contact Number"],
   ];
 
   const { userType } = useParams();
@@ -181,7 +150,7 @@ const ShortListedCandidates = ({
         `${API_BASE_URL}/shortListed-date/${newEmployeeId}/${userType}`
       );
       const data = await response.json();
-      setShortListedData(data);
+      // setShortListedData(data);
       setFilteredShortListed(data);
       console.log(data);
     } catch (error) {
@@ -347,12 +316,16 @@ const ShortListedCandidates = ({
   };
   //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_336
 
+
   useEffect(() => {
-    const options = Object.keys(filteredShortListed[0] || {}).filter((key) =>
-      limitedOptions.includes(key)
-    );
+    const options = limitedOptions
+      .filter(([key]) =>
+        Object.keys(filteredShortListed[0] || {}).includes(key)
+      )
+      .map(([key]) => key);
     setFilterOptions(options);
   }, [filteredShortListed]);
+
 
   useEffect(() => {
     filterData();
@@ -404,12 +377,9 @@ const ShortListedCandidates = ({
     setFilteredShortListed(filtered);
   }, [searchTerm, shortListedData]);
 
-  const handleFilterOptionClick = (option) => {
-    if (activeFilterOption === option) {
-      setActiveFilterOption(null);
-    } else {
-      setActiveFilterOption(option);
-    }
+  const handleFilterOptionClick = (key) => {
+    setActiveFilterOption(activeFilterOption === key ? null : key);
+    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
   };
 
   useEffect(() => {
@@ -436,52 +406,27 @@ const ShortListedCandidates = ({
     let filteredData = [...shortListedData];
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
-        if (option === "requirementId") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
-          );
-        } else if (option === "alternateNumber") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
-          );
-        } else {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]
-                ?.toString()
-                .toLowerCase()
-                .includes(value.toLowerCase())
-            )
-          );
-        }
+        filteredData = filteredData.filter((item) =>
+          values.some((value) =>
+            item[option]?.toString().toLowerCase().includes(value.toLowerCase())
+          )
+        );
       }
     });
     setFilteredShortListed(filteredData);
   };
 
-  const handleFilterSelect = (option, value) => {
-    setSelectedFilters((prevFilters) => {
-      const updatedFilters = { ...prevFilters };
-      if (!updatedFilters[option]) {
-        updatedFilters[option] = [];
-      }
 
-      const index = updatedFilters[option].indexOf(value);
-      if (index === -1) {
-        updatedFilters[option] = [...updatedFilters[option], value];
-      } else {
-        updatedFilters[option] = updatedFilters[option].filter(
-          (item) => item !== value
-        );
-      }
 
-      return updatedFilters;
-    });
+  const handleFilterSelect = (key, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [key]: prev[key].includes(value)
+        ? prev[key].filter((item) => item !== value)
+        : [...prev[key], value],
+    }));
   };
+
 
   const toggleFilterSection = () => {
     setShowSearchBar(false);
@@ -630,7 +575,7 @@ const ShortListedCandidates = ({
             </div>
           )}
           <button className="lineUp-share-btn" onClick={toggleFilterSection}>
-            Filter <i className="fa-solid fa-filter"></i>
+            Filter  <i className="fa-solid fa-filter"></i>
           </button>
         </div>
       </div>
@@ -646,55 +591,51 @@ const ShortListedCandidates = ({
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           )}
+
           {showFilterSection && (
             <div className="filter-section">
               <div className="filter-dropdowns" >
                 {showFilterSection && (
-                  <div className="filter-section">
-                    <div className="filter-options-container" style={{ display: "flex", flexWrap: "wrap"}}>
-                      {filterOptions.map((option) => {
-                        const uniqueValues = Array.from(
-                          new Set(shortListedData.map((item) => item[option]))
-                        );
-                        console.log(uniqueValues);
-                        return (
-                          <div key={option} className="filter-option">
-                            <button
-                              className="white-Btn"
-                              onClick={() => handleFilterOptionClick(option)}
-                            >
-                              {option}
-                              <span className="filter-icon">&#x25bc;</span>
-                            </button>
-                            {activeFilterOption === option && (
-                              <div className="city-filter">
-                                <div className="optionDiv">
-                                  {uniqueValues.map((value) => (
-                                    <label
-                                      key={value}
-                                      className="selfcalling-filter-value"
-                                    >
-                                      <input
-                                        type="checkbox"
-                                        checked={
-                                          selectedFilters[option]?.includes(
-                                            value
-                                          ) || false
-                                        }
-                                        onChange={() =>
-                                          handleFilterSelect(option, value)
-                                        }
-                                      />
-                                      {value}
-                                    </label>
-                                  ))}
-                                </div>
+                  <div
+                    className="filter-options-container"
+                    style={{ display: "flex", flexWrap: "wrap" }}
+                  >
+                    {limitedOptions
+                      .filter(([key]) => filterOptions.includes(key))
+                      .map(([key, displayText]) => (
+                        <div key={key} className="filter-option">
+                          <button
+                            className="white-Btn"
+                            onClick={() => handleFilterOptionClick(key)}
+                          >
+                            {displayText}
+                            <span className="filter-icon">&#x25bc;</span>
+                          </button>
+                          {activeFilterOption === key && (
+                            <div className="city-filter">
+                              <div className="optionDiv">
+                                {Array.from(
+                                  new Set(shortListedData.map((item) => item[key]))
+                                ).map((value) => (
+                                  <label
+                                    key={value}
+                                    className="selfcalling-filter-value"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={
+                                        selectedFilters[key]?.includes(value) || false
+                                      }
+                                      onChange={() => handleFilterSelect(key, value)}
+                                    />
+                                    {value}
+                                  </label>
+                                ))}
                               </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
                   </div>
                 )}
               </div>
@@ -776,19 +717,18 @@ const ShortListedCandidates = ({
                   ) : null}
                   <td className="tabledata">{index + 1}</td>
 
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
+                  <td style={{ paddingRight: "10px", paddingLeft: "10px" }}
+                  // className="tabledata"
+                  // onMouseOver={handleMouseOver}
+                  // onMouseOut={handleMouseOut}
                   >
-                    {item.date}
-                    <div className="tooltip">
+                    {item.date}  -   {item.candidateAddedTime}
+                    {/* <div className="tooltip">
                       <span className="tooltiptext">{item.date}</span>
                       --
                       <span className="tooltiptext">
-                        {item.candidateAddedTime}
                       </span>
-                    </div>
+                    </div> */}
                   </td>
 
                   <td

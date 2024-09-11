@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 
-
 const EmployeeMasterSheet = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState("");

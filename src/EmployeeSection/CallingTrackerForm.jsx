@@ -20,8 +20,7 @@ import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
 import TimePicker from 'react-time-picker';
 
-const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEmployeeName,}) => {
-
+const CallingTrackerForm = ({ onsuccessfulDataAdditions, initialData = {}, loginEmployeeName, }) => {
   const { employeeId } = useParams();
   const [submited, setSubmited] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -43,7 +42,7 @@ const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEm
     currentLocation: "",
     fullAddress: "",
     communicationRating: "",
-    selectYesOrNo: "No",
+    selectYesOrNo: "Yet To Confirm",
     callingFeedback: ""
   };
 
@@ -71,6 +70,8 @@ const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEm
     feedBack: "",
     resume: []
   };
+
+
   const [callingTracker, setCallingTracker] = useState(
     initialCallingTrackerState
   );
@@ -175,6 +176,9 @@ const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEm
     if (!callingTracker.candidateEmail) {
       errors.candidateEmail = "Email is required";
     }
+    if (!callingTracker.callingFeedback) {
+      errors.callingFeedback = "Calling Feedback is required";
+    }
     return errors;
   };
 
@@ -182,9 +186,8 @@ const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEm
     let errors = {};
     if (callingTracker.selectYesOrNo === "Interested") {
       if (!callingTracker.requirementId) {
-        errors.requirementId = "Requirement ID is required";
+        errors.requirementId = "Job Id is required";
       }
-
       if (!lineUpData.experienceYear || !lineUpData.experienceMonth) {
         errors.experienceYear = "Experience is required";
       }
@@ -208,6 +211,12 @@ const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEm
       }
       if (!lineUpData.holdingAnyOffer) {
         errors.holdingAnyOffer = "Holding Any Offer is required";
+      }
+      if (!lineUpData.finalStatus) {
+        errors.finalStatus = "Please Select Option";
+      }
+      if (!lineUpData.noticePeriod) {
+        errors.noticePeriod = "Notice Period is required";
       }
     }
     return errors;
@@ -366,14 +375,12 @@ const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEm
       );
 
 
-      if (response) {
-        if (callingTracker.selectYesOrNo === "Interested") {
-          onsuccessfulDataAdditions(true);
-        console.log("-------Yes Add Calling Tracker-----------");
-        } else {
-          onsuccessfulDataAdditions(false);
-        console.log("-------No Add Calling Tracker-----------");
-        }
+      if (response.status === 200) {
+      if (callingTracker.selectYesOrNo === "Interested") {
+        onsuccessfulDataAdditions(true);
+      } else {
+        onsuccessfulDataAdditions(false); 
+      }
         setSubmited(false);
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 4000);
@@ -388,9 +395,6 @@ const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEm
       setLoading(false);
     }
   };
-
-
-
 
   const handleLocationChange = (e) => {
     const value = e.target.value;
@@ -456,6 +460,7 @@ const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEm
       (requirement) => requirement.requirementId === parseInt(value)
     );
 
+
     if (selectedRequirement) {
       setCallingTracker((prevState) => ({
         ...prevState,
@@ -473,7 +478,6 @@ const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEm
         incentive: "",
       }));
     }
-
     setErrors((prevErrors) => ({ ...prevErrors, requirementId: "" }));
   };
 
@@ -800,8 +804,11 @@ const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEm
                     <option value="Invalid Number">Invalid Number</option>
                     <option value="Need to call back">Need to call back</option>
                     <option value="Do not call again">Do not call again</option>
-                    <option value="Other">Other</option>
+                    {/* <option value="Other">Other</option> */}
                   </select>
+                  {errors.callingFeedback && (
+                    <div className="error-message">{errors.callingFeedback}</div>
+                  )}
                 </div>
               </div>
               <div className="calling-tracker-field">
@@ -1611,31 +1618,27 @@ const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEm
             <div className="calling-tracker-row-gray">
               <div className="calling-tracker-field">
                 <label>Status Type</label>
+
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
                     <select
                       name="selectYesOrNo"
-                      placeholder="Candidate Interested"
                       value={callingTracker.selectYesOrNo}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select</option>
+                      onChange={handleChange}>
+                      {/* <option value="">Select</option> */}
+                      <option value="Yet To Confirm">Yet To Confirm</option>
                       <option value="Interested">Interested</option>
                       <option value="Interested, will confirm later">Interested, will confirm later</option>
-                      <option value="No Interested">No Interested</option>
-                      <option value=" Interested But Not Eligible">
-                        Interested But Not Eligible
-                      </option>
+                      <option value="Not Interested">Not Interested</option>
+                      <option value=" Interested But Not Eligible">Interested But Not Eligible</option>
                       <option value="Eligible">Eligible</option>
                       <option value="Not Eligible">Not Eligible</option>
-                      <option value="Not Eligible But Interested">
-                        Not Eligible But Interested
-                      </option>
+                      <option value="Not Eligible But Interested">Not Eligible But Interested</option>
                     </select>
                   </div>
+
                   <div className="calling-tracker-two-input">
                     <select
-                      type="text"
                       name="finalStatus"
                       value={lineUpData.finalStatus}
                       onChange={(e) =>
@@ -1645,17 +1648,20 @@ const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEm
                         })
                       }
                     >
-                      <option value="">Whats Now</option>
-                      <option value="Interview Schedule">
-                        Interview Schedule
-                      </option>
-                      <option value="Attending After Some time">
-                        Attending After Some time
-                      </option>
-                      <option value="Response On Hold">Response On Hold</option>
-                    </select>
+                      {/* <option value="">Select</option> */}
+                      <option value="">Select</option>
+                      <option value="Yet To Confirm">Yet To Confirm</option>
+                      <option value="Interview Schedule">Interview Schedule</option>
+                      <option value="Attending After Some time">Attending After Some time</option>
+                    </select>         
+                    {errors.finalStatus && (
+                      <div className="error-message error-two-input-box">
+                        {errors.finalStatus}
+                      </div>
+                    )}
                   </div>
                 </div>
+
               </div>
               <div className="calling-tracker-field">
                 <label>Interview Slots</label>
@@ -1673,7 +1679,7 @@ const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEm
                       }
                     />
                   </div>
-                  
+
                   <div className="calling-tracker-two-input">
                     <input
                       type="time"
@@ -1724,7 +1730,7 @@ const CallingTrackerForm = ({ onsuccessfulDataAdditions,initialData = {},loginEm
                   >
                     <Modal.Body>
                       <p className="confirmation-text">
-                      Are you sure you want to save this candidate's information ?
+                        Are you sure you want to save this candidate's information ?
                       </p>
                       <p>{callingTracker.errors}</p>
                       <div

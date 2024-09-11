@@ -209,3 +209,13 @@ html::-webkit-scrollbar {
 .App-after.blurred {
   background-color: #f2f2f2;
 }
+
+
+/* Add this CSS to your stylesheet */
+.filter-option button {
+  text-transform: capitalize;
+}
+
+.selfcalling-filter-value {
+  text-transform: capitalize;
+}

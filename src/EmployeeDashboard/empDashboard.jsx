@@ -165,15 +165,15 @@ const EmpDashboard = ({ userGroup }) => {
   }, [successfulDataAdditions]);
 
 
-  const handleSuccessfulDataUpdation = (check) => {
-    console.log("------From Update.....001");
-    setSuccessfulDataUpdation(check);
-  }
+  // const handleSuccessfulDataUpdation = (check) => {
+  //   console.log("------From Update.....001");
+  //   setSuccessfulDataUpdation(check);
+  // }
 
-  useEffect(() => {
-    console.log("------From Update.....003");
-    setSuccessfulDataUpdation(true);
-  }, [successfulDataUpdation]);
+  // useEffect(() => {
+  //   console.log("------From Update.....003");
+  //   setSuccessfulDataUpdation(true);
+  // }, [successfulDataUpdation]);
 
 
  
@@ -692,7 +692,7 @@ const EmpDashboard = ({ userGroup }) => {
             onCurrentEmployeeJobRoleSet={handleJobRoles}
             jobRole={jobRoles}
             emailSenderInformation={handleEmailSenderInformation}
-            successfulDataUpdation={successfulDataUpdation}
+            // successfulDataUpdation={successfulDataUpdation}
           />
         </div>
         <div>
@@ -810,7 +810,7 @@ const EmpDashboard = ({ userGroup }) => {
           {showUpdateCallingTracker && (
             <UpdateCallingTracker
               candidateId={candidateIdForUpdate}
-              onsuccessfulDataUpdation={handleSuccessfulDataUpdation}
+              // onsuccessfulDataUpdation={handleSuccessfulDataUpdation}
             />
           )}
         </div>
