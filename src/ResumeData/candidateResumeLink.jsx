@@ -17,6 +17,19 @@ const CandidateResumeLink = () => {
     educations: [{ institution: "", degree: "", startDate: "", endDate: "" }],
     technicalSkills: "",
     softSkills: "",
+    // Akash pawar CandidateResumeLink 11/2024
+    personalDetails: {
+      dateOfBirth: "",
+      gender: "",
+      fatherName: "",
+      married: "",
+      spouseName: "",
+      passportNumber: "",
+      validTill: "",
+      visaStatus: "",
+    },
+    profileImage: null,
+    // Akash pawar CandidateResumeLink 11/2024
   });
 
   const previewRef = useRef();
@@ -30,6 +43,7 @@ const CandidateResumeLink = () => {
         </div>
         <div className="w-full md:w-1/2 px-2">
           <ResumePreview ref={previewRef} data={formData} />
+          {/* Akash pawar CandidateResumeLink 11/2024 */}
           <ReactToPrint
             trigger={() => (
               <button className="border mt-2 px-4 py-2 bg-[#ffcb9b] text-white rounded-[15px] hover:bg-white hover:text-[#ffcb9b] transition-all duration-300">
@@ -37,8 +51,9 @@ const CandidateResumeLink = () => {
               </button>
             )}
             content={() => previewRef.current}
-            pageStyle="@page { size: A4; margin: 20mm; } @media print { body { padding: 20mm; } }"
+            pageStyle={`@media print { @page { margin: 1mm; } body { margin: 0mm; } }`}
           />
+          {/* Akash pawar CandidateResumeLink 11/2024 */}
         </div>
       </div>
     </div>
