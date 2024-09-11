@@ -43,31 +43,45 @@ const ResumeForm = ({ formData, onChange }) => {
     onChange({ ...formData, projects });
   };
 
+  // Akash pawar CandidateResumeLink 11/2024
   const handleEducationChange = (index, e) => {
     const { name, value } = e.target;
-    const education = [...formData.educations];
-    education[index][name] = value;
-    onChange({ ...formData, education });
+    const educations = [...formData.educations];
+    educations[index][name] = value;
+    onChange({ ...formData, educations });
   };
 
   const addEducation = () => {
-    const education = [
-      ...formData.education,
+    const educations = [
+      ...formData.educations,
       { institution: "", degree: "", startDate: "", endDate: "" },
     ];
-    onChange({ ...formData, education });
+    onChange({ ...formData, educations });
   };
 
   const removeEducation = (index) => {
-    const education = formData.education.filter((_, i) => i !== index);
-    onChange({ ...formData, education });
+    const educations = formData.educations.filter((_, i) => i !== index);
+    onChange({ ...formData, educations });
   };
+  // Akash pawar CandidateResumeLink 11/2024
 
   const handleSkillChange = (type, e) => {
     const { name, value } = e.target;
     onChange({ ...formData, [name]: value });
   };
-
+  const handlePersonalDetailsChange = (e) => {
+    const { name, value } = e.target;
+    onChange({
+      ...formData,
+      personalDetails: { ...formData.personalDetails, [name]: value },
+    });
+  };
+  // Akash pawar CandidateResumeLink 11/2024
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    onChange({ ...formData, profileImage: file });
+  };
+  // Akash pawar CandidateResumeLink 11/2024
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(JSON.stringify(formData));
@@ -95,7 +109,6 @@ const ResumeForm = ({ formData, onChange }) => {
 
   return (
     <form className="w-full" onSubmit={handleSubmit}>
-      {/* Profile Section */}
       <div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <label className="flex flex-col text-[18px] text-gray-700">
@@ -140,6 +153,18 @@ const ResumeForm = ({ formData, onChange }) => {
               onChange={handleChange}
             />
           </label>
+          {/* Akash pawar CandidateResumeLink 11/2024 */}
+          <label className="flex flex-col text-[18px] text-gray-700">
+            Profile Image:
+            <input
+              type="file"
+              name="profileImage"
+              className="px-2 py-1 text-base font-normal border rounded-md"
+              accept="image/*"
+              onChange={handleImageUpload}
+            />
+          </label>
+          {/* Akash pawar CandidateResumeLink 11/2024 */}
         </div>
       </div>
 
@@ -154,7 +179,6 @@ const ResumeForm = ({ formData, onChange }) => {
           onChange={handleChange}
         ></textarea>
       </div>
-
       {/* Experience Section */}
       <div className="space-y-4">
         <h3 className="text-[18px] text-gray-700">Experience:</h3>
@@ -218,13 +242,12 @@ const ResumeForm = ({ formData, onChange }) => {
         ))}
         <button
           type="button"
-          className="border px-1 py-1 bg-[#ffcb9b] text-white rounded-[15px] hover:bg-white hover:text-[#ffcb9b]"
+          className="border px-1 py-1  mb-3 bg-[#ffcb9b] text-white rounded-[15px] hover:bg-white hover:text-[#ffcb9b]"
           onClick={addExperience}
         >
           Add Experience
         </button>
       </div>
-
       {/* Projects Section */}
       <div className="space-y-4">
         <h3 className="text-[18px] text-gray-700">Projects:</h3>
@@ -255,7 +278,7 @@ const ResumeForm = ({ formData, onChange }) => {
         ))}
         <button
           type="button"
-          className="border px-1 py-1 bg-[#ffcb9b] text-white rounded-[15px] hover:bg-white hover:text-[#ffcb9b]"
+          className="border px-1 py-1  mb-3 bg-[#ffcb9b] text-white rounded-[15px] hover:bg-white hover:text-[#ffcb9b]"
           onClick={addProject}
         >
           Add Project
@@ -318,7 +341,7 @@ const ResumeForm = ({ formData, onChange }) => {
         ))}
         <button
           type="button"
-          className="border px-1 py-1 bg-[#ffcb9b] text-white rounded-[15px] hover:bg-white hover:text-[#ffcb9b]"
+          className="border px-1 py-1 mb-3 bg-[#ffcb9b] text-white rounded-[15px] hover:bg-white hover:text-[#ffcb9b]"
           onClick={addEducation}
         >
           Add Education
@@ -326,7 +349,7 @@ const ResumeForm = ({ formData, onChange }) => {
       </div>
 
       {/* Skills Section */}
-      <div className="space-y-4">
+      <div className="space-y-4 mb-3">
         <div>
           <h3 className="text-[18px] text-gray-700">Technical Skills:</h3>
           <input
@@ -348,6 +371,108 @@ const ResumeForm = ({ formData, onChange }) => {
           />
         </div>
       </div>
+
+      {/* Akash pawar CandidateResumeLink 11/2024 */}
+      <div className="space-y-4">
+        <h3 className="text-[18px] text-gray-700">Personal Details:</h3>
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <label className="flex flex-col text-[18px] text-gray-700">
+              Date Of Birth:
+              <input
+                name="dateOfBirth"
+                type="date"
+                placeholder="Date Of Birth"
+                className="w-full px-2 py-1 text-base border rounded-md"
+                value={formData.personalDetails.dateOfBirth}
+                onChange={(e) => handlePersonalDetailsChange(e)}
+              />
+            </label>
+            <label className="flex flex-col text-[18px] text-gray-700">
+              Gender:
+              <select
+                name="gender"
+                className="px-2 py-1 text-base border rounded-md"
+                value={formData.personalDetails.gender}
+                onChange={(e) => handlePersonalDetailsChange(e)}
+              >
+                <option value={""}>Select Option</option>
+                <option value={"Male"}>Male</option>
+                <option value={"Female"}>Female</option>
+              </select>
+            </label>
+          </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <label className="flex flex-col text-[18px] text-gray-700">
+              Father's Name:
+              <input
+                name="fatherName"
+                placeholder="Father's Name"
+                className="px-2 py-1 text-base border rounded-md"
+                value={formData.personalDetails.fatherName}
+                onChange={(e) => handlePersonalDetailsChange(e)}
+              />
+            </label>
+            <label className="flex flex-col text-[18px] text-gray-700">
+              Married:
+              <select
+                name="married"
+                className="px-2 py-1 text-base border rounded-md"
+                value={formData.personalDetails.married}
+                onChange={(e) => handlePersonalDetailsChange(e)}
+              >
+                <option value={""}>Select Option</option>
+                <option value={"Married"}>Married</option>
+                <option value={"Single"}>Single</option>
+              </select>
+            </label>
+            {formData.personalDetails.married === "Married" && (
+              <label className="flex flex-col text-[18px] text-gray-700">
+                Spouse Name:
+                <input
+                  type="text"
+                  name="spouseName"
+                  className="px-2 py-1 text-base border rounded-md"
+                  value={formData.personalDetails.spouseName}
+                  onChange={(e) => handlePersonalDetailsChange(e)}
+                />
+              </label>
+            )}
+            <label className="flex flex-col text-[18px] text-gray-700">
+              Passport Number:
+              <input
+                type="text"
+                name="passportNumber"
+                className="px-2 py-1 text-base border rounded-md"
+                value={formData.personalDetails.passportNumber}
+                onChange={(e) => handlePersonalDetailsChange(e)}
+              />
+            </label>
+            <label className="flex flex-col text-[18px] text-gray-700">
+              Valid Till:
+              <input
+                type="date"
+                name="validTill"
+                className="px-2 py-1 text-base border rounded-md"
+                value={formData.personalDetails.validTill}
+                onChange={(e) => handlePersonalDetailsChange(e)}
+              />
+            </label>
+            <label className="flex flex-col text-[18px] text-gray-700">
+              Visa Status:
+              <input
+                type="text"
+                name="visaStatus"
+                className="px-2 py-1 text-base border rounded-md"
+                value={formData.personalDetails.visaStatus}
+                onChange={(e) => handlePersonalDetailsChange(e)}
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+      {/* Akash pawar CandidateResumeLink 11/2024 */}
+
       {/* Submit Button */}
       <button
         type="submit"
