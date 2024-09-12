@@ -3,8 +3,9 @@
   z-index: 80000;
   top: 0px;
   position: absolute;
-  background: rgba(45, 45, 45, 0.895);
+  background: rgba(45, 45, 45, 0.971);
   padding: 50px;
+  left: 0;
 }
 
 .main-description-share1 {
@@ -14,6 +15,9 @@
   position: absolute;
   background: rgba(45, 45, 45, 0.895);
   padding: 50px;
+  left: 0;
+  height: 100%;
+
 }
 
 .main-description-share2 {
@@ -23,6 +27,7 @@
   position: absolute;
   background: rgba(45, 45, 45, 0.895);
   padding: 50px;
+
 }
 
 .job-post-share {
@@ -34,11 +39,16 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-decoration: none;
   color:var(--text-color);
+  left: 0;
+  height: 100%;
 }
+
 
 .job-details-share a {
   text-decoration: none;
+
   color:var(--text-color);
+
 }
 
 .responsibilities-share,
@@ -53,13 +63,18 @@
   box-shadow: 0 0 1px black;
 }
 
+.jd-sub-headings{
+  color: black;
+  font-weight: bold;
+}
 .job-details-share h2,
 .responsibilities-share h2,
 .requirements-share h2,
 .preferred-qualifications-share h2,
+.preferred-qualifications-share h4,
 .perks-share h2 {
   color: black;
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom: 10px;
 }
 
@@ -83,20 +98,32 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+
+
+
 .job-title-share {
   text-align: center;
-  grid-column: 1 / -1;
-  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* margin-bottom: 4px; */
   font-size: 18px;
-  border-radius: 15px;
-  background-color: #f2f2f2;
+  border-radius: 8px;
+  background-color: white;
   box-shadow: 0 0 1px black;
+  text-align: center;
+
 }
 
 .job-details-firstsection-share {
   border-right: 2px solid #ffd8a8;
   grid-column: span 1;
   padding: 20px;
+}
+
+.job-details-firstsection-share b,
+.job-details-secondsection-share b{
+ color: black; 
 }
 
 .job-details-secondsection-share {
@@ -144,7 +171,8 @@
 
 .apply-button-share:hover {
   background-color: var(--button-hover-color);
-  color:var(--text-hover-color) ;
+  color: var(--text-hover-color);
+
   border: #f2f2f2;
 }
 
@@ -153,3 +181,46 @@
     padding: 10px;
   }
 }
+
+
+.job-title-share-title{
+  font-size: 22px;         /* Adjust the font size as needed */
+  font-weight: bold;       /* Makes the text bold */
+  margin: 0;  
+  padding-bottom: 10px;
+
+}
+
+.jd-logo{
+  height: 200px;
+  width: 200px;
+  align-items: center;  
+}
+
+.jd-logo-div{
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin-top: -20px;
+}
+
+
+.jd-employeeinfo h2 {
+  text-align: left;
+  font-weight: normal; 
+  margin: 5px 0;
+}
+
+.jd-employeeinfo .label {
+  font-weight: bold; /* Bold for the labels */
+  color: black; /* Black color for the labels */
+}
+
+.responsibilities-share i,
+.requirements-share i,
+.preferred-qualifications-share i{
+  color: black;
+  font-size: 15px;
+  padding-right: 8px;
+}
+

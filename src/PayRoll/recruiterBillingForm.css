@@ -65,8 +65,9 @@
 .modal-header {
   display: flex;
   padding-bottom: 10px;
-  /* padding-right: 10px; */
+
   color:var(--text-color);
+
   justify-content: space-between;
   align-items: center;
   border-bottom: gray;
@@ -83,6 +84,7 @@
   align-items: center;
   justify-content: center;
   color:var(--text-color);
+
   /* Set font color to gray */
 }
 

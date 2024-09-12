@@ -10,6 +10,7 @@ const CallingExcelList = ({
   funForGettingCandidateId,
   onCloseTable,
   loginEmployeeName
+
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOptions, setFilterOptions] = useState([]);
@@ -188,16 +189,15 @@ const CallingExcelList = ({
       setSortOrder("asc");
     }
   };
-
-  const handleUpdate = (candidateData) => {
+  const openCallingExcelList = (candidateData) => {
     setSelectedCandidate(candidateData);
     console.log(candidateData);
-     // Set candidate data for CallingTrackerForm
   };
+
 
   const handleUpdateSuccess = () => {
     fetch(
-      `http://localhost:9090/api/ats/157industries/calling-excel-data/${employeeId}/${userType}`
+      `${API_BASE_URL}/calling-excel-data/${employeeId}/${userType}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -272,7 +272,7 @@ const CallingExcelList = ({
   return (
     <div className="App-after1">
       {!selectedCandidate && (
-        <>
+        <div className="table-container">
           <div className="search">
             <i
               className="fa-solid fa-magnifying-glass"
@@ -608,7 +608,7 @@ const CallingExcelList = ({
                     </td>
                     <td className="tabledata" style={{ textAlign: "center" }}>
                       <i
-                        onClick={() => handleUpdate(item)}
+                        onClick={() => openCallingExcelList(item)}
                         className="fa-regular fa-pen-to-square"
                       ></i>
                     </td>
@@ -617,14 +617,13 @@ const CallingExcelList = ({
               </tbody>
             </table>
           </div>
-        </>
+        </div>
       )}
       {selectedCandidate && (
         <CallingTrackerForm
           initialData={selectedCandidate}
           loginEmployeeName={loginEmployeeName}
           onClose={() => setSelectedCandidate(null)}
-          // onSuccess={handleUpdateSuccess}
         />
       )}
     </div>

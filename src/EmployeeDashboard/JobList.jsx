@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import "../EmployeeDashboard/JobList.css";
-import AddJobDescription from "../JobDiscription/addJobDescription";
 import { bottom } from "@popperjs/core";
 import ShareDescription from "./shareDescription";
 import JobDescriptionEdm from "../JobDiscription/jobDescriptionEdm";
 import jobDiscriptions from "../employeeComponents/jobDiscriptions";
 
+import AddJobDescription from "../JobDiscription/addJobDescription";
+
 import { values } from "pdf-lib";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 import ShareEDM from "../JobDiscription/shareEDM";
+
+import UpdateJobDescription from "../JobDiscription/UpdateJobDescription";
+
 // SwapnilRokade_JobListing_filter_option__18/07
 const JobListing = () => {
 
@@ -17,6 +21,7 @@ const JobListing = () => {
 
   const [jobDescriptions, setJobDescriptions] = useState([]);
   const [filterOptions, setFilterOptions] = useState([]);
+  const [updateJD,setUpdateJd] =useState([])
   const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [selectedJobIndex, setSelectedJobIndex] = useState(-1); // Track which job description is selected
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,7 +33,8 @@ const JobListing = () => {
   const [selectedRequirementId, setSelectedRequirementId] = useState(null);
   const [requirementData, setRequirementData] = useState();
   const [showEDM, setShowEDM] = useState(false);
-  const [showAddJobDescription, setShowAddJobDescription] = useState(false)
+  const [showAddJobDescription, setShowAddJobDescription] = useState(false);
+  const [showAddJobDiscriptionNew,setShowAddJobDescriptionNew] =useState(false);
   const [searchQuery, setSearchQuery] = useState({
     designation: "",
     location: "",
@@ -48,17 +54,21 @@ const JobListing = () => {
     "field",
     "companyName",
   ];
-
   useEffect(() => {
     fetch(`${API_BASE_URL}/all-job-descriptions`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data); // Log the fetched data to inspect its structure
-        setJobDescriptions(data);
-        setFilteredJobDescriptions(data); // Show all jobs initially
+
+        // Sort the data by requirementId in descending order
+        const sortedData = data.sort((a, b) => b.requirementId - a.requirementId);
+
+        setJobDescriptions(sortedData);
+        setFilteredJobDescriptions(sortedData); // Show all jobs initially
       })
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
+
   useEffect(() => {
     handleFilter();
   }, [searchQuery, selectedFilters, jobDescriptions]);
@@ -187,13 +197,18 @@ const JobListing = () => {
 
   const toggleEdm2 = () => {
     setShowEDM(!showEDM);
-    // document.querySelector(".main-description-share2").style.display = "block";
   };
 
 
 
   const handleclose = () => {
     setShowViewMore(false);
+  };
+
+
+    const handleEditBtn = (item) => {
+      setUpdateJd(item);
+      setShowAddJobDescriptionNew(true);
   };
 
   const sharejobdescription = (e) => {
@@ -231,84 +246,90 @@ const JobListing = () => {
 
   return (
     <>
-      <div className="search-container">
-        <div className="search-bar">
-          <input
-            className="search-input"
-            placeholder=" Enter keyword/Designation/Companies"
-            type="text"
-            name="designation"
-            value={searchQuery.designation}
-            onChange={handleInputSearch}
-          />
-          <input
-            className="search-input"
-            list="experienceOptions"
-            placeholder="  Select Experience"
-            type="text"
-            name="experience"
-            value={searchQuery.experience}
-            onChange={handleInputSearch}
-          />
-          <datalist id="experienceOptions">
-            <option value="0-1 years" />
-            <option value="1-3 years" />
-            <option value="3-5 years" />
-            <option value="5+ years" />
-          </datalist>
+    {!showAddJobDiscriptionNew ? (
+      <>
+      <div className="jd-header-search" >
+        <div className="search-container" >
+          <div className="search-bar" >
 
-          <input
-            className="search-input"
-            placeholder="  Enter Location"
-            type="text"
-            name="location"
-            value={searchQuery.location}
-            onChange={handleInputSearch}
-          />
-          <button className="search-button" onClick={filterData}>
-            <span className="search-icon">
-              <i className="fas fa-search"></i>
-              Search
-            </span>
-          </button>
+            <input
+              className="search-input"
+              placeholder=" Enter keyword/Designation/Companies"
+              type="text"
+              name="designation"
+              value={searchQuery.designation}
+              onChange={handleInputSearch}
+            />
+            <input
+              className="search-input"
+              list="experienceOptions"
+              placeholder="  Select Experience"
+              type="text"
+              name="experience"
+              value={searchQuery.experience}
+              onChange={handleInputSearch}
+            />
+            <datalist id="experienceOptions">
+              <option value="0-1 years" />
+              <option value="1-3 years" />
+              <option value="3-5 years" />
+              <option value="5+ years" />
+            </datalist>
+
+            <input
+              className="search-input"
+              placeholder="  Enter Location"
+              type="text"
+              name="location"
+              value={searchQuery.location}
+              onChange={handleInputSearch}
+            />
+            <button className="search-button" onClick={filterData}>
+              <span className="search-icon">
+                <i className="fas fa-search"></i>
+                Search
+              </span>
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="filter-section">
-        <div className="filter-options-container">
-          {filterOptions.map((option) => {
-            const uniqueValues = Array.from(
-              new Set(jobDescriptions.map((item) => item[option]))
-            );
-            return (
-              <div key={option} className="filter-option">
-                <button
-                  className="white-Btn"
-                  onClick={() => handleFilterOptionClick(option)}
-                >
-                  {option}
-                  <span className="filter-icon">&#x25bc;</span>
-                </button>
-                {activeFilterOption === option && (
-                  <div className="city-filter">
-                    <div className="optionDiv">
-                      {uniqueValues.map((value) => (
-                        <label key={value} className="selfcalling-filter-value">
-                          <input
-                            type="checkbox"
-                            checked={
-                              selectedFilters[option]?.includes(value) || false
-                            }
-                            onChange={() => handleFilterSelect(option, value)}
-                          />
-                          {value}
-                        </label>
-                      ))}
+
+        <div className="jd-filter-section">
+          <div className="jd-filter-options-container" >
+            {filterOptions.map((option) => {
+              const uniqueValues = Array.from(
+                new Set(jobDescriptions.map((item) => item[option]))
+              );
+              return (
+                <div key={option} className="filter-option">
+                  <button
+                    className="white-Btn"
+                    onClick={() => handleFilterOptionClick(option)}
+                  >
+                    {option}
+                    <span className="filter-icon">&#x25bc;</span>
+                  </button>
+                  {activeFilterOption === option && (
+                    <div className="city-filter">
+                      <div className="optionDiv">
+                        {uniqueValues.map((value) => (
+                          <label key={value} className="selfcalling-filter-value">
+                            <input
+                              type="checkbox"
+                              checked={
+                                selectedFilters[option]?.includes(value) || false
+                              }
+                              onChange={() => handleFilterSelect(option, value)}
+                            />
+                            {value}
+                          </label>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
       {!showViewMore && (
@@ -316,7 +337,7 @@ const JobListing = () => {
           {filteredJobDescriptions.map((item, job, index) => (
             <div className="job-listing" key={index}>
               <div className="job-header">
-                {/* <h3 >{item.requirementId}</h3> */}
+
                 <h2 className="job-title">{item.designation} </h2>
                 <div className="job-company">{item.companyName}</div>
               </div>
@@ -337,22 +358,14 @@ const JobListing = () => {
                   <i class="fa-solid fa-indian-rupee-sign"></i>
                   {item.incentive}
                 </div>
-                {/* <div className="job-posted">
-          <i className="fas fa-clock"></i>
-          {item.fild}
-        </div> */}
-                {/* <div className="job-posted">
-          <i className="fas fa-clock"></i>
-          {item.requirementId}
-        </div> */}
               </div>
               {/* Arshad Added this button to share edm  */}
 
               <div className="job-actions">
-                {userType === "Manager" ||  userType === "TeamLeader"  ? (
+                {userType === "Manager" || userType === "TeamLeader" ? (
                   <div className="jd-edit-hold-div">
                     <button className="daily-tr-btn"
-                    >
+                    onClick={()=>handleEditBtn(item)}>
                       Edit
                     </button>
                     <button className="daily-tr-btn"
@@ -372,10 +385,6 @@ const JobListing = () => {
                 </button>
                 {/* <button className='daily-tr-btn' onClick={()=>toggleEdm(index)}> EDM  <i id='edm-share-icon'  className="fa-solid fa-eye"></i></button> */}
               </div>
-              {heldJobId === job.requirementId && (
-                <p style={{ color: "red", display: "flex", justifyContent: "center" }}>
-                  This Job Id Hold By Manager</p>
-              )}
             </div>
           ))}
         </div>
@@ -564,11 +573,11 @@ const JobListing = () => {
           />
         </>
       )}
-      {showAddJobDescription && (
+      </>
+    ):(
         <>
-          <AddJobDescription
-            onAddJD={handleAddJD}
-            Descriptions={requirementData.requirementId}
+          <UpdateJobDescription
+            onAddJD={updateJD}
           />
         </>
       )}

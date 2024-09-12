@@ -9,6 +9,7 @@
   justify-content: center;
   padding: 5px;
   color:var(--text-color);
+
   margin-top: 10px;
 }
 .update-main-div {
@@ -91,6 +92,7 @@
   width: 90%;
   border-radius: 5px;
   color:var(--text-color);
+
   padding: 5px 0px;
   /* border: 1px solid gray; */
 }
@@ -163,6 +165,7 @@
   text-align: center;
   font-size: 1em;
   color:var(--text-color);
+
 }
 
 .studTables input[type="text"],
@@ -172,7 +175,9 @@
   width: 100%;
   border-radius: 4px;
   box-sizing: border-box;
+
   color:var(--text-color);
+
   font-size: 1em;
 }
 
@@ -181,6 +186,7 @@
   width: 100%;
   border-radius: 4px;
   color:var(--text-color);
+
   font-size: 1em;
 }
 
@@ -297,6 +303,7 @@
   border-radius: 4px;
   box-sizing: border-box;
   color:var(--text-color);
+
 }
 
 .custom-datepicker-container {
@@ -307,6 +314,7 @@
 .studTables th {
   background-color: white;
   color:var(--text-color);
+
   padding: 5px;
   text-align: center;
   font-size: 1em;
@@ -318,11 +326,14 @@
   font-size: 1em;
   border: 1px solid gray;
   color:var(--text-color);
+
 }
 
 b,
 strong {
+
   color:var(--text-color);
+
 }
 
 @media screen and (max-width: 300px) {
@@ -339,6 +350,7 @@ strong {
       max-width: 100%;
       padding: 10px;
       color:var(--text-color);
+
     }
 
     .maintable::-webkit-scrollbar {
@@ -347,6 +359,7 @@ strong {
 
     .table-striped th {
       color:var(--text-color);
+
     }
 
     .update-page-head {
@@ -391,6 +404,7 @@ strong {
       text-align: center;
       font-size: 1em;
       color:var(--text-color);
+
     }
 
     .studTables input[type="text"],
@@ -452,6 +466,7 @@ strong {
       align-items: center;
       gap: 10px;
       color:var(--text-color);
+
       padding: 10px;
     }
 
@@ -464,7 +479,9 @@ strong {
     #resumeUpload {
       height: auto;
       width: 200px;
+
       color:var(--text-color);
+
       font-size: 1em;
     }
 
@@ -476,7 +493,9 @@ strong {
       margin: 20px;
       text-align: center;
       justify-content: space-around;
+
       color:var(--text-color);
+
     }
 
     .ctf-btn {
@@ -524,6 +543,7 @@ strong {
       border-radius: 4px;
       box-sizing: border-box;
       color:var(--text-color);
+
     }
 
     .custom-datepicker-container {
@@ -534,6 +554,7 @@ strong {
     .studTables th {
       background-color: white;
       color:var(--text-color);
+
       padding: 10px;
       text-align: center;
       font-size: 1em;
@@ -545,11 +566,13 @@ strong {
       font-size: 1em;
       border: 1px solid gray;
       color:var(--text-color);
+
     }
 
     b,
     strong {
       color:var(--text-color);
+
     }
   }
 }
@@ -572,7 +595,9 @@ strong {
 
 .calling-tracker-popup {
   display: flex;
+
   color:var(--text-color);
+
 }
 
 .calling-tracker-popup-sidebar {
@@ -619,6 +644,7 @@ strong {
   width: 100%;
   height: 30px;
   color:var(--text-color);
+
   border: 1px solid #ced4da;
   border-radius: 15px;
   box-shadow: none;
@@ -664,6 +690,7 @@ strong {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5); /* Shadow effect like Bootstrap modal */
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -681,16 +708,13 @@ strong {
 }
 
 .spinner {
-  border: 10px solid transparent; /* Make border transparent */
+  border: 8px solid transparent; 
   border-radius: 50%;
   border-color: var(--Bg-color);
-  border-top: 10px solid rgb(0, 0, 0);
-  /* border-right: 12px solid rgb(88, 88, 180);
-  border-bottom: 12px solid rgb(73, 160, 73);
-  border-left: 12px solid rgb(222, 222, 95); */
+  border-top: 8px solid rgb(0, 0, 0);
   width: 80px;
   height: 80px;
-  animation: spin 1.5s linear infinite; /* Faster spin for better visual */
+  animation: spin 0.5s linear infinite; 
   margin-bottom: 10px;
 }
 

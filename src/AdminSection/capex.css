@@ -6,6 +6,7 @@
   justify-content: center;
   align-items: center;
   color:var(--text-color);
+
   font-size: 18px;
 }
 
@@ -102,7 +103,9 @@
 }
 
 .capexForm-heading, .opexForm-heading {
+
   color:var(--text-color);
+
   font-size: 18px;
   margin-bottom: 10px;
 }
@@ -123,7 +126,9 @@
   align-items: center;
   /* text-align: center; */
   font-size: 16px;
+
   color:var(--text-color);
+
   padding: 10px;
   white-space: nowrap;
 }
@@ -141,6 +146,7 @@
     font-size: 16px;
     margin-right: 10px;
     color:var(--text-color);
+
 }
 
 .capex-from-div, .opex-form-div {
@@ -229,20 +235,26 @@ border-radius: 4px;
 .bill-header, .bill-footer {
   text-align: center;
   margin-bottom: 20px;
+
   color:var(--text-color);
+
 }
 
 .bill-header h1 {
   margin: 0;
   font-size: 2em;
+
   color:var(--text-color);
+
 }
 
 .bill-details table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
+
   color:var(--text-color);
+
 }
 
 .bill-details th, .bill-details td {
@@ -258,7 +270,9 @@ border-radius: 4px;
 .bill-total {
   text-align: right;
   font-size: 1.0em;
+
   color:var(--text-color);
+
 }
 
 .bill-footer p {
@@ -266,7 +280,9 @@ border-radius: 4px;
 }
 
 .billing-table-head {
+
   color:var(--text-color);
+
 }
 .no-date-div{
 display: flex;

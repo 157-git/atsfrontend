@@ -14,10 +14,10 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
   const utteranceRef = useRef(null);
   const [voices, setVoices] = useState([]);
   const [voiceLoaded, setVoiceLoaded] = useState(false);
-  const { employeeId } = useParams()
+  const { employeeId, userType } = useParams()
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/edm-details/${Descriptions}/${employeeId}`)
+    fetch(`${API_BASE_URL}/edm-details/${Descriptions}/${employeeId}/${userType}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -96,22 +96,15 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
       }
     }
   };
-
-
-
   const togglePlay = () => {
     setIsPlaying(!isPlaying);
     if (!isPlaying) {
       const text = document.getElementById('shareEMD').innerText.trim();
-
-      // Stop current speech if it's speaking
       if (synth.speaking) {
         synth.cancel();
       }
 
       const utterance = new SpeechSynthesisUtterance(text);
-
-      // Set voice to the first available voice
       if (voices.length > 0) {
         utterance.voice = voices[0]; // Use the first available voice
       } else {
@@ -137,7 +130,6 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
     <>
 
       <div className="main-description-share1  min-h-screen  flex flex-col justify-center items-center" id='jobEDM'>
-
         <div className="job-posting" id='shareEMD'>
           <h3></h3>
           <h3>We are Hiring</h3>
@@ -153,15 +145,12 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
             <p>{data.jobType} - {data.detailAddress}</p>
             <div className="contact">
               <div className="image-container">
-                {/* Use the imported image */}
                 <img src={profileImage} alt="Profile Image" />
               </div>
               <div className="details1">
                 <h4>For Details</h4>
                 <p>Name : {data.employeeName} | Contact: {data.officialContactNo} </p>
-
                 <p>Email: <a href="mailto:bezalwar@157ipl.com">{data.officialMail}</a> </p>
-
               </div>
             </div>
           </div>
@@ -173,8 +162,6 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
             <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
           </button>
         </div>
-
-
         <section className="apply-section-share">
           <button className="apply-button-share" onClick={generateAndShareVideo}>
             Share Job Description
@@ -183,12 +170,12 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
           <button
             onClick={closeJobDescrptionShare}
             className="apply-button-share"
+            style={{paddingRight:"10px",paddingLeft:"10px",color:"black"}} 
           >
             close
           </button>
         </section>
       </div>
-
     </>
   );
 }

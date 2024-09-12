@@ -69,50 +69,51 @@ const ShortListedCandidates = ({
   });
   //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_62
 
+
+//prachi shortlisted Candidate->filter->10/9
   const limitedOptions = [
-    "alternateNumber",
-    "availabilityForInterview",
-    "callingFeedback",
-    "callingTrackerId",
-    "candidateAddedTime",
-    "candidateEmail",
-    "candidateId",
-    "candidateName",
-    "communicationRating",
-    "companyName",
-    "contactNumber",
-    "currentCtcLakh",
-    "currentCtcThousand",
-    "currentLocation",
-    "date",
-    "dateOfBirth",
-    "empId",
-    "expectedCtcLakh",
-    "expectedCtcThousand",
-    "experienceMonth",
-    "experienceYear",
-    "extraCertification",
-    "feedBack",
-    "finalStatus",
-    "fullAddress",
-    "gender",
-    "holdingAnyOffer",
-    "incentive",
-    "interviewTime",
-    "jobDesignation",
-    "msgForTeamLeader",
-    "noticePeriod",
-    "offerLetterMsg",
-    "oldEmployeeId",
-    "qualification",
-    "recruiterName",
-    "relevantExperience",
-    "requirementCompany",
-    "requirementId",
-    "selectYesOrNo",
-    "sourceName",
-    "yearOfPassing",
+  ["alternateNumber","Alternate Number"],
+  [ "availabilityForInterview", "Availability For Interview"],
+  ["callingFeedback","Calling Feedback"],
+  ["candidateAddedTime", "Candidate Added Time"],
+  ["candidateEmail", "Candidate Email"],
+  ["candidateId", "Candidate Id"],
+  ["candidateName", "Candidate Name"],
+  ["communicationRating", "Communication Rating"],
+  ["companyName", "Company Name"],
+  ["contactNumber", "Contact Number"],
+  ["currentCtcLakh", "Current CTC Lakh"],
+  ["currentCtcThousand", "Current CTC Thousand"],
+  ["currentLocation", "Current Location"],
+  ["date", "Date"],
+  ["dateOfBirth", "Date Of Birth"],
+  ["empId", "Employee Id"],
+  ["expectedCtcLakh", "Expected CTC(Lakh)"],
+  ["expectedCtcThousand", "Expected CTC(Thousand)"],
+  ["experienceMonth", "Experience Month"],
+  ["experienceYear", "Experience Year"],
+  ["extraCertification", "Extra Certification"],
+  ["feedBack", "FeedBack"],
+  ["finalStatus", "Final Status"],
+  ["fullAddress", "Full Address"],
+  ["gender", "Gender"],
+  ["holdingAnyOffer", "Holding Any Offer"],
+  ["incentive", "Incentive"],
+  ["interviewTime", "Interview Time"],
+  ["jobDesignation", "Job Designation"],
+  ["noticePeriod", "Notice Period"],
+  ["offerLetterMsg", "Offer Letter Message"],
+  ["oldEmployeeId", "Old Employee Id"],
+  ["qualification", "Qualification"],
+  ["recruiterName", "Recruiter Name"],
+  ["relevantExperience", "Relevant Experience"],
+  ["requirementCompany", "Applying Company"],
+  ["requirementId", "Job ID"],
+  ["selectYesOrNo", "Status"],
+  ["sourceName", "Source Name"],
+  ["yearOfPassing", "Year Of Passing"]
   ];
+
 
   const { userType } = useParams();
 
@@ -348,9 +349,11 @@ const ShortListedCandidates = ({
   //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_336
 
   useEffect(() => {
-    const options = Object.keys(filteredShortListed[0] || {}).filter((key) =>
-      limitedOptions.includes(key)
-    );
+    const options = limitedOptions
+      .filter(([key]) =>
+        Object.keys(filteredShortListed[0] || {}).includes(key)
+      )
+      .map(([key]) => key);
     setFilterOptions(options);
   }, [filteredShortListed]);
 
@@ -373,11 +376,6 @@ const ShortListedCandidates = ({
           item.contactNumber.toString().includes(searchTermLower)) ||
         (item.sourceName &&
           item.sourceName.toLowerCase().includes(searchTermLower)) ||
-        (item.requirementId &&
-          item.requirementId
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
         (item.requirementCompany &&
           item.requirementCompany.toLowerCase().includes(searchTermLower)) ||
         (item.communicationRating &&
@@ -390,8 +388,6 @@ const ShortListedCandidates = ({
           item.callingFeedback.toLowerCase().includes(searchTermLower)) ||
         (item.selectYesOrNo &&
           item.selectYesOrNo.toLowerCase().includes(searchTermLower)) ||
-        (item.experienceYear &&
-          item.experienceYear.toLowerCase().includes(searchTermLower)) ||
         (item.dateOfBirth &&
           item.dateOfBirth.toLowerCase().includes(searchTermLower)) ||
         (item.gender && item.gender.toLowerCase().includes(searchTermLower)) ||
@@ -404,12 +400,9 @@ const ShortListedCandidates = ({
     setFilteredShortListed(filtered);
   }, [searchTerm, shortListedData]);
 
-  const handleFilterOptionClick = (option) => {
-    if (activeFilterOption === option) {
-      setActiveFilterOption(null);
-    } else {
-      setActiveFilterOption(option);
-    }
+  const handleFilterOptionClick = (key) => {
+    setActiveFilterOption(activeFilterOption === key ? null : key);
+    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
   };
 
   useEffect(() => {
@@ -431,6 +424,8 @@ const ShortListedCandidates = ({
       setFilteredShortListed(sortedList);
     }
   }, [sortCriteria, sortOrder]);
+
+// prachi filterdata
 
   const filterData = () => {
     let filteredData = [...shortListedData];
@@ -466,7 +461,72 @@ const ShortListedCandidates = ({
               item[option]?.toString().toLowerCase().includes(value)
             )
           );
-        } else {
+        } else if(option==="currentCtcLakh"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="currentCtcThousand"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="empId"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="expectedCtcLakh"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="expectedCtcThousand"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="experienceMonth"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="experienceYear"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="oldEmployeeId"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        
+        else {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
               item[option]
@@ -479,26 +539,28 @@ const ShortListedCandidates = ({
       }
     });
     setFilteredShortListed(filteredData);
-  };
+  }; 
 
-  const handleFilterSelect = (option, value) => {
-    setSelectedFilters((prevFilters) => {
-      const updatedFilters = { ...prevFilters };
-      if (!updatedFilters[option]) {
-        updatedFilters[option] = [];
-      }
-
-      const index = updatedFilters[option].indexOf(value);
-      if (index === -1) {
-        updatedFilters[option] = [...updatedFilters[option], value];
-      } else {
-        updatedFilters[option] = updatedFilters[option].filter(
-          (item) => item !== value
-        );
-      }
-
-      return updatedFilters;
-    });
+  // const filterData = () => {
+  //   let filteredData = [...shortListedData];
+  //   Object.entries(selectedFilters).forEach(([option, values]) => {
+  //     if (values.length > 0) {
+  //       filteredData = filteredData.filter((item) =>
+  //         values.some((value) =>
+  //           item[option]?.toString().toLowerCase().includes(value.toLowerCase())
+  //         )
+  //       );
+  //     }
+  //   });
+  //   setFilteredShortListed(filteredData);
+  // };
+  const handleFilterSelect = (key, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [key]: prev[key].includes(value)
+        ? prev[key].filter((item) => item !== value)
+        : [...prev[key], value],
+    }));
   };
 
   const toggleFilterSection = () => {
@@ -666,55 +728,51 @@ const ShortListedCandidates = ({
           )}
           {showFilterSection && (
             <div className="filter-section">
-              <div className="filter-dropdowns">
-                {showFilterSection && (
-                  <div className="filter-section">
-                    <div className="filter-options-container">
-                      {filterOptions.map((option) => {
-                        const uniqueValues = Array.from(
-                          new Set(shortListedData.map((item) => item[option]))
-                        );
-                        console.log(uniqueValues);
-                        return (
-                          <div key={option} className="filter-option">
-                            <button
-                              className="white-Btn"
-                              onClick={() => handleFilterOptionClick(option)}
+              <div className="filter-dropdowns" >
+              {showFilterSection && (
+            <div
+              className="filter-options-container"
+              style={{ display: "flex", flexWrap: "wrap" }}
+            >
+              {limitedOptions
+                .filter(([key]) => filterOptions.includes(key))
+                .map(([key, displayText]) => (
+                  <div key={key} className="filter-option">
+                    <button
+                      className="white-Btn"
+                      onClick={() => handleFilterOptionClick(key)}
+                    >
+                      {displayText}
+                      <span className="filter-icon">&#x25bc;</span>
+                    </button>
+                    {activeFilterOption === key && (
+                      <div className="city-filter">
+                        <div className="optionDiv">
+                          {Array.from(
+                            new Set(shortListedData.map((item) => item[key]))
+                          ).map((value) => (
+                            <label
+                              key={value}
+                              className="selfcalling-filter-value"
                             >
-                              {option}
-                              <span className="filter-icon">&#x25bc;</span>
-                            </button>
-                            {activeFilterOption === option && (
-                              <div className="city-filter">
-                                <div className="optionDiv">
-                                  {uniqueValues.map((value) => (
-                                    <label
-                                      key={value}
-                                      className="selfcalling-filter-value"
-                                    >
-                                      <input
-                                        type="checkbox"
-                                        checked={
-                                          selectedFilters[option]?.includes(
-                                            value
-                                          ) || false
-                                        }
-                                        onChange={() =>
-                                          handleFilterSelect(option, value)
-                                        }
-                                      />
-                                      {value}
-                                    </label>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
+                              <input
+                                type="checkbox"
+                                checked={
+                                  selectedFilters[key]?.includes(value) || false
+                                }
+                                onChange={() => handleFilterSelect(key, value)}
+                                style={{marginRight:'5px'}}
+                              />
+                              {value}
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
+                ))}
+            </div>
+          )}
               </div>
             </div>
           )}
@@ -732,7 +790,7 @@ const ShortListedCandidates = ({
                     />
                   </th>
                 ) : null}
-                <th className="attendanceheading"> No.</th>
+                <th className="attendanceheading">Sr  No.</th>
                 <th className="attendanceheading">Date & Time</th>
                 <th className="attendanceheading">Candidate's Id</th>
                 <th className="attendanceheading">Recruiter's Name</th>
@@ -766,14 +824,14 @@ const ShortListedCandidates = ({
                 <th className="attendanceheading">Offer Letter Message</th>
                 <th className="attendanceheading">Resume</th>
                 <th className="attendanceheading">Notice Period</th>
-                {userType ==='TeamLeader' && 
-                      <th className="attendanceheading">
-                      Message For Manager
-                    </th>}
-                    {userType ==='Recruiters' && 
-                      <th className="attendanceheading">
-                      Message For Team Leader
-                    </th>}
+                {userType === 'TeamLeader' &&
+                  <th className="attendanceheading">
+                    Message For Manager
+                  </th>}
+                {userType === 'Recruiters' &&
+                  <th className="attendanceheading">
+                    Message For Team Leader
+                  </th>}
                 <th className="attendanceheading">Interview Slot</th>
                 <th className="attendanceheading">Interview Time</th>
                 <th className="attendanceheading">Final Status</th>
@@ -802,10 +860,6 @@ const ShortListedCandidates = ({
                     {item.date}
                     <div className="tooltip">
                       <span className="tooltiptext">{item.date}</span>
-                    </div>
-            
-                    {item.candidateAddedTime}
-                    <div className="tooltip">
                       <span className="tooltiptext">
                         {item.candidateAddedTime}
                       </span>
@@ -950,25 +1004,142 @@ const ShortListedCandidates = ({
                       <span className="tooltiptext">{item.fullAddress}</span>
                     </div>
                   </td>
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}
+                  >
+                    {item.callingFeedback}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.callingFeedback}</span>
+                    </div>
+                  </td>
 
-                  <td className="tabledata">{item.callingFeedback}</td>
-                  <td className="tabledata">{item.incentive}</td>
-                  <td className="tabledata">{item.selectYesOrNo}</td>
-                  <td className="tabledata">{item.companyName}</td>
-                  <td className="tabledata">{item.experienceYear} Year {item.experienceMonth} Month</td>
-                  <td className="tabledata">{item.relevantExperience}</td>
-                  <td className="tabledata">{item.currentCtcLakh} Lakh {item.currentCtcThousand} Thousand</td>
-                  <td className="tabledata">{item.expectedCtcLakh} Lakh {item.expectedCtcThousand} Thousand </td>
-                  <td className="tabledata">{item.dateOfBirth}</td>
-                  <td className="tabledata">{item.gender}</td>
-                  <td className="tabledata">{item.qualification}</td>
-                  <td className="tabledata">{item.yearOfPassing}</td>
-                  <td className="tabledata">
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.incentive}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.incentive}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.selectYesOrNo}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.selectYesOrNo}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.companyName}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.companyName}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.experienceYear}
+                    Year {item.experienceMonth}
+                    Month
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.experienceYear}{item.experienceMonth}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.relevantExperience}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.companyName}</span>
+                    </div>
+                  </td>
+
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.currentCtcLakh} Lakh {item.currentCtcThousand} Thousand
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.currentCtcLakh}{item.currentCtcThousand}</span>
+                    </div>
+                  </td>
+
+
+
+                  <td className="tabledata" onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.expectedCtcLakh} Lakh {item.expectedCtcThousand} Thousand
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.expectedCtcLakh}Lakh{item.expectedCtcThousand}Thousand</span>
+                    </div>
+                  </td>
+
+
+                  <td className="tabledata" onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.dateOfBirth}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.dateOfBirth}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata" onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.gender}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.gender}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata" onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.qualification}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.qualification}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata" onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.yearOfPassing}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.yearOfPassing}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
                     {item.extraCertification}
+                    <div className="tooltip">
+                      <span className="tooltiptext"> {item.extraCertification}</span>
+                    </div>
                   </td>
                   {/* <td className="tabledata">{item.feedback}</td> */}
-                  <td className="tabledata">{item.holdingAnyOffer}</td>
-                  <td className="tabledata">{item.offerLetterMsg}</td>
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>{item.holdingAnyOffer}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.holdingAnyOffer}</span>
+                    </div>
+                  </td>
+
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.offerLetterMsg}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.offerLetterMsg}</span>
+                    </div>
+                  </td>
                   {/* <td className="tabledata">{item.lineUp.resume}</td> */}
                   {/* Name:-Akash Pawar Component:-ShortListedCandidate
                   Subcategory:-ResumeViewButton(added) start LineNo:-546
@@ -984,10 +1155,43 @@ const ShortListedCandidates = ({
                   {/* Name:-Akash Pawar Component:-ShortListedCandidate
                   Subcategory:-ResumeViewButton(added) End LineNo:-558
                   Date:-02/07 */}
-                  <td className="tabledata">{item.noticePeriod}</td>
-                  <td className="tabledata">{item.msgForTeamLeader}</td>
-                  <td className="tabledata">{item.availabilityForInterview}</td>
-                  <td className="tabledata">{item.interviewTime}</td>
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.noticePeriod}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.noticePeriod}</span>
+                    </div>
+                  </td>
+
+                  {userType !== 'Manager' && (
+                    <td className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}>
+                      {item.msgForTeamLeader}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{item.msgForTeamLeader}</span>
+                      </div>
+                    </td>
+                  )}
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.availabilityForInterview}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.availabilityForInterview}</span>
+                    </div>
+                  </td>
+
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.interviewTime}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.interviewTime}</span>
+                    </div>
+                  </td>
                   {/* <td className="tabledata">{item.finalStatus}</td> */}
 
                   <td
@@ -1001,7 +1205,6 @@ const ShortListedCandidates = ({
                     </div>
                   </td>
                   <td className="tabledata">
-                  
                     <i
                       onClick={() => handleUpdate(item.candidateId)}
                       className="fa-regular fa-pen-to-square"

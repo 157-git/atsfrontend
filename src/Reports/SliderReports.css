@@ -19,7 +19,6 @@
 .poor {
   background-color: #ff0909;
   width: 25%;
-  /* color:var(--text-color); */
   font-size: 16px;
   display: flex;
   justify-content: center;
@@ -29,7 +28,6 @@
 .average {
   background-color: #FFA500;
   width: 25%;
-  /* color:var(--text-color); */
   font-size: 16px;
   display: flex;
   justify-content: center;
@@ -39,7 +37,6 @@
 .good {
   background-color: #FFFF00;
   width: 25%;
-  /* color:var(--text-color); */
   font-size: 16px;
   display: flex;
   justify-content: center;
@@ -49,9 +46,11 @@
 .best {
   background-color: #2c8d2c;
   width: 25%;
+
   /* color:var(--text-color); */
   font-size: 16px;
   /* color:var(--text-color); */
+
   display: flex;
   justify-content: center;
   align-items: center;

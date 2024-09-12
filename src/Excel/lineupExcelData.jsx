@@ -202,7 +202,7 @@ const LineupExcelData = ({
   };
 
   const handleUpdateSuccess = () => {
-    fetch(`http://localhost:9090/api/ats/157industries/lineup-excel-data/${employeeId}/${userType}`)
+    fetch(`${API_BASE_URL}/lineup-excel-data/${employeeId}/${userType}`)
       .then((response) => response.json())
       .then((data) => {
         setLineUpList(data);

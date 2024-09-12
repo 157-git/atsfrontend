@@ -5,44 +5,44 @@ import "react-toastify/dist/ReactToastify.css";
 import { API_BASE_URL } from "../api/api";
 // import WebSocketService from '../websocket/WebSocketService';
 
-const AddJobDescription = () => {
+const UpdateJobDescription = ({onAddJD}) => {
+  console.log(onAddJD);
+  
   const [formData, setFormData] = useState({
-    companyName: "",
-    designation: "",
-    position: "",
-    qualification: "",
-    year_of_passing: "",
-    field: "",
-    stream: "",
-    location: "",
-    salary: "",
-    job_type: "",
-    experience: "",
-    bond: "",
-    percentage: "",
-    skills: "",
-    companyLink: "",
-    detailAddress: "",
-    shift: "",
-    weekOff: "",
-    noticePeriod: "",
-    jobRole: "",
-    perks: "",
-    incentive: "",
-    reportingHierarchy: "",
-    gender: "",
-    documentation: "",
-    ageCriteria: "",
-    note: "",
+    companyName:onAddJD.companyName || "",
+    designation:onAddJD.designation || "",
+    position:onAddJD.position || "",
+    qualification:onAddJD.qualification || "",
+    year_of_passing:onAddJD.yearOfPassing || "",
+    field:onAddJD.field|| "",
+    stream:onAddJD.stream || "",
+    location:onAddJD.location || "",
+    salary:onAddJD.salary|| "",
+    job_type:onAddJD.jobType|| "",
+    experience:onAddJD.experience|| "",
+    bond:onAddJD.bond || "",
+    percentage:onAddJD.percentage|| "",
+    skills:onAddJD.skills|| "",
+    companyLink:onAddJD.companyLink|| "",
+    detailAddress:onAddJD.detailAddress|| "",
+    shift:onAddJD.shift|| "",
+    weekOff:onAddJD.weekOff|| "",
+    noticePeriod:onAddJD.noticePeriod || "",
+    jobRole:onAddJD.jobRole ||"",
+    perks:onAddJD.perks|| "",
+    incentive:onAddJD.incentive|| "",
+    reportingHierarchy:onAddJD.reportingHierarchy|| "",
+    gender:onAddJD.gender|| "",
+    documentation:onAddJD.documentation|| "",
+    ageCriteria: onAddJD.ageCriteria||"",
+    note: onAddJD.note||"",
     // contactRecruiterEmail:"",
     // contactRecruiterMobileNumber:"",
     // contactRecruiterName:"",
-    positionOverview: { overview: "", employeeId: "" },
-    responsibilities: [{ employeeId: "", responsibilitiesMsg: "" }],
-    jobRequirements: [{ employeeId: "", jobRequirementMsg: "" }],
-    preferredQualifications: [
-      { employeeId: "", preferredQualificationMsg: "" },
-    ]
+    positionOverview: { overview: onAddJD.positionOverview?.overview || '' },
+      responsibilities: onAddJD.responsibilities?.length ? onAddJD.responsibilities : [{ employeeId: '', responsibilitiesMsg: '' }],
+      jobRequirements: onAddJD.jobRequirements?.length ? onAddJD.jobRequirements : [{ employeeId: '', jobRequirementMsg: '' }],
+      preferredQualifications: onAddJD.preferredQualifications?.length ? onAddJD.preferredQualifications : [{ employeeId: '', preferredQualificationMsg: '' }],
     // RoundOfInterView: [
     //   {
     //     round: "",
@@ -52,10 +52,10 @@ const AddJobDescription = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData({
+      ...formData,
       [name]: value,
-    }));
+    });
   };
 
   const handleInputChange = (e, field, index) => {
@@ -119,6 +119,7 @@ const AddJobDescription = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
+
     try {
       const response = await fetch(
         `${API_BASE_URL}/add-requirement`,
@@ -191,8 +192,8 @@ const AddJobDescription = () => {
         {/* Align AddJobDescription name center and changing color to gray */}
 
         <h3 className="text-center text-[18px] text-gray-500 py-2">
-          {" "}
-          Add Job Description
+
+          Update Job Description
         </h3>
 
         <form onSubmit={handleSubmit}>
@@ -260,6 +261,7 @@ const AddJobDescription = () => {
                   <input
                     type="text"
                     name="field"
+
                     value={formData.field}
                     onChange={handleChange}
                     placeholder="Enter Field"
@@ -633,6 +635,7 @@ const AddJobDescription = () => {
                     type="button"
                     className="job-button"
                     onClick={() => handleAddMore("jobRequirements")}
+
                   >
                     Add More Job Requirements
                   </button>
@@ -686,6 +689,7 @@ const AddJobDescription = () => {
                     type="button"
                     className="job-button-add-Preferred"
                     onClick={() => handleAddMore("preferredQualifications")}
+
                   >
                     Add More Preferred Qualifications
                   </button>
@@ -704,4 +708,4 @@ const AddJobDescription = () => {
   );
 };
 
-export default AddJobDescription;
+export default UpdateJobDescription;

@@ -5,11 +5,11 @@
 
 .table-data-row {
     align-items: center;
-    color:var(--text-color);
+    color: gray;
 }
 .data-table th {
     background-color: #ffcb9b;
-    color:var(--text-color);
+    color: gray;
     font-size: 18px;
 
 }

@@ -84,7 +84,6 @@ function Sidebar({
 
   const navigate = useNavigate();
   const location = useLocation();
-
   // const pastelColors = [
   //   "#a8d5ba", // Mint Green
   //   "#f5d0c5", // Light Pink
@@ -140,9 +139,23 @@ function Sidebar({
     navigate(`/login/${userType}`,{ replace: true })
   }
   
+  const handleColorClick = (color) => {
+    applyColor(color);
+    setShowColor(false);
+
+    // Save the selected color in the session storage
+    localStorage.setItem("selectedColor", color);
+
+    // Use history.pushState to update the URL without showing the parameter
+    const url = new URL(window.location);
+    url.searchParams.delete("color"); // Ensure no color param in the URL
+    window.history.pushState({}, "", url);
+  };
+
 
   const handleColorApplied = (color) => {
-    localStorage.setItem("bgColor", color);
+
+    localStorage.setItem("selectedColor", color);
     setShowColor(false); // Close the color picker modal when color is applied
   };
 
@@ -276,6 +289,7 @@ function Sidebar({
       >
         <a href="#">
           {item.icon && <i className={item.icon} ></i>}
+
           <span className="sidebar-text">{item.text}</span>
           {isActive && <span className="active-dot"></span>}
           {item.arrow && <i className={`arrow ph-bold ph-caret-${activeSubMenu === item.key ? 'up' : 'down'}`}></i>}
@@ -295,7 +309,7 @@ function Sidebar({
         {/* Swapnil_SideBar_responsiveAccordingToScreen_161to162_02/07 */}
         <div className="head-sidebar">
           <div className="sidebar-menu-btn" onClick={toggleSidebar}>
-            <i className="fa-solid fa-chevron-left" style={{color:"gray"}}></i>
+            <i className="fa-solid fa-chevron-left"></i>
           </div>
           <div className="nav">
             <div className="sidebar-menu">
@@ -316,7 +330,7 @@ function Sidebar({
                       <a href="#">
                         <i
                           className="fa-solid fa-user-plus"
-                           
+                          style={{ color: "gray" }}
                         ></i>
                         <span className="sidebar-text">Subscription</span>
                       </a>
@@ -339,7 +353,6 @@ function Sidebar({
 
                           <i
                             className="fa-solid fa-user-check"
-                             
                           ></i>
                           <span className="sidebar-text">Shortlisted </span>
                         </a>
@@ -358,7 +371,6 @@ function Sidebar({
                         <a href="#">
                           <i
                             className="fa-solid fa-user-plus"
-                             
                           ></i>
                           <span className="sidebar-text">Add Candidate</span>
                         </a>
@@ -378,12 +390,10 @@ function Sidebar({
                       <a href="#">
                         <i
                           className="fa-solid fa-users"
-                           
                         ></i>
 
                         <span
                           className="sidebar-text"
-                           
                         >
                           Find Candidate
                         </span>
@@ -555,7 +565,6 @@ function Sidebar({
                   <a href="#">
                     <i
                       className="fa-solid fa-pen-to-square"
-                       
                     ></i>
                     <span className="sidebar-text">Job Description</span>
                     <i className="arrow ph-bold ph-caret-down"></i>
@@ -621,7 +630,11 @@ function Sidebar({
                       {/* <a href="#">
                         <i
                           className="fa-solid fa-user-gear"
+<<<<<<< HEAD
                            
+=======
+                          style={{ color: "gray" }}
+>>>>>>> 552f1f9a738807efb94703b78c3a076500cbaa8f
                         ></i>
                         <span className="sidebar-text">Employee Section</span>
                         <i className="arrow ph-bold ph-caret-down"></i>
@@ -818,7 +831,6 @@ function Sidebar({
                     <a href="#">
                       <i
                         className="fa-solid fa-computer"
-                         
                       ></i>
                       <span className="sidebar-text">Manager Section</span>{" "}
                       {/* ArshadAttar_EmpDashboard_AddedPayrollToggeleFunction_10/07/2024_LineNo_428 */}
@@ -893,7 +905,6 @@ function Sidebar({
                             </span>
                           </a>
                         </li>
-
                         {/* <li
                           onClick={handleButtonClick(
                             "questionPaper",
@@ -928,7 +939,7 @@ function Sidebar({
                             </span>
                           </a>
                         </li>
-                        <li
+                        {/* <li
                           onClick={handleButtonClick(
                             "invoiceReport",
                             toggleInvoiceReport
@@ -940,11 +951,11 @@ function Sidebar({
                         >
                           <a href="#">
                             {/* <img src={Circle} style={{ width: "10px" }} alt="" /> */}
-                            <span className="sidebar-text">
+                            {/* <span className="sidebar-text">
                               Create Question paper
                             </span>
                           </a>
-                        </li>
+                        </li>  */}
 
                         <li
                           onClick={handleButtonClick(
@@ -1050,7 +1061,6 @@ function Sidebar({
                     <a href="#">
                       <i
                         className="fa-solid fa-user-tie"
-                         
                       ></i>
                       <span className="sidebar-text">Super User</span>
                       <i className="arrow ph-bold ph-caret-down"></i>
@@ -1182,7 +1192,6 @@ function Sidebar({
                     <a href="#">
                       <i
                         className="fa-solid fa-database"
-                         
                       ></i>
                       <span className="sidebar-text">Database</span>
                       <i className="arrow ph-bold ph-caret-down"></i>
@@ -1280,7 +1289,6 @@ function Sidebar({
                       {/* <i className="icon ph-bold ph-gear"></i> */}
                       <i
                         className="fa-brands fa-rocketchat"
-                         
                       ></i>
 
                       <span className="sidebar-text">Chat Section</span>
@@ -1297,7 +1305,6 @@ function Sidebar({
                       <a href="#">
                         <i
                           className="fa-regular fa-clipboard"
-                           
                         ></i>
                         <span className="sidebar-text">Note Pad</span>
                       </a>
@@ -1314,7 +1321,6 @@ function Sidebar({
                         <a href="#">
                           <i
                             className="fa-regular fa-address-book"
-                             
                           ></i>
                           <span className="sidebar-text">Reports</span>
                         </a>
@@ -1331,7 +1337,6 @@ function Sidebar({
                       {/* <i className="icon ph-bold ph-chart-bar"></i> */}
                       <i
                         className="fa-brands fa-linkedin"
-                         
                       ></i>
                       <span className="sidebar-text">Portal</span>
                       <i className="arrow ph-bold ph-caret-down"></i>
@@ -1395,7 +1400,6 @@ function Sidebar({
                     <a href="#">
                       <i
                         className="fa-solid fa-circle-info"
-                         
                       ></i>
                       <span className="sidebar-text">About Us</span>
                       <i className="arrow ph-bold ph-caret-down"></i>
@@ -1448,7 +1452,6 @@ function Sidebar({
                     <a href="#">
                       <i
                         className="fa-regular fa-circle-question"
-                         
                       ></i>
                       <span className="sidebar-text">Help</span>
                       <i className="arrow ph-bold ph-caret-down"></i>
@@ -1486,7 +1489,6 @@ function Sidebar({
                   <a href="#">
                     <i
                       className="fa-solid fa-palette"
-                       
                     ></i>
                     <span className="sidebar-text" onClick={() => { setShowColor(true) }}>Choose Colour</span>
                   </a>
@@ -1496,7 +1498,6 @@ function Sidebar({
                   <a href="#">
                     <i
                       className="fa-solid fa-power-off"
-                       
                     ></i>
                     <span className="sidebar-text">Logout</span>
                   </a>
@@ -1583,10 +1584,6 @@ function Sidebar({
                   justifyContent: "center",
                 }}
               >
-                {/* <button onClick={handleLogoutLocal} className="buttoncss">
-                  Yes
-                </button> */}
-
                 <button onClick={temproryLogout} className="buttoncss">
                   Yes
                 </button>

@@ -10,7 +10,7 @@ const RecruiterPage = () => {
   };
   useEffect(() => {
     // Retrieve the saved color from local storage and apply it
-    const savedColor = localStorage.getItem("bgColor");
+    const savedColor = localStorage.getItem("selectedColor");
     if (savedColor) {
       applyColor(savedColor);
     }

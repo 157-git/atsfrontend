@@ -37,6 +37,7 @@
 .addRec-form-row select {
   width: 100%;
   color:var(--text-color);
+
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -164,6 +165,7 @@ input[type='number'] {
   font-size: 16px;
   border-radius: 15px;
   width: 120px;
+
   background-color: var(--Bg-color);
   color: white;
   border: 1px solid gray;
@@ -171,8 +173,10 @@ input[type='number'] {
 }
 
 .submit-button-add-emp:hover {
+
   background-color: var(--button-hover-color);
   color: var( --text-hover-color);
+
 }
 
 .error {
@@ -215,6 +219,7 @@ input[type='number'] {
 
   .password-eye-icon i{
     color:var(--text-color);
+
   }
 
   .file-placeholder{

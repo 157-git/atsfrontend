@@ -19,6 +19,7 @@ function DailyWork({
   logoutTimestamp,
   jobRole,
   emailSenderInformation,
+  successfulDataUpdation
 }) {
 
   const { employeeId } = useParams();
@@ -53,6 +54,28 @@ function DailyWork({
   //   localStorage.setItem('buttonColor', '#ffb281');
   //   localStorage.setItem('sidebarBackgroundColor', '#ffe5b5');
   // }, []);
+
+//     return localStorage.getItem('buttonColor') || '#ffb281';
+//   });
+
+//   const handleColorChange = (color, btnColor) => {
+//     setBackgroundColor(color);
+//     setButtonColor(btnColor);
+//     localStorage.setItem('sidebarBackgroundColor', color);
+//     localStorage.setItem('buttonColor', btnColor);
+//   };
+
+//   const [backgroundColor, setBackgroundColor] = useState(() => {
+//     return localStorage.getItem('sidebarBackgroundColor') || '#ffe5b5';
+//   });
+
+//   useEffect(() => {
+//     setButtonColor('#ffb281');
+//     setBackgroundColor('#ffe5b5');
+//     localStorage.setItem('buttonColor', '#ffb281');
+//     localStorage.setItem('sidebarBackgroundColor', '#ffe5b5');
+//   }, []);
+// >>>>>>> 552f1f9a738807efb94703b78c3a076500cbaa8f
 
 
   const getStoredTime = () => {
@@ -375,7 +398,8 @@ function DailyWork({
 
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-updateArchieved(changed) Start LineNo:-334 Date:-01/07
   const updateArchieved = () => {
-    if (data.pending > 0 && successfulDataAdditions) {
+    console.log(successfulDataUpdation);
+    if ( successfulDataAdditions || successfulDataUpdation) {
       // Assuming updateCount is a function that updates states like archived and pending
       const updatedData = JSON.parse(
         localStorage.getItem(`dailyWorkData_${employeeId}`)
@@ -387,7 +411,7 @@ function DailyWork({
   };
   useEffect(() => {
     updateArchieved();
-  }, [successfulDataAdditions]);
+  }, [successfulDataAdditions, successfulDataUpdation]);
 
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-updateArchieved(changed) End LineNo:-351 Date:-01/07
   const handlePause = () => {
@@ -513,7 +537,7 @@ function DailyWork({
         </div>
         <div className="user-details">
           <p>
-            {employeeData.name}
+            {employeeData.name} - {userType}
             <br />
             157{employeeId}
           </p>

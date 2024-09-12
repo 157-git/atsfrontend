@@ -1,3 +1,4 @@
+
 /* SwapnilRokade_ColorPicker_adding_theame_color 11/09 */
 .color-picker-container {
     display: flex;
@@ -6,7 +7,6 @@
     height: 1200px;
     width: 1200px; /* Increased height for larger circle */
 }
-
 .spedometer {
     width: 200px;
     height: 50px;
@@ -42,3 +42,4 @@ path {
 path:hover {
     transform: scale(1.05);
 }
+

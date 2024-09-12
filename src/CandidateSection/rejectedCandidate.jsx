@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import HashLoader from "react-spinners/HashLoader";
 import * as XLSX from "xlsx";
 import { API_BASE_URL } from "../api/api";
+import Loader from "../EmployeeSection/loader";
 
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
@@ -73,48 +74,47 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
 
   const navigator = useNavigate();
   const limitedOptions = [
-    "alternateNumber",
-    "availabilityForInterview",
-    "callingFeedback",
-    "callingTrackerId",
-    "candidateAddedTime",
-    "candidateEmail",
-    "candidateId",
-    "candidateName",
-    "communicationRating",
-    "companyName",
-    "contactNumber",
-    "currentCtcLakh",
-    "currentCtcThousand",
-    "currentLocation",
-    "date",
-    "dateOfBirth",
-    "empId",
-    "expectedCtcLakh",
-    "expectedCtcThousand",
-    "experienceMonth",
-    "experienceYear",
-    "extraCertification",
-    "feedBack",
-    "finalStatus",
-    "fullAddress",
-    "gender",
-    "holdingAnyOffer",
-    "incentive",
-    "interviewTime",
-    "jobDesignation",
-    "msgForTeamLeader",
-    "noticePeriod",
-    "offerLetterMsg",
-    "oldEmployeeId",
-    "qualification",
-    "recruiterName",
-    "relevantExperience",
-    "requirementCompany",
-    "requirementId",
-    "selectYesOrNo",
-    "sourceName",
-    "yearOfPassing",
+    ["alternateNumber", "Alternate Number"],
+  ["availabilityForInterview", "Availability For Interview"],
+  ["callingFeedback", "Calling Feedback"],
+  ["candidateAddedTime", "Candidate Added Time"],
+  ["candidateEmail", "Candidate Email"],
+  ["candidateId", "Candidate Id"],
+  ["candidateName", "Candidate Name"],
+  ["communicationRating", "Communication Rating"],
+  ["companyName", "Company Name"],
+  ["contactNumber", "Contact Number"],
+  ["currentCtcLakh", "Current CTC (Lakh)"],
+  ["currentCtcThousand", "Current CTC (Thousand)"],
+  ["currentLocation", "Current Location"],
+  ["date", "Date"],
+  ["dateOfBirth", "Date Of Birth"],
+  ["empId", "Emp Id"],
+  ["expectedCtcLakh", "Expected CTC (Lakh)"],
+  ["expectedCtcThousand", "Expected CTC (Thousand)"],
+  ["experienceMonth", "Experience Month"],
+  ["experienceYear", "Experience Year"],
+  ["extraCertification", "Extra Certification"],
+  ["feedBack", "FeedBack"],
+  ["finalStatus", "Final Status"],
+  ["fullAddress", "Full Address"],
+  ["gender", "Gender"],
+  ["holdingAnyOffer", "Holding Any Offer"],
+  ["incentive", "Incentive"],
+  ["interviewTime", "Interview Time"],
+  ["jobDesignation", "Job Designation"],
+  ["msgForTeamLeader", "Message For Team Leader"],
+  ["noticePeriod", "Notice Period"],
+  ["offerLetterMsg", "Offer Letter Message"],
+  ["oldEmployeeId", "Old Employee Id"],
+  ["qualification", "Qualification"],
+  ["recruiterName", "Recruiter Name"],
+  ["relevantExperience", "Relevant Experience"],
+  ["requirementCompany", "Applying Company"],
+  ["requirementId", "Job Id"],
+  ["selectYesOrNo", "Status"],
+  ["sourceName", "Source Name"],
+  ["yearOfPassing", "Year Of Passing"]
   ];
   const { userType } = useParams();
 
@@ -123,11 +123,16 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
   }, []);
 
   useEffect(() => {
-    const options = Object.keys(filteredCallingList[0] || {}).filter((key) =>
-      limitedOptions.includes(key)
-    );
+    const options = limitedOptions
+      .filter(([key]) =>
+        Object.keys(filteredCallingList[0] || {}).includes(key)
+      )
+      .map(([key]) => key);
+      
     setFilterOptions(options);
   }, [filteredCallingList]);
+  
+  
 
   const fetchRejectedData = async () => {
     try {
@@ -306,13 +311,11 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
   };
   //akash_pawar_RejectedCandidate_ShareFunctionality_18/07_294
 
-  const handleFilterOptionClick = (option) => {
-    if (activeFilterOption === option) {
-      setActiveFilterOption(null);
-    } else {
-      setActiveFilterOption(option);
-    }
+  const handleFilterOptionClick = (key) => {
+    setActiveFilterOption(activeFilterOption === key ? null : key);
+    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
   };
+  
 
   useEffect(() => {
     const filtered = callingList.filter((item) => {
@@ -422,25 +425,35 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
     setFilteredCallingList(filteredData);
   };
 
-  const handleFilterSelect = (option, value) => {
-    setSelectedFilters((prevFilters) => {
-      const updatedFilters = { ...prevFilters };
-      if (!updatedFilters[option]) {
-        updatedFilters[option] = [];
-      }
+  // const handleFilterSelect = (option, value) => {
+  //   setSelectedFilters((prevFilters) => {
+  //     const updatedFilters = { ...prevFilters };
+  //     if (!updatedFilters[option]) {
+  //       updatedFilters[option] = [];
+  //     }
 
-      const index = updatedFilters[option].indexOf(value);
-      if (index === -1) {
-        updatedFilters[option] = [...updatedFilters[option], value];
-      } else {
-        updatedFilters[option] = updatedFilters[option].filter(
-          (item) => item !== value
-        );
-      }
+  //     const index = updatedFilters[option].indexOf(value);
+  //     if (index === -1) {
+  //       updatedFilters[option] = [...updatedFilters[option], value];
+  //     } else {
+  //       updatedFilters[option] = updatedFilters[option].filter(
+  //         (item) => item !== value
+  //       );
+  //     }
 
-      return updatedFilters;
-    });
+  //     return updatedFilters;
+  //   });
+  // };
+
+  const handleFilterSelect = (key, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [key]: prev[key].includes(value)
+        ? prev[key].filter((item) => item !== value)
+        : [...prev[key], value],
+    }));
   };
+
 
   const handleSort = (criteria) => {
     if (criteria === sortCriteria) {
@@ -709,11 +722,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
     <div className="calling-list-container">
       {loading ? (
         <div className="register">
-          <HashLoader
-             color={`${localStorage.getItem("bgColor")}`}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
+          <Loader></Loader>
         </div>
       ) : (
         <>
@@ -740,9 +749,11 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                   }}
                 >
                   <div>
+                    {(userType === 'Manager' || userType === 'TeamLeader') && (
                     <button className="lineUp-share-btn" onClick={showPopup}>
-                      Create Excel
+                    Create Excel
                     </button>
+                     )}
 
                     {showExportConfirmation && (
                       <div className="popup-containers">
@@ -823,61 +834,52 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               )}
-              {showFilterSection && (
-                <div className="filter-section">
-                  <div className="filter-dropdowns">
-                    {showFilterSection && (
-                      <div className="filter-section">
-                        <div className="filter-options-container">
-                          {filterOptions.map((option) => {
-                            const uniqueValues = Array.from(
-                              new Set(callingList.map((item) => item[option]))
-                            );
-                            return (
-                              <div key={option} className="filter-option">
-                                <button
-                                  className="white-Btn"
-                                  onClick={() =>
-                                    handleFilterOptionClick(option)
-                                  }
-                                >
-                                  {option}
-                                  <span className="filter-icon">&#x25bc;</span>
-                                </button>
-                                {activeFilterOption === option && (
-                                  <div className="city-filter">
-                                    <div className="optionDiv">
-                                      {uniqueValues.map((value) => (
-                                        <label
-                                          key={value}
-                                          className="selfcalling-filter-value"
-                                        >
-                                          <input
-                                            type="checkbox"
-                                            checked={
-                                              selectedFilters[option]?.includes(
-                                                value
-                                              ) || false
-                                            }
-                                            onChange={() =>
-                                              handleFilterSelect(option, value)
-                                            }
-                                          />
-                                          {value}
-                                        </label>
-                                      ))}
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
+
+             <div className="filter-dropdowns">
+  {showFilterSection && (
+    <div className="filter-section">
+      {limitedOptions.map(([optionKey, optionLabel]) => {
+        const uniqueValues = Array.from(
+          new Set(callingList.map((item) => item[optionKey]))
+        );
+
+        return (
+          <div key={optionKey} className="filter-option">
+            <button
+              className="white-Btn"
+              onClick={() => handleFilterOptionClick(optionKey)}
+            >
+              {optionLabel}
+              <span className="filter-icon">&#x25bc;</span>
+            </button>
+            {activeFilterOption === optionKey && (
+              <div className="city-filter">
+                <div className="optionDiv">
+                  {uniqueValues.map((value) => (
+                    <label
+                      key={value}
+                      className="selfcalling-filter-value"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={
+                          selectedFilters[optionKey]?.includes(value) || false
+                        }
+                        onChange={() => handleFilterSelect(optionKey, value)}
+                        style={{marginRight:'5px'}}
+                      />
+                      {value}
+                    </label>
+                  ))}
                 </div>
-              )}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  )}
+</div>
               <div className="attendanceTableData">
                 <table className="attendance-table">
                   <thead>
@@ -900,20 +902,20 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                         onClick={() => handleSort("date")}
                       >
                         Date
-                     &
-                      Time</th>
+                        &
+                        Time</th>
                       <th className="attendanceheading">Candidate Id</th>
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("recruiterName")}
                       >
-                        Recruiter Name
+                        Recruiter's Name
                       </th>
-                      <th className="attendanceheading">Candidate Name</th>
-                      <th className="attendanceheading">Candidate Email</th>
+                      <th className="attendanceheading">Candidate's Name</th>
+                      <th className="attendanceheading">Candidate's Email</th>
                       <th className="attendanceheading">Contact Number</th>
-                      <th className="attendanceheading">Alternate Number</th>
-                      <th className="attendanceheading">sourceName</th>
+                      <th className="attendanceheading">Whatsapp Number</th>
+                      <th className="attendanceheading">Source Name</th>
                       <th className="attendanceheading">Job Designation</th>
                       <th
                         className="attendanceheading"
@@ -927,42 +929,50 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                       </th>
                       <th className="attendanceheading">Current Location</th>
                       <th className="attendanceheading">Full Address</th>
-                      <th className="attendanceheading">Calling Feedback</th>
-                      <th className="attendanceheading">Incentive</th>
-                      <th className="attendanceheading">Interseed or Not</th>
+                      <th className="attendanceheading">Calling Remark</th>
+                      <th className="attendanceheading">Call Summary</th>
+                      <th className="attendanceheading">
+                        Recruiter's Incentive
+                      </th>
+                      <th className="attendanceheading">Interested or Not</th>
                       <th className="attendanceheading">Current Company</th>
                       <th className="attendanceheading">Total Experience</th>
-                      <th className="attendanceheading">relevantExperience</th>
+                      <th className="attendanceheading">Relevant Experience</th>
                       <th className="attendanceheading">Current CTC</th>
                       <th className="attendanceheading">Expected CTC</th>
                       <th className="attendanceheading">Date Of Birth</th>
                       <th className="attendanceheading">Gender</th>
-                      <th className="attendanceheading">Qualification</th>
+                      <th className="attendanceheading">Education</th>
                       <th className="attendanceheading">Year Of Passing</th>
-                      <th className="attendanceheading">Extra Certification</th>
-                      <th className="attendanceheading">Feed Back</th>
+                      <th className="attendanceheading">Any Extra Certification</th>
+                      {/* <th className="attendanceheading">Feedback</th> */}
                       <th className="attendanceheading">Holding Any Offer</th>
                       <th className="attendanceheading">Offer Letter Msg</th>
                       <th className="attendanceheading">Resume</th>
-                      <th className="attendanceheading">NoticePeriod</th>
-                      {userType ==='TeamLeader' && 
-                      <th className="attendanceheading">
-                      Message For Manager
-                    </th>}
-                    {userType ==='Recruiters' && 
-                      <th className="attendanceheading">
-                      Message For Team Leader
-                    </th>}
+                      <th className="attendanceheading">Notice Period</th>
+                      {userType === 'TeamLeader' &&
+                        <th className="attendanceheading">
+                          Message For Manager
+                        </th>}
+                      {userType === 'Recruiters' &&
+                        <th className="attendanceheading">
+                          Message For Team Leader
+                        </th>}
+                      {userType === 'Manager' &&
+                        <th className="attendanceheading">
+                          Message For Super User
+                        </th>}
                       <th className="attendanceheading">
                         Availability For Interview
                       </th>
                       <th className="attendanceheading">Interview Time</th>
-                      <th className="attendanceheading">Final Status</th>
-                      <th className="attendanceheading">Employee Id</th>
-                    
+                      <th className="attendanceheading">Interview Status</th>
+                      <th className="attendanceheading">Employee ID</th>
+
                       {(userType === 'TeamLeader' || userType === 'Manager') && (
                         <th className="attendanceheading">Team Leader Id</th>
                       )}
+
                       <th className="attendanceheading">Action</th>
                     </tr>
                   </thead>
@@ -984,7 +994,12 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.date}                  
+                          {item.date}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.date}</span>
+                          </div>
+                      
+                          {item.candidateAddedTime || "-"}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {item.candidateAddedTime}
@@ -1172,6 +1187,18 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                             </span>
                           </div>
                         </td>
+                        <td
+                      className="tabledata "
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {item.feedBack}{" "}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {item.feedBack}{" "}
+                        </span>
+                      </div>
+                    </td>
 
                         <td
                           className="tabledata"
@@ -1343,32 +1370,6 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                               </span>
                             </div>
                           </td>
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {item.feedBack || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.feedBack}
-                              </span>
-                            </div>
-                          </td>
-
-                          {/* <td
-                              className="tabledata"
-                              onMouseOver={handleMouseOver}
-                              onMouseOut={handleMouseOut}
-                            >
-                              {item.lineUp.feedBack || "-"}
-                              <div className="tooltip">
-                                <span className="tooltiptext">
-                                  {item.lineUp.feedBack}
-                                </span>
-                              </div>
-                            </td> */}
-
                           <td
                             className="tabledata"
                             onMouseOver={handleMouseOver}

@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../HomePage/homePage.css";
+import clouds from "../LogoImages/clouds.png";
+import world from "../LogoImages/world-select-new.svg";
+import developerjob from "../LogoImages/developerjob.svg";
 import { Link } from "react-router-dom";
 import { Modal } from "react-bootstrap";
 import ColorPicker from "./ColorPicker";
@@ -9,7 +12,7 @@ const HomePage = () => {
   const [bgColor, setBgColor] = useState("#ffcb9b");
 
   useEffect(() => {
-    const savedColor = localStorage.getItem("bgColor");
+    const savedColor = localStorage.getItem("selectedColor");
     if (savedColor) {
       setBgColor(savedColor);
     }
@@ -17,10 +20,20 @@ const HomePage = () => {
 
   const handleColorApplied = (color) => {
     setBgColor(color);
-    localStorage.setItem("bgColor", color);
+    localStorage.setItem("selectedColor", color);
     setChooseColor(false); // Close the color picker modal when color is applied
   };
 
+  const handleMouseEnter = () => {
+    enterTimeout = setTimeout(() => {
+      setChooseColor(true);
+    }, 300); // Delay in milliseconds
+  };
+
+  const handleMouseOut = () => {
+    clearTimeout(enterTimeout); // Clear timeout if the mouse leaves before the delay
+    setChooseColor(false);
+  };
   return (
     <div className="bigb">
       <div className="main-homepage-clouds">
@@ -79,7 +92,7 @@ const HomePage = () => {
                 paddingTop: "20px",
               }}
             >
-              <Link to="/Main-Dashboard">
+            <Link to="/Main-Dashboard">
                 <button className="main-homepage-btn">Let's begin</button>
               </Link>
             </div>
@@ -122,5 +135,4 @@ const HomePage = () => {
     </div>
   );
 };
-
 export default HomePage;

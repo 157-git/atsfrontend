@@ -20,7 +20,7 @@ const LoginSignup = ({ onLogin }) => {
   }, []);
 
   useEffect(() => {
-    const savedColor = localStorage.getItem("bgColor");
+    const savedColor = localStorage.getItem("selectedColor");
     if (savedColor) {
       applyColor(savedColor);
     }

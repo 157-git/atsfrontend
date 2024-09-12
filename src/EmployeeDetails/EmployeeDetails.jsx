@@ -7,6 +7,8 @@ import "./EmployeeDetails.css";
 import UpdateEmployee from "./UpdateEmployee";
 import HashLoader from "react-spinners/HashLoader";
 import { API_BASE_URL } from "../api/api";
+import Loader from "../EmployeeSection/loader";
+
 
 // SwapnilRokade_UpdateEmployee_fetchingData From DataBase_16/07
 const EmployeeDetails = () => {
@@ -298,11 +300,12 @@ const EmployeeDetails = () => {
         </>
       ) : (
         <div className="register">
-          <HashLoader
-            color={`${localStorage.getItem("bgColor")}`}
+          {/* <HashLoader
+            color={`${localStorage.getItem("selectedColor")}`}
             aria-label="Loading Spinner"
             data-testid="loader"
-          />
+          /> */}
+          <Loader></Loader>
         </div>
       )}
 

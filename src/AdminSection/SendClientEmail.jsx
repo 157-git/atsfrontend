@@ -12,6 +12,9 @@ import { Form, Table } from "react-bootstrap";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
+
+import Loader from "../EmployeeSection/loader";
+
 // SwapnilRokade_SendClientEmail_ModifyFilters_11/07
 // SwapnilROkade_AddingErrorAndSuccessMessage_19/07
 
@@ -45,50 +48,102 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const [difference, setDifference] = useState();
 
   const navigator = useNavigate();
-  const limitedOptions = [
-    "alternateNumber",
-    "availabilityForInterview",
-    "callingFeedback",
-    "callingTrackerId",
-    "candidateAddedTime",
-    "candidateEmail",
-    "candidateId",
-    "candidateName",
-    "communicationRating",
-    "companyName",
-    "contactNumber",
-    "currentCtcLakh",
-    "currentCtcThousand",
-    "currentLocation",
-    "date",
-    "dateOfBirth",
-    "empId",
-    "expectedCtcLakh",
-    "expectedCtcThousand",
-    "experienceMonth",
-    "experienceYear",
-    "extraCertification",
-    "feedBack",
-    "finalStatus",
-    "fullAddress",
-    "gender",
-    "holdingAnyOffer",
-    "incentive",
-    "interviewTime",
-    "jobDesignation",
-    "msgForTeamLeader",
-    "noticePeriod",
-    "offerLetterMsg",
-    "oldEmployeeId",
-    "qualification",
-    "recruiterName",
-    "relevantExperience",
-    "requirementCompany",
-    "requirementId",
-    "selectYesOrNo",
-    "sourceName",
-    "yearOfPassing",
-  ];
+
+
+
+  // prachi parab sendClientEmail_filter_section 11/9
+  const limitedOptions=[
+   
+      ["alternateNumber", "Alternate Number"],
+      ["availabilityForInterview", "Availability For Interview"],
+      ["callingFeedback", "Calling Feedback"],
+      ["candidateAddedTime", "Candidate Added Time"],
+      ["candidateEmail", "Candidate Email"],
+      ["candidateId", "Candidate Id"],
+      ["candidateName", "Candidate Name"],
+      ["communicationRating", "Communication Rating"],
+      ["companyName", "Company Name"],
+      ["contactNumber", "Contact Number"],
+      ["currentCtcLakh", "Current CTC Lakh"],
+      ["currentCtcThousand", "Current CTC Thousand"],
+      ["currentLocation", "Current Location"],
+      ["date", "Date"],
+      ["dateOfBirth", "Date Of Birth"],
+      ["empId", "Emp Id"],
+      ["expectedCtcLakh", "Expected CTC Lakh"],
+      ["expectedCtcThousand", "Expected CTC Thousand"],
+      ["experienceMonth", "Experience Month"],
+      ["experienceYear", "Experience Year"],
+      ["extraCertification", "Extra Certification"],
+      ["feedBack", "Feedback"],
+      ["finalStatus", "Final Status"],
+      ["fullAddress", "Full Address"],
+      ["gender", "Gender"],
+      ["holdingAnyOffer", "Holding Any Offer"],
+      ["incentive", "Incentive"],
+      ["interviewTime", "Interview Time"],
+      ["jobDesignation", "Job Designation"],
+      ["msgForTeamLeader", "Message For Team Leader"],
+      ["noticePeriod", "Notice Period"],
+      ["offerLetterMsg", "Offer Letter Message"],
+      ["oldEmployeeId", "Old Employee Id"],
+      ["qualification", "Qualification"],
+      ["recruiterName", "Recruiter Name"],
+      ["relevantExperience", "Relevant Experience"],
+      ["requirementCompany", "Applied Company"],
+      ["requirementId", "Job Id"],
+      ["selectYesOrNo", "Status"],
+      ["sourceName", "Source Name"],
+      ["yearOfPassing", "Year Of Passing"]
+    ];
+    
+  
+
+  // const limitedOptions = [
+  //   "alternateNumber",
+  //   "availabilityForInterview",
+  //   "callingFeedback",
+  //   "callingTrackerId",
+  //   "candidateAddedTime",
+  //   "candidateEmail",
+  //   "candidateId",
+  //   "candidateName",
+  //   "communicationRating",
+  //   "companyName",
+  //   "contactNumber",
+  //   "currentCtcLakh",
+  //   "currentCtcThousand",
+  //   "currentLocation",
+  //   "date",
+  //   "dateOfBirth",
+  //   "empId",
+  //   "expectedCtcLakh",
+  //   "expectedCtcThousand",
+  //   "experienceMonth",
+  //   "experienceYear",
+  //   "extraCertification",
+  //   "feedBack",
+  //   "finalStatus",
+  //   "fullAddress",
+  //   "gender",
+  //   "holdingAnyOffer",
+  //   "incentive",
+  //   "interviewTime",
+  //   "jobDesignation",
+  //   "msgForTeamLeader",
+  //   "noticePeriod",
+  //   "offerLetterMsg",
+  //   "oldEmployeeId",
+  //   "qualification",
+  //   "recruiterName",
+  //   "relevantExperience",
+  //   "requirementCompany",
+  //   "requirementId",
+  //   "selectYesOrNo",
+  //   "sourceName",
+  //   "yearOfPassing",
+  // ];
+
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/calling-lineup/${employeeId}/${userType}`)
@@ -104,20 +159,30 @@ const SendClientEmail = ({ clientEmailSender }) => {
       });
   }, [employeeId]);
 
+  // useEffect(() => {
+  //   const options = Object.keys(filteredCallingList[0] || {}).filter((key) =>
+  //     limitedOptions.includes(key)
+  //   );
+  //   setFilterOptions(options);
+  // }, [filteredCallingList]);
+
+
   useEffect(() => {
-    const options = Object.keys(filteredCallingList[0] || {}).filter((key) =>
-      limitedOptions.includes(key)
-    );
+    const options = limitedOptions
+      .filter(([key]) =>
+        Object.keys(filteredCallingList[0] || {}).includes(key)
+      )
+      .map(([key]) => key);
+      
     setFilterOptions(options);
   }, [filteredCallingList]);
 
-  const handleFilterOptionClick = (option) => {
-    if (activeFilterOption === option) {
-      setActiveFilterOption(null);
-    } else {
-      setActiveFilterOption(option);
-    }
+
+  const handleFilterOptionClick = (key) => {
+    setActiveFilterOption(activeFilterOption === key ? null : key);
+    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
   };
+
 
   const handleMouseOver = (event) => {
     const tableData = event.currentTarget;
@@ -237,7 +302,87 @@ const SendClientEmail = ({ clientEmailSender }) => {
               item[option]?.toString().toLowerCase().includes(value)
             )
           );
-        } else {
+        } else if (option === "alternateNumber") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if(option==="currentCtcLakh"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="currentCtcThousand"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="empId"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="expectedCtcLakh"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="expectedCtcThousand"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="experienceMonth"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="experienceYear"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="oldEmployeeId"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }    
+        else if(option==="incentive"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }  
+        
+        else {
+
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
               item[option]
@@ -250,24 +395,15 @@ const SendClientEmail = ({ clientEmailSender }) => {
       }
     });
     setFilteredCallingList(filteredData);
-  };
+  }; 
 
-  const handleFilterSelect = (option, value) => {
-    setSelectedFilters((prevFilters) => {
-      const updatedFilters = { ...prevFilters };
-      if (!updatedFilters[option]) {
-        updatedFilters[option] = [];
-      }
-      const index = updatedFilters[option].indexOf(value);
-      if (index === -1) {
-        updatedFilters[option] = [...updatedFilters[option], value];
-      } else {
-        updatedFilters[option] = updatedFilters[option].filter(
-          (item) => item !== value
-        );
-      }
-      return updatedFilters;
-    });
+ const handleFilterSelect = (key, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [key]: prev[key].includes(value)
+        ? prev[key].filter((item) => item !== value)
+        : [...prev[key], value],
+    }));
   };
 
   const handleSort = (criteria) => {
@@ -366,11 +502,14 @@ const SendClientEmail = ({ clientEmailSender }) => {
     <div className="SCE-list-container">
       {loading ? (
         <div className="register">
-          <HashLoader
-             color={`${localStorage.getItem("bgColor")}`}
+
+          {/* <HashLoader
+             color={`${localStorage.getItem("selectedColor")}`}
             aria-label="Loading Spinner"
             data-testid="loader"
-          />
+          /> */}
+          <Loader></Loader>
+
         </div>
       ) : (
         <>
@@ -429,60 +568,52 @@ const SendClientEmail = ({ clientEmailSender }) => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           )}
-          {showFilterSection && (
-            <div className="filter-section">
-              <h5 style={{ color: "gray", paddingTop: "5px" }}>Filter</h5>
-              <div className="filter-dropdowns">
-                {showFilterSection && (
-                  <div className="filter-section">
-                    <div className="filter-options-container">
-                      {filterOptions.map((option) => {
-                        const uniqueValues = Array.from(
-                          new Set(callingList.map((item) => item[option]))
-                        );
-                        return (
-                          <div key={option} className="filter-option">
-                            <button
-                              className="white-Btn"
-                              onClick={() => handleFilterOptionClick(option)}
-                            >
-                              {option}
-                              <span className="filter-icon">&#x25bc;</span>
-                            </button>
-                            {activeFilterOption === option && (
-                              <div className="city-filter">
-                                <div className="optionDiv">
-                                  {uniqueValues.map((value) => (
-                                    <label
-                                      key={value}
-                                      className="selfcalling-filter-value"
-                                    >
-                                      <input
-                                        type="checkbox"
-                                        checked={
-                                          selectedFilters[option]?.includes(
-                                            value
-                                          ) || false
-                                        }
-                                        onChange={() =>
-                                          handleFilterSelect(option, value)
-                                        }
-                                      />
-                                      {value}
-                                    </label>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
+
+         <div className="filter-dropdowns">
+  {showFilterSection && (
+    <div className="filter-section">
+      {limitedOptions.map(([optionKey, optionLabel]) => {
+        const uniqueValues = Array.from(
+          new Set(callingList.map((item) => item[optionKey]))
+        );
+
+        return (
+          <div key={optionKey} className="filter-option">
+            <button
+              className="white-Btn"
+              onClick={() => handleFilterOptionClick(optionKey)}
+            >
+              {optionLabel}
+              <span className="filter-icon">&#x25bc;</span>
+            </button>
+            {activeFilterOption === optionKey && (
+              <div className="city-filter">
+                <div className="optionDiv">
+                  {uniqueValues.map((value) => (
+                    <label
+                      key={value}
+                      className="selfcalling-filter-value"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={
+                          selectedFilters[optionKey]?.includes(value) || false
+                        }
+                        onChange={() => handleFilterSelect(optionKey, value)}
+                      />
+                      {value}
+                    </label>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
+        );
+      })}
+    </div>
+  )}
+</div>
+
           <div className="attendanceTableData">
             <table className="attendance-table">
               <thead>
@@ -1166,6 +1297,7 @@ const SendEmailPopup = ({
   };
 
   const handleSendEmail = () => {
+
     setIsMailSending(true);
     const emailData = {
       to,
@@ -1184,7 +1316,6 @@ const SendEmailPopup = ({
         perDayBillingSentToClient: 10000, // Assuming a static value for demonstration
       })),
     };
-
     axios
       .post(`${API_BASE_URL}/send-email`,emailData)
       .then((response) => {

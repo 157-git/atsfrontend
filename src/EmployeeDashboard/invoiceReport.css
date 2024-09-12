@@ -29,7 +29,6 @@
   border: 1px solid #ccc;
 }
 
-
 .filter-dropdowns {
   display: flex;
   gap: 2px;
@@ -47,7 +46,6 @@
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
-
 }
 
 .dropbtn {
@@ -172,9 +170,6 @@
 .tooltiptext {
   white-space: nowrap;
 }
-
-
-
 .attendancerows-head {
   background-color: var(--Bg-color);
   color:var(--text-color);
@@ -199,7 +194,6 @@
   height: 30px;
 }
 
-
 .attendancerows:hover {
   background-color: #f2f2f2;
 }
@@ -209,3 +203,4 @@ html::-webkit-scrollbar {
 }
 
 /* Mohini_InvoiceTable_WholePage_09/07/2024_StartLine_1 _to_EndLine_189 */
+

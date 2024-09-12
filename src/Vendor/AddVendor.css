@@ -37,6 +37,7 @@
   .addRec-form-row select {
     width: 100%;
     color:var(--text-color);
+
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -75,6 +76,7 @@
     background-color: var(--button-hover-color);
     color: var(--text-hover-color);
     border-color:var(--text-color);
+
     transform: translateY(-5px);
   }
   

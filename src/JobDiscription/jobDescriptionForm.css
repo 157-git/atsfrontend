@@ -72,7 +72,11 @@
   .section-header {
     font-size: 15px;
     margin-bottom: 5px;
+<<<<<<< HEAD
     color:var(--text-color);
+=======
+    color: gray;
+>>>>>>> 552f1f9a738807efb94703b78c3a076500cbaa8f
   }
   
   /* General styling for form fields */
@@ -97,7 +101,11 @@
   
   
   textarea::placeholder {
+<<<<<<< HEAD
     color:var(--text-color);
+=======
+    color: gray;
+>>>>>>> 552f1f9a738807efb94703b78c3a076500cbaa8f
     font-size: 14px; 
   }
   

@@ -9,6 +9,7 @@ import HashLoader from "react-spinners/HashLoader";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
+import Loader from "./loader";
 
 // SwapnilRokade_lineUpList_ModifyFilters_47to534_11/07
 const LineUpList = ({
@@ -74,58 +75,105 @@ const LineUpList = ({
   });
   //akash_pawar_LineUpList_ShareFunctionality_17/07_71
 
+  // const limitedOptions = [
+  //   "alternateNumber",
+  //   "availabilityForInterview",
+  //   "callingFeedback",
+  //   "callingTrackerId",
+  //   "candidateAddedTime",
+  //   "candidateEmail",
+  //   "candidateId",
+  //   "candidateName",
+  //   "communicationRating",
+  //   "companyName",
+  //   "contactNumber",
+  //   "currentCtcLakh",
+  //   "currentCtcThousand",
+  //   "currentLocation",
+  //   "date",
+  //   "dateOfBirth",
+  //   "empId",
+  //   "expectedCtcLakh",
+  //   "expectedCtcThousand",
+  //   "experienceMonth",
+  //   "experienceYear",
+  //   "extraCertification",
+  //   "feedBack",
+  //   "finalStatus",
+  //   "fullAddress",
+  //   "gender",
+  //   "holdingAnyOffer",
+  //   "incentive",
+  //   "interviewTime",
+  //   "jobDesignation",
+  //   "msgForTeamLeader",
+  //   "noticePeriod",
+  //   "offerLetterMsg",
+  //   "oldEmployeeId",
+  //   "qualification",
+  //   "recruiterName",
+  //   "relevantExperience",
+  //   "requirementCompany",
+  //   "requirementId",
+  //   "selectYesOrNo",
+  //   "sourceName",
+  //   "yearOfPassing",
+  // ];
+
   const limitedOptions = [
-    "alternateNumber",
-    "availabilityForInterview",
-    "callingFeedback",
-    "callingTrackerId",
-    "candidateAddedTime",
-    "candidateEmail",
-    "candidateId",
-    "candidateName",
-    "communicationRating",
-    "companyName",
-    "contactNumber",
-    "currentCtcLakh",
-    "currentCtcThousand",
-    "currentLocation",
-    "date",
-    "dateOfBirth",
-    "empId",
-    "expectedCtcLakh",
-    "expectedCtcThousand",
-    "experienceMonth",
-    "experienceYear",
-    "extraCertification",
-    "feedBack",
-    "finalStatus",
-    "fullAddress",
-    "gender",
-    "holdingAnyOffer",
-    "incentive",
-    "interviewTime",
-    "jobDesignation",
-    "msgForTeamLeader",
-    "noticePeriod",
-    "offerLetterMsg",
-    "oldEmployeeId",
-    "qualification",
-    "recruiterName",
-    "relevantExperience",
-    "requirementCompany",
-    "requirementId",
-    "selectYesOrNo",
-    "sourceName",
-    "yearOfPassing",
+    ["alternateNumber", "Alternate Number"],
+    ["availabilityForInterview", "Availability For Interview"],
+    ["callingFeedback", "Calling Feedback"],
+    ["candidateAddedTime", "Candidate Added Time"],
+    ["candidateEmail", "Candidate Email"],
+    ["candidateId", "Candidate Id"],
+    ["candidateName", "Candidate Name"],
+    ["communicationRating", "Communication Rating"],
+    ["companyName", "Company Name"],
+    ["contactNumber", "Contact Number"],
+    ["currentCtcLakh", "Current CTC (Lakh)"],
+    ["currentCtcThousand", "Current CTC (Thousand)"],
+    ["currentLocation", "Current Location"],
+    ["date", "Date"],
+    ["dateOfBirth", "Date of Birth"],
+    ["empId", "Employee ID"],
+    ["expectedCtcLakh", "Expected CTC (Lakh)"],
+    ["expectedCtcThousand", "Expected CTC (Thousand)"],
+    ["experienceMonth", "Experience (Month)"],
+    ["experienceYear", "Experience (Year)"],
+    ["extraCertification", "Extra Certification"],
+    ["feedBack", "Feedback"],
+    ["finalStatus", "Final Status"],
+    ["fullAddress", "Full Address"],
+    ["gender", "Gender"],
+    ["holdingAnyOffer", "Holding Any Offer"],
+    ["incentive", "Incentive"],
+    ["interviewTime", "Interview Time"],
+    ["jobDesignation", "Job Designation"],
+    ["msgForTeamLeader", "Message for Team Leader"],
+    ["noticePeriod", "Notice Period"],
+    ["offerLetterMsg", "Offer Letter Message"],
+    ["oldEmployeeId", "Old Employee ID"],
+    ["qualification", "Qualification"],
+    ["recruiterName", "Recruiter Name"],
+    ["relevantExperience", "Relevant Experience"],
+    ["requirementCompany", "Applied Company"],
+    ["requirementId", "Job ID"],
+    ["selectYesOrNo", "Status"],
+    ["sourceName", "Source Name"],
+    ["yearOfPassing", "Year of Passing"]
   ];
+  
   const { userType } = useParams();
   console.log(userType);
 
+
   //akash_pawar_LineUpList_ShareFunctionality_16/07_128
   const fetchCallingTrackerData = async () => {
-    const url = `${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`;
+
     try {
-      const response = await fetch(url);
+      const response = await fetch(
+        `${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -135,14 +183,13 @@ const LineUpList = ({
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
-      // Handle error scenarios or show error messages to the user
       setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchCallingTrackerData();
-  }, [employeeIdnew,showUpdateCallingTracker]);
+  }, [employeeIdnew]);
 
   //akash_pawar_selfCallingTracker_ShareFunctionality_17/07_171
 
@@ -196,10 +243,14 @@ const LineUpList = ({
   }, []);
   //akash_pawar_LineUpList_ShareFunctionality_16/07_202
 
+//prachi Parab lineup filterFunctionality_11-09
+
   useEffect(() => {
-    const options = Object.keys(filteredCallingList[0] || {}).filter((key) =>
-      limitedOptions.includes(key)
-    );
+    const options = limitedOptions
+      .filter(([key]) =>
+        Object.keys(filteredCallingList[0] || {}).includes(key)
+      )
+      .map(([key]) => key);
     setFilterOptions(options);
   }, [filteredCallingList]);
 
@@ -344,7 +395,72 @@ const LineUpList = ({
               item[option]?.toString().toLowerCase().includes(value)
             )
           );
-        } else {
+        } else if(option==="currentCtcLakh"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="currentCtcThousand"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="empId"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="expectedCtcLakh"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="expectedCtcThousand"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="experienceMonth"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="experienceYear"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if(option==="oldEmployeeId"){
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        
+        else {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
               item[option]
@@ -357,35 +473,39 @@ const LineUpList = ({
       }
     });
     setFilteredCallingList(filteredData);
+  }; 
+
+  // const filterData = () => {
+  //   let filteredData = [...callingList];
+  //   Object.entries(selectedFilters).forEach(([option, values]) => {
+  //     if (values.length > 0) {
+  //       filteredData = filteredData.filter((item) =>
+  //         values.some((value) =>
+  //           item[option]?.toString().toLowerCase().includes(value.toLowerCase())
+  //         )
+  //       );
+  //     }
+  //   });
+  //   setFilteredCallingList(filteredData);
+  // };
+
+ 
+
+  const handleFilterSelect = (key, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [key]: prev[key].includes(value)
+        ? prev[key].filter((item) => item !== value)
+        : [...prev[key], value],
+    }));
   };
 
-  const handleFilterSelect = (option, value) => {
-    setSelectedFilters((prevFilters) => {
-      const updatedFilters = { ...prevFilters };
-      if (!updatedFilters[option]) {
-        updatedFilters[option] = [];
-      }
 
-      const index = updatedFilters[option].indexOf(value);
-      if (index === -1) {
-        updatedFilters[option] = [...updatedFilters[option], value];
-      } else {
-        updatedFilters[option] = updatedFilters[option].filter(
-          (item) => item !== value
-        );
-      }
-
-      return updatedFilters;
-    });
+  const handleFilterOptionClick = (key) => {
+    setActiveFilterOption(activeFilterOption === key ? null : key);
+    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
   };
 
-  const handleFilterOptionClick = (option) => {
-    if (activeFilterOption === option) {
-      setActiveFilterOption(null);
-    } else {
-      setActiveFilterOption(option);
-    }
-  };
 
   const handleSort = (criteria) => {
     if (criteria === sortCriteria) {
@@ -585,7 +705,6 @@ const LineUpList = ({
     setSelectedCandidateResume("");
     setShowResumeModal(false);
   };
-
   const onClose = ()=>{
 
   }
@@ -740,11 +859,12 @@ const LineUpList = ({
     <div className="calling-list-container">
       {loading ? (
         <div className="register">
-          <HashLoader
-            color={`${localStorage.getItem("bgColor")}`}
+          {/* <HashLoader
+            color={`${localStorage.getItem("selectedColor")}`}
             aria-label="Loading Spinner"
             data-testid="loader"
-          />
+          /> */}
+          <Loader></Loader>
         </div>
       ) : (
         <>
@@ -771,9 +891,12 @@ const LineUpList = ({
                   }}
                 >
                   <div>
-                    <button className="lineUp-share-btn" onClick={showPopup}>
-                      Create Excel
-                    </button>
+
+                    {(userType === 'Manager' || userType === 'TeamLeader') && (
+                      <button className="lineUp-share-btn" onClick={showPopup}>
+                        Create Excel
+                      </button>
+                    )}
 
                     {showExportConfirmation && (
                       <div className="popup-containers">
@@ -855,53 +978,52 @@ const LineUpList = ({
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               )}
-              {showFilterSection && (
-                <div className="filter-section">
-                  <div className="filter-options-container">
-                    {filterOptions.map((option) => {
-                      const uniqueValues = Array.from(
-                        new Set(callingList.map((item) => item[option]))
-                      );
-                      return (
-                        <div key={option} className="filter-option">
-                          <button
-                            className="white-Btn"
-                            onClick={() => handleFilterOptionClick(option)}
-                          >
-                            {option.toUpperCase()}
-                            <span className="filter-icon">&#x25bc;</span>
-                          </button>
-                          {activeFilterOption === option && (
-                            <div className="city-filter">
-                              <div className="optionDiv">
-                                {uniqueValues.map((value) => (
-                                  <label
-                                    key={value}
-                                    className="selfcalling-filter-value"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      checked={
-                                        selectedFilters[option]?.includes(
-                                          value
-                                        ) || false
-                                      }
-                                      onChange={() =>
-                                        handleFilterSelect(option, value)
-                                      }
-                                    />
-                                    {value}
-                                  </label>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
+     
+       <div className="filter-dropdowns">
+  {showFilterSection && (
+    <div className="filter-section">
+      {limitedOptions.map(([optionKey, optionLabel]) => {
+        const uniqueValues = Array.from(
+          new Set(callingList.map((item) => item[optionKey]))
+        );
+
+        return (
+          <div key={optionKey} className="filter-option">
+            <button
+              className="white-Btn"
+              onClick={() => handleFilterOptionClick(optionKey)}
+            >
+              {optionLabel}
+              <span className="filter-icon">&#x25bc;</span>
+            </button>
+            {activeFilterOption === optionKey && (
+              <div className="city-filter">
+                <div className="optionDiv">
+                  {uniqueValues.map((value) => (
+                    <label
+                      key={value}
+                      className="selfcalling-filter-value"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={
+                          selectedFilters[optionKey]?.includes(value) || false
+                        }
+                        onChange={() => handleFilterSelect(optionKey, value)}
+                        style={{marginRight:'5px'}}
+                      />
+                      {value}
+                    </label>
+                  ))}
                 </div>
-              )}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  )}
+</div>
               <div className="attendanceTableData">
                 <table className="attendance-table">
                   <thead>
@@ -918,14 +1040,15 @@ const LineUpList = ({
                           />
                         </th>
                       ) : null}
+
                       <th className="attendanceheading">No.</th>
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("date")}
                       >
                         Date
-                     &
-                      Time</th>
+                        &
+                        Time</th>
                       <th className="attendanceheading">Candidate Id</th>
                       <th
                         className="attendanceheading"
@@ -951,7 +1074,9 @@ const LineUpList = ({
                       </th>
                       <th className="attendanceheading">Current Location</th>
                       <th className="attendanceheading">Full Address</th>
-                      <th className="attendanceheading">Calling Feedback</th>
+
+                      <th className="attendanceheading">Calling Remark</th>
+                      <th className="attendanceheading">Call Summary</th>
                       <th className="attendanceheading">
                         Recruiter's Incentive
                       </th>
@@ -971,14 +1096,18 @@ const LineUpList = ({
                       <th className="attendanceheading">Offer Letter Msg</th>
                       <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">Notice Period</th>
-                     {userType ==='TeamLeader' && 
-                      <th className="attendanceheading">
-                      Message For Manager
-                    </th>}
-                    {userType ==='Recruiters' && 
-                      <th className="attendanceheading">
-                      Message For Team Leader
-                    </th>}
+                      {userType === 'TeamLeader' &&
+                        <th className="attendanceheading">
+                          Message For Manager
+                        </th>}
+                      {userType === 'Recruiters' &&
+                        <th className="attendanceheading">
+                          Message For Team Leader
+                        </th>}
+                      {userType === 'Manager' &&
+                        <th className="attendanceheading">
+                          Message For Super User
+                        </th>}
                       <th className="attendanceheading">
                         Availability For Interview
                       </th>
@@ -1018,7 +1147,6 @@ const LineUpList = ({
                           <div className="tooltip">
                             <span className="tooltiptext">{item.date}</span>
                           </div>
-                      
                           {item.candidateAddedTime || "-"}
                           <div className="tooltip">
                             <span className="tooltiptext">
@@ -1208,6 +1336,18 @@ const LineUpList = ({
                             </span>
                           </div>
                         </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.feedBack || "-"}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.feedBack}
+                            </span>
+                          </div>
+                        </td>
 
                         <td
                           className="tabledata"
@@ -1221,7 +1361,6 @@ const LineUpList = ({
                             </span>
                           </div>
                         </td>
-
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
@@ -1537,7 +1676,6 @@ const LineUpList = ({
                               className="fa-regular fa-pen-to-square"
                             ></i>
                           </td>
-                          
                         </>
                       </tr>
                     ))}

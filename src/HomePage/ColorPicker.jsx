@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import "./ColorPicker.css";
 
@@ -21,7 +22,7 @@ const ColorPicker = ({ onColorApplied }) => {
   const [bgColor, setBgColor] = useState("");
 
   useEffect(() => {
-    const savedColor = localStorage.getItem("bgColor");
+    const savedColor = localStorage.getItem('selectedColor');
     if (savedColor) {
       setBgColor(savedColor);
       applyColor(savedColor);
@@ -37,7 +38,7 @@ const ColorPicker = ({ onColorApplied }) => {
     document.documentElement.style.setProperty("--button-color", buttonColor);
     document.documentElement.style.setProperty("--button-hover-color", hoverColor);
     document.documentElement.style.setProperty("--hover-effect", hoverColor);
-
+  
     localStorage.setItem("bgColor", originalColor);
     localStorage.setItem("buttonColor", buttonColor);
     localStorage.setItem("hoverColor", hoverColor);
@@ -45,6 +46,7 @@ const ColorPicker = ({ onColorApplied }) => {
   };
 
   const handleColorClick = (color) => {
+    localStorage.setItem('selectedColor', color);
     setBgColor(color);
     applyColor(color);
     onColorApplied(color);

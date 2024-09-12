@@ -8,6 +8,7 @@ import ResumeList from "./resumeList";
 import { toast } from "react-toastify";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
 import { API_BASE_URL } from "../api/api";
+import Loader from "../EmployeeSection/loader";
 
 const CallingExcel = ({ onClose, displayCandidateForm }) => {
   const [file, setFile] = useState(null);
@@ -21,7 +22,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showCards, setShowCards] = useState(true);
   const [showCallingTrackerForm, setShowCallingTrackerForm] = useState(false);
-
+  const [loading, setLoading] = useState(false)
   const fileInputRef = useRef(null);
   const lineupFileInputRef = useRef(null);
   const resumeFileInputRef = useRef(null);
@@ -53,7 +54,6 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
       inputRef.current.value = "";
     }
   };
-
   const handleDownload = () => {
     // URL of the file to be downloaded
     const fileUrl = 'F:\ATSFRONTEND\atsfrontend-master\src\assets\Calling_Tracker_Arsh_20_06(1).xlsx'; // Replace with your file URL
@@ -72,8 +72,6 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
     // Remove the anchor from the body
     document.body.removeChild(link);
   };
-
-
   const handleUpload = async () => {
     if (!file) {
       toast.error("Please select a file to upload.");
@@ -101,6 +99,8 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
       }
     } catch (error) {
       toast.error("Upload error:", error);
+    }finally {
+      setLoading(false); // Hide loader
     }
   };
 
@@ -111,6 +111,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
     }
     const formData = new FormData();
     formData.append("file", file);
+    setLoading(true);
     try {
       await axios.post(
 
@@ -132,6 +133,8 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
       resetFileInput(lineupFileInputRef);
     } catch (error) {
       toast.error("Upload error:", error);
+    }finally {
+      setLoading(false); // Hide loader
     }
   };
 
@@ -140,6 +143,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
     for (let i = 0; i < selectedFiles.length; i++) {
       formData.append("files", selectedFiles[i]);
     }
+    setLoading(true);
     try {
       await axios.post(
         `${API_BASE_URL}/add-multiple-resume/${employeeId}/${userType}`,
@@ -154,6 +158,8 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
       resetFileInput(resumeFileInputRef);
     } catch (error) {
       toast.error("Error uploading files:", error);
+    }finally {
+      setLoading(false); // Hide loader
     }
   };
 
@@ -206,7 +212,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
                   <button onClick={() => handleTableChange("CallingExcelList")}>
                     View
                   </button>
-                  <button onClick={handleDownload}>Download Excel Format</button>
+      
                 </div>
               </div>
             </div>
@@ -238,7 +244,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
                   <button onClick={() => handleTableChange("LineupExcelData")}>
                     View
                   </button>
-                  <button>Download Excel Format</button>
+        
                 </div>
               </div>
             </div>
@@ -275,7 +281,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
           </div>
         </div>
       )}
-
+    {loading && <Loader />} 
       {activeTable === "CallingExcelList" && (
         <CallingExcelList
           onCloseTable={() => setActiveTable("")}

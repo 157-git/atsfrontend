@@ -9,6 +9,7 @@ import * as XLSX from "xlsx";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
+import Loader from "../EmployeeSection/loader";
 
 // SwapnilRokade_SelectedCandidate_ModifyFilters_47to534_11/07
 const SelectedCandidate = ({ loginEmployeeName }) => {
@@ -66,50 +67,94 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   //akash_pawar_SelectedCandidate_ShareFunctionality_18/07_58
 
   const { employeeId } = useParams();
+  // const limitedOptions = [
+  //   "alternateNumber",
+  //   "availabilityForInterview",
+  //   "callingFeedback",
+  //   "callingTrackerId",
+  //   "candidateAddedTime",
+  //   "candidateEmail",
+  //   "candidateId",
+  //   "candidateName",
+  //   "communicationRating",
+  //   "companyName",
+  //   "contactNumber",
+  //   "currentCtcLakh",
+  //   "currentCtcThousand",
+  //   "currentLocation",
+  //   "date",
+  //   "dateOfBirth",
+  //   "empId",
+  //   "expectedCtcLakh",
+  //   "expectedCtcThousand",
+  //   "experienceMonth",
+  //   "experienceYear",
+  //   "extraCertification",
+  //   "feedBack",
+  //   "finalStatus",
+  //   "fullAddress",
+  //   "gender",
+  //   "holdingAnyOffer",
+  //   "incentive",
+  //   "interviewTime",
+  //   "jobDesignation",
+  //   "msgForTeamLeader",
+  //   "noticePeriod",
+  //   "offerLetterMsg",
+  //   "oldEmployeeId",
+  //   "qualification",
+  //   "recruiterName",
+  //   "relevantExperience",
+  //   "requirementCompany",
+  //   "requirementId",
+  //   "selectYesOrNo",
+  //   "sourceName",
+  //   "yearOfPassing",
+  // ];
+
   const limitedOptions = [
-    "alternateNumber",
-    "availabilityForInterview",
-    "callingFeedback",
-    "callingTrackerId",
-    "candidateAddedTime",
-    "candidateEmail",
-    "candidateId",
-    "candidateName",
-    "communicationRating",
-    "companyName",
-    "contactNumber",
-    "currentCtcLakh",
-    "currentCtcThousand",
-    "currentLocation",
-    "date",
-    "dateOfBirth",
-    "empId",
-    "expectedCtcLakh",
-    "expectedCtcThousand",
-    "experienceMonth",
-    "experienceYear",
-    "extraCertification",
-    "feedBack",
-    "finalStatus",
-    "fullAddress",
-    "gender",
-    "holdingAnyOffer",
-    "incentive",
-    "interviewTime",
-    "jobDesignation",
-    "msgForTeamLeader",
-    "noticePeriod",
-    "offerLetterMsg",
-    "oldEmployeeId",
-    "qualification",
-    "recruiterName",
-    "relevantExperience",
-    "requirementCompany",
-    "requirementId",
-    "selectYesOrNo",
-    "sourceName",
-    "yearOfPassing",
-  ];
+    ["alternateNumber", "Alternate Number"],
+    ["availabilityForInterview", "Availability For Interview"],
+    ["callingFeedback", "Calling Feedback"],
+    ["candidateAddedTime", "Candidate Added Time"],
+    ["candidateEmail", "Candidate Email"],
+    ["candidateId", "Candidate Id"],
+    ["candidateName", "Candidate Name"],
+    ["communicationRating", "Communication Rating"],
+    ["companyName", "Company Name"],
+    ["contactNumber", "Contact Number"],
+    ["currentCtcLakh", "Current CTC (Lakh)"],
+    ["currentCtcThousand", "Current CTC (Thousand)"],
+    ["currentLocation", "Current Location"],
+    ["date", "Date"],
+    ["dateOfBirth", "Date Of Birth"],
+    ["empId", "Emp Id"],
+    ["expectedCtcLakh", "Expected CTC (Lakh)"],
+    ["expectedCtcThousand", "Expected CTC (Thousand)"],
+    ["experienceMonth", "Experience Month"],
+    ["experienceYear", "Experience Year"],
+    ["extraCertification", "Extra Certification"],
+    ["feedBack", "FeedBack"],
+    ["finalStatus", "Final Status"],
+    ["fullAddress", "Full Address"],
+    ["gender", "Gender"],
+    ["holdingAnyOffer", "Holding Any Offer"],
+    ["incentive", "Incentive"],
+    ["interviewTime", "Interview Time"],
+    ["jobDesignation", "Job Designation"],
+    ["msgForTeamLeader", "Message For Team Leader"],
+    ["noticePeriod", "Notice Period"],
+    ["offerLetterMsg", "Offer Letter Message"],
+    ["oldEmployeeId", "Old Employee Id"],
+    ["qualification", "Qualification"],
+    ["recruiterName", "Recruiter Name"],
+    ["relevantExperience", "Relevant Experience"],
+    ["requirementCompany", "Applying Company"],
+    ["requirementId", "Job Id"],
+    ["selectYesOrNo", "Status"],
+    ["sourceName", "Source Name"],
+    ["yearOfPassing", "Year Of Passing"]
+  ]
   const { userType } = useParams();
 
   useEffect(() => {
@@ -117,11 +162,15 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   }, []);
 
   useEffect(() => {
-    const options = Object.keys(filteredCallingList[0] || {}).filter((key) =>
-      limitedOptions.includes(key)
-    );
+    const options = limitedOptions
+      .filter(([key]) =>
+        Object.keys(filteredCallingList[0] || {}).includes(key)
+      )
+      .map(([key]) => key);
+      
     setFilterOptions(options);
   }, [filteredCallingList]);
+  
 
   const fetchShortListedData = async () => {
     try {
@@ -295,25 +344,35 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     });
     setFilteredCallingList(filteredData);
   };
-  const handleFilterSelect = (option, value) => {
-    setSelectedFilters((prevFilters) => {
-      const updatedFilters = { ...prevFilters };
-      if (!updatedFilters[option]) {
-        updatedFilters[option] = [];
-      }
+  // const handleFilterSelect = (option, value) => {
+  //   setSelectedFilters((prevFilters) => {
+  //     const updatedFilters = { ...prevFilters };
+  //     if (!updatedFilters[option]) {
+  //       updatedFilters[option] = [];
+  //     }
 
-      const index = updatedFilters[option].indexOf(value);
-      if (index === -1) {
-        updatedFilters[option] = [...updatedFilters[option], value];
-      } else {
-        updatedFilters[option] = updatedFilters[option].filter(
-          (item) => item !== value
-        );
-      }
+  //     const index = updatedFilters[option].indexOf(value);
+  //     if (index === -1) {
+  //       updatedFilters[option] = [...updatedFilters[option], value];
+  //     } else {
+  //       updatedFilters[option] = updatedFilters[option].filter(
+  //         (item) => item !== value
+  //       );
+  //     }
 
-      return updatedFilters;
-    });
+  //     return updatedFilters;
+  //   });
+  // };
+
+  const handleFilterSelect = (key, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [key]: prev[key].includes(value)
+        ? prev[key].filter((item) => item !== value)
+        : [...prev[key], value],
+    }));
   };
+  
 
   const handleSort = (criteria) => {
     if (criteria === sortCriteria) {
@@ -328,12 +387,18 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     setShowSearchBar(false);
     setShowFilterSection(!showFilterSection);
   };
-  const handleFilterOptionClick = (option) => {
-    if (activeFilterOption === option) {
-      setActiveFilterOption(null);
-    } else {
-      setActiveFilterOption(option);
-    }
+  // const handleFilterOptionClick = (option) => {
+  //   if (activeFilterOption === option) {
+  //     setActiveFilterOption(null);
+  //   } else {
+  //     setActiveFilterOption(option);
+  //   }
+  // };
+// prachi
+
+  const handleFilterOptionClick = (key) => {
+    setActiveFilterOption(activeFilterOption === key ? null : key);
+    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
   };
 
   const getSortIcon = (criteria) => {
@@ -699,11 +764,12 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     <div className="App-after">
       {loading ? (
         <div className="register">
-          <HashLoader
-             color={`${localStorage.getItem("bgColor")}`}
+          {/* <HashLoader
+             color={`${localStorage.getItem("selectedColor")}`}
             aria-label="Loading Spinner"
             data-testid="loader"
-          />
+          /> */}
+          <Loader></Loader>
         </div>
       ) : (
         <>
@@ -732,10 +798,11 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                   }}
                 >
                   <div>
+                     {(userType === 'Manager' || userType === 'TeamLeader') && (
                     <button className="lineUp-share-btn" onClick={showPopup}>
-                      Create Excel
+                    Create Excel
                     </button>
-
+                     )}
                     {showExportConfirmation && (
                       <div className="popup-containers">
                         <p className="confirmation-texts">
@@ -815,53 +882,52 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               )}
-              {showFilterSection && (
-                <div className="filter-section">
-                  <div className="filter-options-container">
-                    {filterOptions.map((option) => {
-                      const uniqueValues = Array.from(
-                        new Set(callingList.map((item) => item[option]))
-                      );
-                      return (
-                        <div key={option} className="filter-option">
-                          <button
-                            className="white-Btn"
-                            onClick={() => handleFilterOptionClick(option)}
-                          >
-                            {option}
-                            <span className="filter-icon">&#x25bc;</span>
-                          </button>
-                          {activeFilterOption === option && (
-                            <div className="city-filter">
-                              <div className="optionDiv">
-                                {uniqueValues.map((value) => (
-                                  <label
-                                    key={value}
-                                    className="selfcalling-filter-value"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      checked={
-                                        selectedFilters[option]?.includes(
-                                          value
-                                        ) || false
-                                      }
-                                      onChange={() =>
-                                        handleFilterSelect(option, value)
-                                      }
-                                    />
-                                    {value}
-                                  </label>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
+              
+<div className="filter-dropdowns">
+  {showFilterSection && (
+    <div className="filter-section">
+      {limitedOptions.map(([optionKey, optionLabel]) => {
+        const uniqueValues = Array.from(
+          new Set(callingList.map((item) => item[optionKey]))
+        );
+
+        return (
+          <div key={optionKey} className="filter-option">
+            <button
+              className="white-Btn"
+              onClick={() => handleFilterOptionClick(optionKey)}
+            >
+              {optionLabel}
+              <span className="filter-icon">&#x25bc;</span>
+            </button>
+            {activeFilterOption === optionKey && (
+              <div className="city-filter">
+                <div className="optionDiv">
+                  {uniqueValues.map((value) => (
+                    <label
+                      key={value}
+                      className="selfcalling-filter-value"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={
+                          selectedFilters[optionKey]?.includes(value) || false
+                        }
+                        onChange={() => handleFilterSelect(optionKey, value)}
+                        style={{marginRight:'5px'}}
+                      />
+                      {value}
+                    </label>
+                  ))}
                 </div>
-              )}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  )}
+</div>
 
               <div className="attendanceTableData">
                 <table className="attendance-table">
@@ -885,9 +951,9 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                         onClick={() => handleSort("date")}
                       >
                         Date
-                     &
-                      Time</th>
-                      <th className="attendanceheading">Candidate's Id</th>
+                        &
+                        Time</th>
+                      <th className="attendanceheading">Candidate Id</th>
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("recruiterName")}
@@ -913,11 +979,11 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                       <th className="attendanceheading">Current Location</th>
                       <th className="attendanceheading">Full Address</th>
                       <th className="attendanceheading">Calling Remark</th>
+                      <th className="attendanceheading">Call Summary</th>
                       <th className="attendanceheading">
                         Recruiter's Incentive
                       </th>
                       <th className="attendanceheading">Interested or Not</th>
-
                       <th className="attendanceheading">Current Company</th>
                       <th className="attendanceheading">Total Experience</th>
                       <th className="attendanceheading">Relevant Experience</th>
@@ -927,29 +993,31 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                       <th className="attendanceheading">Gender</th>
                       <th className="attendanceheading">Education</th>
                       <th className="attendanceheading">Year Of Passing</th>
-                      <th className="attendanceheading">Extra Certification</th>
-                      <th className="attendanceheading">Calling FeedBack</th>
+                      <th className="attendanceheading">Any Extra Certification</th>
+                      {/* <th className="attendanceheading">Feedback</th> */}
                       <th className="attendanceheading">Holding Any Offer</th>
-                      <th className="attendanceheading">
-                        Offer Letter Message
-                      </th>
+                      <th className="attendanceheading">Offer Letter Msg</th>
                       <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">Notice Period</th>
-                      {userType ==='TeamLeader' && 
-                      <th className="attendanceheading">
-                      Message For Manager
-                    </th>}
-                    {userType ==='Recruiters' && 
-                      <th className="attendanceheading">
-                      Message For Team Leader
-                    </th>}
+                      {userType === 'TeamLeader' &&
+                        <th className="attendanceheading">
+                          Message For Manager
+                        </th>}
+                      {userType === 'Recruiters' &&
+                        <th className="attendanceheading">
+                          Message For Team Leader
+                        </th>}
+                      {userType === 'Manager' &&
+                        <th className="attendanceheading">
+                          Message For Super User
+                        </th>}
                       <th className="attendanceheading">
                         Availability For Interview
                       </th>
                       <th className="attendanceheading">Interview Time</th>
-                      <th className="attendanceheading">Final Status</th>
-                      <th className="attendanceheading">Employee Id</th>
-                      
+                      <th className="attendanceheading">Interview Status</th>
+                      <th className="attendanceheading">Employee ID</th>
+
                       {(userType === 'TeamLeader' || userType === 'Manager') && (
                         <th className="attendanceheading">Team Leader Id</th>
                       )}
@@ -1162,6 +1230,18 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                         </span>
                       </div>
                     </td>
+                    <td
+                      className="tabledata "
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {item.feedBack}{" "}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {item.feedBack}{" "}
+                        </span>
+                      </div>
+                    </td>
                         <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
@@ -1311,18 +1391,6 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {item.extraCertification}
-                            </span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata "
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.feedBack}{" "}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.feedBack}{" "}
                             </span>
                           </div>
                         </td>

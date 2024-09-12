@@ -5,8 +5,6 @@
   position: sticky;
   left: 5px;
   margin-bottom: 10px;
-
-
 }
 
 .shorttext {
@@ -15,9 +13,107 @@
 
 .attendanceTableHeader h6 {
   text-align: center;
-
 }
 
+/* ----------------------------------------------------------------------------------------- */
+
+.attendance-table ::-webkit-scrollbar {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: scroll;
+  white-space: nowrap;
+  background-color: #000;
+}
+
+.attendance-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #ffcb9b;
+  color: gray;
+  z-index: 1;
+  height: 30px;
+  white-space: nowrap;
+  color: gray;
+  max-width: auto !important;
+  font-size: 16px;
+  font-weight: 500;
+}
+.attendanceheading {
+  border: 1px solid gray;
+  padding: 4px;
+  white-space: nowrap;
+  width: auto !important;
+  height: 30px;
+}
+.tabledata {
+  /* overflow: hidden; */
+  text-overflow: ellipsis;
+  position: relative;
+  padding: 2px;
+  max-width: 50px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+.tooltip {
+  visibility: hidden;
+  background-color: #ffcb9b;
+  color: #000;
+  text-align: center;
+  border-radius: 5px;
+  position: fixed;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s;
+  text-overflow: clip;
+  visibility: visible;
+}
+
+.tabledata:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltiptext {
+  white-space: nowrap;
+}
+
+.attendancerows-head {
+  background-color: var(--Bg-color);
+  color: gray;
+  text-align: center;
+  font-size: 18px;
+  border: 1px solid gray;
+  max-width: 300px;
+}
+.attendanceTableData::-webkit-scrollbar {
+  display: none;
+}
+.attendanceTableData {
+  height: 85vh;
+  width: 100%;
+  overflow-y: auto;
+}
+.attendancerows {
+  height: 30px;
+}
+
+.attendancerows:hover {
+  background-color: #f2f2f2;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+.attendancerows i {
+  font-size: 15px;
+  margin-left: 15px;
+}
+
+.attendanceTableData h3 {
+  color: grey;
+  text-align: center;
+}
+/* ----------------------------------------------------------------------------------------- */
 .attendanceTableHeader button {
   font-size: 16px;
   border-radius: 15px;
@@ -43,7 +139,6 @@
   padding: 4px 15px;
   font-weight: 100;
   border: 1px solid gray;
-
 }
 
 .shortlisted-tablehead {
@@ -67,7 +162,7 @@
 }
 
 .shortlistedcandidate .tabledaterow:hover {
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
 }
 
 .shortlistedcan-share-btn,
@@ -113,4 +208,12 @@
 
 .App-after.blurred {
   background-color: #f2f2f2;
+
+}
+.filter-option button {
+  text-transform: capitalize;
+}
+
+.selfcalling-filter-value {
+  text-transform: capitalize;
 }

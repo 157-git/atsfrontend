@@ -1,65 +1,65 @@
- /* Name:-Prachi Parab Component:-Line Up Data Report data page css
+
+/* Name:-Prachi Parab Component:-Line Up Data Report data page css
          End LineNo:-4 to 250 Date:-05/07 */
 
-         .filter-section {
-          margin-bottom: 20px;
-        }
-        
-        .filter-dropdowns {
-          display: flex;
-          flex-wrap: wrap;
-        }
-        
-        .filter-dropdown {
-          margin-right: 20px;
-        }
-        
-        .filter-dropdown label {
-          display: block;
-          margin-bottom: 5px;
-        }
-        
-        .filter-dropdown select {
-          width: 150px; /* Adjust as needed */
-          padding: 5px;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          
-        }
-        
-        /* Style the filter section */
-        .filter-section {
-          margin-top: 20px;
-        }
-        
-        /* Style the filter dropdowns */
-        .filter-dropdown {
-          margin-bottom: 10px;
-        }
-        
-        /* Style the dropdown button */
-        .dropbtn { 
-          cursor: pointer;
-          border: 1px solid gray ;
-            border-radius: 15px;
-            background-color: white;
-            font-size: 16px ;
-            color: #ffcb9b;
-            height: 30px;
-            width: auto;
-            padding-left: 15px;
-            padding-right: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        /* .dropbtn:hover{
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.filter-dropdowns {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.filter-dropdown {
+  margin-right: 20px;
+}
+
+.filter-dropdown label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.filter-dropdown select {
+  width: 150px; /* Adjust as needed */
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Style the filter section */
+.filter-section {
+  margin-top: 20px;
+}
+
+/* Style the filter dropdowns */
+.filter-dropdown {
+  margin-bottom: 10px;
+}
+
+/* Style the dropdown button */
+.dropbtn {
+  cursor: pointer;
+  border: 1px solid gray;
+  border-radius: 15px;
+  background-color: white;
+  font-size: 16px;
+  color: #ffcb9b;
+  height: 30px;
+  width: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* .dropbtn:hover{
+>>>>>>> 552f1f9a738807efb94703b78c3a076500cbaa8f
           background-color: white;
         
           border: 1px solid gray;
-        } */
-        
+        } */        
         /* Style the dropdown content (hidden by default) */
         .dropdown-content {
           display: none;
@@ -183,6 +183,8 @@
         }
         
         /* .attendancerowsdata,
+
+
         .tabledata {
           text-align: center;
           font-size: 16px;
@@ -193,6 +195,7 @@
           text-overflow: clip;
           visibility: visible;
         } */
+
         
         .attendanceTableData::-webkit-scrollbar {
           display: none;
@@ -248,3 +251,4 @@
           background: white;
           color: #ffcb9b;
         }
+      

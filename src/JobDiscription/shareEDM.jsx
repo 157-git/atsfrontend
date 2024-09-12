@@ -7,14 +7,13 @@ import { toast } from 'react-toastify';
 import { API_BASE_URL } from "../api/api";
 
 
-
 function ShareEDM({ Descriptions, onShareEdm }) {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
-    const { employeeId } = useParams()
+    const { employeeId, userType } = useParams()
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/edm-details/1/1`)
+        fetch(`${API_BASE_URL}/edm-details/${Descriptions}/${employeeId}/${userType}`)
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
@@ -85,7 +84,6 @@ function ShareEDM({ Descriptions, onShareEdm }) {
                                 <p>{data.jobType} - {data.detailAddress}</p>
                                 <div className="contact">
                                     <div className="image-container">
-                                        {/* Use the imported image */}
                                         <img src={profileImage} alt="Profile Image" />
                                     </div>
                                     <div className="details1">
@@ -112,10 +110,6 @@ function ShareEDM({ Descriptions, onShareEdm }) {
                     </div>
                 </div>
             )}
-
-
-
-
         </div>
     );
 }

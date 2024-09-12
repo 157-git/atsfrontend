@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 // import Button from "react-bootstrap/Button";
 // Dhanashree_Lokhande_EmployeeProfileData_changing_performace indicator color/11/09
+
 import { useParams } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import "../EmployeeSection/employeeProfile.css";
@@ -106,8 +107,9 @@ const EmployeeProfileData = ({
                   <p className="m-0">
                     <b>Designation: {employeeData.designation}</b>
                   </p>
-
+                  <div className="emp-profile-details-subdiv"></div>
                 </div>
+                
                 <div className="employee-profile-basic-details">
                   <p className="m-1">
                     <b>Resume : </b>Resume.pdf{" "}

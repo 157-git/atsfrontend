@@ -33,7 +33,9 @@
 
 /* Optional: Focus and hover styles */
 .option input[type="text"]:focus {
+
   border-color:var(--text-color);
+
   /* Bootstrap primary color */
   outline: none;
   /* Remove default outline */
@@ -41,7 +43,9 @@
 }
 
 .option input[type="text"]:hover {
+
   border-color:var(--text-color);
+
 
 }
 

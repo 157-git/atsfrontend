@@ -1,10 +1,14 @@
-.filter-section {
+
+.filter-sectiontl {
   margin-bottom: 20px;
+  display: flex;
+
 }
 
 .filter-dropdowns {
   display: flex;
   flex-wrap: wrap;
+
 }
 
 .filter-dropdown {
@@ -18,21 +22,11 @@
 
 .filter-dropdown select {
   width: 150px;
-  /* Adjust as needed */
+
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
 
-}
-
-/* Style the filter section */
-.filter-section {
-  margin-top: 20px;
-}
-
-/* Style the filter dropdowns */
-.filter-dropdown {
-  margin-bottom: 10px;
 }
 
 /* Style the dropdown button */
@@ -101,11 +95,13 @@
   position: sticky;
   top: 0;
   background-color: #ffcb9b;
+
   color:var(--text-color);
   z-index: 1;
   height: 30px;
   white-space: nowrap;
   color:var(--text-color);
+
   max-width: auto !important;
   font-size: 16px;
   font-weight: 500;
@@ -159,7 +155,9 @@
 
 .attendancerows-head {
   background-color: var(--Bg-color);
+
   color:var(--text-color);
+
   /* font-weight: 100; */
   text-align: center;
   font-size: 18px;
@@ -178,11 +176,10 @@
 }
 
 .attendancerows {
+
   color:var(--text-color);
   height: 30px;
 }
-
-
 .attendancerows:hover {
   background-color: #f2f2f2;
 }
@@ -192,6 +189,7 @@ html::-webkit-scrollbar {
 }
 
 /* Team_Leader.css */
+
 
 
 /* CSS for table already added so no need to add */
@@ -232,6 +230,7 @@ html::-webkit-scrollbar {
 .filter-dropdown {
   margin-bottom: 10px;
 }
+
 
 /* Style the dropdown button */
 .dropbtn {
@@ -298,13 +297,6 @@ html::-webkit-scrollbar {
 }
 
 /*End Prachi ChatSection 28/06 line no 235 to 244 */
-
-
-
-
-
-
-
 
 /* Overall container */
 .AppsTL {
@@ -382,7 +374,7 @@ html::-webkit-scrollbar {
 }
 
 .select-all-buttonTL {
-  
+
   background-color: var(--button-color);
   color: #fff;
   border: 1px solid gray;
@@ -459,7 +451,9 @@ html::-webkit-scrollbar {
   /* Prachi TeamLeader 1/7 */
   cursor: pointer;
   background-color: var(--Bg-color);
+
   color:var(--text-color);
+
   border: 1px solid gray;
   border-radius: 15px;
   text-align: center;
@@ -482,14 +476,15 @@ html::-webkit-scrollbar {
   width: 100%;
   padding: 5px;
   cursor: pointer;
+
   color:var(--text-color);
+
   background-color: var(--Bg-color);
   text-align: center;
   font-size: 18px;
   max-height: 70vh;
   overflow-y: auto;
   text-transform: capitalize;
-
 
 }
 
@@ -499,7 +494,9 @@ html::-webkit-scrollbar {
   width: 100%;
   padding: 5px;
   cursor: pointer;
+
   color:var(--text-color);
+
   background-color: var(--Bg-color);
   text-align: center;
   font-size: 18px;
@@ -530,7 +527,6 @@ html::-webkit-scrollbar {
   height: 15px;
   width: 15px;
   margin-right: 9px;
-
 
 }
 
@@ -584,8 +580,10 @@ html::-webkit-scrollbar {
 /* Assignments table */
 
 
+
 .all_assignbtn,
 .remove_assignbtn {
+
 
   background-color: var(--button-color);
   color: white;
@@ -597,7 +595,6 @@ html::-webkit-scrollbar {
   border-radius: 15px;
   height: 30px;
   /* width: 100px; */
-
 }
 
 .all_assignbtn:hover {
@@ -632,7 +629,6 @@ html::-webkit-scrollbar {
 }
 
 .all_assignbtn-Action {
-
   background-color: var(--button-color);
   color: white;
   align-items: center;
@@ -682,7 +678,6 @@ html::-webkit-scrollbar {
 .dropdown-icon.open {
   transform: rotate(180deg);
 }
-
 
 
 .TLR-buttons-div {
@@ -741,7 +736,9 @@ html::-webkit-scrollbar {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   color:var(--text-color);
+
   padding: 10px;
 }
 
@@ -769,4 +766,6 @@ html::-webkit-scrollbar {
   font-size: 18px;
   text-align: center;
   font-weight: bold;
+
 }
+

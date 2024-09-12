@@ -8,8 +8,9 @@
   align-items: center;
   /* margin: 50px; */
   /* margin-top: 10px; */
+
   color:var(--text-color);
-}
+
 
 .ACD_Field-column {
   display: flex;
@@ -63,7 +64,9 @@
   display: flex;
   border-radius: 5px;
   align-items: center;
+
   color:var(--text-color);
+
 }
 
 .ACD_Field input[type="file"] {
@@ -78,7 +81,9 @@
   padding: 4px;
   font-size: 16px;
   border: 1px solid #ccc;
+
   color:var(--text-color);
+
   border-radius: 5px;
 }
 
@@ -243,4 +248,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
 }

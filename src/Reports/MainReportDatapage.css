@@ -572,6 +572,7 @@ color: grey;
       cursor: pointer;
       background-color: #ffcb9b;
       color:var(--text-color);
+
       border: 1px solid gray;
       border-radius: 15px;
      text-align: center;
@@ -584,6 +585,7 @@ color: grey;
       width: 100%;    /* Prachi TeamLeader 1/7 */
       cursor: pointer;
       color:var(--text-color);
+
       background-color: #ffcb9b;
       text-align: center;
       font-size: 18px;

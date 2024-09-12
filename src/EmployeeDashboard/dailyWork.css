@@ -66,8 +66,8 @@
   border-radius: 15px;
   height: 30px;
   width: 90px;
-  color:var(--text-color);
-  background-color: var(--dailyWork-btn);
+  color: white;
+  background-color: var(--button-color);
   transition: background-color 0.3s ease;
 }
 
@@ -92,7 +92,7 @@
   height: 30px;
   width: 40px;
 
-  background-color: var(--dailyWork-btn);
+  background-color: var(--button-color);
 
 }
 
@@ -102,8 +102,8 @@
   align-items: center;
   border: 1px solid gray;
   border-radius: 15px;
-  background-color: var(--dailyWork-btn);
-  color:var(--text-color);
+  background-color: var(--button-color);
+  color: white;
   height: 30px;
   padding-left: 15px;
   padding-right: 15px;

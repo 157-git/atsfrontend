@@ -23,7 +23,6 @@ const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
   initialData = {},
   loginEmployeeName,
-  // toggelCandidateHistory
 }) => {
   const { employeeId } = useParams();
   const [submited, setSubmited] = useState(false);
@@ -48,6 +47,7 @@ const CallingTrackerForm = ({
     communicationRating: "",
     selectYesOrNo: "No",
     callingFeedback: ""
+
   };
 
   const initialLineUpState = {
@@ -64,7 +64,6 @@ const CallingTrackerForm = ({
     qualification: "",
     yearOfPassing: "",
     extraCertification: "",
-    feedBack: "",
     holdingAnyOffer: "",
     offerLetterMsg: "",
     noticePeriod: "",
@@ -72,6 +71,7 @@ const CallingTrackerForm = ({
     availabilityForInterview: "",
     interviewTime: "",
     finalStatus: "",
+    feedBack: "",
     resume: []
   };
   const [callingTracker, setCallingTracker] = useState(
@@ -94,7 +94,7 @@ const CallingTrackerForm = ({
   const [endpoint, setendPoint] = useState("");
   const [resumeFile, setResumeFile] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
     fetchRequirementOptions();
@@ -109,15 +109,12 @@ const CallingTrackerForm = ({
 
       Object.keys(initialData).forEach((key) => {
         if (key === "date") {
-          // Set date to current date if it is present in initialData
           updatedCallingTracker[key] = new Date().toISOString().slice(0, 10);
           updatedLineUpData[key] = new Date().toISOString().slice(0, 10);
         } else if (["candidateId", "candidateAddedTime"].includes(key)) {
-          // Set candidateId and candidateAddedTime to empty string if present
           updatedCallingTracker[key] = "";
           updatedLineUpData[key] = "";
         } else {
-          // Ensure the value is a string for other fields
           updatedCallingTracker[key] = ensureStringValue(initialData[key]);
           updatedLineUpData[key] = ensureStringValue(initialData[key]);
         }
@@ -127,9 +124,6 @@ const CallingTrackerForm = ({
       setLineUpData(updatedLineUpData);
     }
   }, [initialData]);
-
-
-
 
   useEffect(() => {
     const updateTimer = () => {
@@ -151,15 +145,12 @@ const CallingTrackerForm = ({
     return () => clearInterval(timerInterval);
   }, []);
 
-
-  // Helper function to only update with non-null and non-undefined values
-  const ensureStringValue = (value) => (value !== undefined && value !== null ? String(value) : "");
+  const ensureStringValue = (value) =>
+    value !== undefined && value !== null ? String(value) : "";
 
   const fetchRequirementOptions = async () => {
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/company-details`
-      );
+      const response = await axios.get(`${API_BASE_URL}/company-details`);
       const { data } = response;
       setRequirementOptions(data);
     } catch (error) {
@@ -184,11 +175,8 @@ const CallingTrackerForm = ({
     return errors;
   };
 
-
-
   const validateLineUpData = () => {
     let errors = {};
-
     if (callingTracker.selectYesOrNo === "Interested") {
       if (!callingTracker.requirementId) {
         errors.requirementId = "Requirement ID is required";
@@ -196,6 +184,7 @@ const CallingTrackerForm = ({
       if (!lineUpData.dateOfBirth) {
         errors.dateOfBirth = "Date of Birth is required";
       }
+
       if (!lineUpData.experienceYear || !lineUpData.experienceMonth) {
         errors.experienceYear = "Experience is required";
       }
@@ -249,10 +238,8 @@ const CallingTrackerForm = ({
       setStartTime(Date.now());
       console.log("timmer Start");
     }
-    if (name === "selectYesOrNo" && value === "No") {
-      setLineUpData(initialLineUpState);
-    } else if (name === "selectYesOrNo" && value === "Interested") {
-      //setShowLineUpForm(true);
+    if (name === "fullAddress") {
+      setStartPoint(value);
     }
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
@@ -297,29 +284,34 @@ const CallingTrackerForm = ({
 
     if (name === "currentCTCLakh" || name === "currentCTCThousand") {
       const lakhValue = parseFloat(updatedLineUpData.currentCTCLakh) || 0;
-      const thousandValue = parseFloat(updatedLineUpData.currentCTCThousand) || 0;
+      const thousandValue =
+        parseFloat(updatedLineUpData.currentCTCThousand) || 0;
       const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
       setConvertedCurrentCTC(combinedCTC.toFixed(2));
     }
 
     if (name === "expectedCTCLakh" || name === "expectedCTCThousand") {
       const lakhValue = parseFloat(updatedLineUpData.expectedCTCLakh) || 0;
-      const thousandValue = parseFloat(updatedLineUpData.expectedCTCThousand) || 0;
+      const thousandValue =
+        parseFloat(updatedLineUpData.expectedCTCThousand) || 0;
       const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
       setConvertedExpectedCTC(combinedCTC.toFixed(2));
     }
-
     setLineUpData(updatedLineUpData);
+
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
-
-
   const handleSubmit = async (e) => {
+    setShowConfirmation(false);
     e.preventDefault();
-    let callingTrackerErrors = validateCallingTracker();
-    let lineUpDataErrors = validateLineUpData();
-    if (Object.keys(callingTrackerErrors).length > 0 || Object.keys(lineUpDataErrors).length > 0) {
+    let callingTrackerErrors = validateCallingTracker() || {};
+    let lineUpDataErrors = validateLineUpData() || {};
+
+    if (
+      Object.keys(callingTrackerErrors).length > 0 ||
+      Object.keys(lineUpDataErrors).length > 0
+    ) {
       setErrors({ ...callingTrackerErrors, ...lineUpDataErrors });
       return;
     }
@@ -330,13 +322,13 @@ const CallingTrackerForm = ({
       const timeTaken = (endTime - startTime) / 1000; // Time in seconds
       const minutes = Math.floor(timeTaken / 60);
       const seconds = Math.floor(timeTaken % 60);
-      console.log(`Time taken to fill the form: ${minutes} minutes and ${seconds} seconds`);
+      console.log(
+        `Time taken to fill the form: ${minutes} minutes and ${seconds} seconds`
+      );
       formFillingTime = `${minutes} minutes and ${seconds} seconds`;
     }
-
     setSubmited(true);
     setLoading(true);
-
     try {
       let dataToUpdate = {
         callingTracker: { ...callingTracker },
@@ -360,9 +352,10 @@ const CallingTrackerForm = ({
           letterResponse: null,
           joiningProcess: null,
           joinDate: null,
-          interviewRoundList: []
+          interviewRoundList: [],
         },
       };
+
       console.log(dataToUpdate);
       if (userType === "Recruiters") {
         dataToUpdate.callingTracker.employee = { employeeId: employeeId };
@@ -370,33 +363,29 @@ const CallingTrackerForm = ({
         dataToUpdate.callingTracker.teamLeader = { teamLeaderId: employeeId };
       }
 
-      if (callingTracker.selectYesOrNo === "Interested") {
-        dataToUpdate.lineUp = lineUpData;
-      }
-
-      // Make API call
+      dataToUpdate.lineUp = lineUpData;
       const response = await axios.post(
         `${API_BASE_URL}/calling-tracker`,
         dataToUpdate,
         {
           headers: {
-            'Content-Type': 'application/json'
-          }
+            "Content-Type": "application/json",
+          },
         }
       );
-
 
       if (response) {
         if (callingTracker.selectYesOrNo === "Interested") {
           onsuccessfulDataAdditions(true);
+          console.log("-------Yes Add Calling Tracker-----------");
         } else {
           onsuccessfulDataAdditions(false);
+          console.log("-------No Add Calling Tracker-----------");
         }
-
         setSubmited(false);
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 4000);
-        toast.success("Candidate Added Successfully..")
+        toast.success("Candidate Added Successfully..");
         setCallingTracker(initialCallingTrackerState);
         setLineUpData(initialLineUpState);
       }
@@ -404,24 +393,22 @@ const CallingTrackerForm = ({
       setSubmited(false);
       toast.error("An error occurred: " + error.message);
     } finally {
-      setLoading(false); // Hide loader
+      setLoading(false);
     }
   };
-
-
   const handleLocationChange = (e) => {
     const value = e.target.value;
     if (value === "Other") {
       setIsOtherLocationSelected(true);
       setCallingTracker((prevState) => ({
         ...prevState,
-        currentLocation: "", 
+        currentLocation: value,
       }));
     } else {
       setIsOtherLocationSelected(false);
       setCallingTracker((prevState) => ({
         ...prevState,
-        currentLocation: value, 
+        currentLocation: value,
       }));
     }
     setErrors((prevErrors) => ({ ...prevErrors, currentLocation: "" }));
@@ -434,8 +421,10 @@ const CallingTrackerForm = ({
       setIsOtherEducationSelected(true);
       setLineUpData({ ...lineUpData, qualification: "" });
     } else {
+      setIsOtherEducationSelected(false);
       setLineUpData({ ...lineUpData, qualification: value });
     }
+    setErrors((prevErrors) => ({ ...prevErrors, qualification: "" }));
   };
 
   const handleResumeFileChange = (e) => {
@@ -448,12 +437,9 @@ const CallingTrackerForm = ({
         const byteArray = new Uint8Array(arrayBuffer);
         const byteNumbers = Array.from(byteArray);
 
-        // Convert the byte array to a Base64 string
         const base64String = btoa(String.fromCharCode(...byteNumbers));
 
         console.log(base64String); // Print the Base64 string
-
-        // Update the lineUpData state with the Base64 string of the resume file
         setLineUpData((prevState) => ({
           ...prevState,
           resume: base64String, // Store the Base64 string
@@ -463,67 +449,49 @@ const CallingTrackerForm = ({
       reader.readAsArrayBuffer(file); // Read the file as an ArrayBuffer
     }
   };
+  const handleRequirementChange = (e) => {
+    const { value } = e.target;
+    const selectedRequirement = requirementOptions.find(
+      (requirement) => requirement.requirementId === parseInt(value)
+    );
 
-
-
-const handleRequirementChange = (e) => {
-  const { value } = e.target;
-  const selectedRequirement = requirementOptions.find(
-    (requirement) => requirement.requirementId === parseInt(value)
-  );
-
-  if (selectedRequirement) {
-    setCallingTracker((prevState) => ({
-      ...prevState,
-      requirementId: selectedRequirement.requirementId,
-      jobDesignation: selectedRequirement.designation,
-      requirementCompany: selectedRequirement.companyName,
-      incentive: selectedRequirement.incentive,
-    }));
-  } else {
-    setCallingTracker((prevState) => ({
-      ...prevState,
-      requirementId: value,
-      jobDesignation: "",
-      requirementCompany: "",
-      incentive: "",
-    }));
-  }
-
-  setErrors((prevErrors) => ({ ...prevErrors, requirementId: "" }));
-};
-
+    if (selectedRequirement) {
+      setCallingTracker((prevState) => ({
+        ...prevState,
+        requirementId: selectedRequirement.requirementId,
+        jobDesignation: selectedRequirement.designation,
+        requirementCompany: selectedRequirement.companyName,
+        incentive: selectedRequirement.incentive,
+      }));
+    } else {
+      setCallingTracker((prevState) => ({
+        ...prevState,
+        requirementId: value,
+        jobDesignation: "",
+        requirementCompany: "",
+        incentive: "",
+      }));
+    }
+    setendPoint(selectedRequirement.detailAddress);
+    setErrors((prevErrors) => ({ ...prevErrors, requirementId: "" }));
+  };
 
   const handleShow = () => {
     setShowModal(true);
   };
   const handleClose = () => setShowModal(false);
-  // useEffect(() => {
-  //   // Update currentCTC when lineUpData changes
-  //   updateCurrentCTC(lineUpData.currentCTCLakh, lineUpData.currentCTCThousand);
-  //   updateExpectedCTC(
-  //     lineUpData.expectedCTCLakh,
-  //     lineUpData.expectedCTCThousand
-  //   );
-  // }, [lineUpData]);
 
   const updateCurrentCTC = (lakh, thousand) => {
-    // Convert lakh and thousand values to numbers
     const lakhValue = parseFloat(lakh) || 0;
     const thousandValue = parseFloat(thousand) || 0;
-    // Combine lakh and thousand to a single CTC value in thousands
     const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
-    // Format the combined CTC
     setconvertedCurrentCTC(combinedCTC.toFixed(2));
   };
 
   const updateExpectedCTC = (lakh, thousand) => {
-    // Convert lakh and thousand values to numbers
     const lakhValue = parseFloat(lakh) || 0;
     const thousandValue = parseFloat(thousand) || 0;
-    // Combine lakh and thousand to a single CTC value in thousands
     const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
-    // Format the combined CTC
     setconvertedExpectedCTC(combinedCTC.toFixed(2));
   };
   const handleUpdateExpectedCTCLakh = (value) => {
@@ -557,7 +525,6 @@ const handleRequirementChange = (e) => {
                   <div className="calling-tracker-two-input">
                     <input
                       type="text"
-                      //id="currentDate"
                       name="date"
                       value={callingTracker.date}
                       readOnly
@@ -703,96 +670,101 @@ const handleRequirementChange = (e) => {
                 <label>Job Id</label>
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
-                  <select
-        id="requirementId"
-        name="requirementId"
-        value={callingTracker.requirementId}
-        onChange={handleRequirementChange}
-      >
-        <option value="">Select Job Id</option>
-        {requirementOptions.map((option) => (
-          <option
-            key={option.requirementId}
-            value={option.requirementId}
-          >
-            {option.requirementId}
-          </option>
-        ))}
-      </select>
-      {errors.requirementId && (
-        <div className="error-message">{errors.requirementId}</div>
-      )}
+                    <select
+                      id="requirementId"
+                      name="requirementId"
+                      value={callingTracker.requirementId}
+                      onChange={handleRequirementChange}
+                    >
+                      <option value="">Select Job Id</option>
+                      {requirementOptions.map((option) => (
+                        <option
+                          key={option.requirementId}
+                          value={option.requirementId}
+                        >
+                          {option.requirementId} - {option.designation}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.requirementId && (
+                      <div className="error-message">
+                        {errors.requirementId}
+                      </div>
+                    )}
                   </div>
                   <div className="calling-tracker-two-input">
-                  <input
-        placeholder="Your Incentive"
-        value={callingTracker.incentive}
-        readOnly
-        type="text"
-      />
+                    <input
+                      placeholder="Your Incentive"
+                      value={callingTracker.incentive}
+                      readOnly
+                      type="text"
+                    />
                   </div>
                 </div>
               </div>
-
             </div>
             <div className="calling-tracker-row-gray">
               <div className="calling-tracker-field">
                 <label>Applying For Position</label>
                 <div className="calling-tracker-two-input-container">
-                <input
-        type="text"
-        id="jobDesignation"
-        name="jobDesignation"
-        className="calling-tracker-two-input"
-        value={callingTracker.jobDesignation}
-        placeholder="Enter Position"
-        readOnly
-      />
-      <input
-        type="text"
-        placeholder="Company"
-        id="requirementCompany"
-        name="requirementCompany"
-        className="calling-tracker-two-input"
-        value={callingTracker.requirementCompany}
-        readOnly
-      />
+                  <input
+                    type="text"
+                    id="jobDesignation"
+                    name="jobDesignation"
+                    className="calling-tracker-two-input"
+                    value={callingTracker.jobDesignation}
+                    placeholder="Enter Position"
+                    readOnly
+                  />
+                  <input
+                    type="text"
+                    placeholder="Company"
+                    id="requirementCompany"
+                    name="requirementCompany"
+                    className="calling-tracker-two-input"
+                    value={callingTracker.requirementCompany}
+                    readOnly
+                  />
                 </div>
               </div>
 
               <div className="calling-tracker-field">
                 <label style={{ color: "gray" }}>Current Location</label>
-
                 <div className="calling-tracker-two-input-container">
-                   <div className="calling-tracker-two-input">
-      {!isOtherLocationSelected ? (
-        <select
-          name="currentLocation"
-          value={callingTracker.currentLocation}
-          onChange={handleLocationChange}
-        >
-          <option value="" style={{ color: "gray" }}>
-            Select Location
-          </option>
-          <option value="Pune City">Pune City</option>
-          <option value="PCMC">PCMC</option>
-          <option value="Other">Other</option>
-        </select>
-      ) : (
-        <input
-          type="text"
-          name="currentLocation"
-          value={callingTracker.currentLocation}
-          onChange={(e) =>
-            setCallingTracker({ ...callingTracker, currentLocation: e.target.value })
-          }
-          placeholder="Enter your location"
-        />
-      )}
-      {errors.currentLocation && (
-        <div className="error-message">{errors.currentLocation}</div>
-      )}
-    </div>
+                  <div className="calling-tracker-two-input">
+                    {!isOtherLocationSelected ? (
+                      <select
+                        name="currentLocation"
+                        value={callingTracker.currentLocation}
+                        onChange={handleLocationChange}
+                      >
+                        <option value="" style={{ color: "gray" }}>
+                          Select Location
+                        </option>
+                        <option value="Pune City">Pune City</option>
+                        <option value="PCMC">PCMC</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    ) : (
+                      <input
+                        type="text"
+                        name="currentLocation"
+                        value={callingTracker.currentLocation}
+                        onChange={(e) =>
+                          setCallingTracker({
+                            ...callingTracker,
+                            currentLocation: e.target.value,
+                          })
+                        }
+                        placeholder="Enter your location"
+                      />
+                    )}
+                    {errors.currentLocation && (
+                      <div className="error-message">
+                        {errors.currentLocation}
+                      </div>
+                    )}
+                  </div>
                   <div className="calling-tracker-two-input">
                     <input
                       type="text"
@@ -855,33 +827,30 @@ const handleRequirementChange = (e) => {
                       <div className="calling-check-box">
                         <input
                           type="checkbox"
-                          name="male"
-                          value="male"
+                          name="Male"
+                          value="Male"
                           className="gender"
-                          checked={lineUpData.gender === "male"}
+                          checked={lineUpData.gender === "Male"}
+
                           onChange={(e) =>
                             setLineUpData({
                               ...lineUpData,
                               gender: e.target.value,
                             })
                           }
-
                         />
-
-                      </div>
-                      <div>
-                        Male
+                        <span style={{ paddingLeft: "10px" }}>Male</span>
                       </div>
                     </div>
                     <div className="callingTracker-male-div">
                       <div className="calling-check-box">
                         <input
                           type="checkbox"
-                          name="female"
-                          value="female"
+                          name="Female"
+                          value="Female"
                           className="gender"
                           style={{ paddingLeft: "auto" }}
-                          checked={lineUpData.gender === "female"}
+                          checked={lineUpData.gender === "Female"}
                           onChange={(e) =>
                             setLineUpData({
                               ...lineUpData,
@@ -889,9 +858,8 @@ const handleRequirementChange = (e) => {
                             })
                           }
                         />
-
+                        <span style={{ paddingLeft: "10px" }}>Female</span>
                       </div>
-                      <div>Female</div>
                     </div>
                   </div>
                 </div>
@@ -904,9 +872,9 @@ const handleRequirementChange = (e) => {
                 <div className="calling-tracker-field-sub-div">
                   <input
                     type="text"
-                    name="Call Summary"
-                    value={callingTracker.extraCertification}
-                    onChange={handleChange}
+                    name="feedBack"
+                    value={lineUpData.feedBack}
+                    onChange={handleLineUpChange}
                     className="plain-input"
                     placeholder="Enter Call Summary"
                   />
@@ -1342,7 +1310,7 @@ const handleRequirementChange = (e) => {
                       />
                     )}
                     {errors.qualification && (
-                      <div className="error-message">
+                      <div className="error-message error-two-input-box">
                         {errors.qualification}
                       </div>
                     )}
@@ -1504,7 +1472,6 @@ const handleRequirementChange = (e) => {
                     onChange={handleChange}
                     className="plain-input"
                     placeholder="communicationRating"
-
                   />
                   {errors.communicationRating && (
                     <div className="error-message error-two-input-box">
@@ -1584,7 +1551,6 @@ const handleRequirementChange = (e) => {
             </div>
 
             <div className="calling-tracker-row-white">
-
               <div className="calling-tracker-field">
                 <label>Holding Offer Letter</label>
                 <div className="calling-tracker-two-input-container">
@@ -1655,14 +1621,17 @@ const handleRequirementChange = (e) => {
                     >
                       <option value="">Select</option>
                       <option value="Interested">Interested</option>
+                      <option value="Interested, will confirm later">
+                        Interested, will confirm later
+                      </option>
                       <option value="No Interested">No Interested</option>
-                      <option value="Interested But Not Eligible">
-                        Intersted But Not Eligible
+                      <option value=" Interested But Not Eligible">
+                        Interested But Not Eligible
                       </option>
                       <option value="Eligible">Eligible</option>
-                      <option value="No Interested">No Eligible</option>
+                      <option value="Not Eligible">Not Eligible</option>
                       <option value="Not Eligible But Interested">
-                        Not Eligible But Intersted
+                        Not Eligible But Interested
                       </option>
                     </select>
                   </div>
@@ -1679,13 +1648,13 @@ const handleRequirementChange = (e) => {
                       }
                     >
                       <option value="">Whats Now</option>
-                      <option value="Interview schedule">
-                        Interview schedule
+                      <option value="Interview Schedule">
+                        Interview Schedule
                       </option>
                       <option value="Attending After Some time">
                         Attending After Some time
                       </option>
-                      <option value="">Response On Hold</option>
+                      <option value="Response On Hold">Response On Hold</option>
                     </select>
                   </div>
                 </div>
@@ -1698,7 +1667,6 @@ const handleRequirementChange = (e) => {
                       type="date"
                       name="availabilityForInterview"
                       value={lineUpData.availabilityForInterview}
-                      //onChange={handleLineUpChange}
                       onChange={(e) =>
                         setLineUpData({
                           ...lineUpData,
@@ -1712,7 +1680,6 @@ const handleRequirementChange = (e) => {
                       type="time"
                       name="interviewTime"
                       value={lineUpData.interviewTime}
-                      //onChange={handleLineUpChange}
                       onChange={(e) =>
                         setLineUpData({
                           ...lineUpData,
@@ -1728,14 +1695,74 @@ const handleRequirementChange = (e) => {
           <center>
             <div className="buttonDiv">
               {callingTracker.selectYesOrNo !== "Interested" && (
-                <button type="submit" disabled={loading} className="ctf-btn">
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmation(true)}
+                  className="ctf-btn"
+                >
                   Add To Calling
                 </button>
               )}
               {callingTracker.selectYesOrNo === "Interested" && (
-                <button type="submit" disabled={loading} className="ctf-btn" id="uploadbtn2">
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmation(true)}
+                  className="ctf-btn"
+                  id="uploadbtn2"
+                >
                   Add To LineUp
                 </button>
+              )}
+              {showConfirmation && (
+                <div
+                  className="bg-black bg-opacity-50 modal show"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    position: "fixed",
+                    width: "100%",
+                    height: "100vh",
+                  }}
+                >
+                  <Modal.Dialog
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Modal.Body>
+                      <p className="confirmation-text">
+                        Are you sure you want to save this candidate's
+                        information ?
+                      </p>
+                      <p>{callingTracker.errors}</p>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <button
+                          type="submit"
+                          disabled={loading}
+                          className="buttoncss"
+                        >
+                          Yes
+                        </button>
+
+                        <button
+                          onClick={() => setShowConfirmation(false)}
+                          className="buttoncss"
+                        >
+                          No
+                        </button>
+                      </div>
+                    </Modal.Body>
+                  </Modal.Dialog>
+                </div>
               )}
             </div>
           </center>
@@ -1827,29 +1854,33 @@ const ModalComponent = ({
         <div className="calling-tracker-popup">
           <div className="calling-tracker-popup-sidebar">
             <p
-              className={`sidebar-item ${activeField === "distance" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "distance" ? "active" : ""
+              }`}
               onClick={() => setActiveField("distance")}
             >
               Distance Calculation
             </p>
             <p
-              className={`sidebar-item ${activeField === "salary" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "salary" ? "active" : ""
+              }`}
               onClick={() => setActiveField("salary")}
             >
               Salary Calculation
             </p>
             <p
-              className={`sidebar-item ${activeField === "historyTracker" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "historyTracker" ? "active" : ""
+              }`}
               onClick={() => setActiveField("historyTracker")}
             >
               History Tracker
             </p>
             <p
-              className={`sidebar-item ${activeField === "previousQuestion" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "previousQuestion" ? "active" : ""
+              }`}
               onClick={() => setActiveField("previousQuestion")}
             >
               Previous Question
@@ -2020,15 +2051,10 @@ const ModalComponent = ({
             )}
             {activeField === "historyTracker" && (
               <div className="history-Tracker">
-
                 <div className="form-group">
-
-                  < CandidateHistoryTracker />
-                  <div>
-
-                  </div>
+                  <CandidateHistoryTracker />
+                  <div></div>
                 </div>
-
               </div>
             )}
             {activeField === "previousQuestion" && (
@@ -2046,24 +2072,48 @@ const ModalComponent = ({
 
                 <div className="card">
                   <h2 className="card-title">Previous Question</h2>
-                  <p className="card-content">Q.1. What is Java Full Stack Development?</p>
-                  <p className="card-content">Q.2. Explain the difference between front-end and back-end development.</p>
-                  <p className="card-content">Q.3. What do you need to build a typical web application?</p>
-                  <p className="card-content">Q.4. What is the Java Virtual Machine (JVM), and why is it important?</p>
-                  <p className="card-content">Q.5. What's a servlet, and why is it used in Java web development?</p>
-
+                  <p className="card-content">
+                    Q.1. What is Java Full Stack Development?
+                  </p>
+                  <p className="card-content">
+                    Q.2. Explain the difference between front-end and back-end
+                    development.
+                  </p>
+                  <p className="card-content">
+                    Q.3. What do you need to build a typical web application?
+                  </p>
+                  <p className="card-content">
+                    Q.4. What is the Java Virtual Machine (JVM), and why is it
+                    important?
+                  </p>
+                  <p className="card-content">
+                    Q.5. What's a servlet, and why is it used in Java web
+                    development?
+                  </p>
                 </div>
                 <div className="card">
                   <h2 className="card-title">Previous Question</h2>
-                  <p className="card-content">Q.1. What's the Spring Framework, and why is it useful for Java?</p>
-                  <p className="card-content">Q.2. What are RESTful web services, and why are they important in Java?</p>
-                  <p className="card-content">Q.3. What's Hibernate, and how does it help with databases in Java?</p>
-                  <p className="card-content">Q.4. Can you explain what dependency injection means in Spring?</p>
-                  <p className="card-content">Q.5. What's a singleton pattern, and why does it matter in Java?</p>
-
+                  <p className="card-content">
+                    Q.1. What's the Spring Framework, and why is it useful for
+                    Java?
+                  </p>
+                  <p className="card-content">
+                    Q.2. What are RESTful web services, and why are they
+                    important in Java?
+                  </p>
+                  <p className="card-content">
+                    Q.3. What's Hibernate, and how does it help with databases
+                    in Java?
+                  </p>
+                  <p className="card-content">
+                    Q.4. Can you explain what dependency injection means in
+                    Spring?
+                  </p>
+                  <p className="card-content">
+                    Q.5. What's a singleton pattern, and why does it matter in
+                    Java?
+                  </p>
                 </div>
-
-
               </div>
             )}
           </div>

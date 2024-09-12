@@ -67,6 +67,7 @@
     margin: 5px;
     border-radius: 15px;
     color:var(--text-color);
+
   }
   .old-manager-data h1,.new-manager-data h1,.old-teamleader-data h1,.new-teamleader-data h1{
    font-size: 18px;
@@ -99,4 +100,3 @@
     background-color: black ;
     color: white !important;
   }
-  

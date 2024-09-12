@@ -28,7 +28,7 @@ const isAuthenticated = () => {
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
-  return isAuthenticated() ? children : <Navigate to="/Main-Dashboard" replace />;
+  return isAuthenticated() ? children : <Navigate to="/employee-login" replace />;
 };
 
 

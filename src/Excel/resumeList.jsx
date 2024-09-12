@@ -158,7 +158,7 @@ const ResumeList = ({ loginEmployeeName }) => {
   //Swapnil_Rokade_ResumeList_columnsToInclude_columnsToExclude_18/07/2024//
 
   return (
-    <>
+    <div className="App-after1">
       {!selectedCandidate && (
         <div className="table-container">
           <div className="rl-filterSection">
@@ -187,17 +187,18 @@ const ResumeList = ({ loginEmployeeName }) => {
               )}
             </div>
           </div>
-          <div className="attendanceTableData">
-            <table className="attendance-table">
+          <div  className="attendanceTableData" style={{ maxHeight: '600px', overflowY: 'y', width: '100%' }}>
+          <table className="selfcalling-table attendance-table"  >
               <thead>
-                <tr className="attendancerows-head">
+              <tr className="attendancerows-head">
                   <th className="attendanceheading">Sr No</th>
-
-                  <th className="attendanceheading">Candidate  Name</th>
+                  <th className="attendanceheading">Candidate Name</th>
                   <th className="attendanceheading">Contact Number</th>
                   <th className="attendanceheading">Candidate Email</th>
-                  <th className="attendanceheading">Education</th>
-                  <th className="attendanceheading">Experience</th>
+                  {/* <th className="attendanceheading">Education</th> */}
+                  <th className="attendanceheading">Current Company</th>
+                  <th className="attendanceheading">Last Company</th>
+                  <th className="attendanceheading">Job Designation</th>
                   <th className="attendanceheading">Current Location</th>
                   <th className="attendanceheading">Action</th>
                 </tr>
@@ -262,9 +263,9 @@ const ResumeList = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.qualification}
+                      {item.requirementCompany}
                       <div className="tooltip">
-                        <span className="tooltiptext">{item.qualification}</span>
+                        <span className="tooltiptext">{item.requirementCompany}</span>
                       </div>
                     </td>
 
@@ -273,9 +274,20 @@ const ResumeList = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.relevantExperience}
+                      {item.companyName}
                       <div className="tooltip">
-                        <span className="tooltiptext">{item.relevantExperience}</span>
+                        <span className="tooltiptext">{item.companyName}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {item.jobDesignation}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{item.jobDesignation}</span>
                       </div>
                     </td>
 
@@ -309,8 +321,7 @@ const ResumeList = ({ loginEmployeeName }) => {
           loginEmployeeName={loginEmployeeName}
         />
       )}
-
-    </>
+    </div>
   );
 };
 

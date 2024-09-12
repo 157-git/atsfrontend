@@ -359,8 +359,8 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                     </option>
                     <option value="Selected">Selected</option>
                     <option value="Rejected">Rejected</option>
-                    <option value="Result Pending">Hold</option>
-                    <option value="No Show">No Show</option>
+                    <option value="Hold">Hold</option>
+                    {/* <option value="No Show">No Show</option> */}
                   </select>
                   {errors.interviewResponse && (
                     <div className="error-message">

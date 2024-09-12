@@ -886,7 +886,7 @@ const InvoiceReport = () => {
       ) : (
         <div className="register">
           <HashLoader
-            color={`${localStorage.getItem("bgColor")}`}
+            color={`${localStorage.getItem("selectedColor")}`}
             aria-label="Loading Spinner"
             data-testid="loader"
           />

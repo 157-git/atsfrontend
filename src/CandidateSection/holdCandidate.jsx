@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 import HashLoader from "react-spinners/HashLoader";
 import * as XLSX from "xlsx";
 import { API_BASE_URL } from "../api/api";
-
+import Loader from "../EmployeeSection/loader";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 // SwapnilRokade_HoldCandidate_ModifyFilters_47to534_11/07
@@ -74,50 +74,53 @@ const HoldCandidate = ({
   //akash_pawar_HoldCandidate_ShareFunctionality_18/07_67
 
   const navigator = useNavigate();
-  const limitedOptions = [
-    "alternateNumber",
-    "availabilityForInterview",
-    "callingFeedback",
-    "callingTrackerId",
-    "candidateAddedTime",
-    "candidateEmail",
-    "candidateId",
-    "candidateName",
-    "communicationRating",
-    "companyName",
-    "contactNumber",
-    "currentCtcLakh",
-    "currentCtcThousand",
-    "currentLocation",
-    "date",
-    "dateOfBirth",
-    "empId",
-    "expectedCtcLakh",
-    "expectedCtcThousand",
-    "experienceMonth",
-    "experienceYear",
-    "extraCertification",
-    "feedBack",
-    "finalStatus",
-    "fullAddress",
-    "gender",
-    "holdingAnyOffer",
-    "incentive",
-    "interviewTime",
-    "jobDesignation",
-    "msgForTeamLeader",
-    "noticePeriod",
-    "offerLetterMsg",
-    "oldEmployeeId",
-    "qualification",
-    "recruiterName",
-    "relevantExperience",
-    "requirementCompany",
-    "requirementId",
-    "selectYesOrNo",
-    "sourceName",
-    "yearOfPassing",
-  ];
+  // prachi Hold candidate filter 11/09
+
+  const limitedOptions=[
+    ["alternateNumber", "Alternate Number"],
+    ["availabilityForInterview", "Availability For Interview"],
+    ["callingFeedback", "Calling Feedback"],
+    ["candidateAddedTime", "Candidate Added Time"],
+    ["candidateEmail", "Candidate Email"],
+    ["candidateId", "Candidate Id"],
+    ["candidateName", "Candidate Name"],
+    ["communicationRating", "Communication Rating"],
+    ["companyName", "Company Name"],
+    ["contactNumber", "Contact Number"],
+    ["currentCtcLakh", "Current CTC (Lakh)"],
+    ["currentCtcThousand", "Current CTC (Thousand)"],
+    ["currentLocation", "Current Location"],
+    ["date", "Date"],
+    ["dateOfBirth", "Date Of Birth"],
+    ["empId", "Emp Id"],
+    ["expectedCtcLakh", "Expected CTC (Lakh)"],
+    ["expectedCtcThousand", "Expected CTC (Thousand)"],
+    ["experienceMonth", "Experience Month"],
+    ["experienceYear", "Experience Year"],
+    ["extraCertification", "Extra Certification"],
+    ["feedBack", "FeedBack"],
+    ["finalStatus", "Final Status"],
+    ["fullAddress", "Full Address"],
+    ["gender", "Gender"],
+    ["holdingAnyOffer", "Holding Any Offer"],
+    ["incentive", "Incentive"],
+    ["interviewTime", "Interview Time"],
+    ["jobDesignation", "Job Designation"],
+    ["msgForTeamLeader", "Message For Team Leader"],
+    ["noticePeriod", "Notice Period"],
+    ["offerLetterMsg", "Offer Letter Message"],
+    ["oldEmployeeId", "Old Employee Id"],
+    ["qualification", "Qualification"],
+    ["recruiterName", "Recruiter Name"],
+    ["relevantExperience", "Relevant Experience"],
+    ["requirementCompany", "Requirement Company"],
+    ["requirementId", "Job Id"],
+    ["selectYesOrNo", "Status"],
+    ["sourceName", "Source Name"],
+    ["yearOfPassing", "Year Of Passing"]
+  ]
+
+
   const { userType } = useParams();
   useEffect(() => {
     fetchHoldCandidateData();
@@ -170,9 +173,12 @@ const HoldCandidate = ({
   //akash_pawar_HoldCandidate_ShareFunctionality_18/07_163
 
   useEffect(() => {
-    const options = Object.keys(filteredCallingList[0] || {}).filter((key) =>
-      limitedOptions.includes(key)
-    );
+    const options = limitedOptions
+      .filter(([key]) =>
+        Object.keys(filteredCallingList[0] || {}).includes(key)
+      )
+      .map(([key]) => key);
+      
     setFilterOptions(options);
   }, [filteredCallingList]);
 
@@ -372,12 +378,18 @@ const HoldCandidate = ({
     setShowSearchBar(false);
     setShowFilterSection(!showFilterSection);
   };
-  const handleFilterOptionClick = (option) => {
-    if (activeFilterOption === option) {
-      setActiveFilterOption(null);
-    } else {
-      setActiveFilterOption(option);
-    }
+  // const handleFilterOptionClick = (option) => {
+  //   if (activeFilterOption === option) {
+  //     setActiveFilterOption(null);
+  //   } else {
+  //     setActiveFilterOption(option);
+  //   }
+  // };
+
+  const handleFilterOptionClick = (key) => {
+    setActiveFilterOption(activeFilterOption === key ? null : key);
+    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
+
   };
 
   const getSortIcon = (criteria) => {
@@ -704,11 +716,12 @@ const HoldCandidate = ({
     <div className="App-after">
       {loading ? (
         <div className="register">
-          <HashLoader
-             color={`${localStorage.getItem("bgColor")}`}
+          {/* <HashLoader
+             color={`${localStorage.getItem("selectedColor")}`}
             aria-label="Loading Spinner"
             data-testid="loader"
-          />
+          /> */}
+          <Loader></Loader>
         </div>
       ) : (
         <>
@@ -734,9 +747,11 @@ const HoldCandidate = ({
                   }}
                 >
                   <div>
+                    {(userType === 'Manager' || userType === 'TeamLeader') && (
                     <button className="lineUp-share-btn" onClick={showPopup}>
-                      Create Excel
+                    Create Excel
                     </button>
+                     )}
 
                     {showExportConfirmation && (
                       <div className="popup-containers">
@@ -817,53 +832,49 @@ const HoldCandidate = ({
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               )}
-              {showFilterSection && (
-                <div className="filter-section">
-                  <div className="filter-options-container">
-                    {filterOptions.map((option) => {
-                      const uniqueValues = Array.from(
-                        new Set(callingList.map((item) => item[option]))
-                      );
-                      return (
-                        <div key={option} className="filter-option">
-                          <button
-                            className="white-Btn"
-                            onClick={() => handleFilterOptionClick(option)}
-                          >
-                            {option}
-                            <span className="filter-icon">&#x25bc;</span>
-                          </button>
-                          {activeFilterOption === option && (
-                            <div className="city-filter">
-                              <div className="optionDiv">
-                                {uniqueValues.map((value) => (
-                                  <label
-                                    key={value}
-                                    className="selfcalling-filter-value"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      checked={
-                                        selectedFilters[option]?.includes(
-                                          value
-                                        ) || false
-                                      }
-                                      onChange={() =>
-                                        handleFilterSelect(option, value)
-                                      }
-                                    />
-                                    {value}
-                                  </label>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
+               {showFilterSection && (
+    <div className="filter-section">
+      {limitedOptions.map(([optionKey, optionLabel]) => {
+        const uniqueValues = Array.from(
+          new Set(callingList.map((item) => item[optionKey]))
+        );
+
+        return (
+          <div key={optionKey} className="filter-option">
+            <button
+              className="white-Btn"
+              onClick={() => handleFilterOptionClick(optionKey)}
+            >
+              {optionLabel}
+              <span className="filter-icon">&#x25bc;</span>
+            </button>
+            {activeFilterOption === optionKey && (
+              <div className="city-filter">
+                <div className="optionDiv">
+                  {uniqueValues.map((value) => (
+                    <label
+                      key={value}
+                      className="selfcalling-filter-value"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={
+                          selectedFilters[optionKey]?.includes(value) || false
+                        }
+                        onChange={() => handleFilterSelect(optionKey, value)}
+                        style={{marginRight:'5px'}}
+                      />
+                      {value}
+                    </label>
+                  ))}
                 </div>
-              )}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  )}
 
               <div className="attendanceTableData">
                 <table className="attendance-table">
@@ -881,15 +892,16 @@ const HoldCandidate = ({
                           />
                         </th>
                       ) : null}
-                      <th className="attendanceheading">No.</th>
+                      
+<th className="attendanceheading">No.</th>
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("date")}
                       >
                         Date
-                     &
-                      Time</th>
-                      <th className="attendanceheading">Candidate's Id</th>
+                        &
+                        Time</th>
+                      <th className="attendanceheading">Candidate Id</th>
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("recruiterName")}
@@ -914,7 +926,8 @@ const HoldCandidate = ({
                       </th>
                       <th className="attendanceheading">Current Location</th>
                       <th className="attendanceheading">Full Address</th>
-                      <th className="attendanceheading">Calling Feedback</th>
+                      <th className="attendanceheading">Calling Remark</th>
+                      <th className="attendanceheading">Call Summary</th>
                       <th className="attendanceheading">
                         Recruiter's Incentive
                       </th>
@@ -926,33 +939,38 @@ const HoldCandidate = ({
                       <th className="attendanceheading">Expected CTC</th>
                       <th className="attendanceheading">Date Of Birth</th>
                       <th className="attendanceheading">Gender</th>
-                      <th className="attendanceheading">Qualification</th>
+                      <th className="attendanceheading">Education</th>
                       <th className="attendanceheading">Year Of Passing</th>
-                      <th className="attendanceheading">Extra Certification</th>
-                      <th className="attendanceheading">Holding any offer</th>
-                      <th className="attendanceheading">
-                        Offer Letter Message
-                      </th>
+                      <th className="attendanceheading">Any Extra Certification</th>
+                      {/* <th className="attendanceheading">Feedback</th> */}
+                      <th className="attendanceheading">Holding Any Offer</th>
+                      <th className="attendanceheading">Offer Letter Msg</th>
                       <th className="attendanceheading">Resume</th>
-                      <th className="attendanceheading">NoticePeriod</th>
-                      {userType ==='TeamLeader' && 
-                      <th className="attendanceheading">
-                      Message For Manager
-                    </th>}
-                    {userType ==='Recruiters' && 
-                      <th className="attendanceheading">
-                      Message For Team Leader
-                    </th>}
+                      <th className="attendanceheading">Notice Period</th>
+                      {userType === 'TeamLeader' &&
+                        <th className="attendanceheading">
+                          Message For Manager
+                        </th>}
+                      {userType === 'Recruiters' &&
+                        <th className="attendanceheading">
+                          Message For Team Leader
+                        </th>}
+                      {userType === 'Manager' &&
+                        <th className="attendanceheading">
+                          Message For Super User
+                        </th>}
                       <th className="attendanceheading">
                         Availability For Interview
                       </th>
                       <th className="attendanceheading">Interview Time</th>
-                      <th className="attendanceheading">Final Status</th>
-                      <th className="attendanceheading">Employee Id</th>
-                      
+
+                      <th className="attendanceheading">Interview Status</th>
+                      <th className="attendanceheading">Employee ID</th>
+
                       {(userType === 'TeamLeader' || userType === 'Manager') && (
                         <th className="attendanceheading">Team Leader Id</th>
                       )}
+
                       <th className="attendanceheading">Action</th>
                     </tr>
                   </thead>
@@ -1169,6 +1187,18 @@ const HoldCandidate = ({
                             </span>
                           </div>
                         </td>
+                        <td
+                      className="tabledata "
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {item.feedBack}{" "}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {item.feedBack}{" "}
+                        </span>
+                      </div>
+                    </td>
 
                         <td
                           className="tabledata"

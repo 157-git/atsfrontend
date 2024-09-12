@@ -151,6 +151,7 @@
     bottom: auto;
     transform: translateY(-50%);
     pointer-events: none;
+
     color:var(--text-color);
 }
 
@@ -159,6 +160,7 @@
     top: 8px;
     left: 20px;
     color:var(--text-color);
+
 }
 
 .login-button,
