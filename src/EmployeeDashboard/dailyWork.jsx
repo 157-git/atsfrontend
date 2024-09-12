@@ -7,7 +7,7 @@ import logoutImg from "../photos/download.jpeg";
 import { Modal, Button } from "react-bootstrap";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
 import { API_BASE_URL } from "../api/api";
-import watingImg from '../photos/fire-relax.gif'
+import watingImg from "../photos/fire-relax.gif";
 // SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
 
 function DailyWork({
@@ -19,9 +19,8 @@ function DailyWork({
   logoutTimestamp,
   jobRole,
   emailSenderInformation,
-  successfulDataUpdation
+  successfulDataUpdation,
 }) {
-
   const { employeeId } = useParams();
   const [fetchWorkId, setFetchWorkId] = useState(null);
   const [employeeData, setEmployeeData] = useState({});
@@ -31,52 +30,12 @@ function DailyWork({
   const [modalShow, setModalShow] = useState(false);
   const [showAllDailyBtns, setShowAllDailyBtns] = useState(true);
   const [loginDetailsSaved, setLoginDetailsSaved] = useState(false);
-  const [showAlreadyLoggedInMessage, setShowAlreadyLoggedInMessage] = useState(false);
+  const [showAlreadyLoggedInMessage, setShowAlreadyLoggedInMessage] =
+    useState(false);
 
   const [buttonColor, setButtonColor] = useState(() => {
     return localStorage.getItem('buttonColor');
   });
-
-  // const handleColorChange = (color, btnColor) => {
-  //   setBackgroundColor(color);
-  //   setButtonColor(btnColor);
-  //   localStorage.setItem('sidebarBackgroundColor', color);
-  //   localStorage.setItem('buttonColor', btnColor);
-  // };
-
-  // const [backgroundColor, setBackgroundColor] = useState(() => {
-  //   return localStorage.getItem('sidebarBackgroundColor') || '#ffe5b5';
-  // });
-
-  // useEffect(() => {
-  //   setButtonColor('#ffb281');
-  //   setBackgroundColor('#ffe5b5');
-  //   localStorage.setItem('buttonColor', '#ffb281');
-  //   localStorage.setItem('sidebarBackgroundColor', '#ffe5b5');
-  // }, []);
-
-//     return localStorage.getItem('buttonColor') || '#ffb281';
-//   });
-
-//   const handleColorChange = (color, btnColor) => {
-//     setBackgroundColor(color);
-//     setButtonColor(btnColor);
-//     localStorage.setItem('sidebarBackgroundColor', color);
-//     localStorage.setItem('buttonColor', btnColor);
-//   };
-
-//   const [backgroundColor, setBackgroundColor] = useState(() => {
-//     return localStorage.getItem('sidebarBackgroundColor') || '#ffe5b5';
-//   });
-
-//   useEffect(() => {
-//     setButtonColor('#ffb281');
-//     setBackgroundColor('#ffe5b5');
-//     localStorage.setItem('buttonColor', '#ffb281');
-//     localStorage.setItem('sidebarBackgroundColor', '#ffe5b5');
-//   }, []);
-// >>>>>>> 552f1f9a738807efb94703b78c3a076500cbaa8f
-
 
   const getStoredTime = () => {
     const storedTime = localStorage.getItem(`stopwatchTime_${employeeId}`);
@@ -189,7 +148,7 @@ function DailyWork({
     const storedLoginDetailsSaved = localStorage.getItem(
       `loginDetailsSaved_${employeeId}`
     );
-    if (storedLoginDetailsSaved === "true") {
+    if (storedLoginDetailsSaved == "true") {
       setLoginDetailsSaved(true);
     }
 
@@ -198,57 +157,56 @@ function DailyWork({
       if (loginDetailsSaved) {
         fetchCurrentEmployerWorkId();
         console.log("Login details already saved.");
-        return; // Exit early if login details are already saved
-      }
+      } else {
+        try {
+          console.log(name);
+          const now = new Date();
+          const day = now.getDate().toString().padStart(2, "0");
+          const month = (now.getMonth() + 1).toString().padStart(2, "0");
+          const year = now.getFullYear();
+          const formData = {
+            employeeId,
+            jobRole: userType,
+            employeeName: name,
+            date: `${day}/${month}/${year}`,
+            loginTime: now.toLocaleTimeString("en-IN"),
+            lateMark,
+            leaveType,
+            paidLeave,
+            unpaidLeave,
+            dailyTarget: data.pending + data.archived,
+            dailyArchived: data.archived,
+            dailyPending: data.pending,
+          };
+          localStorage.setItem(
+            `dailyWorkData_${employeeId}`,
+            JSON.stringify({ archived: data.archived, pending: data.pending })
+          );
+          const response = await axios.post(
+            `${API_BASE_URL}/save-daily-work/${employeeId}/${userType}`,
+            formData
+          );
 
-      try {
-
-        console.log(name);
-        const now = new Date();
-        const day = now.getDate().toString().padStart(2, "0");
-        const month = (now.getMonth() + 1).toString().padStart(2, "0");
-        const year = now.getFullYear();
-        const formData = {
-          employeeId,
-          jobRole: userType,
-          employeeName: name,
-          date: `${day}/${month}/${year}`,
-          loginTime: now.toLocaleTimeString("en-IN"),
-          lateMark,
-          leaveType,
-          paidLeave,
-          unpaidLeave,
-          dailyTarget: data.pending + data.archived,
-          dailyArchived: data.archived,
-          dailyPending: data.pending,
-        };
-        localStorage.setItem(
-          `dailyWorkData_${employeeId}`,
-          JSON.stringify({ archived: data.archived, pending: data.pending })
-        );
-        const response = await axios.post(
-          `${API_BASE_URL}/save-daily-work/${employeeId}/${userType}`,
-          formData
-        );
-
-        if (response.data) {
-          fetchCurrentEmployerWorkId();
+          if (response.data) {
+            fetchCurrentEmployerWorkId();
+          }
+          console.log("Login details saved successfully.");
+          localStorage.setItem(
+            `loginDetailsSaved_${employeeId}`,
+            JSON.stringify(true)
+          );
+          localStorage.setItem(
+            `loginTimeSaved_${employeeId}`,
+            JSON.stringify(loginTime)
+          );
+          setLoginDetailsSaved(true);
+          setShowAlreadyLoggedInMessage(true); // Show the message after saving
+        } catch (error) {
+          console.error("Error saving login details:", error);
         }
-        console.log("Login details saved successfully.");
-        localStorage.setItem(
-          `loginDetailsSaved_${employeeId}`,
-          JSON.stringify(true)
-        );
-        localStorage.setItem(
-          `loginTimeSaved_${employeeId}`,
-          JSON.stringify(loginTime)
-        );
-        setLoginDetailsSaved(true);
-        setShowAlreadyLoggedInMessage(true); // Show the message after saving
-      } catch (error) {
-        console.error("Error saving login details:", error);
       }
     };
+
     if (!executed && loginTime && lateMark !== null && leaveType !== null) {
       saveLoginDetails();
       executed = true;
@@ -367,13 +325,20 @@ function DailyWork({
     return () => clearInterval(interval);
   }, [running, employeeId]);
 
-
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-updateArchievedPendingCount(changed) Start LineNo:-441 Date:-01/07
   const updateArchievedPendingCount = (archivedIncrement, pendingDecrement) => {
-    const updatedData = {
-      archived: archivedIncrement + 1,
-      pending: pendingDecrement - 1,
-    };
+    let updatedData;
+    if (data.pending > 0) {
+      updatedData = {
+        archived: archivedIncrement + 1,
+        pending: pendingDecrement - 1,
+      };
+    } else {
+      updatedData = {
+        archived: archivedIncrement + 1,
+        pending: 0,
+      };
+    }
     setData(updatedData);
 
     console.log("Archived Increment:", archivedIncrement);
@@ -399,7 +364,11 @@ function DailyWork({
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-updateArchieved(changed) Start LineNo:-334 Date:-01/07
   const updateArchieved = () => {
     console.log(successfulDataUpdation);
-    if ( successfulDataAdditions || successfulDataUpdation) {
+
+    if (
+      successfulDataAdditions ||
+      successfulDataUpdation
+    ) {
       // Assuming updateCount is a function that updates states like archived and pending
       const updatedData = JSON.parse(
         localStorage.getItem(`dailyWorkData_${employeeId}`)
@@ -466,7 +435,7 @@ function DailyWork({
         present = "present";
       }
       let checkHalfDay = "No";
-      console.log(typeof (totalHoursWork));
+      console.log(typeof totalHoursWork);
       const formData = {
         employeeId,
         date: `${day}/${month}/${year}`,
@@ -581,7 +550,7 @@ function DailyWork({
                 Pending : {data.pending}
               </button>
             </div>
-            <button className="loging-hr" >
+            <button className="loging-hr">
               <h6 hidden>Time: {currentTime}</h6>
               <h6 hidden>Date: {currentDate}</h6>
               Login Hours : {time.hours.toString().padStart(2, "0")}:
@@ -615,7 +584,8 @@ function DailyWork({
             <button
               className={running ? "timer-break-btn" : "timer-break-btn"}
               onClick={running ? handlePause : handleResume}
-              style={{ height: "30px" }}>
+              style={{ height: "30px" }}
+            >
               {running ? "Pause" : "Resume"}
             </button>
           </div>
@@ -636,9 +606,14 @@ function DailyWork({
             }}
             className="dw-modal"
           >
-            <div onClick={(e) => e.stopPropagation()} className="dw-modal-content">
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="dw-modal-content"
+            >
               <Modal.Header closeButton>
-                <Modal.Title className="dw-modal-title">Break Runing...</Modal.Title>
+                <Modal.Title className="dw-modal-title">
+                  Break Runing...
+                </Modal.Title>
               </Modal.Header>
               <div>
                 <img src={watingImg} alt="Waiting" className="dw-waiting-img" />
@@ -646,14 +621,18 @@ function DailyWork({
               <Modal.Footer className="dw-modal-footer">
                 <div className="dw-resume-div">
                   <h3>Timer is paused. Click Resume to continue.</h3>
-                  <div className="profile-back-button" >
-                    <button className="profile-back-button" onClick={handleResume}>Resume</button>
+                  <div className="profile-back-button">
+                    <button
+                      className="profile-back-button"
+                      onClick={handleResume}
+                    >
+                      Resume
+                    </button>
                   </div>
                 </div>
               </Modal.Footer>
             </div>
           </Modal>
-
         </>
       ) : null}
     </div>

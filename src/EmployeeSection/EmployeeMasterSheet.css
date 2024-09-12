@@ -42,3 +42,8 @@
 
   /* margin-bottom: 10px; */
 }
+
+.emp-Share-N-filter{
+  display: flex;
+  gap: 5px;
+}

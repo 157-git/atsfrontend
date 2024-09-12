@@ -161,19 +161,18 @@ const LineUpList = ({
     ["requirementId", "Job ID"],
     ["selectYesOrNo", "Status"],
     ["sourceName", "Source Name"],
-    ["yearOfPassing", "Year of Passing"]
+    ["yearOfPassing", "Year of Passing"],
   ];
-  
+
   const { userType } = useParams();
   console.log(userType);
 
-
   //akash_pawar_LineUpList_ShareFunctionality_16/07_128
   const fetchCallingTrackerData = async () => {
-
     try {
       const response = await fetch(
-        `${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`);
+        `${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -190,15 +189,12 @@ const LineUpList = ({
   useEffect(() => {
     fetchCallingTrackerData();
   }, [employeeIdnew]);
-
   //akash_pawar_selfCallingTracker_ShareFunctionality_17/07_171
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_144
   const fetchManager = async () => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/get-all-managers`
-      );
+      const response = await fetch(`${API_BASE_URL}/get-all-managers`);
       const data = await response.json();
       setFetchAllManager(data);
     } catch (error) {
@@ -209,12 +205,9 @@ const LineUpList = ({
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_156
 
-
   const fetchTeamLeader = async (empId) => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/tl-namesIds/${empId}`
-      );
+      const response = await fetch(`${API_BASE_URL}/tl-namesIds/${empId}`);
       const data = await response.json();
       setFetchTeamleader(data);
     } catch (error) {
@@ -243,7 +236,7 @@ const LineUpList = ({
   }, []);
   //akash_pawar_LineUpList_ShareFunctionality_16/07_202
 
-//prachi Parab lineup filterFunctionality_11-09
+  //prachi Parab lineup filterFunctionality_11-09
 
   useEffect(() => {
     const options = limitedOptions
@@ -265,10 +258,7 @@ const LineUpList = ({
 
   const handleUpdateSuccess = () => {
     setShowUpdateCallingTracker(false);
-    fetch(
-
-      `${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`
-    )
+    fetch(`${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`)
       .then((response) => response.json())
       .then((data) => setCallingList(data))
 
@@ -395,72 +385,79 @@ const LineUpList = ({
               item[option]?.toString().toLowerCase().includes(value)
             )
           );
-        } else if(option==="currentCtcLakh"){
+        } else if (option === "currentCtcLakh") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="currentCtcThousand"){
+        } else if (option === "currentCtcThousand") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="empId"){
+        } else if (option === "empId") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="expectedCtcLakh"){
+        } else if (option === "expectedCtcLakh") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="expectedCtcThousand"){
+        } else if (option === "expectedCtcThousand") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="experienceMonth"){
+        } else if (option === "experienceMonth") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="experienceYear"){
+        } else if (option === "experienceYear") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="oldEmployeeId"){
+        } else if (option === "oldEmployeeId") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        
-        else {
+        } else {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
               item[option]
@@ -473,7 +470,7 @@ const LineUpList = ({
       }
     });
     setFilteredCallingList(filteredData);
-  }; 
+  };
 
   // const filterData = () => {
   //   let filteredData = [...callingList];
@@ -489,8 +486,6 @@ const LineUpList = ({
   //   setFilteredCallingList(filteredData);
   // };
 
- 
-
   const handleFilterSelect = (key, value) => {
     setSelectedFilters((prev) => ({
       ...prev,
@@ -500,12 +495,14 @@ const LineUpList = ({
     }));
   };
 
-
   const handleFilterOptionClick = (key) => {
-    setActiveFilterOption(activeFilterOption === key ? null : key);
+    if (activeFilterOption === key) {
+      setActiveFilterOption(null); // Hide the filter details
+    } else {
+      setActiveFilterOption(key); // Show the filter details
+    }
     setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
   };
-
 
   const handleSort = (criteria) => {
     if (criteria === sortCriteria) {
@@ -569,7 +566,6 @@ const LineUpList = ({
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_475
   const handleShare = async () => {
-
     setIsDataSending(true);
     let url = `${API_BASE_URL}/updateIds/${userType}`;
     let requestData;
@@ -604,14 +600,12 @@ const LineUpList = ({
       };
       const response = await fetch(url, requestOptions);
       if (!response.ok) {
-
-
         setIsDataSending(false);
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       // Handle success response
       setIsDataSending(false);
-      toast.success("Candidates forwarded successfully!");//Swapnil Error&success message 
+      toast.success("Candidates forwarded successfully!"); //Swapnil Error&success message
       fetchCallingTrackerData();
       onSuccessAdd(true);
       setShowForwardPopup(false); // Close the modal or handle any further UI updates
@@ -643,8 +637,8 @@ const LineUpList = ({
       console.error("Error while forwarding candidates:", error);
 
       setIsDataSending(false);
-      setShowForwardPopup(false);//Swapnil Error&success message 
-      toast.error("Error while forwarding candidates:");//Swapnil Error&success message 
+      setShowForwardPopup(false); //Swapnil Error&success message
+      toast.error("Error while forwarding candidates:"); //Swapnil Error&success message
       // Handle error scenarios or show error messages to the user
     }
   };
@@ -779,13 +773,16 @@ const LineUpList = ({
         "Recruiter Incentive": item.incentive || "-",
         "Interested or Not": item.selectYesOrNo || "-",
         "Current Company": item.companyName || "-",
-        "Total Experience": `${item.experienceYear || 0} Years ${item.experienceMonth || 0
-          } Months`,
+        "Total Experience": `${item.experienceYear || 0} Years ${
+          item.experienceMonth || 0
+        } Months`,
         "Relevant Experience": item.relevantExperience || "-",
-        "Current CTC": `${item.currentCtcLakh || 0} Lakh ${item.currentCtcThousand || 0
-          } Thousand`,
-        "Expected CTC": `${item.expectedCtcLakh || 0} Lakh ${item.expectedCtcThousand || 0
-          } Thousand`,
+        "Current CTC": `${item.currentCtcLakh || 0} Lakh ${
+          item.currentCtcThousand || 0
+        } Thousand`,
+        "Expected CTC": `${item.expectedCtcLakh || 0} Lakh ${
+          item.expectedCtcThousand || 0
+        } Thousand`,
         "Date Of Birth": item.dateOfBirth || "-",
         Gender: item.gender || "-",
         Education: item.qualification || "-",
@@ -891,8 +888,7 @@ const LineUpList = ({
                   }}
                 >
                   <div>
-
-                    {(userType === 'Manager' || userType === 'TeamLeader') && (
+                    {(userType === "Manager" || userType === "TeamLeader") && (
                       <button className="lineUp-share-btn" onClick={showPopup}>
                         Create Excel
                       </button>
@@ -978,52 +974,56 @@ const LineUpList = ({
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               )}
-     
-       <div className="filter-dropdowns">
-  {showFilterSection && (
-    <div className="filter-section">
-      {limitedOptions.map(([optionKey, optionLabel]) => {
-        const uniqueValues = Array.from(
-          new Set(callingList.map((item) => item[optionKey]))
-        );
 
-        return (
-          <div key={optionKey} className="filter-option">
-            <button
-              className="white-Btn"
-              onClick={() => handleFilterOptionClick(optionKey)}
-            >
-              {optionLabel}
-              <span className="filter-icon">&#x25bc;</span>
-            </button>
-            {activeFilterOption === optionKey && (
-              <div className="city-filter">
-                <div className="optionDiv">
-                  {uniqueValues.map((value) => (
-                    <label
-                      key={value}
-                      className="selfcalling-filter-value"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={
-                          selectedFilters[optionKey]?.includes(value) || false
-                        }
-                        onChange={() => handleFilterSelect(optionKey, value)}
-                        style={{marginRight:'5px'}}
-                      />
-                      {value}
-                    </label>
-                  ))}
-                </div>
+              <div className="filter-dropdowns">
+                {showFilterSection && (
+                  <div className="filter-section">
+                    {limitedOptions.map(([optionKey, optionLabel]) => {
+                      const uniqueValues = Array.from(
+                        new Set(callingList.map((item) => item[optionKey]))
+                      );
+
+                      return (
+                        <div key={optionKey} className="filter-option">
+                          <button
+                            className="white-Btn"
+                            onClick={() => handleFilterOptionClick(optionKey)}
+                          >
+                            {optionLabel}
+                            <span className="filter-icon">&#x25bc;</span>
+                          </button>
+                          {activeFilterOption === optionKey && (
+                            <div className="city-filter">
+                              <div className="optionDiv">
+                                {uniqueValues.map((value) => (
+                                  <label
+                                    key={value}
+                                    className="selfcalling-filter-value"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={
+                                        selectedFilters[optionKey]?.includes(
+                                          value
+                                        ) || false
+                                      }
+                                      onChange={() =>
+                                        handleFilterSelect(optionKey, value)
+                                      }
+                                      style={{ marginRight: "5px" }}
+                                    />
+                                    {value}
+                                  </label>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  )}
-</div>
               <div className="attendanceTableData">
                 <table className="attendance-table">
                   <thead>
@@ -1046,9 +1046,8 @@ const LineUpList = ({
                         className="attendanceheading"
                         onClick={() => handleSort("date")}
                       >
-                        Date
-                        &
-                        Time</th>
+                        Date & Time
+                      </th>
                       <th className="attendanceheading">Candidate Id</th>
                       <th
                         className="attendanceheading"
@@ -1090,24 +1089,29 @@ const LineUpList = ({
                       <th className="attendanceheading">Gender</th>
                       <th className="attendanceheading">Education</th>
                       <th className="attendanceheading">Year Of Passing</th>
-                      <th className="attendanceheading">Any Extra Certification</th>
+                      <th className="attendanceheading">
+                        Any Extra Certification
+                      </th>
                       {/* <th className="attendanceheading">Feedback</th> */}
                       <th className="attendanceheading">Holding Any Offer</th>
                       <th className="attendanceheading">Offer Letter Msg</th>
                       <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">Notice Period</th>
-                      {userType === 'TeamLeader' &&
+                      {userType === "TeamLeader" && (
                         <th className="attendanceheading">
                           Message For Manager
-                        </th>}
-                      {userType === 'Recruiters' &&
+                        </th>
+                      )}
+                      {userType === "Recruiters" && (
                         <th className="attendanceheading">
                           Message For Team Leader
-                        </th>}
-                      {userType === 'Manager' &&
+                        </th>
+                      )}
+                      {userType === "Manager" && (
                         <th className="attendanceheading">
                           Message For Super User
-                        </th>}
+                        </th>
+                      )}
                       <th className="attendanceheading">
                         Availability For Interview
                       </th>
@@ -1115,7 +1119,8 @@ const LineUpList = ({
                       <th className="attendanceheading">Interview Status</th>
                       <th className="attendanceheading">Employee ID</th>
 
-                      {(userType === 'TeamLeader' || userType === 'Manager') && (
+                      {(userType === "TeamLeader" ||
+                        userType === "Manager") && (
                         <th className="attendanceheading">Team Leader Id</th>
                       )}
 
@@ -1135,7 +1140,6 @@ const LineUpList = ({
                           </td>
                         ) : null}
 
-
                         <td className="tabledata">{index + 1}</td>
 
                         <td
@@ -1143,15 +1147,9 @@ const LineUpList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.date}
+                          {item.date}   -  {item.candidateAddedTime || "-"}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.date}</span>
-                          </div>
-                          {item.candidateAddedTime || "-"}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.candidateAddedTime}
-                            </span>
+                            <span className="tooltiptext">{item.date} -  {item.candidateAddedTime}</span>
                           </div>
                         </td>
 
@@ -1343,9 +1341,7 @@ const LineUpList = ({
                         >
                           {item.feedBack || "-"}
                           <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.feedBack}
-                            </span>
+                            <span className="tooltiptext">{item.feedBack}</span>
                           </div>
                         </td>
 
@@ -1427,12 +1423,15 @@ const LineUpList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {`${item.currentCtcLakh || 0} Lakh ${item.currentCtcThousand || 0
-                              } Thousand`}
+                            {`${item.currentCtcLakh || 0} Lakh ${
+                              item.currentCtcThousand || 0
+                            } Thousand`}
                             <div className="tooltip">
-                              <span className="tooltiptext">{`${item.expectedCtcLakh || 0
-                                } Lakh ${item.expectedCtcThousand || 0
-                                } Thousand`}</span>
+                              <span className="tooltiptext">{`${
+                                item.expectedCtcLakh || 0
+                              } Lakh ${
+                                item.expectedCtcThousand || 0
+                              } Thousand`}</span>
                             </div>
                           </td>
 
@@ -1441,12 +1440,15 @@ const LineUpList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {`${item.expectedCtcLakh || 0} Lakh ${item.expectedCtcThousand || 0
-                              } Thousand`}
+                            {`${item.expectedCtcLakh || 0} Lakh ${
+                              item.expectedCtcThousand || 0
+                            } Thousand`}
                             <div className="tooltip">
-                              <span className="tooltiptext">{`${item.expectedCtcLakh || 0
-                                } Lakh ${item.expectedCtcThousand || 0
-                                } Thousand`}</span>
+                              <span className="tooltiptext">{`${
+                                item.expectedCtcLakh || 0
+                              } Lakh ${
+                                item.expectedCtcThousand || 0
+                              } Thousand`}</span>
                             </div>
                           </td>
 
@@ -1649,13 +1651,12 @@ const LineUpList = ({
                           >
                             {item.empId || "-"}
                             <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.empId}
-                              </span>
+                              <span className="tooltiptext">{item.empId}</span>
                             </div>
                           </td>
 
-                          {(userType === 'TeamLeader' || userType === 'Manager') && (
+                          {(userType === "TeamLeader" ||
+                            userType === "Manager") && (
                             <td
                               className="tabledata"
                               onMouseOver={handleMouseOver}

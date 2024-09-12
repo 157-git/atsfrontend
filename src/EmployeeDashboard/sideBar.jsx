@@ -123,22 +123,22 @@ function Sidebar({
     // document.documentElement.style.setProperty("--filter-color", color);
   };
 
-  // const handleLogoutLocal = () => {
-  //   const logoutTime = new Date().toLocaleTimeString("en-IN");
-  //   onLogout(logoutTime);
-  // };.
+  const handleLogoutLocal = () => {
+    const logoutTime = new Date().toLocaleTimeString("en-IN");
+    onLogout(logoutTime);
+  };
 
-  const temproryLogout = () =>{
-    localStorage.removeItem(`loginTimeSaved_${employeeId}`);
-    localStorage.removeItem(`loginDetailsSaved_${employeeId}`);
-    localStorage.removeItem(`stopwatchTime_${employeeId}`);
-    localStorage.removeItem(`dailyWorkData_${employeeId}`);
-    localStorage.removeItem(`breaks_${employeeId}`);
-    localStorage.removeItem('employeeId')
-    console.log("Temp Logout Successfully");
-    navigate(`/login/${userType}`,{ replace: true })
-  }
-  
+  // const temproryLogout = () =>{
+  //   localStorage.removeItem(`loginTimeSaved_${employeeId}`);
+  //   localStorage.removeItem(`loginDetailsSaved_${employeeId}`);
+  //   localStorage.removeItem(`stopwatchTime_${employeeId}`);
+  //   localStorage.removeItem(`dailyWorkData_${employeeId}`);
+  //   localStorage.removeItem(`breaks_${employeeId}`);
+  //   localStorage.removeItem('employeeId')
+  //   console.log("Temp Logout Successfully");
+  //   navigate(`/login/${userType}`,{ replace: true })
+  // }
+
   const handleColorClick = (color) => {
     applyColor(color);
     setShowColor(false);
@@ -313,8 +313,8 @@ function Sidebar({
           </div>
           <div className="nav">
             <div className="sidebar-menu">
-              
-                        
+
+
               <ul>
                 <>
                   {userType === "SuperUser" ? (
@@ -630,11 +630,6 @@ function Sidebar({
                       {/* <a href="#">
                         <i
                           className="fa-solid fa-user-gear"
-<<<<<<< HEAD
-                           
-=======
-                          style={{ color: "gray" }}
->>>>>>> 552f1f9a738807efb94703b78c3a076500cbaa8f
                         ></i>
                         <span className="sidebar-text">Employee Section</span>
                         <i className="arrow ph-bold ph-caret-down"></i>
@@ -920,7 +915,7 @@ function Sidebar({
                               Create Question paper
                             </span>
                           </a>
-                        </li> */}
+                        </li>
                         {/* neha_add_scheduleinterview_page_line_no511_523 */}
                         <li
                           onClick={handleButtonClick(
@@ -1584,7 +1579,7 @@ function Sidebar({
                   justifyContent: "center",
                 }}
               >
-                <button onClick={temproryLogout} className="buttoncss">
+                <button onClick={handleLogoutLocal} className="buttoncss">
                   Yes
                 </button>
 

@@ -24,7 +24,7 @@ const ShareLink = ({ toggleResumeLink }) => {
         <div className="shareLink-share-btn-Div">
           <h1>Share Link To Candidate</h1>
           <button className="shareLink-share-btn">Share 🔗</button>
-
+          <span style={{ color: "black",fontSize:"14px" }}>Share this link with the candidate so they can fill in their information through the link</span>
         </div>
       </RWebShare>
       <div className="shareLink-view-btn-Div">
@@ -32,6 +32,8 @@ const ShareLink = ({ toggleResumeLink }) => {
         <button className="shareLink-view-btn" onClick={toggleResumeLink}>
           Create
         </button>
+        <span style={{ color: "black",fontSize:"14px" }}>If the candidate doesn't have a resume, they can create one here.</span>
+
       </div>
     </div>
   );

@@ -210,6 +210,8 @@ html::-webkit-scrollbar {
   background-color: #f2f2f2;
 
 }
+
+
 .filter-option button {
   text-transform: capitalize;
 }

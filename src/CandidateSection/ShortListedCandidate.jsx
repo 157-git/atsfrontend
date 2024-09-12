@@ -1164,16 +1164,14 @@ const ShortListedCandidates = ({
                     </div>
                   </td>
 
-                  {userType !== 'Manager' && (
-                    <td className="tabledata"
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}>
-                      {item.msgForTeamLeader}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{item.msgForTeamLeader}</span>
-                      </div>
-                    </td>
-                  )}
+                  <td className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}>
+                    {item.msgForTeamLeader}
+                    <div className="tooltip">
+                      <span className="tooltiptext">{item.msgForTeamLeader}</span>
+                    </div>
+                  </td>
 
                   <td className="tabledata"
                     onMouseOver={handleMouseOver}

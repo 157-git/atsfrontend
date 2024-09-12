@@ -18,6 +18,7 @@ import Confetti from "react-confetti";
 import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
+import TimePicker from "react-time-picker";
 
 const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
@@ -45,8 +46,8 @@ const CallingTrackerForm = ({
     currentLocation: "",
     fullAddress: "",
     communicationRating: "",
-    selectYesOrNo: "Yet To Confirm",
-    callingFeedback: ""
+    selectYesOrNo: "No",
+    callingFeedback: "",
   };
 
   const initialLineUpState = {
@@ -71,10 +72,8 @@ const CallingTrackerForm = ({
     interviewTime: "",
     finalStatus: "",
     feedBack: "",
-    resume: []
+    resume: [],
   };
-
-
   const [callingTracker, setCallingTracker] = useState(
     initialCallingTrackerState
   );
@@ -173,9 +172,6 @@ const CallingTrackerForm = ({
     if (!callingTracker.candidateEmail) {
       errors.candidateEmail = "Email is required";
     }
-    if (!callingTracker.callingFeedback) {
-      errors.callingFeedback = "Calling Feedback is required";
-    }
     return errors;
   };
 
@@ -183,8 +179,9 @@ const CallingTrackerForm = ({
     let errors = {};
     if (callingTracker.selectYesOrNo === "Interested") {
       if (!callingTracker.requirementId) {
-        errors.requirementId = "Job Id is required";
+        errors.requirementId = "Requirement ID is required";
       }
+
       if (!lineUpData.experienceYear || !lineUpData.experienceMonth) {
         errors.experienceYear = "Experience is required";
       }
@@ -208,12 +205,6 @@ const CallingTrackerForm = ({
       }
       if (!lineUpData.holdingAnyOffer) {
         errors.holdingAnyOffer = "Holding Any Offer is required";
-      }
-      if (!lineUpData.finalStatus) {
-        errors.finalStatus = "Please Select Option";
-      }
-      if (!lineUpData.noticePeriod) {
-        errors.noticePeriod = "Notice Period is required";
       }
     }
     return errors;
@@ -402,6 +393,7 @@ const CallingTrackerForm = ({
       setLoading(false);
     }
   };
+
   const handleLocationChange = (e) => {
     const value = e.target.value;
     if (value === "Other") {
@@ -420,7 +412,6 @@ const CallingTrackerForm = ({
     setErrors((prevErrors) => ({ ...prevErrors, currentLocation: "" }));
   };
 
-
   const handleEducationChange = (e) => {
     const value = e.target.value;
     if (value === "Other") {
@@ -435,6 +426,7 @@ const CallingTrackerForm = ({
 
   const handleResumeFileChange = (e) => {
     const file = e.target.files[0];
+
     if (file) {
       const reader = new FileReader();
 
@@ -446,6 +438,7 @@ const CallingTrackerForm = ({
         const base64String = btoa(String.fromCharCode(...byteNumbers));
 
         console.log(base64String); // Print the Base64 string
+
         setLineUpData((prevState) => ({
           ...prevState,
           resume: base64String, // Store the Base64 string
@@ -455,12 +448,12 @@ const CallingTrackerForm = ({
       reader.readAsArrayBuffer(file); // Read the file as an ArrayBuffer
     }
   };
+
   const handleRequirementChange = (e) => {
     const { value } = e.target;
     const selectedRequirement = requirementOptions.find(
       (requirement) => requirement.requirementId === parseInt(value)
     );
-
 
     if (selectedRequirement) {
       setCallingTracker((prevState) => ({
@@ -566,6 +559,7 @@ const CallingTrackerForm = ({
                       type="button"
                       onClick={handleShow}
                       className="calling-tracker-popup-open-btn"
+                      style={{ width: "100px" }}
                     >
                       Help
                     </button>
@@ -810,11 +804,8 @@ const CallingTrackerForm = ({
                     <option value="Invalid Number">Invalid Number</option>
                     <option value="Need to call back">Need to call back</option>
                     <option value="Do not call again">Do not call again</option>
-                    {/* <option value="Other">Other</option> */}
+                    <option value="Other">Other</option>
                   </select>
-                  {errors.callingFeedback && (
-                    <div className="error-message">{errors.callingFeedback}</div>
-                  )}
                 </div>
               </div>
               <div className="calling-tracker-field">
@@ -841,7 +832,6 @@ const CallingTrackerForm = ({
                           value="Male"
                           className="gender"
                           checked={lineUpData.gender === "Male"}
-
                           onChange={(e) =>
                             setLineUpData({
                               ...lineUpData,
@@ -852,6 +842,7 @@ const CallingTrackerForm = ({
                         <span style={{ paddingLeft: "10px" }}>Male</span>
                       </div>
                     </div>
+
                     <div className="callingTracker-male-div">
                       <div className="calling-check-box">
                         <input
@@ -1325,6 +1316,7 @@ const CallingTrackerForm = ({
                       </div>
                     )}
                   </div>
+
                   <input
                     type="text"
                     name="yearOfPassing"
@@ -1621,27 +1613,33 @@ const CallingTrackerForm = ({
             <div className="calling-tracker-row-gray">
               <div className="calling-tracker-field">
                 <label>Status Type</label>
-
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
                     <select
                       name="selectYesOrNo"
+                      placeholder="Candidate Interested"
                       value={callingTracker.selectYesOrNo}
-                      onChange={handleChange}>
-                      
-                      <option value="Yet To Confirm">Yet To Confirm</option>
+                      onChange={handleChange}
+                    >
+                      <option value="">Select</option>
                       <option value="Interested">Interested</option>
-                      <option value="Interested, will confirm later">Interested, will confirm later</option>
-                      <option value="Not Interested">Not Interested</option>
-                      <option value=" Interested But Not Eligible">Interested But Not Eligible</option>
+                      <option value="Interested, will confirm later">
+                        Interested, will confirm later
+                      </option>
+                      <option value="No Interested">No Interested</option>
+                      <option value=" Interested But Not Eligible">
+                        Interested But Not Eligible
+                      </option>
                       <option value="Eligible">Eligible</option>
                       <option value="Not Eligible">Not Eligible</option>
-                      <option value="Not Eligible But Interested">Not Eligible But Interested</option>
+                      <option value="Not Eligible But Interested">
+                        Not Eligible But Interested
+                      </option>
                     </select>
                   </div>
-
                   <div className="calling-tracker-two-input">
                     <select
+                      type="text"
                       name="finalStatus"
                       value={lineUpData.finalStatus}
                       onChange={(e) =>
@@ -1651,20 +1649,17 @@ const CallingTrackerForm = ({
                         })
                       }
                     >
-
-                      <option value="">Select</option>
-                      <option value="Yet To Confirm">Yet To Confirm</option>
-                      <option value="Interview Schedule">Interview Schedule</option>
-                      <option value="Attending After Some time">Attending After Some time</option>
+                      <option value="">Whats Now</option>
+                      <option value="Interview Schedule">
+                        Interview Schedule
+                      </option>
+                      <option value="Attending After Some time">
+                        Attending After Some time
+                      </option>
+                      <option value="Response On Hold">Response On Hold</option>
                     </select>
-                    {errors.finalStatus && (
-                      <div className="error-message error-two-input-box">
-                        {errors.finalStatus}
-                      </div>
-                    )}
                   </div>
                 </div>
-
               </div>
               <div className="calling-tracker-field">
                 <label>Interview Slots</label>
@@ -1682,6 +1677,7 @@ const CallingTrackerForm = ({
                       }
                     />
                   </div>
+
                   <div className="calling-tracker-two-input">
                     <input
                       type="time"
@@ -1861,29 +1857,33 @@ const ModalComponent = ({
         <div className="calling-tracker-popup">
           <div className="calling-tracker-popup-sidebar">
             <p
-              className={`sidebar-item ${activeField === "distance" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "distance" ? "active" : ""
+              }`}
               onClick={() => setActiveField("distance")}
             >
               Distance Calculation
             </p>
             <p
-              className={`sidebar-item ${activeField === "salary" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "salary" ? "active" : ""
+              }`}
               onClick={() => setActiveField("salary")}
             >
               Salary Calculation
             </p>
             <p
-              className={`sidebar-item ${activeField === "historyTracker" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "historyTracker" ? "active" : ""
+              }`}
               onClick={() => setActiveField("historyTracker")}
             >
               History Tracker
             </p>
             <p
-              className={`sidebar-item ${activeField === "previousQuestion" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "previousQuestion" ? "active" : ""
+              }`}
               onClick={() => setActiveField("previousQuestion")}
             >
               Previous Question
