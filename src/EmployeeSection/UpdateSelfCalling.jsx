@@ -6,20 +6,21 @@ import "react-phone-number-input/style.css";
 import { FaCheckCircle } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-toastify";
-import "../EmployeeSection/UpdateSelfCalling.css"
+import "../EmployeeSection/UpdateSelfCalling.css";
 import { API_BASE_URL } from "../api/api";
 import { Button, Modal } from "react-bootstrap";
 import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker";
 
-const UpdateCallingTracker = ({
-  onsuccessfulDataUpdation,
+const UpdateSelfCalling = ({
   initialData,
   candidateId,
-  onCancel
+  onCancel,
+  onsuccessfulDataUpdation,
+  onSuccess,
 }) => {
-
-  const [isOtherEducationSelected, setIsOtherEducationSelected] = useState(false);
-  const [callingTracker, setCallingTracker] = useState({ 
+  const [isOtherEducationSelected, setIsOtherEducationSelected] =
+    useState(false);
+  const [callingTracker, setCallingTracker] = useState({
     date: new Date().toISOString().slice(0, 10),
     candidateId: candidateId,
     candidateAddedTime: "",
@@ -62,7 +63,7 @@ const UpdateCallingTracker = ({
       finalStatus: "",
     },
   });
-  
+
   const initialLineUpState = {
     companyName: "",
     experienceYear: "",
@@ -85,7 +86,7 @@ const UpdateCallingTracker = ({
     interviewTime: "",
     finalStatus: "",
     feedBack: "",
-    resume: []
+    resume: [],
   };
 
 
@@ -101,13 +102,13 @@ const UpdateCallingTracker = ({
   const [convertedExpectedCTC, setConvertedExpectedCTC] = useState("");
   const [convertedCurrentCTC, setConvertedCurrentCTC] = useState("");
   const [startpoint, setStartPoint] = useState("");
-  const [endpoint, setendPoint] = useState(""); 
+  const [endpoint, setendPoint] = useState("");
   const [lineUpData, setLineUpData] = useState(initialLineUpState);
 
   useEffect(() => {
     fetchCandidateData(candidateId);
     fetchRequirementOptions();
-  }, [candidateId]);  
+  }, [candidateId]);
 
   useEffect(() => {
     if (initialData) {
@@ -136,9 +137,7 @@ const UpdateCallingTracker = ({
 
   const fetchRequirementOptions = async () => {
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/company-details`
-      );
+      const response = await axios.get(`${API_BASE_URL}/company-details`);
       const { data } = response;
       setRequirementOptions(data);
     } catch (error) {
@@ -158,8 +157,7 @@ const UpdateCallingTracker = ({
             [lineUpField]: value,
           },
         };
-      }
-      else {
+      } else {
         return {
           ...prevState,
           [name]: value,
@@ -167,9 +165,6 @@ const UpdateCallingTracker = ({
       }
     });
   };
-
-  
-
 
   const handleEducationChange = (e) => {
     const value = e.target.value;
@@ -192,7 +187,7 @@ const UpdateCallingTracker = ({
         lineUp: {
           ...callingTracker.lineUp,
           resume: "",
-        }
+        },
       };
 
       const response = await fetch(
@@ -206,19 +201,23 @@ const UpdateCallingTracker = ({
         }
       );
 
-
-
       if (response.ok) {
-
+        if (callingTracker.selectYesOrNo === "Interested") {
+          onsuccessfulDataUpdation(true);
+          console.log("-------Yes Update Calling-----------");
+        } else {
+          onsuccessfulDataUpdation(false);
+          console.log("-------No  Update Calling-----------");
+        }
         toast.success("Data updated successfully");
         setFormSubmitted(true);
+        onSuccess();
         onCancel();
         setTimeout(() => {
           setFormSubmitted(false);
         }, 4000);
       } else {
         toast.error("Failed to update data");
-        
       }
       setLineUpData(initialLineUpState);
     } catch (error) {
@@ -251,7 +250,6 @@ const UpdateCallingTracker = ({
     }
   };
 
-  
   const handleShow = () => {
     setShowModal(true);
   };
@@ -277,8 +275,6 @@ const UpdateCallingTracker = ({
   const handleUpdateExpectedCTCThousand = (value) => {
     setLineUpData({ ...lineUpData, expectedCTCThousand: value });
   };
-
-  
 
   return (
     <div className="update-main-div">
@@ -320,15 +316,15 @@ const UpdateCallingTracker = ({
                   className="plain-input"
                 />
                 <div className="calling-tracker-two-input">
-                    <button
-                      type="button"
-                      onClick={handleShow}
-                      className="update-tracker-popup-open-btn"
-                      style={{ width: "100px" }}
-                    >
-                      Help
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={handleShow}
+                    className="update-tracker-popup-open-btn"
+                    style={{ width: "100px" }}
+                  >
+                    Help
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -346,7 +342,6 @@ const UpdateCallingTracker = ({
                   className={`plain-input`}
                   value={callingTracker.candidateName || ""}
                   onChange={handleChange}
-
                 />
               </div>
             </div>
@@ -382,7 +377,6 @@ const UpdateCallingTracker = ({
               <label>Whatsapp Number</label>
               <div className="update-calling-tracker-field-sub-div">
                 <input
-
                   placeholder="Enter phone number"
                   name="alternateNumber"
                   value={callingTracker?.alternateNumber || ""}
@@ -437,7 +431,6 @@ const UpdateCallingTracker = ({
                       value={option.requirementId}
                     >
                       {option.requirementId} - {option.designation}
-
                     </option>
                   ))}
                 </select>
@@ -481,7 +474,7 @@ const UpdateCallingTracker = ({
               <label>Current Location</label>
               <div className="update-calling-check-box-main-container">
                 {/* {!isOtherLocationSelected ? ( */}
-                  {/* <select
+                {/* <select
                     name="currentLocation"
                     value={callingTracker?.currentLocation || ""}
                     onChange={handleLocationChange}
@@ -494,13 +487,13 @@ const UpdateCallingTracker = ({
                     <option value="Other">Other</option>
                   </select>
                 ) : ( */}
-                  <input
-                    type="text"
-                    name="currentLocation"
-                    value={callingTracker?.currentLocation || ""}
-                    onChange={handleChange}
-                    placeholder="Enter your location"
-                  />
+                <input
+                  type="text"
+                  name="currentLocation"
+                  value={callingTracker?.currentLocation || ""}
+                  onChange={handleChange}
+                  placeholder="Enter your location"
+                />
                 {/* )} */}
 
                 <input
@@ -527,7 +520,9 @@ const UpdateCallingTracker = ({
                 >
                   <option value="">Feedback</option>
                   <option value="Call Done">Call Done</option>
-                  <option value="Asked for Call Back">Asked for Call Back</option>
+                  <option value="Asked for Call Back">
+                    Asked for Call Back
+                  </option>
                   <option value="No Answer">No Answer</option>
                   <option value="Network Issue">Network Issue</option>
                   <option value="Invalid Number">Invalid Number</option>
@@ -557,12 +552,10 @@ const UpdateCallingTracker = ({
                         checked={callingTracker?.lineUp.gender === "Male"}
                         onChange={handleChange}
                       />
-
                     </div>
                     <div>Male</div>
                   </div>
                   <div className="update-callingTracker-male-div">
-
                     <div className="calling-check-box">
                       <input
                         type="checkbox"
@@ -572,7 +565,6 @@ const UpdateCallingTracker = ({
                         checked={callingTracker?.lineUp.gender === "Female"}
                         onChange={handleChange}
                       />
-
                     </div>
                     <div>Female</div>
                   </div>
@@ -607,7 +599,7 @@ const UpdateCallingTracker = ({
                       alignItems: "center",
                       lineHeight: 1,
                       marginRight: "10px",
-                      color: "gray"
+                      color: "gray",
                     }}
                     value={callingTracker?.lineUp.qualification || ""}
                   >
@@ -660,7 +652,9 @@ const UpdateCallingTracker = ({
                     <option value="Associate of Information Technology (AIT)">
                       Associate of Information Technology (AIT)
                     </option>
-                    <option value="Bachelor's Degrees">Bachelor's Degrees</option>
+                    <option value="Bachelor's Degrees">
+                      Bachelor's Degrees
+                    </option>
                     <option value="Bachelor of Arts (BA)">
                       Bachelor of Arts (BA)
                     </option>
@@ -901,7 +895,9 @@ const UpdateCallingTracker = ({
                     <option value="Diploma in Engineering">
                       Diploma in Engineering
                     </option>
-                    <option value="Diploma in Nursing">Diploma in Nursing</option>
+                    <option value="Diploma in Nursing">
+                      Diploma in Nursing
+                    </option>
                     <option value="Diploma in Education">
                       Diploma in Education
                     </option>
@@ -1076,16 +1072,12 @@ const UpdateCallingTracker = ({
                   onChange={handleChange}
                   // required={callingTracker.selectYesOrNo === "Interested"}
                   className="plain-input"
-
                 />
               </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>Total Experience</label>
-              <div
-                className="update-calling-tracker-two-input-container"
-              >
-
+              <div className="update-calling-tracker-two-input-container">
                 <input
                   type="text"
                   name="lineUp.experienceYear"
@@ -1158,9 +1150,7 @@ const UpdateCallingTracker = ({
           <div className="update-calling-tracker-row-gray">
             <div className="update-calling-tracker-field">
               <label>Current CTC(LPA)</label>
-              <div
-                className="update-calling-tracker-two-input-container"
-              >
+              <div className="update-calling-tracker-two-input-container">
                 <input
                   type="text"
                   name="lineUp.currentCTCLakh"
@@ -1187,9 +1177,7 @@ const UpdateCallingTracker = ({
             </div>
             <div className="update-calling-tracker-field">
               <label>Expected CTC (LPA)</label>
-              <div
-                className="update-calling-tracker-two-input-container"
-              >
+              <div className="update-calling-tracker-two-input-container">
                 <input
                   type="text"
                   name="lineUp.expectedCTCLakh"
@@ -1251,7 +1239,6 @@ const UpdateCallingTracker = ({
                   //onChange={handleLineUpChange}
                   onChange={handleChange}
                   className="plain-input"
-
                 />
               </div>
             </div>
@@ -1341,7 +1328,6 @@ const UpdateCallingTracker = ({
         onUpdateExpectedCTCLakh={handleUpdateExpectedCTCLakh}
         onUpdateExpectedCTCThousand={handleUpdateExpectedCTCThousand}
       />
-
     </div>
   );
 };
@@ -1364,7 +1350,9 @@ const ModalComponent = ({
   const [calculatedHike, setCalculatedHike] = useState("");
   const [expectedCTC, setExpectedCTC] = useState("");
   const [expectedCTCLakh, setExpectedCTCLakh] = useState(expectedCTCInLakh);
-  const [expectedCTCThousand, setExpectedCTCThousand] = useState(expectedCTCInThousand);
+  const [expectedCTCThousand, setExpectedCTCThousand] = useState(
+    expectedCTCInThousand
+  );
   const [showHikeInput, setShowHikeInput] = useState(false);
 
   useEffect(() => {
@@ -1496,7 +1484,7 @@ const ModalComponent = ({
                             className="form-control"
                             placeholder="Enter current CTC in lakh"
                             value={convertedCurrentCTC}
-                            // readOnly
+                          // readOnly
                           />
                         </div>
                       </td>
@@ -1542,7 +1530,7 @@ const ModalComponent = ({
                           className="form-control"
                           placeholder="Enter current CTC in lakh"
                           value={convertedCurrentCTC}
-                          // readOnly
+                        // readOnly
                         />
                       </td>
                       <td className="text-secondary">
@@ -1605,15 +1593,10 @@ const ModalComponent = ({
             )}
             {activeField === "historyTracker" && (
               <div className="history-Tracker">
-
                 <div className="form-group">
-
-                  < CandidateHistoryTracker />
-                  <div>
-
-                  </div>
+                  <CandidateHistoryTracker />
+                  <div></div>
                 </div>
-
               </div>
             )}
             {activeField === "previousQuestion" && (
@@ -1631,24 +1614,48 @@ const ModalComponent = ({
 
                 <div className="card">
                   <h2 className="card-title">Previous Question</h2>
-                  <p className="card-content">Q.1. What is Java Full Stack Development?</p>
-                  <p className="card-content">Q.2. Explain the difference between front-end and back-end development.</p>
-                  <p className="card-content">Q.3. What do you need to build a typical web application?</p>
-                  <p className="card-content">Q.4. What is the Java Virtual Machine (JVM), and why is it important?</p>
-                  <p className="card-content">Q.5. What's a servlet, and why is it used in Java web development?</p>
-
+                  <p className="card-content">
+                    Q.1. What is Java Full Stack Development?
+                  </p>
+                  <p className="card-content">
+                    Q.2. Explain the difference between front-end and back-end
+                    development.
+                  </p>
+                  <p className="card-content">
+                    Q.3. What do you need to build a typical web application?
+                  </p>
+                  <p className="card-content">
+                    Q.4. What is the Java Virtual Machine (JVM), and why is it
+                    important?
+                  </p>
+                  <p className="card-content">
+                    Q.5. What's a servlet, and why is it used in Java web
+                    development?
+                  </p>
                 </div>
                 <div className="card">
                   <h2 className="card-title">Previous Question</h2>
-                  <p className="card-content">Q.1. What's the Spring Framework, and why is it useful for Java?</p>
-                  <p className="card-content">Q.2. What are RESTful web services, and why are they important in Java?</p>
-                  <p className="card-content">Q.3. What's Hibernate, and how does it help with databases in Java?</p>
-                  <p className="card-content">Q.4. Can you explain what dependency injection means in Spring?</p>
-                  <p className="card-content">Q.5. What's a singleton pattern, and why does it matter in Java?</p>
-
+                  <p className="card-content">
+                    Q.1. What's the Spring Framework, and why is it useful for
+                    Java?
+                  </p>
+                  <p className="card-content">
+                    Q.2. What are RESTful web services, and why are they
+                    important in Java?
+                  </p>
+                  <p className="card-content">
+                    Q.3. What's Hibernate, and how does it help with databases
+                    in Java?
+                  </p>
+                  <p className="card-content">
+                    Q.4. Can you explain what dependency injection means in
+                    Spring?
+                  </p>
+                  <p className="card-content">
+                    Q.5. What's a singleton pattern, and why does it matter in
+                    Java?
+                  </p>
                 </div>
-
-
               </div>
             )}
           </div>
@@ -1666,5 +1673,5 @@ const ModalComponent = ({
   );
 };
 
-export default UpdateCallingTracker;
+export default UpdateSelfCalling;
 // neha_updateselfcalling_designing_end_lineno_1214_date_16/07/24

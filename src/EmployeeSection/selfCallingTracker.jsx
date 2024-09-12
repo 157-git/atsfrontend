@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../EmployeeSection/LineUpList.css";
-import "../Reports/LineUpDataReport.css"
+import "../Reports/LineUpDataReport.css";
 // import "../AdminSection/Team_Leader.css"
 import UpdateCallingTracker from "./UpdateSelfCalling";
 import * as XLSX from "xlsx";
@@ -18,6 +18,7 @@ const CallingList = ({
   updateState,
   funForGettingCandidateId,
   loginEmployeeName,
+  onsuccessfulDataUpdation,
 }) => {
   const [callingList, setCallingList] = useState([]);
   const { employeeId } = useParams();
@@ -117,18 +118,17 @@ const CallingList = ({
     ["requirementId", "Job Id"],
     ["selectYesOrNo", "Status"],
     ["sourceName", "Source Name"],
-    ["yearOfPassing", "Year Of Passing"]
-  ]
+    ["yearOfPassing", "Year Of Passing"],
+  ];
   const { userType } = useParams();
   console.log(userType);
 
-
   //akash_pawar_LineUpList_ShareFunctionality_16/07_128
   const fetchCallingTrackerData = async () => {
-
     try {
       const response = await fetch(
-        `${API_BASE_URL}/callingData/${employeeIdnew}/${userType}`);
+        `${API_BASE_URL}/callingData/${employeeIdnew}/${userType}`
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -151,9 +151,7 @@ const CallingList = ({
   //akash_pawar_LineUpList_ShareFunctionality_17/07_144
   const fetchManager = async () => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/get-all-managers`
-      );
+      const response = await fetch(`${API_BASE_URL}/get-all-managers`);
       const data = await response.json();
       setFetchAllManager(data);
     } catch (error) {
@@ -164,12 +162,9 @@ const CallingList = ({
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_156
 
-
   const fetchTeamLeader = async (empId) => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/tl-namesIds/${empId}`
-      );
+      const response = await fetch(`${API_BASE_URL}/tl-namesIds/${empId}`);
       const data = await response.json();
       setFetchTeamleader(data);
     } catch (error) {
@@ -206,20 +201,19 @@ const CallingList = ({
   //       Object.keys(filteredCallingList[0] || {}).includes(key)
   //     )
   //     .map(([key]) => key);
-  
+
   //   const formattedOptions = options.map(option =>
-  //     formatDisplayName(option) 
+  //     formatDisplayName(option)
   //   );
-  
+
   //   setFilterOptions(formattedOptions);
   // }, [filteredCallingList]);
-  
+
   // const formatDisplayName = (option) => {
   //   return option
-  //     .replace(/([a-z])([A-Z])/g, '$1 $2') 
-     
+  //     .replace(/([a-z])([A-Z])/g, '$1 $2')
+
   // };
-  
 
   useEffect(() => {
     const options = limitedOptions
@@ -227,7 +221,7 @@ const CallingList = ({
         Object.keys(filteredCallingList[0] || {}).includes(key)
       )
       .map(([key]) => key);
-      
+
     setFilterOptions(options);
   }, [filteredCallingList]);
 
@@ -242,13 +236,9 @@ const CallingList = ({
 
   const handleUpdateSuccess = () => {
     setShowUpdateCallingTracker(false);
-    fetch(
-
-      `${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`
-    )
+    fetch(`${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`)
       .then((response) => response.json())
       .then((data) => setCallingList(data))
-
       .catch((error) => console.error("Error fetching data:", error));
   };
 
@@ -337,7 +327,6 @@ const CallingList = ({
       setFilteredCallingList(sortedList);
     }
   }, [sortCriteria, sortOrder]);
-  
 
   const filterData = () => {
     let filteredData = [...callingList];
@@ -373,74 +362,79 @@ const CallingList = ({
               item[option]?.toString().toLowerCase().includes(value)
             )
           );
-        }
-        else if(option==="currentCtcLakh"){
+        } else if (option === "currentCtcLakh") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="currentCtcThousand"){
+        } else if (option === "currentCtcThousand") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="empId"){
+        } else if (option === "empId") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="expectedCtcLakh"){
+        } else if (option === "expectedCtcLakh") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="expectedCtcThousand"){
+        } else if (option === "expectedCtcThousand") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="experienceMonth"){
+        } else if (option === "experienceMonth") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="experienceYear"){
+        } else if (option === "experienceYear") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="oldEmployeeId"){
+        } else if (option === "oldEmployeeId") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-         
-        
-        else {
+        } else {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
               item[option]
@@ -468,7 +462,6 @@ const CallingList = ({
     setActiveFilterOption(activeFilterOption === key ? null : key);
     setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
   };
-
 
   const handleSort = (criteria) => {
     if (criteria === sortCriteria) {
@@ -532,7 +525,6 @@ const CallingList = ({
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_475
   const handleShare = async () => {
-
     setIsDataSending(true);
     let url = `${API_BASE_URL}/updateIds/${userType}`;
     let requestData;
@@ -567,14 +559,12 @@ const CallingList = ({
       };
       const response = await fetch(url, requestOptions);
       if (!response.ok) {
-
-
         setIsDataSending(false);
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       // Handle success response
       setIsDataSending(false);
-      toast.success("Candidates forwarded successfully!");//Swapnil Error&success message 
+      toast.success("Candidates forwarded successfully!"); //Swapnil Error&success message
       fetchCallingTrackerData();
       onSuccessAdd(true);
       setShowForwardPopup(false); // Close the modal or handle any further UI updates
@@ -606,8 +596,8 @@ const CallingList = ({
       console.error("Error while forwarding candidates:", error);
 
       setIsDataSending(false);
-      setShowForwardPopup(false);//Swapnil Error&success message 
-      toast.error("Error while forwarding candidates:");//Swapnil Error&success message 
+      setShowForwardPopup(false); //Swapnil Error&success message
+      toast.error("Error while forwarding candidates:"); //Swapnil Error&success message
       // Handle error scenarios or show error messages to the user
     }
   };
@@ -851,13 +841,11 @@ const CallingList = ({
                   }}
                 >
                   <div>
-
-                    {(userType === 'Manager' || userType === 'TeamLeader') && (
+                    {(userType === "Manager" || userType === "TeamLeader") && (
                       <button className="lineUp-share-btn" onClick={showPopup}>
                         Create Excel
                       </button>
                     )}
-
 
                     {showExportConfirmation && (
                       <div className="popup-containers">
@@ -939,54 +927,56 @@ const CallingList = ({
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               )}
-               
-<div className="filter-dropdowns">
-  {showFilterSection && (
-    <div className="filter-section">
-      {limitedOptions.map(([optionKey, optionLabel]) => {
-        const uniqueValues = Array.from(
-          new Set(callingList.map((item) => item[optionKey]))
-        );
 
-        return (
-          <div key={optionKey} className="filter-option">
-            <button
-              className="white-Btn"
-              onClick={() => handleFilterOptionClick(optionKey)}
-            >
-              {optionLabel}
-              <span className="filter-icon">&#x25bc;</span>
-            </button>
-            {activeFilterOption === optionKey && (
-              <div className="city-filter">
-                <div className="optionDiv">
-                  {uniqueValues.map((value) => (
-                    <label
-                      key={value}
-                      className="selfcalling-filter-value"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={
-                          selectedFilters[optionKey]?.includes(value) || false
-                        }
-                        onChange={() => handleFilterSelect(optionKey, value)}
-                        style={{marginRight:'5px'}}
-                      />
-                      {value}
-                    </label>
-                  ))}
-                </div>
+              <div className="filter-dropdowns">
+                {showFilterSection && (
+                  <div className="filter-section">
+                    {limitedOptions.map(([optionKey, optionLabel]) => {
+                      const uniqueValues = Array.from(
+                        new Set(callingList.map((item) => item[optionKey]))
+                      );
+
+                      return (
+                        <div key={optionKey} className="filter-option">
+                          <button
+                            className="white-Btn"
+                            onClick={() => handleFilterOptionClick(optionKey)}
+                          >
+                            {optionLabel}
+                            <span className="filter-icon">&#x25bc;</span>
+                          </button>
+                          {activeFilterOption === optionKey && (
+                            <div className="city-filter">
+                              <div className="optionDiv">
+                                {uniqueValues.map((value) => (
+                                  <label
+                                    key={value}
+                                    className="selfcalling-filter-value"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={
+                                        selectedFilters[optionKey]?.includes(
+                                          value
+                                        ) || false
+                                      }
+                                      onChange={() =>
+                                        handleFilterSelect(optionKey, value)
+                                      }
+                                      style={{ marginRight: "5px" }}
+                                    />
+                                    {value}
+                                  </label>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  )}
-</div>
-
-      
 
               <div className="attendanceTableData">
                 <table className="attendance-table">
@@ -1010,9 +1000,8 @@ const CallingList = ({
                         className="attendanceheading"
                         onClick={() => handleSort("date")}
                       >
-                        Date
-                        &
-                        Time</th>
+                        Date & Time
+                      </th>
                       <th className="attendanceheading">Candidate Id</th>
                       <th
                         className="attendanceheading"
@@ -1053,24 +1042,29 @@ const CallingList = ({
                       <th className="attendanceheading">Gender</th>
                       <th className="attendanceheading">Education</th>
                       <th className="attendanceheading">Year Of Passing</th>
-                      <th className="attendanceheading">Any Extra Certification</th>
+                      <th className="attendanceheading">
+                        Any Extra Certification
+                      </th>
                       {/* <th className="attendanceheading">Feedback</th> */}
                       <th className="attendanceheading">Holding Any Offer</th>
                       <th className="attendanceheading">Offer Letter Msg</th>
                       <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">Notice Period</th>
-                      {userType === 'TeamLeader' &&
+                      {userType === "TeamLeader" && (
                         <th className="attendanceheading">
                           Message For Manager
-                        </th>}
-                      {userType === 'Recruiters' &&
+                        </th>
+                      )}
+                      {userType === "Recruiters" && (
                         <th className="attendanceheading">
                           Message For Team Leader
-                        </th>}
-                      {userType === 'Manager' &&
+                        </th>
+                      )}
+                      {userType === "Manager" && (
                         <th className="attendanceheading">
                           Message For Super User
-                        </th>}
+                        </th>
+                      )}
                       <th className="attendanceheading">
                         Availability For Interview
                       </th>
@@ -1078,9 +1072,10 @@ const CallingList = ({
                       <th className="attendanceheading">Interview Status</th>
                       <th className="attendanceheading">Employee ID</th>
 
-                      {(userType === 'TeamLeader' || userType === 'Manager') && (
-                        <th className="attendanceheading">Team Leader Id</th>
-                      )}
+                      {(userType === "TeamLeader" ||
+                        userType === "Manager") && (
+                          <th className="attendanceheading">Team Leader Id</th>
+                        )}
 
                       <th className="attendanceheading">Action</th>
                     </tr>
@@ -1098,7 +1093,6 @@ const CallingList = ({
                           </td>
                         ) : null}
 
-
                         <td className="tabledata">{index + 1}</td>
 
                         <td
@@ -1106,9 +1100,11 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.date}   -  {item.candidateAddedTime || "-"}
+                          {item.date} - {item.candidateAddedTime || "-"}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.date} -  {item.candidateAddedTime}</span>
+                            <span className="tooltiptext">
+                              {item.date} - {item.candidateAddedTime}
+                            </span>
                           </div>
                         </td>
 
@@ -1136,7 +1132,6 @@ const CallingList = ({
                               {item.recruiterName}
                             </span>
                           </div>
-                          
                         </td>
 
                         <td
@@ -1302,9 +1297,7 @@ const CallingList = ({
                         >
                           {item.feedBack || "-"}
                           <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.feedBack}
-                            </span>
+                            <span className="tooltiptext">{item.feedBack}</span>
                           </div>
                         </td>
 
@@ -1320,8 +1313,6 @@ const CallingList = ({
                             </span>
                           </div>
                         </td>
-
-
 
                         <td
                           className="tabledata"
@@ -1611,26 +1602,25 @@ const CallingList = ({
                           >
                             {item.empId || "-"}
                             <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.empId}
-                              </span>
+                              <span className="tooltiptext">{item.empId}</span>
                             </div>
                           </td>
 
-                          {(userType === 'TeamLeader' || userType === 'Manager') && (
-                            <td
-                              className="tabledata"
-                              onMouseOver={handleMouseOver}
-                              onMouseOut={handleMouseOut}
-                            >
-                              {item.teamLeaderId}
-                              <div className="tooltip">
-                                <span className="tooltiptext">
-                                  {item.teamLeaderId}
-                                </span>
-                              </div>
-                            </td>
-                          )}
+                          {(userType === "TeamLeader" ||
+                            userType === "Manager") && (
+                              <td
+                                className="tabledata"
+                                onMouseOver={handleMouseOver}
+                                onMouseOut={handleMouseOut}
+                              >
+                                {item.teamLeaderId}
+                                <div className="tooltip">
+                                  <span className="tooltiptext">
+                                    {item.teamLeaderId}
+                                  </span>
+                                </div>
+                              </td>
+                            )}
 
                           <td className="tabledata">
                             <i
@@ -1638,7 +1628,6 @@ const CallingList = ({
                               className="fa-regular fa-pen-to-square"
                             ></i>
                           </td>
-
                         </>
                       </tr>
                     ))}
@@ -1966,6 +1955,7 @@ const CallingList = ({
               employeeId={employeeId}
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
+              onsuccessfulDataUpdation={onsuccessfulDataUpdation}
             />
           )}
         </>
