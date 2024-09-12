@@ -181,3 +181,17 @@
   background-color: white;
   color: #ffcb9b;
 }
+
+
+  /* {Arbaz CallingExcelData calligtracker form 11/09/24 } */
+
+.callingExcelData-update-form{
+  position: absolute;
+  top: 70px;
+  left: auto;
+  z-index: 999999999999;
+  background-color: white;
+  width: 83%;
+}
+
+

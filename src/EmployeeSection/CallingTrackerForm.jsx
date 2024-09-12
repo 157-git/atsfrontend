@@ -1634,7 +1634,7 @@ const CallingTrackerForm = ({
                       name="selectYesOrNo"
                       value={callingTracker.selectYesOrNo}
                       onChange={handleChange}>
-                      {/* <option value="">Select</option> */}
+                      
                       <option value="Yet To Confirm">Yet To Confirm</option>
                       <option value="Interested">Interested</option>
                       <option value="Interested, will confirm later">Interested, will confirm later</option>
@@ -1657,7 +1657,7 @@ const CallingTrackerForm = ({
                         })
                       }
                     >
-                      {/* <option value="">Select</option> */}
+
                       <option value="">Select</option>
                       <option value="Yet To Confirm">Yet To Confirm</option>
                       <option value="Interview Schedule">Interview Schedule</option>

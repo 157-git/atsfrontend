@@ -1257,16 +1257,14 @@ const UpdateSelfCalling = ({
                   onChange={handleChange}
                 >
                   <option value="">Select</option>
-                  <option value="Interested">Interested</option>
-                  <option value="No Interested">No Interested</option>
-                  <option value="Interested But Not Eligible">
-                    Intersted But Not Eligible
-                  </option>
-                  <option value="Eligible">Eligible</option>
-                  <option value="No Interested">No Eligible</option>
-                  <option value="Not Eligible But Interested">
-                    Not Eligible But Intersted
-                  </option>
+                  <option value="Yet To Confirm">Yet To Confirm</option>
+                      <option value="Interested">Interested</option>
+                      <option value="Interested, will confirm later">Interested, will confirm later</option>
+                      <option value="Not Interested">Not Interested</option>
+                      <option value=" Interested But Not Eligible">Interested But Not Eligible</option>
+                      <option value="Eligible">Eligible</option>
+                      <option value="Not Eligible">Not Eligible</option>
+                      <option value="Not Eligible But Interested">Not Eligible But Interested</option>
                 </select>
                 <select
                   type="text"
@@ -1275,12 +1273,10 @@ const UpdateSelfCalling = ({
                   onChange={handleChange}
                   required={callingTracker.selectYesOrNo === "Interested"}
                 >
-                  <option value="">Whats Now</option>
-                  <option value="Interview schedule">Interview schedule</option>
-                  <option value="Attending After Some time">
-                    Attending After Some time
-                  </option>
-                  <option value="hold">hold</option>
+                  <option value="">Select</option>
+                      <option value="Yet To Confirm">Yet To Confirm</option>
+                      <option value="Interview Schedule">Interview Schedule</option>
+                      <option value="Attending After Some time">Attending After Some time</option>
                 </select>
               </div>
             </div>
