@@ -619,6 +619,7 @@ const CallingExcelList = ({
           </div>
         </div>
       )}
+       <div className="callingExcelData-update-form">
       {selectedCandidate && (
         <CallingTrackerForm
           initialData={selectedCandidate}
@@ -626,6 +627,7 @@ const CallingExcelList = ({
           onClose={() => setSelectedCandidate(null)}
         />
       )}
+      </div>
     </div>
   );
 };

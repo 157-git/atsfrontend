@@ -1,4 +1,4 @@
-@page {
+/* @page {
     size: A4;
     margin: 1mm;
   }
@@ -7,4 +7,20 @@
     body {
       padding: 10mm;
     }
+  } */
+
+  /* Styles for the print view */
+  @media print {
+    /* Adjust margins and layout */
+    body {
+      margin:0mm;
+      padding: 2mm;
+    }
+  
+    /* Ensure the content fills the page */
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
   }
+  

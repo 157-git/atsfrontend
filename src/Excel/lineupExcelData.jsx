@@ -919,6 +919,7 @@ const LineupExcelData = ({
           </div>
         </>
       )}
+       <div className="callingExcelData-update-form">
       {selectedCandidate && (
         <CallingTrackerForm
           initialData={selectedCandidate}
@@ -927,6 +928,7 @@ const LineupExcelData = ({
           onSuccess={handleUpdateSuccess}
         />
       )}
+      </div>
     </div>
   );
 };

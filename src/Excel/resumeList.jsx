@@ -328,13 +328,15 @@ const ResumeList = ({ loginEmployeeName }) => {
           </div>
         </div>
       )}
+
+      <div className="callingExcelData-update-form">
       {selectedCandidate && (
         <CallingTrackerForm
           initialData={selectedCandidate}
           loginEmployeeName={loginEmployeeName}
         />
       )}
-
+</div>
     </div>
   );
 };

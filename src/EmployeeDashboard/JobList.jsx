@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "../EmployeeDashboard/JobList.css";
-import AddJobDescription from "../JobDiscription/addJobDescription";
+
 import { bottom } from "@popperjs/core";
 import ShareDescription from "./shareDescription";
 import JobDescriptionEdm from "../JobDiscription/jobDescriptionEdm";
 import jobDiscriptions from "../employeeComponents/jobDiscriptions";
-
+import AddJobDescription from "../JobDiscription/addJobDescription";
 import { values } from "pdf-lib";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 import ShareEDM from "../JobDiscription/shareEDM";
+import UpdateJobDescription from "../JobDiscription/UpdateJobDescription";
 // SwapnilRokade_JobListing_filter_option__18/07
 const JobListing = () => {
 
@@ -17,6 +18,7 @@ const JobListing = () => {
 
   const [jobDescriptions, setJobDescriptions] = useState([]);
   const [filterOptions, setFilterOptions] = useState([]);
+  const [updateJD,setUpdateJd] =useState([])
   const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [selectedJobIndex, setSelectedJobIndex] = useState(-1); // Track which job description is selected
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,7 +30,8 @@ const JobListing = () => {
   const [selectedRequirementId, setSelectedRequirementId] = useState(null);
   const [requirementData, setRequirementData] = useState();
   const [showEDM, setShowEDM] = useState(false);
-  const [showAddJobDescription, setShowAddJobDescription] = useState(false)
+  const [showAddJobDescription, setShowAddJobDescription] = useState(false);
+  const [showAddJobDiscriptionNew,setShowAddJobDescriptionNew] =useState(false);
   const [searchQuery, setSearchQuery] = useState({
     designation: "",
     location: "",
@@ -48,7 +51,7 @@ const JobListing = () => {
     "field",
     "companyName",
   ];
-
+ 
   useEffect(() => {
     fetch(`${API_BASE_URL}/all-job-descriptions`)
       .then((response) => response.json())
@@ -110,6 +113,7 @@ const JobListing = () => {
       if (!updatedFilters[option]) {
         updatedFilters[option] = [];
       }
+
 
       const index = updatedFilters[option].indexOf(value);
       if (index === -1) {
@@ -200,6 +204,11 @@ const JobListing = () => {
     setShowViewMore(false);
   };
 
+    const handleEditBtn = (item) => {
+      setUpdateJd(item);
+      setShowAddJobDescriptionNew(true);
+  };
+
   const sharejobdescription = (e) => {
     e.preventDefault();
     setShowJobDescriptionShare(!showJobDescriptionShare);
@@ -235,6 +244,8 @@ const JobListing = () => {
 
   return (
     <>
+    {!showAddJobDiscriptionNew ? (
+      <>
       <div className="jd-header-search" >
         <div className="search-container" >
           <div className="search-bar" >
@@ -352,7 +363,7 @@ const JobListing = () => {
                 {userType === "Manager" || userType === "TeamLeader" ? (
                   <div className="jd-edit-hold-div">
                     <button className="daily-tr-btn"
-                    >
+                    onClick={()=>handleEditBtn(item)}>
                       Edit
                     </button>
                     <button className="daily-tr-btn"
@@ -564,11 +575,11 @@ const JobListing = () => {
           />
         </>
       )}
-      {showAddJobDescription && (
+      </>
+    ):(
         <>
-          <AddJobDescription
-            onAddJD={handleAddJD}
-            Descriptions={requirementData.requirementId}
+          <UpdateJobDescription
+            onAddJD={updateJD}
           />
         </>
       )}

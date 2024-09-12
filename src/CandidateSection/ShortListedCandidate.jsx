@@ -18,7 +18,6 @@ const ShortListedCandidates = ({
 
   const [sortCriteria, setSortCriteria] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
-
   const [shortListedData, setShortListedData] = useState([]);
   const [showUpdateCallingTracker, setShowUpdateCallingTracker] =
     useState(false);
@@ -69,11 +68,11 @@ const ShortListedCandidates = ({
   });
   //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_62
 
+  //prachi shortlisted Candidate->filter->10/9
   const limitedOptions = [
     ["alternateNumber", "Alternate Number"],
     ["availabilityForInterview", "Availability For Interview"],
     ["callingFeedback", "Calling Feedback"],
-    ["callingTrackerId", "Calling Tracker Id"],
     ["candidateAddedTime", "Candidate Added Time"],
     ["candidateEmail", "Candidate Email"],
     ["candidateId", "Candidate Id"],
@@ -81,7 +80,38 @@ const ShortListedCandidates = ({
     ["communicationRating", "Communication Rating"],
     ["companyName", "Company Name"],
     ["contactNumber", "Contact Number"],
+    ["currentCtcLakh", "Current CTC Lakh"],
+    ["currentCtcThousand", "Current CTC Thousand"],
+    ["currentLocation", "Current Location"],
+    ["date", "Date"],
+    ["dateOfBirth", "Date Of Birth"],
+    ["empId", "Employee Id"],
+    ["expectedCtcLakh", "Expected CTC(Lakh)"],
+    ["expectedCtcThousand", "Expected CTC(Thousand)"],
+    ["experienceMonth", "Experience Month"],
+    ["experienceYear", "Experience Year"],
+    ["extraCertification", "Extra Certification"],
+    ["feedBack", "FeedBack"],
+    ["finalStatus", "Final Status"],
+    ["fullAddress", "Full Address"],
+    ["gender", "Gender"],
+    ["holdingAnyOffer", "Holding Any Offer"],
+    ["incentive", "Incentive"],
+    ["interviewTime", "Interview Time"],
+    ["jobDesignation", "Job Designation"],
+    ["noticePeriod", "Notice Period"],
+    ["offerLetterMsg", "Offer Letter Message"],
+    ["oldEmployeeId", "Old Employee Id"],
+    ["qualification", "Qualification"],
+    ["recruiterName", "Recruiter Name"],
+    ["relevantExperience", "Relevant Experience"],
+    ["requirementCompany", "Applying Company"],
+    ["requirementId", "Job ID"],
+    ["selectYesOrNo", "Status"],
+    ["sourceName", "Source Name"],
+    ["yearOfPassing", "Year Of Passing"]
   ];
+
 
   const { userType } = useParams();
 
@@ -402,21 +432,121 @@ const ShortListedCandidates = ({
     }
   }, [sortCriteria, sortOrder]);
 
+  // prachi filterdata
+
   const filterData = () => {
     let filteredData = [...shortListedData];
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
-        filteredData = filteredData.filter((item) =>
-          values.some((value) =>
-            item[option]?.toString().toLowerCase().includes(value.toLowerCase())
-          )
-        );
+        if (option === "candidateId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if (option === "requirementId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if (option === "employeeId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if (option === "contactNumber") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if (option === "alternateNumber") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if (option === "currentCtcLakh") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "currentCtcThousand") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "empId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "expectedCtcLakh") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "expectedCtcThousand") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "experienceMonth") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "experienceYear") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "oldEmployeeId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+
+        else {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]
+                ?.toString()
+                .toLowerCase()
+                .includes(value.toLowerCase())
+            )
+          );
+        }
       }
     });
     setFilteredShortListed(filteredData);
   };
-
-
 
   const handleFilterSelect = (key, value) => {
     setSelectedFilters((prev) => ({
@@ -627,6 +757,7 @@ const ShortListedCandidates = ({
                                         selectedFilters[key]?.includes(value) || false
                                       }
                                       onChange={() => handleFilterSelect(key, value)}
+                                      style={{ marginRight: '5px' }}
                                     />
                                     {value}
                                   </label>
@@ -689,6 +820,7 @@ const ShortListedCandidates = ({
                 <th className="attendanceheading">Offer Letter Message</th>
                 <th className="attendanceheading">Resume</th>
                 <th className="attendanceheading">Notice Period</th>
+
                 {userType === 'TeamLeader' &&
                   <th className="attendanceheading">
                     Message For Manager
@@ -1031,15 +1163,16 @@ const ShortListedCandidates = ({
                     </div>
                   </td>
 
-                  <td className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.msgForTeamLeader}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.msgForTeamLeader}</span>
-                    </div>
-                  </td>
-
+                  {userType !== 'Manager' && (
+                    <td className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}>
+                      {item.msgForTeamLeader}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{item.msgForTeamLeader}</span>
+                      </div>
+                    </td>
+                  )}
                   <td className="tabledata"
                     onMouseOver={handleMouseOver}
                     onMouseOut={handleMouseOut}>
@@ -1070,7 +1203,6 @@ const ShortListedCandidates = ({
                     </div>
                   </td>
                   <td className="tabledata">
-
                     <i
                       onClick={() => handleUpdate(item.candidateId)}
                       className="fa-regular fa-pen-to-square"
