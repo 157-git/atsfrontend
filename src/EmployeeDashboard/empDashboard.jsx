@@ -5,7 +5,7 @@ import LineUpList from "../EmployeeSection/LineUpList";
 import "./empDashboard.css";
 import EmpTimeTracker from "./EmpTimeTracker";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
-import Help from "../Help/help"
+import Help from "../Help/help";
 import { Outlet, useParams } from "react-router-dom";
 import DataComponent from "../EmployeeSection/DataComponent";
 import Incentive from "../EmployeeSection/Incentive";
@@ -68,7 +68,9 @@ import AddManager from "../EmployeeSection/addManager";
 
 const EmpDashboard = ({ userGroup }) => {
   const { userType } = useParams();
-  const [showInterviewDate, setShowInterviewDate] = useState(userType === 'SuperUser' ? false : true);
+  const [showInterviewDate, setShowInterviewDate] = useState(
+    userType === "SuperUser" ? false : true
+  );
   const [addCandidate, setAddCandidate] = useState(false);
   const [candidateIdForUpdate, setCandidateIdForUpdate] = useState(0);
   const [selfCalling, setSelfCalling] = useState(false);
@@ -147,10 +149,10 @@ const EmpDashboard = ({ userGroup }) => {
   const [showPayment, setShowPayment] = useState(false);
   const [showCandidateHistory, setShowCandidateHistory] = useState(false);
   const [showInterviewForm, setShowInterviewForm] = useState(false);
-  const [showPerformanceImprovement, setShowPerformanceImprovement] = useState(false)
-  const [showAddManager, setShowAddManager] = useState(false)
-  const [showAddTeamLeader, setShowAddTeamLeader] = useState(false)
-
+  const [showPerformanceImprovement, setShowPerformanceImprovement] =
+    useState(false);
+  const [showAddManager, setShowAddManager] = useState(false);
+  const [showAddTeamLeader, setShowAddTeamLeader] = useState(false);
 
   const handleLogoutTime = (timestamp) => {
     setLogoutTimestamp(timestamp);
@@ -161,22 +163,18 @@ const EmpDashboard = ({ userGroup }) => {
   };
 
   useEffect(() => {
-    setSuccessfulDataAdditions(true);
+    setSuccessfulDataAdditions(false);
   }, [successfulDataAdditions]);
-
 
   const handleSuccessfulDataUpdation = (check) => {
     console.log("------From Update.....001");
     setSuccessfulDataUpdation(check);
-  }
+  };
 
   useEffect(() => {
     console.log("------From Update.....003");
-    setSuccessfulDataUpdation(true);
+    setSuccessfulDataUpdation(false);
   }, [successfulDataUpdation]);
-
-
- 
 
   useEffect(() => {
     setSuccessUpdateResponse(false);
@@ -195,7 +193,8 @@ const EmpDashboard = ({ userGroup }) => {
 
   const [loginEmployeeName, setLoginEmployeeName] = useState("");
   const [clientEmailSender, setClientEmailSender] = useState();
-  const [showAllInterviewResponses, setShowAllInterviewResponses] = useState(false)
+  const [showAllInterviewResponses, setShowAllInterviewResponses] =
+    useState(false);
   const handleEmailSenderInformation = (data) => {
     setLoginEmployeeName(data.senderName); //akash_pawar_SelectedCandidate_ShareFunctionality_16/07_151
     setClientEmailSender(data);
@@ -330,13 +329,13 @@ const EmpDashboard = ({ userGroup }) => {
     setShowCompanyPolicy(false);
     setShowPainArea(false);
     setShowIssueSolving(false);
-    setShowCandidateHistory(false)
+    setShowCandidateHistory(false);
     setShowInterviewForm(false);
-    setShowAllInterviewResponses(false)
-    setShowPerformanceImprovement(false)
-    setShowAddManager(false)
-    setShowAddTeamLeader(false)
-    setShowUpdateCallingTracker(false)
+    setShowAllInterviewResponses(false);
+    setShowPerformanceImprovement(false);
+    setShowAddManager(false);
+    setShowAddTeamLeader(false);
+    setShowUpdateCallingTracker(false);
   };
 
   /* ArshadAttar_EmpDashboa_Added_showProfitLoss_11/07/2024_LineNo_221-225 */
@@ -388,10 +387,8 @@ const EmpDashboard = ({ userGroup }) => {
   };
   const toggelHelp = () => {
     resetAllToggles();
-    setshowHelp(!showHelp)
+    setshowHelp(!showHelp);
   };
-
-
 
   /*Akash_Pawar_EmpDashboard_toggleShortListed(show interview candidate)_23/07_LineNo_345*/
   const toggleShortListed = () => {
@@ -433,7 +430,6 @@ const EmpDashboard = ({ userGroup }) => {
     setLineUp(!lineUp);
   };
 
-
   const toggelResumeData = () => {
     resetAllToggles();
     setShowResumeData(!showResumeData);
@@ -455,7 +451,6 @@ const EmpDashboard = ({ userGroup }) => {
     resetAllToggles();
     setAssignColumns(!assignColumns);
   };
-
 
   const toggleResumeLink = () => {
     resetAllToggles();
@@ -497,7 +492,6 @@ const EmpDashboard = ({ userGroup }) => {
     resetAllToggles();
     setShowAddedResumes(!showAddedResumes);
   };
-
 
   const toggleExcelCalling = () => {
     resetAllToggles();
@@ -572,43 +566,44 @@ const EmpDashboard = ({ userGroup }) => {
   };
   const toggeleInterviewForm = () => {
     resetAllToggles();
-    setShowInterviewForm(!showInterviewForm)
-  }
+    setShowInterviewForm(!showInterviewForm);
+  };
   const toggleAllInterviewResponse = () => {
     resetAllToggles();
-    setShowAllInterviewResponses(!showAllInterviewResponses)
-  }
+    setShowAllInterviewResponses(!showAllInterviewResponses);
+  };
 
   const toggelCandidateHistory = () => {
     resetAllToggles();
-    setShowCandidateHistory(!showCandidateHistory)
-  }
+    setShowCandidateHistory(!showCandidateHistory);
+  };
 
   const togglePerformanceImprovement = () => {
     resetAllToggles();
-    setShowPerformanceImprovement(!showPerformanceImprovement)
-  }
+    setShowPerformanceImprovement(!showPerformanceImprovement);
+  };
 
   const displayCandidateForm = () => {
     resetAllToggles();
-    setShowCallingExcel(false)
-    setShowCallingTrackerForm(!showCallingTrackerForm)
-  }
+    setShowCallingExcel(false);
+    setShowCallingTrackerForm(!showCallingTrackerForm);
+  };
 
   const toggeleAddManager = () => {
     resetAllToggles();
-    setShowAddManager(true)
-  }
+    setShowAddManager(true);
+  };
 
   const toggeleAddTeamLeader = () => {
     resetAllToggles();
-    setShowAddTeamLeader(true)
-  }
+    setShowAddTeamLeader(true);
+  };
 
   return (
     <div
-      className={`grid-container ${openSidebarToggle ? "sidebar-open" : "sidebar-closed"
-        }`}
+      className={`grid-container ${
+        openSidebarToggle ? "sidebar-open" : "sidebar-closed"
+      }`}
       style={{ backgroundColor: "white", minHeight: "100vh" }}
     >
       <Sidebar
@@ -625,7 +620,7 @@ const EmpDashboard = ({ userGroup }) => {
         toggleHoldCandidate={toggleHoldCandidate}
         toggleExcelCalling={toggleExcelCalling}
         toggleResumeData={toggelResumeData}
-        toggleJobDescription={toggleJobDescription}// toggleInterviewDate={toggleInterviewDate}
+        toggleJobDescription={toggleJobDescription} // toggleInterviewDate={toggleInterviewDate}
         toggleEmployeeMasterSheet={toggleEmployeeMasterSheet}
         toggleShortListedCandidates={toggleShortListedCandidates}
         toggleAddJobDescription={toggleAddJobDescription}
@@ -679,7 +674,6 @@ const EmpDashboard = ({ userGroup }) => {
         toggeleAddManager={toggeleAddManager}
       />
 
-
       <div className="empDash-main-content">
         <div className="time-and-data">
           <DailyWork
@@ -704,7 +698,6 @@ const EmpDashboard = ({ userGroup }) => {
               // toggleTeamDetails={toggleTeamDetails}
               toggleTeamDetails={toggleTeamDetails}
               togglePerformanceImprovement={togglePerformanceImprovement}
-
             ></EmployeeProfileData>
           )}
         </div>
@@ -715,6 +708,7 @@ const EmpDashboard = ({ userGroup }) => {
               funForGettingCandidateId={gettingCandidateIdForUpdate}
               onSuccessAdd={handleSuccessAdd}
               loginEmployeeName={loginEmployeeName} //akash_pawar_SelectedCandidate_ShareFunctionality_16/07_545
+              onsuccessfulDataUpdation={handleSuccessfulDataUpdation}
             />
           )}
         </div>
@@ -756,7 +750,11 @@ const EmpDashboard = ({ userGroup }) => {
         <div>{attendancesheet && <Attendancesheet />}</div>
 
         <div>
-          {showCallingExcelList && <CallingExcelList loginEmployeeName={loginEmployeeName}></CallingExcelList>}
+          {showCallingExcelList && (
+            <CallingExcelList
+              loginEmployeeName={loginEmployeeName}
+            ></CallingExcelList>
+          )}
         </div>
         <div>{showInterviewDate && <InterviewDates />}</div>
         <div>{showAddEmployee && <AddEmployee />}</div>
@@ -776,9 +774,17 @@ const EmpDashboard = ({ userGroup }) => {
           )}
         </div>
         <div>{showCallingExcel && <CallingExcel />}</div>
-        <div>{showLineupExcelList && <LineupExcelData loginEmployeeName={loginEmployeeName}></LineupExcelData>}</div>
         <div>
-          {showResumeData && <ResumeList loginEmployeeName={loginEmployeeName}></ResumeList>}
+          {showLineupExcelList && (
+            <LineupExcelData
+              loginEmployeeName={loginEmployeeName}
+            ></LineupExcelData>
+          )}
+        </div>
+        <div>
+          {showResumeData && (
+            <ResumeList loginEmployeeName={loginEmployeeName}></ResumeList>
+          )}
         </div>
         <div>{showNotePad && <NotePad />}</div>
         <div>{showMainReportDatapage && <MainReportDatapage />}</div>
@@ -808,10 +814,7 @@ const EmpDashboard = ({ userGroup }) => {
         <div>{showInvoicePdf && <InvoicePdf />}</div>
         <div>
           {showUpdateCallingTracker && (
-            <UpdateCallingTracker
-              candidateId={candidateIdForUpdate}
-              onsuccessfulDataUpdation={handleSuccessfulDataUpdation}
-            />
+            <UpdateCallingTracker candidateId={candidateIdForUpdate} />
           )}
         </div>
         <div>{assignColumns && <Team_Leader />}</div>
@@ -854,26 +857,20 @@ const EmpDashboard = ({ userGroup }) => {
 
         <div>
           {showInterviewForm && (
-            <InterviewForm toggleAllInterviewResponse={toggleAllInterviewResponse} />
+            <InterviewForm
+              toggleAllInterviewResponse={toggleAllInterviewResponse}
+            />
           )}
         </div>
-        <div>
-          {showAllInterviewResponses && (
-            <InterviewDataTables />
-          )}
-        </div>
-        <div>
-          {showPerformanceImprovement && (
-            <PerformanceImprovement />
-          )}
-        </div>
+        <div>{showAllInterviewResponses && <InterviewDataTables />}</div>
+        <div>{showPerformanceImprovement && <PerformanceImprovement />}</div>
         {/* <div>
           {showTeamDetails && (
             <TeamDetails></TeamDetails>
           )}
         </div> */}
-        <div>{showAddTeamLeader && (<AddTeamLeader></AddTeamLeader>)}</div>
-        <div>{showAddManager && (<AddManager></AddManager>)}</div>
+        <div>{showAddTeamLeader && <AddTeamLeader></AddTeamLeader>}</div>
+        <div>{showAddManager && <AddManager></AddManager>}</div>
       </div>
     </div>
   );

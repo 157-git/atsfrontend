@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../EmployeeSection/LineUpList.css";
-import "../Reports/LineUpDataReport.css"
+import "../Reports/LineUpDataReport.css";
 // import "../AdminSection/Team_Leader.css"
 import UpdateCallingTracker from "./UpdateSelfCalling";
 import * as XLSX from "xlsx";
@@ -18,6 +18,7 @@ const CallingList = ({
   updateState,
   funForGettingCandidateId,
   loginEmployeeName,
+  onsuccessfulDataUpdation,
 }) => {
   const [callingList, setCallingList] = useState([]);
   const { employeeId } = useParams();
@@ -124,13 +125,12 @@ const CallingList = ({
   const { userType } = useParams();
   console.log(userType);
 
-
   //akash_pawar_LineUpList_ShareFunctionality_16/07_128
   const fetchCallingTrackerData = async () => {
-
     try {
       const response = await fetch(
-        `${API_BASE_URL}/callingData/${employeeIdnew}/${userType}`);
+        `${API_BASE_URL}/callingData/${employeeIdnew}/${userType}`
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -153,9 +153,7 @@ const CallingList = ({
   //akash_pawar_LineUpList_ShareFunctionality_17/07_144
   const fetchManager = async () => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/get-all-managers`
-      );
+      const response = await fetch(`${API_BASE_URL}/get-all-managers`);
       const data = await response.json();
       setFetchAllManager(data);
     } catch (error) {
@@ -166,12 +164,9 @@ const CallingList = ({
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_156
 
-
   const fetchTeamLeader = async (empId) => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/tl-namesIds/${empId}`
-      );
+      const response = await fetch(`${API_BASE_URL}/tl-namesIds/${empId}`);
       const data = await response.json();
       setFetchTeamleader(data);
     } catch (error) {
@@ -218,10 +213,7 @@ const CallingList = ({
 
   const handleUpdateSuccess = () => {
     setShowUpdateCallingTracker(false);
-    fetch(
-
-      `${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`
-    )
+    fetch(`${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`)
       .then((response) => response.json())
       .then((data) => setCallingList(data))
 
@@ -453,7 +445,6 @@ const CallingList = ({
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_475
   const handleShare = async () => {
-
     setIsDataSending(true);
     let url = `${API_BASE_URL}/updateIds/${userType}`;
     let requestData;
@@ -488,14 +479,12 @@ const CallingList = ({
       };
       const response = await fetch(url, requestOptions);
       if (!response.ok) {
-
-
         setIsDataSending(false);
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       // Handle success response
       setIsDataSending(false);
-      toast.success("Candidates forwarded successfully!");//Swapnil Error&success message 
+      toast.success("Candidates forwarded successfully!"); //Swapnil Error&success message
       fetchCallingTrackerData();
       onSuccessAdd(true);
       setShowForwardPopup(false); // Close the modal or handle any further UI updates
@@ -527,8 +516,8 @@ const CallingList = ({
       console.error("Error while forwarding candidates:", error);
 
       setIsDataSending(false);
-      setShowForwardPopup(false);//Swapnil Error&success message 
-      toast.error("Error while forwarding candidates:");//Swapnil Error&success message 
+      setShowForwardPopup(false); //Swapnil Error&success message
+      toast.error("Error while forwarding candidates:"); //Swapnil Error&success message
       // Handle error scenarios or show error messages to the user
     }
   };
@@ -660,13 +649,16 @@ const CallingList = ({
         "Recruiter Incentive": item.incentive || "-",
         "Interested or Not": item.selectYesOrNo || "-",
         "Current Company": item.companyName || "-",
-        "Total Experience": `${item.experienceYear || 0} Years ${item.experienceMonth || 0
-          } Months`,
+        "Total Experience": `${item.experienceYear || 0} Years ${
+          item.experienceMonth || 0
+        } Months`,
         "Relevant Experience": item.relevantExperience || "-",
-        "Current CTC": `${item.currentCtcLakh || 0} Lakh ${item.currentCtcThousand || 0
-          } Thousand`,
-        "Expected CTC": `${item.expectedCtcLakh || 0} Lakh ${item.expectedCtcThousand || 0
-          } Thousand`,
+        "Current CTC": `${item.currentCtcLakh || 0} Lakh ${
+          item.currentCtcThousand || 0
+        } Thousand`,
+        "Expected CTC": `${item.expectedCtcLakh || 0} Lakh ${
+          item.expectedCtcThousand || 0
+        } Thousand`,
         "Date Of Birth": item.dateOfBirth || "-",
         Gender: item.gender || "-",
         Education: item.qualification || "-",
@@ -772,13 +764,11 @@ const CallingList = ({
                   }}
                 >
                   <div>
-
-                    {(userType === 'Manager' || userType === 'TeamLeader') && (
+                    {(userType === "Manager" || userType === "TeamLeader") && (
                       <button className="lineUp-share-btn" onClick={showPopup}>
                         Create Excel
                       </button>
                     )}
-
 
                     {showExportConfirmation && (
                       <div className="popup-containers">
@@ -862,7 +852,6 @@ const CallingList = ({
               )}
               {showFilterSection && (
                 <div className="filter-section">
-
                   {filterOptions.map((option) => {
                     const uniqueValues = Array.from(
                       new Set(callingList.map((item) => item[option]))
@@ -905,7 +894,6 @@ const CallingList = ({
                     );
                   })}
                 </div>
-
               )}
 
               <div className="attendanceTableData">
@@ -930,9 +918,8 @@ const CallingList = ({
                         className="attendanceheading"
                         onClick={() => handleSort("date")}
                       >
-                        Date
-                        &
-                        Time</th>
+                        Date & Time
+                      </th>
                       <th className="attendanceheading">Candidate Id</th>
                       <th
                         className="attendanceheading"
@@ -973,24 +960,29 @@ const CallingList = ({
                       <th className="attendanceheading">Gender</th>
                       <th className="attendanceheading">Education</th>
                       <th className="attendanceheading">Year Of Passing</th>
-                      <th className="attendanceheading">Any Extra Certification</th>
+                      <th className="attendanceheading">
+                        Any Extra Certification
+                      </th>
                       {/* <th className="attendanceheading">Feedback</th> */}
                       <th className="attendanceheading">Holding Any Offer</th>
                       <th className="attendanceheading">Offer Letter Msg</th>
                       <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">Notice Period</th>
-                      {userType === 'TeamLeader' &&
+                      {userType === "TeamLeader" && (
                         <th className="attendanceheading">
                           Message For Manager
-                        </th>}
-                      {userType === 'Recruiters' &&
+                        </th>
+                      )}
+                      {userType === "Recruiters" && (
                         <th className="attendanceheading">
                           Message For Team Leader
-                        </th>}
-                      {userType === 'Manager' &&
+                        </th>
+                      )}
+                      {userType === "Manager" && (
                         <th className="attendanceheading">
                           Message For Super User
-                        </th>}
+                        </th>
+                      )}
                       <th className="attendanceheading">
                         Availability For Interview
                       </th>
@@ -998,7 +990,8 @@ const CallingList = ({
                       <th className="attendanceheading">Interview Status</th>
                       <th className="attendanceheading">Employee ID</th>
 
-                      {(userType === 'TeamLeader' || userType === 'Manager') && (
+                      {(userType === "TeamLeader" ||
+                        userType === "Manager") && (
                         <th className="attendanceheading">Team Leader Id</th>
                       )}
 
@@ -1017,7 +1010,6 @@ const CallingList = ({
                             />
                           </td>
                         ) : null}
-
 
                         <td className="tabledata">{index + 1}</td>
 
@@ -1228,9 +1220,7 @@ const CallingList = ({
                         >
                           {item.feedBack || "-"}
                           <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.feedBack}
-                            </span>
+                            <span className="tooltiptext">{item.feedBack}</span>
                           </div>
                         </td>
 
@@ -1246,8 +1236,6 @@ const CallingList = ({
                             </span>
                           </div>
                         </td>
-
-
 
                         <td
                           className="tabledata"
@@ -1315,12 +1303,15 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {`${item.currentCtcLakh || 0} Lakh ${item.currentCtcThousand || 0
-                              } Thousand`}
+                            {`${item.currentCtcLakh || 0} Lakh ${
+                              item.currentCtcThousand || 0
+                            } Thousand`}
                             <div className="tooltip">
-                              <span className="tooltiptext">{`${item.expectedCtcLakh || 0
-                                } Lakh ${item.expectedCtcThousand || 0
-                                } Thousand`}</span>
+                              <span className="tooltiptext">{`${
+                                item.expectedCtcLakh || 0
+                              } Lakh ${
+                                item.expectedCtcThousand || 0
+                              } Thousand`}</span>
                             </div>
                           </td>
 
@@ -1329,12 +1320,15 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {`${item.expectedCtcLakh || 0} Lakh ${item.expectedCtcThousand || 0
-                              } Thousand`}
+                            {`${item.expectedCtcLakh || 0} Lakh ${
+                              item.expectedCtcThousand || 0
+                            } Thousand`}
                             <div className="tooltip">
-                              <span className="tooltiptext">{`${item.expectedCtcLakh || 0
-                                } Lakh ${item.expectedCtcThousand || 0
-                                } Thousand`}</span>
+                              <span className="tooltiptext">{`${
+                                item.expectedCtcLakh || 0
+                              } Lakh ${
+                                item.expectedCtcThousand || 0
+                              } Thousand`}</span>
                             </div>
                           </td>
 
@@ -1537,13 +1531,12 @@ const CallingList = ({
                           >
                             {item.empId || "-"}
                             <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.empId}
-                              </span>
+                              <span className="tooltiptext">{item.empId}</span>
                             </div>
                           </td>
 
-                          {(userType === 'TeamLeader' || userType === 'Manager') && (
+                          {(userType === "TeamLeader" ||
+                            userType === "Manager") && (
                             <td
                               className="tabledata"
                               onMouseOver={handleMouseOver}
@@ -1564,7 +1557,6 @@ const CallingList = ({
                               className="fa-regular fa-pen-to-square"
                             ></i>
                           </td>
-
                         </>
                       </tr>
                     ))}
@@ -1892,6 +1884,7 @@ const CallingList = ({
               employeeId={employeeId}
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
+              onsuccessfulDataUpdation={onsuccessfulDataUpdation}
             />
           )}
         </>
