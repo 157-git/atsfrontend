@@ -77,50 +77,48 @@ const CallingList = ({
     newManagerJobRole: "",
   });
   //akash_pawar_LineUpList_ShareFunctionality_17/07_71
-
   const limitedOptions = [
-    "alternateNumber",
-    "availabilityForInterview",
-    "callingFeedback",
-    "callingTrackerId",
-    "candidateAddedTime",
-    "candidateEmail",
-    "candidateId",
-    "candidateName",
-    "communicationRating",
-    "companyName",
-    "contactNumber",
-    "currentCtcLakh",
-    "currentCtcThousand",
-    "currentLocation",
-    "date",
-    "dateOfBirth",
-    "empId",
-    "expectedCtcLakh",
-    "expectedCtcThousand",
-    "experienceMonth",
-    "experienceYear",
-    "extraCertification",
-    "feedBack",
-    "finalStatus",
-    "fullAddress",
-    "gender",
-    "holdingAnyOffer",
-    "incentive",
-    "interviewTime",
-    "jobDesignation",
-    "msgForTeamLeader",
-    "noticePeriod",
-    "offerLetterMsg",
-    "oldEmployeeId",
-    "qualification",
-    "recruiterName",
-    "relevantExperience",
-    "requirementCompany",
-    "requirementId",
-    "selectYesOrNo",
-    "sourceName",
-    "yearOfPassing",
+    ["alternateNumber", "Alternate Number"],
+    ["availabilityForInterview", "Availability For Interview"],
+    ["callingFeedback", "Calling Feedback"],
+    ["candidateAddedTime", "Candidate Added Time"],
+    ["candidateEmail", "Candidate Email"],
+    ["candidateId", "Candidate Id"],
+    ["candidateName", "Candidate Name"],
+    ["communicationRating", "Communication Rating"],
+    ["companyName", "Company Name"],
+    ["contactNumber", "Contact Number"],
+    ["currentCtcLakh", "Current CTC (Lakh)"],
+    ["currentCtcThousand", "Current CTC (Thousand)"],
+    ["currentLocation", "Current Location"],
+    ["date", "Date"],
+    ["dateOfBirth", "Date Of Birth"],
+    ["empId", "Emp Id"],
+    ["expectedCtcLakh", "Expected CTC (Lakh)"],
+    ["expectedCtcThousand", "Expected CTC (Thousand)"],
+    ["experienceMonth", "Experience Month"],
+    ["experienceYear", "Experience Year"],
+    ["extraCertification", "Extra Certification"],
+    ["feedBack", "FeedBack"],
+    ["finalStatus", "Final Status"],
+    ["fullAddress", "Full Address"],
+    ["gender", "Gender"],
+    ["holdingAnyOffer", "Holding Any Offer"],
+    ["incentive", "Incentive"],
+    ["interviewTime", "Interview Time"],
+    ["jobDesignation", "Job Designation"],
+    ["msgForTeamLeader", "Message For Team Leader"],
+    ["noticePeriod", "Notice Period"],
+    ["offerLetterMsg", "Offer Letter Message"],
+    ["oldEmployeeId", "Old Employee Id"],
+    ["qualification", "Qualification"],
+    ["recruiterName", "Recruiter Name"],
+    ["relevantExperience", "Relevant Experience"],
+    ["requirementCompany", "Applied Company"],
+    ["requirementId", "Job Id"],
+    ["selectYesOrNo", "Status"],
+    ["sourceName", "Source Name"],
+    ["yearOfPassing", "Year Of Passing"],
   ];
   const { userType } = useParams();
   console.log(userType);
@@ -195,10 +193,35 @@ const CallingList = ({
   }, []);
   //akash_pawar_LineUpList_ShareFunctionality_16/07_202
 
+  //Prachi
+
+  // useEffect(() => {
+  //   const options = limitedOptions
+  //     .filter(([key]) =>
+  //       Object.keys(filteredCallingList[0] || {}).includes(key)
+  //     )
+  //     .map(([key]) => key);
+
+  //   const formattedOptions = options.map(option =>
+  //     formatDisplayName(option)
+  //   );
+
+  //   setFilterOptions(formattedOptions);
+  // }, [filteredCallingList]);
+
+  // const formatDisplayName = (option) => {
+  //   return option
+  //     .replace(/([a-z])([A-Z])/g, '$1 $2')
+
+  // };
+
   useEffect(() => {
-    const options = Object.keys(filteredCallingList[0] || {}).filter((key) =>
-      limitedOptions.includes(key)
-    );
+    const options = limitedOptions
+      .filter(([key]) =>
+        Object.keys(filteredCallingList[0] || {}).includes(key)
+      )
+      .map(([key]) => key);
+
     setFilterOptions(options);
   }, [filteredCallingList]);
 
@@ -340,6 +363,78 @@ const CallingList = ({
               item[option]?.toString().toLowerCase().includes(value)
             )
           );
+        } else if (option === "currentCtcLakh") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "currentCtcThousand") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "empId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "expectedCtcLakh") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "expectedCtcThousand") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "experienceMonth") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "experienceYear") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "oldEmployeeId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
         } else {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
@@ -355,32 +450,18 @@ const CallingList = ({
     setFilteredCallingList(filteredData);
   };
 
-  const handleFilterSelect = (option, value) => {
-    setSelectedFilters((prevFilters) => {
-      const updatedFilters = { ...prevFilters };
-      if (!updatedFilters[option]) {
-        updatedFilters[option] = [];
-      }
-
-      const index = updatedFilters[option].indexOf(value);
-      if (index === -1) {
-        updatedFilters[option] = [...updatedFilters[option], value];
-      } else {
-        updatedFilters[option] = updatedFilters[option].filter(
-          (item) => item !== value
-        );
-      }
-
-      return updatedFilters;
-    });
+  const handleFilterSelect = (key, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [key]: prev[key].includes(value)
+        ? prev[key].filter((item) => item !== value)
+        : [...prev[key], value],
+    }));
   };
 
-  const handleFilterOptionClick = (option) => {
-    if (activeFilterOption === option) {
-      setActiveFilterOption(null);
-    } else {
-      setActiveFilterOption(option);
-    }
+  const handleFilterOptionClick = (key) => {
+    setActiveFilterOption(activeFilterOption === key ? null : key);
+    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
   };
 
   const handleSort = (criteria) => {
@@ -850,51 +931,56 @@ const CallingList = ({
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               )}
-              {showFilterSection && (
-                <div className="filter-section">
-                  {filterOptions.map((option) => {
-                    const uniqueValues = Array.from(
-                      new Set(callingList.map((item) => item[option]))
-                    );
-                    return (
-                      <div key={option} className="filter-option">
-                        <button
-                          className="white-Btn"
-                          onClick={() => handleFilterOptionClick(option)}
-                        >
-                          {option.toUpperCase()}
-                          <span className="filter-icon">&#x25bc;</span>
-                        </button>
-                        {activeFilterOption === option && (
-                          <div className="city-filter">
-                            <div className="optionDiv">
-                              {uniqueValues.map((value) => (
-                                <label
-                                  key={value}
-                                  className="selfcalling-filter-value"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    checked={
-                                      selectedFilters[option]?.includes(
-                                        value
-                                      ) || false
-                                    }
-                                    onChange={() =>
-                                      handleFilterSelect(option, value)
-                                    }
-                                  />
-                                  {value}
-                                </label>
-                              ))}
+
+              <div className="filter-dropdowns">
+                {showFilterSection && (
+                  <div className="filter-section">
+                    {limitedOptions.map(([optionKey, optionLabel]) => {
+                      const uniqueValues = Array.from(
+                        new Set(callingList.map((item) => item[optionKey]))
+                      );
+
+                      return (
+                        <div key={optionKey} className="filter-option">
+                          <button
+                            className="white-Btn"
+                            onClick={() => handleFilterOptionClick(optionKey)}
+                          >
+                            {optionLabel}
+                            <span className="filter-icon">&#x25bc;</span>
+                          </button>
+                          {activeFilterOption === optionKey && (
+                            <div className="city-filter">
+                              <div className="optionDiv">
+                                {uniqueValues.map((value) => (
+                                  <label
+                                    key={value}
+                                    className="selfcalling-filter-value"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={
+                                        selectedFilters[optionKey]?.includes(
+                                          value
+                                        ) || false
+                                      }
+                                      onChange={() =>
+                                        handleFilterSelect(optionKey, value)
+                                      }
+                                      style={{ marginRight: "5px" }}
+                                    />
+                                    {value}
+                                  </label>
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
 
               <div className="attendanceTableData">
                 <table className="attendance-table">
@@ -1018,15 +1104,10 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.date}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.date}</span>
-                          </div>
-
-                          {item.candidateAddedTime || "-"}
+                          {item.date} - {item.candidateAddedTime || "-"}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.candidateAddedTime}
+                              {item.date} - {item.candidateAddedTime}
                             </span>
                           </div>
                         </td>
