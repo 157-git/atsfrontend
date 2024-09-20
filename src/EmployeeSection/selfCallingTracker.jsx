@@ -94,13 +94,13 @@ const CallingList = ({
     ["currentLocation", "Current Location"],
     ["date", "Date"],
     ["dateOfBirth", "Date Of Birth"],
-    ["empId", "Emp Id"],
+    ["empId", "Employee Id"],
     ["expectedCtcLakh", "Expected CTC (Lakh)"],
     ["expectedCtcThousand", "Expected CTC (Thousand)"],
     ["experienceMonth", "Experience Month"],
     ["experienceYear", "Experience Year"],
     ["extraCertification", "Extra Certification"],
-    ["feedBack", "FeedBack"],
+    ["feedBack", "Feed Back"],
     ["finalStatus", "Final Status"],
     ["fullAddress", "Full Address"],
     ["gender", "Gender"],
@@ -122,7 +122,6 @@ const CallingList = ({
     ["yearOfPassing", "Year Of Passing"],
   ];
   const { userType } = useParams();
-  console.log(userType);
 
   //akash_pawar_LineUpList_ShareFunctionality_16/07_128
   const fetchCallingTrackerData = async () => {
@@ -193,28 +192,6 @@ const CallingList = ({
     }
   }, []);
   //akash_pawar_LineUpList_ShareFunctionality_16/07_202
-
-  //Prachi
-
-  // useEffect(() => {
-  //   const options = limitedOptions
-  //     .filter(([key]) =>
-  //       Object.keys(filteredCallingList[0] || {}).includes(key)
-  //     )
-  //     .map(([key]) => key);
-
-  //   const formattedOptions = options.map(option =>
-  //     formatDisplayName(option)
-  //   );
-
-  //   setFilterOptions(formattedOptions);
-  // }, [filteredCallingList]);
-
-  // const formatDisplayName = (option) => {
-  //   return option
-  //     .replace(/([a-z])([A-Z])/g, '$1 $2')
-
-  // };
 
   useEffect(() => {
     const options = limitedOptions
@@ -331,6 +308,7 @@ const CallingList = ({
 
   const filterData = () => {
     let filteredData = [...callingList];
+
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
         if (option === "candidateId") {
@@ -372,7 +350,8 @@ const CallingList = ({
               ); // Compare as numbers
             })
           );
-        } else if (option === "currentCtcThousand") {
+        } 
+        else if (option === "currentCtcThousand") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
@@ -435,14 +414,24 @@ const CallingList = ({
               ); // Compare as numbers
             })
           );
-        } else {
+        } else if (option === "yearOfPassing") {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
-              item[option]
-                ?.toString()
-                .toLowerCase()
-                .includes(value.toLowerCase())
+              item[option]?.toString().toLowerCase().includes(value)
             )
+          );
+        }
+        else {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const isNumeric = !isNaN(value); // Check if the value is numeric
+              if (isNumeric) {
+                const numericValue = parseInt(value, 10); // Convert value to integer
+                return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              } else {
+                return item[option]?.toString().includes(value); // For non-numeric comparisons
+              }
+            })
           );
         }
       }

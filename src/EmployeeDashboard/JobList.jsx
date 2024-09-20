@@ -447,11 +447,11 @@ const JobListing = () => {
                 <article>
                   <b>SOFTWARE DEVELOPER</b>
                 </article>
-                <div className="save">
+                <div className="jd-share-div">
                   <button className="saved daily-tr-btn" onClick={toggleEdm}>
                     Share Video
                   </button>
-                  <button className=" daily-tr-btn" onClick={toggleEdm2}>
+                  <button className="daily-tr-btn" onClick={toggleEdm2}>
                     Share EDM
                   </button>
                   <button

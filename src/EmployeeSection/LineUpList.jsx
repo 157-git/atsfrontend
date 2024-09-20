@@ -75,51 +75,6 @@ const LineUpList = ({
   });
   //akash_pawar_LineUpList_ShareFunctionality_17/07_71
 
-  // const limitedOptions = [
-  //   "alternateNumber",
-  //   "availabilityForInterview",
-  //   "callingFeedback",
-  //   "callingTrackerId",
-  //   "candidateAddedTime",
-  //   "candidateEmail",
-  //   "candidateId",
-  //   "candidateName",
-  //   "communicationRating",
-  //   "companyName",
-  //   "contactNumber",
-  //   "currentCtcLakh",
-  //   "currentCtcThousand",
-  //   "currentLocation",
-  //   "date",
-  //   "dateOfBirth",
-  //   "empId",
-  //   "expectedCtcLakh",
-  //   "expectedCtcThousand",
-  //   "experienceMonth",
-  //   "experienceYear",
-  //   "extraCertification",
-  //   "feedBack",
-  //   "finalStatus",
-  //   "fullAddress",
-  //   "gender",
-  //   "holdingAnyOffer",
-  //   "incentive",
-  //   "interviewTime",
-  //   "jobDesignation",
-  //   "msgForTeamLeader",
-  //   "noticePeriod",
-  //   "offerLetterMsg",
-  //   "oldEmployeeId",
-  //   "qualification",
-  //   "recruiterName",
-  //   "relevantExperience",
-  //   "requirementCompany",
-  //   "requirementId",
-  //   "selectYesOrNo",
-  //   "sourceName",
-  //   "yearOfPassing",
-  // ];
-
   const limitedOptions = [
     ["alternateNumber", "Alternate Number"],
     ["availabilityForInterview", "Availability For Interview"],
@@ -153,12 +108,12 @@ const LineUpList = ({
     ["msgForTeamLeader", "Message for Team Leader"],
     ["noticePeriod", "Notice Period"],
     ["offerLetterMsg", "Offer Letter Message"],
-    ["oldEmployeeId", "Old Employee ID"],
+    ["oldEmployeeId", "Old Employee Id"],
     ["qualification", "Qualification"],
     ["recruiterName", "Recruiter Name"],
     ["relevantExperience", "Relevant Experience"],
     ["requirementCompany", "Applied Company"],
-    ["requirementId", "Job ID"],
+    ["requirementId", "Job Id"],
     ["selectYesOrNo", "Status"],
     ["sourceName", "Source Name"],
     ["yearOfPassing", "Year of Passing"],
@@ -353,6 +308,7 @@ const LineUpList = ({
 
   const filterData = () => {
     let filteredData = [...callingList];
+
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
         if (option === "candidateId") {
@@ -457,34 +413,29 @@ const LineUpList = ({
               ); // Compare as numbers
             })
           );
-        } else {
+        }  else if (option === "yearOfPassing") {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
-              item[option]
-                ?.toString()
-                .toLowerCase()
-                .includes(value.toLowerCase())
+              item[option]?.toString().toLowerCase().includes(value)
             )
+          );
+        }else {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const isNumeric = !isNaN(value); // Check if the value is numeric
+              if (isNumeric) {
+                const numericValue = parseInt(value, 10); // Convert value to integer
+                return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              } else {
+                return item[option]?.toString().includes(value); // For non-numeric comparisons
+              }
+            })
           );
         }
       }
     });
     setFilteredCallingList(filteredData);
   };
-
-  // const filterData = () => {
-  //   let filteredData = [...callingList];
-  //   Object.entries(selectedFilters).forEach(([option, values]) => {
-  //     if (values.length > 0) {
-  //       filteredData = filteredData.filter((item) =>
-  //         values.some((value) =>
-  //           item[option]?.toString().toLowerCase().includes(value.toLowerCase())
-  //         )
-  //       );
-  //     }
-  //   });
-  //   setFilteredCallingList(filteredData);
-  // };
 
   const handleFilterSelect = (key, value) => {
     setSelectedFilters((prev) => ({
@@ -856,11 +807,6 @@ const LineUpList = ({
     <div className="calling-list-container">
       {loading ? (
         <div className="register">
-          {/* <HashLoader
-            color={`${localStorage.getItem("selectedColor")}`}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          /> */}
           <Loader></Loader>
         </div>
       ) : (

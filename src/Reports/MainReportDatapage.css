@@ -302,10 +302,10 @@ color: grey;
   /* CSS for table already added so no need to add */
   
   .filter-section {
-      margin-bottom: 20px;
+    margin-top: 5px;
+    margin-bottom: 3px;
     }
     
-   
     
     .filter-dropdown {
       margin-right: 20px;
@@ -324,10 +324,7 @@ color: grey;
       
     }
     
-    /* Style the filter section */
-    .filter-section {
-      margin-top: 20px;
-    }
+
     
     /* Style the filter dropdowns */
     .filter-dropdown {

@@ -1,6 +1,6 @@
 
 .filter-sectiontl {
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   display: flex;
 
 }
@@ -194,10 +194,6 @@ html::-webkit-scrollbar {
 
 /* CSS for table already added so no need to add */
 
-.filter-section {
-  margin-bottom: 20px;
-}
-
 .filter-dropdowns {
   display: flex;
   flex-wrap: wrap;
@@ -223,7 +219,7 @@ html::-webkit-scrollbar {
 
 /* Style the filter section */
 .filter-section {
-  margin-top: 20px;
+  margin-top: 5px;
 }
 
 /* Style the filter dropdowns */

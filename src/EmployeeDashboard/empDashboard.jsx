@@ -256,7 +256,7 @@ const EmpDashboard = ({ userGroup }) => {
   /*Akash_Pawar_EmpDashboard_toggleShowShortListedCandidateData_23/07_LineNo_213*/
   const toggleShowShortListedCandidateData = () => {
     resetAllToggles();
-    setShortlistedCandidateData(true);
+    setShortlistedCandidateData(!showShortlistedCandidateData);
     setShowInterviewDate(false);
     setIncentive(false);
   };

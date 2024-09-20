@@ -579,7 +579,7 @@ strong {
 
 .calling-tracker-popup-open-btn {
   border: none;
-  padding: 2px 5px;
+  padding: 2px 20px;
   width: fit-content;
   border-radius: 15px;
   background-color: var(--button-color);

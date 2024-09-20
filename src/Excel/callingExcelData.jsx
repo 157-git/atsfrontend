@@ -9,8 +9,7 @@ const CallingExcelList = ({
   updateState,
   funForGettingCandidateId,
   onCloseTable,
-  loginEmployeeName
-
+  loginEmployeeName,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOptions, setFilterOptions] = useState([]);
@@ -22,13 +21,13 @@ const CallingExcelList = ({
   const [showCallingForm, setShowCallingForm] = useState(false);
   const [callingToUpdate, setCallingToUpdate] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState({});
-
+  const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [selectedCandidateId, setSelectedCandidateId] = useState();
   const [selectedRows, setSelectedRows] = useState([]);
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
 
-  const { employeeId,userType } = useParams();
+  const { employeeId, userType } = useParams();
   const employeeIdw = parseInt(employeeId);
   console.log(employeeId + "emp 1111 id");
 
@@ -65,15 +64,56 @@ const CallingExcelList = ({
     console.log("Filtered Calling List:", filteredCallingList);
   }, [filteredCallingList]);
 
+  // prachi parab callingExcelData data_filter_section 12/9
+  const limitedOptions = [
+    ["date", "Date"],
+    ["candidateAddedTime", "Candidate Added Time"],
+    ["recruiterName", "Recruiter Name"],
+    ["candidateName", "Candidate Name"],
+    ["candidateEmail", "Candidate Email"],
+    ["contactNumber", "Contact Number"],
+    ["alternateNumber", "Alternate Number"],
+    ["sourceName", "Source Name"],
+    ["jobDesignation", "Job Designation"],
+    ["requirementId", "Requirement Id"],
+    ["requirementCompany", "Requirement Company"],
+    ["communicationRating", "Communication Rating"],
+    ["currentLocation", "Current Location"],
+    ["fullAddress", "Full Address"],
+    ["callingFeedback", "Calling Feedback"],
+    ["selectYesOrNo", "Status Type"],
+    ["incentive", "Incentive"],
+    ["employeeId", "Employee Id"],
+    ["jobRole", "Job Role"],
+    ["oldEmployeeId", "Old Employee Id"],
+    ["excelLineupTracker", "Excel Lineup Tracker"]
+  ]
+
+
   useEffect(() => {
-    const limitedOptions = [
-      "date",
-      "recruiterName",
-      "jobDesignation",
-      "requirementId",
-    ];
-    setFilterOptions(limitedOptions);
+    const options = limitedOptions
+      .filter(([key]) =>
+        Object.keys(callingList[0] || {}).includes(key)
+      )
+      .map(([key]) => key);
+
+    setFilterOptions(options);
   }, [callingList]);
+
+  const handleFilterOptionClick = (key) => {
+    setActiveFilterOption(activeFilterOption === key ? null : key);
+    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
+  };
+
+  // useEffect(() => {
+  //   const limitedOptions = [
+  //     "date",
+  //     "recruiterName",
+  //     "jobDesignation",
+  //     "requirementId",
+  //   ];
+  //   setFilterOptions(limitedOptions);
+  // }, [callingList]);
 
   useEffect(() => {
     filterData();
@@ -146,7 +186,33 @@ const CallingExcelList = ({
           filteredData = filteredData.filter((item) =>
             values.includes(item[option]?.toString())
           );
-        } else {
+        } else if (option === "contactNumber") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if (option === "alternateNumber") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if (option === "incentive") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if (option === "employeeId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        }
+
+        else {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
               item[option]
@@ -161,25 +227,34 @@ const CallingExcelList = ({
     setFilteredCallingList(filteredData);
   };
 
-  const handleFilterSelect = (option, value) => {
-    setSelectedFilters((prevFilters) => {
-      const updatedFilters = { ...prevFilters };
-      if (!updatedFilters[option]) {
-        updatedFilters[option] = [];
-      }
-
-      const index = updatedFilters[option].indexOf(value);
-      if (index === -1) {
-        updatedFilters[option] = [...updatedFilters[option], value];
-      } else {
-        updatedFilters[option] = updatedFilters[option].filter(
-          (item) => item !== value
-        );
-      }
-
-      return updatedFilters;
-    });
+  const handleFilterSelect = (key, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [key]: prev[key].includes(value)
+        ? prev[key].filter((item) => item !== value)
+        : [...prev[key], value],
+    }));
   };
+
+  // const handleFilterSelect = (option, value) => {
+  //   setSelectedFilters((prevFilters) => {
+  //     const updatedFilters = { ...prevFilters };
+  //     if (!updatedFilters[option]) {
+  //       updatedFilters[option] = [];
+  //     }
+
+  //     const index = updatedFilters[option].indexOf(value);
+  //     if (index === -1) {
+  //       updatedFilters[option] = [...updatedFilters[option], value];
+  //     } else {
+  //       updatedFilters[option] = updatedFilters[option].filter(
+  //         (item) => item !== value
+  //       );
+  //     }
+
+  //     return updatedFilters;
+  //   });
+  // };
 
   const handleSort = (criteria) => {
     if (criteria === sortCriteria) {
@@ -189,6 +264,7 @@ const CallingExcelList = ({
       setSortOrder("asc");
     }
   };
+
   const openCallingExcelList = (candidateData) => {
     setSelectedCandidate(candidateData);
     console.log(candidateData);
@@ -282,17 +358,7 @@ const CallingExcelList = ({
             <h1 className="excel-calling-data-heading">Excel Calling Data</h1>
             <button
               onClick={toggleFilterSection}
-              style={{
-                fontSize: "16px",
-                borderRadius: "15px",
-                height: "30px",
-                color: "#ffcb9b",
-                paddingLeft: "15px",
-                paddingRight: "15px",
-                background: "white",
-                border: "1px solid gray",
-                position: "sticky",
-              }}
+                  className="daily-tr-btn"
             >
               Filter <i className="fa-solid fa-filter"></i>
             </button>
@@ -309,52 +375,54 @@ const CallingExcelList = ({
           )}
           {showFilterSection && (
             <div className="filter-section">
-              <h5 style={{ color: "gray", paddingTop: "5px" }}>Filter</h5>
+              {/* <h5 style={{ color: "gray", paddingTop: "5px" }}>Filter</h5> */}
 
               <div className="filter-dropdowns">
+                {showFilterSection && (
+                  <div className="filter-section">
+                    {limitedOptions.map(([optionKey, optionLabel]) => {
+                      const uniqueValues = Array.from(
+                        new Set(callingList.map((item) => item[optionKey]))
+                      );
 
-                {filterOptions.map((option) => (
-                  <div key={option} className="filter-dropdown">
-                    <div className="dropdown">
-                      <button className="dropbtn">{option}</button>
-                      <div className="dropdown-content">
-                        <div key={`${option}-All`}>
-                          <input
-                            type="checkbox"
-                            id={`${option}-All`}
-                            value="All"
-                            checked={
-                              !selectedFilters[option] ||
-                              selectedFilters[option].length === 0
-                            }
-                            onChange={() => handleFilterSelect(option, "All")}
-                          />
-                          <label htmlFor={`${option}-All`}>All</label>
+                      return (
+                        <div key={optionKey} className="filter-option">
+                          <button
+                            className="white-Btn"
+                            onClick={() => handleFilterOptionClick(optionKey)}
+                          >
+                            {optionLabel}
+                            <span className="filter-icon">&#x25bc;</span>
+                          </button>
+                          {activeFilterOption === optionKey && (
+                            <div className="city-filter">
+                              <div className="optionDiv">
+                                {uniqueValues.map((value) => (
+                                  <label
+                                    key={value}
+                                    className="selfcalling-filter-value"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={
+                                        selectedFilters[optionKey]?.includes(value) || false
+                                      }
+                                      onChange={() => handleFilterSelect(optionKey, value)}
+                                      style={{ marginRight: "5px" }}
+                                    />
+                                    {value}
+                                  </label>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
-                        {[
-                          ...new Set(callingList.map((item) => item[option])),
-                        ].map((value) => (
-                          <div key={value}>
-                            <input
-                              type="checkbox"
-                              id={`${option}-${value}`}
-                              value={value}
-                              checked={
-                                selectedFilters[option]?.includes(value) ||
-                                false
-                              }
-                              onChange={() => handleFilterSelect(option, value)}
-                            />
-                            <label htmlFor={`${option}-${value}`}>
-                              {value}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                      );
+                    })}
                   </div>
-                ))}
+                )}
               </div>
+
             </div>
           )}
 
@@ -619,8 +687,6 @@ const CallingExcelList = ({
           </div>
         </div>
       )}
-      
-       <div className="callingExcelData-update-form">
       {selectedCandidate && (
         <CallingTrackerForm
           initialData={selectedCandidate}
@@ -628,7 +694,6 @@ const CallingExcelList = ({
           onClose={() => setSelectedCandidate(null)}
         />
       )}
-      </div>
     </div>
   );
 };

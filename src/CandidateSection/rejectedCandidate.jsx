@@ -73,8 +73,9 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
   //akash_pawar_RejectedCandidate_ShareFunctionality_18/07_65
 
   const navigator = useNavigate();
+
   const limitedOptions = [
-    ["alternateNumber", "Alternate Number"],
+  ["alternateNumber", "Alternate Number"],
   ["availabilityForInterview", "Availability For Interview"],
   ["callingFeedback", "Calling Feedback"],
   ["candidateAddedTime", "Candidate Added Time"],
@@ -115,7 +116,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
   ["selectYesOrNo", "Status"],
   ["sourceName", "Source Name"],
   ["yearOfPassing", "Year Of Passing"]
-  ];
+  ]
   const { userType } = useParams();
 
   useEffect(() => {
@@ -128,7 +129,6 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
         Object.keys(filteredCallingList[0] || {}).includes(key)
       )
       .map(([key]) => key);
-      
     setFilterOptions(options);
   }, [filteredCallingList]);
   
@@ -142,7 +142,6 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
       const data = await response.json();
       setCallingList(data);
       setFilteredCallingList(data);
-
       setLoading(false);
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
@@ -154,7 +153,9 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
     filterData();
   }, [selectedFilters, callingList]);
 
+
   //akash_pawar_RejectedCandidate_ShareFunctionality_18/07_144
+
   const fetchManager = async () => {
     try {
       const response = await fetch(
@@ -178,6 +179,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
       console.error("Error fetching shortlisted data:", error);
     }
   };
+
   const fetchRecruiters = async (teamLeaderId) => {
     try {
       const response = await fetch(
@@ -189,6 +191,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
       console.error("Error fetching shortlisted data:", error);
     }
   };
+
   useEffect(() => {
     if (userType === "SuperUser") {
       fetchManager();
@@ -200,6 +203,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
   }, []);
   //akash_pawar_RejectedCandidate_ShareFunctionality_18/07_188
 
+  
   const handleSelectAll = () => {
     if (allSelected) {
       setSelectedRows([]);
@@ -378,6 +382,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
 
   const filterData = () => {
     let filteredData = [...callingList];
+    
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
         if (option === "candidateId") {
@@ -410,14 +415,86 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
               item[option]?.toString().toLowerCase().includes(value)
             )
           );
-        } else {
+        } else if (option === "currentCtcLakh") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "currentCtcThousand") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "empId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "expectedCtcLakh") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "expectedCtcThousand") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "experienceMonth") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "experienceYear") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "oldEmployeeId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        } else if (option === "yearOfPassing") {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
-              item[option]
-                ?.toString()
-                .toLowerCase()
-                .includes(value.toLowerCase())
+              item[option]?.toString().toLowerCase().includes(value)
             )
+          );
+        }  else {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const isNumeric = !isNaN(value); // Check if the value is numeric
+              if (isNumeric) {
+                const numericValue = parseInt(value, 10); // Convert value to integer
+                return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              } else {
+                return item[option]?.toString().includes(value); // For non-numeric comparisons
+              }
+            })
           );
         }
       }

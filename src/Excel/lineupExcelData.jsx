@@ -21,7 +21,7 @@ const LineupExcelData = ({
   const [showLineUpForm, setShowLineUpForm] = useState(false);
   const [lineUpToUpdate, setLineUpToUpdate] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState({});
-
+  const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [selectedCandidateId, setSelectedCandidateId] = useState();
   const [selectedRows, setSelectedRows] = useState([]);
   const [showSearchBar, setShowSearchBar] = useState(false);
@@ -63,15 +63,71 @@ const LineupExcelData = ({
     console.log("Filtered LineUp List:", filteredLineUpList);
   }, [filteredLineUpList]);
 
+
+  // prachi parab lineupExcel data_filter_section 12/9
+  const limitedOptions = [
+    ["alternateNumber", "Alternate Number"],
+    ["callingFeedback", "Calling Feedback"],
+    ["candidateAddedTime", "Candidate Added Time"],
+    ["candidateEmail", "Candidate Email"],
+    ["candidateName", "Candidate Name"],
+    ["communicationRating", "Communication Rating"],
+    ["contactNumber", "Contact Number"],
+    ["currentLocation", "Current Location"],
+    ["date", "Date"],
+    ["fullAddress", "Full Address"],
+    ["incentive", "Incentive"],
+    ["jobDesignation", "Job Designation"],
+    ["oldEmployeeId", "Old Employee Id"],
+    ["recruiterName", "Recruiter Name"],
+    ["requirementCompany", "Requirement Company"],
+    ["requirementId", "Requirement Id"],
+    ["selectYesOrNo", "Status Type"],
+    ["sourceName", "Source Name"],
+    ["empId", "Employee Id"],
+    ["availabilityForInterview", "Availability For Interview"],
+    ["companyName", "Company Name"],
+    ["currentCtcLakh", "Current CTC (Lakh)"],
+    ["currentCtcThousand", "Current CTC (Thousand)"],
+    ["dateOfBirth", "Date Of Birth"],
+    ["expectedCtcLakh", "Expected CTC (Lakh)"],
+    ["expectedCtcThousand", "Expected CTC (Thousand)"],
+    ["experienceMonth", "Experience (Months)"],
+    ["experienceYear", "Experience (Years)"],
+    ["extraCertification", "Extra Certification"],
+    ["feedBack", "Feedback"],
+    ["finalStatus", "Final Status"],
+    ["gender", "Gender"],
+    ["holdingAnyOffer", "Holding Any Offer"],
+    ["interviewTime", "Interview Time"],
+    ["noticePeriod", "Notice Period"],
+    ["offerLetterMsg", "Offer Letter Message"],
+    ["qualification", "Qualification"],
+    ["relevantExperience", "Relevant Experience"],
+    ["resume", "Resume"],
+    ["verificationLink", "Verification Link"],
+    ["yearOfPassing", "Year Of Passing"],
+    ["token", "Token"],
+    ["candidateStatus", "Candidate Status"],
+
+  ]
+
+
   useEffect(() => {
-    const limitedOptions = [
-      "date",
-      "recruiterName",
-      "jobDesignation",
-      "requirementId",
-    ];
-    setFilterOptions(limitedOptions);
+    const options = limitedOptions
+      .filter(([key]) =>
+        Object.keys(lineUpList[0] || {}).includes(key)
+      )
+      .map(([key]) => key);
+
+    setFilterOptions(options);
   }, [lineUpList]);
+
+
+  const handleFilterOptionClick = (key) => {
+    setActiveFilterOption(activeFilterOption === key ? null : key);
+    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
+  };
 
   useEffect(() => {
     filterData();
@@ -145,15 +201,162 @@ const LineupExcelData = ({
     }
   }, [sortCriteria, sortOrder]);
 
+
   const filterData = () => {
     let filteredData = [...lineUpList];
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
-        if (option === "requirementId") {
+        if (option === "candidateId") {
           filteredData = filteredData.filter((item) =>
-            values.includes(item[option]?.toString())
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
           );
-        } else {
+        } else if (option === "requirementId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if (option === "employeeId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if (option === "contactNumber") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if (option === "alternateNumber") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if (option === "currentCtcLakh") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "currentCtcThousand") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "empId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "expectedCtcLakh") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "expectedCtcThousand") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "experienceMonth") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "experienceYear") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "oldEmployeeId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "availabilityForInterview") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "candidateAddedTime") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "date") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "dateOfBirth") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "incentive") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "interviewTime") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "selectYesOrNo") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
               item[option]
@@ -168,24 +371,15 @@ const LineupExcelData = ({
     setFilteredLineUpList(filteredData);
   };
 
-  const handleFilterSelect = (option, value) => {
-    setSelectedFilters((prevFilters) => {
-      const updatedFilters = { ...prevFilters };
-      if (!updatedFilters[option]) {
-        updatedFilters[option] = [];
-      }
 
-      const index = updatedFilters[option].indexOf(value);
-      if (index === -1) {
-        updatedFilters[option] = [...updatedFilters[option], value];
-      } else {
-        updatedFilters[option] = updatedFilters[option].filter(
-          (item) => item !== value
-        );
-      }
 
-      return updatedFilters;
-    });
+  const handleFilterSelect = (key, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [key]: prev[key].includes(value)
+        ? prev[key].filter((item) => item !== value)
+        : [...prev[key], value],
+    }));
   };
 
   const handleSort = (criteria) => {
@@ -198,11 +392,11 @@ const LineupExcelData = ({
   };
 
   const handleUpdate = (candidateData) => {
-    setSelectedCandidate(candidateData); 
+    setSelectedCandidate(candidateData);
   };
 
   const handleUpdateSuccess = () => {
-    fetch(`${API_BASE_URL}/lineup-excel-data/${employeeId}/${userType}`)
+    fetch(`http://93.127.199.85/api/ats/157industries/lineup-excel-data/${employeeId}/${userType}`)
       .then((response) => response.json())
       .then((data) => {
         setLineUpList(data);
@@ -288,17 +482,7 @@ const LineupExcelData = ({
             {/* Prachi UploadLineUpData 3/7 */}
             <button
               onClick={toggleFilterSection}
-              style={{
-                fontSize: "16px",
-                borderRadius: "15px",
-                height: "30px",
-                color: "#ffcb9b",
-                paddingLeft: "15px",
-                paddingRight: "15px",
-                background: "white",
-                border: "1px solid gray",
-                position: "sticky",
-              }}
+              className="daily-tr-btn"
             >
               Filter <i className="fa-solid fa-filter"></i>
             </button>
@@ -316,53 +500,53 @@ const LineupExcelData = ({
           )}
           {showFilterSection && (
             <div className="filter-section">
-              <h5 style={{ color: "gray", paddingTop: "5px" }}>Filter</h5>
+              {/* <h5 style={{ color: "gray", paddingTop: "5px" }}>Filter</h5> */}
+
 
               <div className="filter-dropdowns">
-                {/* <button onClick={onCloseTable} style={{ float: 'right' }}>Close</button> */}
+                {showFilterSection && (
+                  <div className="filter-section">
+                    {limitedOptions.map(([optionKey, optionLabel]) => {
+                      const uniqueValues = Array.from(
+                        new Set(lineUpList.map((item) => item[optionKey]))
+                      );
 
-                {filterOptions.map((option) => (
-                  <div key={option} className="filter-dropdown">
-                    {/* <label htmlFor={option}>{option}</label> */}
-                    <div className="dropdown">
-                      <button className="dropbtn">{option}</button>
-                      <div className="dropdown-content">
-                        <div key={`${option}-All`}>
-                          <input
-                            type="checkbox"
-                            id={`${option}-All`}
-                            value="All"
-                            checked={
-                              !selectedFilters[option] ||
-                              selectedFilters[option].length === 0
-                            }
-                            onChange={() => handleFilterSelect(option, "All")}
-                          />
-                          <label htmlFor={`${option}-All`}>All</label>
+                      return (
+                        <div key={optionKey} className="filter-option">
+                          <button
+                            className="white-Btn"
+                            onClick={() => handleFilterOptionClick(optionKey)}
+                          >
+                            {optionLabel}
+                            <span className="filter-icon">&#x25bc;</span>
+                          </button>
+                          {activeFilterOption === optionKey && (
+                            <div className="city-filter">
+                              <div className="optionDiv">
+                                {uniqueValues.map((value) => (
+                                  <label
+                                    key={value}
+                                    className="selfcalling-filter-value"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={
+                                        selectedFilters[optionKey]?.includes(value) || false
+                                      }
+                                      onChange={() => handleFilterSelect(optionKey, value)}
+                                      style={{ marginRight: '5px' }}
+                                    />
+                                    {value}
+                                  </label>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
-                        {[
-                          ...new Set(lineUpList.map((item) => item[option])),
-                        ].map((value) => (
-                          <div key={value}>
-                            <input
-                              type="checkbox"
-                              id={`${option}-${value}`}
-                              value={value}
-                              checked={
-                                selectedFilters[option]?.includes(value) ||
-                                false
-                              }
-                              onChange={() => handleFilterSelect(option, value)}
-                            />
-                            <label htmlFor={`${option}-${value}`}>
-                              {value}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                      );
+                    })}
                   </div>
-                ))}
+                )}
               </div>
             </div>
           )}
@@ -371,15 +555,15 @@ const LineupExcelData = ({
             <table className="selfcalling-table attendance-table">
               <thead>
                 <tr className="attendancerows-head">
-                  <th className="attendanceheading">
-                    <input
+                  {/* <th className="attendanceheading"> */}
+                    {/* <input
                       type="checkbox"
                       onChange={handleSelectAll}
                       checked={
                         selectedRows.length === filteredLineUpList.length
                       }
-                    />
-                  </th>
+                    /> */}
+                  {/* </th> */}
                   <th className="attendanceheading">Sr No.</th>
                   <th
                     className="attendanceheading"
@@ -444,13 +628,13 @@ const LineupExcelData = ({
               <tbody>
                 {filteredLineUpList.map((item, index) => (
                   <tr key={item.candidateId} className="attendancerows">
-                    <td className="tabledata ">
+                    {/* <td className="tabledata ">
                       <input
                         type="checkbox"
                         checked={selectedRows.includes(item.candidateId)}
                         onChange={() => handleSelectRow(item.candidateId)}
                       />
-                    </td>
+                    </td> */}
 
                     <td
                       className="tabledata "
@@ -919,7 +1103,6 @@ const LineupExcelData = ({
           </div>
         </>
       )}
-       <div className="callingExcelData-update-form">
       {selectedCandidate && (
         <CallingTrackerForm
           initialData={selectedCandidate}
@@ -928,7 +1111,6 @@ const LineupExcelData = ({
           onSuccess={handleUpdateSuccess}
         />
       )}
-      </div>
     </div>
   );
 };

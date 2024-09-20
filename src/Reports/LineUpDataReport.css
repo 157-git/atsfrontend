@@ -3,7 +3,7 @@
          End LineNo:-4 to 250 Date:-05/07 */
 
 .filter-section {
-  margin-bottom: 20px;
+  margin-top: 5px;
 }
 
 .filter-dropdowns {
@@ -27,10 +27,6 @@
   border-radius: 5px;
 }
 
-/* Style the filter section */
-.filter-section {
-  margin-top: 20px;
-}
 
 /* Style the filter dropdowns */
 .filter-dropdown {

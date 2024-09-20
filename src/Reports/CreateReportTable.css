@@ -1,9 +1,7 @@
  /* Name:-Prachi Parab Component:-Create Report Table page 
          End LineNo:-4 to 230 Date:-07/07 */
 
-         .filter-section {
-          margin-bottom: 20px;
-        }
+
         
         .filter-dropdowns {
           display: flex;
@@ -29,7 +27,7 @@
         
         /* Style the filter section */
         .filter-section {
-          margin-top: 20px;
+          margin-top: 5px;
         }
         
         /* Style the filter dropdowns */

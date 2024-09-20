@@ -391,13 +391,13 @@ const EmployeeMasterSheet = () => {
               {(userType === 'TeamLeader' || userType === 'Manager') && (
                         <th className="attendanceheading">Team Leader Id</th>
                       )}
-              <th className="attendanceheading">Candidate ID</th>
+                       <th className="attendanceheading">Candidate ID</th>
+              <th className="attendanceheading">Candidate Name</th>
+              <th className="attendanceheading">Candidate Email</th>
+              <th className="attendanceheading">Contact Number</th>
               <th className="attendanceheading">Alternate Number</th>
               <th className="attendanceheading">Calling Feedback</th>
-              <th className="attendanceheading">Candidate Email</th>
-              <th className="attendanceheading">Candidate Name</th>
               <th className="attendanceheading">Communication Rating</th>
-              <th className="attendanceheading">Contact Number</th>
               <th className="attendanceheading">Current Location</th>
               <th className="attendanceheading">Date</th>
               <th className="attendanceheading">Job Designation</th>
@@ -474,7 +474,7 @@ const EmployeeMasterSheet = () => {
               <th className="attendanceheading">Join Status</th>
               <th className="attendanceheading">Reason for Not Join</th>
               <th className="attendanceheading">Join Date</th>
-              <th className="attendanceheading">Interview History</th>
+              {/* <th className="attendanceheading">Interview History</th> */}
               <th className="attendanceheading">Inquiry ID</th>
               <th className="attendanceheading">Active Status</th>
               <th className="attendanceheading">Any Problem</th>
@@ -483,7 +483,7 @@ const EmployeeMasterSheet = () => {
               <th className="attendanceheading">Inactive Reason</th>
               <th className="attendanceheading">Office Environment</th>
               <th className="attendanceheading">Staff Behavior</th>
-              <th className="attendanceheading">FollowUp History</th>
+              {/* <th className="attendanceheading">FollowUp History</th> */}
               {/* <th className="attendanceheading">Action</th> */}
             </tr>
           </thead>
@@ -505,12 +505,14 @@ const EmployeeMasterSheet = () => {
                 <td className="tabledata">{entry[73]}</td>
                 )}
                 <td className="tabledata">{entry[0]}</td>
+                <td className="tabledata">{entry[4]}</td>
+                <td className="tabledata">{entry[3]}</td>
+                <td className="tabledata">{entry[6]}</td>
+
                 <td className="tabledata">{entry[1]}</td>
                 <td className="tabledata">{entry[2]}</td>
-                <td className="tabledata">{entry[3]}</td>
-                <td className="tabledata">{entry[4]}</td>
+
                 <td className="tabledata">{entry[5]}</td>
-                <td className="tabledata">{entry[6]}</td>
                 <td className="tabledata">{entry[7]}</td>
                 <td className="tabledata">{entry[8]}</td>
                 <td className="tabledata">{entry[9]}</td>
@@ -666,9 +668,9 @@ const EmployeeMasterSheet = () => {
                 <td className="tabledata">{entry[62]}</td>
                 <td className="tabledata">{entry[63]}</td>
                 <td className="tabledata">{entry[64]}</td>
-                <td className="tabledata">
+                {/* <td className="tabledata">
                   <button className="View-Interview-History">View</button>
-                </td>
+                </td> */}
                 <td className="tabledata">{entry[65]}</td>
                 <td className="tabledata">{entry[66]}</td>
                 <td className="tabledata">{entry[67]}</td>
@@ -677,9 +679,10 @@ const EmployeeMasterSheet = () => {
                 <td className="tabledata">{entry[70]}</td>
                 <td className="tabledata">{entry[71]}</td>
                 <td className="tabledata">{entry[72]}</td>
-                <td className="tabledata">
+
+                {/* <td className="tabledata">
                   <button className="FollowUp-History">View</button>
-                </td>
+                </td> */}
                 {/* <td className="tabledata">
                   <i className="fa-regular fa-pen-to-square"></i>
                 </td> */}

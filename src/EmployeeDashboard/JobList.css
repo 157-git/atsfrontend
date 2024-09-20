@@ -15,7 +15,6 @@
 
 
 .white-Btn { 
-
   border: 1px solid gray;
   border-radius: 15px;
   background-color: white;
@@ -33,17 +32,13 @@
 .name {
   font-family: Arial, sans-serif;
   margin: 0px;
-
 padding-top: 120px;
-
   flex-wrap: wrap;
   height: 100vh;
 }
 
 .names {
-
   color:var(--text-color);
-
   /* line-height: 25px; */
   overflow-y: scroll;
   height: 70vh;
@@ -66,12 +61,15 @@ padding-top: 120px;
   justify-content: space-between;
 }
 
-.save {
+.jd-share-div {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   flex-wrap: wrap;
   color: #ffe5b5;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  /* border: 1px solid black; */
 }
 
 .saved {
@@ -118,13 +116,10 @@ padding-top: 120px;
 }
 
 .job-performance1 {
-  flex: 4;
-  height: 95vh;
-}
-
-.job-performance1 {
   flex: 2;
+  height: 95vh;
   margin-bottom: 20px;
+
 }
 
 .info,
@@ -138,7 +133,7 @@ padding-top: 120px;
 
 .info-title,
 .job-performance-title {
-  font-size: 18px;
+  font-size: 16px;
   color: #f2f2f2;
   margin-bottom: 1px;
   background-color: #f2f2f2;
@@ -170,7 +165,6 @@ padding-top: 120px;
 .info-title {
   font-size: 18px;
   color:var(--text-color);
-
   margin-bottom: 10px;
   font-weight: bold;
 }
@@ -201,16 +195,13 @@ padding-top: 120px;
 
 .screening-questions-title {
   font-size: 1.8em;
-
   color:var(--text-color);
-
   margin-bottom: 10px;
   font-weight: bold;
 }
 
 .screening-questions-item {
   margin-bottom: 10px;
-
   color:var(--text-color);
 
 }
@@ -222,9 +213,7 @@ padding-top: 120px;
 
 .job-performance-title {
   font-size: 1.8em;
-
   color:var(--text-color);
-
   margin-bottom: 20px;
   font-weight: bold;
 }
@@ -232,7 +221,6 @@ padding-top: 120px;
 .job-performance-value {
   font-size: 2em;
   color:var(--text-color);
-
   font-weight: bold;
 }
 
@@ -242,7 +230,6 @@ padding-top: 120px;
   align-items: center;
   justify-content: space-around;
   flex-wrap: wrap;
-
   margin: 10px;
 }
 
@@ -261,9 +248,9 @@ padding-top: 120px;
   justify-content: center;
   flex-wrap: wrap;
   background-color: #f2f2f2;
-  margin-top: 60px; /* Adjust this based on your header's height */
-  overflow-y: auto; /* Allow scrolling */
-  height: calc(100vh - 100px); /* Adjust based on header height */
+  margin-top: 100px; 
+  overflow-y: auto; 
+  height: calc(100vh - 100px); 
 }
 
 .city-list {
@@ -391,6 +378,7 @@ padding-top: 120px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .job-location,
@@ -442,7 +430,6 @@ padding-top: 120px;
   overflow-y: auto;
   overflow-x: hidden;
   position: absolute;
-
   z-index: 1000;
 }
 
@@ -500,9 +487,7 @@ padding-top: 120px;
 }
 
 #edm-share-icon {
-
   color:var(--text-color);
-
   padding-left: 5px;
 }
 
@@ -523,10 +508,22 @@ padding-top: 120px;
 
 .jd-header-search {
   position: fixed;
-  top: 75px;
+  top: 70px;
   background-color: white; /* Adjust as needed */
   z-index: 1000; /* Ensure it's on top */
   padding: 10px;
   width: 95%;
 }
 
+
+/* AjharTamboli JobList Fiter 11-09-24 */
+/* Add this CSS to your stylesheet */
+.filter-option button {
+  text-transform: capitalize;
+}
+
+.selfcalling-filter-value {
+  text-transform: capitalize;
+  gap: 5px;
+
+}

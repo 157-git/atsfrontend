@@ -259,8 +259,10 @@ const HoldCandidate = ({
     }
   }, [sortCriteria, sortOrder]);
 
+
   const filterData = () => {
     let filteredData = [...callingList];
+    
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
         if (option === "candidateId") {
@@ -293,14 +295,86 @@ const HoldCandidate = ({
               item[option]?.toString().toLowerCase().includes(value)
             )
           );
-        } else {
+        } else if (option === "currentCtcLakh") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "currentCtcThousand") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "empId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "expectedCtcLakh") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "expectedCtcThousand") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "experienceMonth") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "experienceYear") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        }
+        else if (option === "oldEmployeeId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            })
+          );
+        } else if (option === "yearOfPassing") {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
-              item[option]
-                ?.toString()
-                .toLowerCase()
-                .includes(value.toLowerCase())
+              item[option]?.toString().toLowerCase().includes(value)
             )
+          );
+        }  else {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const isNumeric = !isNaN(value); // Check if the value is numeric
+              if (isNumeric) {
+                const numericValue = parseInt(value, 10); // Convert value to integer
+                return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              } else {
+                return item[option]?.toString().includes(value); // For non-numeric comparisons
+              }
+            })
           );
         }
       }

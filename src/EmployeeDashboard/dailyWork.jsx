@@ -506,7 +506,8 @@ function DailyWork({
         </div>
         <div className="user-details">
           <p>
-            {employeeData.name} - {userType}
+            {employeeData.name} - {(userType == "Recruiters" ? "Recruiter" : "") || (userType == "TeamLeader" ? "Team Leader" : "") ||
+              (userType == "Manager" ? "Manager" : "") || (userType == "SuperUser" ? "Super User" : "")}
             <br />
             157{employeeId}
           </p>
@@ -535,16 +536,15 @@ function DailyWork({
                 className="daily-tr-btn"
                 style={{
                   color: data.archived <= 3 ? "red" : "green",
-                  // backgroundColor: buttonColor,
+
                 }}
               >
-                Archived : {data.archived}
+                Achieved : {data.archived}
               </button>
               <button
                 className="daily-tr-btn"
                 style={{
                   color: data.pending < 7 ? "green" : "red",
-                  // backgroundColor: buttonColor,
                 }}
               >
                 Pending : {data.pending}

@@ -45,7 +45,7 @@ const CallingTrackerForm = ({
     currentLocation: "",
     fullAddress: "",
     communicationRating: "",
-    selectYesOrNo: "Yet To Confirm",
+    selectYesOrNo: "",
     callingFeedback: ""
   };
 
@@ -389,6 +389,7 @@ const CallingTrackerForm = ({
           console.log("-------No Add Calling Tracker-----------");
         }
         setSubmited(false);
+        setLoading(true)
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 4000);
         toast.success("Candidate Added Successfully..");

@@ -209,13 +209,13 @@ const ShareDescription = ({ Descriptions }) => {
 
       </div>
       <section className="apply-section-share">
-        <button className="apply-button-share" style={{ paddingRight: "10px", paddingLeft: "10px", color: "black" }} onClick={generateAndShareImage}>
+        <button className="apply-button-share" onClick={generateAndShareImage}>
           Share Job Description
         </button>
         <button
           onClick={closeJobDescrptionShare}
           className="apply-button-share"
-          style={{ paddingRight: "10px", paddingLeft: "10px", color: "black" }}
+          
         >
           close
         </button>

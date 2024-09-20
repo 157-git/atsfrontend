@@ -478,32 +478,20 @@ const EmployeeProfileData = ({
 
   return (
     <div
-      className="bg-black bg-opacity-50 modal show"
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        position: "initial",
-        width: "100%",
-        height: "100vh",
-      }}
+      className="employee-profile-card"
     >
       {employeeData != null ? (
         <Modal.Dialog
-          // size="lg"
-          style={{
-            padding: "10px",
-          }}
+        style={{padding:"10px",margin:"10px"}}
         >
           <Modal.Header
-            style={{ fontSize: "18px", backgroundColor: "#f2f2f2" }}
+            style={{ fontSize: "18px",   backgroundColor: "#f2f2f2"}}
           >
             Employee Profile 
             <button
               onClick={onClose}
               style={{
-                marginLeft: "270px",
-                padding: "8px",
+                marginLeft: "250px",
                 color: "red",
               }}
               className="close-profile-popup-btn  white-Btn"
@@ -520,7 +508,7 @@ const EmployeeProfileData = ({
               color: "gray",
             }}
           >
-            <div>
+            <div className="profile-card-img">
               <img src={profileImage} width={"150px"} />
             </div>
             <div>
@@ -545,15 +533,6 @@ const EmployeeProfileData = ({
             <button onClick={toggleAttendance} className="emp-pro-incentive">
               Attendance
             </button>
-
-            {/* {(userType === 'TeamLeader' || userType === 'Manager' || userType === 'SuperUser') && (
-  <button
-    onClick={toggleTeamDetails}
-    className="emp-pro-incentive">
-    Team Details
-  </button>
-)} */}
-
 
             <button
               onClick={viewMoreProfile}

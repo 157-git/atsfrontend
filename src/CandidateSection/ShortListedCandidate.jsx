@@ -7,6 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import { API_BASE_URL } from "../api/api";
+import Loader from "../EmployeeSection/loader";
 // SwapnilRokade_ShortListedCandidates_ModifyFilters_11/07
 
 const ShortListedCandidates = ({
@@ -38,6 +39,7 @@ const ShortListedCandidates = ({
   const [showForwardPopup, setShowForwardPopup] = useState(false);
   const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [isDataSending, setIsDataSending] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const { employeeId } = useParams();
   const newEmployeeId = parseInt(employeeId, 10);
@@ -70,50 +72,49 @@ const ShortListedCandidates = ({
   //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_62
 
 
-//prachi shortlisted Candidate->filter->10/9
+  //prachi shortlisted Candidate->filter->10/9
   const limitedOptions = [
-  ["alternateNumber","Alternate Number"],
-  [ "availabilityForInterview", "Availability For Interview"],
-  ["callingFeedback","Calling Feedback"],
-  ["candidateAddedTime", "Candidate Added Time"],
-  ["candidateEmail", "Candidate Email"],
-  ["candidateId", "Candidate Id"],
-  ["candidateName", "Candidate Name"],
-  ["communicationRating", "Communication Rating"],
-  ["companyName", "Company Name"],
-  ["contactNumber", "Contact Number"],
-  ["currentCtcLakh", "Current CTC Lakh"],
-  ["currentCtcThousand", "Current CTC Thousand"],
-  ["currentLocation", "Current Location"],
-  ["date", "Date"],
-  ["dateOfBirth", "Date Of Birth"],
-  ["empId", "Employee Id"],
-  ["expectedCtcLakh", "Expected CTC(Lakh)"],
-  ["expectedCtcThousand", "Expected CTC(Thousand)"],
-  ["experienceMonth", "Experience Month"],
-  ["experienceYear", "Experience Year"],
-  ["extraCertification", "Extra Certification"],
-  ["feedBack", "FeedBack"],
-  ["finalStatus", "Final Status"],
-  ["fullAddress", "Full Address"],
-  ["gender", "Gender"],
-  ["holdingAnyOffer", "Holding Any Offer"],
-  ["incentive", "Incentive"],
-  ["interviewTime", "Interview Time"],
-  ["jobDesignation", "Job Designation"],
-  ["noticePeriod", "Notice Period"],
-  ["offerLetterMsg", "Offer Letter Message"],
-  ["oldEmployeeId", "Old Employee Id"],
-  ["qualification", "Qualification"],
-  ["recruiterName", "Recruiter Name"],
-  ["relevantExperience", "Relevant Experience"],
-  ["requirementCompany", "Applying Company"],
-  ["requirementId", "Job ID"],
-  ["selectYesOrNo", "Status"],
-  ["sourceName", "Source Name"],
-  ["yearOfPassing", "Year Of Passing"]
+    ["alternateNumber", "Alternate Number"],
+    ["availabilityForInterview", "Availability For Interview"],
+    ["callingFeedback", "Calling Feedback"],
+    ["candidateAddedTime", "Candidate Added Time"],
+    ["candidateEmail", "Candidate Email"],
+    ["candidateId", "Candidate Id"],
+    ["candidateName", "Candidate Name"],
+    ["communicationRating", "Communication Rating"],
+    ["companyName", "Company Name"],
+    ["contactNumber", "Contact Number"],
+    ["currentCtcLakh", "Current CTC Lakh"],
+    ["currentCtcThousand", "Current CTC Thousand"],
+    ["currentLocation", "Current Location"],
+    ["date", "Date"],
+    ["dateOfBirth", "Date Of Birth"],
+    ["empId", "Employee Id"],
+    ["expectedCtcLakh", "Expected CTC (Lakh)"],
+    ["expectedCtcThousand", "Expected CTC (Thousand)"],
+    ["experienceMonth", "Experience Month"],
+    ["experienceYear", "Experience Year"],
+    ["extraCertification", "Extra Certification"],
+    ["feedBack", "Feed Back"],
+    ["finalStatus", "Final Status"],
+    ["fullAddress", "Full Address"],
+    ["gender", "Gender"],
+    ["holdingAnyOffer", "Holding Any Offer"],
+    ["incentive", "Incentive"],
+    ["interviewTime", "Interview Time"],
+    ["jobDesignation", "Job Designation"],
+    ["noticePeriod", "Notice Period"],
+    ["offerLetterMsg", "Offer Letter Message"],
+    ["oldEmployeeId", "Old Employee Id"],
+    ["qualification", "Qualification"],
+    ["recruiterName", "Recruiter Name"],
+    ["relevantExperience", "Relevant Experience"],
+    ["requirementCompany", "Applying Company"],
+    ["requirementId", "Job ID"],
+    ["selectYesOrNo", "Status"],
+    ["sourceName", "Source Name"],
+    ["yearOfPassing", "Year Of Passing"]
   ];
-
 
   const { userType } = useParams();
 
@@ -185,8 +186,10 @@ const ShortListedCandidates = ({
       setShortListedData(data);
       setFilteredShortListed(data);
       console.log(data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
+      setLoading(false);
     }
   };
 
@@ -361,6 +364,7 @@ const ShortListedCandidates = ({
     filterData();
   }, [selectedFilters, shortListedData]);
 
+
   useEffect(() => {
     const filtered = shortListedData.filter((item) => {
       const searchTermLower = searchTerm.toLowerCase();
@@ -425,10 +429,9 @@ const ShortListedCandidates = ({
     }
   }, [sortCriteria, sortOrder]);
 
-// prachi filterdata
-
   const filterData = () => {
     let filteredData = [...shortListedData];
+
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
         if (option === "candidateId") {
@@ -461,7 +464,7 @@ const ShortListedCandidates = ({
               item[option]?.toString().toLowerCase().includes(value)
             )
           );
-        } else if(option==="currentCtcLakh"){
+        } else if (option === "currentCtcLakh") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
@@ -469,7 +472,7 @@ const ShortListedCandidates = ({
             })
           );
         }
-        else if(option==="currentCtcThousand"){
+        else if (option === "currentCtcThousand") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
@@ -477,7 +480,7 @@ const ShortListedCandidates = ({
             })
           );
         }
-        else if(option==="empId"){
+        else if (option === "empId") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
@@ -485,7 +488,7 @@ const ShortListedCandidates = ({
             })
           );
         }
-        else if(option==="expectedCtcLakh"){
+        else if (option === "expectedCtcLakh") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
@@ -493,7 +496,7 @@ const ShortListedCandidates = ({
             })
           );
         }
-        else if(option==="expectedCtcThousand"){
+        else if (option === "expectedCtcThousand") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
@@ -501,7 +504,7 @@ const ShortListedCandidates = ({
             })
           );
         }
-        else if(option==="experienceMonth"){
+        else if (option === "experienceMonth") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
@@ -509,7 +512,7 @@ const ShortListedCandidates = ({
             })
           );
         }
-        else if(option==="experienceYear"){
+        else if (option === "experienceYear") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
@@ -517,43 +520,37 @@ const ShortListedCandidates = ({
             })
           );
         }
-        else if(option==="oldEmployeeId"){
+        else if (option === "oldEmployeeId") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
               return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
             })
           );
-        }
-        
-        else {
+        } else if (option === "yearOfPassing") {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
-              item[option]
-                ?.toString()
-                .toLowerCase()
-                .includes(value.toLowerCase())
+              item[option]?.toString().toLowerCase().includes(value)
             )
+          );
+        } else {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const isNumeric = !isNaN(value); // Check if the value is numeric
+              if (isNumeric) {
+                const numericValue = parseInt(value, 10); // Convert value to integer
+                return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              } else {
+                return item[option]?.toString().includes(value); // For non-numeric comparisons
+              }
+            })
           );
         }
       }
     });
     setFilteredShortListed(filteredData);
-  }; 
+  };
 
-  // const filterData = () => {
-  //   let filteredData = [...shortListedData];
-  //   Object.entries(selectedFilters).forEach(([option, values]) => {
-  //     if (values.length > 0) {
-  //       filteredData = filteredData.filter((item) =>
-  //         values.some((value) =>
-  //           item[option]?.toString().toLowerCase().includes(value.toLowerCase())
-  //         )
-  //       );
-  //     }
-  //   });
-  //   setFilteredShortListed(filteredData);
-  // };
   const handleFilterSelect = (key, value) => {
     setSelectedFilters((prev) => ({
       ...prev,
@@ -630,901 +627,937 @@ const ShortListedCandidates = ({
 
   return (
     <div className="calling-list-container">
-      <div className="search">
-        <div
-          style={{
-            display: "flex",
-            gap: "5px",
-            justifyContent: "center",
-            alignItems: "center",
-            paddingTop: "3px",
-          }}
-        >
-          <i
-            className="fa-solid fa-magnifying-glass"
-            onClick={() => {
-              setShowSearchBar(!showSearchBar);
-              setShowFilterSection(false);
-            }}
-            style={{ margin: "10px", width: "auto", fontSize: "15px" }}
-          ></i>
-          <i
-            style={{ fontSize: "22px" }}
-            onClick={
-              toggleShortListed
-            } /*Akash_Pawar_ShortlistedCandidate_toggleShortListed(show interview candidate)_23/07_LineNo_591*/
-            className="fa-regular fa-calendar"
-          ></i>
+      {loading ? (
+        <div className="register">
+          <Loader></Loader>
         </div>
-        <h5 style={{ color: "gray", paddingTop: "5px" }}>
-          Shortlisted Candidate
-        </h5>
-
-        <div
-          style={{
-            display: "flex",
-            gap: "5px",
-            justifyContent: "center",
-            alignItems: "center",
-            paddingTop: "3px",
-          }}
-        >
-          {userType !== "Recruiters" && (
-            <div>
-              {showShareButton ? (
-                <button
-                  className="lineUp-share-btn"
-                  onClick={() => setShowShareButton(false)}
-                >
-                  Share
-                </button>
-              ) : (
-                <div style={{ display: "flex", gap: "5px" }}>
-                  <button
-                    className="lineUp-share-btn"
-                    onClick={() => {
-                      setShowShareButton(true);
-                      setSelectedRows([]);
-                    }}
-                  >
-                    Close
-                  </button>
-                  {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_602 */}
-                  {userType === "TeamLeader" && (
-                    <button
-                      className="callingList-share-btn"
-                      onClick={handleSelectAll}
-                    >
-                      {allSelected ? "Deselect All" : "Select All"}
-                    </button>
-                  )}
-                  {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_609 */}
-                  <button
-                    className="lineUp-share-btn"
-                    onClick={forwardSelectedCandidate}
-                  >
-                    Forward
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-          <button className="lineUp-share-btn" onClick={toggleFilterSection}>
-            Filter <i className="fa-solid fa-filter"></i>
-          </button>
-        </div>
-      </div>
-      {!showUpdateCallingTracker ? (
-        <div className="attendanceTableData">
-          {showSearchBar && (
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search here..."
-              value={searchTerm}
-              style={{ marginBottom: "10px" }}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          )}
-          {showFilterSection && (
-            <div className="filter-section">
-              <div className="filter-dropdowns" >
-              {showFilterSection && (
+      ) : (
+        <>
+          <div className="search">
             <div
-              className="filter-options-container"
-              style={{ display: "flex", flexWrap: "wrap" }}
+              style={{
+                display: "flex",
+                gap: "5px",
+                justifyContent: "center",
+                alignItems: "center",
+                paddingTop: "3px",
+              }}
             >
-              {limitedOptions
-                .filter(([key]) => filterOptions.includes(key))
-                .map(([key, displayText]) => (
-                  <div key={key} className="filter-option">
-                    <button
-                      className="white-Btn"
-                      onClick={() => handleFilterOptionClick(key)}
-                    >
-                      {displayText}
-                      <span className="filter-icon">&#x25bc;</span>
-                    </button>
-                    {activeFilterOption === key && (
-                      <div className="city-filter">
-                        <div className="optionDiv">
-                          {Array.from(
-                            new Set(shortListedData.map((item) => item[key]))
-                          ).map((value) => (
-                            <label
-                              key={value}
-                              className="selfcalling-filter-value"
-                            >
-                              <input
-                                type="checkbox"
-                                checked={
-                                  selectedFilters[key]?.includes(value) || false
-                                }
-                                onChange={() => handleFilterSelect(key, value)}
-                                style={{marginRight:'5px'}}
-                              />
-                              {value}
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-            </div>
-          )}
-              </div>
-            </div>
-          )}
-
-          <table id="shortlisted-table-id" className="attendance-table">
-            <thead>
-              <tr className="attendancerows-head">
-                {!showShareButton && userType === "TeamLeader" ? (
-                  <th className="attendanceheading">
-                    <input
-                      type="checkbox"
-                      onChange={handleSelectAll}
-                      checked={selectedRows.length === shortListedData.length}
-                      name="selectAll"
-                    />
-                  </th>
-                ) : null}
-                <th className="attendanceheading">Sr  No.</th>
-                <th className="attendanceheading">Date & Time</th>
-                <th className="attendanceheading">Candidate's Id</th>
-                <th className="attendanceheading">Recruiter's Name</th>
-                <th className="attendanceheading">Candidate's Name</th>
-                <th className="attendanceheading">Candidate's Email</th>
-                <th className="attendanceheading">Contact Number</th>
-                <th className="attendanceheading">Whatsapp Number</th>
-                <th className="attendanceheading">Source Name</th>
-                <th className="attendanceheading">Job Designation</th>
-                <th className="attendanceheading">Job Id</th>
-                <th className="attendanceheading">Applying Company</th>
-                <th className="attendanceheading">Communication Rating</th>
-                <th className="attendanceheading">Current Location</th>
-                <th className="attendanceheading">Full Address</th>
-                <th className="attendanceheading">Calling Remark</th>
-                <th className="attendanceheading">Recruiter's Incentive</th>
-                <th className="attendanceheading">Interested or Not</th>
-                <th className="attendanceheading">Current Company</th>
-                <th className="attendanceheading">Total Experience</th>
-                <th className="attendanceheading">Relevant Experience</th>
-                <th className="attendanceheading">Current CTC</th>
-                <th className="attendanceheading">Expected CTC</th>
-                <th className="attendanceheading">Date Of Birth</th>
-                <th className="attendanceheading">Gender</th>
-                <th className="attendanceheading">Education</th>
-                <th className="attendanceheading">Year Of Passing</th>
-                <th className="attendanceheading">Extra Certification</th>
-                {/* call summary */}
-                {/* <th className="attendanceheading">Feedback</th> */}
-                <th className="attendanceheading">Holding Any Offer</th>
-                <th className="attendanceheading">Offer Letter Message</th>
-                <th className="attendanceheading">Resume</th>
-                <th className="attendanceheading">Notice Period</th>
-                {userType === 'TeamLeader' &&
-                  <th className="attendanceheading">
-                    Message For Manager
-                  </th>}
-                {userType === 'Recruiters' &&
-                  <th className="attendanceheading">
-                    Message For Team Leader
-                  </th>}
-                <th className="attendanceheading">Interview Slot</th>
-                <th className="attendanceheading">Interview Time</th>
-                <th className="attendanceheading">Final Status</th>
-                <th className="attendanceheading">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredShortListed.map((item, index) => (
-                <tr key={item.candidateId} className="attendancerows">
-                  {!showShareButton && userType === "TeamLeader" ? (
-                    <td className="tabledata">
-                      <input
-                        type="checkbox"
-                        checked={selectedRows.includes(item.candidateId)}
-                        onChange={() => handleSelectRow(item.candidateId)}
-                      />
-                    </td>
-                  ) : null}
-                  <td className="tabledata">{index + 1}</td>
-
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.date}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.date}</span>
-                      <span className="tooltiptext">
-                        {item.candidateAddedTime}
-                      </span>
-                    </div>
-                  </td>
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.candidateId}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.candidateId}</span>
-                    </div>
-                  </td>
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.recruiterName}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.recruiterName}</span>
-                    </div>
-                  </td>
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.candidateName}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.candidateName}</span>
-                    </div>
-                  </td>
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.candidateEmail}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.candidateEmail}</span>
-                    </div>
-                  </td>
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.contactNumber}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.contactNumber}</span>
-                    </div>
-                  </td>
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.alternateNumber}
-                    <div className="tooltip">
-                      <span className="tooltiptext">
-                        {item.alternateNumber}
-                      </span>
-                    </div>
-                  </td>
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.sourceName}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.sourceName}</span>
-                    </div>
-                  </td>
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.jobDesignation}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.jobDesignation}</span>
-                    </div>
-                  </td>
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.requirementId}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.requirementId}</span>
-                    </div>
-                  </td>
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.requirementCompany}
-                    <div className="tooltip">
-                      <span className="tooltiptext">
-                        {item.requirementCompany}
-                      </span>
-                    </div>
-                  </td>
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.communicationRating}
-                    <div className="tooltip">
-                      <span className="tooltiptext">
-                        {item.communicationRating}
-                      </span>
-                    </div>
-                  </td>
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.currentLocation}
-                    <div className="tooltip">
-                      <span className="tooltiptext">
-                        {item.currentLocation}
-                      </span>
-                    </div>
-                  </td>
-
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.fullAddress}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.fullAddress}</span>
-                    </div>
-                  </td>
-                  <td className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.callingFeedback}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.callingFeedback}</span>
-                    </div>
-                  </td>
-
-                  <td className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.incentive}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.incentive}</span>
-                    </div>
-                  </td>
-
-                  <td className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.selectYesOrNo}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.selectYesOrNo}</span>
-                    </div>
-                  </td>
-
-                  <td className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.companyName}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.companyName}</span>
-                    </div>
-                  </td>
-
-                  <td className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.experienceYear}
-                    Year {item.experienceMonth}
-                    Month
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.experienceYear}{item.experienceMonth}</span>
-                    </div>
-                  </td>
-
-                  <td className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.relevantExperience}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.companyName}</span>
-                    </div>
-                  </td>
-
-
-                  <td className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.currentCtcLakh} Lakh {item.currentCtcThousand} Thousand
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.currentCtcLakh}{item.currentCtcThousand}</span>
-                    </div>
-                  </td>
-
-
-
-                  <td className="tabledata" onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.expectedCtcLakh} Lakh {item.expectedCtcThousand} Thousand
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.expectedCtcLakh}Lakh{item.expectedCtcThousand}Thousand</span>
-                    </div>
-                  </td>
-
-
-                  <td className="tabledata" onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.dateOfBirth}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.dateOfBirth}</span>
-                    </div>
-                  </td>
-
-                  <td className="tabledata" onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.gender}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.gender}</span>
-                    </div>
-                  </td>
-
-                  <td className="tabledata" onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.qualification}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.qualification}</span>
-                    </div>
-                  </td>
-
-                  <td className="tabledata" onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.yearOfPassing}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.yearOfPassing}</span>
-                    </div>
-                  </td>
-
-                  <td className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.extraCertification}
-                    <div className="tooltip">
-                      <span className="tooltiptext"> {item.extraCertification}</span>
-                    </div>
-                  </td>
-                  {/* <td className="tabledata">{item.feedback}</td> */}
-                  <td className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>{item.holdingAnyOffer}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.holdingAnyOffer}</span>
-                    </div>
-                  </td>
-
-
-                  <td className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.offerLetterMsg}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.offerLetterMsg}</span>
-                    </div>
-                  </td>
-                  {/* <td className="tabledata">{item.lineUp.resume}</td> */}
-                  {/* Name:-Akash Pawar Component:-ShortListedCandidate
-                  Subcategory:-ResumeViewButton(added) start LineNo:-546
-                  Date:-02/07 */}
-                  <td className="tabledata">
-                    <button
-                      className="text-secondary"
-                      onClick={() => openResumeModal(item.resume)}
-                    >
-                      <i className="fas fa-eye"></i>
-                    </button>
-                  </td>
-                  {/* Name:-Akash Pawar Component:-ShortListedCandidate
-                  Subcategory:-ResumeViewButton(added) End LineNo:-558
-                  Date:-02/07 */}
-                  <td className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.noticePeriod}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.noticePeriod}</span>
-                    </div>
-                  </td>
-
-                  <td className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.msgForTeamLeader}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.msgForTeamLeader}</span>
-                    </div>
-                  </td>
-
-                  <td className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.availabilityForInterview}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.availabilityForInterview}</span>
-                    </div>
-                  </td>
-
-                  <td className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}>
-                    {item.interviewTime}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.interviewTime}</span>
-                    </div>
-                  </td>
-                  {/* <td className="tabledata">{item.finalStatus}</td> */}
-
-                  <td
-                    className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.finalStatus}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.finalStatus}</span>
-                    </div>
-                  </td>
-                  <td className="tabledata">
-                    <i
-                      onClick={() => handleUpdate(item.candidateId)}
-                      className="fa-regular fa-pen-to-square"
-                    ></i>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {showForwardPopup ? (
-            <>
-              <div
-                className="bg-black bg-opacity-50 modal show"
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  position: "fixed",
-                  width: "100%",
-                  height: "100vh",
+              <i
+                className="fa-solid fa-magnifying-glass"
+                onClick={() => {
+                  setShowSearchBar(!showSearchBar);
+                  setShowFilterSection(false);
                 }}
-              >
-                <Modal.Dialog
-                  style={{
-                    width: "500px",
-                    height: "800px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginTop: "100px",
-                  }}
-                >
-                  <Modal.Header
-                    style={{ fontSize: "18px", backgroundColor: "#f2f2f2" }}
-                  >
-                    Forward To
-                  </Modal.Header>
-                  <Modal.Body
-                    style={{
-                      backgroundColor: "#f2f2f2",
-                    }}
-                  >
-                    {/* akash_pawar_RejectedCandidate_ShareFunctionality_18/07_1007 */}
-                    <div className="accordion">
-                      {fetchAllManager && userType === "SuperUser" && (
-                        <div className="manager-data-transfer">
-                          <div className="old-manager-data">
-                            <center>
-                              <h1>Old Managers</h1>
-                            </center>
-                            {fetchAllManager.map((managers) => (
-                              <div
-                                className="accordion-item-SU"
-                                key={managers.managerId}
-                              >
-                                <div className="accordion-header-SU">
-                                  <label
-                                    htmlFor={`old-${managers.managerId}`}
-                                    className="accordion-title"
-                                  >
-                                    <input
-                                      type="radio"
-                                      name="oldmanagers"
-                                      id={`old-${managers.managerId}`}
-                                      value={managers.managerId}
-                                      checked={
-                                        oldSelectedManager.oldManagerId ===
-                                        managers.managerId
-                                      }
-                                      onChange={() =>
-                                        setOldSelectedManager({
-                                          oldManagerId: managers.managerId,
-                                          oldManagerJobRole:
-                                            managers.managerJobRole,
-                                        })
-                                      }
-                                    />{" "}
-                                    {managers.managerName}
-                                  </label>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
+                style={{ margin: "10px", width: "auto", fontSize: "15px" }}
+              ></i>
+              <i
+                style={{ fontSize: "22px" }}
+                onClick={
+                  toggleShortListed
+                } /*Akash_Pawar_ShortlistedCandidate_toggleShortListed(show interview candidate)_23/07_LineNo_591*/
+                className="fa-regular fa-calendar"
+              ></i>
+            </div>
+            <h5 style={{ color: "gray", paddingTop: "5px" }}>
+              Shortlisted Candidate
+            </h5>
 
-                          <div className="new-manager-data">
-                            <center>
-                              <h1>New Managers</h1>
-                            </center>
-                            {fetchAllManager
-                              .filter(
-                                (item) =>
-                                  item.managerId !==
-                                  oldSelectedManager.oldManagerId
-                              )
-                              .map((managers) => (
-                                <div
-                                  className="accordion-item-SU"
-                                  key={managers.managerId}
-                                >
-                                  <div className="accordion-header-SU">
-                                    <label
-                                      htmlFor={`new-${managers.managerId}`}
-                                      className="accordion-title"
-                                    >
-                                      <input
-                                        type="radio"
-                                        name="newmanagers"
-                                        id={`new-${managers.managerId}`}
-                                        value={managers.managerId}
-                                        checked={
-                                          newSelectedManager.newManagerId ===
-                                          managers.managerId
-                                        }
-                                        onChange={() =>
-                                          setNewSelectedManager({
-                                            newManagerId: managers.managerId,
-                                            newManagerJobRole:
-                                              managers.managerJobRole,
-                                          })
-                                        }
-                                      />{" "}
-                                      {managers.managerName}
-                                    </label>
-                                  </div>
-                                </div>
-                              ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {fetchTeamleader && userType === "Manager" && (
-                        <div className="teamleader-data-transfer">
-                          <div className="old-teamleader-data">
-                            <center>
-                              <h1>Old Team Leaders</h1>
-                            </center>
-                            {fetchTeamleader.map((teamleaders) => (
-                              <div
-                                className="accordion-item-M"
-                                key={teamleaders.teamLeaderId}
-                              >
-                                <div className="accordion-header-M">
-                                  <label
-                                    htmlFor={`old-${teamleaders.teamLeaderId}`}
-                                    className="accordion-title"
-                                  >
-                                    <input
-                                      type="radio"
-                                      name="oldteamleaders"
-                                      id={`old-${teamleaders.teamLeaderId}`}
-                                      value={teamleaders.teamLeaderId}
-                                      checked={
-                                        oldselectedTeamLeader.oldTeamLeaderId ===
-                                        teamleaders.teamLeaderId
-                                      }
-                                      onChange={() =>
-                                        setOldSelectedTeamLeader({
-                                          oldTeamLeaderId:
-                                            teamleaders.teamLeaderId,
-                                          oldTeamLeaderJobRole:
-                                            teamleaders.teamLeaderJobRole,
-                                        })
-                                      }
-                                    />{" "}
-                                    {teamleaders.teamLeaderName}
-                                  </label>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-
-                          <div className="new-teamleader-data">
-                            <center>
-                              <h1>New Team Leaders</h1>
-                            </center>
-                            {fetchTeamleader
-                              .filter(
-                                (item) =>
-                                  item.teamLeaderId !==
-                                  oldselectedTeamLeader.oldTeamLeaderId
-                              )
-                              .map((teamleaders) => (
-                                <div
-                                  className="accordion-item-M"
-                                  key={teamleaders.managerId}
-                                >
-                                  <div className="accordion-header-SU">
-                                    <label
-                                      htmlFor={`new-${teamleaders.teamLeaderId}`}
-                                      className="accordion-title"
-                                    >
-                                      <input
-                                        type="radio"
-                                        name="newteamleaders"
-                                        id={`new-${teamleaders.teamLeaderId}`}
-                                        value={teamleaders.teamLeaderId}
-                                        checked={
-                                          newselectedTeamLeader.newTeamLeaderId ===
-                                          teamleaders.teamLeaderId
-                                        }
-                                        onChange={() =>
-                                          setNewSelectedTeamLeader({
-                                            newTeamLeaderId:
-                                              teamleaders.teamLeaderId,
-                                            newTeamLeaderJobRole:
-                                              teamleaders.teamLeaderJobRole,
-                                          })
-                                        }
-                                      />{" "}
-                                      {teamleaders.teamLeaderName}
-                                    </label>
-                                  </div>
-                                </div>
-                              ))}
-                          </div>
-                        </div>
-                      )}
-                      {userType === "TeamLeader" && (
-                        <div className="accordion-item">
-                          <div className="accordion-header">
-                            <label className="accordion-title">
-                              {loginEmployeeName}
-                            </label>
-                          </div>
-                          <div className="accordion-content">
-                            <form>
-                              {recruiterUnderTeamLeader &&
-                                recruiterUnderTeamLeader.map((recruiters) => (
-                                  <div
-                                    key={recruiters.recruiterId}
-                                    className="form-group"
-                                  >
-                                    <label htmlFor={recruiters.employeeId}>
-                                      <input
-                                        type="radio"
-                                        id={recruiters.employeeId}
-                                        name="recruiter"
-                                        value={recruiters.employeeId}
-                                        checked={
-                                          selectedRecruiters.recruiterId ===
-                                          recruiters.employeeId
-                                        }
-                                        onChange={() =>
-                                          setSelectedRecruiters({
-                                            index: 1,
-                                            recruiterId: recruiters.employeeId,
-                                            recruiterJobRole:
-                                              recruiters.jobRole,
-                                          })
-                                        }
-                                      />{" "}
-                                      {recruiters.employeeName}
-                                    </label>
-                                  </div>
-                                ))}
-                            </form>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_1225 */}
-                  </Modal.Body>
-                  <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
+            <div
+              style={{
+                display: "flex",
+                gap: "5px",
+                justifyContent: "center",
+                alignItems: "center",
+                paddingTop: "3px",
+              }}
+            >
+              {userType !== "Recruiters" && (
+                <div>
+                  {showShareButton ? (
                     <button
-                      onClick={handleShare}
-                      className="shortlistedcan-share-forward-popup-btn"
+                      className="lineUp-share-btn"
+                      onClick={() => setShowShareButton(false)}
                     >
                       Share
                     </button>
-                    <button
-                      onClick={() => setShowForwardPopup(false)}
-                      className="shortlistedcan-close-forward-popup-btn"
-                    >
-                      Close
-                    </button>
-                  </Modal.Footer>
-                </Modal.Dialog>
-              </div>
-            </>
-          ) : null}
-          {/* Name:-Akash Pawar Component:-ShortListedCandidate
-          Subcategory:-ResumeModel(added) End LineNo:-656 Date:-02/07 */}
-          <Modal show={showResumeModal} onHide={closeResumeModal} size="md">
-            <Modal.Header closeButton>
-              <Modal.Title>Resume</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {selectedCandidateResume ? (
-                <iframe
-                  src={convertToDocumentLink(
-                    selectedCandidateResume,
-                    "Resume.pdf"
+                  ) : (
+                    <div style={{ display: "flex", gap: "5px" }}>
+                      <button
+                        className="lineUp-share-btn"
+                        onClick={() => {
+                          setShowShareButton(true);
+                          setSelectedRows([]);
+                        }}
+                      >
+                        Close
+                      </button>
+                      {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_602 */}
+                      {userType === "TeamLeader" && (
+                        <button
+                          className="callingList-share-btn"
+                          onClick={handleSelectAll}
+                        >
+                          {allSelected ? "Deselect All" : "Select All"}
+                        </button>
+                      )}
+                      {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_609 */}
+                      <button
+                        className="lineUp-share-btn"
+                        onClick={forwardSelectedCandidate}
+                      >
+                        Forward
+                      </button>
+                    </div>
                   )}
-                  width="100%"
-                  height="550px"
-                  title="PDF Viewer"
-                ></iframe>
-              ) : (
-                <p>No resume available</p>
+                </div>
               )}
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={closeResumeModal}>
-                Close
-              </Button>
-            </Modal.Footer>
-          </Modal>
-          {/* Name:-Akash Pawar Component:-ShortListedCandidate
+              <button className="lineUp-share-btn" onClick={toggleFilterSection}>
+                Filter <i className="fa-solid fa-filter"></i>
+              </button>
+            </div>
+          </div>
+          {!showUpdateCallingTracker ? (
+            <div>
+              {showSearchBar && (
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search here..."
+                  value={searchTerm}
+                  style={{ marginBottom: "10px" }}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              )}
+
+              {showFilterSection && (
+                <div className="filter-section">
+                  <div className="filter-dropdowns" >
+                    {showFilterSection && (
+                      <div
+                        className="filter-options-container"
+                        style={{ display: "flex", flexWrap: "wrap" }}
+                      >
+                        {limitedOptions
+                          .filter(([key]) => filterOptions.includes(key))
+                          .map(([key, displayText]) => (
+                            <div key={key} className="filter-option">
+                              <button
+                                className="white-Btn"
+                                onClick={() => handleFilterOptionClick(key)}
+                              >
+                                {displayText}
+                                <span className="filter-icon">&#x25bc;</span>
+                              </button>
+                              {activeFilterOption === key && (
+                                <div className="city-filter">
+                                  <div className="optionDiv">
+                                    {Array.from(
+                                      new Set(shortListedData.map((item) => item[key]))
+                                    ).map((value) => (
+                                      <label
+                                        key={value}
+                                        className="selfcalling-filter-value"
+                                      >
+                                        <input
+                                          type="checkbox"
+                                          checked={
+                                            selectedFilters[key]?.includes(value) || false
+                                          }
+                                          onChange={() => handleFilterSelect(key, value)}
+                                          style={{ marginRight: '5px' }}
+                                        />
+                                        {value}
+                                      </label>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+              <div className="attendanceTableData">
+                <table id="shortlisted-table-id" className="attendance-table">
+                  <thead>
+                    <tr className="attendancerows-head">
+                      {!showShareButton && userType === "TeamLeader" ? (
+                        <th className="attendanceheading">
+                          <input
+                            type="checkbox"
+                            onChange={handleSelectAll}
+                            checked={selectedRows.length === shortListedData.length}
+                            name="selectAll"
+                          />
+                        </th>
+                      ) : null}
+                      <th className="attendanceheading">Sr  No.</th>
+                      <th className="attendanceheading">Date & Time</th>
+                      <th className="attendanceheading">Candidate's Id</th>
+                      <th className="attendanceheading">Recruiter's Name</th>
+                      <th className="attendanceheading">Candidate's Name</th>
+                      <th className="attendanceheading">Candidate's Email</th>
+                      <th className="attendanceheading">Contact Number</th>
+                      <th className="attendanceheading">Whatsapp Number</th>
+                      <th className="attendanceheading">Source Name</th>
+                      <th className="attendanceheading">Job Designation</th>
+                      <th className="attendanceheading">Job Id</th>
+                      <th className="attendanceheading">Applying Company</th>
+                      <th className="attendanceheading">Communication Rating</th>
+                      <th className="attendanceheading">Current Location</th>
+                      <th className="attendanceheading">Full Address</th>
+                      <th className="attendanceheading">Calling Remark</th>
+                      <th className="attendanceheading">Recruiter's Incentive</th>
+                      <th className="attendanceheading">Interested or Not</th>
+                      <th className="attendanceheading">Current Company</th>
+                      <th className="attendanceheading">Total Experience</th>
+                      <th className="attendanceheading">Relevant Experience</th>
+                      <th className="attendanceheading">Current CTC</th>
+                      <th className="attendanceheading">Expected CTC</th>
+                      <th className="attendanceheading">Date Of Birth</th>
+                      <th className="attendanceheading">Gender</th>
+                      <th className="attendanceheading">Education</th>
+                      <th className="attendanceheading">Year Of Passing</th>
+                      <th className="attendanceheading">Extra Certification</th>
+                      {/* call summary */}
+                      {/* <th className="attendanceheading">Feedback</th> */}
+                      <th className="attendanceheading">Holding Any Offer</th>
+                      <th className="attendanceheading">Offer Letter Message</th>
+                      <th className="attendanceheading">Resume</th>
+                      <th className="attendanceheading">Notice Period</th>
+
+                      {userType === 'TeamLeader' &&
+                        <th className="attendanceheading">
+                          Message For Manager
+                        </th>}
+                      {userType === 'Recruiters' &&
+                        <th className="attendanceheading">
+                          Message For Team Leader
+                        </th>}
+
+                      <th className="attendanceheading">Interview Slot</th>
+                      <th className="attendanceheading">Interview Time</th>
+                      <th className="attendanceheading">Final Status</th>
+                      <th className="attendanceheading">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredShortListed.map((item, index) => (
+                      <tr key={item.candidateId} className="attendancerows">
+                        {!showShareButton && userType === "TeamLeader" ? (
+                          <td className="tabledata">
+                            <input
+                              type="checkbox"
+                              checked={selectedRows.includes(item.candidateId)}
+                              onChange={() => handleSelectRow(item.candidateId)}
+                            />
+                          </td>
+                        ) : null}
+                        <td className="tabledata">{index + 1}</td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.date}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.date}</span>
+                            <span className="tooltiptext">
+                              {item.candidateAddedTime}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.candidateId}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.candidateId}</span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.recruiterName}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.recruiterName}</span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.candidateName}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.candidateName}</span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.candidateEmail}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.candidateEmail}</span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.contactNumber}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.contactNumber}</span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.alternateNumber}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.alternateNumber}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.sourceName}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.sourceName}</span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.jobDesignation}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.jobDesignation}</span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.requirementId}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.requirementId}</span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.requirementCompany}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.requirementCompany}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.communicationRating}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.communicationRating}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.currentLocation}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.currentLocation}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.fullAddress}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.fullAddress}</span>
+                          </div>
+                        </td>
+                        <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.callingFeedback}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.callingFeedback}</span>
+                          </div>
+                        </td>
+
+                        <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.incentive}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.incentive}</span>
+                          </div>
+                        </td>
+
+                        <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.selectYesOrNo}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.selectYesOrNo}</span>
+                          </div>
+                        </td>
+
+                        <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.companyName}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.companyName}</span>
+                          </div>
+                        </td>
+
+                        <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.experienceYear}
+                          Year {item.experienceMonth}
+                          Month
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.experienceYear}{item.experienceMonth}</span>
+                          </div>
+                        </td>
+
+                        <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.relevantExperience}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.companyName}</span>
+                          </div>
+                        </td>
+
+
+                        <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.currentCtcLakh} Lakh {item.currentCtcThousand} Thousand
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.currentCtcLakh}{item.currentCtcThousand}</span>
+                          </div>
+                        </td>
+
+
+
+                        <td className="tabledata" onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.expectedCtcLakh} Lakh {item.expectedCtcThousand} Thousand
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.expectedCtcLakh}Lakh{item.expectedCtcThousand}Thousand</span>
+                          </div>
+                        </td>
+
+
+                        <td className="tabledata" onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.dateOfBirth}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.dateOfBirth}</span>
+                          </div>
+                        </td>
+
+                        <td className="tabledata" onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.gender}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.gender}</span>
+                          </div>
+                        </td>
+
+                        <td className="tabledata" onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.qualification}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.qualification}</span>
+                          </div>
+                        </td>
+
+                        <td className="tabledata" onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.yearOfPassing}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.yearOfPassing}</span>
+                          </div>
+                        </td>
+
+                        <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.extraCertification}
+                          <div className="tooltip">
+                            <span className="tooltiptext"> {item.extraCertification}</span>
+                          </div>
+                        </td>
+                        {/* <td className="tabledata">{item.feedback}</td> */}
+                        <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>{item.holdingAnyOffer}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.holdingAnyOffer}</span>
+                          </div>
+                        </td>
+
+
+                        <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.offerLetterMsg}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.offerLetterMsg}</span>
+                          </div>
+                        </td>
+                        {/* <td className="tabledata">{item.lineUp.resume}</td> */}
+                        {/* Name:-Akash Pawar Component:-ShortListedCandidate
+                  Subcategory:-ResumeViewButton(added) start LineNo:-546
+                  Date:-02/07 */}
+                        <td className="tabledata">
+                          <button
+                            className="text-secondary"
+                            onClick={() => openResumeModal(item.resume)}
+                          >
+                            <i className="fas fa-eye"></i>
+                          </button>
+                        </td>
+                        {/* Name:-Akash Pawar Component:-ShortListedCandidate
+                  Subcategory:-ResumeViewButton(added) End LineNo:-558
+                  Date:-02/07 */}
+                        <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.noticePeriod}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.noticePeriod}</span>
+                          </div>
+                        </td>
+
+
+                        {userType === 'TeamLeader' &&
+
+
+                          <td className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}>
+                            {item.msgForTeamLeader}
+                            <div className="tooltip">
+                              <span className="tooltiptext">{item.msgForTeamLeader}</span>
+                            </div>
+                          </td>
+
+                        }
+
+                        {userType === 'Recruiters' &&
+
+                          <td className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}>
+                            {item.msgForTeamLeader}
+                            <div className="tooltip">
+                              <span className="tooltiptext">{item.msgForTeamLeader}</span>
+                            </div>
+                          </td>
+
+                        }
+
+
+
+                        <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.availabilityForInterview}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.availabilityForInterview}</span>
+                          </div>
+                        </td>
+
+                        <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.interviewTime}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.interviewTime}</span>
+                          </div>
+                        </td>
+                        {/* <td className="tabledata">{item.finalStatus}</td> */}
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.finalStatus}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.finalStatus}</span>
+                          </div>
+                        </td>
+                        <td className="tabledata">
+                          <i
+                            onClick={() => handleUpdate(item.candidateId)}
+                            className="fa-regular fa-pen-to-square"
+                          ></i>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {showForwardPopup ? (
+                <>
+                  <div
+                    className="bg-black bg-opacity-50 modal show"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      position: "fixed",
+                      width: "100%",
+                      height: "100vh",
+                    }}
+                  >
+                    <Modal.Dialog
+                      style={{
+                        width: "500px",
+                        height: "800px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: "100px",
+                      }}
+                    >
+                      <Modal.Header
+                        style={{ fontSize: "18px", backgroundColor: "#f2f2f2" }}
+                      >
+                        Forward To
+                      </Modal.Header>
+                      <Modal.Body
+                        style={{
+                          backgroundColor: "#f2f2f2",
+                        }}
+                      >
+                        {/* akash_pawar_RejectedCandidate_ShareFunctionality_18/07_1007 */}
+                        <div className="accordion">
+                          {fetchAllManager && userType === "SuperUser" && (
+                            <div className="manager-data-transfer">
+                              <div className="old-manager-data">
+                                <center>
+                                  <h1>Old Managers</h1>
+                                </center>
+                                {fetchAllManager.map((managers) => (
+                                  <div
+                                    className="accordion-item-SU"
+                                    key={managers.managerId}
+                                  >
+                                    <div className="accordion-header-SU">
+                                      <label
+                                        htmlFor={`old-${managers.managerId}`}
+                                        className="accordion-title"
+                                      >
+                                        <input
+                                          type="radio"
+                                          name="oldmanagers"
+                                          id={`old-${managers.managerId}`}
+                                          value={managers.managerId}
+                                          checked={
+                                            oldSelectedManager.oldManagerId ===
+                                            managers.managerId
+                                          }
+                                          onChange={() =>
+                                            setOldSelectedManager({
+                                              oldManagerId: managers.managerId,
+                                              oldManagerJobRole:
+                                                managers.managerJobRole,
+                                            })
+                                          }
+                                        />{" "}
+                                        {managers.managerName}
+                                      </label>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+
+                              <div className="new-manager-data">
+                                <center>
+                                  <h1>New Managers</h1>
+                                </center>
+                                {fetchAllManager
+                                  .filter(
+                                    (item) =>
+                                      item.managerId !==
+                                      oldSelectedManager.oldManagerId
+                                  )
+                                  .map((managers) => (
+                                    <div
+                                      className="accordion-item-SU"
+                                      key={managers.managerId}
+                                    >
+                                      <div className="accordion-header-SU">
+                                        <label
+                                          htmlFor={`new-${managers.managerId}`}
+                                          className="accordion-title"
+                                        >
+                                          <input
+                                            type="radio"
+                                            name="newmanagers"
+                                            id={`new-${managers.managerId}`}
+                                            value={managers.managerId}
+                                            checked={
+                                              newSelectedManager.newManagerId ===
+                                              managers.managerId
+                                            }
+                                            onChange={() =>
+                                              setNewSelectedManager({
+                                                newManagerId: managers.managerId,
+                                                newManagerJobRole:
+                                                  managers.managerJobRole,
+                                              })
+                                            }
+                                          />{" "}
+                                          {managers.managerName}
+                                        </label>
+                                      </div>
+                                    </div>
+                                  ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {fetchTeamleader && userType === "Manager" && (
+                            <div className="teamleader-data-transfer">
+                              <div className="old-teamleader-data">
+                                <center>
+                                  <h1>Old Team Leaders</h1>
+                                </center>
+                                {fetchTeamleader.map((teamleaders) => (
+                                  <div
+                                    className="accordion-item-M"
+                                    key={teamleaders.teamLeaderId}
+                                  >
+                                    <div className="accordion-header-M">
+                                      <label
+                                        htmlFor={`old-${teamleaders.teamLeaderId}`}
+                                        className="accordion-title"
+                                      >
+                                        <input
+                                          type="radio"
+                                          name="oldteamleaders"
+                                          id={`old-${teamleaders.teamLeaderId}`}
+                                          value={teamleaders.teamLeaderId}
+                                          checked={
+                                            oldselectedTeamLeader.oldTeamLeaderId ===
+                                            teamleaders.teamLeaderId
+                                          }
+                                          onChange={() =>
+                                            setOldSelectedTeamLeader({
+                                              oldTeamLeaderId:
+                                                teamleaders.teamLeaderId,
+                                              oldTeamLeaderJobRole:
+                                                teamleaders.teamLeaderJobRole,
+                                            })
+                                          }
+                                        />{" "}
+                                        {teamleaders.teamLeaderName}
+                                      </label>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+
+                              <div className="new-teamleader-data">
+                                <center>
+                                  <h1>New Team Leaders</h1>
+                                </center>
+                                {fetchTeamleader
+                                  .filter(
+                                    (item) =>
+                                      item.teamLeaderId !==
+                                      oldselectedTeamLeader.oldTeamLeaderId
+                                  )
+                                  .map((teamleaders) => (
+                                    <div
+                                      className="accordion-item-M"
+                                      key={teamleaders.managerId}
+                                    >
+                                      <div className="accordion-header-SU">
+                                        <label
+                                          htmlFor={`new-${teamleaders.teamLeaderId}`}
+                                          className="accordion-title"
+                                        >
+                                          <input
+                                            type="radio"
+                                            name="newteamleaders"
+                                            id={`new-${teamleaders.teamLeaderId}`}
+                                            value={teamleaders.teamLeaderId}
+                                            checked={
+                                              newselectedTeamLeader.newTeamLeaderId ===
+                                              teamleaders.teamLeaderId
+                                            }
+                                            onChange={() =>
+                                              setNewSelectedTeamLeader({
+                                                newTeamLeaderId:
+                                                  teamleaders.teamLeaderId,
+                                                newTeamLeaderJobRole:
+                                                  teamleaders.teamLeaderJobRole,
+                                              })
+                                            }
+                                          />{" "}
+                                          {teamleaders.teamLeaderName}
+                                        </label>
+                                      </div>
+                                    </div>
+                                  ))}
+                              </div>
+                            </div>
+                          )}
+                          {userType === "TeamLeader" && (
+                            <div className="accordion-item">
+                              <div className="accordion-header">
+                                <label className="accordion-title">
+                                  {loginEmployeeName}
+                                </label>
+                              </div>
+                              <div className="accordion-content">
+                                <form>
+                                  {recruiterUnderTeamLeader &&
+                                    recruiterUnderTeamLeader.map((recruiters) => (
+                                      <div
+                                        key={recruiters.recruiterId}
+                                        className="form-group"
+                                      >
+                                        <label htmlFor={recruiters.employeeId}>
+                                          <input
+                                            type="radio"
+                                            id={recruiters.employeeId}
+                                            name="recruiter"
+                                            value={recruiters.employeeId}
+                                            checked={
+                                              selectedRecruiters.recruiterId ===
+                                              recruiters.employeeId
+                                            }
+                                            onChange={() =>
+                                              setSelectedRecruiters({
+                                                index: 1,
+                                                recruiterId: recruiters.employeeId,
+                                                recruiterJobRole:
+                                                  recruiters.jobRole,
+                                              })
+                                            }
+                                          />{" "}
+                                          {recruiters.employeeName}
+                                        </label>
+                                      </div>
+                                    ))}
+                                </form>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_1225 */}
+                      </Modal.Body>
+                      <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
+                        <button
+                          onClick={handleShare}
+                          className="shortlistedcan-share-forward-popup-btn"
+                        >
+                          Share
+                        </button>
+                        <button
+                          onClick={() => setShowForwardPopup(false)}
+                          className="shortlistedcan-close-forward-popup-btn"
+                        >
+                          Close
+                        </button>
+                      </Modal.Footer>
+                    </Modal.Dialog>
+                  </div>
+                </>
+              ) : null}
+              {/* Name:-Akash Pawar Component:-ShortListedCandidate
+          Subcategory:-ResumeModel(added) End LineNo:-656 Date:-02/07 */}
+              <Modal show={showResumeModal} onHide={closeResumeModal} size="md">
+                <Modal.Header closeButton>
+                  <Modal.Title>Resume</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  {selectedCandidateResume ? (
+                    <iframe
+                      src={convertToDocumentLink(
+                        selectedCandidateResume,
+                        "Resume.pdf"
+                      )}
+                      width="100%"
+                      height="550px"
+                      title="PDF Viewer"
+                    ></iframe>
+                  ) : (
+                    <p>No resume available</p>
+                  )}
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={closeResumeModal}>
+                    Close
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+              {/* Name:-Akash Pawar Component:-ShortListedCandidate
           Subcategory:-ResumeModel(added) End LineNo:-681 Date:-02/07 */}
-        </div>
-      ) : (
-        <UpdateCallingTracker
-          candidateId={selectedCandidateId}
-          closeComponent={() => setShowUpdateCallingTracker(false)}
-          updateSuccess={handleUpdateSuccess}
-        />
+            </div>
+          ) : (
+            <UpdateCallingTracker
+              candidateId={selectedCandidateId}
+              closeComponent={() => setShowUpdateCallingTracker(false)}
+              updateSuccess={handleUpdateSuccess}
+            />
+
+          )}
+        </>
       )}
+
       {isDataSending && (
         <div className="ShareFunc_Loading_Animation">
           <ClipLoader size={50} color="#ffb281" />
         </div>
       )}
+
     </div>
   );
 };

@@ -219,3 +219,10 @@ html::-webkit-scrollbar {
 .selfcalling-filter-value {
   text-transform: capitalize;
 }
+
+/* --------------------------------------------------- */
+/* Arshad Addded This CSS */
+
+.filter-section{
+  margin-top: 5px;
+}

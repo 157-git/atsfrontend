@@ -67,50 +67,6 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   //akash_pawar_SelectedCandidate_ShareFunctionality_18/07_58
 
   const { employeeId } = useParams();
-  // const limitedOptions = [
-  //   "alternateNumber",
-  //   "availabilityForInterview",
-  //   "callingFeedback",
-  //   "callingTrackerId",
-  //   "candidateAddedTime",
-  //   "candidateEmail",
-  //   "candidateId",
-  //   "candidateName",
-  //   "communicationRating",
-  //   "companyName",
-  //   "contactNumber",
-  //   "currentCtcLakh",
-  //   "currentCtcThousand",
-  //   "currentLocation",
-  //   "date",
-  //   "dateOfBirth",
-  //   "empId",
-  //   "expectedCtcLakh",
-  //   "expectedCtcThousand",
-  //   "experienceMonth",
-  //   "experienceYear",
-  //   "extraCertification",
-  //   "feedBack",
-  //   "finalStatus",
-  //   "fullAddress",
-  //   "gender",
-  //   "holdingAnyOffer",
-  //   "incentive",
-  //   "interviewTime",
-  //   "jobDesignation",
-  //   "msgForTeamLeader",
-  //   "noticePeriod",
-  //   "offerLetterMsg",
-  //   "oldEmployeeId",
-  //   "qualification",
-  //   "recruiterName",
-  //   "relevantExperience",
-  //   "requirementCompany",
-  //   "requirementId",
-  //   "selectYesOrNo",
-  //   "sourceName",
-  //   "yearOfPassing",
-  // ];
 
   const limitedOptions = [
     ["alternateNumber", "Alternate Number"],
@@ -128,13 +84,13 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     ["currentLocation", "Current Location"],
     ["date", "Date"],
     ["dateOfBirth", "Date Of Birth"],
-    ["empId", "Emp Id"],
+    ["empId", "Employee Id"],
     ["expectedCtcLakh", "Expected CTC (Lakh)"],
     ["expectedCtcThousand", "Expected CTC (Thousand)"],
     ["experienceMonth", "Experience Month"],
     ["experienceYear", "Experience Year"],
     ["extraCertification", "Extra Certification"],
-    ["feedBack", "FeedBack"],
+    ["feedBack", "Feedback"],
     ["finalStatus", "Final Status"],
     ["fullAddress", "Full Address"],
     ["gender", "Gender"],
@@ -158,7 +114,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   const { userType } = useParams();
 
   useEffect(() => {
-    fetchShortListedData();
+    fetchSelectedCandidateData();
   }, []);
 
   useEffect(() => {
@@ -167,12 +123,11 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
         Object.keys(filteredCallingList[0] || {}).includes(key)
       )
       .map(([key]) => key);
-      
     setFilterOptions(options);
   }, [filteredCallingList]);
   
 
-  const fetchShortListedData = async () => {
+  const fetchSelectedCandidateData = async () => {
     try {
       const response = await fetch(
         `${API_BASE_URL}/selected-candidate/${employeeId}/${userType}`
@@ -190,6 +145,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   useEffect(() => {
     filterData();
   }, [selectedFilters, callingList]);
+
 
   //akash_pawar_SelectedCandidate_ShareFunctionality_18/07_138
   const fetchManager = async () => {
@@ -215,6 +171,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
       console.error("Error fetching shortlisted data:", error);
     }
   };
+
   const fetchRecruiters = async (teamLeaderId) => {
     try {
       const response = await fetch(
@@ -226,6 +183,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
       console.error("Error fetching shortlisted data:", error);
     }
   };
+
   useEffect(() => {
     if (userType === "SuperUser") {
       fetchManager();
@@ -296,74 +254,130 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     }
   }, [sortCriteria, sortOrder]);
 
+
   const filterData = () => {
     let filteredData = [...callingList];
+
     Object.entries(selectedFilters).forEach(([option, values]) => {
-      if (values.length > 0) {
-        if (option === "candidateId") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
-          );
-        } else if (option === "requirementId") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
-          );
-        } else if (option === "employeeId") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
-          );
-        } else if (option === "contactNumber") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
-          );
-        } else if (option === "alternateNumber") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
-          );
-        } else {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]
-                ?.toString()
-                .toLowerCase()
-                .includes(value.toLowerCase())
-            )
-          );
-        }
+    if (values.length > 0) {
+      if (option === "candidateId") {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) =>
+            item[option]?.toString().toLowerCase().includes(value)
+          )
+        );
+      } else if (option === "requirementId") {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) =>
+            item[option]?.toString().toLowerCase().includes(value)
+          )
+        );
+      } else if (option === "employeeId") {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) =>
+            item[option]?.toString().toLowerCase().includes(value)
+          )
+        );
+      } else if (option === "contactNumber") {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) =>
+            item[option]?.toString().toLowerCase().includes(value)
+          )
+        );
+      } else if (option === "alternateNumber") {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) =>
+            item[option]?.toString().toLowerCase().includes(value)
+          )
+        );
+      } else if (option === "currentCtcLakh") {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) => {
+            const numericValue = parseInt(value, 10); // Convert value to integer
+            return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+          })
+        );
       }
-    });
+      else if (option === "currentCtcThousand") {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) => {
+            const numericValue = parseInt(value, 10); // Convert value to integer
+            return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+          })
+        );
+      }
+      else if (option === "empId") {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) => {
+            const numericValue = parseInt(value, 10); // Convert value to integer
+            return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+          })
+        );
+      }
+      else if (option === "expectedCtcLakh") {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) => {
+            const numericValue = parseInt(value, 10); // Convert value to integer
+            return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+          })
+        );
+      }
+      else if (option === "expectedCtcThousand") {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) => {
+            const numericValue = parseInt(value, 10); // Convert value to integer
+            return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+          })
+        );
+      }
+      else if (option === "experienceMonth") {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) => {
+            const numericValue = parseInt(value, 10); // Convert value to integer
+            return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+          })
+        );
+      }
+      else if (option === "experienceYear") {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) => {
+            const numericValue = parseInt(value, 10); // Convert value to integer
+            return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+          })
+        );
+      }
+      else if (option === "oldEmployeeId") {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) => {
+            const numericValue = parseInt(value, 10); // Convert value to integer
+            return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+          })
+        );
+      } else if (option === "yearOfPassing") {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) =>
+            item[option]?.toString().toLowerCase().includes(value)
+          )
+        );
+      }  else {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) => {
+            const isNumeric = !isNaN(value); // Check if the value is numeric
+            if (isNumeric) {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+            } else {
+              return item[option]?.toString().includes(value); // For non-numeric comparisons
+            }
+          })
+        );
+      }
+    }
+  });
     setFilteredCallingList(filteredData);
   };
-  // const handleFilterSelect = (option, value) => {
-  //   setSelectedFilters((prevFilters) => {
-  //     const updatedFilters = { ...prevFilters };
-  //     if (!updatedFilters[option]) {
-  //       updatedFilters[option] = [];
-  //     }
 
-  //     const index = updatedFilters[option].indexOf(value);
-  //     if (index === -1) {
-  //       updatedFilters[option] = [...updatedFilters[option], value];
-  //     } else {
-  //       updatedFilters[option] = updatedFilters[option].filter(
-  //         (item) => item !== value
-  //       );
-  //     }
-
-  //     return updatedFilters;
-  //   });
-  // };
-
+  
   const handleFilterSelect = (key, value) => {
     setSelectedFilters((prev) => ({
       ...prev,
@@ -387,14 +401,6 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     setShowSearchBar(false);
     setShowFilterSection(!showFilterSection);
   };
-  // const handleFilterOptionClick = (option) => {
-  //   if (activeFilterOption === option) {
-  //     setActiveFilterOption(null);
-  //   } else {
-  //     setActiveFilterOption(option);
-  //   }
-  // };
-// prachi
 
   const handleFilterOptionClick = (key) => {
     setActiveFilterOption(activeFilterOption === key ? null : key);
@@ -423,7 +429,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     setSelectedCandidateId(null);
     setSelectedEmployeeId(null);
     setSelectedRequirementId(null);
-    fetchShortListedData();
+    fetchSelectedCandidateData();
   };
 
   const handleMouseOver = (event) => {
@@ -528,7 +534,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
       // Handle success response
       setIsDataSending(false);
       toast.success("Candidates forwarded successfully!");
-      fetchShortListedData();
+      fetchSelectedCandidateData();
       onSuccessAdd(true);
       setShowForwardPopup(false); // Close the modal or handle any further UI updates
       setShowShareButton(true);
@@ -554,7 +560,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
         newManagerId: "",
         newManagerJobRole: "",
       });
-      // fetchShortListedData(); // Uncomment this if you want to refresh the data after forwarding
+      // fetchSelectedCandidateData(); // Uncomment this if you want to refresh the data after forwarding
     } catch (error) {
       setIsDataSending(false);
       setShowForwardPopup(false);
@@ -759,16 +765,13 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   const cancelExport = () => {
     hidePopup();
   };
+
+  
   //Swapnil_Rokade_SelectedCandidate_columnsToInclude_columnsToExclude_17/07/2024//
   return (
     <div className="App-after">
       {loading ? (
         <div className="register">
-          {/* <HashLoader
-             color={`${localStorage.getItem("selectedColor")}`}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          /> */}
           <Loader></Loader>
         </div>
       ) : (
