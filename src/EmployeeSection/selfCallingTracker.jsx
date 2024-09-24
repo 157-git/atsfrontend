@@ -136,6 +136,8 @@ const CallingList = ({
       setCallingList(data);
       setFilteredCallingList(data);
       setLoading(false);
+      console.log(data);
+      
     } catch (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
@@ -556,7 +558,6 @@ const CallingList = ({
       setIsDataSending(false);
       toast.success("Candidates forwarded successfully!"); //Swapnil Error&success message
       fetchCallingTrackerData();
-      onSuccessAdd(true);
       setShowForwardPopup(false); // Close the modal or handle any further UI updates
       setShowShareButton(true);
       setSelectedRows([]);
@@ -882,7 +883,7 @@ const CallingList = ({
                           {/* akash_pawar_SelfCallingTracker_ShareFunctionality_17/07_793 */}
                           {userType === "TeamLeader" && (
                             <button
-                              className="callingList-share-btn"
+                               className="lineUp-share-btn"
                               onClick={handleSelectAll}
                             >
                               {allSelected ? "Deselect All" : "Select All"}
@@ -985,14 +986,15 @@ const CallingList = ({
                         </th>
                       ) : null}
 
-                      <th className="attendanceheading">No.</th>
+                      <th className="attendanceheading">Sr No.</th>
+                      <th className="attendanceheading">Candidate Id</th>
+
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("date")}
                       >
-                        Date & Time
+                       Added Date Time
                       </th>
-                      <th className="attendanceheading">Candidate Id</th>
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("recruiterName")}
@@ -1060,7 +1062,7 @@ const CallingList = ({
                       </th>
                       <th className="attendanceheading">Interview Time</th>
                       <th className="attendanceheading">Interview Status</th>
-                      <th className="attendanceheading">Employee ID</th>
+                      <th className="attendanceheading">Employee Id</th>
 
                       {(userType === "TeamLeader" ||
                         userType === "Manager") && (
@@ -1090,10 +1092,10 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.date} - {item.candidateAddedTime || "-"}
+                          {item.candidateId}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.date} - {item.candidateAddedTime}
+                              {item.candidateId}
                             </span>
                           </div>
                         </td>
@@ -1103,13 +1105,15 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.candidateId}
+                          {item.date} - {item.candidateAddedTime || "-"}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.candidateId}
+                              {item.date} - {item.candidateAddedTime}
                             </span>
                           </div>
                         </td>
+
+                     
 
                         <td
                           className="tabledata"
@@ -1331,26 +1335,15 @@ const CallingList = ({
                             </div>
                           </td>
 
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {item.experienceYear || "0"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.experienceYear}{" "}
-                              </span>
-                            </div>
-                            Years
-                            {item.experienceMonth || "0"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.experienceMonth}
-                              </span>
-                            </div>
-                            Months
-                          </td>
+                          <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          
+                          {item.experienceYear} {" "} Year -  {item.experienceMonth} Month
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.experienceYear} {" "} Year {item.experienceMonth} Month</span>
+                          </div>
+                        </td>
 
                           <td
                             className="tabledata"
@@ -1365,33 +1358,23 @@ const CallingList = ({
                             </div>
                           </td>
 
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {`${item.currentCtcLakh || 0} Lakh ${item.currentCtcThousand || 0
-                              } Thousand`}
-                            <div className="tooltip">
-                              <span className="tooltiptext">{`${item.expectedCtcLakh || 0
-                                } Lakh ${item.expectedCtcThousand || 0
-                                } Thousand`}</span>
-                            </div>
-                          </td>
+                          <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
 
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {`${item.expectedCtcLakh || 0} Lakh ${item.expectedCtcThousand || 0
-                              } Thousand`}
-                            <div className="tooltip">
-                              <span className="tooltiptext">{`${item.expectedCtcLakh || 0
-                                } Lakh ${item.expectedCtcThousand || 0
-                                } Thousand`}</span>
-                            </div>
-                          </td>
+                          {item.currentCtcLakh} {" "} Lakh {item.currentCtcThousand}   {" "} Thousand
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.currentCtcLakh} {" "} Lakh {item.currentCtcThousand}   {" "} Thousand</span>
+                          </div>
+                        </td>
+
+                        <td className="tabledata" onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.expectedCtcLakh}  {" "} Lakh {item.expectedCtcThousand} {" "} Thousand
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.expectedCtcLakh}  {" "} Lakh {item.expectedCtcThousand}  {" "} Thousand</span>
+                          </div>
+                        </td>
 
                           <td
                             className="tabledata"
@@ -1510,7 +1493,7 @@ const CallingList = ({
                   Date:-02/07 */}
                           <td className="tabledata">
                             <button
-                              className="text-secondary"
+                              className="table-icon-div"
                               onClick={() => openResumeModal(item.resume)}
                             >
                               <i className="fas fa-eye"></i>
@@ -1613,10 +1596,11 @@ const CallingList = ({
                             )}
 
                           <td className="tabledata">
-                            <i
+                            <button  className="table-icon-div">    <i
                               onClick={() => handleUpdate(item.candidateId)}
                               className="fa-regular fa-pen-to-square"
-                            ></i>
+                            ></i></button>
+                          
                           </td>
                         </>
                       </tr>
@@ -1836,54 +1820,48 @@ const CallingList = ({
                                 </div>
                               </div>
                             )}
-                            {userType === "TeamLeader" && (
-                              <div className="accordion-item">
-                                <div className="accordion-header">
-                                  <label className="accordion-title">
-                                    {loginEmployeeName}
-                                  </label>
-                                </div>
-                                <div className="accordion-content">
-                                  <form>
-                                    {recruiterUnderTeamLeader &&
-                                      recruiterUnderTeamLeader.map(
-                                        (recruiters) => (
-                                          <div
-                                            key={recruiters.recruiterId}
-                                            className="form-group"
-                                          >
-                                            <label
-                                              htmlFor={recruiters.employeeId}
-                                            >
-                                              <input
-                                                type="radio"
-                                                id={recruiters.employeeId}
-                                                name="recruiter"
-                                                value={recruiters.employeeId}
-                                                checked={
-                                                  selectedRecruiters.recruiterId ===
-                                                  recruiters.employeeId
-                                                }
-                                                onChange={() =>
-                                                  setSelectedRecruiters({
-                                                    index: 1,
-                                                    recruiterId:
-                                                      recruiters.employeeId,
-                                                    recruiterJobRole:
-                                                      recruiters.jobRole,
-                                                  })
-                                                }
-                                              />{" "}
-                                              {recruiters.employeeName}
-                                            </label>
-                                          </div>
-                                        )
-                                      )}
-                                  </form>
-                                </div>
+{userType === "TeamLeader" && (
+                            <div className="accordion-item">
+                              <div className="accordion-header">
+                                <label className="accordion-title">
+                                 <strong>TL - {loginEmployeeName} </strong>
+                                </label>
                               </div>
-                            )}
-                          </div>
+                              <div className="accordion-content">
+                                <form>
+                                  {recruiterUnderTeamLeader &&
+                                    recruiterUnderTeamLeader.map((recruiters) => (
+                                      <div
+                                        key={recruiters.recruiterId}
+                                      >
+                                        <label htmlFor={recruiters.employeeId}> 
+                                          <input
+                                            type="radio"
+                                            id={recruiters.employeeId}
+                                            name="recruiter"
+                                            value={recruiters.employeeId}
+                                            checked={
+                                              selectedRecruiters.recruiterId ===
+                                              recruiters.employeeId
+                                            }
+                                            onChange={() =>
+                                              setSelectedRecruiters({
+                                                index: 1,
+                                                recruiterId: recruiters.employeeId,
+                                                recruiterJobRole:
+                                                  recruiters.jobRole,
+                                              })
+                                            }
+                                          />{" "} - {" "}
+                                          {recruiters.employeeName}
+                                        </label>
+                                      </div>
+                                    ))}
+                                </form>
+                              </div>
+                            </div>
+                          )}
+                        </div>
                           {/* akash_pawar_LineUpList_ShareFunctionality_17/07_1747 */}
                         </Modal.Body>
                         <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
@@ -1936,7 +1914,7 @@ const CallingList = ({
                   </Modal.Footer>
                 </Modal>
                 {/* Name:-Akash Pawar Component:-LineUpList
-          Subcategory:-ResumeModel(added) End LineNo:-1184 Date:-02/07 */}
+                   Subcategory:-ResumeModel(added) End LineNo:-1184 Date:-02/07 */}
               </div>
             </>
           ) : (
@@ -1952,7 +1930,7 @@ const CallingList = ({
       )}
       {isDataSending && (
         <div className="ShareFunc_Loading_Animation">
-          <ClipLoader size={50} color="#ffb281" />
+          <Loader />
         </div>
       )}
     </div>

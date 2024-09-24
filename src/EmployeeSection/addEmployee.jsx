@@ -321,14 +321,19 @@ const AddEmployee = () => {
 
 
   return (
+    <>
+<div className="add-employee-top-div">
+<strong>Add New Recruiter</strong>
+</div>
     <div className="AddRec-form-container">
+     
       <form
         className="AddRec-form-group"
         onSubmit={handleSubmit}
         encType="multipart/form-data"
       >
         <div className="addRec-form-row">
-          <label>Employee Name:</label>
+          <label>Recruiter Name:</label>
           <input
             type="text"
             name="employeeName"
@@ -1128,6 +1133,7 @@ const AddEmployee = () => {
         )}
       </form>
     </div>
+    </>
   );
 };
 

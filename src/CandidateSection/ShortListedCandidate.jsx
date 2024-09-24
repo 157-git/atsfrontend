@@ -8,6 +8,7 @@ import Button from "react-bootstrap/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
+import { toast } from "react-toastify";
 // SwapnilRokade_ShortListedCandidates_ModifyFilters_11/07
 
 const ShortListedCandidates = ({
@@ -315,9 +316,10 @@ const ShortListedCandidates = ({
       }
       // Handle success response
       setIsDataSending(false);
+      toast.success("Candidates forwarded successfully!");
       console.log("Candidates forwarded successfully!");
       fetchShortListedData();
-      onSuccessAdd(true);
+      // onSuccessAdd(true);
       setShowForwardPopup(false); // Close the modal or handle any further UI updates
       setShowShareButton(true);
       setSelectedRows([]);
@@ -695,7 +697,7 @@ const ShortListedCandidates = ({
                       {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_602 */}
                       {userType === "TeamLeader" && (
                         <button
-                          className="callingList-share-btn"
+                          className="lineUp-share-btn"
                           onClick={handleSelectAll}
                         >
                           {allSelected ? "Deselect All" : "Select All"}
@@ -795,8 +797,9 @@ const ShortListedCandidates = ({
                         </th>
                       ) : null}
                       <th className="attendanceheading">Sr  No.</th>
-                      <th className="attendanceheading">Date & Time</th>
-                      <th className="attendanceheading">Candidate's Id</th>
+
+                      <th className="attendanceheading">Candidate Id</th>
+                      <th className="attendanceheading">Added Date Time</th>
                       <th className="attendanceheading">Recruiter's Name</th>
                       <th className="attendanceheading">Candidate's Name</th>
                       <th className="attendanceheading">Candidate's Email</th>
@@ -817,7 +820,7 @@ const ShortListedCandidates = ({
                       <th className="attendanceheading">Relevant Experience</th>
                       <th className="attendanceheading">Current CTC</th>
                       <th className="attendanceheading">Expected CTC</th>
-                      <th className="attendanceheading">Date Of Birth</th>
+                      <th className="attendanceheading">Date Of Birth  - {" "}</th>
                       <th className="attendanceheading">Gender</th>
                       <th className="attendanceheading">Education</th>
                       <th className="attendanceheading">Year Of Passing</th>
@@ -838,7 +841,7 @@ const ShortListedCandidates = ({
                           Message For Team Leader
                         </th>}
 
-                      <th className="attendanceheading">Interview Slot</th>
+                      <th className="attendanceheading">Interview Date</th>
                       <th className="attendanceheading">Interview Time</th>
                       <th className="attendanceheading">Final Status</th>
                       <th className="attendanceheading">Action</th>
@@ -857,20 +860,6 @@ const ShortListedCandidates = ({
                           </td>
                         ) : null}
                         <td className="tabledata">{index + 1}</td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.date}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.date}</span>
-                            <span className="tooltiptext">
-                              {item.candidateAddedTime}
-                            </span>
-                          </div>
-                        </td>
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
@@ -881,6 +870,18 @@ const ShortListedCandidates = ({
                             <span className="tooltiptext">{item.candidateId}</span>
                           </div>
                         </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.date} -  {" "}  {item.candidateAddedTime}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.date}  - {" "}  {item.candidateAddedTime}</span>
+                          </div>
+                        </td>
+
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
@@ -1049,12 +1050,11 @@ const ShortListedCandidates = ({
 
                         <td className="tabledata"
                           onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}>
-                          {item.experienceYear}
-                          Year {item.experienceMonth}
-                          Month
+                          onMouseOut={handleMouseOut}
+                          >
+                          {item.experienceYear} {" "} Year {item.experienceMonth}  {" "}  Month
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.experienceYear}{item.experienceMonth}</span>
+                            <span className="tooltiptext">{item.experienceYear}  Year  {" "} {item.experienceMonth}{" "} Month </span>
                           </div>
                         </td>
 
@@ -1071,19 +1071,17 @@ const ShortListedCandidates = ({
                         <td className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
-                          {item.currentCtcLakh} Lakh {item.currentCtcThousand} Thousand
+                          {item.currentCtcLakh} {" "} Lakh {item.currentCtcThousand}   {" "} Thousand
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.currentCtcLakh}{item.currentCtcThousand}</span>
+                            <span className="tooltiptext">{item.currentCtcLakh} {" "} Lakh {item.currentCtcThousand}   {" "} Thousand</span>
                           </div>
                         </td>
 
-
-
                         <td className="tabledata" onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
-                          {item.expectedCtcLakh} Lakh {item.expectedCtcThousand} Thousand
+                          {item.expectedCtcLakh}  {" "} Lakh {item.expectedCtcThousand} {" "} Thousand
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.expectedCtcLakh}Lakh{item.expectedCtcThousand}Thousand</span>
+                            <span className="tooltiptext">{item.expectedCtcLakh}  {" "} Lakh{item.expectedCtcThousand}  {" "} Thousand</span>
                           </div>
                         </td>
 
@@ -1152,7 +1150,7 @@ const ShortListedCandidates = ({
                   Date:-02/07 */}
                         <td className="tabledata">
                           <button
-                            className="text-secondary"
+                            className="table-icon-div"
                             onClick={() => openResumeModal(item.resume)}
                           >
                             <i className="fas fa-eye"></i>
@@ -1229,11 +1227,13 @@ const ShortListedCandidates = ({
                             <span className="tooltiptext">{item.finalStatus}</span>
                           </div>
                         </td>
-                        <td className="tabledata">
-                          <i
-                            onClick={() => handleUpdate(item.candidateId)}
-                            className="fa-regular fa-pen-to-square"
-                          ></i>
+                        <td className="tabledata" >
+                          <button className="table-icon-div" >
+                            <i
+                              onClick={() => handleUpdate(item.candidateId)}
+                              className="fa-regular fa-pen-to-square"
+                            ></i>
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -1448,11 +1448,12 @@ const ShortListedCandidates = ({
                               </div>
                             </div>
                           )}
+                          
                           {userType === "TeamLeader" && (
                             <div className="accordion-item">
                               <div className="accordion-header">
                                 <label className="accordion-title">
-                                  {loginEmployeeName}
+                                 <strong>TL - {loginEmployeeName} </strong>
                                 </label>
                               </div>
                               <div className="accordion-content">
@@ -1461,9 +1462,8 @@ const ShortListedCandidates = ({
                                     recruiterUnderTeamLeader.map((recruiters) => (
                                       <div
                                         key={recruiters.recruiterId}
-                                        className="form-group"
                                       >
-                                        <label htmlFor={recruiters.employeeId}>
+                                        <label htmlFor={recruiters.employeeId}> 
                                           <input
                                             type="radio"
                                             id={recruiters.employeeId}
@@ -1481,7 +1481,7 @@ const ShortListedCandidates = ({
                                                   recruiters.jobRole,
                                               })
                                             }
-                                          />{" "}
+                                          />{" "} - {" "}
                                           {recruiters.employeeName}
                                         </label>
                                       </div>
@@ -1544,17 +1544,19 @@ const ShortListedCandidates = ({
           ) : (
             <UpdateCallingTracker
               candidateId={selectedCandidateId}
+              employeeId={employeeId}
               closeComponent={() => setShowUpdateCallingTracker(false)}
-              updateSuccess={handleUpdateSuccess}
+              // updateSuccess={handleUpdateSuccess}
+              onSuccess={handleUpdateSuccess}
+              onCancel={() => setShowUpdateCallingTracker(false)}
             />
-
           )}
         </>
       )}
 
       {isDataSending && (
         <div className="ShareFunc_Loading_Animation">
-          <ClipLoader size={50} color="#ffb281" />
+          <Loader />
         </div>
       )}
 

@@ -850,7 +850,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                           {/* akash_pawar_SelectedCandidate_ShareFunctionality_18/07_604 */}
                           {userType === "TeamLeader" && (
                             <button
-                              className="callingList-share-btn"
+                        className="lineUp-share-btn"
                               onClick={handleSelectAll}
                             >
                               {allSelected ? "Deselect All" : "Select All"}
@@ -948,15 +948,15 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                           />
                         </th>
                       ) : null}
-                      <th className="attendanceheading">No.</th>
+                     <th className="attendanceheading">Sr No.</th>
+                      <th className="attendanceheading">Candidate Id</th>
+
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("date")}
                       >
-                        Date
-                        &
-                        Time</th>
-                      <th className="attendanceheading">Candidate Id</th>
+                       Added Date Time
+                      </th>
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("recruiterName")}
@@ -1014,10 +1014,10 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                         <th className="attendanceheading">
                           Message For Super User
                         </th>}
-                      <th className="attendanceheading">
+                      {/* <th className="attendanceheading">
                         Availability For Interview
                       </th>
-                      <th className="attendanceheading">Interview Time</th>
+                      <th className="attendanceheading">Interview Time</th> */}
                       <th className="attendanceheading">Interview Status</th>
                       <th className="attendanceheading">Employee ID</th>
 
@@ -1041,49 +1041,48 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
 
 
                         ) : null}
-                        <td
-                          className="tabledata "
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {index + 1}
-                        </td>
+  <td className="tabledata">{index + 1}</td>
 
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.date}   -  {item.candidateAddedTime || "-"}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.date} -  {item.candidateAddedTime}</span>
-                          </div>
-                        </td>
+<td
+  className="tabledata"
+  onMouseOver={handleMouseOver}
+  onMouseOut={handleMouseOut}
+>
+  {item.candidateId}
+  <div className="tooltip">
+    <span className="tooltiptext">
+      {item.candidateId}
+    </span>
+  </div>
+</td>
 
-                        <td
-                          className="tabledata "
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.candidateId}{" "}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.candidateId}
-                            </span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata "
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.recruiterName}{" "}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.recruiterName}
-                            </span>
-                          </div>
-                        </td>
+<td
+  className="tabledata"
+  onMouseOver={handleMouseOver}
+  onMouseOut={handleMouseOut}
+>
+  {item.date} - {item.candidateAddedTime || "-"}
+  <div className="tooltip">
+    <span className="tooltiptext">
+      {item.date} - {item.candidateAddedTime}
+    </span>
+  </div>
+</td>
+
+
+
+<td
+  className="tabledata"
+  onMouseOver={handleMouseOver}
+  onMouseOut={handleMouseOut}
+>
+  {item.recruiterName}
+  <div className="tooltip">
+    <span className="tooltiptext">
+      {item.recruiterName}
+    </span>
+  </div>
+</td>
                         <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
@@ -1282,12 +1281,12 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.experienceYear} Years
+                          {item.experienceYear} Years {" "}
                           {item.experienceMonth} Month
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {" "}
-                              {item.experienceYear} Years
+                              {item.experienceYear} Years  {" "}
                               {item.experienceMonth} Month
                             </span>
                           </div>
@@ -1309,11 +1308,11 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.currentCtcLakh} Lakh
+                          {item.currentCtcLakh} Lakh  {" "}
                           {item.currentCtcThousand} Thousand
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.currentCtcLakh} Lakh
+                              {item.currentCtcLakh} Lakh  {" "}
                               {item.currentCtcThousand} Thousand
                             </span>
                           </div>
@@ -1323,11 +1322,11 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.expectedCtcLakh} Lakh
+                          {item.expectedCtcLakh} Lakh  {" "}
                           {item.expectedCtcThousand} Thousand
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.expectedCtcLakh} Lakh
+                              {item.expectedCtcLakh} Lakh  {" "}
                               {item.expectedCtcThousand} Thousand
                             </span>
                           </div>
@@ -1416,25 +1415,14 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                             </span>
                           </div>
                         </td>
-                        {/* <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.lineUp?.resume || "-"}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.lineUp?.resume || "-"}{" "}
-                        </span>
-                      </div>
-                    </td> */}
+                        
 
                         {/* Name:-Akash Pawar Component:-SelectedCandidate
                   Subcategory:-ResumeViewButton(added) start LineNo:-953
                   Date:-02/07 */}
                         <td className="tabledata">
                           <button
-                            className="text-secondary"
+                             className="table-icon-div"
                             onClick={() => openResumeModal(item.resume)}
                           >
                             <i className="fas fa-eye"></i>
@@ -1468,7 +1456,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                             </span>
                           </div>
                         </td>
-                        <td
+                        {/* <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
@@ -1491,7 +1479,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                               {item.interviewTime}
                             </span>
                           </div>
-                        </td>
+                        </td> */}
                         <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
@@ -1533,11 +1521,15 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                           )}
 
                         <td className="tabledata ">
+                          <button    className="table-icon-div">
                           <i
                             onClick={() => viewPage(item.candidateId,item.requirementId)}
                             className="fa-regular fa-pen-to-square"
 
                           ></i>
+
+                          </button>
+                         
                         </td>
                       </tr>
                     ))}

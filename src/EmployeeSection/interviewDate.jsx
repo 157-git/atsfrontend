@@ -57,8 +57,6 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
       const response = await fetch(
         `${API_BASE_URL}/interview-date/${employeeIdNew}/${userType}`
       );
-      console.log(employeeIdNew + " ---01--- Interview Dates");
-      console.log(userType + " ---01--- User Type");
       const data = await response.json();
       setInterviewDates(data);
     } catch (error) {
@@ -83,6 +81,8 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
         `${API_BASE_URL}/today-interview/${formattedDate}/${employeeId}/${userType}`
       );
       const data = await response.json();
+      console.log(data);
+      
       if (data.length === 0) {
         setNoDataMessage(true);
         setInterviewData(null);
@@ -244,9 +244,9 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
         <table id="shortlisted-table-id" className="attendance-table">
         <thead>
         <tr className="attendancerows-head">
-                <th className="attendanceheading">No</th>
+                <th className="attendanceheading">Sr No</th>
                 <th className="attendanceheading">Candidate Id</th>
-                <th className="attendanceheading">Candidate Added</th>
+                <th className="attendanceheading">Added Date Time </th>
                 <th className="attendanceheading">Interview Date</th>
                 <th className="attendanceheading">Interview Time </th>
                 <th className="attendanceheading">Candidate Name</th>
@@ -292,16 +292,21 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                       <span className="tooltiptext">{item.candidateId}</span>
                     </div>
                   </td>
+
+                  
                   <td
-                     className="tabledata"
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                  >
-                    {item.date}
-                    <div className="tooltip">
-                      <span className="tooltiptext">{item.date}</span>
-                    </div>
-                  </td>
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.date} - {item.candidateAddedTime || "-"}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.date} - {item.candidateAddedTime}
+                            </span>
+                          </div>
+                        </td>
+
                   <td
                     className="tabledata"
                     onMouseOver={handleMouseOver}
@@ -421,52 +426,46 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                         </span>
                       </div>
                     </td>
+
                     <td
                       className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.experienceYear || "0"}
+                      {item.experienceYear || "0"} {" "}  Years  {item.experienceMonth || "0"} {" "}   Months
                       <div className="tooltip">
                         <span className="tooltiptext">
-                          {item.experienceYear}{" "}
+                        {item.experienceYear || "0"} {" "}   Years  {item.experienceMonth || "0"} {" "}   Months
                         </span>
                       </div>
-                      Years
-                      {item.experienceMonth || "0"}
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {item.currentCtcLakh || "0"} {" "}  Lakh  {item.currentCtcThousand || "0"} {" "}   Thousand
                       <div className="tooltip">
                         <span className="tooltiptext">
-                          {item.experienceMonth}
+                        {item.currentCtcLakh || "0"} {" "}  Lakh  {item.currentCtcThousand || "0"} {" "}   Thousand
                         </span>
                       </div>
-                      Months
                     </td>
+
                     <td
                       className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {`${item.currentCTCLakh || 0} Lakh ${item.currentCTCThousand || 0
-                        } Thousand`}
+                      {item.expectedCtcLakh || "0"} {" "}  Lakh  {item.expectedCtcThousand || "0"} {" "}   Thousand
                       <div className="tooltip">
-                        <span className="tooltiptext">{`${item.expectedCTCLakh || 0
-                          } Lakh ${item.expectedCTCThousand || 0
-                          } Thousand`}</span>
+                        <span className="tooltiptext">
+                        {item.expectedCtcLakh || "0"} {" "}  Lakh  {item.expectedCtcThousand || "0"} {" "}   Thousand
+                        </span>
                       </div>
                     </td>
-                    <td
-                      className="tabledata"
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {`${item.expectedCTCLakh || 0} Lakh ${item.expectedCTCThousand || 0
-                        } Thousand`}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{`${item.expectedCTCLakh || 0
-                          } Lakh ${item.expectedCTCThousand || 0
-                          } Thousand`}</span>
-                      </div>
-                    </td>
+
                     <td
                       className="tabledata"
                       onMouseOver={handleMouseOver}
@@ -509,7 +508,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                   Date:-02/07 */}
                     <td className="tabledata">
                       <button
-                        className="text-secondary"
+                        className="table-icon-div"
                         onClick={() => openResumeModal(item.resume)}
                       >
                         <i className="fas fa-eye"></i>
@@ -541,6 +540,8 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                       </div>
                     </td>
                     <td className="tabledata">
+                      <button  className="table-icon-div">
+
                       <i
                         onClick={() => {
                           fetchAndUpdateInterviewResponse(
@@ -551,6 +552,8 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                         }}
                         className="fa-regular fa-pen-to-square"
                       ></i>
+                      </button>
+                     
                     </td>
                   </>
 

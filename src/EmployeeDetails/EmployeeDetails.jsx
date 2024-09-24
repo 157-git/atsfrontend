@@ -138,9 +138,10 @@ const EmployeeDetails = () => {
       {!Loading ? (
         <>
           {!showEmployee ? (
+                   <div className="attendanceTableData">
             <table className="attendance-table">
               <thead>
-                <tr className="attendancerows-head">
+              <tr className="attendancerows-head">
                   <th className="attendanceheading">Employee  Id</th>
                   <th className="attendanceheading">Employee Name</th>
                   <th className="attendanceheading">Employee Number</th>
@@ -260,7 +261,7 @@ const EmployeeDetails = () => {
                       </div>
 
                     </td>
-                    <td className="tabledata">
+                    <td>
                       <div className="emp-details-act-btn">
                         {/* <button
                           className="action-button"
@@ -290,6 +291,7 @@ const EmployeeDetails = () => {
                 ))}
               </tbody>
             </table>
+            </div>
           ) : (
             <>
               <div>

@@ -473,30 +473,16 @@ const UpdateSelfCalling = ({
             <div className="update-calling-tracker-field">
               <label>Current Location</label>
               <div className="update-calling-check-box-main-container">
-                {/* {!isOtherLocationSelected ? ( */}
-                {/* <select
-                    name="currentLocation"
-                    value={callingTracker?.currentLocation || ""}
-                    onChange={handleLocationChange}
-                  >
-                    <option value="" style={{ color: "gray" }}>
-                      Select Location
-                    </option>
-                    <option value="Pune City">Pune City</option>
-                    <option value="PCMC">PCMC</option>
-                    <option value="Other">Other</option>
-                  </select>
-                ) : ( */}
                 <input
                   type="text"
                   name="currentLocation"
                   value={callingTracker?.currentLocation || ""}
                   onChange={handleChange}
                   placeholder="Enter your location"
+                  className="update-calling-check-box-main-container-input"
                 />
-                {/* )} */}
-
                 <input
+                   className="update-calling-check-box-main-container-input"
                   type="text"
                   name="fullAddress"
                   placeholder="Full Address"

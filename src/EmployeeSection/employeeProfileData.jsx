@@ -116,14 +116,16 @@ const EmployeeProfileData = ({
                     <i onClick={openModal} className="fas fa-eye"></i>
                   </p>
                   <p className="m-1">
-                    <b>Job Role : </b>
-                    {employeeData.gender}
-                  </p>
-                  <p className="m-1">
-                    <b>Gender : </b>
+                  <b>Job Role : </b>
+                   
                     {employeeData.jobRole}
               
                   </p>
+                  <p className="m-1">
+                  <b>Gender : </b>
+                    {employeeData.gender}
+                  </p>
+                 
                   <p className="m-1">
                     <b>Blood Group : </b>
                     {employeeData.bloodGroup}

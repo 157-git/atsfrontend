@@ -55,6 +55,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
 }
 
 .update-calling-tracker-field-inner-div {
@@ -104,6 +105,10 @@
   justify-content: space-around;
 }
 
+.update-calling-check-box-main-container-input{
+ width: 160px;
+}
+
 .calling-check-box-container {
   width: 48%;
   display: flex;
@@ -141,7 +146,7 @@
 }
 
 .update-calling-tracker-two-input {
-  width: 40%;
+  width: 30%;
   padding: 1px;
   color: rgba(128, 128, 128, 0.782);
   font-size: 16px;

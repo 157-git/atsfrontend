@@ -871,7 +871,7 @@ const HoldCandidate = ({
                           {/* akash_pawar_HoldCandidate_ShareFunctionality_18/07_603 */}
                           {userType === "TeamLeader" && (
                             <button
-                              className="callingList-share-btn"
+                           className="lineUp-share-btn"
                               onClick={handleSelectAll}
                             >
                               {allSelected ? "Deselect All" : "Select All"}
@@ -967,21 +967,22 @@ const HoldCandidate = ({
                         </th>
                       ) : null}
                       
-<th className="attendanceheading">No.</th>
+<th className="attendanceheading">Sr No.</th>
+                      <th className="attendanceheading">Candidate Id</th>
+
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("date")}
                       >
-                        Date
-                        &
-                        Time</th>
-                      <th className="attendanceheading">Candidate Id</th>
+                       Added Date Time
+                      </th>
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("recruiterName")}
                       >
                         Recruiter's Name
                       </th>
+
                       <th className="attendanceheading">Candidate's Name</th>
                       <th className="attendanceheading">Candidate's Email</th>
                       <th className="attendanceheading">Contact Number</th>
@@ -1060,45 +1061,49 @@ const HoldCandidate = ({
                             />
                           </td>
                         ) : null}
-                        <td className="tabledata">{index + 1}</td>
+ 
+ <td className="tabledata">{index + 1}</td>
 
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.date}   -  {item.candidateAddedTime || "-"}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.date} -  {item.candidateAddedTime}</span>
-                          </div>
-                        </td>
-                        
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.candidateId}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.candidateId}
-                            </span>
-                          </div>
-                        </td>
+<td
+  className="tabledata"
+  onMouseOver={handleMouseOver}
+  onMouseOut={handleMouseOut}
+>
+  {item.candidateId}
+  <div className="tooltip">
+    <span className="tooltiptext">
+      {item.candidateId}
+    </span>
+  </div>
+</td>
 
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.recruiterName}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.recruiterName}
-                            </span>
-                          </div>
-                        </td>
+<td
+  className="tabledata"
+  onMouseOver={handleMouseOver}
+  onMouseOut={handleMouseOut}
+>
+  {item.date} - {item.candidateAddedTime || "-"}
+  <div className="tooltip">
+    <span className="tooltiptext">
+      {item.date} - {item.candidateAddedTime}
+    </span>
+  </div>
+</td>
 
+
+
+<td
+  className="tabledata"
+  onMouseOver={handleMouseOver}
+  onMouseOut={handleMouseOut}
+>
+  {item.recruiterName}
+  <div className="tooltip">
+    <span className="tooltiptext">
+      {item.recruiterName}
+    </span>
+  </div>
+</td>
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
@@ -1306,27 +1311,15 @@ const HoldCandidate = ({
                               </span>
                             </div>
                           </td>
-
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {item.experienceYear || "0"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.experienceYear}{" "}
-                              </span>
-                            </div>
-                            Years
-                            {item.experienceMonth || "0"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.experienceMonth}
-                              </span>
-                            </div>
-                            Months
-                          </td>
+                          <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          
+                          {item.experienceYear} {" "} Year -  {item.experienceMonth} Month
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.experienceYear} {" "} Year {item.experienceMonth} Month</span>
+                          </div>
+                        </td>
 
                           <td
                             className="tabledata"
@@ -1341,40 +1334,24 @@ const HoldCandidate = ({
                             </div>
                           </td>
 
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {`${item.currentCTCLakh || 0} Lakh ${
-                              item.currentCTCThousand || 0
-                            } Thousand`}
-                            <div className="tooltip">
-                              <span className="tooltiptext">{`${
-                                item.expectedCTCLakh || 0
-                              } Lakh ${
-                                item.expectedCTCThousand || 0
-                              } Thousand`}</span>
-                            </div>
-                          </td>
+                         <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
 
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {`${item.expectedCTCLakh || 0} Lakh ${
-                              item.expectedCTCThousand || 0
-                            } Thousand`}
-                            <div className="tooltip">
-                              <span className="tooltiptext">{`${
-                                item.expectedCTCLakh || 0
-                              } Lakh ${
-                                item.expectedCTCThousand || 0
-                              } Thousand`}</span>
-                            </div>
-                          </td>
+                          {item.currentCtcLakh} {" "} Lakh {item.currentCtcThousand}   {" "} Thousand
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.currentCtcLakh} {" "} Lakh {item.currentCtcThousand}   {" "} Thousand</span>
+                          </div>
+                        </td>
 
+                        <td className="tabledata" onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.expectedCtcLakh}  {" "} Lakh {item.expectedCtcThousand} {" "} Thousand
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.expectedCtcLakh}  {" "} Lakh {item.expectedCtcThousand}  {" "} Thousand</span>
+                          </div>
+                        </td>
+                        
                           <td
                             className="tabledata"
                             onMouseOver={handleMouseOver}

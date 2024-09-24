@@ -52,14 +52,14 @@ const Home = () => {
   return (
     <div className="mainDashboard-div">
       <div className="main-clouds"></div>
-      <div className="pricing-plan">
+      <div className="pricing-plan">  
         {[
           { title: "Client", userType: "client", buttonClass: "login" },
           { title: "Applicant", userType: "applicant", buttonClass: "login" },
           { title: "Employee", userType: "employee", buttonClass: "login1" },
           { title: "Vendor", userType: "vendor", buttonClass: "login1" },
         ].map((section) => (
-          <div key={section.title} className="square-box">
+          <div key={section.title} className="square-box" > 
             <div className="content">
               <h1>{section.title}</h1>
               <button

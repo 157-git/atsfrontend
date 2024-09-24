@@ -123,21 +123,21 @@ function Sidebar({
     // document.documentElement.style.setProperty("--filter-color", color);
   };
 
-  const handleLogoutLocal = () => {
-    const logoutTime = new Date().toLocaleTimeString("en-IN");
-    onLogout(logoutTime);
-  };
+  // const handleLogoutLocal = () => {
+  //   const logoutTime = new Date().toLocaleTimeString("en-IN");
+  //   onLogout(logoutTime);
+  // };
 
-  // const temproryLogout = () =>{
-  //   localStorage.removeItem(`loginTimeSaved_${employeeId}`);
-  //   localStorage.removeItem(`loginDetailsSaved_${employeeId}`);
-  //   localStorage.removeItem(`stopwatchTime_${employeeId}`);
-  //   localStorage.removeItem(`dailyWorkData_${employeeId}`);
-  //   localStorage.removeItem(`breaks_${employeeId}`);
-  //   localStorage.removeItem('employeeId')
-  //   console.log("Temp Logout Successfully");
-  //   navigate(`/login/${userType}`,{ replace: true })
-  // }
+  const temproryLogout = () =>{
+    localStorage.removeItem(`loginTimeSaved_${employeeId}`);
+    localStorage.removeItem(`loginDetailsSaved_${employeeId}`);
+    localStorage.removeItem(`stopwatchTime_${employeeId}`);
+    localStorage.removeItem(`dailyWorkData_${employeeId}`);
+    localStorage.removeItem(`breaks_${employeeId}`);
+    localStorage.removeItem('employeeId')
+    console.log("Temp Logout Successfully");
+    navigate(`/login/${userType}`,{ replace: true })
+  }
 
   const handleColorClick = (color) => {
     applyColor(color);
@@ -1404,36 +1404,45 @@ function Sidebar({
                         }`}
                     >
                       <li style={{ marginLeft: "10px" }}>
+                        <a href="">
                         <span
                           className="sidebar-text"
                           onClick={toggeleRightsInstructions}
                         >
                           Rights & Instructions
                         </span>
+                        </a>
                       </li>
                       <li style={{ marginLeft: "10px" }}>
+                        <a href="">
                         <span
                           className="sidebar-text"
                           onClick={toggeleCompanyPolicy}
                         >
                           Company Policy
                         </span>
+                        </a>
                       </li>
                       <li style={{ marginLeft: "10px" }}>
+                        <a href="">
                         <span
                           className="sidebar-text"
                           onClick={toggeleIssueSolving}
                         >
                           Issues Solving
                         </span>
+                        </a>
                       </li>
                       <li style={{ marginLeft: "10px" }}>
-                        <span
+                        <a href="">
+                                                  <span
                           className="sidebar-text"
                           onClick={toggelePainArea}
                         >
                           Recruites Pain Area
                         </span>
+                        </a>
+
                       </li>
                     </ul>
                   </li>
@@ -1456,12 +1465,14 @@ function Sidebar({
                         }`}
                     >
                       <li style={{ marginLeft: "10px" }}>
+                        <a href="">
                         <span
                           className="sidebar-text"
                           onClick={toggeleInterviewForm}
                         >
                           Interview Questions
                         </span>
+                        </a>
                       </li>
                       <li
                         style={{ marginLeft: "10px" }}
@@ -1469,7 +1480,7 @@ function Sidebar({
                       >
                         <a href="#">
                           <span className="sidebar-text">
-                            Candidate History Tracker
+                             History Tracker
                           </span>
                         </a>
                       </li>
@@ -1579,7 +1590,7 @@ function Sidebar({
                   justifyContent: "center",
                 }}
               >
-                <button onClick={handleLogoutLocal} className="buttoncss">
+                <button onClick={temproryLogout} className="buttoncss">
                   Yes
                 </button>
 

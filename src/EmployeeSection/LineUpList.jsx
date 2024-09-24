@@ -413,13 +413,13 @@ const LineUpList = ({
               ); // Compare as numbers
             })
           );
-        }  else if (option === "yearOfPassing") {
+        } else if (option === "yearOfPassing") {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
               item[option]?.toString().toLowerCase().includes(value)
             )
           );
-        }else {
+        } else {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const isNumeric = !isNaN(value); // Check if the value is numeric
@@ -650,7 +650,7 @@ const LineUpList = ({
     setSelectedCandidateResume("");
     setShowResumeModal(false);
   };
-  const onClose = ()=>{
+  const onClose = () => {
 
   }
   //Name:-Akash Pawar Component:-ShortListedCandidate Subcategory:-ResumeViewButton(added) End LineNo:-196 Date:-02/07
@@ -724,16 +724,13 @@ const LineUpList = ({
         "Recruiter Incentive": item.incentive || "-",
         "Interested or Not": item.selectYesOrNo || "-",
         "Current Company": item.companyName || "-",
-        "Total Experience": `${item.experienceYear || 0} Years ${
-          item.experienceMonth || 0
-        } Months`,
+        "Total Experience": `${item.experienceYear || 0} Years ${item.experienceMonth || 0
+          } Months`,
         "Relevant Experience": item.relevantExperience || "-",
-        "Current CTC": `${item.currentCtcLakh || 0} Lakh ${
-          item.currentCtcThousand || 0
-        } Thousand`,
-        "Expected CTC": `${item.expectedCtcLakh || 0} Lakh ${
-          item.expectedCtcThousand || 0
-        } Thousand`,
+        "Current CTC": `${item.currentCtcLakh || 0} Lakh ${item.currentCtcThousand || 0
+          } Thousand`,
+        "Expected CTC": `${item.expectedCtcLakh || 0} Lakh ${item.expectedCtcThousand || 0
+          } Thousand`,
         "Date Of Birth": item.dateOfBirth || "-",
         Gender: item.gender || "-",
         Education: item.qualification || "-",
@@ -885,7 +882,7 @@ const LineUpList = ({
                           {/* akash_pawar_SelfCallingTracker_ShareFunctionality_17/07_793 */}
                           {userType === "TeamLeader" && (
                             <button
-                              className="callingList-share-btn"
+                              className="lineUp-share-btn"
                               onClick={handleSelectAll}
                             >
                               {allSelected ? "Deselect All" : "Select All"}
@@ -987,14 +984,15 @@ const LineUpList = ({
                         </th>
                       ) : null}
 
-                      <th className="attendanceheading">No.</th>
+                      <th className="attendanceheading">Sr No.</th>
+                      <th className="attendanceheading">Candidate Id</th>
+
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("date")}
                       >
-                        Date & Time
+                        Added Date Time
                       </th>
-                      <th className="attendanceheading">Candidate Id</th>
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("recruiterName")}
@@ -1067,8 +1065,8 @@ const LineUpList = ({
 
                       {(userType === "TeamLeader" ||
                         userType === "Manager") && (
-                        <th className="attendanceheading">Team Leader Id</th>
-                      )}
+                          <th className="attendanceheading">Team Leader Id</th>
+                        )}
 
                       <th className="attendanceheading">Action</th>
                     </tr>
@@ -1086,18 +1084,8 @@ const LineUpList = ({
                           </td>
                         ) : null}
 
-                        <td className="tabledata">{index + 1}</td>
 
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.date}   -  {item.candidateAddedTime || "-"}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.date} -  {item.candidateAddedTime}</span>
-                          </div>
-                        </td>
+                        <td className="tabledata">{index + 1}</td>
 
                         <td
                           className="tabledata"
@@ -1117,6 +1105,21 @@ const LineUpList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
+                          {item.date} - {item.candidateAddedTime || "-"}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.date} - {item.candidateAddedTime}
+                            </span>
+                          </div>
+                        </td>
+
+
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
                           {item.recruiterName}
                           <div className="tooltip">
                             <span className="tooltiptext">
@@ -1124,7 +1127,6 @@ const LineUpList = ({
                             </span>
                           </div>
                         </td>
-
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
@@ -1330,25 +1332,15 @@ const LineUpList = ({
                             </div>
                           </td>
 
-                          <td
-                            className="tabledata"
+
+                          <td className="tabledata"
                             onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {item.experienceYear || "0"}
+                            onMouseOut={handleMouseOut}>
+
+                            {item.experienceYear} {" "} Year -  {item.experienceMonth} Month
                             <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.experienceYear}{" "}
-                              </span>
+                              <span className="tooltiptext">{item.experienceYear} {" "} Year {item.experienceMonth} Month</span>
                             </div>
-                            Years
-                            {item.experienceMonth || "0"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.experienceMonth}
-                              </span>
-                            </div>
-                            Months
                           </td>
 
                           <td
@@ -1364,37 +1356,21 @@ const LineUpList = ({
                             </div>
                           </td>
 
-                          <td
-                            className="tabledata"
+                          <td className="tabledata"
                             onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {`${item.currentCtcLakh || 0} Lakh ${
-                              item.currentCtcThousand || 0
-                            } Thousand`}
+                            onMouseOut={handleMouseOut}>
+
+                            {item.currentCtcLakh} {" "} Lakh {item.currentCtcThousand}   {" "} Thousand
                             <div className="tooltip">
-                              <span className="tooltiptext">{`${
-                                item.expectedCtcLakh || 0
-                              } Lakh ${
-                                item.expectedCtcThousand || 0
-                              } Thousand`}</span>
+                              <span className="tooltiptext">{item.currentCtcLakh} {" "} Lakh {item.currentCtcThousand}   {" "} Thousand</span>
                             </div>
                           </td>
 
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {`${item.expectedCtcLakh || 0} Lakh ${
-                              item.expectedCtcThousand || 0
-                            } Thousand`}
+                          <td className="tabledata" onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}>
+                            {item.expectedCtcLakh}  {" "} Lakh {item.expectedCtcThousand} {" "} Thousand
                             <div className="tooltip">
-                              <span className="tooltiptext">{`${
-                                item.expectedCtcLakh || 0
-                              } Lakh ${
-                                item.expectedCtcThousand || 0
-                              } Thousand`}</span>
+                              <span className="tooltiptext">{item.expectedCtcLakh}  {" "} Lakh {item.expectedCtcThousand}  {" "} Thousand</span>
                             </div>
                           </td>
 
@@ -1461,18 +1437,6 @@ const LineUpList = ({
                             </div>
                           </td>
 
-                          {/* <td
-                              className="tabledata"
-                              onMouseOver={handleMouseOver}
-                              onMouseOut={handleMouseOut}
-                            >
-                              {item.lineUp.feedBack || "-"}
-                              <div className="tooltip">
-                                <span className="tooltiptext">
-                                  {item.lineUp.feedBack}
-                                </span>
-                              </div>
-                            </td> */}
 
                           <td
                             className="tabledata"
@@ -1500,22 +1464,13 @@ const LineUpList = ({
                             </div>
                           </td>
 
-                          {/* <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {item.resume || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">{item.resume}</span>
-                            </div>
-                          </td> */}
+
                           {/* Name:-Akash Pawar Component:-LineUpList
                   Subcategory:-ResumeViewButton(added) start LineNo:-993
                   Date:-02/07 */}
                           <td className="tabledata">
                             <button
-                              className="text-secondary"
+                              className="table-icon-div"
                               onClick={() => openResumeModal(item.resume)}
                             >
                               <i className="fas fa-eye"></i>
@@ -1603,25 +1558,29 @@ const LineUpList = ({
 
                           {(userType === "TeamLeader" ||
                             userType === "Manager") && (
-                            <td
-                              className="tabledata"
-                              onMouseOver={handleMouseOver}
-                              onMouseOut={handleMouseOut}
-                            >
-                              {item.teamLeaderId}
-                              <div className="tooltip">
-                                <span className="tooltiptext">
-                                  {item.teamLeaderId}
-                                </span>
-                              </div>
-                            </td>
-                          )}
+                              <td
+                                className="tabledata"
+                                onMouseOver={handleMouseOver}
+                                onMouseOut={handleMouseOut}
+                              >
+                                {item.teamLeaderId}
+                                <div className="tooltip">
+                                  <span className="tooltiptext">
+                                    {item.teamLeaderId}
+                                  </span>
+                                </div>
+                              </td>
+                            )}
 
                           <td className="tabledata">
-                            <i
-                              onClick={() => handleUpdate(item.candidateId)}
-                              className="fa-regular fa-pen-to-square"
-                            ></i>
+                            <button className="table-icon-div" >
+                              <i
+                                onClick={() => handleUpdate(item.candidateId)}
+                                className="fa-regular fa-pen-to-square"
+                              ></i>
+
+                            </button>
+
                           </td>
                         </>
                       </tr>
@@ -1845,45 +1804,39 @@ const LineUpList = ({
                               <div className="accordion-item">
                                 <div className="accordion-header">
                                   <label className="accordion-title">
-                                    {loginEmployeeName}
+                                    <strong>TL - {loginEmployeeName} </strong>
                                   </label>
                                 </div>
                                 <div className="accordion-content">
                                   <form>
                                     {recruiterUnderTeamLeader &&
-                                      recruiterUnderTeamLeader.map(
-                                        (recruiters) => (
-                                          <div
-                                            key={recruiters.recruiterId}
-                                            className="form-group"
-                                          >
-                                            <label
-                                              htmlFor={recruiters.employeeId}
-                                            >
-                                              <input
-                                                type="radio"
-                                                id={recruiters.employeeId}
-                                                name="recruiter"
-                                                value={recruiters.employeeId}
-                                                checked={
-                                                  selectedRecruiters.recruiterId ===
-                                                  recruiters.employeeId
-                                                }
-                                                onChange={() =>
-                                                  setSelectedRecruiters({
-                                                    index: 1,
-                                                    recruiterId:
-                                                      recruiters.employeeId,
-                                                    recruiterJobRole:
-                                                      recruiters.jobRole,
-                                                  })
-                                                }
-                                              />{" "}
-                                              {recruiters.employeeName}
-                                            </label>
-                                          </div>
-                                        )
-                                      )}
+                                      recruiterUnderTeamLeader.map((recruiters) => (
+                                        <div
+                                          key={recruiters.recruiterId}
+                                        >
+                                          <label htmlFor={recruiters.employeeId}>
+                                            <input
+                                              type="radio"
+                                              id={recruiters.employeeId}
+                                              name="recruiter"
+                                              value={recruiters.employeeId}
+                                              checked={
+                                                selectedRecruiters.recruiterId ===
+                                                recruiters.employeeId
+                                              }
+                                              onChange={() =>
+                                                setSelectedRecruiters({
+                                                  index: 1,
+                                                  recruiterId: recruiters.employeeId,
+                                                  recruiterJobRole:
+                                                    recruiters.jobRole,
+                                                })
+                                              }
+                                            />{" "} - {" "}
+                                            {recruiters.employeeName}
+                                          </label>
+                                        </div>
+                                      ))}
                                   </form>
                                 </div>
                               </div>

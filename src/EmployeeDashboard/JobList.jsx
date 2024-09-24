@@ -251,7 +251,6 @@ const JobListing = () => {
       <div className="jd-header-search" >
         <div className="search-container" >
           <div className="search-bar" >
-
             <input
               className="search-input"
               placeholder=" Enter keyword/Designation/Companies"
@@ -284,11 +283,12 @@ const JobListing = () => {
               value={searchQuery.location}
               onChange={handleInputSearch}
             />
-            <button className="search-button" onClick={filterData}>
+            <button className="daily-tr-btn" onClick={filterData}>
               <span className="search-icon">
-                <i className="fas fa-search"></i>
-                Search
-              </span>
+             <div><i className="fas fa-search"></i></div> 
+             <div> Search </div>
+           
+              </span> 
             </button>
           </div>
         </div>

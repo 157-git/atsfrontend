@@ -226,3 +226,11 @@ html::-webkit-scrollbar {
 .filter-section{
   margin-top: 5px;
 }
+
+.table-icon-div{
+  align-items: center;
+flex-direction: row;
+display: flex;
+text-align: center;
+padding-right: 8px;
+}

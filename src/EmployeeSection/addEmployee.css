@@ -297,3 +297,10 @@ input[type='number'] {
   margin-bottom: 10px;
 }
 
+.add-employee-top-div{
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
