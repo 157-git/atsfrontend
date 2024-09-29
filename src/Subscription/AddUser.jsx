@@ -87,7 +87,7 @@ const AddUser = ({ selectedPlan }) => {
   return (
     <div className="form-main-container">
       {!paymentForm ? (
-        <form onSubmit={handleSubmit} className="form-container">
+        <form onSubmit={handleSubmit} className="addUser-form-container ">
           <div className="form-group-main">
             <label htmlFor="userName">User Name</label>
             <input

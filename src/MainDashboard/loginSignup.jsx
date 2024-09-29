@@ -38,7 +38,6 @@ const LoginSignup = ({ onLogin }) => {
 
       return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
     };
-
     const hoverColor = darkenColor(color, -30);
     document.documentElement.style.setProperty("--Bg-color", color);
     document.documentElement.style.setProperty("--button-color", color);
@@ -155,10 +154,9 @@ const LoginSignup = ({ onLogin }) => {
                   type="submit"
                   data-aos="fade-top"
                 >
-                  Login
+                  Login  
                 </button>
                 <div className="acc-create-div">
-
                   <span
                     className="account-create-span"
                     onClick={() => setShowForgotPassword(true)}

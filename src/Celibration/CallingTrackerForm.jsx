@@ -900,13 +900,13 @@ const CallingTrackerForm = ({
                           Diploma in Computer science
                         </option>
                         <option value="Degree In CS">
-                          BTech in Computer Science
+                          B-Tech in Computer Science
                         </option>
                         <option value="M-Tech In CS">
-                          MTech in Computer Science
+                          M-Tech in Computer Science
                         </option>
                         <option value="PhD ">PhD</option>
-                        <option value="BSC">BSC in chemestry</option>
+                        <option value="BSC">BSC in Chemistry</option>
                         <option value="MSC">MSC </option>
                         <option value="BCA">BCA</option>
                         <option value="MCA">MCA</option>
@@ -947,7 +947,7 @@ const CallingTrackerForm = ({
                           Bachelor of Arts (BA)
                         </option>
                         <option value="Bachelor of Science (BS)">
-                          Bachelor of Science (BS)
+                          Bachelor of Science 
                         </option>
                         <option value="Bachelor of Fine Arts (BFA)">
                           Bachelor of Fine Arts (BFA)
@@ -956,7 +956,7 @@ const CallingTrackerForm = ({
                           Bachelor of Business Administration (BBA)
                         </option>
                         <option value="Bachelor of Engineering (BEng)">
-                          Bachelor of Engineering (BEng)
+                          Bachelor of Engineering 
                         </option>
                         <option value="Bachelor of Technology (BTech)">
                           Bachelor of Technology (BTech)
@@ -1022,7 +1022,7 @@ const CallingTrackerForm = ({
                           Bachelor of Applied Science (BAS)
                         </option>
                         <option value="Bachelor of Agriculture (BAgri)">
-                          Bachelor of Agriculture (BAgri)
+                          Bachelor of Agriculture 
                         </option>
                         <option value="Bachelor of Veterinary Science (BVSc)">
                           Bachelor of Veterinary Science (BVSc)

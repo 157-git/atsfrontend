@@ -114,6 +114,7 @@ const EmployeeMasterSheet = () => {
       setLoading(false)
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
+      setLoading(false)
     }
   };
 

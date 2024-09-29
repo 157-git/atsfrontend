@@ -477,8 +477,8 @@ const AddTeamLeader = () => {
             onChange={handleInputChange}
           >
             <option value="">Select Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
             <option value="other">Other</option>
           </select>
         </div>

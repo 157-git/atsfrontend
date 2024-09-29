@@ -122,7 +122,7 @@ const EmployeeProfileData = ({
               
                   </p>
                   <p className="m-1">
-                  <b>Gender : </b>
+                  <b>Gender  : </b>
                     {employeeData.gender}
                   </p>
                  

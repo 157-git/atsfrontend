@@ -253,7 +253,7 @@ const JobListing = () => {
           <div className="search-bar" >
             <input
               className="search-input"
-              placeholder=" Enter keyword/Designation/Companies"
+              placeholder="Designation"
               type="text"
               name="designation"
               value={searchQuery.designation}
@@ -277,7 +277,7 @@ const JobListing = () => {
 
             <input
               className="search-input"
-              placeholder="  Enter Location"
+              placeholder="Enter Location"
               type="text"
               name="location"
               value={searchQuery.location}
@@ -366,7 +366,7 @@ const JobListing = () => {
                   <div className="jd-edit-hold-div">
                     <button className="daily-tr-btn"
                     onClick={()=>handleEditBtn(item)}>
-                      Edit
+                      Edit 
                     </button>
                     <button className="daily-tr-btn"
                       onClick={() => handleHoldClick(job.requirementId)}

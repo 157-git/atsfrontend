@@ -39,7 +39,7 @@ const SubscriptionPlans = () => {
       ) : (
         plans.map((plan, index) => (
           <div className="PlanCard" key={index}>
-            {plan.popular && <div className="MostPopular">Most Popular</div>}
+            {plan.popular && <div className="MostPopular"> Popular Palns</div>}
             <h2 className="PlanName">{plan.name}</h2>
             <div className="OldPrice">₹{plan.oldPrice}</div>
             <div className="Price">
@@ -70,12 +70,11 @@ const SubscriptionPlans = () => {
                         {feature.name}
                       </li>
                     ))}
-                  <span
-                    className="ViewMore"
-                    onClick={() => toggleViewMore(plan.id)}
-                  >
-                    {expandedPlanId === plan.id ? "View Less" : "View More"}
-                  </span>
+                    <button        className="daily-tr-btn"
+                    onClick={() => toggleViewMore(plan.id)}>
+                                {expandedPlanId === plan.id ? "View Less" : "View More"}
+                    </button>
+                 
                 </>
               )}
             </ul>

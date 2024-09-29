@@ -202,7 +202,7 @@ function Sidebar({
   };
 
   const openTimesPlatform = () => {
-    window.open("", "_blank");
+    window.open("https://www.timesjobs.com/", "_blank");
   };
 
   const openIndeedPlatform = () => {
@@ -1025,7 +1025,7 @@ function Sidebar({
                       >
                         <a href="#">
                           <span className="sidebar-text">
-                            Add Company Details
+                            Add Client Details
                           </span>
                         </a>
                       </li>
@@ -1136,7 +1136,7 @@ function Sidebar({
                       >
                         <a href="#">
                           <span className="sidebar-text">
-                            Add Company Details
+                          Add Client Details
                           </span>
                         </a>
                       </li>
