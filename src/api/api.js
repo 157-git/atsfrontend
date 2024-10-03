@@ -3,7 +3,6 @@ import axios from "axios";
 export const API_BASE_URL = "http://localhost:9090/api/ats/157industries";
 export const CHAT_BASE_URL = "http://localhost:9090";
 
-
 export const addEmployee = (employee) => {
   return axios.post(`${API_BASE_URL}/add-payroll-details`, employee);
 };

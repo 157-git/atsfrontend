@@ -709,7 +709,7 @@ const AddCompanyDetails = () => {
                 </div>
                 <div className="ACD_Field-Row-Gray">
                   <div className="ACD_Field">
-                    <label>Bank Details</label>
+                    <label>Grand Total</label>
                     <input
                       type="text"
                       name="grandTotal"

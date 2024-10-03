@@ -50,7 +50,6 @@ const App = () => {
           <Route path="/follow-up/:candidateId" element={<AfterSelection />} />
           <Route path="/admin-login" element={<AdminLogin></AdminLogin>}></Route>
           <Route path="api/ats/157industries/verify" element={<CandidateVerification></CandidateVerification>}></Route>
-          <Route path="/shareResumeLink" element={<CandidateResumeLink />}></Route>
           <Route path="/callingtracker" element={<CallingTrackerForm />}></Route>
           <Route path="/employee-login" element={<RecruiterPage />} />
           <Route path="/login/:userType" element={<LoginSignup />} />
@@ -58,6 +57,7 @@ const App = () => {
           <Route path="/createAccount/Vendor" element={<AddVendor />}></Route>
           <Route path="/manager/technicalUser" element={<SelfTechnicalUser />}></Route>
           <Route path="/create-account/:userType" element={<AddEmployee />}></Route>
+          <Route path="/157industries/:employeeId/:userType/candidate-form" element={<CandidateResumeLink />}></Route>
 
 
         </Routes>

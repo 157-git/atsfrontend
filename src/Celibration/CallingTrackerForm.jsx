@@ -1473,7 +1473,7 @@ const CallingTrackerForm = ({
                     value={callingTracker.communicationRating}
                     onChange={handleChange}
                     className="plain-input"
-                    placeholder="communicationRating"
+                    placeholder="Communication Rating"
                   />
                   {errors.communicationRating && (
                     <div className="error-message error-two-input-box">

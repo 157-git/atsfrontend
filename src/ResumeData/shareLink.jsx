@@ -1,15 +1,14 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import { RWebShare } from "react-web-share";
 import "../ResumeData/shareLink.css";
 
 const ShareLink = ({ toggleResumeLink }) => {
+  const { employeeId,userType } = useParams();
   // Get the current hostname and port
   const hostname = window.location.hostname;
   const port = window.location.port;
   const protocol = window.location.protocol;
-
-  // Construct the URL dynamically
-  const shareURL = `${protocol}//${hostname}:${port}/shareResumeLink`;
 
   return (
     <div
@@ -17,9 +16,8 @@ const ShareLink = ({ toggleResumeLink }) => {
     >
       <RWebShare
         data={{
-          url: `http://93.127.199.85/shareResumeLink`,
+          url: `http://93.127.199.85/157industries/${employeeId}/${userType}/candidate-form`,
         }}
-        onClick={() => alert("Shared successfully!")}
       >
         <div className="shareLink-share-btn-Div">
           <h1>Share Link To Candidate</h1>
@@ -33,7 +31,6 @@ const ShareLink = ({ toggleResumeLink }) => {
           Create
         </button>
         <span style={{ color: "black",fontSize:"14px" }}>If the candidate doesn't have a resume, they can create one here.</span>
-
       </div>
     </div>
   );

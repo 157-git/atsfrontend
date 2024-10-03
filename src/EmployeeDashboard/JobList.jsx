@@ -55,11 +55,11 @@ const JobListing = () => {
     "companyName",
   ];
   useEffect(() => {
+    // replaced base url with actual url just for testing by sahil karnekar please replace it with base url at the time of deployment
     fetch(`${API_BASE_URL}/all-job-descriptions`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data); // Log the fetched data to inspect its structure
-
         // Sort the data by requirementId in descending order
         const sortedData = data.sort((a, b) => b.requirementId - a.requirementId);
 
@@ -182,6 +182,7 @@ const JobListing = () => {
   const toggleJobDescription = (requirementId) => {
     console.log(requirementId + "before Api");
     fetch(
+       // replaced base url with actual url just for testing by sahil karnekar please replace it with base url at the time of deployment
       `${API_BASE_URL}/requirement-info/${requirementId}`
     )
       .then((response) => response.json())
@@ -244,6 +245,13 @@ const JobListing = () => {
     }
   };
 
+  //   This is added by sahil karnekar date : 30 sep 2024 the function for formatting the word is it is in PascalCase line 250 to 254
+  function formatOption(option) {
+    // Regular expression to insert a space before any uppercase letter 
+    // that follows a lowercase letter or another uppercase letter
+    return option.replace(/([a-z])([A-Z])/g, '$1 $2');
+  }
+
   return (
     <>
     {!showAddJobDiscriptionNew ? (
@@ -305,7 +313,8 @@ const JobListing = () => {
                     className="white-Btn"
                     onClick={() => handleFilterOptionClick(option)}
                   >
-                    {option}
+                    {/* this line numeber 319 is added by sahil karnekar for saparating the word if it is in PascalCase naming convention */}
+                    {formatOption(option)}  {/* Call the formatting function here */}
                     <span className="filter-icon">&#x25bc;</span>
                   </button>
                   {activeFilterOption === option && (
@@ -335,7 +344,8 @@ const JobListing = () => {
       {!showViewMore && (
         <div className="jdCards">
           {filteredJobDescriptions.map((item, job, index) => (
-            <div className="job-listing" key={index}>
+             // edited this line numer 348 only by sahil karnekar date : 30 sep 2024
+            <div className="job-listing" key={item.requirementId} >
               <div className="job-header">
 
                 <h2 className="job-title">{item.designation} </h2>
