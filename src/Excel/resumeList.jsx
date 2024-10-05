@@ -37,9 +37,7 @@ const ResumeList = ({ loginEmployeeName }) => {
   }, []);
 
   const handleUpdateSuccess = () => {
-    fetch(
-      `${API_BASE_URL}/callingData/${employeeId}/${userType}`
-    )
+    fetch(`${API_BASE_URL}/callingData/${employeeId}/${userType}`)
       .then((response) => response.json())
       .then((data) => {
         setCallingList(data);
@@ -88,7 +86,6 @@ const ResumeList = ({ loginEmployeeName }) => {
       "Current Location",
     ];
 
-  
     const dataToExport = data.map((item, index) => {
       const filteredItem = {
         "No.": index + 1,
@@ -187,18 +184,24 @@ const ResumeList = ({ loginEmployeeName }) => {
               )}
             </div>
           </div>
-          <div  className="attendanceTableData" style={{ maxHeight: '600px', overflowY: 'y', width: '100%' }}>
-          <table className="selfcalling-table attendance-table"  >
+          <div
+            className="attendanceTableData"
+            style={{ maxHeight: "600px", overflowY: "y", width: "100%" }}
+          >
+            <table className="selfcalling-table attendance-table">
               <thead>
-              <tr className="attendancerows-head">
+                <tr className="attendancerows-head">
                   <th className="attendanceheading">Sr No</th>
                   <th className="attendanceheading">Candidate Name</th>
-                  <th className="attendanceheading">Contact Number</th>
                   <th className="attendanceheading">Candidate Email</th>
-                  {/* <th className="attendanceheading">Education</th> */}
-                  <th className="attendanceheading">Current Company</th>
-                  <th className="attendanceheading">Last Company</th>
+                  <th className="attendanceheading">Gender</th>
+                  <th className="attendanceheading">Date Of Birth</th>
+                  <th className="attendanceheading">Contact Number</th>
                   <th className="attendanceheading">Job Designation</th>
+                  <th className="attendanceheading">Last Company</th>
+                  <th className="attendanceheading">Relevant Experience</th>
+                  <th className="attendanceheading">Education</th>
+                  <th className="attendanceheading">Extra Certification</th>
                   <th className="attendanceheading">Current Location</th>
                   <th className="attendanceheading">Action</th>
                 </tr>
@@ -234,17 +237,9 @@ const ResumeList = ({ loginEmployeeName }) => {
                     >
                       {item.candidateName}{" "}
                       <div className="tooltip">
-                        <span className="tooltiptext">{item.candidateName}</span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata"
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.contactNumber}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{item.contactNumber}</span>
+                        <span className="tooltiptext">
+                          {item.candidateName}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -254,7 +249,9 @@ const ResumeList = ({ loginEmployeeName }) => {
                     >
                       {item.candidateEmail}
                       <div className="tooltip">
-                        <span className="tooltiptext">{item.candidateEmail}</span>
+                        <span className="tooltiptext">
+                          {item.candidateEmail}
+                        </span>
                       </div>
                     </td>
 
@@ -263,9 +260,46 @@ const ResumeList = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.requirementCompany}
+                      {item.gender}
                       <div className="tooltip">
-                        <span className="tooltiptext">{item.requirementCompany}</span>
+                        <span className="tooltiptext">{item.gender}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {item.dateOfBirth}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{item.dateOfBirth}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {item.contactNumber}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {item.contactNumber}
+                        </span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {item.jobDesignation}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {item.jobDesignation}
+                        </span>
                       </div>
                     </td>
 
@@ -285,9 +319,37 @@ const ResumeList = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.jobDesignation}
+                      {item.relevantExperience}
                       <div className="tooltip">
-                        <span className="tooltiptext">{item.jobDesignation}</span>
+                        <span className="tooltiptext">
+                          {item.relevantExperience}
+                        </span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {item.qualification}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {item.qualification}
+                        </span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {item.extraCertification}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {item.extraCertification}
+                        </span>
                       </div>
                     </td>
 
@@ -298,7 +360,9 @@ const ResumeList = ({ loginEmployeeName }) => {
                     >
                       {item.currentLocation}
                       <div className="tooltip">
-                        <span className="tooltiptext">{item.currentLocation}</span>
+                        <span className="tooltiptext">
+                          {item.currentLocation}
+                        </span>
                       </div>
                     </td>
 
@@ -317,13 +381,13 @@ const ResumeList = ({ loginEmployeeName }) => {
       )}
 
       <div className="callingExcelData-update-form">
-      {selectedCandidate && (
-        <CallingTrackerForm
-          initialData={selectedCandidate}
-          loginEmployeeName={loginEmployeeName}
-        />
-      )}
-</div>
+        {selectedCandidate && (
+          <CallingTrackerForm
+            initialData={selectedCandidate}
+            loginEmployeeName={loginEmployeeName}
+          />
+        )}
+      </div>
     </div>
   );
 };

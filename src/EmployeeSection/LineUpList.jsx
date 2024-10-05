@@ -899,6 +899,7 @@ const LineUpList = ({
                       )}
                     </div>
                   )}
+
                   <button
                     className="lineUp-Filter-btn"
                     onClick={toggleFilterSection}
@@ -907,6 +908,9 @@ const LineUpList = ({
                   </button>
                 </div>
               </div>
+
+
+
               {showSearchBar && (
                 <input
                   type="text"
@@ -918,9 +922,11 @@ const LineUpList = ({
                 />
               )}
 
+
               <div className="filter-dropdowns">
                 {showFilterSection && (
                   <div className="filter-section">
+                    
                     {limitedOptions.map(([optionKey, optionLabel]) => {
                       const uniqueValues = Array.from(
                         new Set(callingList.map((item) => item[optionKey]))
@@ -967,6 +973,9 @@ const LineUpList = ({
                   </div>
                 )}
               </div>
+
+
+
               <div className="attendanceTableData">
                 <table className="attendance-table">
                   <thead>

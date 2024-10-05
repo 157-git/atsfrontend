@@ -9,7 +9,8 @@ const LineupExcelData = ({
   updateState,
   funForGettingCandidateId,
   onCloseTable,
-  loginEmployeeName
+  loginEmployeeName,
+  toggleSection // this props toggleSection added by sahil karnekar line 13
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOptions, setFilterOptions] = useState([]);
@@ -29,8 +30,6 @@ const LineupExcelData = ({
 
   const { employeeId, userType } = useParams();
   const employeeIdw = parseInt(employeeId);
-  console.log(employeeIdw + "emp @@@@ id");
-  console.log(employeeId + "emp 1111 id");
 
   const [showUpdateLineUpTracker, setShowUpdateLineUpTracker] = useState(false);
 
@@ -393,10 +392,12 @@ const LineupExcelData = ({
 
   const handleUpdate = (candidateData) => {
     setSelectedCandidate(candidateData);
+    // this line 398 added by sahil karnekar
+    toggleSection(false);
   };
 
   const handleUpdateSuccess = () => {
-    fetch(`http://93.127.199.85/api/ats/157industries/lineup-excel-data/${employeeId}/${userType}`)
+    fetch(`http://93.127.199.85/api/ats/157industries/lineup-excel-data/5/Recruiters`)
       .then((response) => response.json())
       .then((data) => {
         setLineUpList(data);
@@ -1094,7 +1095,8 @@ const LineupExcelData = ({
                       <i
                         onClick={() => handleUpdate(item)}
                         className="fa-regular fa-pen-to-square"
-                      ></i>
+                        // this edit word is added for testing only by sahil karnekar remove this word at the time of deployement
+                      >edit</i> 
                     </td>
                   </tr>
                 ))}
@@ -1116,3 +1118,4 @@ const LineupExcelData = ({
 };
 
 export default LineupExcelData;
+

@@ -105,16 +105,6 @@ const CallingExcelList = ({
     setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
   };
 
-  // useEffect(() => {
-  //   const limitedOptions = [
-  //     "date",
-  //     "recruiterName",
-  //     "jobDesignation",
-  //     "requirementId",
-  //   ];
-  //   setFilterOptions(limitedOptions);
-  // }, [callingList]);
-
   useEffect(() => {
     filterData();
   }, [selectedFilters, callingList]);

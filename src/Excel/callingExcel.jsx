@@ -12,6 +12,8 @@ import Loader from "../EmployeeSection/loader";
 
 const CallingExcel = ({ onClose, displayCandidateForm }) => {
   const [file, setFile] = useState(null);
+  // line number 16 added by sahil karnekar for manage input state for lineup file input
+  const [lineupFile, setLineupFile] = useState(null);
   const [uploadError, setUploadError] = useState(null);
   const [uploadErrorLineUp, setUploadErrorLineUp] = useState(null);
   const [uploadErrorResume, setUploadErrorResume] = useState(null);
@@ -22,23 +24,38 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showCards, setShowCards] = useState(true);
   const [showCallingTrackerForm, setShowCallingTrackerForm] = useState(false);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
   const lineupFileInputRef = useRef(null);
   const resumeFileInputRef = useRef(null);
   const { employeeId, userType } = useParams();
+  // Separate error states for each file input
+  // line number 34 to 36 added by sahil karnekar for manage error state
+  const [hasErrorCalling, setHasErrorCalling] = useState(false);
+  const [hasErrorLineup, setHasErrorLineup] = useState(false);
+  const [hasErrorResume, setHasErrorResume] = useState(false);
 
   const handleTableChange = (tableName) => {
     setActiveTable(tableName);
   };
 
+  // this code from line number 43 to 59 added by sahil karnekar methods are same as previous just added new code but all three methods complete code is required
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
     setUploadSuccess(false);
+    setHasErrorCalling(false); // Reset error when file is selected
+  };
+
+  const handleLineupFileChange = (e) => {
+    setLineupFile(e.target.files[0]);
+    setUploadSuccessLineUp(false);
+    setHasErrorLineup(false); // Reset error when file is selected
   };
 
   const handleResumeFileChange = (event) => {
     setSelectedFiles(event.target.files);
+    setUploadSuccessResume(false);
+    setHasErrorResume(false); // Reset error when files are selected
   };
 
   const hideSuccessMessage = () => {
@@ -54,26 +71,13 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
       inputRef.current.value = "";
     }
   };
-  const handleDownload = () => {
-    // URL of the file to be downloaded
-    const fileUrl = 'F:\ATSFRONTEND\atsfrontend-master\src\assets\Calling_Tracker_Arsh_20_06(1).xlsx'; // Replace with your file URL
-  
-    // Create a temporary anchor element
-    const link = document.createElement('a');
-    link.href = fileUrl;
-    link.download = 'Calling_Tracker.xlsx'; // Name the file as you want it to be saved
-  
-    // Append the anchor to the body
-    document.body.appendChild(link);
-  
-    // Programmatically click the anchor to trigger the download
-    link.click();
-  
-    // Remove the anchor from the body
-    document.body.removeChild(link);
-  };
+
   const handleUpload = async () => {
     if (!file) {
+      // line number 95to 97 added by sahil karnekar
+      setHasErrorLineup(false);
+      setHasErrorResume(false);
+      setHasErrorCalling(true);
       toast.error("Please select a file to upload.");
       return;
     }
@@ -97,24 +101,31 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
       if (fileInputRef.current) {
         fileInputRef.current.value = null;
       }
+      // line number 123 added by sahil karnekar
+      setHasErrorCalling(false);
     } catch (error) {
       toast.error("Upload error:", error);
-    }finally {
+    } finally {
       setLoading(false); // Hide loader
     }
   };
 
   const handleUploadLineupFile = async () => {
-    if (!file) {
+    // this variable should be changed in if condition added by sahil karnekar, previous variable file new variable lineupFile
+    if (!lineupFile) {
+      // line number 135 to 137 added by sahil karnekar
+      setHasErrorCalling(false);
+      setHasErrorResume(false);
+      setHasErrorLineup(true);
       toast.error("Please select a file to upload."); //Swapnil Error&success message
       return;
     }
     const formData = new FormData();
-    formData.append("file", file);
+    // this variable should be changed in formData.append("file", lineupFile); added by sahil karnekar, previous variable name file new variable lineupFile
+    formData.append("file", lineupFile);
     setLoading(true);
     try {
       await axios.post(
-
         `${API_BASE_URL}/upload-calling-lineup-data/${employeeId}/${userType}`,
 
         formData,
@@ -129,16 +140,27 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
       toast.success("File Uploaded Successfully");
       setActiveTable("LineupExcelData");
       hideSuccessMessage();
-      setFile(null);
+      setLineupFile(null);
       resetFileInput(lineupFileInputRef);
+      // this line number 166 added by sahil karnekar
+      setHasErrorLineup(false);
     } catch (error) {
       toast.error("Upload error:", error);
-    }finally {
+    } finally {
       setLoading(false); // Hide loader
     }
   };
 
   const handleUploadResume = async () => {
+    if (!selectedFiles.length) {
+      // this line number 178 to 180  added by sahil karnekar
+      setHasErrorCalling(false);
+      setHasErrorLineup(false);
+      setHasErrorResume(true); // Set error only for the third input
+      toast.error("Please select files to upload.");
+      return;
+    }
+
     const formData = new FormData();
     for (let i = 0; i < selectedFiles.length; i++) {
       formData.append("files", selectedFiles[i]);
@@ -156,25 +178,35 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
       hideSuccessMessage();
       setSelectedFiles([]);
       resetFileInput(resumeFileInputRef);
+      // line number 204 added by sahil karnekar
+      setHasErrorResume(false);
     } catch (error) {
       toast.error("Error uploading files:", error);
-    }finally {
+    } finally {
       setLoading(false); // Hide loader
     }
   };
 
   const handleActionClick = () => {
     setShowCards(false);
-    setShowCallingTrackerForm(true);  // Show CallingTrackerForm when action icon is clicked
+    setShowCallingTrackerForm(true); // Show CallingTrackerForm when action icon is clicked
   };
 
   if (showCallingTrackerForm) {
     return <CallingTrackerForm />; // Return CallingTrackerForm only when `showCallingTrackerForm` is true
   }
 
+  // download function added by sahil karnekar line 222 to 230
+  const handleDownloadButton = (fileLocation) => {
+    const userConfirmed = window.confirm(
+      "Are you sure you want to download this file?"
+    );
+    if (userConfirmed) {
+      window.location.href = fileLocation;
+    }
+  };
 
   return (
-
     <div
       className="callingfiel"
       style={{
@@ -187,36 +219,60 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
     >
       {showCards && (
         <div className="fileupload">
-          <div>
-            <div
-              className="card fixed-card"
-              style={{ width: "90%", border: "1px solid gray" }}
-            >
-              <div className="card-header">
-                <h5 className="mb-0 card-title">Upload Calling Excel </h5>
-              </div>
-              <div className="card-body">
-                <div className="mb-3">
-                  {!uploadSuccess && (
-                    <input
-                      type="file"
-                      className="form-control"
-                      accept=".xls,.xlsx"
-                      onChange={handleFileChange}
-                      ref={fileInputRef}
-                    />
-                  )}
+
+            <div>
+              <div
+                className="card fixed-card"
+                style={{ width: "90%", border: "1px solid gray" }}
+              >
+                <div className="card-header">
+                  <h5 className="mb-0 card-title">Upload Calling Tracker</h5>
                 </div>
-                <div className="gap-2 d-grid">
-                  <button onClick={handleUpload}>Upload</button>
-                  <button onClick={() => handleTableChange("CallingExcelList")}>
-                    View
-                  </button>
-      
+                <div className="card-body">
+                  <div className="mb-3">
+                    {!uploadSuccess && (
+                      <input
+                        type="file"
+                        className="form-control"
+                        accept=".xls,.xlsx"
+                        onChange={handleFileChange}
+                        ref={fileInputRef}
+                        // this code line 264 to line 268 added by sahil karnekar
+                        style={
+                          hasErrorCalling
+                            ? {
+                                border: "1px solid red",
+                                borderRadius: "15px",
+                                boxShadow: "0 0 2px 1px rgba(255, 0, 0, 0.7)",
+                              }
+                            : {}
+                        }
+                      />
+                    )}
+                  </div>
+                  <div className="gap-2 d-grid">
+                    <button onClick={handleUpload}>Upload</button>
+                    {/* download added by sahil karnekar line 275 to 277 */}
+                    <button
+                      onClick={() =>
+                        handleDownloadButton(
+                          "/files/Calling_Tracker_Formate.xlsx"
+                        )
+                      }
+                      title="To upload the data, download Excel format"
+                    >
+                      Download
+                    </button>
+                    <button
+                      onClick={() => handleTableChange("CallingExcelList")}
+                    >
+                      View
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+
 
           <div>
             <div
@@ -224,7 +280,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
               style={{ width: "90%", border: "1px solid gray" }}
             >
               <div className="card-header">
-                <h5 className="mb-0 card-title">Upload LineUp Excel </h5>
+                <h5 className="mb-0 card-title">Upload LineUp Tracker </h5>
               </div>
               <div className="card-body">
                 <div className="mb-3">
@@ -233,18 +289,35 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
                       type="file"
                       className="form-control"
                       accept=".xls,.xlsx"
-                      onChange={handleFileChange}
-                      ref={fileInputRef}
+                      // this code line 303 to 309 added by sahil karnekar
+                      onChange={handleLineupFileChange}
+                      ref={lineupFileInputRef}
+                      style={
+                        hasErrorLineup
+                          ? {
+                              border: "1px solid red",
+                              borderRadius: "15px",
+                              boxShadow: "0 0 2px 1px rgba(255, 0, 0, 0.7)",
+                            }
+                          : {}
+                      }
                     />
                   )}
                 </div>
                 <div className="gap-2 d-grid">
+                  {/* this line 315 added by sahil karnekar */}
                   <button onClick={handleUploadLineupFile}>Upload</button>
-
+                  {/* download added by sahil karnekar line 317 to 319 */}
+                  <button
+                    onClick={() =>
+                      handleDownloadButton("/files/Lineup_Tracker_Formate.xlsx")
+                    }
+                  >
+                    Download
+                  </button>
                   <button onClick={() => handleTableChange("LineupExcelData")}>
                     View
                   </button>
-        
                 </div>
               </div>
             </div>
@@ -266,7 +339,17 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
                       multiple
                       onChange={handleResumeFileChange}
                       className="form-control"
-                      ref={fileInputRef}
+                      ref={resumeFileInputRef}
+                      // line 347 to 351 added by sahil karnekar
+                      style={
+                        hasErrorResume
+                          ? {
+                              border: "1px solid red",
+                              borderRadius: "15px",
+                              boxShadow: "0 0 2px 1px rgba(255, 0, 0, 0.7)",
+                            }
+                          : {}
+                      }
                     />
                   )}
                 </div>
@@ -281,7 +364,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
           </div>
         </div>
       )}
-    {loading && <Loader />} 
+      {loading && <Loader />}
       {activeTable === "CallingExcelList" && (
         <CallingExcelList
           onCloseTable={() => setActiveTable("")}
@@ -293,18 +376,17 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
       {activeTable === "LineupExcelData" && (
         <LineupExcelData
           onCloseTable={() => setActiveTable("")}
-          onActionClick={handleActionClick}  // Pass the handler to the table component
+          onActionClick={handleActionClick} // Pass the handler to the table component
         />
       )}
 
       {activeTable === "ResumeList" && (
         <ResumeList
           onCloseTable={() => setActiveTable("")}
-          onActionClick={handleActionClick}  // Pass the handler to the table component
+          onActionClick={handleActionClick} // Pass the handler to the table component
         />
       )}
     </div>
-
   );
 };
 
