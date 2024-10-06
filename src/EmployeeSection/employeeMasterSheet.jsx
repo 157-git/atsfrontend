@@ -56,7 +56,7 @@ const EmployeeMasterSheet = () => {
     experienceInMonth: [],
     experienceInYear: [],
     offerLatterMessage: [],
-    relevantExperience: []
+    relevantExperience: [],
   });
 
   const [expandedFilters, setExpandedFilters] = useState({});
@@ -102,7 +102,7 @@ const EmployeeMasterSheet = () => {
     experienceInMonth: 38,
     experienceInYear: 39,
     offerLatterMessage: 40,
-    relevantExperience: 41
+    relevantExperience: 41,
   };
 
   const displayNameMap = {
@@ -147,9 +147,8 @@ const EmployeeMasterSheet = () => {
     experienceInMonth: "Experience In Month",
     experienceInYear: "Experience In Year",
     offerLatterMessage: "Offer Letter Message",
-    relevantExperience: "Relevant Experience"
+    relevantExperience: "Relevant Experience",
   };
-  
 
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -502,6 +501,33 @@ const EmployeeMasterSheet = () => {
     setShowFilterSection(!showFilterSection);
   };
 
+  const handleMouseOver = (event) => {
+    const tableData = event.currentTarget;
+    const tooltip = tableData.querySelector(".tooltip");
+    const tooltiptext = tableData.querySelector(".tooltiptext");
+
+    if (tooltip && tooltiptext) {
+      const textOverflowing =
+        tableData.offsetWidth < tableData.scrollWidth ||
+        tableData.offsetHeight < tableData.scrollHeight;
+      if (textOverflowing) {
+        const rect = tableData.getBoundingClientRect();
+        tooltip.style.top = `${rect.top - 10}px`;
+        tooltip.style.left = `${rect.left + rect.width / 100}px`;
+        tooltip.style.visibility = "visible";
+      } else {
+        tooltip.style.visibility = "hidden";
+      }
+    }
+  };
+
+  const handleMouseOut = (event) => {
+    const tooltip = event.currentTarget.querySelector(".tooltip");
+    if (tooltip) {
+      tooltip.style.visibility = "hidden";
+    }
+  };
+
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -517,98 +543,99 @@ const EmployeeMasterSheet = () => {
               </h3>
             </div>
 
-            <div
-            className="master-sheet-share-btn"
-            >
-
-                {/* sahil karnekar line 526 to 536 */}
-                {userType !== "Recruiters" && (
-                  <div>
-                    {showShareButton ? (
+            <div className="master-sheet-share-btn">
+              {/* sahil karnekar line 526 to 536 */}
+              {userType !== "Recruiters" && (
+                <div>
+                  {showShareButton ? (
+                    <button
+                      className="EmployeeMasterSheet-share-btn"
+                      onClick={() => setShowShareButton(false)}
+                    >
+                      Share
+                    </button>
+                  ) : (
+                    <div style={{ display: "flex", gap: "5px" }}>
                       <button
-                        className="EmployeeMasterSheet-share-btn"
-                        onClick={() => setShowShareButton(false)}
+                        className="lineUp-share-close-btn"
+                        onClick={() => setShowShareButton(true)}
                       >
-                        Share
+                        Close
                       </button>
-                    ) : (
-                      <div style={{ display: "flex", gap: "5px" }}>
+                      {/* akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_331 */}
+                      {userType === "TeamLeader" && (
                         <button
-                          className="lineUp-share-close-btn"
-                          onClick={() => setShowShareButton(true)}
+                          className="lineUp-share-btn"
+                          onClick={handleSelectAll}
                         >
-                          Close
+                          {allSelected ? "Deselect All" : "Select All"}
                         </button>
-                        {/* akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_331 */}
-                        {userType === "TeamLeader" && (
-                          <button
-                            className="lineUp-share-btn"
-                            onClick={handleSelectAll}
-                          >
-                            {allSelected ? "Deselect All" : "Select All"}
-                          </button>
-                        )}
-                        {/* akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_339 */}
-                        <button
-                          className="lineUp-forward-btn"
-                          onClick={forwardSelectedCandidate}
-                        >
-                          Forward
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
-                <button
-                  className="master-sheet-filterbtn"
-                  onClick={toggleFilterSection}
-                >
-                  Filter <i className="fa-solid fa-filter"></i>
-                </button>
-            
+                      )}
+                      {/* akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_339 */}
+                      <button
+                        className="lineUp-forward-btn"
+                        onClick={forwardSelectedCandidate}
+                      >
+                        Forward
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+              <button
+                className="master-sheet-filterbtn"
+                onClick={toggleFilterSection}
+              >
+                Filter <i className="fa-solid fa-filter"></i>
+              </button>
             </div>
           </div>
 
           {/* sahil karnekar line 541 to 573 */}
           <div className="filter-dropdowns">
-  {showFilterSection && (
-    <div className="filter-section">
-      {Object.keys(uniqueValues).map((field) => (
-        <div className="filter-option" key={field}>
-          <button
-            className="white-Btn"
-            onClick={() => toggleFilter(field)}
-            style={{ cursor: "pointer" }}
-          >
-            {displayNameMap[field] || field}
-            <span className="filter-icon">&#x25bc;</span>
-          </button>
-          {expandedFilters[field] && (
-            <div className="city-filter">
-              <div className="optionDiv">
-                {uniqueValues[field].map((value, index) => (
-                  <label className="selfcalling-filter-value" key={index}>
-                    <input
-                      name="testName"
-                      style={{ marginRight: "5px" }}
-                      type="checkbox"
-                      checked={selectedFilters[field].includes(value)}
-                      onChange={() => handleFilterChange(field, value)}
-                    />
-                    {value}
-                  </label>
+            {showFilterSection && (
+              <div className="filter-section">
+                {Object.keys(uniqueValues).map((field) => (
+                  <div className="filter-option" key={field}>
+                    <button
+                      className="white-Btn"
+                      onClick={() => toggleFilter(field)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {displayNameMap[field] || field}
+                      <span className="filter-icon">&#x25bc;</span>
+                    </button>
+                    {expandedFilters[field] && (
+                      <div className="city-filter">
+                        <div className="optionDiv">
+                          {uniqueValues[field].map((value, index) => (
+                            <label
+                              className="selfcalling-filter-value"
+                              key={index}
+                            >
+                              <input
+                                name="testName"
+                                style={{ marginRight: "5px" }}
+                                type="checkbox"
+                                checked={selectedFilters[field].includes(value)}
+                                onChange={() =>
+                                  handleFilterChange(field, value)
+                                }
+                              />
+                              {value}
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 ))}
               </div>
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
-  )}
-</div>
-
+            )}
+          </div>
 
           {error && <div className="alert alert-danger">{error}</div>}
+
           <div className="attendanceTableData">
             <table className="attendance-table">
               <thead>
@@ -741,63 +768,568 @@ const EmployeeMasterSheet = () => {
                       </td>
                     ) : null}
 
-                    <td className="tabledata">{entry[15]}</td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[15]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[15]}</span>
+                      </div>
+                    </td>
+
                     {(userType === "TeamLeader" || userType === "Manager") && (
                       <td className="tabledata">{entry[73]}</td>
                     )}
-                    <td className="tabledata">{entry[0]}</td>
-                    <td className="tabledata">{entry[4]}</td>
-                    <td className="tabledata">{entry[3]}</td>
-                    <td className="tabledata">{entry[6]}</td>
 
-                    <td className="tabledata">{entry[1]}</td>
-                    <td className="tabledata">{entry[2]}</td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[0]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[0]}</span>
+                      </div>
+                    </td>
 
-                    <td className="tabledata">{entry[5]}</td>
-                    <td className="tabledata">{entry[7]}</td>
-                    <td className="tabledata">{entry[8]}</td>
-                    <td className="tabledata">{entry[9]}</td>
-                    <td className="tabledata">{entry[10]}</td>
-                    <td className="tabledata">{entry[11]}</td>
-                    <td className="tabledata">{entry[12]}</td>
-                    <td className="tabledata">{entry[13]}</td>
-                    <td className="tabledata">{entry[14]}</td>
-                    <td className="tabledata">{entry[16]}</td>
-                    <td className="tabledata">{entry[17]}</td>
-                    <td className="tabledata">{entry[18]}</td>
-                    <td className="tabledata">{entry[19]}</td>
-                    <td className="tabledata">{entry[20]}</td>
-                    <td className="tabledata">{entry[21]}</td>
-                    <td className="tabledata">{entry[22]}</td>
-                    <td className="tabledata">{entry[23]}</td>
-                    <td className="tabledata">{entry[24]}</td>
-                    <td className="tabledata">{entry[25]}</td>
-                    <td className="tabledata">{entry[26]}</td>
-                    <td className="tabledata">{entry[27]}</td>
-                    <td className="tabledata">{entry[28]}</td>
-                    <td className="tabledata">{entry[29]}</td>
-                    <td className="tabledata">{entry[30]}</td>
-                    <td className="tabledata">{entry[31]}</td>
-                    <td className="tabledata">{entry[32]}</td>
-                    <td className="tabledata">{entry[33]}</td>
-                    <td className="tabledata">{entry[34]}</td>
-                    <td className="tabledata">{entry[35]}</td>
-                    <td className="tabledata">{entry[36]}</td>
-                    <td className="tabledata">{entry[37]}</td>
-                    <td className="tabledata">{entry[38]}</td>
-                    <td className="tabledata">{entry[39]}</td>
-                    <td className="tabledata">{entry[40]}</td>
-                    <td className="tabledata">{entry[41]}</td>
-                    <td className="tabledata">{entry[42]}</td>
-                    <td className="tabledata">{entry[43]}</td>
-                    <td className="tabledata">{entry[44]}</td>
-                    <td className="tabledata">{entry[45]}</td>
-                    <td className="tabledata">{entry[46]}</td>
-                    <td className="tabledata">{entry[47]}</td>
-                    <td className="tabledata">{entry[48]}</td>
-                    <td className="tabledata">{entry[49]}</td>
-                    <td className="tabledata">{entry[50]}</td>
-                    <td className="tabledata">{entry[51]}</td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[4]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[4]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[3]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[3]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[6]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[6]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[1]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[1]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[2]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[2]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[5]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[5]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[7]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[7]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[8]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[8]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[9]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[9]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[10]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[10]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[11]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[11]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[12]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[12]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[13]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[13]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[14]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[14]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[16]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[16]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[17]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[17]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[18]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[18]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[19]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[19]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[20]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[20]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[21]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[21]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[22]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[22]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[23]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[23]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[24]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[24]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[25]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[25]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[26]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[26]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[27]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[27]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[28]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[28]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[29]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[29]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[30]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[30]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[31]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[31]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[32]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[32]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[33]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[33]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[34]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[34]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[35]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[35]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[36]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[36]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[37]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[37]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[38]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[38]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[39]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[39]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[40]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[40]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[41]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[41]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[42]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[42]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[43]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[43]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[44]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[44]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[45]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[45]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[46]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[46]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[47]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[47]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[48]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[48]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[49]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[49]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[50]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[50]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[51]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[51]}</span>
+                      </div>
+                    </td>
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                   Subcategory:-ResumeViewButton(added) start LineNo:-340
                   Date:-02/07 */}
@@ -902,24 +1434,151 @@ const EmployeeMasterSheet = () => {
                   Subcategory:-ResumeViewButton(added) End LineNo:-463
                   Date:-02/07 */}
 
-                    <td className="tabledata">{entry[59]}</td>
-                    <td className="tabledata">{entry[60]}</td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[59]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[59]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[60]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[60]}</span>
+                      </div>
+                    </td>
 
-                    <td className="tabledata">{entry[61]}</td>
-                    <td className="tabledata">{entry[62]}</td>
-                    <td className="tabledata">{entry[63]}</td>
-                    <td className="tabledata">{entry[64]}</td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[61]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[61]}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[62]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[62]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[63]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[63]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[64]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[64]}</span>
+                      </div>
+                    </td>
                     {/* <td className="tabledata">
                   <button className="View-Interview-History">View</button>
                 </td> */}
-                    <td className="tabledata">{entry[65]}</td>
-                    <td className="tabledata">{entry[66]}</td>
-                    <td className="tabledata">{entry[67]}</td>
-                    <td className="tabledata">{entry[68]}</td>
-                    <td className="tabledata">{entry[69]}</td>
-                    <td className="tabledata">{entry[70]}</td>
-                    <td className="tabledata">{entry[71]}</td>
-                    <td className="tabledata">{entry[72]}</td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[65]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[65]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[66]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[66]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[67]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[67]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[68]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[68]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[69]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[69]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[70]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[70]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[71]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[71]}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[72]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[72]}</span>
+                      </div>
+                    </td>
 
                     {/* <td className="tabledata">
                   <button className="FollowUp-History">View</button>

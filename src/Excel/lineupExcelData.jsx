@@ -10,7 +10,7 @@ const LineupExcelData = ({
   funForGettingCandidateId,
   onCloseTable,
   loginEmployeeName,
-  toggleSection // this props toggleSection added by sahil karnekar line 13
+  toggleSection, // this props toggleSection added by sahil karnekar line 13
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOptions, setFilterOptions] = useState([]);
@@ -36,9 +36,7 @@ const LineupExcelData = ({
   const navigator = useNavigate();
 
   useEffect(() => {
-    fetch(
-      `${API_BASE_URL}/lineup-excel-data/${employeeId}/${userType}`
-    )
+    fetch(`${API_BASE_URL}/lineup-excel-data/${employeeId}/${userType}`)
       .then((response) => response.json())
       .then((data) => {
         setLineUpList(data);
@@ -62,66 +60,38 @@ const LineupExcelData = ({
     console.log("Filtered LineUp List:", filteredLineUpList);
   }, [filteredLineUpList]);
 
-
   // prachi parab lineupExcel data_filter_section 12/9
   const limitedOptions = [
-    ["alternateNumber", "Alternate Number"],
     ["callingFeedback", "Calling Feedback"],
-    ["candidateAddedTime", "Candidate Added Time"],
     ["candidateEmail", "Candidate Email"],
     ["candidateName", "Candidate Name"],
-    ["communicationRating", "Communication Rating"],
     ["contactNumber", "Contact Number"],
     ["currentLocation", "Current Location"],
     ["date", "Date"],
     ["fullAddress", "Full Address"],
-    ["incentive", "Incentive"],
     ["jobDesignation", "Job Designation"],
-    ["oldEmployeeId", "Old Employee Id"],
-    ["recruiterName", "Recruiter Name"],
     ["requirementCompany", "Requirement Company"],
-    ["requirementId", "Requirement Id"],
-    ["selectYesOrNo", "Status Type"],
-    ["sourceName", "Source Name"],
     ["empId", "Employee Id"],
-    ["availabilityForInterview", "Availability For Interview"],
     ["companyName", "Company Name"],
-    ["currentCtcLakh", "Current CTC (Lakh)"],
-    ["currentCtcThousand", "Current CTC (Thousand)"],
+    ["currentCTCLakh", "Current CTC (Lakh)"],
+    ["currentCTCThousand", "Current CTC (Thousand)"],
     ["dateOfBirth", "Date Of Birth"],
-    ["expectedCtcLakh", "Expected CTC (Lakh)"],
-    ["expectedCtcThousand", "Expected CTC (Thousand)"],
+    ["expectedCTCLakh", "Expected CTC (Lakh)"],
+    ["expectedCTCThousand", "Expected CTC (Thousand)"],
     ["experienceMonth", "Experience (Months)"],
     ["experienceYear", "Experience (Years)"],
-    ["extraCertification", "Extra Certification"],
-    ["feedBack", "Feedback"],
     ["finalStatus", "Final Status"],
-    ["gender", "Gender"],
     ["holdingAnyOffer", "Holding Any Offer"],
-    ["interviewTime", "Interview Time"],
     ["noticePeriod", "Notice Period"],
-    ["offerLetterMsg", "Offer Letter Message"],
-    ["qualification", "Qualification"],
-    ["relevantExperience", "Relevant Experience"],
-    ["resume", "Resume"],
-    ["verificationLink", "Verification Link"],
-    ["yearOfPassing", "Year Of Passing"],
-    ["token", "Token"],
-    ["candidateStatus", "Candidate Status"],
-
-  ]
-
+  ];
 
   useEffect(() => {
     const options = limitedOptions
-      .filter(([key]) =>
-        Object.keys(lineUpList[0] || {}).includes(key)
-      )
+      .filter(([key]) => Object.keys(lineUpList[0] || {}).includes(key))
       .map(([key]) => key);
 
     setFilterOptions(options);
   }, [lineUpList]);
-
 
   const handleFilterOptionClick = (key) => {
     setActiveFilterOption(activeFilterOption === key ? null : key);
@@ -199,7 +169,7 @@ const LineupExcelData = ({
       setFilteredLineUpList(sortedList);
     }
   }, [sortCriteria, sortOrder]);
-
+  
 
   const filterData = () => {
     let filteredData = [...lineUpList];
@@ -235,127 +205,142 @@ const LineupExcelData = ({
               item[option]?.toString().toLowerCase().includes(value)
             )
           );
-        } else if (option === "currentCtcLakh") {
+        } else if (option === "currentCTCLakh") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if (option === "currentCtcThousand") {
+        } else if (option === "currentCTCThousand") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if (option === "empId") {
+        } else if (option === "empId") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if (option === "expectedCtcLakh") {
+        } else if (option === "expectedCTCLakh") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if (option === "expectedCtcThousand") {
+        } else if (option === "expectedCTCThousand") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if (option === "experienceMonth") {
+        } else if (option === "experienceMonth") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if (option === "experienceYear") {
+        } else if (option === "experienceYear") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if (option === "oldEmployeeId") {
+        } else if (option === "oldEmployeeId") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if (option === "availabilityForInterview") {
+        } else if (option === "availabilityForInterview") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if (option === "candidateAddedTime") {
+        } else if (option === "candidateAddedTime") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if (option === "date") {
+        } else if (option === "date") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if (option === "dateOfBirth") {
+        } else if (option === "dateOfBirth") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if (option === "incentive") {
+        } else if (option === "incentive") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if (option === "interviewTime") {
+        } else if (option === "interviewTime") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if (option === "selectYesOrNo") {
+        } else if (option === "selectYesOrNo") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else {
+        } else {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
               item[option]
@@ -369,8 +354,6 @@ const LineupExcelData = ({
     });
     setFilteredLineUpList(filteredData);
   };
-
-
 
   const handleFilterSelect = (key, value) => {
     setSelectedFilters((prev) => ({
@@ -397,7 +380,9 @@ const LineupExcelData = ({
   };
 
   const handleUpdateSuccess = () => {
-    fetch(`http://93.127.199.85/api/ats/157industries/lineup-excel-data/5/Recruiters`)
+    fetch(
+      `http://93.127.199.85/api/ats/157industries/lineup-excel-data/5/Recruiters`
+    )
       .then((response) => response.json())
       .then((data) => {
         setLineUpList(data);
@@ -479,12 +464,9 @@ const LineupExcelData = ({
               style={{ margin: "10px", width: "auto", fontSize: "15px" }}
             ></i>
             {/* <h5 style={{ color: "gray", paddingTop: "5px" }}>Excel Uploaded data</h5> */}
-            <h1 style={{ color: "grey", fontSize: "18px" }}>LineUp Data</h1>{" "}
+            <h1 style={{ color: "grey", fontSize: "18px" }}>LineUp Tracker Data</h1>{" "}
             {/* Prachi UploadLineUpData 3/7 */}
-            <button
-              onClick={toggleFilterSection}
-              className="daily-tr-btn"
-            >
+            <button onClick={toggleFilterSection} className="daily-tr-btn">
               Filter <i className="fa-solid fa-filter"></i>
             </button>
           </div>
@@ -501,9 +483,6 @@ const LineupExcelData = ({
           )}
           {showFilterSection && (
             <div className="filter-section">
-              {/* <h5 style={{ color: "gray", paddingTop: "5px" }}>Filter</h5> */}
-
-
               <div className="filter-dropdowns">
                 {showFilterSection && (
                   <div className="filter-section">
@@ -532,10 +511,14 @@ const LineupExcelData = ({
                                     <input
                                       type="checkbox"
                                       checked={
-                                        selectedFilters[optionKey]?.includes(value) || false
+                                        selectedFilters[optionKey]?.includes(
+                                          value
+                                        ) || false
                                       }
-                                      onChange={() => handleFilterSelect(optionKey, value)}
-                                      style={{ marginRight: '5px' }}
+                                      onChange={() =>
+                                        handleFilterSelect(optionKey, value)
+                                      }
+                                      style={{ marginRight: "5px" }}
                                     />
                                     {value}
                                   </label>
@@ -557,7 +540,7 @@ const LineupExcelData = ({
               <thead>
                 <tr className="attendancerows-head">
                   {/* <th className="attendanceheading"> */}
-                    {/* <input
+                  {/* <input
                       type="checkbox"
                       onChange={handleSelectAll}
                       checked={
@@ -570,59 +553,25 @@ const LineupExcelData = ({
                     className="attendanceheading"
                     onClick={() => handleSort("date")}
                   >
+                    {" "}
                     Date & Time {getSortIcon("date")}
                   </th>
-                  <th hidden className="attendanceheading">
-                    Candidate Id
-                  </th>
-                  <th
-                    className="attendanceheading"
-                    onClick={() => handleSort("recruiterName")}
-                  >
-                    Recruiter Name {getSortIcon("recruiterName")}
-                  </th>
-
                   <th className="attendanceheading">Candidate Name</th>
                   <th className="attendanceheading">Candidate Email</th>
                   <th className="attendanceheading">Contact Number</th>
-                  <th className="attendanceheading">Whatsapp Number</th>
-                  <th className="attendanceheading">Source Name</th>
+                  <th className="attendanceheading">Date Of Birth</th>
                   <th className="attendanceheading">Job Designation</th>
-                  <th
-                    className="attendanceheading"
-                    onClick={() => handleSort("requirementId")}
-                  >
-                    Job Id{getSortIcon("requirementId")}
-                  </th>
                   <th className="attendanceheading">Applying Company</th>
-                  <th className="attendanceheading">Communication Rating</th>
                   <th className="attendanceheading">Current Location</th>
                   <th className="attendanceheading">Full Address</th>
                   <th className="attendanceheading">Calling Feedback</th>
-                  <th className="attendanceheading">Recruiter's Incentive</th>
-                  <th className="attendanceheading">Interested or Not</th>
                   <th className="attendanceheading">Current Company</th>
                   <th className="attendanceheading">Total Experience</th>
-                  <th className="attendanceheading">Relevant Experience</th>
                   <th className="attendanceheading">Current CTC</th>
                   <th className="attendanceheading">Expected CTC</th>
-                  <th className="attendanceheading">Date Of Birth</th>
-                  <th className="attendanceheading">Gender</th>
-                  <th className="attendanceheading">Education</th>
-                  <th className="attendanceheading">Year Of Passing</th>
-                  <th className="attendanceheading">Extra Certification</th>
-                  <th className="attendanceheading">Call Summary</th>
-                  {/* <th className="attendanceheading">Feedback</th> */}
                   <th className="attendanceheading">Holding Any Offer</th>
-                  <th className="attendanceheading">Offer Letter Msg</th>
                   <th className="attendanceheading">Notice Period</th>
-                  <th className="attendanceheading">Message For Team Leader</th>
-                  <th className="attendanceheading">
-                    Availability For Interview
-                  </th>
-                  <th className="attendanceheading">Interview Time</th>
                   <th className="attendanceheading">Interview Status</th>
-                  <th className="attendanceheading">EmpID</th>
                   <th className="attendanceheading">Action</th>
                 </tr>
               </thead>
@@ -656,37 +605,6 @@ const LineupExcelData = ({
                       <div className="tooltip">
                         <span className="tooltiptext">{item.date}</span>
                       </div>
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {" "}
-                          {item.candidateAddedTime}
-                        </span>
-                      </div>
-                    </td>
-
-                    <td
-                      hidden
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.candidateId}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{item.candidateId} </span>
-                      </div>
-                    </td>
-
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.recruiterName}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.recruiterName}{" "}
-                        </span>
-                      </div>
                     </td>
                     <td
                       className="tabledata "
@@ -700,6 +618,7 @@ const LineupExcelData = ({
                         </span>
                       </div>
                     </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -712,6 +631,7 @@ const LineupExcelData = ({
                         </span>
                       </div>
                     </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -724,28 +644,18 @@ const LineupExcelData = ({
                         </span>
                       </div>
                     </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.alternateNumber}{" "}
+                      {item.dateOfBirth}{" "}
                       <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.alternateNumber}
-                        </span>
+                        <span className="tooltiptext">{item.dateOfBirth} </span>
                       </div>
                     </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.sourceName}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{item.sourceName}</span>
-                      </div>
-                    </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -758,19 +668,7 @@ const LineupExcelData = ({
                         </span>
                       </div>
                     </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.requirementId}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {" "}
-                          {item.requirementId}{" "}
-                        </span>
-                      </div>{" "}
-                    </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -783,18 +681,7 @@ const LineupExcelData = ({
                         </span>
                       </div>
                     </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.communicationRating}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.communicationRating}
-                        </span>
-                      </div>
-                    </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -807,6 +694,7 @@ const LineupExcelData = ({
                         </span>
                       </div>
                     </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -817,6 +705,7 @@ const LineupExcelData = ({
                         <span className="tooltiptext">{item.fullAddress} </span>
                       </div>
                     </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -829,28 +718,7 @@ const LineupExcelData = ({
                         </span>
                       </div>
                     </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.incentive}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{item.incentive} </span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.selectYesOrNo}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.selectYesOrNo}{" "}
-                        </span>
-                      </div>
-                    </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -868,16 +736,11 @@ const LineupExcelData = ({
                       onMouseOut={handleMouseOut}
                     >
                       {" "}
-                      {item.experienceYear}
+                      {item.experienceYear} {" "} Year - {item.experienceMonth} {" "} Months
                       <div className="tooltip">
                         <span className="tooltiptext">
-                          {item.experienceYear}
-                        </span>
-                      </div>
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {" "}
-                          {item.experienceMonth}
+                        {" "}
+                        {item.experienceYear} {" "} Year - {item.experienceMonth} {" "} Months
                         </span>
                       </div>
                     </td>
@@ -887,48 +750,12 @@ const LineupExcelData = ({
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.relevantExperience}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.relevantExperience}{" "}
-                        </span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
                       {" "}
-                      {item.currentCtcLakh}
+                      {item.currentCTCLakh} {" "} Lakh -  {item.currentCTCThousand} {" "} Thousand
                       <div className="tooltip">
                         <span className="tooltiptext">
-                          {item.currentCtcLakh}
-                        </span>
-                      </div>
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {" "}
-                          {item.currentCtcThousand}
-                        </span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {" "}
-                      {item.expectedCtcLakh}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.expectedCtcLakh}
-                        </span>
-                      </div>
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {" "}
-                          {item.expectedCtcThousand}
+                        {" "}
+                        {item.currentCTCLakh} {" "} Lakh -  {item.currentCTCThousand} {" "} Thousand
                         </span>
                       </div>
                     </td>
@@ -938,65 +765,15 @@ const LineupExcelData = ({
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.dateOfBirth}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{item.dateOfBirth} </span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.gender}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{item.gender} </span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.qualification}{" "}
+                      {" "}
+                      {item.expectedCTCLakh}{" "} Lakh -
+                      {item.expectedCTCThousand}  {" "} Thousand
                       <div className="tooltip">
                         <span className="tooltiptext">
-                          {item.qualification}{" "}
+                        {" "}
+                      {item.expectedCTCLakh} {" "} Lakh -
+                      {item.expectedCTCThousand}  {" "} Thousand
                         </span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.yearOfPassing}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.yearOfPassing}{" "}
-                        </span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.extraCertification}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.extraCertification}{" "}
-                        </span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.feedBack}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{item.feedBack} </span>
                       </div>
                     </td>
                     <td
@@ -1008,18 +785,6 @@ const LineupExcelData = ({
                       <div className="tooltip">
                         <span className="tooltiptext">
                           {item.holdingAnyOffer}{" "}
-                        </span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.offerLetterMsg}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.offerLetterMsg}{" "}
                         </span>
                       </div>
                     </td>
@@ -1040,63 +805,20 @@ const LineupExcelData = ({
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.msgForTeamLeader}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.msgForTeamLeader}{" "}
-                        </span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.availabilityForInterview}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.availabilityForInterview}{" "}
-                        </span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.interviewTime}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.interviewTime}{" "}
-                        </span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
                       {item.finalStatus}{" "}
                       <div className="tooltip">
                         <span className="tooltiptext">{item.finalStatus} </span>
                       </div>
                     </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.empId}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{item.empId} </span>
-                      </div>
-                    </td>
+
+
                     <td className="tabledata">
                       <i
                         onClick={() => handleUpdate(item)}
                         className="fa-regular fa-pen-to-square"
-                        // this edit word is added for testing only by sahil karnekar remove this word at the time of deployement
-                      >edit</i> 
+                      >
+                     
+                      </i>
                     </td>
                   </tr>
                 ))}
@@ -1118,4 +840,3 @@ const LineupExcelData = ({
 };
 
 export default LineupExcelData;
-

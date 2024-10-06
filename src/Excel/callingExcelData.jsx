@@ -29,7 +29,6 @@ const CallingExcelList = ({
 
   const { employeeId, userType } = useParams();
   const employeeIdw = parseInt(employeeId);
-  console.log(employeeId + "emp 1111 id");
 
   const [showUpdateCallingTracker, setShowUpdateCallingTracker] =
     useState(false);
@@ -37,7 +36,6 @@ const CallingExcelList = ({
   const navigator = useNavigate();
 
   useEffect(() => {
-    console.log(employeeId + "---00---");
     fetch(
       `${API_BASE_URL}/calling-excel-data/${employeeId}/${userType}`
     )
@@ -66,28 +64,28 @@ const CallingExcelList = ({
 
   // prachi parab callingExcelData data_filter_section 12/9
   const limitedOptions = [
-    ["date", "Date"],
-    ["candidateAddedTime", "Candidate Added Time"],
-    ["recruiterName", "Recruiter Name"],
-    ["candidateName", "Candidate Name"],
-    ["candidateEmail", "Candidate Email"],
-    ["contactNumber", "Contact Number"],
-    ["alternateNumber", "Alternate Number"],
-    ["sourceName", "Source Name"],
-    ["jobDesignation", "Job Designation"],
-    ["requirementId", "Requirement Id"],
-    ["requirementCompany", "Requirement Company"],
-    ["communicationRating", "Communication Rating"],
-    ["currentLocation", "Current Location"],
-    ["fullAddress", "Full Address"],
     ["callingFeedback", "Calling Feedback"],
-    ["selectYesOrNo", "Status Type"],
-    ["incentive", "Incentive"],
-    ["employeeId", "Employee Id"],
-    ["jobRole", "Job Role"],
-    ["oldEmployeeId", "Old Employee Id"],
-    ["excelLineupTracker", "Excel Lineup Tracker"]
-  ]
+    ["candidateEmail", "Candidate Email"],
+    ["candidateName", "Candidate Name"],
+    ["contactNumber", "Contact Number"],
+    ["currentLocation", "Current Location"],
+    ["date", "Date"],
+    ["fullAddress", "Full Address"],
+    ["jobDesignation", "Job Designation"],
+    ["requirementCompany", "Requirement Company"],
+    ["empId", "Employee Id"],
+    ["companyName", "Company Name"],
+    ["currentCTCLakh", "Current CTC (Lakh)"],
+    ["currentCTCThousand", "Current CTC (Thousand)"],
+    ["dateOfBirth", "Date Of Birth"],
+    ["expectedCTCLakh", "Expected CTC (Lakh)"],
+    ["expectedCTCThousand", "Expected CTC (Thousand)"],
+    ["experienceMonth", "Experience (Months)"],
+    ["experienceYear", "Experience (Years)"],
+    ["finalStatus", "Final Status"],
+    ["holdingAnyOffer", "Holding Any Offer"],
+    ["noticePeriod", "Notice Period"],
+  ];
 
 
   useEffect(() => {
@@ -172,9 +170,23 @@ const CallingExcelList = ({
     let filteredData = [...callingList];
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
-        if (option === "requirementId") {
+        if (option === "candidateId") {
           filteredData = filteredData.filter((item) =>
-            values.includes(item[option]?.toString())
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if (option === "requirementId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if (option === "employeeId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) =>
+              item[option]?.toString().toLowerCase().includes(value)
+            )
           );
         } else if (option === "contactNumber") {
           filteredData = filteredData.filter((item) =>
@@ -188,21 +200,142 @@ const CallingExcelList = ({
               item[option]?.toString().toLowerCase().includes(value)
             )
           );
+        } else if (option === "currentCTCLakh") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "currentCTCThousand") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "empId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "expectedCTCLakh") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "expectedCTCThousand") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "experienceMonth") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "experienceYear") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "oldEmployeeId") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "availabilityForInterview") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "candidateAddedTime") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "date") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else if (option === "dateOfBirth") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
         } else if (option === "incentive") {
           filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
           );
-        } else if (option === "employeeId") {
+        } else if (option === "interviewTime") {
           filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
           );
-        }
-
-        else {
+        } else if (option === "selectYesOrNo") {
+          filteredData = filteredData.filter((item) =>
+            values.some((value) => {
+              const numericValue = parseInt(value, 10); // Convert value to integer
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
+            })
+          );
+        } else {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
               item[option]
@@ -225,27 +358,6 @@ const CallingExcelList = ({
         : [...prev[key], value],
     }));
   };
-
-  // const handleFilterSelect = (option, value) => {
-  //   setSelectedFilters((prevFilters) => {
-  //     const updatedFilters = { ...prevFilters };
-  //     if (!updatedFilters[option]) {
-  //       updatedFilters[option] = [];
-  //     }
-
-  //     const index = updatedFilters[option].indexOf(value);
-  //     if (index === -1) {
-  //       updatedFilters[option] = [...updatedFilters[option], value];
-  //     } else {
-  //       updatedFilters[option] = updatedFilters[option].filter(
-  //         (item) => item !== value
-  //       );
-  //     }
-
-  //     return updatedFilters;
-  //   });
-  // };
-
   const handleSort = (criteria) => {
     if (criteria === sortCriteria) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -345,7 +457,7 @@ const CallingExcelList = ({
               onClick={() => setShowSearchBar(!showSearchBar)}
               style={{ margin: "10px", width: "auto", fontSize: "15px" }}
             ></i>
-            <h1 className="excel-calling-data-heading">Excel Calling Data</h1>
+            <h1 className="excel-calling-data-heading">Calling Tracker Data</h1>
             <button
               onClick={toggleFilterSection}
                   className="daily-tr-btn"
@@ -417,48 +529,56 @@ const CallingExcelList = ({
           )}
 
           <div className="attendanceTableData">
-            <table className="selfcalling-table attendance-table">
+          <table className="selfcalling-table attendance-table">
               <thead>
                 <tr className="attendancerows-head">
+                  {/* <th className="attendanceheading"> */}
+                  {/* <input
+                      type="checkbox"
+                      onChange={handleSelectAll}
+                      checked={
+                        selectedRows.length === filteredLineUpList.length
+                      }
+                    /> */}
+                  {/* </th> */}
                   <th className="attendanceheading">Sr No.</th>
                   <th
                     className="attendanceheading"
                     onClick={() => handleSort("date")}
                   >
-                    Date & Time {getSortIcon("date")}
-                  </th>
-                  <th className="attendanceheading">Candidate Id</th>
-                  <th
-                    className="attendanceheading"
-                    onClick={() => handleSort("recruiterName")}
-                  >
-                    Recruiter Name {getSortIcon("recruiterName")}
+                    {" "}
+                    Added Date {getSortIcon("date")}
                   </th>
                   <th className="attendanceheading">Candidate Name</th>
                   <th className="attendanceheading">Candidate Email</th>
                   <th className="attendanceheading">Contact Number</th>
-                  <th className="attendanceheading">Alternate Number</th>
-                  <th className="attendanceheading">Source Name</th>
-                  <th className="attendanceheading">Position</th>
-                  <th
-                    className="attendanceheading"
-                    onClick={() => handleSort("requirementId")}
-                  >
-                    Job Id {getSortIcon("requirementId")}
-                  </th>
+                  {/* <th className="attendanceheading">Date Of Birth</th> */}
+                  <th className="attendanceheading">Job Designation</th>
                   <th className="attendanceheading">Applying Company</th>
-                  <th className="attendanceheading">Communication Rating</th>
                   <th className="attendanceheading">Current Location</th>
-                  <th className="attendanceheading">Full Address</th>
+                  {/* <th className="attendanceheading">Full Address</th> */}
                   <th className="attendanceheading">Calling Feedback</th>
-                  <th className="attendanceheading">Candidate Incentive</th>
-                  <th className="attendanceheading">Interested / Eligible</th>
+                  <th className="attendanceheading">Current Company</th>
+                  <th className="attendanceheading">Total Experience</th>
+                  <th className="attendanceheading">Current CTC</th>
+                  <th className="attendanceheading">Expected CTC</th>
+                  <th className="attendanceheading">Holding Any Offer</th>
+                  <th className="attendanceheading">Notice Period</th>
+                  <th className="attendanceheading">Interview Status</th>
                   <th className="attendanceheading">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredCallingList.map((item, index) => (
                   <tr key={item.candidateId} className="attendancerows">
+                    {/* <td className="tabledata ">
+                      <input
+                        type="checkbox"
+                        checked={selectedRows.includes(item.candidateId)}
+                        onChange={() => handleSelectRow(item.candidateId)}
+                      />
+                    </td> */}
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -467,6 +587,7 @@ const CallingExcelList = ({
                       {" "}
                       {index + 1}
                     </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -483,29 +604,6 @@ const CallingExcelList = ({
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.candidateId}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{item.candidateId} </span>
-                      </div>
-                    </td>
-
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.recruiterName}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.recruiterName}{" "}
-                        </span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
                       {item.candidateName}{" "}
                       <div className="tooltip">
                         <span className="tooltiptext">
@@ -513,6 +611,7 @@ const CallingExcelList = ({
                         </span>
                       </div>
                     </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -525,6 +624,7 @@ const CallingExcelList = ({
                         </span>
                       </div>
                     </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -537,28 +637,18 @@ const CallingExcelList = ({
                         </span>
                       </div>
                     </td>
-                    <td
+
+                    {/* <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.alternateNumber}{" "}
+                      {item.dateOfBirth}{" "}
                       <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.alternateNumber}
-                        </span>
+                        <span className="tooltiptext">{item.dateOfBirth} </span>
                       </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.sourceName}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{item.sourceName}</span>
-                      </div>
-                    </td>
+                    </td> */}
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -571,19 +661,7 @@ const CallingExcelList = ({
                         </span>
                       </div>
                     </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.requirementId}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {" "}
-                          {item.requirementId}{" "}
-                        </span>
-                      </div>{" "}
-                    </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -596,18 +674,7 @@ const CallingExcelList = ({
                         </span>
                       </div>
                     </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.communicationRating}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.communicationRating}
-                        </span>
-                      </div>
-                    </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -620,7 +687,8 @@ const CallingExcelList = ({
                         </span>
                       </div>
                     </td>
-                    <td
+
+                    {/* <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
@@ -629,7 +697,8 @@ const CallingExcelList = ({
                       <div className="tooltip">
                         <span className="tooltiptext">{item.fullAddress} </span>
                       </div>
-                    </td>
+                    </td> */}
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -642,28 +711,101 @@ const CallingExcelList = ({
                         </span>
                       </div>
                     </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.incentive}{" "}
+                      {item.companyName}{" "}
                       <div className="tooltip">
-                        <span className="tooltiptext">{item.incentive} </span>
+                        <span className="tooltiptext">{item.companyName} </span>
                       </div>
                     </td>
+
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.selectYesOrNo}{" "}
+                      {" "}
+                      {item.experienceYear} {" "} Year - {item.experienceMonth} {" "} Months
                       <div className="tooltip">
                         <span className="tooltiptext">
-                          {item.selectYesOrNo}{" "}
+                        {" "}
+                        {item.experienceYear} {" "} Year - {item.experienceMonth} {" "} Months
                         </span>
                       </div>
                     </td>
+
+                    <td
+                      className="tabledata "
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {" "}
+                      {item.currentCTCLakh} {" "} Lakh -  {item.currentCTCThousand} {" "} Thousand
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                        {" "}
+                        {item.currentCTCLakh} {" "} Lakh -  {item.currentCTCThousand} {" "} Thousand
+                        </span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata "
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {" "}
+                      {item.expectedCTCLakh}{" "} Lakh -
+                      {item.expectedCTCThousand}  {" "} Thousand
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                        {" "}
+                      {item.expectedCTCLakh} {" "} Lakh -
+                      {item.expectedCTCThousand}  {" "} Thousand
+                        </span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata "
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {item.holdingAnyOffer}{" "}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {item.holdingAnyOffer}{" "}
+                        </span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata "
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {item.noticePeriod}{" "}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {item.noticePeriod}{" "}
+                        </span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata "
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {item.finalStatus}{" "}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{item.finalStatus} </span>
+                      </div>
+                    </td>
+
+                    
+
                     <td className="tabledata" style={{ textAlign: "center" }}>
                       <i
                         onClick={() => openCallingExcelList(item)}

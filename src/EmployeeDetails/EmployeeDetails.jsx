@@ -19,7 +19,6 @@ const EmployeeDetails = () => {
   const [deletedEmployees, setDeletedEmployees] = useState([]);
   const [blockedEmployees, setBlockedEmployees] = useState([]);
   const [Loading, setLoading] = useState(true);
-  // const [employeeId, setEmployeeId] = useState(null);
   const [employeeRole, setEmployeeRole] = useState("");
   const [showEmployee, setShowEmployee] = useState(false);
   const { employeeId,userType } = useParams();

@@ -85,7 +85,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
     formData.append("file", file);
     try {
       await axios.post(
-        `${API_BASE_URL}/uploadData-calling-data/${employeeId}/${userType}`,
+        `${API_BASE_URL}/uploadData-calling-tracker/${employeeId}/${userType}`,
         formData,
         {
           headers: {
@@ -126,7 +126,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
     setLoading(true);
     try {
       await axios.post(
-        `${API_BASE_URL}/upload-calling-lineup-data/${employeeId}/${userType}`,
+        `${API_BASE_URL}/upload-lineup-tracker/${employeeId}/${userType}`,
 
         formData,
         {
@@ -256,7 +256,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
                     <button
                       onClick={() =>
                         handleDownloadButton(
-                          "/files/Calling_Tracker_Formate.xlsx"
+                          "/files/Calling_Tracker_Format.xlsx"
                         )
                       }
                       title="To upload the data, download Excel format"
@@ -310,7 +310,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
                   {/* download added by sahil karnekar line 317 to 319 */}
                   <button
                     onClick={() =>
-                      handleDownloadButton("/files/Lineup_Tracker_Formate.xlsx")
+                      handleDownloadButton("/files/Lineup_Tracker_Format.xlsx")
                     }
                   >
                     Download
