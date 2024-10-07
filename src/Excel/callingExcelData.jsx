@@ -10,6 +10,7 @@ const CallingExcelList = ({
   funForGettingCandidateId,
   onCloseTable,
   loginEmployeeName,
+  toggleSection,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOptions, setFilterOptions] = useState([]);
@@ -36,9 +37,7 @@ const CallingExcelList = ({
   const navigator = useNavigate();
 
   useEffect(() => {
-    fetch(
-      `${API_BASE_URL}/calling-excel-data/${employeeId}/${userType}`
-    )
+    fetch(`${API_BASE_URL}/calling-excel-data/${employeeId}/${userType}`)
       .then((response) => response.json())
       .then((data) => {
         setCallingList(data);
@@ -87,12 +86,9 @@ const CallingExcelList = ({
     ["noticePeriod", "Notice Period"],
   ];
 
-
   useEffect(() => {
     const options = limitedOptions
-      .filter(([key]) =>
-        Object.keys(callingList[0] || {}).includes(key)
-      )
+      .filter(([key]) => Object.keys(callingList[0] || {}).includes(key))
       .map(([key]) => key);
 
     setFilterOptions(options);
@@ -367,16 +363,8 @@ const CallingExcelList = ({
     }
   };
 
-  const openCallingExcelList = (candidateData) => {
-    setSelectedCandidate(candidateData);
-    console.log(candidateData);
-  };
-
-
   const handleUpdateSuccess = () => {
-    fetch(
-      `${API_BASE_URL}/calling-excel-data/${employeeId}/${userType}`
-    )
+    fetch(`${API_BASE_URL}/calling-excel-data/${employeeId}/${userType}`)
       .then((response) => response.json())
       .then((data) => {
         setCallingList(data);
@@ -447,6 +435,11 @@ const CallingExcelList = ({
     });
   };
 
+  const openCallingExcelList = (candidateData) => {
+    setSelectedCandidate(candidateData);
+    toggleSection(false);
+  };
+
   return (
     <div className="App-after1">
       {!selectedCandidate && (
@@ -458,10 +451,7 @@ const CallingExcelList = ({
               style={{ margin: "10px", width: "auto", fontSize: "15px" }}
             ></i>
             <h1 className="excel-calling-data-heading">Calling Tracker Data</h1>
-            <button
-              onClick={toggleFilterSection}
-                  className="daily-tr-btn"
-            >
+            <button onClick={toggleFilterSection} className="daily-tr-btn">
               Filter <i className="fa-solid fa-filter"></i>
             </button>
           </div>
@@ -475,10 +465,9 @@ const CallingExcelList = ({
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           )}
+
           {showFilterSection && (
             <div className="filter-section">
-              {/* <h5 style={{ color: "gray", paddingTop: "5px" }}>Filter</h5> */}
-
               <div className="filter-dropdowns">
                 {showFilterSection && (
                   <div className="filter-section">
@@ -507,9 +496,13 @@ const CallingExcelList = ({
                                     <input
                                       type="checkbox"
                                       checked={
-                                        selectedFilters[optionKey]?.includes(value) || false
+                                        selectedFilters[optionKey]?.includes(
+                                          value
+                                        ) || false
                                       }
-                                      onChange={() => handleFilterSelect(optionKey, value)}
+                                      onChange={() =>
+                                        handleFilterSelect(optionKey, value)
+                                      }
                                       style={{ marginRight: "5px" }}
                                     />
                                     {value}
@@ -524,12 +517,11 @@ const CallingExcelList = ({
                   </div>
                 )}
               </div>
-
             </div>
           )}
 
           <div className="attendanceTableData">
-          <table className="selfcalling-table attendance-table">
+            <table className="selfcalling-table attendance-table">
               <thead>
                 <tr className="attendancerows-head">
                   {/* <th className="attendanceheading"> */}
@@ -638,17 +630,6 @@ const CallingExcelList = ({
                       </div>
                     </td>
 
-                    {/* <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.dateOfBirth}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{item.dateOfBirth} </span>
-                      </div>
-                    </td> */}
-
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -688,17 +669,6 @@ const CallingExcelList = ({
                       </div>
                     </td>
 
-                    {/* <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.fullAddress}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{item.fullAddress} </span>
-                      </div>
-                    </td> */}
-
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
@@ -729,11 +699,12 @@ const CallingExcelList = ({
                       onMouseOut={handleMouseOut}
                     >
                       {" "}
-                      {item.experienceYear} {" "} Year - {item.experienceMonth} {" "} Months
+                      {item.experienceYear} Year - {item.experienceMonth} Months
                       <div className="tooltip">
                         <span className="tooltiptext">
-                        {" "}
-                        {item.experienceYear} {" "} Year - {item.experienceMonth} {" "} Months
+                          {" "}
+                          {item.experienceYear} Year - {item.experienceMonth}{" "}
+                          Months
                         </span>
                       </div>
                     </td>
@@ -744,11 +715,13 @@ const CallingExcelList = ({
                       onMouseOut={handleMouseOut}
                     >
                       {" "}
-                      {item.currentCTCLakh} {" "} Lakh -  {item.currentCTCThousand} {" "} Thousand
+                      {item.currentCTCLakh} Lakh - {item.currentCTCThousand}{" "}
+                      Thousand
                       <div className="tooltip">
                         <span className="tooltiptext">
-                        {" "}
-                        {item.currentCTCLakh} {" "} Lakh -  {item.currentCTCThousand} {" "} Thousand
+                          {" "}
+                          {item.currentCTCLakh} Lakh - {item.currentCTCThousand}{" "}
+                          Thousand
                         </span>
                       </div>
                     </td>
@@ -759,13 +732,13 @@ const CallingExcelList = ({
                       onMouseOut={handleMouseOut}
                     >
                       {" "}
-                      {item.expectedCTCLakh}{" "} Lakh -
-                      {item.expectedCTCThousand}  {" "} Thousand
+                      {item.expectedCTCLakh} Lakh -{item.expectedCTCThousand}{" "}
+                      Thousand
                       <div className="tooltip">
                         <span className="tooltiptext">
-                        {" "}
-                      {item.expectedCTCLakh} {" "} Lakh -
-                      {item.expectedCTCThousand}  {" "} Thousand
+                          {" "}
+                          {item.expectedCTCLakh} Lakh -
+                          {item.expectedCTCThousand} Thousand
                         </span>
                       </div>
                     </td>
@@ -804,8 +777,6 @@ const CallingExcelList = ({
                       </div>
                     </td>
 
-                    
-
                     <td className="tabledata" style={{ textAlign: "center" }}>
                       <i
                         onClick={() => openCallingExcelList(item)}
@@ -824,6 +795,7 @@ const CallingExcelList = ({
           initialData={selectedCandidate}
           loginEmployeeName={loginEmployeeName}
           onClose={() => setSelectedCandidate(null)}
+          onSuccess={handleUpdateSuccess}
         />
       )}
     </div>

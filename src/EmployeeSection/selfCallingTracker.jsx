@@ -216,7 +216,7 @@ const CallingList = ({
 
   const handleUpdateSuccess = () => {
     setShowUpdateCallingTracker(false);
-    fetch(`${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`)
+    fetch(`${API_BASE_URL}/callingData/${employeeIdnew}/${userType}`)
       .then((response) => response.json())
       .then((data) => setCallingList(data))
       .catch((error) => console.error("Error fetching data:", error));
@@ -800,11 +800,6 @@ const CallingList = ({
     <div className="calling-list-container">
       {loading ? (
         <div className="register">
-          {/* <HashLoader
-            color={`${localStorage.getItem("selectedColor")}`}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          /> */}
           <Loader></Loader>
         </div>
       ) : (
@@ -968,6 +963,7 @@ const CallingList = ({
                   </div>
                 )}
               </div>
+
 
               <div className="attendanceTableData">
                 <table className="attendance-table">

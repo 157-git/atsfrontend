@@ -9,11 +9,10 @@ const ResumeList = ({ loginEmployeeName }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { employeeId, userType } = useParams();
-
   const [selectedCandidate, setSelectedCandidate] = useState();
   const [show, setShow] = useState(false);
   const [showExportConfirmation, setShowExportConfirmation] = useState(false);
+  const { employeeId, userType } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,20 +31,9 @@ const ResumeList = ({ loginEmployeeName }) => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
-  const handleUpdateSuccess = () => {
-    fetch(`${API_BASE_URL}/callingData/${employeeId}/${userType}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setCallingList(data);
-        setFilteredCallingList(data);
-        setSelectedCandidateId(null); // Hide CallingTrackerForm after success
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-  };
 
   const handleMouseOver = (event) => {
     const tableData = event.currentTarget;
@@ -73,6 +61,7 @@ const ResumeList = ({ loginEmployeeName }) => {
       tooltip.style.visibility = "hidden";
     }
   };
+
   //Swapnil_Rokade_ResumeList_columnsToInclude_columnsToExclude_18/07/2024//
   const handleExportToExcel = () => {
     const columnsToInclude = [
@@ -97,7 +86,6 @@ const ResumeList = ({ loginEmployeeName }) => {
         Experience: item.experience || "-",
         "Current Location": item.location || "-",
       };
-
       return filteredItem;
     });
 
@@ -148,6 +136,7 @@ const ResumeList = ({ loginEmployeeName }) => {
   const cancelExport = () => {
     hidePopup();
   };
+
   const handleUpdate = (candidateData) => {
     setShow(true);
     setSelectedCandidate(candidateData); // Set candidate data for CallingTrackerForm
@@ -157,7 +146,7 @@ const ResumeList = ({ loginEmployeeName }) => {
   return (
     <div className="App-after1">
       {!selectedCandidate && (
-        <div className="table-container">
+        <>
           <div className="rl-filterSection">
             <div className="filterSection">
               <h1 className="resume-data-heading">Resume Data</h1>
@@ -184,10 +173,8 @@ const ResumeList = ({ loginEmployeeName }) => {
               )}
             </div>
           </div>
-          <div
-            className="attendanceTableData"
-            style={{ maxHeight: "600px", overflowY: "y", width: "100%" }}
-          >
+
+          <div className="attendanceTableData">
             <table className="selfcalling-table attendance-table">
               <thead>
                 <tr className="attendancerows-head">
@@ -377,9 +364,8 @@ const ResumeList = ({ loginEmployeeName }) => {
               </tbody>
             </table>
           </div>
-        </div>
+        </>
       )}
-
       <div className="callingExcelData-update-form">
         {selectedCandidate && (
           <CallingTrackerForm

@@ -182,13 +182,19 @@
 
 .callingfiel {
   overflow: hidden;
-  height: 85vh;
-
+  height: 100%;
+  z-index: 10;
 }
 
 .fileupload {
   display: flex;
+  align-items: center;
+  justify-content: center; 
+}
 
+.upload-data-cards{
+  overflow: hidden;
+  z-index: 10;
 }
 
 @media (max-width: 1056px) {

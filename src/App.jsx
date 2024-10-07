@@ -69,7 +69,7 @@ const App = () => {
           <Route path="/manager/technicalUser" element={<SelfTechnicalUser />}></Route>
           <Route path="/create-account/:userType" element={<AddEmployee />}></Route>
           <Route path="/157industries/:employeeId/:userType/candidate-form" element={<CandidateResumeLink />}></Route>
-
++
 
         </Routes>
       </BrowserRouter>

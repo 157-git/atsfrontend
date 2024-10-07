@@ -10,7 +10,7 @@ import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 
-const CallingExcel = ({ onClose, displayCandidateForm }) => {
+const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
   const [file, setFile] = useState(null);
   // line number 16 added by sahil karnekar for manage input state for lineup file input
   const [lineupFile, setLineupFile] = useState(null);
@@ -84,8 +84,9 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
     const formData = new FormData();
     formData.append("file", file);
     try {
+      setLoading(true);
       await axios.post(
-        `${API_BASE_URL}/uploadData-calling-tracker/${employeeId}/${userType}`,
+        `${API_BASE_URL}/upload-calling-tracker/${employeeId}/${userType}`,
         formData,
         {
           headers: {
@@ -206,75 +207,65 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
     }
   };
 
+  // line nummber 177 to 179 added by sahil karnekar toggleSection
+  const toggleSection = (value) => {
+    setShowCards(value);
+  };
+
   return (
-    <div
-      className="callingfiel"
-      style={{
-        display: showCards ? "flex" : "none",
-        justifyContent: "center",
-        flexWrap: "wrap",
-        paddingTop: "15px",
-        gap: "12px",
-      }}
-    >
+    <div className="callingfiel">
       {showCards && (
         <div className="fileupload">
-
-            <div>
-              <div
-                className="card fixed-card"
-                style={{ width: "90%", border: "1px solid gray" }}
-              >
-                <div className="card-header">
-                  <h5 className="mb-0 card-title">Upload Calling Tracker</h5>
-                </div>
-                <div className="card-body">
-                  <div className="mb-3">
-                    {!uploadSuccess && (
-                      <input
-                        type="file"
-                        className="form-control"
-                        accept=".xls,.xlsx"
-                        onChange={handleFileChange}
-                        ref={fileInputRef}
-                        // this code line 264 to line 268 added by sahil karnekar
-                        style={
-                          hasErrorCalling
-                            ? {
-                                border: "1px solid red",
-                                borderRadius: "15px",
-                                boxShadow: "0 0 2px 1px rgba(255, 0, 0, 0.7)",
-                              }
-                            : {}
-                        }
-                      />
-                    )}
-                  </div>
-                  <div className="gap-2 d-grid">
-                    <button onClick={handleUpload}>Upload</button>
-                    {/* download added by sahil karnekar line 275 to 277 */}
-                    <button
-                      onClick={() =>
-                        handleDownloadButton(
-                          "/files/Calling_Tracker_Format.xlsx"
-                        )
+          <div className="upload-data-cards">
+            <div
+              className="card fixed-card"
+              style={{ width: "90%", border: "1px solid gray" }}
+            >
+              <div className="card-header">
+                <h5 className="mb-0 card-title">Upload Calling Tracker</h5>
+              </div>
+              <div className="card-body">
+                <div className="mb-3">
+                  {!uploadSuccess && (
+                    <input
+                      type="file"
+                      className="form-control"
+                      accept=".xls,.xlsx"
+                      onChange={handleFileChange}
+                      ref={fileInputRef}
+                      // this code line 264 to line 268 added by sahil karnekar
+                      style={
+                        hasErrorCalling
+                          ? {
+                              border: "1px solid red",
+                              borderRadius: "15px",
+                              boxShadow: "0 0 2px 1px rgba(255, 0, 0, 0.7)",
+                            }
+                          : {}
                       }
-                      title="To upload the data, download Excel format"
-                    >
-                      Download
-                    </button>
-                    <button
-                      onClick={() => handleTableChange("CallingExcelList")}
-                    >
-                      View
-                    </button>
-                  </div>
+                    />
+                  )}
+                </div>
+                <div className="gap-2 d-grid">
+                  <button onClick={handleUpload}>Upload</button>
+                  {/* download added by sahil karnekar line 275 to 277 */}
+                  <button
+                    onClick={() =>
+                      handleDownloadButton("/files/Calling_Tracker_Format.xlsx")
+                    }
+                    title="To upload the data, download Excel format"
+                  >
+                    Download
+                  </button>
+                  <button onClick={() => handleTableChange("CallingExcelList")}>
+                    View
+                  </button>
                 </div>
               </div>
             </div>
+          </div>
 
-
-          <div>
+          <div className="upload-data-cards">
             <div
               className="card fixed-card"
               style={{ width: "90%", border: "1px solid gray" }}
@@ -323,7 +314,7 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
             </div>
           </div>
 
-          <div>
+          <div className="upload-data-cards">
             <div
               className="card fixed-card"
               style={{ width: "90%", border: "1px solid gray" }}
@@ -364,28 +355,37 @@ const CallingExcel = ({ onClose, displayCandidateForm }) => {
           </div>
         </div>
       )}
-      {loading && <Loader />}
-      {activeTable === "CallingExcelList" && (
-        <CallingExcelList
-          onCloseTable={() => setActiveTable("")}
-          onActionClick={handleActionClick}
-          onClick={displayCandidateForm}
-        />
-      )}
 
-      {activeTable === "LineupExcelData" && (
-        <LineupExcelData
-          onCloseTable={() => setActiveTable("")}
-          onActionClick={handleActionClick} // Pass the handler to the table component
-        />
-      )}
+      <div className="upload-tables-section">
+        {loading && <Loader />}
+        {activeTable === "CallingExcelList" && (
+          <CallingExcelList
+            onCloseTable={() => setActiveTable("")}
+            onActionClick={handleActionClick}
+            onClick={displayCandidateForm}
+            toggleSection={toggleSection}
+            loginEmployeeName={loginEmployeeName}
+            // this line added by sahil karnekar line 302
+          />
+        )}
 
-      {activeTable === "ResumeList" && (
-        <ResumeList
-          onCloseTable={() => setActiveTable("")}
-          onActionClick={handleActionClick} // Pass the handler to the table component
-        />
-      )}
+        {activeTable === "LineupExcelData" && (
+          <LineupExcelData
+            onCloseTable={() => setActiveTable("")}
+            onActionClick={handleActionClick} // Pass the handler to the table component
+            toggleSection={toggleSection} // this line added by sahil karnekar line 302
+            loginEmployeeName={loginEmployeeName}
+          />
+        )}
+
+        {activeTable === "ResumeList" && (
+          <ResumeList
+            onCloseTable={() => setActiveTable("")}
+            onActionClick={handleActionClick} // Pass the handler to the table component
+            loginEmployeeName={loginEmployeeName}
+          />
+        )}
+      </div>
     </div>
   );
 };

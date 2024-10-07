@@ -601,8 +601,9 @@ const EmpDashboard = ({ userGroup }) => {
 
   return (
     <div
-      className={`grid-container ${openSidebarToggle ? "sidebar-open" : "sidebar-closed"
-        }`}
+      className={`grid-container ${
+        openSidebarToggle ? "sidebar-open" : "sidebar-closed"
+      }`}
       style={{ backgroundColor: "white", minHeight: "100vh" }}
     >
       <Sidebar
@@ -674,6 +675,7 @@ const EmpDashboard = ({ userGroup }) => {
       />
 
       <div className="empDash-main-content">
+
         <div className="time-and-data">
           <DailyWork
             employeeId={employeeId}
@@ -688,6 +690,7 @@ const EmpDashboard = ({ userGroup }) => {
             successfulDataUpdation={successfulDataUpdation}
           />
         </div>
+
         <div>
           {showProfile && (
             <EmployeeProfileData
@@ -755,6 +758,7 @@ const EmpDashboard = ({ userGroup }) => {
             ></CallingExcelList>
           )}
         </div>
+
         <div>{showInterviewDate && <InterviewDates />}</div>
         <div>{showAddEmployee && <AddEmployee />}</div>
         <div>
@@ -772,7 +776,13 @@ const EmpDashboard = ({ userGroup }) => {
             <HoldCandidate loginEmployeeName={loginEmployeeName} />
           )}
         </div>
-        <div>{showCallingExcel && <CallingExcel />}</div>
+
+        <div className="calling-excel-div">
+          {showCallingExcel && (
+            <CallingExcel loginEmployeeName={loginEmployeeName} />
+          )}
+        </div>
+
         <div>
           {showLineupExcelList && (
             <LineupExcelData

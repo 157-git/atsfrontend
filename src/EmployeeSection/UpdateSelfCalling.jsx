@@ -204,12 +204,11 @@ const UpdateSelfCalling = ({
       if (response.ok) {
         if (callingTracker.selectYesOrNo === "Interested") {
           onsuccessfulDataUpdation(true);
-          console.log("-------Yes Update Calling-----------");
+          toast.success("Data updated successfully Please Cheack Line Up Tracker");
         } else {
           onsuccessfulDataUpdation(false);
-          console.log("-------No  Update Calling-----------");
-        }
-        toast.success("Data updated successfully");
+          toast.success("Data updated successfully");
+        }        
         setFormSubmitted(true);
         onSuccess();
         onCancel();

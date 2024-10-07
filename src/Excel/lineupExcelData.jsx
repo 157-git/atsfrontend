@@ -169,7 +169,6 @@ const LineupExcelData = ({
       setFilteredLineUpList(sortedList);
     }
   }, [sortCriteria, sortOrder]);
-  
 
   const filterData = () => {
     let filteredData = [...lineUpList];
@@ -381,7 +380,7 @@ const LineupExcelData = ({
 
   const handleUpdateSuccess = () => {
     fetch(
-      `http://93.127.199.85/api/ats/157industries/lineup-excel-data/5/Recruiters`
+      `${API_BASE_URL}/lineup-excel-data/${employeeId}/${userType}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -434,6 +433,7 @@ const LineupExcelData = ({
     setShowFilterSection(!showFilterSection);
   };
 
+
   const handleSelectAll = (event) => {
     if (event.target.checked) {
       const allRowIds = filteredLineUpList.map((item) => item.candidateId);
@@ -463,9 +463,9 @@ const LineupExcelData = ({
               onClick={() => setShowSearchBar(!showSearchBar)}
               style={{ margin: "10px", width: "auto", fontSize: "15px" }}
             ></i>
-            {/* <h5 style={{ color: "gray", paddingTop: "5px" }}>Excel Uploaded data</h5> */}
-            <h1 style={{ color: "grey", fontSize: "18px" }}>LineUp Tracker Data</h1>{" "}
-            {/* Prachi UploadLineUpData 3/7 */}
+            <h1 style={{ color: "grey", fontSize: "18px" }}>
+              LineUp Tracker Data
+            </h1>{" "}
             <button onClick={toggleFilterSection} className="daily-tr-btn">
               Filter <i className="fa-solid fa-filter"></i>
             </button>
@@ -481,6 +481,7 @@ const LineupExcelData = ({
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           )}
+
           {showFilterSection && (
             <div className="filter-section">
               <div className="filter-dropdowns">
@@ -736,11 +737,12 @@ const LineupExcelData = ({
                       onMouseOut={handleMouseOut}
                     >
                       {" "}
-                      {item.experienceYear} {" "} Year - {item.experienceMonth} {" "} Months
+                      {item.experienceYear} Year - {item.experienceMonth} Months
                       <div className="tooltip">
                         <span className="tooltiptext">
-                        {" "}
-                        {item.experienceYear} {" "} Year - {item.experienceMonth} {" "} Months
+                          {" "}
+                          {item.experienceYear} Year - {item.experienceMonth}{" "}
+                          Months
                         </span>
                       </div>
                     </td>
@@ -751,11 +753,13 @@ const LineupExcelData = ({
                       onMouseOut={handleMouseOut}
                     >
                       {" "}
-                      {item.currentCTCLakh} {" "} Lakh -  {item.currentCTCThousand} {" "} Thousand
+                      {item.currentCTCLakh} Lakh - {item.currentCTCThousand}{" "}
+                      Thousand
                       <div className="tooltip">
                         <span className="tooltiptext">
-                        {" "}
-                        {item.currentCTCLakh} {" "} Lakh -  {item.currentCTCThousand} {" "} Thousand
+                          {" "}
+                          {item.currentCTCLakh} Lakh - {item.currentCTCThousand}{" "}
+                          Thousand
                         </span>
                       </div>
                     </td>
@@ -766,13 +770,13 @@ const LineupExcelData = ({
                       onMouseOut={handleMouseOut}
                     >
                       {" "}
-                      {item.expectedCTCLakh}{" "} Lakh -
-                      {item.expectedCTCThousand}  {" "} Thousand
+                      {item.expectedCTCLakh} Lakh -{item.expectedCTCThousand}{" "}
+                      Thousand
                       <div className="tooltip">
                         <span className="tooltiptext">
-                        {" "}
-                      {item.expectedCTCLakh} {" "} Lakh -
-                      {item.expectedCTCThousand}  {" "} Thousand
+                          {" "}
+                          {item.expectedCTCLakh} Lakh -
+                          {item.expectedCTCThousand} Thousand
                         </span>
                       </div>
                     </td>
@@ -811,14 +815,11 @@ const LineupExcelData = ({
                       </div>
                     </td>
 
-
                     <td className="tabledata">
                       <i
                         onClick={() => handleUpdate(item)}
                         className="fa-regular fa-pen-to-square"
-                      >
-                     
-                      </i>
+                      ></i>
                     </td>
                   </tr>
                 ))}

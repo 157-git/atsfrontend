@@ -4,9 +4,7 @@ import { bottom } from "@popperjs/core";
 import ShareDescription from "./shareDescription";
 import JobDescriptionEdm from "../JobDiscription/jobDescriptionEdm";
 import jobDiscriptions from "../employeeComponents/jobDiscriptions";
-
 import AddJobDescription from "../JobDiscription/addJobDescription";
-
 import { values } from "pdf-lib";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
@@ -477,7 +475,7 @@ const JobListing = () => {
               </span>
               <div className="names">
                 <p>
-                  <b>Id : </b>
+                  <b>Job eId : </b>
                   {requirementData.requirementId || "N/A"}
                 </p>
                 <p>

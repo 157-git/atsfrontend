@@ -34,12 +34,17 @@
   width: 100%;
   display: flex;
   justify-content: space-around;
-  position: fixed;
   background-color: #ffe5b5;
   top: 0;
   left: 0;
   z-index: 1000;
+  position: fixed;
 }
+
+.calling-excel-div{
+  /* border: 2px solid black; */
+}
+
 
 .menu-icon {
   display: none;
@@ -87,3 +92,5 @@
 .grid-container.sidebar-closed .sidebar-text {
   display: block;
 }
+
+
