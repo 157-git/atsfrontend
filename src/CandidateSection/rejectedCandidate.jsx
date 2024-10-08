@@ -1342,23 +1342,24 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                             </div>
                           </td>
 
-                         <td className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}>
+                          <td className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}>
 
-                          {item.currentCtcLakh} {" "} Lakh {item.currentCtcThousand}   {" "} Thousand
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.currentCtcLakh} {" "} Lakh {item.currentCtcThousand}   {" "} Thousand</span>
-                          </div>
-                        </td>
+                            {item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand
+                            <div className="tooltip">
+                              <span className="tooltiptext">{item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand</span>
+                            </div>
+                          </td>
 
-                        <td className="tabledata" onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}>
-                          {item.expectedCtcLakh}  {" "} Lakh {item.expectedCtcThousand} {" "} Thousand
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.expectedCtcLakh}  {" "} Lakh {item.expectedCtcThousand}  {" "} Thousand</span>
-                          </div>
-                        </td>
+                          <td className="tabledata" onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}>
+                            {item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand} {" "} Thousand
+                            <div className="tooltip">
+                              <span className="tooltiptext">{item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand}  {" "} Thousand</span>
+                            </div>
+                          </td>
+                          
                         
                           <td
                             className="tabledata"

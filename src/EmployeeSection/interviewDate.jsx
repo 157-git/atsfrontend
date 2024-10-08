@@ -6,7 +6,7 @@ import "./interviewDate.css";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
-import '../EmployeeSection/interviewDate.css'
+import "../EmployeeSection/interviewDate.css";
 import { API_BASE_URL } from "../api/api";
 
 const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
@@ -82,7 +82,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
       );
       const data = await response.json();
       console.log(data);
-      
+
       if (data.length === 0) {
         setNoDataMessage(true);
         setInterviewData(null);
@@ -109,8 +109,8 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
         );
         console.log(userType + "---------- userType");
         console.log(employeeIdNew + "-----Id ");
-        console.log( monthString + "--------monthString");
-        
+        console.log(monthString + "--------monthString");
+
         const data = await response.json();
         if (data.length === 0) {
           setNoDataMessage(true);
@@ -163,16 +163,13 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
     };
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/save-interview-response`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/save-interview-response`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
       if (response.ok) {
         setFormSubmitted(true);
         toast.success("Interview response saved successfully");
@@ -241,9 +238,9 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
     return (
       <div className="App-after">
         <div className="interview-data-div">
-        <table id="shortlisted-table-id" className="attendance-table">
-        <thead>
-        <tr className="attendancerows-head">
+          <table id="shortlisted-table-id" className="attendance-table">
+            <thead>
+              <tr className="attendancerows-head">
                 <th className="attendanceheading">Sr No</th>
                 <th className="attendanceheading">Candidate Id</th>
                 <th className="attendanceheading">Added Date Time </th>
@@ -266,7 +263,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                 <th className="attendanceheading">Incentive</th>
                 <th className="attendanceheading">Interview Status</th>
                 <th className="attendanceheading">Action</th>
-                </tr>
+              </tr>
             </thead>
             <tbody>
               {interviewData.map((item, index) => (
@@ -293,19 +290,18 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                     </div>
                   </td>
 
-                  
                   <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.date} - {item.candidateAddedTime || "-"}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.date} - {item.candidateAddedTime}
-                            </span>
-                          </div>
-                        </td>
+                    className="tabledata"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}
+                  >
+                    {item.date} - {item.candidateAddedTime || "-"}
+                    <div className="tooltip">
+                      <span className="tooltiptext">
+                        {item.date} - {item.candidateAddedTime}
+                      </span>
+                    </div>
+                  </td>
 
                   <td
                     className="tabledata"
@@ -327,9 +323,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                   >
                     {item.interviewTime || "-"}
                     <div className="tooltip">
-                      <span className="tooltiptext">
-                        {item.interviewTime}
-                      </span>
+                      <span className="tooltiptext">{item.interviewTime}</span>
                     </div>
                   </td>
 
@@ -421,8 +415,21 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                     >
                       {item.companyName || "-"}
                       <div className="tooltip">
+                        <span className="tooltiptext">{item.companyName}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {item.experienceYear || "0"} Years{" "}
+                      {item.experienceMonth || "0"} Months
+                      <div className="tooltip">
                         <span className="tooltiptext">
-                          {item.companyName}
+                          {item.experienceYear || "0"} Years{" "}
+                          {item.experienceMonth || "0"} Months
                         </span>
                       </div>
                     </td>
@@ -432,10 +439,12 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.experienceYear || "0"} {" "}  Years  {item.experienceMonth || "0"} {" "}   Months
+                      {item.currentCTCLakh} Lakh {item.currentCTCThousand}{" "}
+                      Thousand
                       <div className="tooltip">
                         <span className="tooltiptext">
-                        {item.experienceYear || "0"} {" "}   Years  {item.experienceMonth || "0"} {" "}   Months
+                          {item.currentCTCLakh} Lakh {item.currentCTCThousand}{" "}
+                          Thousand
                         </span>
                       </div>
                     </td>
@@ -445,23 +454,12 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.currentCtcLakh || "0"} {" "}  Lakh  {item.currentCtcThousand || "0"} {" "}   Thousand
+                      {item.expectedCTCLakh} Lakh {item.expectedCTCThousand}{" "}
+                      Thousand
                       <div className="tooltip">
                         <span className="tooltiptext">
-                        {item.currentCtcLakh || "0"} {" "}  Lakh  {item.currentCtcThousand || "0"} {" "}   Thousand
-                        </span>
-                      </div>
-                    </td>
-
-                    <td
-                      className="tabledata"
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.expectedCtcLakh || "0"} {" "}  Lakh  {item.expectedCtcThousand || "0"} {" "}   Thousand
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                        {item.expectedCtcLakh || "0"} {" "}  Lakh  {item.expectedCtcThousand || "0"} {" "}   Thousand
+                          {item.expectedCTCLakh} Lakh {item.expectedCTCThousand}{" "}
+                          Thousand
                         </span>
                       </div>
                     </td>
@@ -473,9 +471,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                     >
                       {item.noticePeriod || "-"}
                       <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.noticePeriod}
-                        </span>
+                        <span className="tooltiptext">{item.noticePeriod}</span>
                       </div>
                     </td>
                     <td
@@ -534,29 +530,24 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                     >
                       {item.finalStatus || "-"}
                       <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.finalStatus}
-                        </span>
+                        <span className="tooltiptext">{item.finalStatus}</span>
                       </div>
                     </td>
                     <td className="tabledata">
-                      <button  className="table-icon-div">
-
-                      <i
-                        onClick={() => {
-                          fetchAndUpdateInterviewResponse(
-                            item.candidateId,
-                            item.requirementId
-                          );
-                          setShowShortlistTable(!showShortlistTable);
-                        }}
-                        className="fa-regular fa-pen-to-square"
-                      ></i>
+                      <button className="table-icon-div">
+                        <i
+                          onClick={() => {
+                            fetchAndUpdateInterviewResponse(
+                              item.candidateId,
+                              item.requirementId
+                            );
+                            setShowShortlistTable(!showShortlistTable);
+                          }}
+                          className="fa-regular fa-pen-to-square"
+                        ></i>
                       </button>
-                     
                     </td>
                   </>
-
                 </tr>
               ))}
             </tbody>
@@ -794,4 +785,3 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
 };
 
 export default InterviewDates;
-

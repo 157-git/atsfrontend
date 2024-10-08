@@ -1369,17 +1369,17 @@ const LineUpList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}>
 
-                            {item.currentCtcLakh} {" "} Lakh {item.currentCtcThousand}   {" "} Thousand
+                            {item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand
                             <div className="tooltip">
-                              <span className="tooltiptext">{item.currentCtcLakh} {" "} Lakh {item.currentCtcThousand}   {" "} Thousand</span>
+                              <span className="tooltiptext">{item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand</span>
                             </div>
                           </td>
 
                           <td className="tabledata" onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}>
-                            {item.expectedCtcLakh}  {" "} Lakh {item.expectedCtcThousand} {" "} Thousand
+                            {item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand} {" "} Thousand
                             <div className="tooltip">
-                              <span className="tooltiptext">{item.expectedCtcLakh}  {" "} Lakh {item.expectedCtcThousand}  {" "} Thousand</span>
+                              <span className="tooltiptext">{item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand}  {" "} Thousand</span>
                             </div>
                           </td>
 
