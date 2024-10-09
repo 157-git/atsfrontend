@@ -953,7 +953,7 @@ const PerformanceImprovement = () => {
                     </tbody>
                 </table>
             </div>
-            <h5 className="text-secondary">Process Time Table</h5>
+            {/* <h5 className="text-secondary">Process Time Table</h5>
             <table className="PIE-timetrackertable">
                 <thead>
                     <th className="PIE-timetrackertablehead">Sr No</th>
@@ -973,7 +973,7 @@ const PerformanceImprovement = () => {
                         </tr>
                     ))}
                 </tbody>
-            </table>
+            </table> */}
 
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>

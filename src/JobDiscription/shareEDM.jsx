@@ -69,6 +69,7 @@ function ShareEDM({ Descriptions, onShareEdm }) {
           
               <h1>We are Hiring</h1>
               <h2 className="short-edm-heading"> {data.designation}</h2>
+           
               <div className="details">
                 <h3>Required Key Skills</h3>
                 <p> {data.skills}</p>

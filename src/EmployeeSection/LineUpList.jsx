@@ -120,7 +120,6 @@ const LineUpList = ({
   ];
 
   const { userType } = useParams();
-  console.log(userType);
 
   //akash_pawar_LineUpList_ShareFunctionality_16/07_128
   const fetchCallingTrackerData = async () => {
@@ -202,6 +201,7 @@ const LineUpList = ({
     setFilterOptions(options);
   }, [filteredCallingList]);
 
+  
   useEffect(() => {
     filterData();
   }, [selectedFilters, callingList]);
@@ -906,6 +906,7 @@ const LineUpList = ({
                   >
                     Filter <i className="fa-solid fa-filter"></i>
                   </button>
+
                 </div>
               </div>
 
@@ -973,7 +974,6 @@ const LineUpList = ({
                   </div>
                 )}
               </div>
-
 
 
               <div className="attendanceTableData">

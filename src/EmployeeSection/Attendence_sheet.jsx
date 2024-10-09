@@ -18,7 +18,7 @@ import {
   parseISO,
 } from "date-fns";
 
-import '../EmployeeSection/Attendence_sheet.css';
+import "../EmployeeSection/Attendence_sheet.css";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
@@ -49,6 +49,7 @@ const Attendance = () => {
   const [employeeCount, setEmployeeCount] = useState([]);
   const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState({});
+  const [filteredData, setFilteredData] = useState(attendanceData);
   const [summary, setSummary] = useState({
     workingDays: 0,
     totalTarget: 0,
@@ -61,22 +62,12 @@ const Attendance = () => {
     achievementRate: "",
     performanceStatus: "",
   });
-  const limitedOption = ["employeeName", "jobRole"];
 
-  useEffect(() => {
-    filterData();
-  }, [selectedFilters]);
-  const filterData = () => {
-    let filteredData = [...attendanceData];
-    Object.entries(selectedFilters).forEach(([option, values]) => {
-      filteredData = filteredData.filter((item) =>
-        values.some((value) =>
-          item[option]?.toString().toLowerCase().includes(value.toLowerCase())
-        )
-      );
-      setAttendanceData(filteredData);
-    });
-  };
+  // Arshad Attar Work On Fillter 09-10-2024 ( Start line 66 )                   
+  const [showFilterSection, setShowFilterSection] = useState(false);
+  // const [filteredAttendanceData, setFilteredAttendanceData] = useState(attendanceData); // To store filtered data
+  
+    // Arshad Attar Work On Fillter 09-10-2024 ( End line 68 ) 
 
   const handleDateRangeChange = (event) => {
     const selectedRange = event.target.value;
@@ -133,9 +124,7 @@ const Attendance = () => {
   useEffect(() => {
     const fetchManagerNames = async () => {
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}/get-all-managers`
-        );
+        const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
         setManagers(response.data);
       } catch (error) {
         console.error("Error fetching manager names:", error);
@@ -165,9 +154,7 @@ const Attendance = () => {
 
   const fetchTeamLeaderNames = async (id) => {
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/tl-namesIds/${id}`
-      );
+      const response = await axios.get(`${API_BASE_URL}/tl-namesIds/${id}`);
       setTeamLeaders(response.data);
     } catch (error) {
       console.error("Error fetching team leader names:", error);
@@ -190,7 +177,6 @@ const Attendance = () => {
     }
   }, [attendanceData]);
 
-
   const calculateWeekendsAndHolidays = (startDate, endDate) => {
     const interval = eachDayOfInterval({ start: startDate, end: endDate });
     let weekendCount = 0;
@@ -208,16 +194,14 @@ const Attendance = () => {
   };
 
   const fetchData = async (id, roles, startDate, endDate) => {
-    console.log(id + "-- idd "+ roles+ " Job "+  startDate+ " Start Date "+  endDate + " -- End Date " );
     try {
-      
       const response = await fetch(
         `${API_BASE_URL}/attendance-data/${id}/${roles}/${startDate}/${endDate}`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const data = await response.json();
       setAttendanceData(data);
       console.log(data);
@@ -349,7 +333,7 @@ const Attendance = () => {
         `${API_BASE_URL}/head-count/${role}/${ids}`
       );
       setEmployeeCount(response.data);
-    } catch (error) { }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -378,12 +362,12 @@ const Attendance = () => {
       prev.some((item) => item.managerId === manager.managerId)
         ? prev.filter((item) => item.managerId !== manager.managerId)
         : [
-          ...prev,
-          {
-            managerId: manager.managerId,
-            managerJobRole: manager.jobRole,
-          },
-        ]
+            ...prev,
+            {
+              managerId: manager.managerId,
+              managerJobRole: manager.jobRole,
+            },
+          ]
     );
   };
 
@@ -434,12 +418,12 @@ const Attendance = () => {
       prev.some((item) => item.teamLeaderId === teamLeader.teamLeaderId)
         ? prev.filter((item) => item.teamLeaderId !== teamLeader.teamLeaderId)
         : [
-          ...prev,
-          {
-            teamLeaderId: teamLeader.teamLeaderId,
-            teamLeaderJobRole: teamLeader.jobRole,
-          },
-        ]
+            ...prev,
+            {
+              teamLeaderId: teamLeader.teamLeaderId,
+              teamLeaderJobRole: teamLeader.jobRole,
+            },
+          ]
     );
   };
 
@@ -448,27 +432,24 @@ const Attendance = () => {
       prev.some((item) => item.recruiterId === recruiter.employeeId)
         ? prev.filter((item) => item.recruiterId !== recruiter.employeeId)
         : [
-          ...prev,
-          {
-            recruiterId: recruiter.employeeId,
-            recruiterJobRole: recruiter.jobRole,
-          },
-        ]
+            ...prev,
+            {
+              recruiterId: recruiter.employeeId,
+              recruiterJobRole: recruiter.jobRole,
+            },
+          ]
     );
   };
+
   const formatOption = (option) => {
-    return option
-      .split("")
-      .map((char, index) => {
-        if (index === 0) {
-          return char.toUpperCase();
-        } else if (char === char.toUpperCase()) {
-          return " " + char;
-        } else {
-          return char;
-        }
-      })
-      .join("");
+    switch (option) {
+      case "employeeName":
+        return "Employee Name";
+      case "jobRole":
+        return "Job Role";
+      default:
+        return option;
+    }
   };
 
   const toggleManagerExpand = (managerId) => {
@@ -481,6 +462,82 @@ const Attendance = () => {
       expandedTeamLeaderId === teamLeaderId ? null : teamLeaderId
     );
   };
+
+
+  // Arshad Attar Work On Fillter 09-10-2024 ( Start line 465 )
+  const limitedOptions = [
+    ["date","Working Date"],
+    ["employeeId", "Employee Id"],
+    ["employeeName","Employee Name"],
+    ["jobRole","Job Role"],
+    ["teamLeader","Team Leader Id"],
+    ["loginTime","Login Time"],
+    ["logoutTime","Log Out Time"],
+    ["lateMark","Late Marks"],
+    ["remoteWork","Work Type"]
+  ];
+
+  const filterData = () => {
+    let filteredData = [...attendanceData];
+  
+    // Apply all selected filters
+    Object.entries(selectedFilters).forEach(([optionKey, values]) => {
+      if (values.length > 0) {
+        filteredData = filteredData.filter((item) =>
+          values.some((value) =>
+            item[optionKey]?.toString().toLowerCase().includes(value.toLowerCase())
+          )
+        );
+      }
+    });
+    setAttendanceData(filteredData); // Update the displayed data
+  };
+
+// Arshad Added This 09-10-2024
+
+useEffect(() => {
+  if (Object.keys(selectedFilters).length > 0) {
+    filterData(); // Apply filters if any are selected
+  } else {
+    setAttendanceData(attendanceData); // Show full data if no filters are selected
+  }
+}, [selectedFilters]);
+
+const toggleFilterSection = () => {
+  setShowFilterSection(!showFilterSection);
+  setActiveFilterOption(null); // Ensure no filter dropdown is active by default
+};
+
+
+const handleFilterSelect = (key, value) => {
+  setSelectedFilters((prev) => {
+    const currentSelections = prev[key] || [];
+
+    // Toggle selection
+    const newSelections = currentSelections.includes(value)
+      ? currentSelections.filter((item) => item !== value) // Remove if already selected
+      : [...currentSelections, value]; // Add if not selected
+
+    const updatedFilters = { ...prev, [key]: newSelections };
+
+    // If all selections for this key are removed, remove the key from filters
+    if (newSelections.length === 0) {
+      delete updatedFilters[key];
+    }
+
+    return updatedFilters;
+  });
+};
+
+const handleFilterOptionClick = (key) => {
+  if (activeFilterOption === key) {
+    setActiveFilterOption(null); // Close the dropdown if clicked again
+  } else {
+    setActiveFilterOption(key); // Open the dropdown for the clicked filter
+  }
+};
+
+// Arshad Attar Work On Fillter 09-10-2024 ( Start line 518 )
 
   const renderManagers = () => {
     return managers.map((manager) => (
@@ -499,10 +556,11 @@ const Attendance = () => {
           >
             {manager.managerName}
             <i
-              className={`fa-solid ${expandedManagerId === manager.managerId
-                ? "fa-angle-up"
-                : "fa-angle-down"
-                }`}
+              className={`fa-solid ${
+                expandedManagerId === manager.managerId
+                  ? "fa-angle-up"
+                  : "fa-angle-down"
+              }`}
             ></i>
           </label>
         </div>
@@ -532,10 +590,11 @@ const Attendance = () => {
           >
             {teamLeader.teamLeaderName}
             <i
-              className={`fa-solid ${expandedTeamLeaderId === teamLeader.teamLeaderId
-                ? "fa-angle-up"
-                : "fa-angle-down"
-                }`}
+              className={`fa-solid ${
+                expandedTeamLeaderId === teamLeader.teamLeaderId
+                  ? "fa-angle-up"
+                  : "fa-angle-down"
+              }`}
             ></i>
           </label>
         </div>
@@ -560,32 +619,6 @@ const Attendance = () => {
       </div>
     ));
   };
-  const handleFilterSelect = (option, value) => {
-    setSelectedFilters((prevFilters) => {
-      const updatedFilters = { ...prevFilters };
-      if (!updatedFilters[option]) {
-        updatedFilters[option] = [];
-      }
-
-      const index = updatedFilters[option].indexOf(value);
-      if (index === -1) {
-        updatedFilters[option] = [...updatedFilters[option], value];
-      } else {
-        updatedFilters[option] = updatedFilters[option].filter(
-          (item) => item !== value
-        );
-      }
-
-      return updatedFilters;
-    });
-  };
-  const handleFilterOptionClick = (option) => {
-    if (activeFilterOption === option) {
-      setActiveFilterOption(null); // Hide if already active
-    } else {
-      setActiveFilterOption(option); // Show selected option
-    }
-  };
 
   const categorizePerformance = (target, achieved) => {
     const achievementRate = (achieved / target) * 100;
@@ -609,19 +642,20 @@ const Attendance = () => {
 
   return (
     <div>
-      <div className="PI-full-width PI-half-height">
+      <div className="PI-full-width-PI-half-height">
         <div className="PI-container">
           <div className="PI-dropdown-container-main">
             <div className="PI-header">{userType}</div>
             <div className="PI-dropdown-container">
               <div className="PI-Dropdown" onClick={toggleDropdown}>
-                {userType === "SuperUser" && <span>Select  Manager</span>}
+                {userType === "SuperUser" && <span>Select Manager</span>}
                 {userType === "Manager" && <span>Select Team Leader</span>}
                 {userType === "TeamLeader" && <span>Select Recruiters</span>}
                 <span className={`dropdown-icon`} />
                 <i
-                  className={`fa-solid ${dropdownOpen ? "fa-angle-up" : "fa-angle-down"
-                    }`}
+                  className={`fa-solid ${
+                    dropdownOpen ? "fa-angle-up" : "fa-angle-down"
+                  }`}
                 ></i>
               </div>
               {dropdownOpen && (
@@ -652,38 +686,38 @@ const Attendance = () => {
               {userType === "SuperUser" && (
                 <>
                   <p>
-                    Manager Count :{" "}
+                    Manager  :{" "}
                     {selectedManagers.length || employeeCount.managerCount}
                   </p>
                   <p>
-                    TeamLeader Count :{" "}
+                    Team Leader  :{" "}
                     {employeeCount.teamLeaderCount ||
                       selectedTeamLeaders.length}
                   </p>
-                  <p>Recruiter Count : {employeeCount.employeeCount}</p>
+                  <p>Recruiter  : {employeeCount.employeeCount}</p>
                 </>
               )}
               {userType === "Manager" && (
-                <>
+                <div>
                   <p>
-                    TeamLeader Count :{" "}
+                    Team Leader  : {" "}
                     {selectedTeamLeaders.length ||
                       employeeCount.teamLeaderCount}
-                  </p>
-                  <p>Recruiter  Count : {employeeCount.employeeCount}</p>
-                </>
+                  </p> 
+                  <p> Recruiter  : {employeeCount.employeeCount}</p>
+                </div>
               )}
               {userType === "TeamLeader" && (
                 <>
-                  <p>Recruiter Count : {employeeCount.employeeCount}</p>
+                  <p>Recruiter  : {employeeCount.employeeCount}</p>
                 </>
               )}
             </div>
             {showCalculation && (
               <div className="PI-table-container">
-                <table className="summary-table" >
-                  <tbody >
-                    <tr >
+                <table className="summary-table">
+                  <tbody>
+                    <tr>
                       <td className="text-gray">Working Days</td>
                       <td className="text-gray">{summary.workingDays}</td>
                       <td className="text-gray">Total Working Hours</td>
@@ -707,7 +741,6 @@ const Attendance = () => {
                       <td className="text-gray">Absent</td>
                       <td className="text-gray">{summary.absent}</td>
                     </tr>
-
                   </tbody>
                 </table>
               </div>
@@ -716,6 +749,7 @@ const Attendance = () => {
 
           <div className="PI-attendance-form">
             <div className="PI-radio-buttons">
+              <div>
               <label className="PI-radio-label">
                 <input
                   type="radio"
@@ -728,6 +762,8 @@ const Attendance = () => {
                 />
                 <span>Current Month</span>
               </label>
+              </div>
+              <div>
               <label className="PI-radio-label">
                 <input
                   type="radio"
@@ -740,6 +776,8 @@ const Attendance = () => {
                 />
                 <span>Last Month</span>
               </label>
+              </div>
+              <div>
               <label className="PI-radio-label">
                 <input
                   type="radio"
@@ -752,7 +790,9 @@ const Attendance = () => {
                 />
                 <span>Last 3 Months</span>
               </label>
-              <label className="PI-radio-label">
+              </div>
+            <div>
+            <label className="PI-radio-label">
                 <input
                   type="radio"
                   id="last6Months"
@@ -764,7 +804,9 @@ const Attendance = () => {
                 />
                 <span>Last 6 Months</span>
               </label>
-              <label className="PI-radio-label">
+            </div>
+             <div>
+             <label className="PI-radio-label">
                 <input
                   type="radio"
                   id="lastYear"
@@ -776,6 +818,8 @@ const Attendance = () => {
                 />
                 <span>Last 1 Year</span>
               </label>
+             </div>
+              <div>
               <label className="PI-radio-label">
                 <input
                   type="radio"
@@ -788,6 +832,7 @@ const Attendance = () => {
                 />
                 <span>Custom Date</span>
               </label>
+              </div>
             </div>
             {dateRange === "custom" && (
               <div className="PI-date-inputs">
@@ -805,29 +850,27 @@ const Attendance = () => {
                 />
               </div>
             )}
-  
-            <div className="PI-filters" >
+
+            <div className="PI-filters">
               <button className="PI-attendence-btn" onClick={showDataReport}>
                 Get Attendance
               </button>
               <div>
-                <button
+                {/* <button
                   className="PI-attendence-btn"
-                  onClick={() => {
-                    setShowFilterOptions(!showFilterOptions);
-                  }}
+                  onClick={() => setShowFilterOptions(!showFilterOptions)}
                 >
                   Filter
-                </button>
+                </button> */}
               </div>
-              {showFilterOptions && (
+              {/* {showFilterOptions && (
                 <div className="PI-filter-options-container">
                   {limitedOption.map((option) => {
                     const uniqueValues = Array.from(
-                      new Set(attendanceData.map((item) => item[option]))
+                      new Set(attendanceData.map((item) => item[option])) // get unique values (e.g., employee names or job roles)
                     );
                     return (
-                      <div key={option} className="filter-option">
+                      <div key={option} className="attendance-filter-option">
                         <button
                           className="PI-white-Btn"
                           onClick={() => handleFilterOptionClick(option)}
@@ -845,6 +888,7 @@ const Attendance = () => {
                                 >
                                   <input
                                     type="checkbox"
+                                    className="attendance-filter-checkbox"
                                     checked={
                                       selectedFilters[option]?.includes(
                                         value
@@ -864,50 +908,97 @@ const Attendance = () => {
                     );
                   })}
                 </div>
-              )}
+              )} */}
             </div>
-            
+
             <div
-              className={`${getStatusClassName(
-                summary.performanceStatus
-              )}`}
+              className={`${getStatusClassName(summary.performanceStatus)}`}
               id="total-Performance-percentage"
             >
               <p>Achievement Rate</p>
-              <p>{summary.achievementRate}</p>
-              <p>Performance Status</p> -
-              <p>{summary.performanceStatus}</p>
+              <p> {" - "} <strong>{summary.achievementRate}</strong></p>
+              <p>Performance Status</p> -<p> <strong>{summary.performanceStatus}</strong></p>
             </div>
           </div>
+          
         </div>
+        <div className="attendance-fillter-div">
+        <button className="lineUp-Filter-btn" onClick={toggleFilterSection}>
+      Filter <i className="fa-solid fa-filter"></i>
+    </button>
+
+        </div>
+
+
+        <div className="filter-dropdowns">
+                {showFilterSection && (
+                  <div className="filter-section">
+                  {limitedOptions.map(([optionKey, optionLabel]) => {
+                    const uniqueValues = Array.from(
+                      new Set(attendanceData.map((item) => item[optionKey]))
+                    );
+          
+                    return (
+                      <div key={optionKey} className="filter-option">
+                        <button
+                          className="white-Btn"
+                          onClick={() => handleFilterOptionClick(optionKey)}
+                        >
+                          {optionLabel}
+                          <span className="filter-icon">&#x25bc;</span>
+                        </button>
+          
+                        {/* Show dropdown if this option is active */}
+                        {activeFilterOption === optionKey && (
+                          <div className="city-filter">
+                            <div className="optionDiv">
+                              {uniqueValues.map((value) => (
+                                <label key={value} className="selfcalling-filter-value">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedFilters[optionKey]?.includes(value) || false}
+                                    onChange={() => handleFilterSelect(optionKey, value)}
+                                  />
+                                  {value}
+                                </label>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+                )}
+              </div>
       </div>
-      
+
       <div className="PI-attendance-container">
         <table className="PI-attendance-table">
-          <thead className="PI-attendancerows-head" >
-              <th className="PI-attendanceheading">Sr No</th>
-              <th className="PI-attendanceheading">Working Date</th>
-              <th className="PI-attendanceheading">Employee Name</th>
-              <th className="PI-attendanceheading">Job Role</th>
-              <th className="PI-attendanceheading">Login Time</th>
-              <th className="PI-attendanceheading">Late Mark</th>
-              <th className="PI-attendanceheading">Calling Count</th>
-              <th className="PI-attendanceheading">Target</th>
-              <th className="PI-attendanceheading">Archived</th>
-              <th className="PI-attendanceheading">Pending</th>
-              <th className="PI-attendanceheading">Leave Type</th>
-              <th className="PI-attendanceheading">Half Days</th>
-              <th className="PI-attendanceheading">Holiday Leave</th>
-              <th className="PI-attendanceheading">Work Type</th>
-              <th className="PI-attendanceheading">Day Status</th>
-              <th className="PI-attendanceheading">Working Hours</th>
-              <th className="PI-attendanceheading">Logout Time</th>
-              <th className="PI-attendanceheading">Employee Id</th>
-              <th className="PI-attendanceheading">Team Leader Id</th>
+          <thead className="PI-attendancerows-head">
+            <th className="PI-attendanceheading">Sr No</th>
+            <th className="PI-attendanceheading">Working Date</th>
+            <th className="PI-attendanceheading">Employee Name</th>
+            <th className="PI-attendanceheading">Job Role</th>
+            <th className="PI-attendanceheading">Login Time</th>
+            <th className="PI-attendanceheading">Late Mark</th>
+            <th className="PI-attendanceheading">Calling Count</th>
+            <th className="PI-attendanceheading">Target</th>
+            <th className="PI-attendanceheading">Archived</th>
+            <th className="PI-attendanceheading">Pending</th>
+            <th className="PI-attendanceheading">Leave Type</th>
+            <th className="PI-attendanceheading">Half Days</th>
+            <th className="PI-attendanceheading">Holiday Leave</th>
+            <th className="PI-attendanceheading">Work Type</th>
+            <th className="PI-attendanceheading">Day Status</th>
+            <th className="PI-attendanceheading">Working Hours</th>
+            <th className="PI-attendanceheading">Logout Time</th>
+            <th className="PI-attendanceheading">Employee Id</th>
+            <th className="PI-attendanceheading">Team Leader Id</th>
           </thead>
           <tbody>
             {attendanceData.map((data, index) => (
-              <tr key={data.workId} className="PI-attendancerows">
+              <tr key={index} className="PI-attendancerows">
                 <td
                   className="tabledata"
                   onMouseOver={handleMouseOver}

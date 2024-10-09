@@ -36,7 +36,7 @@ const LineupExcelData = ({
   const navigator = useNavigate();
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/lineup-excel-data/${employeeId}/${userType}`)
+    fetch(`hppt://192.168.1.36:9090/lineup-excel-data/${employeeId}/${userType}`)
       .then((response) => response.json())
       .then((data) => {
         setLineUpList(data);

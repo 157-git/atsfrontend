@@ -42,13 +42,9 @@ const App = () => {
         <Routes>
                    {/* This is secured route  added by sahil karnekar*/}
           <Route path="/" element={<HomePage />} />
-
           <Route path="/Main-Dashboard" element={<MainDashboard />} />
-
           <Route path="/employee-login/:userType" element={<Login />} />
-
           <Route path="/forgotPassword" element={<ForgotPasswordForm />} />
-
           <Route path="/Dashboard/:employeeId/:userType"
             element={
                // protected route created for the child or children Dashboard created by sahil karnekar
