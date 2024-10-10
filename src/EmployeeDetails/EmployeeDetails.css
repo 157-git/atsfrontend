@@ -47,3 +47,9 @@
     z-index: 1000;
   }
   
+  /* Arshad Attar : 10-10-2024 */
+  .emp-details-heading{
+    font-size: 18px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }

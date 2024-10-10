@@ -8,7 +8,6 @@ import "../AdminSection/capex.css";
 
 function App() {
   const [showForm, setShowForm] = useState("");
-
   const [formData, setFormData] = useState({
     opratingUnit: "",
     equipment: "",

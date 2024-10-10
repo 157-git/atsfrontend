@@ -397,9 +397,6 @@ html::-webkit-scrollbar {
   position: relative;
   width: 100%;
 }
-.PI-dropdown-container-main {
-  /* width: 25%; */
-}
 
 .PI-Dropdown {
   background-color: #f8f9fa;
@@ -484,18 +481,8 @@ html::-webkit-scrollbar {
   margin-right: 5px;
 }
 
-
 .attendance-fillter-div{
   /* border: 2px solid red; */
   float: right;
   padding-top: 5px;
 }
-
-/* .PI-full-width-PI-half-height{
-  border: 2px solid black;
-} */
-
-/* .attendance-filter-option{
-  border: 2px solid black;
-  width: 400px;
-} */

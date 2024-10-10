@@ -25,17 +25,6 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
   const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [filterOptions, setFilterOptions] = useState([]);
 
-
-
-  // const filterOptions = [
-  //   "candidateId",
-  //   "candidateName",
-  //   "jobDesignation",
-  //   "requirementId",
-  //   "employeeId",
-  //   "employeeName",
-  // ];
-// prachi updateResponse_filter data
   const limitedOptions = [
     ["candidateId", "Candidate Id"],
     ["candidateName", "Candidate Name"],
@@ -391,9 +380,9 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                       <th className="attendanceheading">Candidate Name</th>
                       <th className="attendanceheading">Candidate Email</th>
                       <th className="attendanceheading">Contact Number</th>
-                      <th className="attendanceheading">Source</th>
-                      <th className="attendanceheading">Requirement ID</th>
-                      <th className="attendanceheading">Requirement Company</th>
+                      <th className="attendanceheading">Source Name</th>
+                      <th className="attendanceheading">Job Id</th>
+                      <th className="attendanceheading">Applying Company</th>
                       <th className="attendanceheading">Job Designation</th>
                       <th className="attendanceheading">Comment for TL</th>
                       <th className="attendanceheading">Last Status</th>
@@ -408,9 +397,9 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                       </th>
                       <th className="attendanceheading">Employee ID</th>
                       <th className="attendanceheading">Employee Name</th>
-                      <th className="attendanceheading">Official Mail</th>
-                      <th className="attendanceheading">Job Role</th>
-                      <th className="attendanceheading">View Resume</th>
+                      <th className="attendanceheading">Employee Mail Id</th>
+                      <th className="attendanceheading">Employee Role</th>
+                      <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">
                          Manager Name
                       </th>
@@ -434,6 +423,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                             </span>
                           </div>
                         </td>
+
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
@@ -446,8 +436,34 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                             </span>
                           </div>
                         </td>
-                        <td className="tabledata">{data.contactNumber}</td>
-                        <td className="tabledata">{data.sourceName}</td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {data.contactNumber || "-"}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {data.contactNumber}
+                            </span>
+                          </div>
+                        </td>
+
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {data.sourceName || "-"}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {data.sourceName}
+                            </span>
+                          </div>
+                        </td>
+                     
                         <td className="tabledata">{data.requirementId}</td>
                         <td
                           className="tabledata"
@@ -538,7 +554,21 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           {data.nextInterviewTiming}
                         </td>
                         <td className="tabledata">{data.employeeId}</td>
-                        <td className="tabledata">{data.employeeName}</td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {data.employeeName || "-"}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {data.employeeName}
+                            </span>
+                          </div>
+                        </td>
+
+                       
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
@@ -551,7 +581,20 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                             </span>
                           </div>
                         </td>
-                        <td className="tabledata">{data.jobRole}</td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {data.jobRole || "-"}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {data.jobRole}
+                            </span>
+                          </div>
+                        </td>
+
                         <td className="tabledata">
                           <button
                             className="text-secondary"
@@ -560,8 +603,18 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                             <i className="fas fa-eye"></i>
                           </button>
                         </td>
-                        <td className="tabledata">
-                          {data.reportingManagerName}
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {data.reportingManagerName || "-"}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {data.reportingManagerName}
+                            </span>
+                          </div>
                         </td>
 
                         <td className=" TeamLead-main-table-td">

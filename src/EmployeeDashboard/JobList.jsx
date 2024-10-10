@@ -558,28 +558,28 @@ const JobListing = () => {
         </>
       )}
       {showJobDescriptionShare && (
-        <>
+          <div>
           <ShareDescription
             onShareDescription={handleShareJobDescription}
             Descriptions={requirementData}
           />
-        </>
+          </div>
       )}
       {showJobDescriptionEdm && (
-        <>
+        <div>
           <JobDescriptionEdm
             onJobDescriptionEdm={handleJobDescriptionEdm}
             Descriptions={requirementData.requirementId}
           />
-        </>
+        </div>
       )}
       {showEDM && (
-        <>
+        <div>
           <ShareEDM
             onShareEdm={handleShareEdm}
             Descriptions={requirementData.requirementId}
           />
-        </>
+        </div>
       )}
       </>
     ):(

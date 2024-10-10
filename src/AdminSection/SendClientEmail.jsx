@@ -17,14 +17,11 @@ import Loader from "../EmployeeSection/loader";
 
 // SwapnilRokade_SendClientEmail_ModifyFilters_11/07
 // SwapnilROkade_AddingErrorAndSuccessMessage_19/07
-
 // SwapnilRokade_SendClientEmail_addedProcessImprovmentEvaluatorFunctionalityStoringInterviweResponse_18_to_1251_29/07/2024
-
 
 const SendClientEmail = ({ clientEmailSender }) => {
   const [callingList, setCallingList] = useState([]);
-  const { employeeId } = useParams();
-  const { userType } = useParams();
+  const { employeeId,userType } = useParams();
 
   // const employeeIdnew = parseInt(employeeId);
   const [showUpdateCallingTracker, setShowUpdateCallingTracker] =
@@ -49,101 +46,50 @@ const SendClientEmail = ({ clientEmailSender }) => {
 
   const navigator = useNavigate();
 
-
-
   // prachi parab sendClientEmail_filter_section 11/9
-  const limitedOptions=[
-   
-      ["alternateNumber", "Alternate Number"],
-      ["availabilityForInterview", "Availability For Interview"],
-      ["callingFeedback", "Calling Feedback"],
-      ["candidateAddedTime", "Candidate Added Time"],
-      ["candidateEmail", "Candidate Email"],
-      ["candidateId", "Candidate Id"],
-      ["candidateName", "Candidate Name"],
-      ["communicationRating", "Communication Rating"],
-      ["companyName", "Company Name"],
-      ["contactNumber", "Contact Number"],
-      ["currentCtcLakh", "Current CTC Lakh"],
-      ["currentCtcThousand", "Current CTC Thousand"],
-      ["currentLocation", "Current Location"],
-      ["date", "Date"],
-      ["dateOfBirth", "Date Of Birth"],
-      ["empId", "Emp Id"],
-      ["expectedCtcLakh", "Expected CTC Lakh"],
-      ["expectedCtcThousand", "Expected CTC Thousand"],
-      ["experienceMonth", "Experience Month"],
-      ["experienceYear", "Experience Year"],
-      ["extraCertification", "Extra Certification"],
-      ["feedBack", "Feedback"],
-      ["finalStatus", "Final Status"],
-      ["fullAddress", "Full Address"],
-      ["gender", "Gender"],
-      ["holdingAnyOffer", "Holding Any Offer"],
-      ["incentive", "Incentive"],
-      ["interviewTime", "Interview Time"],
-      ["jobDesignation", "Job Designation"],
-      ["msgForTeamLeader", "Message For Team Leader"],
-      ["noticePeriod", "Notice Period"],
-      ["offerLetterMsg", "Offer Letter Message"],
-      ["oldEmployeeId", "Old Employee Id"],
-      ["qualification", "Qualification"],
-      ["recruiterName", "Recruiter Name"],
-      ["relevantExperience", "Relevant Experience"],
-      ["requirementCompany", "Applied Company"],
-      ["requirementId", "Job Id"],
-      ["selectYesOrNo", "Status"],
-      ["sourceName", "Source Name"],
-      ["yearOfPassing", "Year Of Passing"]
-    ];
-    
-  
-
-  // const limitedOptions = [
-  //   "alternateNumber",
-  //   "availabilityForInterview",
-  //   "callingFeedback",
-  //   "callingTrackerId",
-  //   "candidateAddedTime",
-  //   "candidateEmail",
-  //   "candidateId",
-  //   "candidateName",
-  //   "communicationRating",
-  //   "companyName",
-  //   "contactNumber",
-  //   "currentCtcLakh",
-  //   "currentCtcThousand",
-  //   "currentLocation",
-  //   "date",
-  //   "dateOfBirth",
-  //   "empId",
-  //   "expectedCtcLakh",
-  //   "expectedCtcThousand",
-  //   "experienceMonth",
-  //   "experienceYear",
-  //   "extraCertification",
-  //   "feedBack",
-  //   "finalStatus",
-  //   "fullAddress",
-  //   "gender",
-  //   "holdingAnyOffer",
-  //   "incentive",
-  //   "interviewTime",
-  //   "jobDesignation",
-  //   "msgForTeamLeader",
-  //   "noticePeriod",
-  //   "offerLetterMsg",
-  //   "oldEmployeeId",
-  //   "qualification",
-  //   "recruiterName",
-  //   "relevantExperience",
-  //   "requirementCompany",
-  //   "requirementId",
-  //   "selectYesOrNo",
-  //   "sourceName",
-  //   "yearOfPassing",
-  // ];
-
+  const limitedOptions = [
+    ["alternateNumber", "Alternate Number"],
+    ["availabilityForInterview", "Availability For Interview"],
+    ["callingFeedback", "Calling Feedback"],
+    ["candidateAddedTime", "Candidate Added Time"],
+    ["candidateEmail", "Candidate Email"],
+    ["candidateId", "Candidate Id"],
+    ["candidateName", "Candidate Name"],
+    ["communicationRating", "Communication Rating"],
+    ["companyName", "Company Name"],
+    ["contactNumber", "Contact Number"],
+    ["currentCtcLakh", "Current CTC Lakh"],
+    ["currentCtcThousand", "Current CTC Thousand"],
+    ["currentLocation", "Current Location"],
+    ["date", "Date"],
+    ["dateOfBirth", "Date Of Birth"],
+    ["empId", "Emp Id"],
+    ["expectedCtcLakh", "Expected CTC Lakh"],
+    ["expectedCtcThousand", "Expected CTC Thousand"],
+    ["experienceMonth", "Experience Month"],
+    ["experienceYear", "Experience Year"],
+    ["extraCertification", "Extra Certification"],
+    ["feedBack", "Feedback"],
+    ["finalStatus", "Final Status"],
+    ["fullAddress", "Full Address"],
+    ["gender", "Gender"],
+    ["holdingAnyOffer", "Holding Any Offer"],
+    ["incentive", "Incentive"],
+    ["interviewTime", "Interview Time"],
+    ["jobDesignation", "Job Designation"],
+    ["msgForTeamLeader", "Message For Team Leader"],
+    ["noticePeriod", "Notice Period"],
+    ["offerLetterMsg", "Offer Letter Message"],
+    ["oldEmployeeId", "Old Employee Id"],
+    ["qualification", "Qualification"],
+    ["recruiterName", "Recruiter Name"],
+    ["relevantExperience", "Relevant Experience"],
+    ["requirementCompany", "Applied Company"],
+    ["requirementId", "Job Id"],
+    ["selectYesOrNo", "Status"],
+    ["sourceName", "Source Name"],
+    ["yearOfPassing", "Year Of Passing"],
+  ];
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/calling-lineup/${employeeId}/${userType}`)
@@ -159,30 +105,20 @@ const SendClientEmail = ({ clientEmailSender }) => {
       });
   }, [employeeId]);
 
-  // useEffect(() => {
-  //   const options = Object.keys(filteredCallingList[0] || {}).filter((key) =>
-  //     limitedOptions.includes(key)
-  //   );
-  //   setFilterOptions(options);
-  // }, [filteredCallingList]);
-
-
   useEffect(() => {
     const options = limitedOptions
       .filter(([key]) =>
         Object.keys(filteredCallingList[0] || {}).includes(key)
       )
       .map(([key]) => key);
-      
+
     setFilterOptions(options);
   }, [filteredCallingList]);
-
 
   const handleFilterOptionClick = (key) => {
     setActiveFilterOption(activeFilterOption === key ? null : key);
     setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
   };
-
 
   const handleMouseOver = (event) => {
     const tableData = event.currentTarget;
@@ -308,81 +244,88 @@ const SendClientEmail = ({ clientEmailSender }) => {
               item[option]?.toString().toLowerCase().includes(value)
             )
           );
-        } else if(option==="currentCtcLakh"){
+        } else if (option === "currentCtcLakh") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="currentCtcThousand"){
+        } else if (option === "currentCtcThousand") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="empId"){
+        } else if (option === "empId") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="expectedCtcLakh"){
+        } else if (option === "expectedCtcLakh") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="expectedCtcThousand"){
+        } else if (option === "expectedCtcThousand") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="experienceMonth"){
+        } else if (option === "experienceMonth") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="experienceYear"){
+        } else if (option === "experienceYear") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }
-        else if(option==="oldEmployeeId"){
+        } else if (option === "oldEmployeeId") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }    
-        else if(option==="incentive"){
+        } else if (option === "incentive") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
-              return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+              return (
+                item[option] !== undefined && item[option] === numericValue
+              ); // Compare as numbers
             })
           );
-        }  
-        
-        else {
-
+        } else {
           filteredData = filteredData.filter((item) =>
             values.some((value) =>
               item[option]
@@ -395,9 +338,9 @@ const SendClientEmail = ({ clientEmailSender }) => {
       }
     });
     setFilteredCallingList(filteredData);
-  }; 
+  };
 
- const handleFilterSelect = (key, value) => {
+  const handleFilterSelect = (key, value) => {
     setSelectedFilters((prev) => ({
       ...prev,
       [key]: prev[key].includes(value)
@@ -502,14 +445,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
     <div className="SCE-list-container">
       {loading ? (
         <div className="register">
-
-          {/* <HashLoader
-             color={`${localStorage.getItem("selectedColor")}`}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          /> */}
           <Loader></Loader>
-
         </div>
       ) : (
         <>
@@ -569,50 +505,54 @@ const SendClientEmail = ({ clientEmailSender }) => {
             />
           )}
 
-         <div className="filter-dropdowns">
-  {showFilterSection && (
-    <div className="filter-section">
-      {limitedOptions.map(([optionKey, optionLabel]) => {
-        const uniqueValues = Array.from(
-          new Set(callingList.map((item) => item[optionKey]))
-        );
+          <div className="filter-dropdowns">
+            {showFilterSection && (
+              <div className="filter-section">
+                {limitedOptions.map(([optionKey, optionLabel]) => {
+                  const uniqueValues = Array.from(
+                    new Set(callingList.map((item) => item[optionKey]))
+                  );
 
-        return (
-          <div key={optionKey} className="filter-option">
-            <button
-              className="white-Btn"
-              onClick={() => handleFilterOptionClick(optionKey)}
-            >
-              {optionLabel}
-              <span className="filter-icon">&#x25bc;</span>
-            </button>
-            {activeFilterOption === optionKey && (
-              <div className="city-filter">
-                <div className="optionDiv">
-                  {uniqueValues.map((value) => (
-                    <label
-                      key={value}
-                      className="selfcalling-filter-value"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={
-                          selectedFilters[optionKey]?.includes(value) || false
-                        }
-                        onChange={() => handleFilterSelect(optionKey, value)}
-                      />
-                      {value}
-                    </label>
-                  ))}
-                </div>
+                  return (
+                    <div key={optionKey} className="filter-option">
+                      <button
+                        className="white-Btn"
+                        onClick={() => handleFilterOptionClick(optionKey)}
+                      >
+                        {optionLabel}
+                        <span className="filter-icon">&#x25bc;</span>
+                      </button>
+                      {activeFilterOption === optionKey && (
+                        <div className="city-filter">
+                          <div className="optionDiv">
+                            {uniqueValues.map((value) => (
+                              <label
+                                key={value}
+                                className="selfcalling-filter-value"
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={
+                                    selectedFilters[optionKey]?.includes(
+                                      value
+                                    ) || false
+                                  }
+                                  onChange={() =>
+                                    handleFilterSelect(optionKey, value)
+                                  }
+                                />
+                                {value}
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
-        );
-      })}
-    </div>
-  )}
-</div>
 
           <div className="attendanceTableData">
             <table className="attendance-table">
@@ -629,14 +569,14 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       />
                     </th>
                   ) : null}
-                  <th className="attendanceheading">No.</th>
+                  <th className="attendanceheading">Sr No.</th>
                   <th
                     className="attendanceheading"
                     onClick={() => handleSort("date")}
                   >
-                    Date
+                    Date & Time
                   </th>
-                  <th className="attendanceheading">Time</th>
+                  {/* <th className="attendanceheading">Time</th> */}
                   <th className="attendanceheading">Candidate Id</th>
                   <th
                     className="attendanceheading"
@@ -706,22 +646,9 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.date}
+                      {item.date} { " "}  {item.candidateAddedTime || "-"}
                       <div className="tooltip">
-                        <span className="tooltiptext">{item.date}</span>
-                      </div>
-                    </td>
-
-                    <td
-                      className="tabledata"
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.candidateAddedTime || "-"}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.candidateAddedTime}
-                        </span>
+                        <span className="tooltiptext">{item.date} {" "} {item.candidateAddedTime}</span>
                       </div>
                     </td>
 
@@ -944,20 +871,13 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                        {item.experienceYear || "0"}
+                        {item.experienceYear || "0"} Years {" "}  {item.experienceMonth} Months
                         <div className="tooltip">
                           <span className="tooltiptext">
-                            {item.experienceYear}{" "}
+                          {item.experienceYear || "0"} Years {" "}  {item.experienceMonth} Months
                           </span>
                         </div>
-                        Years
-                        {item.experienceMonth || "0"}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
-                            {item.experienceMonth}
-                          </span>
-                        </div>
-                        Months
+                     
                       </td>
 
                       <td
@@ -978,12 +898,15 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                        {`${item.currentCTCLakh || 0} Lakh ${item.currentCTCThousand || 0
-                          } Thousand`}
+                        {`${item.currentCTCLakh || 0} Lakh ${
+                          item.currentCTCThousand || 0
+                        } Thousand`}
                         <div className="tooltip">
-                          <span className="tooltiptext">{`${item.expectedCTCLakh || 0
-                            } Lakh ${item.expectedCTCThousand || 0
-                            } Thousand`}</span>
+                          <span className="tooltiptext">{`${
+                            item.expectedCTCLakh || 0
+                          } Lakh ${
+                            item.expectedCTCThousand || 0
+                          } Thousand`}</span>
                         </div>
                       </td>
 
@@ -992,12 +915,15 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                        {`${item.expectedCTCLakh || 0} Lakh ${item.expectedCTCThousand || 0
-                          } Thousand`}
+                        {`${item.expectedCTCLakh || 0} Lakh ${
+                          item.expectedCTCThousand || 0
+                        } Thousand`}
                         <div className="tooltip">
-                          <span className="tooltiptext">{`${item.expectedCTCLakh || 0
-                            } Lakh ${item.expectedCTCThousand || 0
-                            } Thousand`}</span>
+                          <span className="tooltiptext">{`${
+                            item.expectedCTCLakh || 0
+                          } Lakh ${
+                            item.expectedCTCThousand || 0
+                          } Thousand`}</span>
                         </div>
                       </td>
 
@@ -1200,7 +1126,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                 selectedCandidate={selectedRows}
                 onSuccessFullEmailSend={handleSuccessEmailSend}
                 clientEmailSender={clientEmailSender}
-              // date1={date1}
+                // date1={date1}
               />
             ) : null}
             {/* Name:-Akash Pawar Component:-LineUpList
@@ -1284,7 +1210,10 @@ const SendEmailPopup = ({
         toBCCNames: [],
       };
 
-      const response = await axios.post(`${API_BASE_URL}/add-client-details`,clientData);
+      const response = await axios.post(
+        `${API_BASE_URL}/add-client-details`,
+        clientData
+      );
       if (response) {
         setIsMailSending(false);
         setResponse(response.data);
@@ -1297,7 +1226,6 @@ const SendEmailPopup = ({
   };
 
   const handleSendEmail = () => {
-
     setIsMailSending(true);
     const emailData = {
       to,
@@ -1317,7 +1245,7 @@ const SendEmailPopup = ({
       })),
     };
     axios
-      .post(`${API_BASE_URL}/send-email`,emailData)
+      .post(`${API_BASE_URL}/send-email`, emailData)
       .then((response) => {
         handleStoreClientInformation();
         onSuccessFullEmailSend(true);
@@ -1326,7 +1254,9 @@ const SendEmailPopup = ({
 
         selectedCandidate.forEach(async (can) => {
           try {
-            const performanceId = await axios.get(`${API_BASE_URL}/fetch-performance-id/${can.candidateId}`);
+            const performanceId = await axios.get(
+              `${API_BASE_URL}/fetch-performance-id/${can.candidateId}`
+            );
             UpdatePerformace(performanceId.data);
           } catch (error) {
             console.log(error);
@@ -1334,7 +1264,6 @@ const SendEmailPopup = ({
         });
 
         toast.success("Email sent successfully");
-
       })
 
       .catch((error) => {
@@ -1345,20 +1274,21 @@ const SendEmailPopup = ({
       });
   };
 
-
   const UpdatePerformace = async (id) => {
     try {
       const additionalData = {
-        mailToClient: new Date()
+        mailToClient: new Date(),
       };
       // console.log("Sending additional data:", additionalData);
-      const response1 = await axios.put(`${API_BASE_URL}/update-performance/${id}`,additionalData);
+      const response1 = await axios.put(
+        `${API_BASE_URL}/update-performance/${id}`,
+        additionalData
+      );
       console.log("Second API Response:", response1.data);
     } catch (error) {
       console.log(error);
     }
-  }
-
+  };
 
   return (
     <>
@@ -1551,7 +1481,6 @@ const SendEmailPopup = ({
           </div>
         </Modal.Body>
         <Modal.Footer style={{ justifyContent: "space-between" }}>
-
           <div className="gap-2 d-flex align-items-center">
             <button
               className="SCE-share-forward-popup-btn"

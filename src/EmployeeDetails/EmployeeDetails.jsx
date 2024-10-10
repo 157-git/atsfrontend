@@ -138,6 +138,9 @@ const EmployeeDetails = () => {
         <>
           {!showEmployee ? (
                    <div className="attendanceTableData">
+                    <center>
+                    <h1 className="emp-details-heading">Team Details</h1>
+                    </center>
             <table className="attendance-table">
               <thead>
               <tr className="attendancerows-head">
@@ -161,115 +164,97 @@ const EmployeeDetails = () => {
                     <td className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}>
-
                       {employee.id}
                       <div className="tooltip">
                         <span className="tooltiptext">{employee.id}</span>
                       </div>
-
                     </td>
 
                     <td className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}>
-
                       {employee.name}
                       <div className="tooltip">
                         <span className="tooltiptext">{employee.name}</span>
                       </div>
-
                     </td>
 
                     <td className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}>
-
                       {employee.contact}
                       <div className="tooltip">
                         <span className="tooltiptext">{employee.contact}</span>
                       </div>
-
                     </td>
+
                     <td className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}>
-
                       {employee.joinDate}
                       <div className="tooltip">
                         <span className="tooltiptext">{employee.joinDate}</span>
                       </div>
-
                     </td>
 
                     <td className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}>
-
                       {employee.designation}
                       <div className="tooltip">
                         <span className="tooltiptext">{employee.designation}</span>
                       </div>
-
                     </td>
 
                     <td className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}>
-
                       {employee.jobRole}
                       <div className="tooltip">
                         <span className="tooltiptext">{employee.jobRole}</span>
                       </div>
-
                     </td>
 
                     <td className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}>
-
                       {employee.department}
                       <div className="tooltip">
                         <span className="tooltiptext">{employee.department}</span>
                       </div>
-
                     </td>
 
-                    <td className="tabledata"
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}>
+                   
 
-                      {employee.reportingManger}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{employee.reportingManger}</span>
-                      </div>
-
-                    </td>
+                    <td
+                        className="tabledata"
+                        onMouseOver={handleMouseOver}
+                        onMouseOut={handleMouseOut}
+                      >
+                        {employee.reportingManger}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
+                          {employee.reportingManger}
+                          </span>
+                        </div>
+                      </td>
 
                     <td className="tabledata">
                       <button onClick={() => openResumeModal(employee.resume)}>
                         <i className="fas fa-eye"></i>
                       </button>
                     </td>
+
                     <td className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}>
-
                       {employee.status}
                       <div className="tooltip">
                         <span className="tooltiptext">{employee.status}</span>
                       </div>
-
                     </td>
                     <td>
                       <div className="emp-details-act-btn">
-                        {/* <button
-                          className="action-button"
-                          onClick={() => handleDelete(employee.id)}
-                        >
-                          {isDeleted(employee.employeeId)
-                            ? "Deleted"
-                            : "Delete"}
-                        </button> */}
                         <button
                           className="action-button"
                           onClick={() => handleBlock(employee.id)}
@@ -301,16 +286,10 @@ const EmployeeDetails = () => {
         </>
       ) : (
         <div className="register">
-          {/* <HashLoader
-            color={`${localStorage.getItem("selectedColor")}`}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          /> */}
           <Loader></Loader>
         </div>
       )}
 
-      {/* Resume Modal */}
       <Modal show={showResumeModal} onHide={closeResumeModal} size="md">
         <Modal.Header closeButton>
           <Modal.Title>Resume</Modal.Title>
