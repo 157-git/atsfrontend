@@ -756,21 +756,19 @@ const ShortListedCandidates = ({
                                   <div className="optionDiv">
                                     {Array.from(
                                       new Set(shortListedData.map((item) => item[key]))
-                                    ).map((value) => (
-                                      <label
-                                        key={value}
-                                        className="selfcalling-filter-value"
-                                      >
-                                        <input
-                                          type="checkbox"
-                                          checked={
-                                            selectedFilters[key]?.includes(value) || false
-                                          }
-                                          onChange={() => handleFilterSelect(key, value)}
-                                          style={{ marginRight: '5px' }}
-                                        />
-                                        {value}
-                                      </label>
+               // sahil karnekar added empty and 0 conditions for filter date : 11-10-24
+                                    ).map((value) => ( 
+                                      value !== '' && value !== '-' && !(key === 'alternateNumber' && value === 0) && (
+                                        <label key={value} className="selfcalling-filter-value">
+                                          <input
+                                            type="checkbox"
+                                            checked={selectedFilters[key]?.includes(value) || false}
+                                            onChange={() => handleFilterSelect(key, value)}
+                                            style={{ marginRight: '5px' }}
+                                          />
+                                          {value}
+                                        </label>
+                                      )
                                     ))}
                                   </div>
                                 </div>

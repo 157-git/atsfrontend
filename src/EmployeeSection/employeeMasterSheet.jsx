@@ -473,11 +473,18 @@ const EmployeeMasterSheet = () => {
     });
   };
 
+  // sahil karnekar added line 478 to 489 date 11-10-2024
   const toggleFilter = (field) => {
-    setExpandedFilters((prev) => ({
-      ...prev,
-      [field]: !prev[field],
-    }));
+    setExpandedFilters((prev) => {
+      const newExpanded = {};
+      newExpanded[field] = !prev[field]; 
+      Object.keys(prev).forEach((key) => {
+        if (key !== field) {
+          newExpanded[key] = false; 
+        }
+      });
+      return newExpanded;
+    });
   };
 
   const applyFilters = (data) => {
