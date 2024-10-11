@@ -797,7 +797,7 @@ function Sidebar({
                           >
                             <a href="#">
                               <span className="sidebar-text">
-                                Send Client Email
+                              Mail To Client 
                               </span>
                             </a>
                           </li>
@@ -1008,7 +1008,7 @@ function Sidebar({
                       >
                         <a href="#">
                           <span className="sidebar-text">
-                            Send Client Email
+                          Mail To Client 
                           </span>
                         </a>
                       </li>
@@ -1120,7 +1120,7 @@ function Sidebar({
                       >
                         <a href="#">
                           <span className="sidebar-text">
-                            Send Client Email
+                          Mail To Client 
                           </span>
                         </a>
                       </li>

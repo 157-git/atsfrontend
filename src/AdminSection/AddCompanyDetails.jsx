@@ -257,7 +257,7 @@ const AddCompanyDetails = () => {
             </center> */}
             <div className="ACD-desc-form">
               {/* Align AddJob  Description name center and changing color to gray */}
-              <h2 className="text-center text-[20px] text-gray-500 py-2">Add Client Details</h2>
+              <h2 className="text-center text-[20px] text-gray-500 py-2">Add  Client Details</h2>
               <div className="ACD_Field-column">
                 <div className="ACD_Field-Row-white">
                   <div className="ACD_Field">

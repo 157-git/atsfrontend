@@ -9,7 +9,6 @@ import { values } from "pdf-lib";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 import ShareEDM from "../JobDiscription/shareEDM";
-
 import UpdateJobDescription from "../JobDiscription/UpdateJobDescription";
 
 // SwapnilRokade_JobListing_filter_option__18/07
@@ -58,14 +57,13 @@ const JobListing = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data); // Log the fetched data to inspect its structure
-        // Sort the data by requirementId in descending order
         const sortedData = data.sort((a, b) => b.requirementId - a.requirementId);
-
         setJobDescriptions(sortedData);
         setFilteredJobDescriptions(sortedData); // Show all jobs initially
       })
       .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+         // sahil karnekar line 65 date : 10-10-2024
+  }, [showAddJobDiscriptionNew]);
 
   useEffect(() => {
     handleFilter();
@@ -178,7 +176,6 @@ const JobListing = () => {
   };
 
   const toggleJobDescription = (requirementId) => {
-    console.log(requirementId + "before Api");
     fetch(
        // replaced base url with actual url just for testing by sahil karnekar please replace it with base url at the time of deployment
       `${API_BASE_URL}/requirement-info/${requirementId}`
@@ -189,7 +186,6 @@ const JobListing = () => {
         setRequirementData(data);
         // setJobDescription(data)
         setShowViewMore(true);
-        console.log(requirementId + "after Api");
       })
       .catch((error) => console.error("Error fetching data:", error));
   };
@@ -243,11 +239,16 @@ const JobListing = () => {
     }
   };
 
-  //   This is added by sahil karnekar date : 30 sep 2024 the function for formatting the word is it is in PascalCase line 250 to 254
+  //   This is added by sahil karnekar date : 30 sep 2024 the function for formatting the word is it is in PascalCase line 243 to 248
   function formatOption(option) {
     // Regular expression to insert a space before any uppercase letter 
     // that follows a lowercase letter or another uppercase letter
     return option.replace(/([a-z])([A-Z])/g, '$1 $2');
+  }
+
+  // sahil karnekar line 249 to 252 date : 10-10-2024
+  const handleUpdateCompProp = (data) =>{
+    setShowAddJobDescriptionNew(data);
   }
 
   return (
@@ -583,21 +584,24 @@ const JobListing = () => {
       )}
       </>
     ):(
-        <>
-          <UpdateJobDescription
-            onAddJD={updateJD}
-          />
-        </>
+      <>
+      <UpdateJobDescription
+        onAddJD={updateJD}
+        // sahil karnekar line 599 date : 10-10-2024
+        toggleUpdateCompProp={handleUpdateCompProp}
+      />
+    </>
       )}
     </>
   );
 };
 
+
+//Arshad Attar Commented This : 11-10-2024
 const JobList = () => {
   return (
     <div className="job-list">
       <JobListing />
-      {/* Add more job listings as needed */}
     </div>
   );
 };

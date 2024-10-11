@@ -611,7 +611,6 @@ const CallingList = ({
           const blob = new Blob([array], { type: "application/pdf" });
           return URL.createObjectURL(blob);
         }
-
         // Convert Word document (assuming docx format)
         if (fileType === "docx") {
           const binary = atob(byteCode);
@@ -624,9 +623,7 @@ const CallingList = ({
           });
           return URL.createObjectURL(blob);
         }
-
         // Handle other document types here if needed
-
         // If file type is not supported
         console.error(`Unsupported document type: ${fileType}`);
         return "Unsupported Document";
@@ -637,6 +634,8 @@ const CallingList = ({
     }
     return "Document Not Found";
   };
+
+  
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [selectedCandidateResume, setSelectedCandidateResume] = useState("");
 

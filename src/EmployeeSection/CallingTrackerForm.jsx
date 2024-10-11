@@ -508,21 +508,17 @@ const CallingTrackerForm = ({
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-
       reader.onloadend = () => {
         const arrayBuffer = reader.result;
         const byteArray = new Uint8Array(arrayBuffer);
         const byteNumbers = Array.from(byteArray);
-
         const base64String = btoa(String.fromCharCode(...byteNumbers));
-
         console.log(base64String); // Print the Base64 string
         setLineUpData((prevState) => ({
           ...prevState,
           resume: base64String, // Store the Base64 string
         }));
       };
-
       reader.readAsArrayBuffer(file); // Read the file as an ArrayBuffer
     }
   };
@@ -1538,7 +1534,7 @@ const CallingTrackerForm = ({
                       onChange={handleLineUpChange}
                       placeholder="Months"
                       maxLength="2"
-                      min="1"
+                      min="0"
                       max="11"
                     />
                     {/* sahil karnekar line 1551 to 1556 */}
