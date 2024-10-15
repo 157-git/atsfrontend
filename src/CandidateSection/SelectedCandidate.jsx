@@ -906,7 +906,9 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
             {activeFilterOption === optionKey && (
               <div className="city-filter">
                 <div className="optionDiv">
+                  {/* line number 910 to 927 added by sahil karnekar date : 14-10-2024 */}
                   {uniqueValues.map((value) => (
+                     value !== '' && value !== '-' && !(optionKey === 'alternateNumber' && value === 0) && (
                     <label
                       key={value}
                       className="selfcalling-filter-value"
@@ -921,6 +923,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                       />
                       {value}
                     </label>
+                     )
                   ))}
                 </div>
               </div>

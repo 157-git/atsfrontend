@@ -107,7 +107,8 @@ const EmployeeMasterSheet = () => {
 
   const displayNameMap = {
     candidateId: "Candidate Id",
-    alternateNumber: "Alternate Number",
+   // line number 111 edited by sahil karnekar according to tester suggestion date 14-10-2024
+    alternateNumber: "WhatsApp Number",
     callingFeedback: "Calling Feedback",
     candidateEmail: "Candidate Email",
     candidateName: "Candidate Name",
@@ -615,7 +616,11 @@ const EmployeeMasterSheet = () => {
                     {expandedFilters[field] && (
                       <div className="city-filter">
                         <div className="optionDiv">
+                        {/* line number 619 to 639 added by sahil karnekar on date : 14-10-2024 */}
                           {uniqueValues[field].map((value, index) => (
+
+                            (field !== "alternateNumber" || value !== 0) && value && (
+
                             <label
                               className="selfcalling-filter-value"
                               key={index}
@@ -631,6 +636,7 @@ const EmployeeMasterSheet = () => {
                               />
                               {value}
                             </label>
+                            )
                           ))}
                         </div>
                       </div>

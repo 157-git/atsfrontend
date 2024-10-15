@@ -79,7 +79,8 @@ const CallingList = ({
   });
   //akash_pawar_LineUpList_ShareFunctionality_17/07_71
   const limitedOptions = [
-    ["alternateNumber", "Alternate Number"],
+    // line number 83 edited by sahil karnekar according to tester suggestion date 14-10-2024
+    ["alternateNumber", "WhatsApp Number"],
     ["availabilityForInterview", "Availability For Interview"],
     ["callingFeedback", "Calling Feedback"],
     ["candidateAddedTime", "Candidate Added Time"],
@@ -934,7 +935,9 @@ const CallingList = ({
                           {activeFilterOption === optionKey && (
                             <div className="city-filter">
                               <div className="optionDiv">
+                                {/* line number 938 to 959 added by sahil karnekar date 14-10-2024 */}
                                 {uniqueValues.map((value) => (
+                                   value !== '' && value !== '-' && !(optionKey === 'alternateNumber' && value === 0) && (
                                   <label
                                     key={value}
                                     className="selfcalling-filter-value"
@@ -953,6 +956,7 @@ const CallingList = ({
                                     />
                                     {value}
                                   </label>
+                                   )
                                 ))}
                               </div>
                             </div>

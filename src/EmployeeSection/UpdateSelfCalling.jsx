@@ -534,6 +534,8 @@ const UpdateSelfCalling = ({
                         type="checkbox"
                         name="lineUp.gender"
                         className="gender"
+                        // line number 538 added by sahil karnekar , suggestion from tester on date : 14-10-2024
+                        value="Male"
                         checked={callingTracker?.lineUp.gender === "Male"}
                         onChange={handleChange}
                       />

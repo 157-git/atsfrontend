@@ -76,7 +76,8 @@ const LineUpList = ({
   //akash_pawar_LineUpList_ShareFunctionality_17/07_71
 
   const limitedOptions = [
-    ["alternateNumber", "Alternate Number"],
+   // line number 79 edited by sahil karnekar according to tester suggestion date 14-10-2024
+    ["alternateNumber", "WhatsApp Number"],
     ["availabilityForInterview", "Availability For Interview"],
     ["callingFeedback", "Calling Feedback"],
     ["candidateAddedTime", "Candidate Added Time"],
@@ -945,7 +946,9 @@ const LineUpList = ({
                           {activeFilterOption === optionKey && (
                             <div className="city-filter">
                               <div className="optionDiv">
+                                {/* line number 949 to 970 added by sahil karnekar on the date : 14-10-2024 */}
                                 {uniqueValues.map((value) => (
+                                   value !== '' && value !== '-' && !(optionKey === 'alternateNumber' && value === 0) && (
                                   <label
                                     key={value}
                                     className="selfcalling-filter-value"
@@ -964,6 +967,7 @@ const LineUpList = ({
                                     />
                                     {value}
                                   </label>
+                                   )
                                 ))}
                               </div>
                             </div>

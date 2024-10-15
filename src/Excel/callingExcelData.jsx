@@ -488,7 +488,9 @@ const CallingExcelList = ({
                           {activeFilterOption === optionKey && (
                             <div className="city-filter">
                               <div className="optionDiv">
+                                {/* line number 492 to 513 added by sahil karnekar date : 14-10-2024 */}
                                 {uniqueValues.map((value) => (
+                                  value !== null && (
                                   <label
                                     key={value}
                                     className="selfcalling-filter-value"
@@ -507,6 +509,7 @@ const CallingExcelList = ({
                                     />
                                     {value}
                                   </label>
+                                  )
                                 ))}
                               </div>
                             </div>

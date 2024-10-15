@@ -274,12 +274,14 @@ const JobListing = () => {
               value={searchQuery.experience}
               onChange={handleInputSearch}
             />
-            <datalist id="experienceOptions">
+
+            {/* line number 279 to 284 commented by sahil karnekar suggestionfrom tester on date : 14-10-2024 */}
+            {/* <datalist id="experienceOptions">
               <option value="0-1 years" />
               <option value="1-3 years" />
               <option value="3-5 years" />
               <option value="5+ years" />
-            </datalist>
+            </datalist> */}
 
             <input
               className="search-input"

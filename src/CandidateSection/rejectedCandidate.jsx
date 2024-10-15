@@ -932,7 +932,9 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
             {activeFilterOption === optionKey && (
               <div className="city-filter">
                 <div className="optionDiv">
+                  {/* line number 936 to 953 added by sahil karnekar date : 14-10-2024 */}
                   {uniqueValues.map((value) => (
+                     value !== '' && value !== '-' && value !== undefined && !(optionKey === 'alternateNumber' && value === 0) && (
                     <label
                       key={value}
                       className="selfcalling-filter-value"
@@ -947,6 +949,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                       />
                       {value}
                     </label>
+                     )
                   ))}
                 </div>
               </div>
