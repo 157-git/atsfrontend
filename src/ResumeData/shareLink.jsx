@@ -44,7 +44,7 @@ const ShareLink = ({ toggleResumeLink }) => {
         </div>
       )}
       <div className="shareLink-view-btn-Div">
-        <h1>Create Resume</h1>
+        <h1>Resume Builder</h1>
         <button className="shareLink-view-btn" onClick={toggleResumeLink}>
           Create
         </button>

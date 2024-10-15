@@ -32,8 +32,8 @@
 .interview-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+  /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); */
 }
 
 .interview-table th,

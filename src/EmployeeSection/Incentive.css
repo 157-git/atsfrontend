@@ -111,3 +111,21 @@
     justify-content: center;
   }
 }
+
+
+/* Arshad Attar Added this CSS 15-10-2024 */
+.incetive-heading-div{
+  height: 30px;
+  /* border: 1px solid black; */
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  
+}
+
+#incetive-heading{
+  font-size: 18px;
+  color: black;
+  color: gray;
+  
+}

@@ -128,8 +128,8 @@ button.react-calendar__tile.react-calendar__tile--now.react-calendar__month-view
 }
 
 .shortlist-table-div {
-  margin-top: 20px;
-  padding-top: 30px;
+  /* margin-top: 20px;
+  padding-top: 30px; */
   padding-left: 10px;
   padding-right: 20px;
 }
@@ -284,7 +284,7 @@ button.react-calendar__tile.react-calendar__tile--now.react-calendar__month-view
 
 .interview-data-div {
   overflow-x: auto; /* Enable horizontal scrolling */
-  margin-top: 20px; /* Space above the table */
+  /* margin-top: 20px;  */
 }
 
 
