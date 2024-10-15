@@ -11,7 +11,7 @@ import Loader from "../EmployeeSection/loader";
 
 const EmployeeMasterSheet = () => {
   const [data, setData] = useState([]);
-  // sahil karnekar line 16 to 111
+  // sahil karnekar line 14 to 111
   const [showFilterSection, setShowFilterSection] = useState(false);
   const [uniqueValues, setUniqueValues] = useState({});
   const [selectedFilters, setSelectedFilters] = useState({
@@ -242,12 +242,12 @@ const EmployeeMasterSheet = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        // sahil karnekar line 212 set employeeId and usertType in Api at the time of deployement this url is just for testing
+        // sahil karnekar line 244 set employeeId and usertType in Api at the time of deployement this url is just for testing
         `${API_BASE_URL}/master-sheet/${employeeId}/${userType}`
       );
       const data = await response.json();
       setData(data);
-      // sahil karnekar line 216
+      // sahil karnekar line 249
       extractUniqueValues(data);
       setLoading(false);
     } catch (error) {
@@ -424,7 +424,6 @@ const EmployeeMasterSheet = () => {
         }
 
         // Handle other document types here if needed
-
         // If file type is not supported
         console.error(`Unsupported document type: ${fileType}`);
         return "Unsupported Document";
@@ -451,7 +450,7 @@ const EmployeeMasterSheet = () => {
   };
   //Name:-Akash Pawar Component:-EmployeeMarksheet Subcategory:-ResumeViewButton(added) End LineNo:-167 Date:-02/07
 
-  // sahil karnekar  line 422 to 471
+  // sahil karnekar  line 451 to 471
   const extractUniqueValues = (data) => {
     const uniqueValuesMap = {};
     Object.keys(fieldIndexMap).forEach((field) => {
@@ -491,7 +490,6 @@ const EmployeeMasterSheet = () => {
 
   const applyFilters = (data) => {
     let filtered = data;
-
     Object.keys(selectedFilters).forEach((field) => {
       const fieldValues = selectedFilters[field];
       if (fieldValues.length > 0) {
@@ -501,7 +499,6 @@ const EmployeeMasterSheet = () => {
         );
       }
     });
-
     return filtered;
   };
 
@@ -599,7 +596,7 @@ const EmployeeMasterSheet = () => {
             </div>
           </div>
 
-          {/* sahil karnekar line 541 to 573 */}
+          {/* sahil karnekar line 593 to 573 */}
           <div className="filter-dropdowns">
             {showFilterSection && (
               <div className="filter-section">
@@ -616,28 +613,30 @@ const EmployeeMasterSheet = () => {
                     {expandedFilters[field] && (
                       <div className="city-filter">
                         <div className="optionDiv">
-                        {/* line number 619 to 639 added by sahil karnekar on date : 14-10-2024 */}
-                          {uniqueValues[field].map((value, index) => (
 
-                            (field !== "alternateNumber" || value !== 0) && value && (
-
-                            <label
-                              className="selfcalling-filter-value"
-                              key={index}
-                            >
-                              <input
-                                name="testName"
-                                style={{ marginRight: "5px" }}
-                                type="checkbox"
-                                checked={selectedFilters[field].includes(value)}
-                                onChange={() =>
-                                  handleFilterChange(field, value)
-                                }
-                              />
-                              {value}
-                            </label>
-                            )
-                          ))}
+                          {uniqueValues[field].map(
+                            (value, index) =>
+                              (field !== "alternateNumber" || value !== 0) &&
+                              value && (
+                                <label
+                                  className="selfcalling-filter-value"
+                                  key={index}
+                                >
+                                  <input
+                                    name="testName"
+                                    style={{ marginRight: "5px" }}
+                                    type="checkbox"
+                                    checked={selectedFilters[field].includes(
+                                      value
+                                    )}
+                                    onChange={() =>
+                                      handleFilterChange(field, value)
+                                    }
+                                  />
+                                  {value}
+                                </label>
+                              )
+                          )}
                         </div>
                       </div>
                     )}

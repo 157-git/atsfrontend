@@ -57,7 +57,6 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
     console.log(formData);
   }, [formData]);
   useEffect(() => {
-    // fetchRecruiterName();
     fetchRequirementOptions();
   }, [employeeId]);
 
@@ -123,6 +122,8 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
       alert("There was an error submitting the form. Please try again.");
     }
   };
+
+
   const fetchRequirementOptions = async () => {
     try {
       const response = await axios.get(
@@ -240,7 +241,7 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
             <div className="dhansform-group">
               <div className="dhansform-label-input">
                 <div className="dhansform-label">
-                  <label>Company Name:</label>
+                  <label>Company Name: </label>
                 </div>
                 <div className="job-id-side-input">
                   <input
@@ -360,7 +361,6 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
 
               {showAdditionalFields && (
                 <div>
-
                   <div className="dhansform-group">
                     <div className="dhansform-label-input">
                       <div className="dhansform-label">

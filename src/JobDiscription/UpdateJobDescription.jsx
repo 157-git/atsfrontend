@@ -5,44 +5,51 @@ import "react-toastify/dist/ReactToastify.css";
 import { API_BASE_URL } from "../api/api";
 // import WebSocketService from '../websocket/WebSocketService';
 
-const UpdateJobDescription = ({onAddJD}) => {
+// sahil karnekar line 9_  date : 10-10-2024
+const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
   console.log(onAddJD);
-  
+
   const [formData, setFormData] = useState({
-    companyName:onAddJD.companyName || "",
-    designation:onAddJD.designation || "",
-    position:onAddJD.position || "",
-    qualification:onAddJD.qualification || "",
-    year_of_passing:onAddJD.yearOfPassing || "",
-    field:onAddJD.field|| "",
-    stream:onAddJD.stream || "",
-    location:onAddJD.location || "",
-    salary:onAddJD.salary|| "",
-    job_type:onAddJD.jobType|| "",
-    experience:onAddJD.experience|| "",
-    bond:onAddJD.bond || "",
-    percentage:onAddJD.percentage|| "",
-    skills:onAddJD.skills|| "",
-    companyLink:onAddJD.companyLink|| "",
-    detailAddress:onAddJD.detailAddress|| "",
-    shift:onAddJD.shift|| "",
-    weekOff:onAddJD.weekOff|| "",
-    noticePeriod:onAddJD.noticePeriod || "",
-    jobRole:onAddJD.jobRole ||"",
-    perks:onAddJD.perks|| "",
-    incentive:onAddJD.incentive|| "",
-    reportingHierarchy:onAddJD.reportingHierarchy|| "",
-    gender:onAddJD.gender|| "",
-    documentation:onAddJD.documentation|| "",
-    ageCriteria: onAddJD.ageCriteria||"",
-    note: onAddJD.note||"",
+    companyName: onAddJD.companyName || "",
+    designation: onAddJD.designation || "",
+    position: onAddJD.position || "",
+    qualification: onAddJD.qualification || "",
+    year_of_passing: onAddJD.yearOfPassing || "",
+    field: onAddJD.field || "",
+    stream: onAddJD.stream || "",
+    location: onAddJD.location || "",
+    salary: onAddJD.salary || "",
+    job_type: onAddJD.jobType || "",
+    experience: onAddJD.experience || "",
+    bond: onAddJD.bond || "",
+    percentage: onAddJD.percentage || "",
+    skills: onAddJD.skills || "",
+    companyLink: onAddJD.companyLink || "",
+    detailAddress: onAddJD.detailAddress || "",
+    shift: onAddJD.shift || "",
+    weekOff: onAddJD.weekOff || "",
+    noticePeriod: onAddJD.noticePeriod || "",
+    jobRole: onAddJD.jobRole || "",
+    perks: onAddJD.perks || "",
+    incentive: onAddJD.incentive || "",
+    reportingHierarchy: onAddJD.reportingHierarchy || "",
+    gender: onAddJD.gender || "",
+    documentation: onAddJD.documentation || "",
+    ageCriteria: onAddJD.ageCriteria || "",
+    note: onAddJD.note || "",
     // contactRecruiterEmail:"",
     // contactRecruiterMobileNumber:"",
     // contactRecruiterName:"",
-    positionOverview: { overview: onAddJD.positionOverview?.overview || '' },
-      responsibilities: onAddJD.responsibilities?.length ? onAddJD.responsibilities : [{ employeeId: '', responsibilitiesMsg: '' }],
-      jobRequirements: onAddJD.jobRequirements?.length ? onAddJD.jobRequirements : [{ employeeId: '', jobRequirementMsg: '' }],
-      preferredQualifications: onAddJD.preferredQualifications?.length ? onAddJD.preferredQualifications : [{ employeeId: '', preferredQualificationMsg: '' }],
+    positionOverview: { overview: onAddJD.positionOverview?.overview || "" },
+    responsibilities: onAddJD.responsibilities?.length
+      ? onAddJD.responsibilities
+      : [{ employeeId: "", responsibilitiesMsg: "" }],
+    jobRequirements: onAddJD.jobRequirements?.length
+      ? onAddJD.jobRequirements
+      : [{ employeeId: "", jobRequirementMsg: "" }],
+    preferredQualifications: onAddJD.preferredQualifications?.length
+      ? onAddJD.preferredQualifications
+      : [{ employeeId: "", preferredQualificationMsg: "" }],
     // RoundOfInterView: [
     //   {
     //     round: "",
@@ -90,13 +97,15 @@ const UpdateJobDescription = ({onAddJD}) => {
     let subscription;
     const setupWebSocket = async () => {
       try {
-        subscription = await WebSocketService.subscribeToNotifications((notification) => {
-          if (notification.type === 'ADD') {
-            toast.info(notification.message);
+        subscription = await WebSocketService.subscribeToNotifications(
+          (notification) => {
+            if (notification.type === "ADD") {
+              toast.info(notification.message);
+            }
           }
-        });
+        );
       } catch (error) {
-        console.error('Failed to subscribe to notifications:', error);
+        console.error("Failed to subscribe to notifications:", error);
       }
     };
 
@@ -116,15 +125,14 @@ const UpdateJobDescription = ({onAddJD}) => {
     }));
   };
 
+  //   sahil karnekar line 128 to 202 date : 10-10-2024
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-
     try {
       const response = await fetch(
-        `${API_BASE_URL}/add-requirement`,
+        `${API_BASE_URL}/update-job-description/${onAddJD.requirementId}`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
@@ -134,6 +142,7 @@ const UpdateJobDescription = ({onAddJD}) => {
       console.log(response);
       if (response.ok) {
         const result = await response.text();
+        console.log(result);
         toast.success(result);
         setFormData({
           companyName: "",
@@ -163,21 +172,15 @@ const UpdateJobDescription = ({onAddJD}) => {
           documentation: "",
           ageCriteria: "",
           note: "",
-          // contactRecruiterEmail:"",
-          // contactRecruiterMobileNumber:"",
-          // contactRecruiterName:"",
           positionOverview: { overview: "", employeeId: "" },
           responsibilities: [{ employeeId: "", responsibilitiesMsg: "" }],
           jobRequirements: [{ employeeId: "", jobRequirementMsg: "" }],
           preferredQualifications: [
             { employeeId: "", preferredQualificationMsg: "" },
-          ]
-          // RoundOfInterView: [
-          //   {
-          //     round: "",
-          //   },
-          // ],
+          ],
         });
+
+        toggleUpdateCompProp(false);
       } else {
         toast.error(`Error: ${errorText}`);
       }
@@ -186,13 +189,17 @@ const UpdateJobDescription = ({onAddJD}) => {
     }
   };
 
+  // sahil karnekar
+  const handleCloseButton = () => {
+    toggleUpdateCompProp(false);
+  };
+
   return (
     <main className="job-desc">
       <section className="job-performance">
         {/* Align AddJobDescription name center and changing color to gray */}
 
         <h3 className="text-center text-[18px] text-gray-500 py-2">
-
           Update Job Description
         </h3>
 
@@ -261,7 +268,6 @@ const UpdateJobDescription = ({onAddJD}) => {
                   <input
                     type="text"
                     name="field"
-
                     value={formData.field}
                     onChange={handleChange}
                     placeholder="Enter Field"
@@ -519,17 +525,16 @@ const UpdateJobDescription = ({onAddJD}) => {
                     value={formData.positionOverview.overview}
                     onChange={(e) => {
                       handlePositionOverviewChange(e);
-                      e.target.style.height = 'auto';
+                      e.target.style.height = "auto";
                       e.target.style.height = `${e.target.scrollHeight}px`;
                     }}
                     placeholder="Describe Position Overview"
                     style={{
-                      resize: 'none',
-                      overflow: 'hidden',
+                      resize: "none",
+                      overflow: "hidden",
                     }}
                   />
                 </div>
-
               </div>
 
               <div className="bg-white multi-field">
@@ -548,31 +553,30 @@ const UpdateJobDescription = ({onAddJD}) => {
                       />
                     </div>
                     <div className="field">
-  <label>Responsibility Message:</label>
-  <textarea
-    className="textarea"
-    name="responsibilitiesMsg"
-    value={item.responsibilitiesMsg}
-    onChange={(e) => {
-      handleInputChange(e, "responsibilities", index);
-      e.target.style.height = 'auto'; // Reset the height
-      e.target.style.height = `${e.target.scrollHeight}px`; // Adjust the height based on content
-    }}
-    placeholder="Enter Responsibility Message"
-    style={{
-      resize: 'none', // Prevent manual resizing
-      overflow: 'hidden', // Hide scrollbars
-    }}
-  />
-  <button
-    type="button"
-    className="job-remove-button"
-    onClick={() => handleRemove("responsibilities", index)}
-  >
-    X
-  </button>
-</div>
-
+                      <label>Responsibility Message:</label>
+                      <textarea
+                        className="textarea"
+                        name="responsibilitiesMsg"
+                        value={item.responsibilitiesMsg}
+                        onChange={(e) => {
+                          handleInputChange(e, "responsibilities", index);
+                          e.target.style.height = "auto"; // Reset the height
+                          e.target.style.height = `${e.target.scrollHeight}px`; // Adjust the height based on content
+                        }}
+                        placeholder="Enter Responsibility Message"
+                        style={{
+                          resize: "none", // Prevent manual resizing
+                          overflow: "hidden", // Hide scrollbars
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="job-remove-button"
+                        onClick={() => handleRemove("responsibilities", index)}
+                      >
+                        X
+                      </button>
+                    </div>
                   </div>
                 ))}
 
@@ -600,7 +604,6 @@ const UpdateJobDescription = ({onAddJD}) => {
                           handleInputChange(e, "jobRequirements", index)
                         }
                       />
-
                     </div>
                     <div className="field">
                       <label>Job Requirement Message:</label>
@@ -609,14 +612,14 @@ const UpdateJobDescription = ({onAddJD}) => {
                         name="jobRequirementMsg"
                         value={item.jobRequirementMsg}
                         onChange={(e) => {
-                          handleInputChange(e, "jobRequirements", index)
-                          e.target.style.height = 'auto'; 
-                          e.target.style.height = `${e.target.scrollHeight}px`; 
+                          handleInputChange(e, "jobRequirements", index);
+                          e.target.style.height = "auto";
+                          e.target.style.height = `${e.target.scrollHeight}px`;
                         }}
                         placeholder="Enter Job Requirement Message"
                         style={{
-                          resize: 'none', // Prevent manual resizing
-                          overflow: 'hidden', // Hide scrollbars
+                          resize: "none", // Prevent manual resizing
+                          overflow: "hidden", // Hide scrollbars
                         }}
                       />
                       <button
@@ -635,7 +638,6 @@ const UpdateJobDescription = ({onAddJD}) => {
                     type="button"
                     className="job-button"
                     onClick={() => handleAddMore("jobRequirements")}
-
                   >
                     Add More Job Requirements
                   </button>
@@ -663,21 +665,27 @@ const UpdateJobDescription = ({onAddJD}) => {
                         className="textarea"
                         name="preferredQualificationMsg"
                         value={item.preferredQualificationMsg}
-                        onChange={(e) =>{
-                          handleInputChange(e, "preferredQualifications", index)
-                          e.target.style.height = 'auto'; 
+                        onChange={(e) => {
+                          handleInputChange(
+                            e,
+                            "preferredQualifications",
+                            index
+                          );
+                          e.target.style.height = "auto";
                           e.target.style.height = `${e.target.scrollHeight}px`;
                         }}
                         placeholder="Enter Preferred Qualification Message"
                         style={{
-                          resize: 'none', // Prevent manual resizing
-                          overflow: 'hidden', // Hide scrollbars
+                          resize: "none", // Prevent manual resizing
+                          overflow: "hidden", // Hide scrollbars
                         }}
                       />
                       <button
                         type="button"
                         className="job-remove-button"
-                        onClick={() => handleRemove("preferredQualifications", index)}
+                        onClick={() =>
+                          handleRemove("preferredQualifications", index)
+                        }
                       >
                         X
                       </button>
@@ -689,7 +697,6 @@ const UpdateJobDescription = ({onAddJD}) => {
                     type="button"
                     className="job-button-add-Preferred"
                     onClick={() => handleAddMore("preferredQualifications")}
-
                   >
                     Add More Preferred Qualifications
                   </button>
@@ -697,9 +704,18 @@ const UpdateJobDescription = ({onAddJD}) => {
               </div>
             </div>
           </div>
+          {/* sahil karnekar line 716 to 727 */}
           <div className="job-submit-button">
             <button className="daily-tr-btn" type="submit">
-              Submit
+              Update
+            </button>
+            {/* sahil karnekar */}
+            <button
+              className="daily-tr-btn"
+              style={{ marginLeft: "10px"}}
+              onClick={handleCloseButton}
+            >
+              Close
             </button>
           </div>
         </form>
