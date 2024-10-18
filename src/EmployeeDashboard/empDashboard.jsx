@@ -675,7 +675,6 @@ const EmpDashboard = ({ userGroup }) => {
       />
 
       <div className="empDash-main-content">
-
         <div className="time-and-data">
           <DailyWork
             employeeId={employeeId}
@@ -749,7 +748,11 @@ const EmpDashboard = ({ userGroup }) => {
           )}
         </div>
         <div>{incentive && <Incentive />}</div>
-        <div>{attendancesheet && <Attendancesheet />}</div>
+        <div>
+          {attendancesheet && (
+            <Attendancesheet loginEmployeeName={loginEmployeeName} />
+          )}
+        </div>
 
         <div>
           {showCallingExcelList && (
@@ -872,12 +875,11 @@ const EmpDashboard = ({ userGroup }) => {
           )}
         </div>
         <div>{showAllInterviewResponses && <InterviewDataTables />}</div>
-        <div>{showPerformanceImprovement && <PerformanceImprovement />}</div>
-        {/* <div>
-          {showTeamDetails && (
-            <TeamDetails></TeamDetails>
+        <div>
+          {showPerformanceImprovement && (
+            <PerformanceImprovement loginEmployeeName={loginEmployeeName} />
           )}
-        </div> */}
+        </div>
         <div>{showAddTeamLeader && <AddTeamLeader></AddTeamLeader>}</div>
         <div>{showAddManager && <AddManager></AddManager>}</div>
       </div>

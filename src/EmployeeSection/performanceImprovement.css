@@ -60,31 +60,19 @@
   }
   
   .PIE-Header-Section{
-    display: grid;
+    display: flex;
     gap: 10px;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   
   .PIE-grid-dropdown{
-    grid-column: span 1 / span 1;
-    background-color: #f2f2f2;
+    /* grid-column: span 1 / span 1; */
+    /* background-color: #f2f2f2; */
     padding: 10px;
     border-radius: 15px;
+    /* border: 2px solid yellow; */
+    width: 300px;
   }
-  .PIE-grid-date{
-    grid-column: span 2 / span 2;
-    width: 100%;
-    background-color: #f2f2f2;
-    padding: 10px;
-    border-radius: 15px;
-  }
-  .PIE-date-container{
-    color:var(--text-color);
-    /* min-width: 450px; */
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
+
   .PIE-radio-group1 {
     display: flex;
     flex-direction: column;
@@ -93,9 +81,46 @@
     display: flex;
     flex-direction: column;
   }
+
+  .PIE-grid-date{
+    width: 70%;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid gray;
+    margin-left: 10px;
+  }
   
+  .PIE-date-container{
+    color:var(--text-color);
+    display: flex;
+  flex-wrap: wrap; 
+  gap: 5px; 
+  justify-content: space-evenly;
+
+  }
+
   .PIE-radio-option {
    margin-left: 5px;
+   border: 1px solid black;
+   width: auto;
+   height: 30px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+  }
+
+  .PIT-heading{
+    /* border: 1px solid red; */
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  .PIE-custom-date{
+    /* border: 1px solid black; */
   }
   .PIE-custom-date-input {
     border: 1px solid gray;
@@ -125,6 +150,7 @@
   .PIE-client-desg-role{
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
     gap: 10px; 
     align-items: center;
   }
@@ -153,12 +179,13 @@
   
   .PIE-dropdown-container {
     position: relative;
-    max-width: 250px; /* Maximum width */
+    max-width: 250px;
   }
   
   .PIE-Dropdown {
-    padding: 5px;
-    border-radius: 15px;
+    padding-right: 8px;
+    padding-left: 8px;
+    border-radius: 5px;
     color:var(--text-color);
     background-color: #f8f9fa;
     border: 1px solid #ced4da;
@@ -166,6 +193,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border: 1px solid black;
+    width: 300px;
+    /* max-width: 450px; */
   }
   
   .PIE-dropdown-icon {

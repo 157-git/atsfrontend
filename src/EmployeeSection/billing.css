@@ -71,7 +71,9 @@
 
 
 
+
 .table-container th {
+  
   background-color: var(--Bg-color);
   /* padding: 5px; */
   text-align: center;

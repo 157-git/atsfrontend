@@ -348,6 +348,7 @@ const CallingTrackerForm = ({
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
+  
   const handleSubmit = async (e) => {
     setShowConfirmation(false);
     e.preventDefault();
@@ -423,10 +424,10 @@ const CallingTrackerForm = ({
       if (response) {
         if (callingTracker.selectYesOrNo === "Interested") {
           onsuccessfulDataAdditions(true);
-          console.log("-------Yes Add Calling Tracker-----------");
+          // console.log("-------Yes Add Calling Tracker-----------");
         } else {
           onsuccessfulDataAdditions(false);
-          console.log("-------No Add Calling Tracker-----------");
+          // console.log("-------No Add Calling Tracker-----------");
         }
         setSubmited(false);
         setLoading(true);
@@ -444,25 +445,6 @@ const CallingTrackerForm = ({
     }
   };
 
-  //Arshad Comment this code 7-10-2-2024
-  // const handleLocationChange = (e) => {
-  //   const value = e.target.value;
-  //   if (value === "Other") {
-  //     setIsOtherLocationSelected(true);
-  //     setCallingTracker((prevState) => ({
-  //       ...prevState,
-  //       currentLocation: value,
-  //     }));
-  //   } else {
-  //     setIsOtherLocationSelected(false);
-  //     setCallingTracker((prevState) => ({
-  //       ...prevState,
-  //       currentLocation: value,
-  //     }));
-  //   }
-  //   setErrors((prevErrors) => ({ ...prevErrors, currentLocation: "" }));
-  // };
-
   // sahil karnekar :-  8-10-2-2024 ,  line 446 to 460
   const handleLocationChange = (e) => {
     const value = e.target.value;
@@ -477,19 +459,6 @@ const CallingTrackerForm = ({
     }));
     setErrors((prevErrors) => ({ ...prevErrors, currentLocation: "" }));
   };
-
-  //Arshad Comment this code 7-10-2-2024
-  // const handleEducationChange = (e) => {
-  //   const value = e.target.value;
-  //   if (value === "Other") {
-  //     setIsOtherEducationSelected(true);
-  //     setLineUpData({ ...lineUpData, qualification: "" });
-  //   } else {
-  //     setIsOtherEducationSelected(false);
-  //     setLineUpData({ ...lineUpData, qualification: value });
-  //   }
-  //   setErrors((prevErrors) => ({ ...prevErrors, qualification: "" }));
-  // };
 
   // sahil karnekar :-  8-10-2-2024 ,  line 497 to 508
   const handleEducationChange = (e) => {
@@ -2007,14 +1976,16 @@ const ModalComponent = ({
             >
               Salary Calculation
             </p>
-            <p
+
+            {/* <p
               className={`sidebar-item ${
                 activeField === "historyTracker" ? "active" : ""
               }`}
               onClick={() => setActiveField("historyTracker")}
             >
               History Tracker
-            </p>
+            </p> */}
+            
             <p
               className={`sidebar-item ${
                 activeField === "previousQuestion" ? "active" : ""

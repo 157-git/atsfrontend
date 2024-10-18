@@ -277,7 +277,7 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
               <div className="dhansform-label-input">
 
                 <div className="dhansform-label">
-                  <label>Candidate name</label>
+                  <label>Candidate Id</label>
                 </div >
                 <div>
                   <select 
@@ -293,14 +293,14 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
                         key={option[0]}
                         value={option[0]}
                       >
-                        {option[1]}
+                        {option[0]}
                       </option>
                     ))}
                   </select>
                 </div>
               </div>
             </div>
-            <div className="dhansform-group">
+            {/* <div className="dhansform-group">
               <div className="dhansform-label-input">
                 <div className="dhansform-label">
                   <label>Candidate ID:</label>
@@ -309,7 +309,7 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
                   <label>{newCandidateData.candidateId}</label>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="dhansform-group">
               <div className="dhansform-label-input">

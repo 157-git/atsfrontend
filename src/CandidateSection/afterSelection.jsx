@@ -49,11 +49,14 @@ const AfterSelection = ({
     useState("");
   const [reasonForNotJoin, setReasonForNotJoin] = useState("");
   const [errors, setErrors] = useState({});
-  const [performanceId,setPerformanceId]=useState();
-  const [updatedTime,setUpdatedTime] = useState();
-  const [JoiningStatus,setJoiningStatus] =useState();
-  const [offerLatter,setOfferLatter] =useState();
+  const [performanceId, setPerformanceId] = useState();
+  const [updatedTime, setUpdatedTime] = useState();
+  const [JoiningStatus, setJoiningStatus] = useState();
+  const [offerLatter, setOfferLatter] = useState();
+  const [loading, setLoading] = useState(false);
+
   
+  const { userType } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,7 +70,9 @@ const AfterSelection = ({
 
   const fetchCandidateData = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/specific-data/${candidateId}`);
+      const response = await fetch(
+        `${API_BASE_URL}/specific-data/${candidateId}`
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -79,21 +84,22 @@ const AfterSelection = ({
     }
   };
 
-  const fetchPerformaceId = async()=>{
+  const fetchPerformaceId = async () => {
     try {
-      const performanceId = await axios.get(`${API_BASE_URL}/fetch-performance-id/${candidateId}`);
+      const performanceId = await axios.get(
+        `${API_BASE_URL}/fetch-performance-id/${candidateId}`
+      );
       setPerformanceId(performanceId.data);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const fetchCandidateTableData = async () => {
-    console.log(candidateId + "---candidateId");
-    console.log(employeeId + "---> employeeId");
-    console.log(requirementId + "-->requirementId");
     try {
-      const response = await fetch(`${API_BASE_URL}/fetch-after-selection?candidateId=${candidateId}&employeeId=${employeeId}&requirementId=${requirementId}`);
+      const response = await fetch(
+        `${API_BASE_URL}/fetch-after-selection?candidateId=${candidateId}&employeeId=${employeeId}&requirementId=${requirementId}`
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -110,7 +116,7 @@ const AfterSelection = ({
     setAdharCardUploaded(file);
     try {
       const additionalData = {
-        sendingDocument:formatDateToIST(new Date()),
+        sendingDocument: formatDateToIST(new Date()),
       };
       console.log(additionalData);
       const response1 = await axios.put(
@@ -156,7 +162,7 @@ const AfterSelection = ({
     }
   };
 
-  const handleOfferLetterReceivedChange =async (e) => {
+  const handleOfferLetterReceivedChange = async (e) => {
     const received = e.target.value;
     setOfferLetterReceived(received);
     if (received === "yes") {
@@ -166,7 +172,7 @@ const AfterSelection = ({
     }
     try {
       const additionalData = {
-        letterResponse:new Date(),
+        letterResponse: new Date(),
       };
       console.log(additionalData);
       const response1 = await axios.put(
@@ -179,12 +185,12 @@ const AfterSelection = ({
     }
   };
 
-  const handleOfferLetterAcceptedChange =async (e) => {
+  const handleOfferLetterAcceptedChange = async (e) => {
     const accepted = e.target.value;
     setOfferLetterAccepted(accepted);
     try {
       const additionalData = {
-        issueOfferLetter:new Date(),
+        issueOfferLetter: new Date(),
       };
       console.log(additionalData);
       const response1 = await axios.put(
@@ -195,10 +201,9 @@ const AfterSelection = ({
     } catch (error) {
       console.log(error);
     }
-
   };
 
-  const handleJoinStatusChange = async(e) => {
+  const handleJoinStatusChange = async (e) => {
     const status = e.target.value;
     setJoinStatus(status);
     if (status === "join") {
@@ -208,22 +213,7 @@ const AfterSelection = ({
     }
     try {
       const additionalData = {
-        joiningProcess:new Date()
-      };
-      console.log(additionalData);
-      const response1 = await axios.put(`${API_BASE_URL}/update-performance/${performanceId}`,additionalData);
-      console.log("Second API Response:", response1.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleJoiningDateChange =async (e)=>{
-    const date = e.target.value;
-    setJoinDate(date);
-    try {
-      const additionalData = {
-        joinDate:date,
+        joiningProcess: new Date(),
       };
       console.log(additionalData);
       const response1 = await axios.put(
@@ -234,7 +224,25 @@ const AfterSelection = ({
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
+  const handleJoiningDateChange = async (e) => {
+    const date = e.target.value;
+    setJoinDate(date);
+    try {
+      const additionalData = {
+        joinDate: date,
+      };
+      console.log(additionalData);
+      const response1 = await axios.put(
+        `${API_BASE_URL}/update-performance/${performanceId}`,
+        additionalData
+      );
+      console.log("Second API Response:", response1.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleInactiveReasonChange = (e) => {
     const reason = e.target.value;
@@ -257,15 +265,13 @@ const AfterSelection = ({
     };
 
     try {
-      const response = await fetch(`${API_BASE_URL}/add-after-selection`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/add-after-selection`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
       console.log(response);
 
       setInquiryFormSubmitted(true);
@@ -289,15 +295,20 @@ const AfterSelection = ({
     }
   };
 
+
   const JoininghandleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
 
+    setLoading(true);
+    
+    // Create FormData object to hold the form data
+    const formData = new FormData();
     formData.append("employeeId", employeeId);
     formData.append("candidateId", candidateId);
     formData.append("requirementId", requirementId);
     formData.append("mailReceived", mailReceived);
-
+    
+    // Only append files if they are provided
     if (aadhaarCard) formData.append("aadhaarCard", aadhaarCard);
     if (panCard) formData.append("panCard", panCard);
     if (drivingLicense) formData.append("drivingLicense", drivingLicense);
@@ -307,51 +318,69 @@ const AfterSelection = ({
 
     formData.append("offerLetterReceived", offerLetterReceived);
     formData.append("offerLetterAccepted", offerLetterAccepted);
-    formData.append(
-      "reasonForRejectionOfferLetter",
-      reasonForRejectionOfferLetter
-    );
+    formData.append("reasonForRejectionOfferLetter", reasonForRejectionOfferLetter || "");
     formData.append("joinStatus", joinStatus);
-    formData.append("reasonForNotJoin", reasonForNotJoin);
+    formData.append("reasonForNotJoin", reasonForNotJoin || "");
     formData.append("joinDate", joinDate);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/save-join-data`,
-        {
-          method: "POST",
-          body: formData,
+        // Make POST request to the backend API
+        const response = await fetch(`${API_BASE_URL}/save-join-data`, {
+            method: "POST",
+            body: formData,  // Send form data
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
         }
-      );
 
-      if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.statusText}`);
-      }
+        const contentType = response.headers.get("content-type");
+        let result;
+        
+        if (contentType && contentType.includes("application/json")) {
+            result = await response.json();
+        } else {
+            result = await response.text();
+        }
 
-      const contentType = response.headers.get("content-type");
-
-      let result;
-      if (contentType && contentType.includes("application/json")) {
-        result = await response.json();
-      } else {
-        result = await response.text();
-      }
-
-      console.log("Response received:", result);
-
-      if (
-        (typeof result === "string" &&
-          result.includes("Data Added successfully")) ||
-        (result && result.success)
-      ) {
-        onReturn();
-      } else {
-        throw new Error("Unexpected response format or error status");
-      }
+        // Check response and show success message
+        if (
+            (typeof result === "string" && result.includes("Data Added Successfully")) ||
+            (result && result.success)
+        ) {
+            toast.success("Documents Added Successfully!"); 
+            clearForm();  // Clear form after successful submission
+            onReturn();   // Trigger any necessary callback or navigation
+            setLoading(true); 
+        } else {
+            throw new Error("Unexpected response format or error status");
+        }
     } catch (error) {
-      console.error("Failed to submit form:", error);
+        // Display error message using toast
+        toast.error("Failed to submit the form. Please try again.");
+        console.error("Failed to submit form:", error);
+    }finally {
+      setLoading(false);
     }
+};
 
-  };
+const clearForm = () => {
+    setMailReceived("");
+    setAdharCardUploaded(null);
+    setPanCardUploaded(null);
+    setDrivingLicenseUploaded(null);
+    setDegreeMarksheetUploaded(null);
+    setHscMarksheetUploaded(null);
+    setSscMarksheetUploaded(null);
+    setOfferLetterReceived("");
+    setOfferLetterAccepted("");
+    setReasonForRejectionOfferLetter("");
+    setJoinStatus("");
+    setReasonForNotJoin("");
+    setJoinDate("");
+};
+
+
 
   return (
     <div>
@@ -543,6 +572,27 @@ const AfterSelection = ({
                     <div className="after-mail-div">
                       <div className="after-lable-div">
                         <label
+                          htmlFor="offerLetterReceived"
+                          className="after-label"
+                        >
+                          Offer Letter Received:
+                        </label>
+                      </div>
+
+                      <select
+                        id="offerLetterReceived"
+                        className="after-select"
+                        value={offerLetterReceived}
+                        onChange={handleOfferLetterReceivedChange}
+                      >
+                        <option value="">Select Option</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                      </select>
+                    </div>
+                    <div className="after-mail-div">
+                      <div className="after-lable-div">
+                        <label
                           htmlFor="offerLetterAccepted"
                           className="after-label"
                         >
@@ -582,43 +632,6 @@ const AfterSelection = ({
                         <option value="toJoin">To Join</option>
                       </select>
                     </div>
-                    <div className="after-mail-div">
-                      <div className="after-lable-div">
-                        <label
-                          htmlFor="offerLetterReceived"
-                          className="after-label"
-                        >
-                          Offer Letter Received:
-                        </label>
-                      </div>
-
-                      <select
-                        id="offerLetterReceived"
-                        className="after-select"
-                        value={offerLetterReceived}
-                        onChange={handleOfferLetterReceivedChange}
-                      >
-                        <option value="">Select Option</option>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                      </select>
-                    </div>
-
-                    <div className="after-mail-div">
-                      <div className="after-lable-div">
-                        <label className="after-label">
-                          Reason for Not Accepting:
-                        </label>
-                      </div>
-
-                      <input
-                        type="text"
-                        className="after-input"
-                        id="joinReason"
-                        value={joinReason}
-                        onChange={(e) => setJoinReason(e.target.value)}
-                      />
-                    </div>
 
                     <div className="after-mail-div">
                       <div className="after-lable-div">
@@ -633,6 +646,31 @@ const AfterSelection = ({
                         id="joinDate"
                         value={joinDate}
                         onChange={handleJoiningDateChange}
+                      />
+                    </div>
+                    <div className="after-mail-div">
+                      <div className="after-lable-div">
+                        {userType === "Recruiters" && (
+                          <label className="after-label">
+                            Comment For Team Leader : -
+                          </label>
+                        )}
+                        {userType === "TeamLeader" && (
+                          <label className="after-label">
+                            Comment For Manager : -
+                          </label>
+                        )}
+                        {userType === "Manager" && (
+                          <label className="after-label">Comment :-</label>
+                        )}
+                      </div>
+
+                      <input
+                        type="text"
+                        className="after-input"
+                        id="joinReason"
+                        value={joinReason}
+                        onChange={(e) => setJoinReason(e.target.value)}
                       />
                     </div>
                   </div>
@@ -693,13 +731,16 @@ const AfterSelection = ({
                       </tr>
 
                       <tr id="table-row">
-                      <th scope="col">Gender</th>
-                      <td>{candidateData.gender}</td>
+                        <th scope="col">Gender</th>
+                        <td>{candidateData.gender}</td>
                         <th scope="col">Total Experience:</th>
-                        <td> {candidateData.experienceYear} Year {candidateData.experienceMonth} Month </td>
+                        <td>
+                          {" "}
+                          {candidateData.experienceYear} Year{" "}
+                          {candidateData.experienceMonth} Month{" "}
+                        </td>
                         <th scope="col">Source Name :</th>
                         <td>{candidateData.sourceName}</td>
-                        
                       </tr>
 
                       <tr id="table-row">
@@ -720,8 +761,7 @@ const AfterSelection = ({
                         <td> dd-mm-yyyy </td>
                         <th scope="col"> Days Remainig :</th>
                         <td style={{ color: "red", fontWeight: "bold" }}>
-                         
-                         0 Days
+                          0 Days
                         </td>
                       </tr>
                     </tbody>
@@ -891,7 +931,7 @@ const AfterSelection = ({
                     <div className="alert alert-success" role="alert">
                       Follow Up Data Added successfully!
                     </div>
-                  )} 
+                  )}
                   <button
                     type="submit"
                     style={{ marginTop: "25px" }}
