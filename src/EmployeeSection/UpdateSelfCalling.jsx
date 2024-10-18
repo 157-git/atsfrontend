@@ -113,12 +113,13 @@ const UpdateSelfCalling = ({
   const [errors, setErrors] = useState({});
   const [errorForDOB, setErrorForDOB] = useState("");
   const [errorInterviewSlot, seterrorInterviewSlot] = useState("");
+  // updated by sahil karnekar date 18-10-2024
   const today = new Date();
-const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
-  .toISOString()
-  .split("T")[0]; // Format as YYYY-MM-DD
-  
-  
+  const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
+    .toISOString()
+    .split("T")[0]; // Format as YYYY-MM-DD
+
+
 
   const validateCallingTracker = () => {
     let newErrors = {};
@@ -139,7 +140,6 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
     }
     return newErrors;
   };
-  
   const validateLineUpData = () => {
     let newErrors = {};
     if (callingTracker.selectYesOrNo === "Interested") {
@@ -151,6 +151,9 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
       }
       if (!callingTracker.lineUp.experienceMonth) {
         newErrors.experienceMonth = "Experience Month is required";
+        // line 155 to 158 added by sahil karnekar date 18-10-2024
+      } else if (parseInt(callingTracker.lineUp.experienceMonth, 10) > 11) {
+        newErrors.experienceMonth = "Experience in months cannot exceed 11.";
       }
       if (!callingTracker.lineUp.relevantExperience) {
         newErrors.relevantExperience = "Relevant Experience is required";
@@ -182,8 +185,6 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
     }
     return newErrors;
   };
-  
-
   useEffect(() => {
     fetchCandidateData(candidateId);
     fetchRequirementOptions();
@@ -226,11 +227,11 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // line 229 to 459 added by sahil karnekar date 17-10-2024
+    // line 230 to 627 added by sahil karnekar date 17-10-2024
 
     if (
-      (name === "candidateName" || 
-      name === "currentLocation"
+      (name === "candidateName" ||
+        name === "currentLocation"
       ) &&
       !/^[a-zA-Z\s]*$/.test(value)
     ) {
@@ -240,12 +241,12 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
       (name === "contactNumber" ||
         name === "alternateNumber" ||
         name === "lineUp.experienceYear" ||
-        name === "lineUp.experienceMonth"||
-        name === "lineUp.relevantExperience"||
-      name === "lineUp.expectedCTCLakh"||
-      name === "lineUp.expectedCTCThousand"||
-      name === "lineUp.currentCTCLakh" ||
-      name === "lineUp.currentCTCThousand"
+        name === "lineUp.experienceMonth" ||
+        name === "lineUp.relevantExperience" ||
+        name === "lineUp.expectedCTCLakh" ||
+        name === "lineUp.expectedCTCThousand" ||
+        name === "lineUp.currentCTCLakh" ||
+        name === "lineUp.currentCTCThousand"
       ) &&
       !/^\d*$/.test(value)
     ) {
@@ -257,18 +258,51 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
     if (name === "lineUp.dateOfBirth") {
       console.log(value);
       console.log(maxDate);
-      
+
       if (value > maxDate) {
-        setErrorForDOB("MaxDate"+maxDate);
-        
-      }else{
+        setErrorForDOB("MaxDate" + maxDate);
+
+      } else {
         setErrorForDOB("");
       }
     }
-    
 
 
-
+    if (name === "lineUp.yearOfPassing") {
+      // Allow only 4 digits
+      if (!/^\d{0,4}$/.test(value)) {
+        return; // Prevent updating state if the value doesn't match
+      }
+  
+      // Check if the value is within the required range
+      const year = parseInt(value, 10);
+      if (value.length === 4 && (year < 1947 || year > 2025)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          yearOfPassing: "Year of Passing must be between 1947 and 2025.",
+        }));
+        return; // Prevent updating state if the year is out of range
+      } else {
+        // Clear error if valid
+        setErrors((prevErrors) => {
+          const { yearOfPassing, ...restErrors } = prevErrors; // Clear the yearOfPassing error if valid
+          return restErrors;
+        });
+      }
+  
+      // Set the value in the state
+      setCallingTracker((prevState) => {
+        const lineUpField = name.split(".")[1];
+        return {
+          ...prevState,
+          lineUp: {
+            ...prevState.lineUp,
+            [lineUpField]: value,
+          },
+        };
+      });
+    }
+console.log(errors);
 
     setCallingTracker((prevState) => {
       if (name.includes("lineUp")) {
@@ -289,59 +323,67 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
     });
     // line 290 to 15 added by sahil karnekar date 17-10-2024
 
-// Perform real-time validation
-validateRealTime(name, value);
+    // Perform real-time validation
+    validateRealTime(name, value);
 
   };
 
   const validateRealTime = (name, value) => {
     setErrors((prevErrors) => {
       let newErrors = { ...prevErrors };
-  
+
       // Specific validations based on the input field
-      if (name === "candidateName"){
-        if (value=== "") {
+      if (name === "candidateName") {
+        if (value === "") {
           newErrors.candidateName = "Candidate Name is required";
-        }else{
-          delete newErrors.candidateName; 
+        } else {
+          delete newErrors.candidateName;
         }
       }
-      if (name === "candidateEmail"){
+      if (name === "candidateEmail") {
         const emailPattern = /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
-        if (value=== "") {
+        if (value === "") {
           newErrors.candidateEmail = "Candidate Email is required";
-        }else if (!emailPattern.test(value)) {
+        } else if (!emailPattern.test(value)) {
           // If email format is invalid, show an error
           newErrors.candidateEmail = "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).";
-        }else{
-          delete newErrors.candidateEmail; 
+        } else {
+          delete newErrors.candidateEmail;
         }
       }
-      if (name === "contactNumber"){
-        if (value=== "") {
+      if (name === "contactNumber") {
+        if (value === "") {
           newErrors.contactNumber = "Contact Number is required";
-        }else{
-          delete newErrors.contactNumber; 
+        } else {
+          delete newErrors.contactNumber;
         }
       }
-      if (name === "sourceName"){
-        if (value=== "") {
+      if (name === "sourceName") {
+        if (value === "") {
           newErrors.sourceName = "source Name is required";
-        }else{
-          delete newErrors.sourceName; 
+        } else {
+          delete newErrors.sourceName;
         }
       }
-      if (name === "callingFeedback"){
-        if (value=== "") {
+      if (name === "callingFeedback") {
+        if (value === "") {
           newErrors.callingFeedback = "calling Feedback is required";
-        }else{
-          delete newErrors.callingFeedback; 
+        } else {
+          delete newErrors.callingFeedback;
         }
       }
+   // Add yearOfPassing validation directly in errors
+   if (name === "lineUp.yearOfPassing") {
+    if (callingTracker.selectYesOrNo === "Interested" && value === "") {
+      newErrors.yearOfPassing = "Year of Passing is required when Interested.";
+    } else {
+      delete newErrors.yearOfPassing; // Clear the error if valid
+    }
+  }
       if (callingTracker.selectYesOrNo === "Interested") {
         setErrors((prevErrors) => {
           let newErrors = { ...prevErrors }; // Copy the previous errors
-      
+
           if (name === "currentLocation") {
             if (value === "") {
               newErrors.currentLocation = "Location is required";
@@ -356,10 +398,10 @@ validateRealTime(name, value);
               delete newErrors.communicationRating; // Clear the error if value is valid
             }
           }
-   
+
           if (name.startsWith("lineUp.")) {
             const fieldName = name.split(".")[1]; // Get the specific field name
-      
+
             if (fieldName === "experienceYear") {
               if (value === "") {
                 newErrors.experienceYear = "Experience Year is required";
@@ -372,21 +414,15 @@ validateRealTime(name, value);
                 newErrors.experienceMonth = "Experience Month is required";
               } else {
                 const experienceMonthValue = parseInt(value, 10);
-            
+
                 if (experienceMonthValue > 11) {
-                  setErrors((prevErrors) => ({
-                    ...prevErrors,
-                    experienceMonth: "Experience in months cannot exceed 11.",
-                  }));
+                  newErrors.experienceMonth = "Experience in months cannot exceed 11.";
                 } else {
-                  setErrors((prevErrors) => ({
-                    ...prevErrors,
-                    experienceMonth: "",
-                  }));
+                  delete newErrors.experienceMonth; // Clear the error if value is valid
                 }
               }
             }
-            
+
             if (fieldName === "relevantExperience") {
               if (value === "") {
                 newErrors.relevantExperience = "relevant Experience is required";
@@ -423,16 +459,16 @@ validateRealTime(name, value);
               }
             }
 
-            
+
             // Add more validations for lineUp fields here if needed
           }
-      
+
           return newErrors; // Return the updated errors
         });
       }
-      
-      
-  
+
+
+
       return newErrors;  // Return the updated error state
     });
   };
@@ -445,14 +481,14 @@ validateRealTime(name, value);
     if (callingTracker.selectYesOrNo === "Interested") {
       setErrors((prevErrors) => {
         let newErrors = { ...prevErrors }; // Copy the previous errors
-       
-          if (value === "") {
-            newErrors.qualification = "Education is required";
-          } else {
-            delete newErrors.qualification; // Clear the error if value is valid
-          }
-        
-    
+
+        if (value === "") {
+          newErrors.qualification = "Education is required";
+        } else {
+          delete newErrors.qualification; // Clear the error if value is valid
+        }
+
+
         return newErrors; // Return the updated errors
       });
     }
@@ -479,31 +515,46 @@ validateRealTime(name, value);
       }));
     }
   };
-  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
- // Validate the form data before submitting
- console.log(callingTracker);
- const validationErrors = validateCallingTracker();
- const validationErrorsForLineup = validateLineUpData();
+   // Validate the form data before submitting
+   const validationErrors = validateCallingTracker();
+   const validationErrorsForLineup = validateLineUpData();
  
- if (Object.keys(validationErrors).length > 0 || Object.keys(validationErrorsForLineup).length > 0) {
-   setErrors({
+   // Check yearOfPassing errors directly
+   if (callingTracker.selectYesOrNo === "Interested") {
+     if (!callingTracker.lineUp.yearOfPassing) {
+       validationErrors.yearOfPassing = "Year of Passing is required when Interested.";
+     } else {
+       const year = parseInt(callingTracker.lineUp.yearOfPassing, 10);
+       if (year < 1947 || year > 2025) {
+         validationErrors.yearOfPassing = "Year of Passing must be between 1947 and 2025.";
+       }
+     }
+   }
+ 
+   // Combine all errors
+   const combinedErrors = {
      ...validationErrors,
      ...validationErrorsForLineup,
-   });
-
-   console.log(errors);
-   return; // Prevent submission if errors exist
- }
+   };
  
-  
+   // Check if there are any errors before submission
+   if (Object.keys(combinedErrors).length > 0) {
+     setErrors(combinedErrors);
+     return; // Prevent submission if errors exist
+   }
 
 
 
- 
+
+
+
     try {
+      // Clear all existing errors at the start of submission
+  setErrors({});
       const dataToUpdate = {
         ...callingTracker,
         candidateAddedTime: callingTracker.candidateAddedTime,
@@ -531,7 +582,7 @@ validateRealTime(name, value);
         } else {
           onsuccessfulDataUpdation(false);
           toast.success("Data updated successfully");
-        }        
+        }
         setFormSubmitted(true);
         onSuccess();
         onCancel();
@@ -556,24 +607,24 @@ validateRealTime(name, value);
 
       // Check if the user is interested
       if (callingTracker.selectYesOrNo === "Interested") {
-          // If the value is empty, set the error
-          if (value === "") {
-              newErrors.requirementId = "Job Id is required";
-          } else {
-              // If there's a value, clear the error for requirementId
-              delete newErrors.requirementId;
-          }
-      } else {
-          // If not interested, clear the error for requirementId
+        // If the value is empty, set the error
+        if (value === "") {
+          newErrors.requirementId = "Job Id is required";
+        } else {
+          // If there's a value, clear the error for requirementId
           delete newErrors.requirementId;
+        }
+      } else {
+        // If not interested, clear the error for requirementId
+        delete newErrors.requirementId;
       }
 
       return newErrors; // Return the updated error state
-  });
-    
+    });
 
-    
-    
+
+
+
 
 
     const selectedRequirement = requirementOptions.find(
@@ -684,9 +735,9 @@ validateRealTime(name, value);
           <div className="update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
               <label>Candidate's Full Name</label>
-               {/* line 687 to 740 added by sahil karnekar date 17-10-2024 */}
-              <div className="update-calling-tracker-field-sub-div">
-                <div className="input-block" style={{display:"block"}}>
+              {/* line 738 to 1844 added and updated by sahil karnekar date 18-10-2024 */}
+              <div className="update-calling-tracker-field-sub-div setInputBlock">
+
                 <input
                   type="text"
                   name="candidateName"
@@ -696,15 +747,15 @@ validateRealTime(name, value);
                   maxlength="50"
                 />
                 {errors.candidateName && (
-                    <div className="error-message">{errors.candidateName}</div>
-                  )}
-              </div>
+                  <div className="error-message">{errors.candidateName}</div>
+                )}
+
               </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>Candidate's Email</label>
-              <div className="update-calling-tracker-field-sub-div">
-              <div className="input-block" style={{display:"block"}}>
+              <div className="update-calling-tracker-field-sub-div setInputBlock">
+
                 <input
                   type="email"
                   name="candidateEmail"
@@ -713,9 +764,9 @@ validateRealTime(name, value);
                   className={`plain-input`}
                 />
                 {errors.candidateEmail && (
-                    <div className="error-message">{errors.candidateEmail}</div>
-                  )}
-              </div>
+                  <div className="error-message">{errors.candidateEmail}</div>
+                )}
+
               </div>
             </div>
           </div>
@@ -723,8 +774,8 @@ validateRealTime(name, value);
           <div className="update-calling-tracker-row-gray">
             <div className="update-calling-tracker-field">
               <label>Contact Number</label>
-              <div className="update-calling-tracker-field-sub-div">
-              <div className="input-block" style={{display:"block"}}>
+              <div className="update-calling-tracker-field-sub-div setInputBlock">
+
                 <input
                   name="contactNumber"
                   value={callingTracker?.contactNumber || ""}
@@ -733,10 +784,10 @@ validateRealTime(name, value);
                   defaultCountry="IN"
                   maxLength={11}
                 />
-                 {errors.contactNumber && (
-                    <div className="error-message">{errors.contactNumber}</div>
-                  )}
-              </div>
+                {errors.contactNumber && (
+                  <div className="error-message">{errors.contactNumber}</div>
+                )}
+
               </div>
             </div>
             <div className="update-calling-tracker-field">
@@ -758,15 +809,15 @@ validateRealTime(name, value);
           <div className="update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
               <label>Source Name</label>
-               {/* line 761 to 770 added by sahil karnekar date 17-10-2024 */}
-              <div className="update-calling-tracker-field-sub-div">
-              <div className="input-block" style={{display:"block"}}>
+              {/* line 761 to 770 added by sahil karnekar date 17-10-2024 */}
+              <div className="update-calling-tracker-field-sub-div setInputBlock">
+
                 <select
                   name="sourceName"
                   className={`plain-input`}
                   value={callingTracker?.sourceName || ""}
                   onChange={handleChange}
-                 // required={callingTracker.selectYesOrNo !== "Interested"}
+                // required={callingTracker.selectYesOrNo !== "Interested"}
                 >
                   <option value="">Select Source Name</option>
                   <option value="LinkedIn">linkedIn</option>
@@ -779,49 +830,49 @@ validateRealTime(name, value);
                   <option value="Friends">Friends</option>
                   <option value="others">others</option>
                 </select>
-                 {/* line 782 to 825 added by sahil karnekar date 17-10-2024 */}
+                {/* line 782 to 825 added by sahil karnekar date 17-10-2024 */}
                 {errors.sourceName && (
-                    <div className="error-message">{errors.sourceName}</div>
-                  )}
-                  </div>
+                  <div className="error-message">{errors.sourceName}</div>
+                )}
+
               </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>Job Id</label>
               <div className="update-calling-tracker-two-input-container">
-              <div className="input-block" style={{display:"block"}}>
-                <select
-                  className="update-calling-tracker-two-input"
-                  id="requirementId"
-                  name="requirementId"
-                  value={callingTracker?.requirementId || ""}
-                  onChange={handleRequirementChange}
-                 //  required={callingTracker.selectYesOrNo === "Interested"}
-                 style={{ width: "80%" }}
-                >
-                  <option value="">Select Job Id</option>
-                  {requirementOptions.map((option) => (
-                    <option
-                      key={option.requirementId}
-                      value={option.requirementId}
-                    >
-                      {option.requirementId} - {option.designation}
-                    </option>
-                  ))}
-                </select>
-                {errors.requirementId && (
-  <div className="error-message">{errors.requirementId}</div>
-)}
-</div>
-<div>
-                <input
-                  placeholder=" Your Incentive"
-                  value={callingTracker?.incentive || ""}
-                  readOnly
-                  className="update-calling-tracker-two-input"
-                  type="text"
-                  style={{ width: "100%" }}
-                />
+                <div>
+                  <select
+                    className="update-calling-tracker-two-input"
+                    id="requirementId"
+                    name="requirementId"
+                    value={callingTracker?.requirementId || ""}
+                    onChange={handleRequirementChange}
+                    //  required={callingTracker.selectYesOrNo === "Interested"}
+                    style={{ width: "80%" }}
+                  >
+                    <option value="">Select Job Id</option>
+                    {requirementOptions.map((option) => (
+                      <option
+                        key={option.requirementId}
+                        value={option.requirementId}
+                      >
+                        {option.requirementId} - {option.designation}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.requirementId && (
+                    <div className="error-message">{errors.requirementId}</div>
+                  )}
+                </div>
+                <div>
+                  <input
+                    placeholder=" Your Incentive"
+                    value={callingTracker?.incentive || ""}
+                    readOnly
+                    className="update-calling-tracker-two-input"
+                    type="text"
+                    style={{ width: "100%" }}
+                  />
                 </div>
               </div>
             </div>
@@ -853,29 +904,29 @@ validateRealTime(name, value);
             </div>
             <div className="update-calling-tracker-field">
               <label>Current Location</label>
-               {/* line 856 to 926 added by sahil karnekar date 17-10-2024 */}
+              {/* line 856 to 926 added by sahil karnekar date 17-10-2024 */}
               <div className="update-calling-check-box-main-container">
-              <div className="input-block" style={{display:"block"}}>
+                <div>
+                  <input
+                    type="text"
+                    name="currentLocation"
+                    value={callingTracker?.currentLocation || ""}
+                    onChange={handleChange}
+                    placeholder="Enter your location"
+                    className="update-calling-check-box-main-container-input"
+                  />
+                  {errors.currentLocation && (
+                    <div className="error-message">{errors.currentLocation}</div>
+                  )}
+                </div>
                 <input
-                  type="text"
-                  name="currentLocation"
-                  value={callingTracker?.currentLocation || ""}
-                  onChange={handleChange}
-                  placeholder="Enter your location"
                   className="update-calling-check-box-main-container-input"
-                />
-                 {errors.currentLocation && (
-  <div className="error-message">{errors.currentLocation}</div>
-)}
-</div>
-                <input
-                   className="update-calling-check-box-main-container-input"
                   type="text"
                   name="fullAddress"
                   placeholder="Full Address"
                   value={callingTracker?.fullAddress || ""}
                   onChange={handleChange}
-                  style={{height:"fit-content"}}
+                  style={{ height: "fit-content" }}
                 />
               </div>
             </div>
@@ -884,10 +935,10 @@ validateRealTime(name, value);
           <div className="update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
               <label>Calling Remark</label>
-              <div className="update-calling-tracker-field-sub-div">
-              <div className="input-block" style={{display:"block"}}>
+              <div className="update-calling-tracker-field-sub-div setInputBlock">
+
                 <select
-                 //  required={callingTracker.selectYesOrNo === "Interested"}
+                  //  required={callingTracker.selectYesOrNo === "Interested"}
                   className="plain-input"
                   name="callingFeedback"
                   value={callingTracker?.callingFeedback || ""}
@@ -906,24 +957,26 @@ validateRealTime(name, value);
                   <option value="Other">Other</option>
                 </select>
                 {errors.callingFeedback && (
-                    <div className="error-message">{errors.callingFeedback}</div>
-                  )}
-              </div>
+                  <div className="error-message">{errors.callingFeedback}</div>
+                )}
+
               </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>Date Of Birth</label>
               <div className="update-calling-check-box-main-container">
-                <input
-                  type="date"
-                  name="lineUp.dateOfBirth"
-                  value={callingTracker.lineUp.dateOfBirth}
-                  onChange={handleChange}
-                  max={maxDate}
-                />
-                {errorForDOB && (
-                      <div className="error-message">{errorForDOB}</div>
-                    )}
+                <div>
+                  <input
+                    type="date"
+                    name="lineUp.dateOfBirth"
+                    value={callingTracker.lineUp.dateOfBirth}
+                    onChange={handleChange}
+                    max={maxDate}
+                  />
+                  {errorForDOB && (
+                    <div className="error-message">{errorForDOB}</div>
+                  )}
+                </div>
 
                 <div className="calling-check-box-container">
                   <div className="update-callingTracker-male-div">
@@ -974,446 +1027,456 @@ validateRealTime(name, value);
             </div>
             <div className="update-calling-tracker-field">
               <label>Education</label>
-               {/* line 979 to 1408 added by sahil karnekar date 17-10-2024 */}
+              {/* line 979 to 1408 added by sahil karnekar date 17-10-2024 */}
               <div className="update-calling-tracker-two-input-container">
-              <div className="input-block" style={{display:"block"}}>
-              <input list="educationListDropDown" 
-                  name="qualification"
-                  value={callingTracker?.lineUp.qualification || ""}
+                <div style={{width:"50%", marginRight:"20px"}}>
+                  <input list="educationListDropDown"
+                    name="qualification"
+                    value={callingTracker?.lineUp.qualification || ""}
                     onChange={handleEducationChange}
-                  placeholder="Search...."
-                  
+                    placeholder="Search...."
+
                   />
-                  
-                      <datalist id="educationListDropDown"
-                        
-                      >
-                        <option value="">Select</option>
-                        <option value="Other">Other</option>
-                        <option value="10th">10th</option>
-                        <option value="12th">12 th</option>
-                        <option value="ITI">ITI</option>
-                        <option value="diploma in CS">
-                          Diploma in Computer science
-                        </option>
-                        <option value="Degree In CS">
-                          BTech in Computer Science
-                        </option>
-                        <option value="M-Tech In CS">
-                          MTech in Computer Science
-                        </option>
-                        <option value="PhD ">PhD</option>
-                        <option value="BSC">BSC in chemestry</option>
-                        <option value="MSC">MSC </option>
-                        <option value="BCA">BCA</option>
-                        <option value="MCA">MCA</option>
-                        <option value="Associate of Arts (AA)">
-                          Associate of Arts (AA)
-                        </option>
-                        <option value="Associate of Science (AS)">
-                          Associate of Science (AS)
-                        </option>
-                        <option value="Associate of Applied Science (AAS)">
-                          Associate of Applied Science (AAS)
-                        </option>
-                        <option value="Associate of Fine Arts (AFA)">
-                          Associate of Fine Arts (AFA)
-                        </option>
-                        <option value="Associate of Business Administration (ABA)">
-                          Associate of Business Administration (ABA)
-                        </option>
-                        <option value="Associate of Engineering (AE)">
-                          Associate of Engineering (AE)
-                        </option>
-                        <option value="Associate of Nursing (AN)">
-                          Associate of Nursing (AN)
-                        </option>
-                        <option value="Associate of General Studies (AGS)">
-                          Associate of General Studies (AGS)
-                        </option>
-                        <option value="Associate of Occupational Studies (AOS)">
-                          Associate of Occupational Studies (AOS)
-                        </option>
-                        <option value="Associate of Information Technology (AIT)">
-                          Associate of Information Technology (AIT)
-                        </option>
-                        <option value="Bachelor's Degrees">
-                          Bachelor's Degrees
-                        </option>
-                        <option value="Bachelor of Arts (BA)">
-                          Bachelor of Arts (BA)
-                        </option>
-                        <option value="Bachelor of Science (BS)">
-                          Bachelor of Science (BS)
-                        </option>
-                        <option value="Bachelor of Fine Arts (BFA)">
-                          Bachelor of Fine Arts (BFA)
-                        </option>
-                        <option value="Bachelor of Business Administration (BBA)">
-                          Bachelor of Business Administration (BBA)
-                        </option>
-                        <option value="Bachelor of Engineering (BEng)">
-                          Bachelor of Engineering (BEng)
-                        </option>
-                        <option value="Bachelor of Technology (BTech)">
-                          Bachelor of Technology (BTech)
-                        </option>
-                        <option value="Bachelor of Education (BEd)">
-                          Bachelor of Education (BEd)
-                        </option>
-                        <option value="Bachelor of Nursing (BN)">
-                          Bachelor of Nursing (BN)
-                        </option>
-                        <option value="Bachelor of Social Work (BSW)">
-                          Bachelor of Social Work (BSW)
-                        </option>
-                        <option value="Bachelor of Music (BM)">
-                          Bachelor of Music (BM)
-                        </option>
-                        <option value="Bachelor of Architecture (BArch)">
-                          Bachelor of Architecture (BArch)
-                        </option>
-                        <option value="Bachelor of Science in Nursing (BSN)">
-                          Bachelor of Science in Nursing (BSN)
-                        </option>
-                        <option value="Bachelor of Computer Science (BCS)">
-                          Bachelor of Computer Science (BCS)
-                        </option>
-                        <option value="Bachelor of Laws (LLB)">
-                          Bachelor of Laws (LLB)
-                        </option>
-                        <option value="Bachelor of Medicine, Bachelor of Surgery (MBBS)">
-                          Bachelor of Medicine, Bachelor of Surgery (MBBS)
-                        </option>
-                        <option value="Bachelor of Dental Surgery (BDS)">
-                          Bachelor of Dental Surgery (BDS)
-                        </option>
-                        <option value="Bachelor of Pharmacy (BPharm)">
-                          Bachelor of Pharmacy (BPharm)
-                        </option>
-                        <option value="Bachelor of Public Health (BPH)">
-                          Bachelor of Public Health (BPH)
-                        </option>
-                        <option value="Bachelor of Environmental Science (BES)">
-                          Bachelor of Environmental Science (BES)
-                        </option>
-                        <option value="Bachelor of Communication (BComm)">
-                          Bachelor of Communication (BComm)
-                        </option>
-                        <option value="Bachelor of Information Technology (BIT)">
-                          Bachelor of Information Technology (BIT)
-                        </option>
-                        <option value="Bachelor of Science in Engineering (BSE)">
-                          Bachelor of Science in Engineering (BSE)
-                        </option>
-                        <option value="Bachelor of Business (BBus)">
-                          Bachelor of Business (BBus)
-                        </option>
-                        <option value="Bachelor of Design (BDes)">
-                          Bachelor of Design (BDes)
-                        </option>
-                        <option value="Bachelor of Journalism (BJ)">
-                          Bachelor of Journalism (BJ)
-                        </option>
-                        <option value="Bachelor of Applied Science (BAS)">
-                          Bachelor of Applied Science (BAS)
-                        </option>
-                        <option value="Bachelor of Agriculture (BAgri)">
-                          Bachelor of Agriculture (BAgri)
-                        </option>
-                        <option value="Bachelor of Veterinary Science (BVSc)">
-                          Bachelor of Veterinary Science (BVSc)
-                        </option>
-                        <option value="Bachelor of Physiotherapy (BPT)">
-                          Bachelor of Physiotherapy (BPT)
-                        </option>
-                        <option value="Master's Degrees">
-                          Master's Degrees
-                        </option>
-                        <option value="Master of Arts (MA)">
-                          Master of Arts (MA)
-                        </option>
-                        <option value="Master of Science (MS or MSc)">
-                          Master of Science (MS or MSc)
-                        </option>
-                        <option value="Master of Business Administration (MBA)">
-                          Master of Business Administration (MBA)
-                        </option>
-                        <option value="Master of Fine Arts (MFA)">
-                          Master of Fine Arts (MFA)
-                        </option>
-                        <option value="Master of Education (MEd)">
-                          Master of Education (MEd)
-                        </option>
-                        <option value="Master of Engineering (MEng)">
-                          Master of Engineering (MEng)
-                        </option>
-                        <option value="Master of Technology (MTech)">
-                          Master of Technology (MTech)
-                        </option>
-                        <option value="Master of Social Work (MSW)">
-                          Master of Social Work (MSW)
-                        </option>
-                        <option value="Master of Music (MM)">
-                          Master of Music (MM)
-                        </option>
-                        <option value="Master of Architecture (MArch)">
-                          Master of Architecture (MArch)
-                        </option>
-                        <option value="Master of Public Health (MPH)">
-                          Master of Public Health (MPH)
-                        </option>
-                        <option value="Master of Laws (LLM)">
-                          Master of Laws (LLM)
-                        </option>
-                        <option value="Master of Computer Applications (MCA)">
-                          Master of Computer Applications (MCA)
-                        </option>
-                        <option value="Master of Science in Nursing (MSN)">
-                          Master of Science in Nursing (MSN)
-                        </option>
-                        <option value="Master of Library Science (MLS)">
-                          Master of Library Science (MLS)
-                        </option>
-                        <option value="Master of Public Administration (MPA)">
-                          Master of Public Administration (MPA)
-                        </option>
-                        <option value="Master of Philosophy (MPhil)">
-                          Master of Philosophy (MPhil)
-                        </option>
-                        <option value="Master of Professional Studies (MPS)">
-                          Master of Professional Studies (MPS)
-                        </option>
-                        <option value="Master of Design (MDes)">
-                          Master of Design (MDes)
-                        </option>
-                        <option value="Master of Journalism (MJ)">
-                          Master of Journalism (MJ)
-                        </option>
-                        <option value="Master of Environmental Science (MES)">
-                          Master of Environmental Science (MES)
-                        </option>
-                        <option value="Master of Communication (MComm)">
-                          Master of Communication (MComm)
-                        </option>
-                        <option value="Master of International Business (MIB)">
-                          Master of International Business (MIB)
-                        </option>
-                        <option value="Master of Finance (MFin)">
-                          Master of Finance (MFin)
-                        </option>
-                        <option value="Master of Management (MMgt)">
-                          Master of Management (MMgt)
-                        </option>
-                        <option value="Master of Science in Engineering (MSE)">
-                          Master of Science in Engineering (MSE)
-                        </option>
-                        <option value="Master of Health Administration (MHA)">
-                          Master of Health Administration (MHA)
-                        </option>
-                        <option value="Master of Urban Planning (MUP)">
-                          Master of Urban Planning (MUP)
-                        </option>
-                        <option value="Master of Data Science (MDS)">
-                          Master of Data Science (MDS)
-                        </option>
-                        <option value="Doctoral Degrees">
-                          Doctoral Degrees
-                        </option>
-                        <option value="Doctor of Philosophy (PhD)">
-                          Doctor of Philosophy (PhD)
-                        </option>
-                        <option value="Doctor of Medicine (MD)">
-                          Doctor of Medicine (MD)
-                        </option>
-                        <option value="Doctor of Education (EdD)">
-                          Doctor of Education (EdD)
-                        </option>
-                        <option value="Doctor of Business Administration (DBA)">
-                          Doctor of Business Administration (DBA)
-                        </option>
-                        <option value="Doctor of Dental Surgery (DDS)">
-                          Doctor of Dental Surgery (DDS)
-                        </option>
-                        <option value="Doctor of Dental Medicine (DMD)">
-                          Doctor of Dental Medicine (DMD)
-                        </option>
-                        <option value="Doctor of Veterinary Medicine (DVM)">
-                          Doctor of Veterinary Medicine (DVM)
-                        </option>
-                        <option value="Doctor of Nursing Practice (DNP)">
-                          Doctor of Nursing Practice (DNP)
-                        </option>
-                        <option value="Doctor of Psychology (PsyD)">
-                          Doctor of Psychology (PsyD)
-                        </option>
-                        <option value="Juris Doctor (JD)">
-                          Juris Doctor (JD)
-                        </option>
-                        <option value="Doctor of Public Health (DrPH)">
-                          Doctor of Public Health (DrPH)
-                        </option>
-                        <option value="Doctor of Pharmacy (PharmD)">
-                          Doctor of Pharmacy (PharmD)
-                        </option>
-                        <option value="Doctor of Physical Therapy (DPT)">
-                          Doctor of Physical Therapy (DPT)
-                        </option>
-                        <option value="Doctor of Engineering (DEng or DScEng)">
-                          Doctor of Engineering (DEng or DScEng)
-                        </option>
-                        <option value="Doctor of Science (DSc)">
-                          Doctor of Science (DSc)
-                        </option>
-                        <option value="Doctor of Musical Arts (DMA)">
-                          Doctor of Musical Arts (DMA)
-                        </option>
-                        <option value="Doctor of Social Work (DSW)">
-                          Doctor of Social Work (DSW)
-                        </option>
-                        <option value="Doctor of Information Technology (DIT)">
-                          Doctor of Information Technology (DIT)
-                        </option>
-                        <option value="Doctor of Health Science (DHSc)">
-                          Doctor of Health Science (DHSc)
-                        </option>
-                        <option value="Doctor of Public Administration (DPA)">
-                          Doctor of Public Administration (DPA)
-                        </option>
-                        <option value="Diplomas and Certificates">
-                          Diplomas and Certificates
-                        </option>
-                        <option value="Diploma in Engineering">
-                          Diploma in Engineering
-                        </option>
-                        <option value="Diploma in Nursing">
-                          Diploma in Nursing
-                        </option>
-                        <option value="Diploma in Education">
-                          Diploma in Education
-                        </option>
-                        <option value="Diploma in Business Studies">
-                          Diploma in Business Studies
-                        </option>
-                        <option value="Diploma in Computer Applications">
-                          Diploma in Computer Applications
-                        </option>
-                        <option value="Diploma in Culinary Arts">
-                          Diploma in Culinary Arts
-                        </option>
-                        <option value="Diploma in Graphic Design">
-                          Diploma in Graphic Design
-                        </option>
-                        <option value="Diploma in Information Technology">
-                          Diploma in Information Technology
-                        </option>
-                        <option value="Diploma in Pharmacy">
-                          Diploma in Pharmacy
-                        </option>
-                        <option value="Diploma in Accounting">
-                          Diploma in Accounting
-                        </option>
-                        <option value="Diploma in Marketing">
-                          Diploma in Marketing
-                        </option>
-                        <option value="Diploma in Hospitality Management">
-                          Diploma in Hospitality Management
-                        </option>
-                        <option value="Diploma in Fashion Design">
-                          Diploma in Fashion Design
-                        </option>
-                        <option value="Diploma in Project Management">
-                          Diploma in Project Management
-                        </option>
-                        <option value="Diploma in Electrical Engineering">
-                          Diploma in Electrical Engineering
-                        </option>
-                        <option value="Diploma in Mechanical Engineering">
-                          Diploma in Mechanical Engineering
-                        </option>
-                        <option value="Diploma in Civil Engineering">
-                          Diploma in Civil Engineering
-                        </option>
-                        <option value="Diploma in Health Sciences">
-                          Diploma in Health Sciences
-                        </option>
-                        <option value="Diploma in Environmental Science">
-                          Diploma in Environmental Science
-                        </option>
-                        <option value="Diploma in Journalism">
-                          Diploma in Journalism
-                        </option>
-                        <option value="Diploma in Social Work">
-                          Diploma in Social Work
-                        </option>
-                        <option value="Diploma in Early Childhood Education">
-                          Diploma in Early Childhood Education
-                        </option>
-                        <option value="Diploma in Interior Design">
-                          Diploma in Interior Design
-                        </option>
-                        <option value="Diploma in Event Management">
-                          Diploma in Event Management
-                        </option>
-                        <option value="Diploma in Human Resource Management">
-                          Diploma in Human Resource Management
-                        </option>
-                        <option value="Diploma in Digital Marketing">
-                          Diploma in Digital Marketing
-                        </option>
-                        <option value="Diploma in Financial Management">
-                          Diploma in Financial Management
-                        </option>
-                        <option value="Diploma in Logistics and Supply Chain Management">
-                          Diploma in Logistics and Supply Chain Management
-                        </option>
-                        <option value="Diploma in Biotechnology">
-                          Diploma in Biotechnology
-                        </option>
-                        <option value="Diploma in Tourism Management">
-                          Diploma in Tourism Management
-                        </option>
-                        <option value="Diploma in Public Relations">
-                          Diploma in Public Relations
-                        </option>
-                        <option value="Diploma in Web Development">
-                          Diploma in Web Development
-                        </option>
-                        <option value="Diploma in Film and Television Production">
-                          Diploma in Film and Television Production
-                        </option>
-                        <option value="Diploma in Software Engineering">
-                          Diploma in Software Engineering
-                        </option>
-                        <option value="Diploma in Agriculture">
-                          Diploma in Agriculture
-                        </option>
-                        <option value="Diploma in Cybersecurity">
-                          Diploma in Cybersecurity
-                        </option>
-                        <option value="Diploma in Data Science">
-                          Diploma in Data Science
-                        </option>
-                        <option value="Diploma in Artificial Intelligence">
-                          Diploma in Artificial Intelligence
-                        </option>
-                      </datalist>
-                      {/* sahil karnekar */}
-                    
-                    {errors.qualification && (
-                      <div className="error-message error-two-input-box">
-                        {errors.qualification}
-                      </div>
-                    )}
+
+                  <datalist id="educationListDropDown"
+
+                  >
+                    <option value="">Select</option>
+                    <option value="Other">Other</option>
+                    <option value="10th">10th</option>
+                    <option value="12th">12 th</option>
+                    <option value="ITI">ITI</option>
+                    <option value="diploma in CS">
+                      Diploma in Computer science
+                    </option>
+                    <option value="Degree In CS">
+                      BTech in Computer Science
+                    </option>
+                    <option value="M-Tech In CS">
+                      MTech in Computer Science
+                    </option>
+                    <option value="PhD ">PhD</option>
+                    <option value="BSC">BSC in chemestry</option>
+                    <option value="MSC">MSC </option>
+                    <option value="BCA">BCA</option>
+                    <option value="MCA">MCA</option>
+                    <option value="Associate of Arts (AA)">
+                      Associate of Arts (AA)
+                    </option>
+                    <option value="Associate of Science (AS)">
+                      Associate of Science (AS)
+                    </option>
+                    <option value="Associate of Applied Science (AAS)">
+                      Associate of Applied Science (AAS)
+                    </option>
+                    <option value="Associate of Fine Arts (AFA)">
+                      Associate of Fine Arts (AFA)
+                    </option>
+                    <option value="Associate of Business Administration (ABA)">
+                      Associate of Business Administration (ABA)
+                    </option>
+                    <option value="Associate of Engineering (AE)">
+                      Associate of Engineering (AE)
+                    </option>
+                    <option value="Associate of Nursing (AN)">
+                      Associate of Nursing (AN)
+                    </option>
+                    <option value="Associate of General Studies (AGS)">
+                      Associate of General Studies (AGS)
+                    </option>
+                    <option value="Associate of Occupational Studies (AOS)">
+                      Associate of Occupational Studies (AOS)
+                    </option>
+                    <option value="Associate of Information Technology (AIT)">
+                      Associate of Information Technology (AIT)
+                    </option>
+                    <option value="Bachelor's Degrees">
+                      Bachelor's Degrees
+                    </option>
+                    <option value="Bachelor of Arts (BA)">
+                      Bachelor of Arts (BA)
+                    </option>
+                    <option value="Bachelor of Science (BS)">
+                      Bachelor of Science (BS)
+                    </option>
+                    <option value="Bachelor of Fine Arts (BFA)">
+                      Bachelor of Fine Arts (BFA)
+                    </option>
+                    <option value="Bachelor of Business Administration (BBA)">
+                      Bachelor of Business Administration (BBA)
+                    </option>
+                    <option value="Bachelor of Engineering (BEng)">
+                      Bachelor of Engineering (BEng)
+                    </option>
+                    <option value="Bachelor of Technology (BTech)">
+                      Bachelor of Technology (BTech)
+                    </option>
+                    <option value="Bachelor of Education (BEd)">
+                      Bachelor of Education (BEd)
+                    </option>
+                    <option value="Bachelor of Nursing (BN)">
+                      Bachelor of Nursing (BN)
+                    </option>
+                    <option value="Bachelor of Social Work (BSW)">
+                      Bachelor of Social Work (BSW)
+                    </option>
+                    <option value="Bachelor of Music (BM)">
+                      Bachelor of Music (BM)
+                    </option>
+                    <option value="Bachelor of Architecture (BArch)">
+                      Bachelor of Architecture (BArch)
+                    </option>
+                    <option value="Bachelor of Science in Nursing (BSN)">
+                      Bachelor of Science in Nursing (BSN)
+                    </option>
+                    <option value="Bachelor of Computer Science (BCS)">
+                      Bachelor of Computer Science (BCS)
+                    </option>
+                    <option value="Bachelor of Laws (LLB)">
+                      Bachelor of Laws (LLB)
+                    </option>
+                    <option value="Bachelor of Medicine, Bachelor of Surgery (MBBS)">
+                      Bachelor of Medicine, Bachelor of Surgery (MBBS)
+                    </option>
+                    <option value="Bachelor of Dental Surgery (BDS)">
+                      Bachelor of Dental Surgery (BDS)
+                    </option>
+                    <option value="Bachelor of Pharmacy (BPharm)">
+                      Bachelor of Pharmacy (BPharm)
+                    </option>
+                    <option value="Bachelor of Public Health (BPH)">
+                      Bachelor of Public Health (BPH)
+                    </option>
+                    <option value="Bachelor of Environmental Science (BES)">
+                      Bachelor of Environmental Science (BES)
+                    </option>
+                    <option value="Bachelor of Communication (BComm)">
+                      Bachelor of Communication (BComm)
+                    </option>
+                    <option value="Bachelor of Information Technology (BIT)">
+                      Bachelor of Information Technology (BIT)
+                    </option>
+                    <option value="Bachelor of Science in Engineering (BSE)">
+                      Bachelor of Science in Engineering (BSE)
+                    </option>
+                    <option value="Bachelor of Business (BBus)">
+                      Bachelor of Business (BBus)
+                    </option>
+                    <option value="Bachelor of Design (BDes)">
+                      Bachelor of Design (BDes)
+                    </option>
+                    <option value="Bachelor of Journalism (BJ)">
+                      Bachelor of Journalism (BJ)
+                    </option>
+                    <option value="Bachelor of Applied Science (BAS)">
+                      Bachelor of Applied Science (BAS)
+                    </option>
+                    <option value="Bachelor of Agriculture (BAgri)">
+                      Bachelor of Agriculture (BAgri)
+                    </option>
+                    <option value="Bachelor of Veterinary Science (BVSc)">
+                      Bachelor of Veterinary Science (BVSc)
+                    </option>
+                    <option value="Bachelor of Physiotherapy (BPT)">
+                      Bachelor of Physiotherapy (BPT)
+                    </option>
+                    <option value="Master's Degrees">
+                      Master's Degrees
+                    </option>
+                    <option value="Master of Arts (MA)">
+                      Master of Arts (MA)
+                    </option>
+                    <option value="Master of Science (MS or MSc)">
+                      Master of Science (MS or MSc)
+                    </option>
+                    <option value="Master of Business Administration (MBA)">
+                      Master of Business Administration (MBA)
+                    </option>
+                    <option value="Master of Fine Arts (MFA)">
+                      Master of Fine Arts (MFA)
+                    </option>
+                    <option value="Master of Education (MEd)">
+                      Master of Education (MEd)
+                    </option>
+                    <option value="Master of Engineering (MEng)">
+                      Master of Engineering (MEng)
+                    </option>
+                    <option value="Master of Technology (MTech)">
+                      Master of Technology (MTech)
+                    </option>
+                    <option value="Master of Social Work (MSW)">
+                      Master of Social Work (MSW)
+                    </option>
+                    <option value="Master of Music (MM)">
+                      Master of Music (MM)
+                    </option>
+                    <option value="Master of Architecture (MArch)">
+                      Master of Architecture (MArch)
+                    </option>
+                    <option value="Master of Public Health (MPH)">
+                      Master of Public Health (MPH)
+                    </option>
+                    <option value="Master of Laws (LLM)">
+                      Master of Laws (LLM)
+                    </option>
+                    <option value="Master of Computer Applications (MCA)">
+                      Master of Computer Applications (MCA)
+                    </option>
+                    <option value="Master of Science in Nursing (MSN)">
+                      Master of Science in Nursing (MSN)
+                    </option>
+                    <option value="Master of Library Science (MLS)">
+                      Master of Library Science (MLS)
+                    </option>
+                    <option value="Master of Public Administration (MPA)">
+                      Master of Public Administration (MPA)
+                    </option>
+                    <option value="Master of Philosophy (MPhil)">
+                      Master of Philosophy (MPhil)
+                    </option>
+                    <option value="Master of Professional Studies (MPS)">
+                      Master of Professional Studies (MPS)
+                    </option>
+                    <option value="Master of Design (MDes)">
+                      Master of Design (MDes)
+                    </option>
+                    <option value="Master of Journalism (MJ)">
+                      Master of Journalism (MJ)
+                    </option>
+                    <option value="Master of Environmental Science (MES)">
+                      Master of Environmental Science (MES)
+                    </option>
+                    <option value="Master of Communication (MComm)">
+                      Master of Communication (MComm)
+                    </option>
+                    <option value="Master of International Business (MIB)">
+                      Master of International Business (MIB)
+                    </option>
+                    <option value="Master of Finance (MFin)">
+                      Master of Finance (MFin)
+                    </option>
+                    <option value="Master of Management (MMgt)">
+                      Master of Management (MMgt)
+                    </option>
+                    <option value="Master of Science in Engineering (MSE)">
+                      Master of Science in Engineering (MSE)
+                    </option>
+                    <option value="Master of Health Administration (MHA)">
+                      Master of Health Administration (MHA)
+                    </option>
+                    <option value="Master of Urban Planning (MUP)">
+                      Master of Urban Planning (MUP)
+                    </option>
+                    <option value="Master of Data Science (MDS)">
+                      Master of Data Science (MDS)
+                    </option>
+                    <option value="Doctoral Degrees">
+                      Doctoral Degrees
+                    </option>
+                    <option value="Doctor of Philosophy (PhD)">
+                      Doctor of Philosophy (PhD)
+                    </option>
+                    <option value="Doctor of Medicine (MD)">
+                      Doctor of Medicine (MD)
+                    </option>
+                    <option value="Doctor of Education (EdD)">
+                      Doctor of Education (EdD)
+                    </option>
+                    <option value="Doctor of Business Administration (DBA)">
+                      Doctor of Business Administration (DBA)
+                    </option>
+                    <option value="Doctor of Dental Surgery (DDS)">
+                      Doctor of Dental Surgery (DDS)
+                    </option>
+                    <option value="Doctor of Dental Medicine (DMD)">
+                      Doctor of Dental Medicine (DMD)
+                    </option>
+                    <option value="Doctor of Veterinary Medicine (DVM)">
+                      Doctor of Veterinary Medicine (DVM)
+                    </option>
+                    <option value="Doctor of Nursing Practice (DNP)">
+                      Doctor of Nursing Practice (DNP)
+                    </option>
+                    <option value="Doctor of Psychology (PsyD)">
+                      Doctor of Psychology (PsyD)
+                    </option>
+                    <option value="Juris Doctor (JD)">
+                      Juris Doctor (JD)
+                    </option>
+                    <option value="Doctor of Public Health (DrPH)">
+                      Doctor of Public Health (DrPH)
+                    </option>
+                    <option value="Doctor of Pharmacy (PharmD)">
+                      Doctor of Pharmacy (PharmD)
+                    </option>
+                    <option value="Doctor of Physical Therapy (DPT)">
+                      Doctor of Physical Therapy (DPT)
+                    </option>
+                    <option value="Doctor of Engineering (DEng or DScEng)">
+                      Doctor of Engineering (DEng or DScEng)
+                    </option>
+                    <option value="Doctor of Science (DSc)">
+                      Doctor of Science (DSc)
+                    </option>
+                    <option value="Doctor of Musical Arts (DMA)">
+                      Doctor of Musical Arts (DMA)
+                    </option>
+                    <option value="Doctor of Social Work (DSW)">
+                      Doctor of Social Work (DSW)
+                    </option>
+                    <option value="Doctor of Information Technology (DIT)">
+                      Doctor of Information Technology (DIT)
+                    </option>
+                    <option value="Doctor of Health Science (DHSc)">
+                      Doctor of Health Science (DHSc)
+                    </option>
+                    <option value="Doctor of Public Administration (DPA)">
+                      Doctor of Public Administration (DPA)
+                    </option>
+                    <option value="Diplomas and Certificates">
+                      Diplomas and Certificates
+                    </option>
+                    <option value="Diploma in Engineering">
+                      Diploma in Engineering
+                    </option>
+                    <option value="Diploma in Nursing">
+                      Diploma in Nursing
+                    </option>
+                    <option value="Diploma in Education">
+                      Diploma in Education
+                    </option>
+                    <option value="Diploma in Business Studies">
+                      Diploma in Business Studies
+                    </option>
+                    <option value="Diploma in Computer Applications">
+                      Diploma in Computer Applications
+                    </option>
+                    <option value="Diploma in Culinary Arts">
+                      Diploma in Culinary Arts
+                    </option>
+                    <option value="Diploma in Graphic Design">
+                      Diploma in Graphic Design
+                    </option>
+                    <option value="Diploma in Information Technology">
+                      Diploma in Information Technology
+                    </option>
+                    <option value="Diploma in Pharmacy">
+                      Diploma in Pharmacy
+                    </option>
+                    <option value="Diploma in Accounting">
+                      Diploma in Accounting
+                    </option>
+                    <option value="Diploma in Marketing">
+                      Diploma in Marketing
+                    </option>
+                    <option value="Diploma in Hospitality Management">
+                      Diploma in Hospitality Management
+                    </option>
+                    <option value="Diploma in Fashion Design">
+                      Diploma in Fashion Design
+                    </option>
+                    <option value="Diploma in Project Management">
+                      Diploma in Project Management
+                    </option>
+                    <option value="Diploma in Electrical Engineering">
+                      Diploma in Electrical Engineering
+                    </option>
+                    <option value="Diploma in Mechanical Engineering">
+                      Diploma in Mechanical Engineering
+                    </option>
+                    <option value="Diploma in Civil Engineering">
+                      Diploma in Civil Engineering
+                    </option>
+                    <option value="Diploma in Health Sciences">
+                      Diploma in Health Sciences
+                    </option>
+                    <option value="Diploma in Environmental Science">
+                      Diploma in Environmental Science
+                    </option>
+                    <option value="Diploma in Journalism">
+                      Diploma in Journalism
+                    </option>
+                    <option value="Diploma in Social Work">
+                      Diploma in Social Work
+                    </option>
+                    <option value="Diploma in Early Childhood Education">
+                      Diploma in Early Childhood Education
+                    </option>
+                    <option value="Diploma in Interior Design">
+                      Diploma in Interior Design
+                    </option>
+                    <option value="Diploma in Event Management">
+                      Diploma in Event Management
+                    </option>
+                    <option value="Diploma in Human Resource Management">
+                      Diploma in Human Resource Management
+                    </option>
+                    <option value="Diploma in Digital Marketing">
+                      Diploma in Digital Marketing
+                    </option>
+                    <option value="Diploma in Financial Management">
+                      Diploma in Financial Management
+                    </option>
+                    <option value="Diploma in Logistics and Supply Chain Management">
+                      Diploma in Logistics and Supply Chain Management
+                    </option>
+                    <option value="Diploma in Biotechnology">
+                      Diploma in Biotechnology
+                    </option>
+                    <option value="Diploma in Tourism Management">
+                      Diploma in Tourism Management
+                    </option>
+                    <option value="Diploma in Public Relations">
+                      Diploma in Public Relations
+                    </option>
+                    <option value="Diploma in Web Development">
+                      Diploma in Web Development
+                    </option>
+                    <option value="Diploma in Film and Television Production">
+                      Diploma in Film and Television Production
+                    </option>
+                    <option value="Diploma in Software Engineering">
+                      Diploma in Software Engineering
+                    </option>
+                    <option value="Diploma in Agriculture">
+                      Diploma in Agriculture
+                    </option>
+                    <option value="Diploma in Cybersecurity">
+                      Diploma in Cybersecurity
+                    </option>
+                    <option value="Diploma in Data Science">
+                      Diploma in Data Science
+                    </option>
+                    <option value="Diploma in Artificial Intelligence">
+                      Diploma in Artificial Intelligence
+                    </option>
+                  </datalist>
+                  {/* sahil karnekar */}
+
+                  {errors.qualification && (
+                    <div className="error-message error-two-input-box">
+                      {errors.qualification}
                     </div>
+                  )}
+                </div>
+<div style={{width:"50%", marginRight:"20px"}}>
                 <input
-                  type="text"
+                  style={{ width: "100%" }}
+                  type="number"
+                  min="1947"
+                  max="2025"
                   name="lineUp.yearOfPassing"
                   placeholder="Year Of PassOut"
                   value={callingTracker?.lineUp.yearOfPassing || ""}
                   // required={callingTracker.selectYesOrNo === "Interested"}
                   onChange={handleChange}
                 />
+                {errors.yearOfPassing && (
+                  <div className="error-message error-two-input-box">
+                    {errors.yearOfPassing}
+                  </div>
+                )}
+                </div>
               </div>
             </div>
           </div>
@@ -1468,39 +1531,40 @@ validateRealTime(name, value);
             </div>
             <div className="update-calling-tracker-field">
               <label>Total Experience</label>
-               {/* line 1471 to 1758 added by sahil karnekar date 17-10-2024 */}
+              {/* line 1471 to 1758 added by sahil karnekar date 17-10-2024 */}
               <div className="update-calling-tracker-two-input-container">
-              <div className="input-block" style={{display:"block"}}>
-                <input
-                  type="text"
-                  name="lineUp.experienceYear"
-                  value={callingTracker?.lineUp.experienceYear || ""}
-                  onChange={handleChange}
-                  className="update-calling-tracker-two-input"
-                  // required={callingTracker.selectYesOrNo === "Interested"}
-                  placeholder="Years"
-                  maxLength="2"
-                />
-                {errors.experienceYear && (
-  <div className="error-message">{errors.experienceYear}</div>
-)}
-</div>
+                <div>
+                  <input
+                    style={{ width: "69%" }}
+                    type="text"
+                    name="lineUp.experienceYear"
+                    value={callingTracker?.lineUp.experienceYear || ""}
+                    onChange={handleChange}
+                    className="update-calling-tracker-two-input"
+                    // required={callingTracker.selectYesOrNo === "Interested"}
+                    placeholder="Years"
+                    maxLength="2"
+                  />
+                  {errors.experienceYear && (
+                    <div className="error-message">{errors.experienceYear}</div>
+                  )}
+                </div>
 
                 <div className="calling-tracker-two-input">
-                  
+
                   <input
                     type="text"
                     name="lineUp.experienceMonth"
                     onChange={handleChange}
                     value={callingTracker?.lineUp.experienceMonth || ""}
                     placeholder="Months"
-                  maxLength="2"
-                  min="0"
-                  max="11"
+                    maxLength="2"
+                    min="0"
+                    max="11"
                   />
-                       {errors.experienceMonth && (
-  <div className="error-message">{errors.experienceMonth}</div>
-)}
+                  {errors.experienceMonth && (
+                    <div className="error-message">{errors.experienceMonth}</div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1521,8 +1585,8 @@ validateRealTime(name, value);
                     maxLength="2"
                   />
                   {errors.relevantExperience && (
-  <div className="error-message">{errors.relevantExperience}</div>
-)}
+                    <div className="error-message">{errors.relevantExperience}</div>
+                  )}
                 </div>
                 <div className="update-calling-tracker-two-input">
                   <input
@@ -1533,17 +1597,18 @@ validateRealTime(name, value);
                     onChange={handleChange}
                     min="0"
                     max="90"
-                   //  required={callingTracker.selectYesOrNo === "Interested"}
+                  //  required={callingTracker.selectYesOrNo === "Interested"}
                   />
                   {errors.noticePeriod && (
-  <div className="error-message">{errors.noticePeriod}</div>
-)}
+                    <div className="error-message">{errors.noticePeriod}</div>
+                  )}
                 </div>
               </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>Communication Rating </label>
-              <div className="update-calling-tracker-field-sub-div">
+              <div className="update-calling-tracker-field-sub-div setInputBlock">
+
                 <input
                   type="text"
                   name="communicationRating"
@@ -1554,8 +1619,9 @@ validateRealTime(name, value);
                 // required={callingTracker.selectYesOrNo === "Interested"}
                 />
                 {errors.communicationRating && (
-  <div className="error-message">{errors.communicationRating}</div>
-)}
+                  <div className="error-message">{errors.communicationRating}</div>
+                )}
+
               </div>
             </div>
           </div>
@@ -1563,61 +1629,73 @@ validateRealTime(name, value);
             <div className="update-calling-tracker-field">
               <label>Current CTC(LPA)</label>
               <div className="update-calling-tracker-two-input-container">
-                <input
-                  type="text"
-                  name="lineUp.currentCTCLakh"
-                  value={callingTracker?.lineUp.currentCTCLakh || ""}
-                  onChange={handleChange}
-                  className="update-calling-tracker-two-input"
-                  placeholder="Lakh"
-                  maxLength="2"
-                 // required={callingTracker.selectYesOrNo === "Interested"}
-                  pattern="\d*"
-                />
+                <div style={{ marginLeft: "10%" }}>
+                  <input
+                    style={{ width: "75%" }}
+                    type="text"
+                    name="lineUp.currentCTCLakh"
+                    value={callingTracker?.lineUp.currentCTCLakh || ""}
+                    onChange={handleChange}
+                    className="update-calling-tracker-two-input"
+                    placeholder="Lakh"
+                    maxLength="2"
+                    // required={callingTracker.selectYesOrNo === "Interested"}
+                    pattern="\d*"
+                  />
                   {errors.currentCTCLakh && (
-  <div className="error-message">{errors.currentCTCLakh}</div>
-)}
-                <input
-                  type="text"
-                  name="lineUp.currentCTCThousand"
-                  value={callingTracker?.lineUp.currentCTCThousand || ""}
-                  onChange={handleChange}
-                  className="update-calling-tracker-two-input"
-                  placeholder="Thousand"
-                  maxLength="2"
-                  pattern="\d*"
-                  inputMode="numeric"
-                />
+                    <div className="error-message">{errors.currentCTCLakh}</div>
+                  )}
+                </div>
+                <div style={{ marginLeft: "10%" }}>
+                  <input
+                    style={{ width: "75%" }}
+                    type="text"
+                    name="lineUp.currentCTCThousand"
+                    value={callingTracker?.lineUp.currentCTCThousand || ""}
+                    onChange={handleChange}
+                    className="update-calling-tracker-two-input"
+                    placeholder="Thousand"
+                    maxLength="2"
+                    pattern="\d*"
+                    inputMode="numeric"
+                  />
+                </div>
               </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>Expected CTC (LPA)</label>
               <div className="update-calling-tracker-two-input-container">
-                <input
-                  type="text"
-                  name="lineUp.expectedCTCLakh"
-                  value={callingTracker?.lineUp.expectedCTCLakh || ""}
-                  onChange={handleChange}
-                  className="update-calling-tracker-two-input"
-                  placeholder="Lakh"
-                 // required={callingTracker.selectYesOrNo === "Interested"}
-                  maxLength="2"
-                  pattern="\d*"
-                />
-                 {errors.expectedCTCLakh && (
-  <div className="error-message">{errors.expectedCTCLakh}</div>
-)}
-                <input
-                  type="text"
-                  name="lineUp.expectedCTCThousand"
-                  value={callingTracker?.lineUp.expectedCTCThousand || ""}
-                  onChange={handleChange}
-                  className="update-calling-tracker-two-input"
-                  placeholder="Thousand"
-                  maxLength="2"
-                  pattern="\d*"
-                  inputMode="numeric"
-                />
+                <div style={{ marginLeft: "10%" }}>
+                  <input
+                    style={{ width: "75%" }}
+                    type="text"
+                    name="lineUp.expectedCTCLakh"
+                    value={callingTracker?.lineUp.expectedCTCLakh || ""}
+                    onChange={handleChange}
+                    className="update-calling-tracker-two-input"
+                    placeholder="Lakh"
+                    // required={callingTracker.selectYesOrNo === "Interested"}
+                    maxLength="2"
+                    pattern="\d*"
+                  />
+                  {errors.expectedCTCLakh && (
+                    <div className="error-message">{errors.expectedCTCLakh}</div>
+                  )}
+                </div>
+                <div style={{ marginLeft: "10%" }}>
+                  <input
+                    style={{ width: "75%" }}
+                    type="text"
+                    name="lineUp.expectedCTCThousand"
+                    value={callingTracker?.lineUp.expectedCTCThousand || ""}
+                    onChange={handleChange}
+                    className="update-calling-tracker-two-input"
+                    placeholder="Thousand"
+                    maxLength="2"
+                    pattern="\d*"
+                    inputMode="numeric"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -1625,11 +1703,12 @@ validateRealTime(name, value);
             <div className="update-calling-tracker-field">
               <label>Holding Offer Letter</label>
               <div className="update-calling-tracker-two-input-container">
+<div>
                 <select
                   type="text"
                   name="lineUp.holdingAnyOffer"
                   value={callingTracker?.lineUp.holdingAnyOffer || ""}
-                 // required={callingTracker.selectYesOrNo === "Interested"}
+                  // required={callingTracker.selectYesOrNo === "Interested"}
                   onChange={handleChange}
                 >
                   <option value="">Select</option>
@@ -1637,8 +1716,9 @@ validateRealTime(name, value);
                   <option value="No">No</option>
                 </select>
                 {errors.holdingAnyOffer && (
-  <div className="error-message">{errors.holdingAnyOffer}</div>
-)}
+                  <div className="error-message">{errors.holdingAnyOffer}</div>
+                )}
+</div>
                 <input
                   type="text"
                   name="lineUp.offerLetterMsg"
@@ -1647,7 +1727,7 @@ validateRealTime(name, value);
                   // onChange={handleLineUpChange}
                   onChange={handleChange}
                 />
-                
+
               </div>
             </div>
             <div className="update-calling-tracker-field">
@@ -1671,91 +1751,97 @@ validateRealTime(name, value);
               <label>Status Type</label>
               <div className="update-calling-tracker-two-input-container">
                 <select
-                  
+
                   className="update-calling-tracker-two-input"
                   name="selectYesOrNo"
                   placeholder="Candidate Interested"
                   value={callingTracker?.selectYesOrNo}
                   onChange={handleChange}
                 >
-                  
+
                   <option value="Yet To Confirm">Yet To Confirm</option>
-                      <option value="Interested">Interested</option>
-                      <option value="Interested, will confirm later">Interested, will confirm later</option>
-                      <option value="Not Interested">Not Interested</option>
-                      <option value=" Interested But Not Eligible">Interested But Not Eligible</option>
-                      <option value="Eligible">Eligible</option>
-                      <option value="Not Eligible">Not Eligible</option>
-                      <option value="Not Eligible But Interested">Not Eligible But Interested</option>
+                  <option value="Interested">Interested</option>
+                  <option value="Interested, will confirm later">Interested, will confirm later</option>
+                  <option value="Not Interested">Not Interested</option>
+                  <option value=" Interested But Not Eligible">Interested But Not Eligible</option>
+                  <option value="Eligible">Eligible</option>
+                  <option value="Not Eligible">Not Eligible</option>
+                  <option value="Not Eligible But Interested">Not Eligible But Interested</option>
                 </select>
+
+
+<div>
                 <select
                   type="text"
                   name="lineUp.finalStatus"
                   value={callingTracker?.lineUp.finalStatus}
                   onChange={handleChange}
-                 // required={callingTracker.selectYesOrNo === "Interested"}
+                // required={callingTracker.selectYesOrNo === "Interested"}
                 >
                   <option value="">Select</option>
-                      <option value="Yet To Confirm">Yet To Confirm</option>
-                      <option value="Interview Schedule">Interview Schedule</option>
-                      <option value="Attending After Some time">Attending After Some time</option>
+                  <option value="Yet To Confirm">Yet To Confirm</option>
+                  <option value="Interview Schedule">Interview Schedule</option>
+                  <option value="Attending After Some time">Attending After Some time</option>
                 </select>
                 {errors.finalStatus && (
-  <div className="error-message">{errors.finalStatus}</div>
-)}
+                  <div className="error-message">{errors.finalStatus}</div>
+                )}
+              </div>
               </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>Interview Slots</label>
               <div className="update-calling-tracker-two-input-container">
-              <input
-  type="date"
-  name="lineUp.availabilityForInterview"
-  value={callingTracker?.lineUp.availabilityForInterview || ""}
-  onChange={(e) => {
-    const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
+<div>
+                <input
+                style={{width:"auto"}}
+                  type="date"
+                  name="lineUp.availabilityForInterview"
+                  value={callingTracker?.lineUp.availabilityForInterview || ""}
+                  onChange={(e) => {
+                    const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
 
-    if (e.target.value < today) {
-      seterrorInterviewSlot("Interview Slot Should be Next Date From Today");
-    } else {
-      seterrorInterviewSlot(""); // Clear error message if the date is valid
-    }
+                    if (e.target.value < today) {
+                      seterrorInterviewSlot("Interview Slot Should be Next Date From Today");
+                    } else {
+                      seterrorInterviewSlot(""); // Clear error message if the date is valid
+                    }
 
-    setCallingTracker((prevState) => ({
-      ...prevState,
-      lineUp: {
-        ...prevState.lineUp,
-        availabilityForInterview: e.target.value,
-      },
-    }));
-  }}
-  min={new Date(new Date().setDate(new Date().getDate() + 1))
-    .toISOString()
-    .split("T")[0]} // Restrict to future dates starting from tomorrow
-  className="update-calling-tracker-two-input"
-/>
+                    setCallingTracker((prevState) => ({
+                      ...prevState,
+                      lineUp: {
+                        ...prevState.lineUp,
+                        availabilityForInterview: e.target.value,
+                      },
+                    }));
+                  }}
+                  min={new Date(new Date().setDate(new Date().getDate() + 1))
+                    .toISOString()
+                    .split("T")[0]} // Restrict to future dates starting from tomorrow
+                  className="update-calling-tracker-two-input"
+                />
 
-{errorInterviewSlot && (
-  <div className="error-message">{errorInterviewSlot}</div>
-)}
+                {errorInterviewSlot && (
+                  <div className="error-message">{errorInterviewSlot}</div>
+                )}
+</div>
+
+                <TimePicker
+                  value={callingTracker.lineUp.interviewTime ? dayjs(callingTracker.lineUp.interviewTime, 'h:mm a') : null}
+                  onChange={(time) => {
+                    setCallingTracker((prevState) => ({
+                      ...prevState,
+                      lineUp: {
+                        ...prevState.lineUp,
+                        interviewTime: time ? time.format('h:mm a') : "",  // Format the time as a string in h:mm a (AM/PM)
+                      },
+                    }));
+                  }}
+                  format="h:mm a"  // Display format in the picker
+                  className="update-calling-tracker-two-input"
+                />
 
 
-<TimePicker
-  value={callingTracker.lineUp.interviewTime ? dayjs(callingTracker.lineUp.interviewTime, 'h:mm a') : null} 
-  onChange={(time) => {
-    setCallingTracker((prevState) => ({
-      ...prevState,
-      lineUp: {
-        ...prevState.lineUp,
-        interviewTime: time ? time.format('h:mm a') : "",  // Format the time as a string in h:mm a (AM/PM)
-      },
-    }));
-  }}
-  format="h:mm a"  // Display format in the picker
-  className="update-calling-tracker-two-input"
-/>
-
-                
               </div>
             </div>
           </div>
