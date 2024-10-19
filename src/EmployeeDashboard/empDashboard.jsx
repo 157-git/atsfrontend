@@ -710,6 +710,7 @@ const EmpDashboard = ({ userGroup }) => {
               onSuccessAdd={handleSuccessAdd}
               loginEmployeeName={loginEmployeeName} //akash_pawar_SelectedCandidate_ShareFunctionality_16/07_545
               onsuccessfulDataUpdation={handleSuccessfulDataUpdation}
+              fromCallingList={true}
             />
           )}
         </div>
@@ -719,9 +720,9 @@ const EmpDashboard = ({ userGroup }) => {
             <ShortListedCandidates
               viewUpdatedPage={viewUpdatedPage}
               loginEmployeeName={loginEmployeeName}
-              toggleShortListed={
-                toggleShortListed
-              } /*Akash_Pawar_EmpDashboard_toggleShortListed(show interview candidate)_23/07_LineNo_636*/
+              toggleShortListed={toggleShortListed}
+              onsuccessfulDataUpdation={handleSuccessfulDataUpdation}
+              /*Akash_Pawar_EmpDashboard_toggleShortListed(show interview candidate)_23/07_LineNo_636*/
             />
           )}
         </div>
@@ -880,6 +881,11 @@ const EmpDashboard = ({ userGroup }) => {
             <PerformanceImprovement loginEmployeeName={loginEmployeeName} />
           )}
         </div>
+        {/* <div>
+          {showTeamDetails && (
+            <TeamDetails></TeamDetails>
+          )}
+        </div> */}
         <div>{showAddTeamLeader && <AddTeamLeader></AddTeamLeader>}</div>
         <div>{showAddManager && <AddManager></AddManager>}</div>
       </div>

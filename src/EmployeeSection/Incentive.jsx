@@ -78,7 +78,7 @@ const Incentive = () => {
     }
   };
   return (
-    <div className="container-after1">
+    <div className="container-after1" >
       <div className="incetive-heading-div">
       <span id="incetive-heading">
         Incentive Table

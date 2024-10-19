@@ -20,6 +20,7 @@ const UpdateSelfCalling = ({
   onCancel,
   onsuccessfulDataUpdation,
   onSuccess,
+  fromCallingList
 }) => {
   const [isOtherEducationSelected, setIsOtherEducationSelected] =
     useState(false);
@@ -483,26 +484,16 @@ validateRealTime(name, value);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
- // Validate the form data before submitting
  console.log(callingTracker);
  const validationErrors = validateCallingTracker();
  const validationErrorsForLineup = validateLineUpData();
- 
  if (Object.keys(validationErrors).length > 0 || Object.keys(validationErrorsForLineup).length > 0) {
    setErrors({
      ...validationErrors,
      ...validationErrorsForLineup,
    });
-
-   console.log(errors);
-   return; // Prevent submission if errors exist
+   return; 
  }
- 
-  
-
-
-
- 
     try {
       const dataToUpdate = {
         ...callingTracker,
@@ -512,7 +503,6 @@ validateRealTime(name, value);
           resume: "",
         },
       };
-
       const response = await fetch(
         `${API_BASE_URL}/update-calling-data/${candidateId}`,
         {
@@ -523,13 +513,15 @@ validateRealTime(name, value);
           body: JSON.stringify(dataToUpdate),
         }
       );
-
       if (response.ok) {
         if (callingTracker.selectYesOrNo === "Interested") {
-          onsuccessfulDataUpdation(true);
-          toast.success("Data updated successfully Please Cheack Line Up Tracker");
+          if (fromCallingList) {
+            onsuccessfulDataUpdation(true);
+            toast.success("Data updated successfully, please check Line Up Tracker");
+          } else {
+            toast.success("Data updated successfully");
+          }
         } else {
-          onsuccessfulDataUpdation(false);
           toast.success("Data updated successfully");
         }        
         setFormSubmitted(true);

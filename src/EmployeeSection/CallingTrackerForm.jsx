@@ -403,7 +403,11 @@ const CallingTrackerForm = ({
         },
       };
 
-      console.log(dataToUpdate);
+      dataToUpdate.lineUp = {
+        ...lineUpData,
+        resume: lineUpData.resume, // Ensure the resume field is added here
+      };
+
       if (userType === "Recruiters") {
         dataToUpdate.callingTracker.employee = { employeeId: employeeId };
       } else if (userType === "TeamLeader") {
@@ -424,10 +428,8 @@ const CallingTrackerForm = ({
       if (response) {
         if (callingTracker.selectYesOrNo === "Interested") {
           onsuccessfulDataAdditions(true);
-          // console.log("-------Yes Add Calling Tracker-----------");
         } else {
           onsuccessfulDataAdditions(false);
-          // console.log("-------No Add Calling Tracker-----------");
         }
         setSubmited(false);
         setLoading(true);
@@ -444,6 +446,39 @@ const CallingTrackerForm = ({
       setLoading(false);
     }
   };
+
+  //Arshad Attar Added This , Now Resume will added Proper in data base.  18-10-2024
+  //Start Line 451
+  const handleResumeFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const arrayBuffer = reader.result;
+        const byteArray = new Uint8Array(arrayBuffer);
+        const chunkSize = 0x8000; 
+        let base64String = '';
+
+        for (let i = 0; i < byteArray.length; i += chunkSize) {
+          base64String += String.fromCharCode.apply(null, byteArray.subarray(i, i + chunkSize));
+        }
+        base64String = btoa(base64String); 
+        setLineUpData((prevState) => {
+          if (prevState.resume !== base64String) {
+            return {
+              ...prevState,
+              resume: base64String, 
+            };
+          }
+          return prevState; 
+        });
+      };
+      reader.readAsArrayBuffer(file); 
+    }
+  };
+  //Arshad Attar Added This , Now Resume will added Proper in data base.  18-10-2024
+  //Start end Line 480
+    
 
   // sahil karnekar :-  8-10-2-2024 ,  line 446 to 460
   const handleLocationChange = (e) => {
@@ -473,24 +508,7 @@ const CallingTrackerForm = ({
     setErrors((prevErrors) => ({ ...prevErrors, qualification: "" }));
   };
 
-  const handleResumeFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const arrayBuffer = reader.result;
-        const byteArray = new Uint8Array(arrayBuffer);
-        const byteNumbers = Array.from(byteArray);
-        const base64String = btoa(String.fromCharCode(...byteNumbers));
-        console.log(base64String); // Print the Base64 string
-        setLineUpData((prevState) => ({
-          ...prevState,
-          resume: base64String, // Store the Base64 string
-        }));
-      };
-      reader.readAsArrayBuffer(file); // Read the file as an ArrayBuffer
-    }
-  };
+ 
   const handleRequirementChange = (e) => {
     const { value } = e.target;
     const selectedRequirement = requirementOptions.find(

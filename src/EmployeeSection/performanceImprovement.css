@@ -83,7 +83,7 @@
   }
 
   .PIE-grid-date{
-    width: 70%;
+    width: 85%;
     padding: 10px;
     border-radius: 8px;
     display: flex;
@@ -161,6 +161,7 @@
     color:var(--text-color);
     border: 1px solid #ccc;
     display: inline-block;
+    width: 300px;
   }
   .PIE-Apply-Filter-Btn{
     margin-top: 10px;
@@ -194,7 +195,8 @@
     justify-content: space-between;
     align-items: center;
     border: 1px solid black;
-    width: 300px;
+    width: 270px;
+    height: 30px;
     /* max-width: 450px; */
   }
   

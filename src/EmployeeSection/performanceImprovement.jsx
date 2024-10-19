@@ -629,7 +629,7 @@ const PerformanceImprovement = ({ loginEmployeeName }) => {
           {userType === "TeamLeader" && <span>Team Leader</span>}
           {userType === "Manager" && <span>Manager</span>}
           {userType === "SuperUser" && <span>Super User</span>}
-          
+
             <div className="PIE-Dropdown" onClick={toggleDropdown}>
               {userType === "SuperUser" && <span>Select  Manage OR Team Leader</span>}
               {userType === "Manager" && <span>Select TeamLeader OR Recruiter </span>}
