@@ -1,4 +1,4 @@
-.update-main-div{
+.update-main-div {
   height: 100%;
   width: 100%;
   display: flex;
@@ -6,17 +6,16 @@
   /* align-items: center; */
   justify-content: center;
   padding: 5px;
-  color:var(--text-color);
+  color: var(--text-color);
   margin-top: 5px;
 }
-.update-main-div::-webkit-scrollbar{
+.update-main-div::-webkit-scrollbar {
   display: none;
-} 
-
+}
 
 .update-page-head {
   width: 100%;
-  color:var(--text-color);
+  color: var(--text-color);
   /* Set font color to gray */
   text-transform: uppercase;
   align-self: center;
@@ -55,7 +54,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
 }
 
 .update-calling-tracker-field-inner-div {
@@ -90,7 +88,7 @@
 
 .plain-input {
   width: 90%;
-  color:var(--text-color);
+  color: var(--text-color);
   font-size: 16px;
   padding: 1px;
   border-radius: 5px;
@@ -105,8 +103,8 @@
   justify-content: space-around;
 }
 
-.update-calling-check-box-main-container-input{
- width: 160px;
+.update-calling-check-box-main-container-input {
+  width: 160px;
 }
 
 .calling-check-box-container {
@@ -118,7 +116,7 @@
 .inner-sub-div-input {
   width: 90%;
   border-radius: 5px;
-  color:var(--text-color);
+  color: var(--text-color);
   padding: 5px 0px;
   /* border: 1px solid gray; */
 }
@@ -129,7 +127,7 @@
   font-weight: 500;
   border-right: 1px solid gray;
   text-align: center;
-  font-size: 1.0vw;
+  font-size: 1vw;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -143,6 +141,9 @@
   /* flex-direction: column; */
   padding: 10px;
   gap: 6px;
+}
+.setInputBlock {
+  display: block;
 }
 
 .update-calling-tracker-two-input {
@@ -171,7 +172,7 @@
 
 .buttons {
   text-align: center;
-  color:var(--text-color);
+  color: var(--text-color);
   display: flex;
 }
 
@@ -181,22 +182,20 @@
   display: flex;
   justify-content: start;
   align-items: center;
-  color:var(--text-color);
+  color: var(--text-color);
 }
 
 .gender-checkboxes {
   display: flex;
   justify-content: start;
   align-items: center;
-  color:var(--text-color);
-
+  color: var(--text-color);
 }
 
 .gender-checkboxes input[type="checkbox"] {
   margin-right: 0px;
-  color:var(--text-color);
+  color: var(--text-color);
 }
-
 
 .buttons {
   display: flex;
@@ -206,11 +205,11 @@
   margin: 20px;
   text-align: center;
   justify-content: space-around;
-  color:var(--text-color);
+  color: var(--text-color);
 }
 
 .ctf-btn {
-  background-color:var(--button-color);
+  background-color: var(--button-color);
   color: white;
   border-radius: 15px;
   border: 1px solid gray;
@@ -224,7 +223,7 @@
 }
 
 .ctf-btn:hover {
-  background-color:  var( --button-hover-color);
+  background-color: var(--button-hover-color);
   color: var(--text-hover-color);
   border: 1px solid gray;
 }
@@ -233,10 +232,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color:var(--text-color);
+  color: var(--text-color);
   border: 1px solid red;
 }
-
 
 #currentDate {
   width: 75%;
@@ -245,7 +243,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
-  color:var(--text-color);
+  color: var(--text-color);
 }
 
 .custom-datepicker-container {
@@ -255,7 +253,7 @@
 
 b,
 strong {
-  color:var(--text-color);
+  color: var(--text-color);
   /* Set font color to gray */
 }
 /* .update-calling-tracker-field-sub-div input [type="placeholder"]
@@ -264,10 +262,10 @@ strong {
   padding-left: 100px;
 } */
 
-::placeholder{
+::placeholder {
   padding-left: 10px;
 }
-.update-callingTracker-male-div{
+.update-callingTracker-male-div {
   display: flex;
   justify-content: center;
   gap: 10px;

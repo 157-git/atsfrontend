@@ -119,9 +119,11 @@
     padding-bottom: 5px;
   }
 
-  .PIE-custom-date{
-    /* border: 1px solid black; */
-  }
+  /* .PIE-custom-date{
+    border: 1px solid black;
+  } */
+
+
   .PIE-custom-date-input {
     border: 1px solid gray;
     margin: 5px 8px;
