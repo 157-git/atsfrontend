@@ -19,6 +19,9 @@ import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
 
+// added this component from antd library by sahil karnekar line 23 date : 15-10-2024
+import { TimePicker } from "antd";
+
 const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
   initialData = {},
@@ -101,8 +104,10 @@ const CallingTrackerForm = ({
   const [resumeFile, setResumeFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  // sahil karnekar line 106
+  // sahil karnekar line 110 to 112 Date : 15-10-2024
   const [errorForYOP, setErrorForYOP] = useState("");
+  const [errorForDOB, setErrorForDOB] = useState("");
+  const [errorInterviewSlot, seterrorInterviewSlot] = useState("");
 
   useEffect(() => {
     fetchRequirementOptions();
@@ -303,6 +308,18 @@ const CallingTrackerForm = ({
   const handleLineUpChange = (e) => {
     const { name, value } = e.target;
 
+    // line number 314 to 324 added by sahil karnekar date : 15-10-2024
+    if (name === "dateOfBirth") {
+      console.log(value);
+      console.log(maxDate);
+
+      if (value > maxDate) {
+        setErrorForDOB("MaxDate" + maxDate);
+      } else {
+        setErrorForDOB("");
+      }
+    }
+
     // Restrict non-numeric input for specific fields
     if (
       (name === "contactNumber" ||
@@ -348,7 +365,6 @@ const CallingTrackerForm = ({
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
-  
   const handleSubmit = async (e) => {
     setShowConfirmation(false);
     e.preventDefault();
@@ -456,34 +472,36 @@ const CallingTrackerForm = ({
       reader.onloadend = () => {
         const arrayBuffer = reader.result;
         const byteArray = new Uint8Array(arrayBuffer);
-        const chunkSize = 0x8000; 
-        let base64String = '';
+        const chunkSize = 0x8000;
+        let base64String = "";
 
         for (let i = 0; i < byteArray.length; i += chunkSize) {
-          base64String += String.fromCharCode.apply(null, byteArray.subarray(i, i + chunkSize));
+          base64String += String.fromCharCode.apply(
+            null,
+            byteArray.subarray(i, i + chunkSize)
+          );
         }
-        base64String = btoa(base64String); 
+        base64String = btoa(base64String);
         setLineUpData((prevState) => {
           if (prevState.resume !== base64String) {
             return {
               ...prevState,
-              resume: base64String, 
+              resume: base64String,
             };
           }
-          return prevState; 
+          return prevState;
         });
       };
-      reader.readAsArrayBuffer(file); 
+      reader.readAsArrayBuffer(file);
     }
   };
   //Arshad Attar Added This , Now Resume will added Proper in data base.  18-10-2024
   //Start end Line 480
-    
 
-  // sahil karnekar :-  8-10-2-2024 ,  line 446 to 460
+  // sahil karnekar line 489 to 503 date 15-10-2024
   const handleLocationChange = (e) => {
     const value = e.target.value;
-    if (value === "Other") {
+    if (value === "") {
       setIsOtherLocationSelected(true);
     } else {
       setIsOtherLocationSelected(false);
@@ -495,20 +513,17 @@ const CallingTrackerForm = ({
     setErrors((prevErrors) => ({ ...prevErrors, currentLocation: "" }));
   };
 
-  // sahil karnekar :-  8-10-2-2024 ,  line 497 to 508
+  // sahil karnekar :-  8-10-2-2024 ,  line 499 to 508
   const handleEducationChange = (e) => {
     const value = e.target.value;
     if (value === "Other") {
-      setIsOtherEducationSelected(true);
       setLineUpData({ ...lineUpData, qualification: "" });
     } else {
-      setIsOtherEducationSelected(false);
       setLineUpData({ ...lineUpData, qualification: value });
     }
     setErrors((prevErrors) => ({ ...prevErrors, qualification: "" }));
   };
 
- 
   const handleRequirementChange = (e) => {
     const { value } = e.target;
     const selectedRequirement = requirementOptions.find(
@@ -793,7 +808,7 @@ const CallingTrackerForm = ({
               <div className="calling-tracker-field">
                 <label style={{ color: "gray" }}>Current Location</label>
                 <div className="calling-tracker-two-input-container">
-                  {/* sahil karnekar line 819 to 850 */}
+                  {/* sahil karnekar line 831 to 865 */}
                   <div className="calling-tracker-two-input">
                     <select
                       name="currentLocation"
@@ -805,7 +820,8 @@ const CallingTrackerForm = ({
                       </option>
                       <option value="Pune City">Pune City</option>
                       <option value="PCMC">PCMC</option>
-                      <option value="Other">Other</option>
+                      {/* line number 841 added by sahil date : 15-10-2024 */}
+                      <option value="">Other</option>
                     </select>
                     {isOtherLocationSelected && (
                       <input
@@ -821,6 +837,7 @@ const CallingTrackerForm = ({
                         placeholder="Enter your location"
                       />
                     )}
+
                     {/* Display error message if any */}
                     {errors.currentLocation && (
                       <div className="error-message">
@@ -828,7 +845,6 @@ const CallingTrackerForm = ({
                       </div>
                     )}
                   </div>
-
                   <div className="calling-tracker-two-input">
                     <input
                       type="text"
@@ -876,20 +892,26 @@ const CallingTrackerForm = ({
                   )}
                 </div>
               </div>
+
               <div className="calling-tracker-field">
                 <label>Date Of Birth</label>
                 <div className="calling-check-box-main-container">
                   <div className="calling-tracker-two-input">
+                    {/* line number 916 to 930 added by sahil karnekar date : 15-10-2024 */}
                     <input
                       type="date"
                       name="dateOfBirth"
-                      value={lineUpData.dateOfBirth}
+                      value={
+                        lineUpData.dateOfBirth === "DOB not found"
+                          ? "" // Provide default value if "DOB not found"
+                          : lineUpData.dateOfBirth // Use the actual date if it's present
+                      }
                       onChange={handleLineUpChange}
-                      // sahil karnekar line 907
                       max={maxDate}
                     />
-                    {errors.dateOfBirth && (
-                      <div className="error-message">{errors.dateOfBirth}</div>
+
+                    {errorForDOB && (
+                      <div className="error-message">{errorForDOB}</div>
                     )}
                   </div>
 
@@ -899,6 +921,7 @@ const CallingTrackerForm = ({
                         <input
                           type="checkbox"
                           name="Male"
+                          // added line number 940 by sahil karnekar date : 15-10-2024
                           value="Male"
                           className="gender"
                           checked={lineUpData.gender === "Male"}
@@ -912,6 +935,7 @@ const CallingTrackerForm = ({
                         <span style={{ paddingLeft: "10px" }}>Male</span>
                       </div>
                     </div>
+
                     <div className="callingTracker-male-div">
                       <div className="calling-check-box">
                         <input
@@ -950,15 +974,21 @@ const CallingTrackerForm = ({
                   />
                 </div>
               </div>
+
               <div className="calling-tracker-field">
                 <label>Education</label>
                 <div className="calling-tracker-two-input-container">
+                  {/* sahil karnekar line 966 to 1442 */}
                   <div className="calling-tracker-two-input">
-                    <select
+                    <input
+                      list="educationListDropDown"
                       name="qualification"
                       value={lineUpData.qualification}
                       onChange={handleEducationChange}
-                    >
+                      placeholder="Search...."
+                    />
+
+                    <datalist id="educationListDropDown">
                       <option value="">Select</option>
                       <option value="Other">Other</option>
                       <option value="10th">10th</option>
@@ -1364,25 +1394,16 @@ const CallingTrackerForm = ({
                       <option value="Diploma in Artificial Intelligence">
                         Diploma in Artificial Intelligence
                       </option>
-                    </select>
+                    </datalist>
+                    {/* sahil karnekar */}
 
-                    {/* sahil karnekar 8-10-2024*/}
-                    {isOtherEducationSelected && (
-                      <input
-                        type="text"
-                        name="qualification"
-                        value={lineUpData.qualification}
-                        onChange={handleLineUpChange}
-                        placeholder="Enter your Education"
-                      />
-                    )}
                     {errors.qualification && (
                       <div className="error-message error-two-input-box">
                         {errors.qualification}
                       </div>
                     )}
                   </div>
-
+                  {/* sahil karnekar line 1376 to 1420 */}
                   <input
                     type="number"
                     min="1947"
@@ -1391,6 +1412,7 @@ const CallingTrackerForm = ({
                     value={lineUpData.yearOfPassing}
                     onChange={(e) => {
                       const value = e.target.value;
+
                       // Check if the input is empty and clear the error
                       if (value === "") {
                         setErrorForYOP("");
@@ -1399,6 +1421,7 @@ const CallingTrackerForm = ({
                       } else {
                         setErrorForYOP("");
                       }
+
                       // Only allow 0 to 4 digits input
                       if (/^\d{0,4}$/.test(value)) {
                         const year = parseInt(value, 10);
@@ -1427,12 +1450,14 @@ const CallingTrackerForm = ({
                     }}
                     className="calling-tracker-two-input"
                   />
-                  {/* sahil karnekar  line 1421 to 1424*/}
+                  {/* sahil karnekar  line 1443 to 1446 */}
                   {errorForYOP && (
                     <span className="error-message">{errorForYOP}</span>
                   )}
                 </div>
               </div>
+
+              {/* -------------- */}
             </div>
             <div className="calling-tracker-row-white">
               <div className="calling-tracker-field">
@@ -1493,6 +1518,7 @@ const CallingTrackerForm = ({
                   />
                 </div>
               </div>
+
               <div className="calling-tracker-field">
                 <label>Total Experience</label>
                 <div className="calling-tracker-two-input-container">
@@ -1505,7 +1531,7 @@ const CallingTrackerForm = ({
                       placeholder="Years"
                       maxLength="2"
                     />
-                    {/* sahil karnekar line 1533 to 1537 */}
+                    {/* sahil karnekar line 1523 to 1527 */}
                     {errors.experienceYear && (
                       <div className="error-message error-two-input-box">
                         {errors.experienceYear}
@@ -1513,7 +1539,7 @@ const CallingTrackerForm = ({
                     )}
                   </div>
                   <div className="calling-tracker-two-input">
-                    {/* sahil karnekar line 1540 to 1550 */}
+                    {/* sahil karnekar line 1531 to 1540 */}
                     <input
                       type="number"
                       name="experienceMonth"
@@ -1521,10 +1547,11 @@ const CallingTrackerForm = ({
                       onChange={handleLineUpChange}
                       placeholder="Months"
                       maxLength="2"
+                      // line number 1563 added by sahil karnekar date : 15-10-2024
                       min="0"
                       max="11"
                     />
-                    {/* sahil karnekar line 1551 to 1556 */}
+                    {/* sahil karnekar line 1542 to 1546 */}
                     {errors.experienceMonth && (
                       <div className="error-message error-two-input-box">
                         {errors.experienceMonth}
@@ -1572,6 +1599,7 @@ const CallingTrackerForm = ({
                   </div>
                 </div>
               </div>
+
               <div className="calling-tracker-field">
                 <label>Communication Rating</label>
                 <div className="calling-tracker-field-sub-div">
@@ -1591,6 +1619,7 @@ const CallingTrackerForm = ({
                 </div>
               </div>
             </div>
+
             <div className="calling-tracker-row-gray">
               <div className="calling-tracker-field">
                 <label>Current CTC(LPA)</label>
@@ -1784,34 +1813,74 @@ const CallingTrackerForm = ({
                   </div>
                 </div>
               </div>
+
               <div className="calling-tracker-field">
                 <label>Interview Slots</label>
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
+                    {/* line number 1825 to 1851 added by sahil karnekar date : 15-10-2024 */}
                     <input
                       type="date"
                       name="availabilityForInterview"
                       value={lineUpData.availabilityForInterview}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
+
+                        if (e.target.value < today) {
+                          seterrorInterviewSlot(
+                            "Interview Slot Should be Next Date From Today"
+                          );
+                        } else {
+                          seterrorInterviewSlot(""); // Clear error message if the date is valid
+                        }
+
                         setLineUpData({
                           ...lineUpData,
                           availabilityForInterview: e.target.value,
-                        })
-                      }
+                        });
+                      }}
+                      min={
+                        new Date(new Date().setDate(new Date().getDate() + 1))
+                          .toISOString()
+                          .split("T")[0]
+                      } // Restrict to future dates starting from tomorrow
                     />
+
+                    {errorInterviewSlot && (
+                      <div className="error-message">{errorInterviewSlot}</div>
+                    )}
                   </div>
                   <div className="calling-tracker-two-input">
-                    <input
-                      type="time"
-                      name="interviewTime"
-                      value={lineUpData.interviewTime}
-                      onChange={(e) =>
+                    {/* line number 1856 to 1878 added by sahil karnekar date : 15-10-2024 */}
+                    <TimePicker
+                      value={lineUpData.interviewTime} // ensure this is a valid dayjs object
+                      placeholder="Interview Time"
+                      onChange={(time) =>
                         setLineUpData({
                           ...lineUpData,
-                          interviewTime: e.target.value,
+                          interviewTime: time, // 'time' is the selected time as a dayjs object
                         })
                       }
+                      format="h:mm a" // this hides the seconds selection
                     />
+
+                    {/* <input
+                          type="text"
+                          name="interviewTime"
+                          placeholder="⏰(e.g 12:00 AM)"
+                          value={lineUpData.interviewTime}
+                          onChange={(e) =>
+                            setLineUpData({
+                              ...lineUpData,
+                              interviewTime: e.target.value,
+                            })
+                          }
+                          onFocus={(e) => (e.target.type = 'time')} // Change to time input on focus
+                          onBlur={(e) => {
+                            if (!e.target.value) e.target.type = 'text'; // Revert to text input if no time is selected
+                          }}
+ 
+                    /> */}
                   </div>
                 </div>
               </div>
@@ -2003,7 +2072,7 @@ const ModalComponent = ({
             >
               History Tracker
             </p> */}
-            
+
             <p
               className={`sidebar-item ${
                 activeField === "previousQuestion" ? "active" : ""
