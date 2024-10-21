@@ -452,10 +452,7 @@ const LineupExcelData = ({
       }
     });
   };
-  // added by sahil karnekar 21-10-2024
-  const handleUpdateProp = (propFromUpdateForm) =>{
-    setSelectedCandidate(propFromUpdateForm);
-      }
+ 
 
   return (
     <div className="App-after1">
@@ -838,8 +835,7 @@ const LineupExcelData = ({
           loginEmployeeName={loginEmployeeName}
           onClose={() => setSelectedCandidate(null)}
           onSuccess={handleUpdateSuccess}
-          // this prop added by sahil karnekar date 21-10-2024
-          onsuccessfulDataAdditions={handleUpdateProp}
+         
         />
       )}
     </div>

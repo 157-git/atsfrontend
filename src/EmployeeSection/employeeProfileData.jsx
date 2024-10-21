@@ -5,14 +5,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import "../EmployeeSection/employeeProfile.css";
-import TeamDetails from "../TeamDetails/teamDetails"
+import TeamDetails from "../TeamDetails/teamDetails";
 import { API_BASE_URL } from "../api/api";
 
 const EmployeeProfileData = ({
   onClose,
   toggleIncentive,
   toggleAttendance,
-  // toggleTeamDetails,
   togglePerformanceImprovement,
 }) => {
   const [viewMoreProfileShow, setViewMoreProfileShow] = useState(false);
@@ -24,15 +23,37 @@ const EmployeeProfileData = ({
   const { employeeId } = useParams();
   const { userType } = useParams();
 
+  const [value, setValue] = useState(0); //Arshad Attar Added This Line :- 17-10-2024
+  const targetValue = 60; //Arshad Attar Added This Line :- 17-10-2024
+
+  //Arshad Attar Added This code  :- 17-10-2024
+  //Line Start 33
   const viewMoreProfile = (e) => {
     e.preventDefault();
     setViewMoreProfileShow(true);
+
+    const totalDuration = 2000;
+    const steps = 200;
+    const stepDuration = totalDuration / steps;
+    let interval = setInterval(() => {
+      setValue((prev) => {
+        const nextValue = prev + targetValue / steps;
+        if (nextValue >= targetValue) {
+          clearInterval(interval);
+          return targetValue;
+        }
+        return nextValue;
+      });
+    }, stepDuration);
+
+    setTimeout(() => clearInterval(interval), totalDuration);
   };
+  const arrowPosition = (value / 100) * 600;
+  //Arshad Attar Added This code  :- 17-10-2024
+  //Line End57
 
   useEffect(() => {
-    fetch(
-      `${API_BASE_URL}/fetch-profile-details/${employeeId}/${userType}`
-    )
+    fetch(`${API_BASE_URL}/fetch-profile-details/${employeeId}/${userType}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -99,7 +120,6 @@ const EmployeeProfileData = ({
             <div className="employee-profile-staticsection">
               <div className="employee-profile-static">
                 <div className="employee-profile-details">
-
                   <img src={profileImage} />
                   <p className="m-0">
                     <b>Name: {employeeData?.name}</b>
@@ -109,23 +129,22 @@ const EmployeeProfileData = ({
                   </p>
                   <div className="emp-profile-details-subdiv"></div>
                 </div>
-                
+
                 <div className="employee-profile-basic-details">
                   <p className="m-1">
                     <b>Resume : </b>Resume.pdf{" "}
                     <i onClick={openModal} className="fas fa-eye"></i>
                   </p>
                   <p className="m-1">
-                  <b>Job Role : </b>
-                   
+                    <b>Job Role : </b>
+
                     {employeeData.jobRole}
-              
                   </p>
                   <p className="m-1">
-                  <b>Gender  : </b>
+                    <b>Gender : </b>
                     {employeeData.gender}
                   </p>
-                 
+
                   <p className="m-1">
                     <b>Blood Group : </b>
                     {employeeData.bloodGroup}
@@ -208,63 +227,81 @@ const EmployeeProfileData = ({
             </div>
 
             <div className="employee-profile-scrollsection">
-
-              {/* Employee Performance Indicator */}
               <div className="employee-profile-performance-indicator">
                 <h1>
                   <b>Performance Indicator</b>
                 </h1>
 
-                <div className="emp-pro-data-progress-bar">
-                  <div className="emp-pro-data-progress-bar-inner">
-                    <div className="emp-pro-data-poor">
-                      <h6>Poor</h6>
+                <div>
+                  <div className="emp-pro-data-progress-bar">
+                    <div className="emp-pro-data-progress-bar-inner">
+                      <div className="emp-pro-data-poor">
+                        <h6>Poor</h6>
+                      </div>
+
+                      <div className="emp-pro-data-average">
+                        <h6>Average</h6>
+                      </div>
+
+                      <div className="emp-pro-data-good">
+                        <h6>Good</h6>
+                      </div>
+
+                      <div className="emp-pro-data-best">
+                        <h6>Best</h6>
+                      </div>
                     </div>
 
-                    <div className="emp-pro-data-average">
-                      <h6>Average</h6>
+                    {/* Arrow div that moves based on the hardcoded value */}
+                    <div
+                      className="moving-arrow"
+                      style={{ left: `${arrowPosition}px` }}
+                    >
+                      ▼
                     </div>
-
-                    <div className="emp-pro-data-good">
-                      <h6>Good</h6>
-                    </div>
-
-                    <div className="emp-pro-data-best">
-                      <h6>Best</h6>
-                    </div>
-                  </div>
-
-                  <div className="indicator-123">
-                    <i className="fa-solid fa-i"></i>
                   </div>
                 </div>
 
                 <div className="profile-back-button" style={{ padding: "5px" }}>
-                  {userType === 'Recruiters' ? (
+                  <button
+                    onClick={toggleIncentive}
+                    className="emp-pro-incentive"
+                  >
+                    Incentive
+                  </button>
+                  {/* 
+            <div className="indicator-123">
+                    <i className="fa-solid fa-i"></i>
+                  </div> */}
+
+                  {userType === "Recruiters" ? (
                     <>
-                      <button onClick={togglePerformanceImprovement}>Your Performance</button>
-                      <button onClick={toggleAttendance}>Your Attendance</button>
+                      <button onClick={togglePerformanceImprovement}>
+                        Your Performance
+                      </button>
+                      <button onClick={toggleAttendance}>
+                        Your Attendance
+                      </button>
                     </>
                   ) : (
                     <>
-                      <button onClick={togglePerformanceImprovement}>Team Performance</button>
-                      <button onClick={toggleAttendance}>Team Attendance</button>
+                      <button onClick={togglePerformanceImprovement}>
+                        Team Performance
+                      </button>
+                      <button onClick={toggleAttendance}>
+                        Team Attendance
+                      </button>
                     </>
                   )}
+                  {/* <div className="profile-back-button"> */}
+                  <button onClick={onClose}>
+                    Close
+                    <i className="fas fa-times"></i>
+                  </button>
+                  {/* </div> */}
                 </div>
               </div>
               <div className="employee-profile-emergency-education-details">
-                <div className="profile-back-button">
-                  <button onClick={onClose}>
-                    Close 
-                    <i className="fas fa-times"></i>
-                  </button>
-                  {/* <button onClick={handleEditProfile}>
-                    Close
-                    <i className="fas fa-times"></i>
-                  </button> */}
-                </div>
-
                 {/*End Prachi EmployeeProfile 1/07 line no 205 to 210  */}
 
                 <div className="employee-profile-emergency-details">
@@ -432,7 +469,6 @@ const EmployeeProfileData = ({
                 </div>
               </div>
               {/* Ajhar-11-07-2024 jsx.LineNo-370  */}
-
             </div>
           </section>
         </main>
@@ -479,17 +515,13 @@ const EmployeeProfileData = ({
     );
 
   return (
-    <div
-      className="employee-profile-card"
-    >
+    <div className="employee-profile-card">
       {employeeData != null ? (
-        <Modal.Dialog
-        style={{padding:"10px",margin:"10px"}}
-        >
+        <Modal.Dialog style={{ padding: "10px", margin: "10px" }}>
           <Modal.Header
-            style={{ fontSize: "18px",   backgroundColor: "#f2f2f2"}}
+            style={{ fontSize: "18px", backgroundColor: "#f2f2f2" }}
           >
-            Employee Profile 
+            Employee Profile
             <button
               onClick={onClose}
               style={{
@@ -528,21 +560,12 @@ const EmployeeProfileData = ({
           </Modal.Body>
           <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
             {/* Ajhar Tamboli - EmployeeProfileData- 22-07-24- lineNo 491 to 510 */}
-            <button onClick={toggleIncentive} className="emp-pro-incentive">
-              Incentive
-            </button>
-
-            <button onClick={toggleAttendance} className="emp-pro-incentive">
-              Attendance
-            </button>
-
             <button
               onClick={viewMoreProfile}
               className="display-more-profile-btn daily-tr-btn"
             >
               More
             </button>
-
           </Modal.Footer>
         </Modal.Dialog>
       ) : (

@@ -818,10 +818,7 @@ const LineUpList = ({
   //Mohini_Raut_LineUpList_columnsToInclude_columnsToExclude_16/07/2024//
 
 
-  // added by sahil karnekar date 21-10-2024
-  const handleUpdateProp = (propFromUpdateForm) =>{
-    setShowUpdateCallingTracker(propFromUpdateForm);
-      }
+ 
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -1937,8 +1934,7 @@ const LineUpList = ({
               employeeId={employeeId}
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
-              // this prop added by sahil karnekar date 21-10-2024
-              onsuccessfulDataUpdation={handleUpdateProp}
+             
             />
           )}
         </>

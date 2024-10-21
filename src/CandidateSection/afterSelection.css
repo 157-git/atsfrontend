@@ -202,3 +202,8 @@
 .as-nofilechosen {
   color: red;
 }
+
+/* Arshad Attar Added CSS  */
+.inquiry-table-td{
+  text-align: left;
+}

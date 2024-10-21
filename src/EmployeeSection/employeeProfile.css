@@ -72,6 +72,7 @@
   justify-content: end;
   gap: 20px;
   margin-top: 10px;
+  /* border: 1px solid black; */
 }
 
 .profile-back-button button {
@@ -251,29 +252,7 @@
   align-items: center;
 }
 
-.emp-pro-data-progress-bar {
-  width: 600px;
-  height: 40px;
-  border-radius: 25px;
-  overflow: hidden;
-}
 
-.emp-pro-data-progress-bar-inner {
-  display: flex;
-  height: 100%;
-}
-
-.emp-pro-data-poor {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #F7C6C7;
-    width: 25%;
-    color: black;
-    font-size: 16px;
-  
-  }
-  
   .emp-pro-data-average {
     display: flex;
     align-items: center;
@@ -282,9 +261,7 @@
     width: 25%;
     color: black;
     font-size: 16px;
-  
   }
-  
   .emp-pro-data-good {
     display: flex;
     align-items: center;
@@ -293,9 +270,7 @@
     width: 25%;
     color: black;
     font-size: 16px;
-  
   }
-  
   .emp-pro-data-best {
     display: flex;
     align-items: center;
@@ -304,7 +279,6 @@
     width: 25%;
     color: black;
     font-size: 16px;
-  
   }
 
 
@@ -374,4 +348,54 @@ padding-left: 15px;
   height: 200px;
   align-items: center;
   display: flex;
+}
+
+
+
+/* Arshad added This CSS 17-10-2024 */
+
+.emp-pro-data-progress-bar {
+  width: 600px;
+  height: 40px;
+  border-radius: 25px;
+  overflow: hidden;
+  /* border: 1px solid black; */
+  position: relative; 
+}
+
+.emp-pro-data-progress-bar-inner {
+  display: flex;
+  height: 100%;
+}
+
+.emp-pro-data-poor,
+.emp-pro-data-average,
+.emp-pro-data-good,
+.emp-pro-data-best {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-size: 16px;
+}
+
+
+
+.emp-pro-data-poor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F7C6C7;
+  width: 25%;
+  color: black;
+  font-size: 16px;
+}
+
+/* Arrow styling */
+.moving-arrow {
+  position: absolute;
+  top: -20px; /* Adjust as needed to position the arrow above the progress bar */
+  font-size: 30px; /* Can use any size or even replace with an icon */
+  color: rgb(28, 206, 28);
+  transition: left 0.3s ease;  /* Smooth transition */
 }

@@ -51,6 +51,7 @@ const JobListing = () => {
     "field",
     "companyName",
   ];
+
   useEffect(() => {
     // replaced base url with actual url just for testing by sahil karnekar please replace it with base url at the time of deployment
     fetch(`${API_BASE_URL}/all-job-descriptions`)
@@ -239,17 +240,19 @@ const JobListing = () => {
     }
   };
 
-  //   This is added by sahil karnekar date : 30 sep 2024 the function for formatting the word is it is in PascalCase line 243 to 248
+  //   This is added by sahil karnekar date : 30 sep 2024 the function for formatting the word is it is in PascalCase line 250 to 254
   function formatOption(option) {
     // Regular expression to insert a space before any uppercase letter 
     // that follows a lowercase letter or another uppercase letter
     return option.replace(/([a-z])([A-Z])/g, '$1 $2');
   }
 
-  // sahil karnekar line 249 to 252 date : 10-10-2024
+  // sahil karnekar line 256 to 259 date : 10-10-2024
   const handleUpdateCompProp = (data) =>{
     setShowAddJobDescriptionNew(data);
+   
   }
+
 
   return (
     <>
@@ -342,6 +345,7 @@ const JobListing = () => {
           </div>
         </div>
       </div>
+
       {!showViewMore && (
         <div className="jdCards">
           {filteredJobDescriptions.map((item, job, index) => (
@@ -400,6 +404,7 @@ const JobListing = () => {
           ))}
         </div>
       )}
+
 
       {showViewMore && (
         <>

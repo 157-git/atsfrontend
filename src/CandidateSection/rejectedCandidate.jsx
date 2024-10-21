@@ -808,10 +808,6 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
   //Swapnil_Rokade_SelectedCandidate_columnsToInclude_columnsToExclude_17/07/2024//
 
 
-// added by sahil karnekar 21-10-2024
-  const handleUpdateProp = (propFromUpdateForm) =>{
-    setShowUpdateCallingTracker(propFromUpdateForm);
-      }
 
   return (
     <div className="calling-list-container">
@@ -1919,8 +1915,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
               employeeId={employeeId}
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
-              // this prop is added by sahil karnekar date 21-10-2024
-              onsuccessfulDataUpdation={handleUpdateProp} 
+             
             />
           )}
         </>

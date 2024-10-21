@@ -68,7 +68,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
         setInterviewDates(data);
       }
     } catch (error) {
-      toast.error(`Error fetching interview dates: ${error.message}`);
+      // toast.error(`Error jjj fetching interview dates: ${error.message}`);
       console.error("Error fetching interview dates:", error);
     }
   };
@@ -80,7 +80,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
     if (!date) {
       return;
     }
-  
+
     const adjustedDate = new Date(date);
     adjustedDate.setHours(adjustedDate.getHours() + 10);
     const formattedDate = adjustedDate.toISOString().split("T")[0];
