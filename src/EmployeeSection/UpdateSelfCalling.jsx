@@ -1551,8 +1551,6 @@ const UpdateSelfCalling = ({
                     value={callingTracker?.lineUp.relevantExperience || ""}
                     onChange={handleChange}
                     placeholder="Enter Relevant Experience"
-                  
-                    // maxLength="2"
                   />
                   {errors.relevantExperience && (
                     <div className="error-message">
