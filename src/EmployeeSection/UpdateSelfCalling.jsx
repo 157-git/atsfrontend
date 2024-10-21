@@ -132,8 +132,15 @@ const UpdateSelfCalling = ({
     if (!callingTracker.sourceName) {
       newErrors.sourceName = "Source Name is required";
     }
+    // line number 135 to 144 added validation by sahil karnekar date 21-10-2024
+    const emailPattern = /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
     if (!callingTracker.candidateEmail) {
       newErrors.candidateEmail = "Email is required";
+    } else if (!emailPattern.test(callingTracker.candidateEmail)) {
+      // If email format is invalid, show an error
+      newErrors.candidateEmail = "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).";
+    } else {
+      delete newErrors.candidateEmail;
     }
     if (!callingTracker.callingFeedback) {
       newErrors.callingFeedback = "Calling Feedback is required";
@@ -553,8 +560,8 @@ console.log(errors);
 
 
     try {
-      // Clear all existing errors at the start of submission
-  setErrors({});
+      // Clear all existing errors at the start of submission added by sahil karnekar date 21-10-2024
+ setErrors({});
       const dataToUpdate = {
         ...callingTracker,
         candidateAddedTime: callingTracker.candidateAddedTime,
@@ -577,7 +584,8 @@ console.log(errors);
 
       if (response.ok) {
         if (callingTracker.selectYesOrNo === "Interested") {
-          onsuccessfulDataUpdation(true);
+          // changed parameter from true to false by sahil karnekar date 21-10-2024
+          onsuccessfulDataUpdation(false);
           toast.success("Data updated successfully Please Cheack Line Up Tracker");
         } else {
           onsuccessfulDataUpdation(false);
@@ -1771,7 +1779,9 @@ console.log(errors);
 
 
 <div>
+  {/* line 1784 added by sahil karnekar date 21-10-2024 */}
                 <select
+                disabled={callingTracker.selectYesOrNo !== "Interested"}
                   type="text"
                   name="lineUp.finalStatus"
                   value={callingTracker?.lineUp.finalStatus}
@@ -1793,7 +1803,9 @@ console.log(errors);
               <label>Interview Slots</label>
               <div className="update-calling-tracker-two-input-container">
 <div>
+  {/* line 1808 added by sahil karnekar date 21-10-2024 */}
                 <input
+                disabled={callingTracker.selectYesOrNo !== "Interested"}
                 style={{width:"auto"}}
                   type="date"
                   name="lineUp.availabilityForInterview"
@@ -1815,9 +1827,8 @@ console.log(errors);
                       },
                     }));
                   }}
-                  min={new Date(new Date().setDate(new Date().getDate() + 1))
-                    .toISOString()
-                    .split("T")[0]} // Restrict to future dates starting from tomorrow
+                  // line 1831 changed updated by sahil karnekar date 21-10-2024
+                  min={new Date().toISOString().split("T")[0]} // Allow today and future dates 
                   className="update-calling-tracker-two-input"
                 />
 
@@ -1826,7 +1837,10 @@ console.log(errors);
                 )}
 </div>
 
+{/* complete componenet timepicker added by sahil karnekar date 21-10-2024 */}
                 <TimePicker
+                placeholder="Interview Time"
+                disabled={callingTracker.selectYesOrNo !== "Interested"}
                   value={callingTracker.lineUp.interviewTime ? dayjs(callingTracker.lineUp.interviewTime, 'h:mm a') : null}
                   onChange={(time) => {
                     setCallingTracker((prevState) => ({

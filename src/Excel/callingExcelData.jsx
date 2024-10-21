@@ -440,6 +440,11 @@ const CallingExcelList = ({
     toggleSection(false);
   };
 
+  // added by sahil karnekar 21-10-2024
+  const handleUpdateProp = (propFromUpdateForm) =>{
+    setSelectedCandidate(propFromUpdateForm);
+      }
+
   return (
     <div className="App-after1">
       {!selectedCandidate && (
@@ -799,6 +804,8 @@ const CallingExcelList = ({
           loginEmployeeName={loginEmployeeName}
           onClose={() => setSelectedCandidate(null)}
           onSuccess={handleUpdateSuccess}
+          // this prop added by sahil karnekar date 21-10-2024
+          onsuccessfulDataAdditions={handleUpdateProp}
         />
       )}
     </div>

@@ -626,7 +626,10 @@ const ShortListedCandidates = ({
     setShowResumeModal(false);
   };
   //Name:-Akash Pawar Component:-ShortListedCandidate Subcategory:-ResumeViewButton(added) End LineNo:-196 Date:-02/07
-
+ // added by sahil karnekar date 21-10-2024
+ const handleUpdateProp = (propFromUpdateForm) =>{
+  setShowUpdateCallingTracker(propFromUpdateForm);
+    }
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -1548,6 +1551,8 @@ const ShortListedCandidates = ({
               // updateSuccess={handleUpdateSuccess}
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
+              // this prop added by sahil karnekar date 21-10-2024
+              onsuccessfulDataUpdation={handleUpdateProp}
             />
           )}
         </>

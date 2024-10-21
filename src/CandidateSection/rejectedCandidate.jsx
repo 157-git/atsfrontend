@@ -315,9 +315,21 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
   };
   //akash_pawar_RejectedCandidate_ShareFunctionality_18/07_294
 
+  //  filter problem solved updated by sahil karnekar date 21-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
-    setActiveFilterOption(activeFilterOption === key ? null : key);
-    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
+    if (activeFilterOption === key) {
+      setActiveFilterOption(null);
+    } else {
+      setActiveFilterOption(key);
+    }
+    setSelectedFilters((prev) => {
+      const newSelectedFilters = { ...prev };
+      if (key in newSelectedFilters) {
+      } else {
+        newSelectedFilters[key] = []; 
+      }
+      return newSelectedFilters;
+    });
   };
   
 
@@ -794,6 +806,12 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
     hidePopup();
   };
   //Swapnil_Rokade_SelectedCandidate_columnsToInclude_columnsToExclude_17/07/2024//
+
+
+// added by sahil karnekar 21-10-2024
+  const handleUpdateProp = (propFromUpdateForm) =>{
+    setShowUpdateCallingTracker(propFromUpdateForm);
+      }
 
   return (
     <div className="calling-list-container">
@@ -1901,6 +1919,8 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
               employeeId={employeeId}
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
+              // this prop is added by sahil karnekar date 21-10-2024
+              onsuccessfulDataUpdation={handleUpdateProp} 
             />
           )}
         </>
