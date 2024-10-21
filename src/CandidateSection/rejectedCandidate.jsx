@@ -4,12 +4,9 @@ import "./rejectedcandidate.css";
 import UpdateCallingTracker from "../EmployeeSection/UpdateSelfCalling";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import HashLoader from "react-spinners/HashLoader";
 import * as XLSX from "xlsx";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
-
-import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 // SwapnilRokade_RejectedCandidate_ModifyFilters_11/07
 const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
@@ -1907,7 +1904,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
       )}
       {isDataSending && (
         <div className="ShareFunc_Loading_Animation">
-          <ClipLoader size={50} color="#ffb281" />
+          <Loader size={50} color="#ffb281" />
         </div>
       )}
     </div>

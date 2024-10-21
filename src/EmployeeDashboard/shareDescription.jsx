@@ -12,12 +12,13 @@ const ShareDescription = ({ Descriptions }) => {
     console.log(Descriptions);
   });
 
-
   useEffect(() => {
-    fetch(`${API_BASE_URL}/details-for-job-description/${employeeId}/${userType}`)
+    fetch(
+      `${API_BASE_URL}/details-for-job-description/${employeeId}/${userType}`
+    )
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched Data:", data);  // Debugging: Log the entire response
+        console.log("Fetched Data:", data); // Debugging: Log the entire response
         setData(data);
       })
       .catch((error) => console.error("Error fetching data:", error));
@@ -60,19 +61,34 @@ const ShareDescription = ({ Descriptions }) => {
     }
   };
 
+  const handleInputChange = (e, field) => {
+    setData({
+      ...data,
+      [field]: e.target.value, // Update the specific field
+    });
+  };
 
   return (
     <main className="main-description-share">
       <div className="job-post-share" id="job-description-share">
         <section className="job-details-section-share">
-
           <div className="job-title-share">
-            <p className="job-title-share-title">!!..  We are Hiring For  {Descriptions.designation} ..!!</p>
+            <p className="job-title-share-title">
+              !!.. We are Hiring For {Descriptions.designation} ..!!
+            </p>
           </div>
           <hr />
           <div className="job-details-share">
             <div className="job-details-firstsection-share">
-              <h2 style={{ fontWeight: "bold", textDecoration: 'underline', marginRight: '10px' }} >Job Description</h2>
+              <h2
+                style={{
+                  fontWeight: "bold",
+                  textDecoration: "underline",
+                  marginRight: "10px",
+                }}
+              >
+                Job Description
+              </h2>
               <p>
                 <b>Company:</b>
                 <a href={`${Descriptions.companyLink}`}>
@@ -112,7 +128,7 @@ const ShareDescription = ({ Descriptions }) => {
               </p>
             </div>
 
-            <div className="job-details-secondsection-share" >
+            <div className="job-details-secondsection-share">
               <div className="jd-logo-div">
                 <img src={LoginImage} alt="Logo" className="jd-logo" />
               </div>
@@ -139,14 +155,12 @@ const ShareDescription = ({ Descriptions }) => {
                   <b>Perks:</b> <span>{Descriptions.perks}</span>
                 </p>
               </div>
-
             </div>
           </div>
         </section>
         <section className="positionOverview-share">
           <h2>
             <b className="jd-sub-headings">Position Overview</b>
-
           </h2>
           <p>{Descriptions.positionOverview.overview}</p>
         </section>
@@ -157,7 +171,8 @@ const ShareDescription = ({ Descriptions }) => {
           <div>
             {Descriptions.responsibilities.map((responsibilites) => (
               <div key={responsibilites.responsibilitiesId}>
-                <i className="fa-solid fa-arrow-right"></i> {responsibilites.responsibilitiesMsg}{" "}
+                <i className="fa-solid fa-arrow-right"></i>{" "}
+                {responsibilites.responsibilitiesMsg}{" "}
               </div>
             ))}
           </div>
@@ -169,7 +184,8 @@ const ShareDescription = ({ Descriptions }) => {
           <div>
             {Descriptions.jobRequirements.map((requirements) => (
               <div key={requirements.jobRequirementId}>
-                <i className="fa-solid fa-arrow-right"></i>  {requirements.jobRequirementMsg}{" "}
+                <i className="fa-solid fa-arrow-right"></i>{" "}
+                {requirements.jobRequirementMsg}{" "}
               </div>
             ))}
           </div>
@@ -182,29 +198,42 @@ const ShareDescription = ({ Descriptions }) => {
           <div>
             {Descriptions.preferredQualifications.map((qualifications) => (
               <div key={qualifications.preferredQualificationId}>
-                <i className="fa-solid fa-arrow-right"></i>  {qualifications.preferredQualificationMsg}
+                <i className="fa-solid fa-arrow-right"></i>{" "}
+                {qualifications.preferredQualificationMsg}
               </div>
             ))}
           </div>
         </section>
 
         <section className="preferred-qualifications-share">
-          <h2 className="jd-sub-headings">
-            Contact Person
-          </h2>
+          <h2 className="jd-sub-headings">Contact  Person</h2>
           <div className="jd-employeeinfo">
-            <h2>
-              <span className="label">Name : </span> - {data?.name?.split(' ')[0] || "Not available"}
+            <h2 className="share-jd-contact-div">
+              <span className="label">Name : </span> 
+              <input
+                value={data?.name.split(" ")[0] }
+                onChange={(e) => handleInputChange(e, "name")}
+                className="share-edm-input"
+              />
             </h2>
-
-            <h2>
-              <span className="label">Email : </span> - {data?.email || "Not available"}
+            <h2 className="share-jd-contact-div">
+              <span className="label">Email : </span> 
+              <input
+                value={data?.email}
+                onChange={(e) => handleInputChange(e, "email")}
+                className="share-edm-input"
+              />
             </h2>
-            <h2>
-              <span className="label">Contact Number : </span> - {data?.contact || "Not available"}
+            <h2 className="share-jd-contact-div">
+              <span className="label">Contact Number : </span> 
+              <input
+                type="tel"
+                value={data?.contact}
+                onChange={(e) => handleInputChange(e, "contact")}
+                className="share-edm-input"
+              />
             </h2>
           </div>
-
         </section>
 
       </div>
@@ -215,7 +244,6 @@ const ShareDescription = ({ Descriptions }) => {
         <button
           onClick={closeJobDescrptionShare}
           className="apply-button-share"
-          
         >
           close
         </button>

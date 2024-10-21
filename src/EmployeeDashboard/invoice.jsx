@@ -64,12 +64,13 @@ const InvoiceTable = () => {
       email: "",
       mobile: "",
     },
-    clientDetails: {
-      name: "",
-      designation: "",
-      email: "",
-      mobile: "",
-    },
+    //Arshad Attar Comment this 21-10-2024
+    // clientDetails: {
+    //   name: "",
+    //   designation: "",
+    //   email: "",
+    //   mobile: "",
+    // },
     supplierDetails: {
       supplierName: "",
       supplierOfficeNo: "",
@@ -734,22 +735,26 @@ const InvoiceTable = () => {
                   />
                 </div>
               </div>
-              <div className="field-Row-white">
+
+
+
+              {/* //Arshad Attar Comment : - Start Line 741 / 21-10-2024 */}
+              {/* <div className="field-Row-white">
                 <div className="field">
                   <label>Client details</label>
                   <label>Name</label>
                   <input
                     type="text"
                     name="name"
-                    value={formData.clientDetails.name}
-                    onChange={handleCompanyDetailsChange}
+                    // value={formData.clientDetails.name}
+                    // onChange={handleCompanyDetailsChange}
                   />
                   <label>Designation</label>
                   <input
                     type="text"
                     name="designation"
-                    value={formData.clientDetails.designation}
-                    onChange={handleCompanyDetailsChange}
+                    // value={formData.clientDetails.designation}
+                    // onChange={handleCompanyDetailsChange}
                   />
                 </div>
                 <div className="field">
@@ -757,18 +762,20 @@ const InvoiceTable = () => {
                   <input
                     type="text"
                     name="email"
-                    value={formData.clientDetails.email}
-                    onChange={handleCompanyDetailsChange}
+                    // value={formData.clientDetails.email}
+                    // onChange={handleCompanyDetailsChange}
                   />
                   <label>Mobile</label>{" "}
                   <input
                     type="text"
                     name="mobile"
-                    value={formData.clientDetails.mobile}
-                    onChange={handleCompanyDetailsChange}
+                    // value={formData.clientDetails.mobile}
+                    // onChange={handleCompanyDetailsChange}
                   />
                 </div>
-              </div>
+              </div> */}
+                  {/* //Arshad Attar Comment : - end Line 77 / 21-10-2024 */}
+              
               <div className="field-Row-Gray">
                 <div className="field">
                   <label>Details of Supplier:</label>

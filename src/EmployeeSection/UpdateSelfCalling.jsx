@@ -243,7 +243,6 @@ const UpdateSelfCalling = ({
         name === "alternateNumber" ||
         name === "lineUp.experienceYear" ||
         name === "lineUp.experienceMonth" ||
-        name === "lineUp.relevantExperience" ||
         name === "lineUp.expectedCTCLakh" ||
         name === "lineUp.expectedCTCThousand" ||
         name === "lineUp.currentCTCLakh" ||
@@ -1552,8 +1551,8 @@ const UpdateSelfCalling = ({
                     value={callingTracker?.lineUp.relevantExperience || ""}
                     onChange={handleChange}
                     placeholder="Enter Relevant Experience"
-                    // required={callingTracker.selectYesOrNo === "Interested"}
-                    maxLength="2"
+                  
+                    // maxLength="2"
                   />
                   {errors.relevantExperience && (
                     <div className="error-message">

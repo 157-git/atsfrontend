@@ -603,7 +603,6 @@ const JobListing = () => {
   );
 };
 
-
 //Arshad Attar Commented This : 11-10-2024
 const JobList = () => {
   return (

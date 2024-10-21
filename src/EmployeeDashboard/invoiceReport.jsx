@@ -153,10 +153,11 @@ const InvoiceReport = () => {
                           Send To Details
                         </th>
 
+                        {/* Arshad Attar comment This 21-10-2024 */}
                         {/* Client Details */}
-                        <th className="table-header-cell" colSpan="4">
+                        {/* <th className="table-header-cell" colSpan="4">
                           Client Details
-                        </th>
+                        </th> */}
                         <th className="table-header-cell">Print</th>
                       </tr>
                       <tr className="table-header">
@@ -204,10 +205,11 @@ const InvoiceReport = () => {
                         <th className="sub-heading-cell">Mobile No</th>
 
                         {/* Sub-headings for Company Details */}
-                        <th className="sub-heading-cell">Name</th>
-                        <th className="sub-heading-cell">Designation</th>
+                        {/* Arshad Attar comment This 21-10-2024 */}
+                        {/* <th className="sub-heading-cell">Name</th>
+                        <th className="sub-heading-cell">Designation </th>
                         <th className="sub-heading-cell">Email</th>
-                        <th className="sub-heading-cell">Mobile No</th>
+                        <th className="sub-heading-cell">Mobile No</th> */}
                         <th className="sub-heading-cell" colSpan="2"></th>
                       </tr>
                     </thead>
@@ -803,7 +805,9 @@ const InvoiceReport = () => {
                               </span>
                             </div>
                           </td>
-                          <td
+
+                          {/* Arshad Attar comment  This 21-10-2024 Start Line 809 */}
+                          {/* <td
                             className="tabledata"
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
@@ -851,7 +855,10 @@ const InvoiceReport = () => {
                                 {item.clientDetails.mobile}
                               </span>
                             </div>
-                          </td>
+                          </td> */}
+                          {/* Arshad Attar comment This 21-10-2024 , End Line 859 */}
+
+
                           <td className="tabledata">
                             <button onClick={() => handleClick(item.invoiceNo)}>
                               <i className="fa-solid fa-print"></i>

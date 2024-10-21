@@ -1,10 +1,11 @@
   .job-posting {
     text-align: center;
     background-color: #ffffff;
-    max-width: 360px;
+    max-width: 420px;
     width: 100%;
     margin: auto;
     padding-bottom: 20px;
+    height: auto;
     /* Work By Arshad : - Dont Remove This Comment  9 */
     /* z-index: 1; */
   }
@@ -30,6 +31,7 @@
     left: 0;
     background: rgba(45, 45, 45, 0.895);
     padding: 50px;
+    height: 150%;
   }
   .shareEDMdiv {
     display: flex;
@@ -88,7 +90,8 @@
 
   .image-container img {
     width: 120px;
-    height: 100px;
+    height: 120px;
+    /* border: 1px solid black; */
   }
 
   .contact {
