@@ -130,8 +130,15 @@ const UpdateSelfCalling = ({
     if (!callingTracker.sourceName) {
       newErrors.sourceName = "Source Name is required";
     }
+    // line number 135 to 144 added validation by sahil karnekar date 21-10-2024
+    const emailPattern = /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
     if (!callingTracker.candidateEmail) {
       newErrors.candidateEmail = "Email is required";
+    } else if (!emailPattern.test(callingTracker.candidateEmail)) {
+      // If email format is invalid, show an error
+      newErrors.candidateEmail = "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).";
+    } else {
+      delete newErrors.candidateEmail;
     }
     if (!callingTracker.callingFeedback) {
       newErrors.callingFeedback = "Calling Feedback is required";
@@ -540,8 +547,9 @@ const UpdateSelfCalling = ({
       return; // Prevent submission if errors exist
     }
     try {
-      // Clear all existing errors at the start of submission
-      setErrors({});
+      // Clear all existing errors at the start of submission added by sahil karnekar date 21-10-2024
+ setErrors({});
+
       const dataToUpdate = {
         ...callingTracker,
         candidateAddedTime: callingTracker.candidateAddedTime,
@@ -1746,78 +1754,74 @@ const UpdateSelfCalling = ({
                   </option>
                 </select>
 
-                <div>
-                  <select
-                    type="text"
-                    name="lineUp.finalStatus"
-                    value={callingTracker?.lineUp.finalStatus}
-                    onChange={handleChange}
-                    // required={callingTracker.selectYesOrNo === "Interested"}
-                  >
-                    <option value="">Select</option>
-                    <option value="Yet To Confirm">Yet To Confirm</option>
-                    <option value="Interview Schedule">
-                      Interview Schedule
-                    </option>
-                    <option value="Attending After Some time">
-                      Attending After Some time
-                    </option>
-                  </select>
-                  {errors.finalStatus && (
-                    <div className="error-message">{errors.finalStatus}</div>
-                  )}
-                </div>
+
+<div>
+  {/* line 1784 added by sahil karnekar date 21-10-2024 */}
+                <select
+                disabled={callingTracker.selectYesOrNo !== "Interested"}
+                  type="text"
+                  name="lineUp.finalStatus"
+                  value={callingTracker?.lineUp.finalStatus}
+                  onChange={handleChange}
+                // required={callingTracker.selectYesOrNo === "Interested"}
+                >
+                  <option value="">Select</option>
+                  <option value="Yet To Confirm">Yet To Confirm</option>
+                  <option value="Interview Schedule">Interview Schedule</option>
+                  <option value="Attending After Some time">Attending After Some time</option>
+                </select>
+                {errors.finalStatus && (
+                  <div className="error-message">{errors.finalStatus}</div>
+                )}
+              </div>
               </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>Interview Slots</label>
               <div className="update-calling-tracker-two-input-container">
-                <div>
-                  <input
-                    style={{ width: "auto" }}
-                    type="date"
-                    name="lineUp.availabilityForInterview"
-                    value={
-                      callingTracker?.lineUp.availabilityForInterview || ""
-                    }
-                    onChange={(e) => {
-                      const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
 
-                      if (e.target.value < today) {
-                        seterrorInterviewSlot(
-                          "Interview Slot Should be Next Date From Today"
-                        );
-                      } else {
-                        seterrorInterviewSlot(""); // Clear error message if the date is valid
-                      }
+<div>
+  {/* line 1808 added by sahil karnekar date 21-10-2024 */}
+                <input
+                disabled={callingTracker.selectYesOrNo !== "Interested"}
+                style={{width:"auto"}}
+                  type="date"
+                  name="lineUp.availabilityForInterview"
+                  value={callingTracker?.lineUp.availabilityForInterview || ""}
+                  onChange={(e) => {
+                    const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
 
-                      setCallingTracker((prevState) => ({
-                        ...prevState,
-                        lineUp: {
-                          ...prevState.lineUp,
-                          availabilityForInterview: e.target.value,
-                        },
-                      }));
-                    }}
-                    min={
-                      new Date(new Date().setDate(new Date().getDate() + 1))
-                        .toISOString()
-                        .split("T")[0]
-                    } // Restrict to future dates starting from tomorrow
-                    className="update-calling-tracker-two-input"
-                  />
+                    if (e.target.value < today) {
+                      seterrorInterviewSlot("Interview Slot Should be Next Date From Today");
+                    } else {
+                      seterrorInterviewSlot(""); // Clear error message if the date is valid
 
-                  {errorInterviewSlot && (
-                    <div className="error-message">{errorInterviewSlot}</div>
-                  )}
-                </div>
+                   
+                    setCallingTracker((prevState) => ({
+                      ...prevState,
+                      lineUp: {
+                        ...prevState.lineUp,
+                        availabilityForInterview: e.target.value,
+                      },
+                    }));
+                  }}}
+                  // line 1831 changed updated by sahil karnekar date 21-10-2024
+                  min={new Date().toISOString().split("T")[0]} // Allow today and future dates 
+                  className="update-calling-tracker-two-input"
+                />
 
+                {errorInterviewSlot && (
+                  <div className="error-message">{errorInterviewSlot}</div>
+                )}
+</div>
+
+
+{/* complete componenet timepicker added by sahil karnekar date 21-10-2024 */}
                 <TimePicker
-                  value={
-                    callingTracker.lineUp.interviewTime
-                      ? dayjs(callingTracker.lineUp.interviewTime, "h:mm a")
-                      : null
-                  }
+                placeholder="Interview Time"
+                disabled={callingTracker.selectYesOrNo !== "Interested"}
+                  value={callingTracker.lineUp.interviewTime ? dayjs(callingTracker.lineUp.interviewTime, 'h:mm a') : null}
+
                   onChange={(time) => {
                     setCallingTracker((prevState) => ({
                       ...prevState,

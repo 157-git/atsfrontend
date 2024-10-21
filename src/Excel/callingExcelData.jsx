@@ -440,6 +440,7 @@ const CallingExcelList = ({
     toggleSection(false);
   };
 
+
   return (
     <div className="App-after1">
       {!selectedCandidate && (
@@ -799,6 +800,7 @@ const CallingExcelList = ({
           loginEmployeeName={loginEmployeeName}
           onClose={() => setSelectedCandidate(null)}
           onSuccess={handleUpdateSuccess}
+    
         />
       )}
     </div>

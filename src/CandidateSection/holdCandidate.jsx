@@ -458,10 +458,21 @@ const HoldCandidate = ({
   //   }
   // };
 
+  //  filter problem solved updated by sahil karnekar date 21-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
-    setActiveFilterOption(activeFilterOption === key ? null : key);
-    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
-
+    if (activeFilterOption === key) {
+      setActiveFilterOption(null);
+    } else {
+      setActiveFilterOption(key);
+    }
+    setSelectedFilters((prev) => {
+      const newSelectedFilters = { ...prev };
+      if (key in newSelectedFilters) {
+      } else {
+        newSelectedFilters[key] = []; 
+      }
+      return newSelectedFilters;
+    });
   };
 
   const getSortIcon = (criteria) => {
@@ -784,6 +795,7 @@ const HoldCandidate = ({
     hidePopup();
   };
   //Swapnil_Rokade_SelectedCandidate_columnsToInclude_columnsToExclude_17/07/2024//
+
   return (
     <div className="App-after">
       {loading ? (
@@ -1903,6 +1915,7 @@ Date:-02/07 */}
               employeeId={employeeId}
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
+             
             />
           )}
         </>

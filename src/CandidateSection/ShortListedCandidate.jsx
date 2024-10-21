@@ -627,7 +627,6 @@ const ShortListedCandidates = ({
     setShowResumeModal(false);
   };
   //Name:-Akash Pawar Component:-ShortListedCandidate Subcategory:-ResumeViewButton(added) End LineNo:-196 Date:-02/07
-
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -1547,9 +1546,11 @@ const ShortListedCandidates = ({
               employeeId={employeeId}
               onsuccessfulDataUpdation={onsuccessfulDataUpdation}
               onCancel={() => setShowUpdateCallingTracker(false)}
+
               onSuccess={handleUpdateSuccess}
               // updateSuccess={handleUpdateSuccess}
               // onCancel={() => setShowUpdateCallingTracker(false)}
+
             />
           )}
         </>
