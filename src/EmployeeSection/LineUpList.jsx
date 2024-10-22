@@ -933,6 +933,7 @@ const LineUpList = ({
                       const uniqueValues = Array.from(
                         new Set(callingList.map((item) => item[optionKey]))
                       );
+                      console.log(uniqueValues);
 
                       return (
                         <div key={optionKey} className="filter-option">

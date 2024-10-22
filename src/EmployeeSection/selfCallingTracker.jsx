@@ -138,7 +138,7 @@ const CallingList = ({
       setFilteredCallingList(data);
       setLoading(false);
       console.log(data);
-      
+
     } catch (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
@@ -353,7 +353,7 @@ const CallingList = ({
               ); // Compare as numbers
             })
           );
-        } 
+        }
         else if (option === "currentCtcThousand") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
@@ -636,7 +636,7 @@ const CallingList = ({
     return "Document Not Found";
   };
 
-  
+
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [selectedCandidateResume, setSelectedCandidateResume] = useState("");
 
@@ -878,7 +878,7 @@ const CallingList = ({
                           {/* akash_pawar_SelfCallingTracker_ShareFunctionality_17/07_793 */}
                           {userType === "TeamLeader" && (
                             <button
-                               className="lineUp-share-btn"
+                              className="lineUp-share-btn"
                               onClick={handleSelectAll}
                             >
                               {allSelected ? "Deselect All" : "Select All"}
@@ -935,28 +935,32 @@ const CallingList = ({
                             <div className="city-filter">
                               <div className="optionDiv">
                                 {/* line number 938 to 959 added by sahil karnekar date 14-10-2024 */}
-                                {uniqueValues.map((value) => (
-                                   value !== '' && value !== '-' && !(optionKey === 'alternateNumber' && value === 0) && (
-                                  <label
-                                    key={value}
-                                    className="selfcalling-filter-value"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      checked={
-                                        selectedFilters[optionKey]?.includes(
-                                          value
-                                        ) || false
-                                      }
-                                      onChange={() =>
-                                        handleFilterSelect(optionKey, value)
-                                      }
-                                      style={{ marginRight: "5px" }}
-                                    />
-                                    {value}
-                                  </label>
-                                   )
-                                ))}
+                                {uniqueValues.filter(value =>
+                                  value !== '' && value !== '-' && value !== undefined && !(optionKey === 'alternateNumber' && value === 0)
+                                ).length > 0 ? (
+                                  uniqueValues.map((value) => (
+                                    value !== '' && value !== '-' && value !== undefined && !(optionKey === 'alternateNumber' && value === 0) && (
+                                      <label
+                                        key={value}
+                                        className="selfcalling-filter-value"
+                                      >
+                                        <input
+                                          type="checkbox"
+                                          checked={
+                                            selectedFilters[optionKey]?.includes(value) || false
+                                          }
+                                          onChange={() =>
+                                            handleFilterSelect(optionKey, value)
+                                          }
+                                          style={{ marginRight: "5px" }}
+                                        />
+                                        {value}
+                                      </label>
+                                    )
+                                  ))
+                                ) : (
+                                  <div>No values</div>
+                                )}
                               </div>
                             </div>
                           )}
@@ -992,7 +996,7 @@ const CallingList = ({
                         className="attendanceheading"
                         onClick={() => handleSort("date")}
                       >
-                       Added Date Time
+                        Added Date Time
                       </th>
                       <th
                         className="attendanceheading"
@@ -1112,7 +1116,7 @@ const CallingList = ({
                           </div>
                         </td>
 
-                     
+
 
                         <td
                           className="tabledata"
@@ -1335,14 +1339,14 @@ const CallingList = ({
                           </td>
 
                           <td className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}>
-                          
-                          {item.experienceYear} {" "} Year -  {item.experienceMonth} Month
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.experienceYear} {" "} Year {item.experienceMonth} Month</span>
-                          </div>
-                        </td>
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}>
+
+                            {item.experienceYear} {" "} Year -  {item.experienceMonth} Month
+                            <div className="tooltip">
+                              <span className="tooltiptext">{item.experienceYear} {" "} Year {item.experienceMonth} Month</span>
+                            </div>
+                          </td>
 
                           <td
                             className="tabledata"
@@ -1374,7 +1378,7 @@ const CallingList = ({
                               <span className="tooltiptext">{item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand}  {" "} Thousand</span>
                             </div>
                           </td>
-                          
+
                           <td
                             className="tabledata"
                             onMouseOver={handleMouseOver}
@@ -1595,11 +1599,11 @@ const CallingList = ({
                             )}
 
                           <td className="tabledata">
-                            <button  className="table-icon-div">    <i
+                            <button className="table-icon-div">    <i
                               onClick={() => handleUpdate(item.candidateId)}
                               className="fa-regular fa-pen-to-square"
                             ></i></button>
-                          
+
                           </td>
                         </>
                       </tr>
@@ -1819,48 +1823,48 @@ const CallingList = ({
                                 </div>
                               </div>
                             )}
-{userType === "TeamLeader" && (
-                            <div className="accordion-item">
-                              <div className="accordion-header">
-                                <label className="accordion-title">
-                                 <strong>TL - {loginEmployeeName} </strong>
-                                </label>
+                            {userType === "TeamLeader" && (
+                              <div className="accordion-item">
+                                <div className="accordion-header">
+                                  <label className="accordion-title">
+                                    <strong>TL - {loginEmployeeName} </strong>
+                                  </label>
+                                </div>
+                                <div className="accordion-content">
+                                  <form>
+                                    {recruiterUnderTeamLeader &&
+                                      recruiterUnderTeamLeader.map((recruiters) => (
+                                        <div
+                                          key={recruiters.recruiterId}
+                                        >
+                                          <label htmlFor={recruiters.employeeId}>
+                                            <input
+                                              type="radio"
+                                              id={recruiters.employeeId}
+                                              name="recruiter"
+                                              value={recruiters.employeeId}
+                                              checked={
+                                                selectedRecruiters.recruiterId ===
+                                                recruiters.employeeId
+                                              }
+                                              onChange={() =>
+                                                setSelectedRecruiters({
+                                                  index: 1,
+                                                  recruiterId: recruiters.employeeId,
+                                                  recruiterJobRole:
+                                                    recruiters.jobRole,
+                                                })
+                                              }
+                                            />{" "} - {" "}
+                                            {recruiters.employeeName}
+                                          </label>
+                                        </div>
+                                      ))}
+                                  </form>
+                                </div>
                               </div>
-                              <div className="accordion-content">
-                                <form>
-                                  {recruiterUnderTeamLeader &&
-                                    recruiterUnderTeamLeader.map((recruiters) => (
-                                      <div
-                                        key={recruiters.recruiterId}
-                                      >
-                                        <label htmlFor={recruiters.employeeId}> 
-                                          <input
-                                            type="radio"
-                                            id={recruiters.employeeId}
-                                            name="recruiter"
-                                            value={recruiters.employeeId}
-                                            checked={
-                                              selectedRecruiters.recruiterId ===
-                                              recruiters.employeeId
-                                            }
-                                            onChange={() =>
-                                              setSelectedRecruiters({
-                                                index: 1,
-                                                recruiterId: recruiters.employeeId,
-                                                recruiterJobRole:
-                                                  recruiters.jobRole,
-                                              })
-                                            }
-                                          />{" "} - {" "}
-                                          {recruiters.employeeName}
-                                        </label>
-                                      </div>
-                                    ))}
-                                </form>
-                              </div>
-                            </div>
-                          )}
-                        </div>
+                            )}
+                          </div>
                           {/* akash_pawar_LineUpList_ShareFunctionality_17/07_1747 */}
                         </Modal.Body>
                         <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
