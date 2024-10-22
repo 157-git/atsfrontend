@@ -94,9 +94,21 @@ const CallingExcelList = ({
     setFilterOptions(options);
   }, [callingList]);
 
+  //  filter problem solved updated by sahil karnekar date 22-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
-    setActiveFilterOption(activeFilterOption === key ? null : key);
-    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
+    if (activeFilterOption === key) {
+      setActiveFilterOption(null);
+    } else {
+      setActiveFilterOption(key);
+    }
+    setSelectedFilters((prev) => {
+      const newSelectedFilters = { ...prev };
+      if (key in newSelectedFilters) {
+      } else {
+        newSelectedFilters[key] = []; 
+      }
+      return newSelectedFilters;
+    });
   };
 
   useEffect(() => {
@@ -472,10 +484,19 @@ const CallingExcelList = ({
               <div className="filter-dropdowns">
                 {showFilterSection && (
                   <div className="filter-section">
+                    {/* updated by sahil karnekar date 22-10-2024 */}
                     {limitedOptions.map(([optionKey, optionLabel]) => {
-                      const uniqueValues = Array.from(
-                        new Set(callingList.map((item) => item[optionKey]))
-                      );
+      const uniqueValues = Array.from(
+        new Set(
+          callingList
+            .map((item) => {
+              const value = item[optionKey];
+              // Ensure the value is a string before converting to lowercase
+              return typeof value === 'string' ? value.toLowerCase() : value;
+            })
+            .filter((value) => value !== undefined && value !== null) // Remove null or undefined values
+        )
+      );
 
                       return (
                         <div key={optionKey} className="filter-option">

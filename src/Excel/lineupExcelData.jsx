@@ -93,9 +93,21 @@ const LineupExcelData = ({
     setFilterOptions(options);
   }, [lineUpList]);
 
+  //  filter problem solved updated by sahil karnekar date 22-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
-    setActiveFilterOption(activeFilterOption === key ? null : key);
-    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
+    if (activeFilterOption === key) {
+      setActiveFilterOption(null);
+    } else {
+      setActiveFilterOption(key);
+    }
+    setSelectedFilters((prev) => {
+      const newSelectedFilters = { ...prev };
+      if (key in newSelectedFilters) {
+      } else {
+        newSelectedFilters[key] = []; 
+      }
+      return newSelectedFilters;
+    });
   };
 
   useEffect(() => {
@@ -482,60 +494,69 @@ const LineupExcelData = ({
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           )}
+{/* added by sahil karnekar date 22-10-2024 */}
+        {showFilterSection && (
+  <div className="filter-section">
+    {limitedOptions.map(([optionKey, optionLabel]) => {
+      const uniqueValues = Array.from(
+        new Set(
+          lineUpList
+            .map((item) => {
+              const value = item[optionKey];
+              // Ensure the value is a string before converting to lowercase
+              return typeof value === 'string' ? value.toLowerCase() : value;
+            })
+            .filter((value) => value !== undefined && value !== null) // Remove null or undefined values
+        )
+      );
 
-          {showFilterSection && (
-            <div className="filter-section">
-              <div className="filter-dropdowns">
-                {showFilterSection && (
-                  <div className="filter-section">
-                    {limitedOptions.map(([optionKey, optionLabel]) => {
-                      const uniqueValues = Array.from(
-                        new Set(lineUpList.map((item) => item[optionKey]))
-                      );
-
-                      return (
-                        <div key={optionKey} className="filter-option">
-                          <button
-                            className="white-Btn"
-                            onClick={() => handleFilterOptionClick(optionKey)}
-                          >
-                            {optionLabel}
-                            <span className="filter-icon">&#x25bc;</span>
-                          </button>
-                          {activeFilterOption === optionKey && (
-                            <div className="city-filter">
-                              <div className="optionDiv">
-                                {uniqueValues.map((value) => (
-                                  <label
-                                    key={value}
-                                    className="selfcalling-filter-value"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      checked={
-                                        selectedFilters[optionKey]?.includes(
-                                          value
-                                        ) || false
-                                      }
-                                      onChange={() =>
-                                        handleFilterSelect(optionKey, value)
-                                      }
-                                      style={{ marginRight: "5px" }}
-                                    />
-                                    {value}
-                                  </label>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+      return (
+        <div key={optionKey} className="filter-option">
+          <button
+            className="white-Btn"
+            onClick={() => handleFilterOptionClick(optionKey)}
+          >
+            {optionLabel}
+            <span className="filter-icon">&#x25bc;</span>
+          </button>
+          {activeFilterOption === optionKey && (
+            <div className="city-filter">
+              <div className="optionDiv">
+              {uniqueValues.filter(value =>
+                                  value !== '' && value !== '-' && value !== undefined && !(optionKey === 'alternateNumber' && value === 0)
+                                ).length > 0 ? (
+                                  uniqueValues.map((value) => (
+                                    value !== '' && value !== '-' && value !== undefined && !(optionKey === 'alternateNumber' && value === 0) && (
+                                      <label
+                                        key={value}
+                                        className="selfcalling-filter-value"
+                                      >
+                                        <input
+                                          type="checkbox"
+                                          checked={
+                                            selectedFilters[optionKey]?.includes(value) || false
+                                          }
+                                          onChange={() =>
+                                            handleFilterSelect(optionKey, value)
+                                          }
+                                          style={{ marginRight: "5px" }}
+                                        />
+                                        {value}
+                                      </label>
+                                    )
+                                  ))
+                                ) : (
+                                  <div>No values</div>
+                                )}
               </div>
             </div>
           )}
+        </div>
+      );
+    })}
+  </div>
+)}
+
 
           <div className="attendanceTableData">
             <table className="selfcalling-table attendance-table">

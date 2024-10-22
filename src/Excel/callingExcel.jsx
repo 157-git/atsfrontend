@@ -215,7 +215,8 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
   return (
     <div className="callingfiel">
       {showCards && (
-        <div className="fileupload">
+        //  {/* this line added by sahil date 22-10-2024 */}
+        <div className="fileupload" style={{position:"sticky"}}>
           <div className="upload-data-cards">
             <div
               className="card fixed-card"

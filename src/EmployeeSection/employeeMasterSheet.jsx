@@ -451,14 +451,32 @@ const EmployeeMasterSheet = () => {
   //Name:-Akash Pawar Component:-EmployeeMarksheet Subcategory:-ResumeViewButton(added) End LineNo:-167 Date:-02/07
 
   // sahil karnekar  line 451 to 471
+   {/* this extractUniqueValues method updated by sahil date 22-10-2024 */}
   const extractUniqueValues = (data) => {
     const uniqueValuesMap = {};
+    
     Object.keys(fieldIndexMap).forEach((field) => {
       const values = data.map((item) => item[fieldIndexMap[field]]);
-      uniqueValuesMap[field] = [...new Set(values)];
+      
+      // Create a map to store unique lowercase values, but keep the original case for display
+      const uniqueValues = new Map();
+      
+      values.forEach((value) => {
+        const lowerCaseValue = String(value).toLowerCase();
+        
+        // Add only the first occurrence of each unique lowercase value
+        if (!uniqueValues.has(lowerCaseValue)) {
+          uniqueValues.set(lowerCaseValue, value);  // Store original case for display
+        }
+      });
+      
+      // Convert the map values back to an array and store in the uniqueValuesMap
+      uniqueValuesMap[field] = Array.from(uniqueValues.values());
     });
+    
     setUniqueValues(uniqueValuesMap);
   };
+  
 
   const handleFilterChange = (field, value) => {
     setSelectedFilters((prevFilters) => {
@@ -488,19 +506,28 @@ const EmployeeMasterSheet = () => {
     });
   };
 
+  // this applyFilters method updated by sahil karnekar date 22-10-2024
   const applyFilters = (data) => {
     let filtered = data;
     Object.keys(selectedFilters).forEach((field) => {
       const fieldValues = selectedFilters[field];
       if (fieldValues.length > 0) {
         const fieldIndex = fieldIndexMap[field];
-        filtered = filtered.filter((item) =>
-          fieldValues.includes(item[fieldIndex])
-        );
+        
+        filtered = filtered.filter((item) => {
+          // Normalize both selected value and data value to lowercase for comparison
+          const dataValueLowerCase = String(item[fieldIndex]).toLowerCase();
+          
+          // Convert the selected filter values to lowercase for case-insensitive matching
+          const selectedValuesLowerCase = fieldValues.map((v) => String(v).toLowerCase());
+  
+          // Check if the normalized data value matches any of the normalized selected filter values
+          return selectedValuesLowerCase.includes(dataValueLowerCase);
+        });
       }
     });
     return filtered;
-  };
+  }; 
 
   const toggleFilterSection = () => {
     setShowFilterSection(!showFilterSection);
@@ -614,32 +641,29 @@ const EmployeeMasterSheet = () => {
                     {expandedFilters[field] && (
                       <div className="city-filter">
                          {/* sahil karnekar filter edition line 552 to 567 date : 10-10-2024 */}
-                        <div className="optionDiv">
+                         {/* this complete optiondiv is updated by sahil karnekar date 22-10-2024 */}
+                         <div className="optionDiv">
+  {uniqueValues[field] && uniqueValues[field].map((value, index) => {
+    // Check if the field is "alternateNumber" and value is 0, or if value is falsy (null, undefined)
+    if ((field === "alternateNumber" && value === 0) || value === null || value === undefined || value === "") {
+      return null; // Skip rendering for this value
+    }
+    
+    return (
+      <label className="selfcalling-filter-value" key={index}>
+        <input
+          name="testName"
+          style={{ marginRight: "5px" }}
+          type="checkbox"
+          checked={selectedFilters[field].includes(value)}
+          onChange={() => handleFilterChange(field, value)}
+        />
+        {value}
+      </label>
+    );
+  })}
+</div>
 
-                          {uniqueValues[field].map(
-                            (value, index) =>
-                              (field !== "alternateNumber" || value !== 0) &&
-                              value && (
-                                <label
-                                  className="selfcalling-filter-value"
-                                  key={index}
-                                >
-                                  <input
-                                    name="testName"
-                                    style={{ marginRight: "5px" }}
-                                    type="checkbox"
-                                    checked={selectedFilters[field].includes(
-                                      value
-                                    )}
-                                    onChange={() =>
-                                      handleFilterChange(field, value)
-                                    }
-                                  />
-                                  {value}
-                                </label>
-                              )
-                          )}
-                        </div>
                       </div>
                     )}
                   </div>

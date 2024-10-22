@@ -34,11 +34,11 @@ const CallingTrackerForm = ({
   const [showConfetti, setShowConfetti] = useState(false);
   const { userType } = useParams();
 
-// sahil karnekar line 33 to 38 date 15-10-2024
-const today = new Date();
-const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
-  .toISOString()
-  .split("T")[0]; // Format as YYYY-MM-DD
+  // sahil karnekar line 33 to 38 date 15-10-2024
+  const today = new Date();
+  const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
+    .toISOString()
+    .split("T")[0]; // Format as YYYY-MM-DD
 
   const initialCallingTrackerState = {
     date: new Date().toISOString().slice(0, 10),
@@ -187,7 +187,7 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
     const emailPattern = /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
     if (!callingTracker.candidateEmail) {
       errors.candidateEmail = "Email is required";
-    }else if(!emailPattern.test(callingTracker.candidateEmail)){
+    } else if (!emailPattern.test(callingTracker.candidateEmail)) {
       errors.candidateEmail = "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).";
     } else {
       delete errors.candidateEmail;
@@ -246,18 +246,18 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
     const { name, value } = e.target || e;
     // sahil karnekar line 249 to 274
     if (name === "candidateEmail") {
-      
+
       const emailPattern = /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
-  
-      
+
+
       if (/\s/.test(value)) {
-        return; 
+        return;
       }
-  
-     
+
+
       setCallingTracker({ ...callingTracker, [name]: value });
-  
-     
+
+
       if (value !== "" && !emailPattern.test(value)) {
         setErrors((prevErrors) => ({
           ...prevErrors,
@@ -266,7 +266,7 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
       } else {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          [name]: "", 
+          [name]: "",
         }));
       }
       return;
@@ -353,23 +353,23 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
     const updatedLineUpData = { ...lineUpData, [name]: value };
 
     // sahil karnekar line 354 to 372
-     // Validate experienceMonth and set error message if necessary
-  if (name === "experienceMonth") { 
-    const experienceMonthValue = parseInt(value, 10);
-    if (experienceMonthValue > 11) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        experienceMonth: "Experience in months cannot exceed 11.",
-      }));
-      return;
-    } else {
-      
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        experienceMonth: "",
-      }));
+    // Validate experienceMonth and set error message if necessary
+    if (name === "experienceMonth") {
+      const experienceMonthValue = parseInt(value, 10);
+      if (experienceMonthValue > 11) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          experienceMonth: "Experience in months cannot exceed 11.",
+        }));
+        return;
+      } else {
+
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          experienceMonth: "",
+        }));
+      }
     }
-  }
 
     if (name === "currentCTCLakh" || name === "currentCTCThousand") {
       const lakhValue = parseFloat(updatedLineUpData.currentCTCLakh) || 0;
@@ -549,14 +549,14 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
   const handleEducationChange = (e) => {
     const value = e.target.value;
     if (value === "Other") {
-      
+
       setLineUpData({ ...lineUpData, qualification: "" });
     } else {
-      
+
       setLineUpData({ ...lineUpData, qualification: value });
     }
     setErrors((prevErrors) => ({ ...prevErrors, qualification: "" }));
-   
+
   };
 
   const handleRequirementChange = (e) => {
@@ -680,16 +680,20 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
               <div className="calling-tracker-field">
                 <label>Candidate's Full Name</label>
                 <div className="calling-tracker-field-sub-div">
-                  <input
-                    type="text"
-                    name="candidateName"
-                    value={callingTracker.candidateName}
-                    className={`plain-input`}
-                    onChange={handleChange}
-                    placeholder="Enter Candidate Name"
-                    // line 668 added by sahil karnekar date 21-10-2024
-                    maxLength="50"
-                  />
+                  {/* line number 684 to 696 added by sahil karnekar date 22-10-2024 */}
+                  <div className="setRequiredStarDiv">
+                    <input
+                      type="text"
+                      name="candidateName"
+                      value={callingTracker.candidateName}
+                      className={`plain-input`}
+                      onChange={handleChange}
+                      placeholder="Enter Candidate Name"
+                      // line 668 added by sahil karnekar date 21-10-2024
+                      maxLength="50"
+                    />
+                  { !callingTracker.candidateName && ( <span className="requiredFieldStar">*</span>)}
+                  </div>
                   {errors.candidateName && (
                     <div className="error-message">{errors.candidateName}</div>
                   )}
@@ -698,6 +702,8 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
               <div className="calling-tracker-field">
                 <label>Candidate's Email</label>
                 <div className="calling-tracker-field-sub-div">
+                  {/* this line added by sahil date 22-10-2024 */}
+                <div className="setRequiredStarDiv">
                   <input
                     type="email"
                     name="candidateEmail"
@@ -706,6 +712,9 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                     className={`plain-input`}
                     placeholder="Enter Candidate Email"
                   />
+                   {/* this line added by sahil date 22-10-2024 */}
+                  { !callingTracker.candidateEmail && ( <span className="requiredFieldStar">*</span>)}
+                  </div>
                   {errors.candidateEmail && (
                     <div className="error-message">{errors.candidateEmail}</div>
                   )}
@@ -717,6 +726,8 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
               <div className="calling-tracker-field">
                 <label>Contact Number</label>
                 <div className="calling-tracker-field-sub-div">
+                   {/* this line added by sahil date 22-10-2024 */}
+                <div className="setRequiredStarDiv">
                   <PhoneInput
                     placeholder="Enter phone number"
                     name="contactNumber"
@@ -729,6 +740,9 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                     // sahil karnekar line 712
                     maxLength={20}
                   />
+                   {/* this line added by sahil date 22-10-2024 */}
+                  { !callingTracker.contactNumber && ( <span className="requiredFieldStar">*</span>)}
+                  </div>
                   {errors.contactNumber && (
                     <div className="error-message">{errors.contactNumber}</div>
                   )}
@@ -757,6 +771,8 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
               <div className="calling-tracker-field">
                 <label>Source Name</label>
                 <div className="calling-tracker-field-sub-div">
+                   {/* this line added by sahil date 22-10-2024 */}
+                <div className="setRequiredStarDiv">
                   <select
                     className={`plain-input`}
                     name="sourceName"
@@ -774,6 +790,9 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                     <option value="Friends">Friends</option>
                     <option value="others">Others</option>
                   </select>
+                   {/* this line added by sahil date 22-10-2024 */}
+                  { !callingTracker.sourceName && ( <span className="requiredFieldStar">*</span>)}
+                  </div>
                   {errors.sourceName && (
                     <div className="error-message">{errors.sourceName}</div>
                   )}
@@ -784,11 +803,15 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                 <label>Job Id</label>
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
+                     {/* this line added by sahil date 22-10-2024 */}
+                  <div className="setRequiredStarDiv">
                     <select
                       id="requirementId"
                       name="requirementId"
                       value={callingTracker.requirementId}
                       onChange={handleRequirementChange}
+                      //  {/* this line added by sahil date 22-10-2024 */}
+                      style={{width:"inherit"}}
                     >
                       <option value="">Select Job Id</option>
                       {requirementOptions.map((option) => (
@@ -800,6 +823,9 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                         </option>
                       ))}
                     </select>
+                     {/* this line added by sahil date 22-10-2024 */}
+                    {callingTracker.selectYesOrNo === "Interested" && !callingTracker.requirementId && ( <span className="requiredFieldStar">*</span>)}
+                  </div>
                     {errors.requirementId && (
                       <div className="error-message">
                         {errors.requirementId}
@@ -847,6 +873,8 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                 <div className="calling-tracker-two-input-container">
                   {/* sahil karnekar line 831 to 865 */}
                   <div className="calling-tracker-two-input">
+                     {/* this line added by sahil date 22-10-2024 */}
+                  <div className="setRequiredStarDiv">
                     <select
                       name="currentLocation"
                       value={callingTracker.currentLocation}
@@ -860,6 +888,9 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                       {/* line number 841 added by sahil date : 15-10-2024 */}
                       <option value="">Other</option>
                     </select>
+                     {/* this line added by sahil date 22-10-2024 */}
+                    {callingTracker.selectYesOrNo === "Interested" && !callingTracker.currentLocation && ( <span className="requiredFieldStar">*</span>)}
+ </div>
                     {isOtherLocationSelected && (
                       <input
                         type="text"
@@ -899,6 +930,8 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
               <div className="calling-tracker-field">
                 <label>Calling Remark</label>
                 <div className="calling-tracker-field-sub-div">
+                   {/* this line added by sahil date 22-10-2024 */}
+                <div className="setRequiredStarDiv">
                   <select
                     className="plain-input"
                     name="callingFeedback"
@@ -920,6 +953,9 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                     <option value="Do not call again">Do not call again</option>
                     {/* <option value="Other">Other</option> */}
                   </select>
+                   {/* this line added by sahil date 22-10-2024 */}
+                  { !callingTracker.callingFeedback && ( <span className="requiredFieldStar">*</span>)}
+                  </div>
                   {errors.callingFeedback && (
                     <div className="error-message">{errors.callingFeedback}</div>
                   )}
@@ -1014,13 +1050,16 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                 <div className="calling-tracker-two-input-container">
                   {/* sahil karnekar line 966 to 1442 */}
                   <div className="calling-tracker-two-input">
-
+                     {/* this line added by sahil date 22-10-2024 */}
+                  <div className="setRequiredStarDiv">
                     <input
                       list="educationListDropDown"
                       name="qualification"
                       value={lineUpData.qualification}
                       onChange={handleEducationChange}
                       placeholder="Search...."
+                      //  {/* this line added by sahil date 22-10-2024 */}
+                      style={{width:"inherit"}}
                     />
 
                     <datalist id="educationListDropDown">
@@ -1431,7 +1470,9 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                       </option>
                     </datalist>
                     {/* sahil karnekar */}
-
+                     {/* this line added by sahil date 22-10-2024 */}
+                    {callingTracker.selectYesOrNo === "Interested" && !lineUpData.qualification && ( <span className="requiredFieldStar">*</span>)}
+                    </div>
 
                     {errors.qualification && (
                       <div className="error-message error-two-input-box">
@@ -1558,6 +1599,8 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                 <label>Total Experience</label>
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
+                     {/* this line added by sahil date 22-10-2024 */}
+                  <div className="setRequiredStarDiv">
                     <input
                       type="text"
                       name="experienceYear"
@@ -1565,9 +1608,13 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                       onChange={handleLineUpChange}
                       placeholder="Years"
                       maxLength="2"
+                      //  {/* this line added by sahil date 22-10-2024 */}
+                      style={{ width: "inherit" }}
                     />
                     {/* sahil karnekar line 1523 to 1527 */}
-
+                     {/* this line added by sahil date 22-10-2024 */}
+                    {callingTracker.selectYesOrNo === "Interested" && !lineUpData.experienceYear && ( <span className="requiredFieldStar">*</span>)}
+                    </div>
                     {errors.experienceYear && (
 
                       <div className="error-message error-two-input-box">
@@ -1577,6 +1624,8 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                   </div>
                   <div className="calling-tracker-two-input">
                     {/* sahil karnekar line 1531 to 1540 */}
+                     {/* this line added by sahil date 22-10-2024 */}
+                    <div className="setRequiredStarDiv">
                     <input
                       type="number"
                       name="experienceMonth"
@@ -1587,9 +1636,13 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                       // line number 1563 added by sahil karnekar date : 15-10-2024
                       min="0"
                       max="11"
+                      //  {/* this line added by sahil date 22-10-2024 */}
+                      style={{ width: "inherit" }}
                     />
                     {/* sahil karnekar line 1542 to 1546 */}
-
+                     {/* this line added by sahil date 22-10-2024 */}
+                    {callingTracker.selectYesOrNo === "Interested" && !lineUpData.experienceMonth && ( <span className="requiredFieldStar">*</span>)}
+                    </div>
                     {errors.experienceMonth && (
 
                       <div className="error-message error-two-input-box">
@@ -1606,13 +1659,20 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                 <label>Relevant Experience</label>
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
+                     {/* this line added by sahil date 22-10-2024 */}
+                  <div className="setRequiredStarDiv">
                     <input
                       type="text"
                       name="relevantExperience"
                       value={lineUpData.relevantExperience}
                       onChange={handleLineUpChange}
                       placeholder="Enter Relevant Experience"
+                      //  {/* this line added by sahil date 22-10-2024 */}
+                      style={{ width: "inherit" }}
                     />
+                     {/* this line added by sahil date 22-10-2024 */}
+                    {callingTracker.selectYesOrNo === "Interested" && !lineUpData.relevantExperience && ( <span className="requiredFieldStar">*</span>)}
+                    </div>
                     {errors.relevantExperience && (
                       <div className="error-message">
                         {errors.relevantExperience || errors.relevantExperience}
@@ -1620,6 +1680,8 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                     )}
                   </div>
                   <div className="calling-tracker-two-input">
+                     {/* this line added by sahil date 22-10-2024 */}
+                  <div className="setRequiredStarDiv">
                     <input
                       type="text"
                       name="noticePeriod"
@@ -1628,7 +1690,12 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                       onChange={handleLineUpChange}
                       min="0"
                       max="90"
+                      //  {/* this line added by sahil date 22-10-2024 */}
+                      style={{ width: "inherit" }}
                     />
+                     {/* this line added by sahil date 22-10-2024 */}
+                    {callingTracker.selectYesOrNo === "Interested" && !lineUpData.noticePeriod && ( <span className="requiredFieldStar">*</span>)}
+                    </div>
                     {/* sahil karnekar line 1581 to 1585  */}
                     {errors.noticePeriod && (
                       <div className="error-message">
@@ -1642,6 +1709,8 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
               <div className="calling-tracker-field">
                 <label>Communication Rating </label>
                 <div className="calling-tracker-field-sub-div">
+                   {/* this line added by sahil date 22-10-2024 */}
+                <div className="setRequiredStarDiv">
                   <input
                     type="text"
                     name="communicationRating"
@@ -1650,6 +1719,9 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                     className="plain-input"
                     placeholder="communicationRating"
                   />
+                   {/* this line added by sahil date 22-10-2024 */}
+                  {callingTracker.selectYesOrNo === "Interested" && !callingTracker.communicationRating && ( <span className="requiredFieldStar">*</span>)}
+                  </div>
                   {errors.communicationRating && (
                     <div className="error-message error-two-input-box">
                       {errors.communicationRating}
@@ -1664,6 +1736,8 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                 <label>Current CTC(LPA)</label>
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
+                     {/* this line added by sahil date 22-10-2024 */}
+                  <div className="setRequiredStarDiv">
                     <input
                       type="text"
                       name="currentCTCLakh"
@@ -1672,7 +1746,12 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                       placeholder="Lakh"
                       maxLength="2"
                       pattern="\d*"
+                      //  {/* this line added by sahil date 22-10-2024 */}
+                      style={{ width: "inherit" }}
                     />
+                     {/* this line added by sahil date 22-10-2024 */}
+                    {callingTracker.selectYesOrNo === "Interested" && !lineUpData.currentCTCLakh && ( <span className="requiredFieldStar">*</span>)}
+                    </div>
                     {errors.currentCTCLakh && (
                       <div className="error-message error-two-input-box">
                         {errors.currentCTCLakh}
@@ -1697,6 +1776,8 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                 <label>Expected CTC (LPA)</label>
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
+                     {/* this line added by sahil date 22-10-2024 */}
+                  <div className="setRequiredStarDiv">
                     <input
                       type="text"
                       name="expectedCTCLakh"
@@ -1705,7 +1786,12 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                       placeholder="Lakh"
                       maxLength="2"
                       pattern="\d*"
+                      //  {/* this line added by sahil date 22-10-2024 */}
+                      style={{ width: "inherit" }}
                     />
+                     {/* this line added by sahil date 22-10-2024 */}
+                     {callingTracker.selectYesOrNo === "Interested" && !lineUpData.expectedCTCLakh && ( <span className="requiredFieldStar">*</span>)}
+                     </div>
                     {errors.expectedCTCLakh && (
                       <div className="error-message error-two-input-box">
                         {errors.expectedCTCLakh}
@@ -1733,6 +1819,8 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                 <label>Holding Offer Letter</label>
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
+                     {/* this line added by sahil date 22-10-2024 */}
+                  <div className="setRequiredStarDiv">
                     <select
                       type="text"
                       name="holdingAnyOffer"
@@ -1743,6 +1831,9 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                       <option value="Yes">Yes</option>
                       <option value="No">No</option>
                     </select>
+                     {/* this line added by sahil date 22-10-2024 */}
+                    {callingTracker.selectYesOrNo === "Interested" && !lineUpData.holdingAnyOffer && ( <span className="requiredFieldStar">*</span>)}
+                     </div>
                     {errors.holdingAnyOffer && (
                       <div className="error-message error-two-input-box">
                         {errors.holdingAnyOffer}
@@ -1808,8 +1899,12 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                   </div>
 
                   <div className="calling-tracker-two-input">
+                     {/* this line added by sahil date 22-10-2024 */}
+                  <div className="setRequiredStarDiv">
                     <select
-                    disabled={callingTracker.selectYesOrNo !== "Interested"}
+                    //  {/* this line added by sahil date 22-10-2024 */}
+                    style={{width:"inherit"}}
+                      disabled={callingTracker.selectYesOrNo !== "Interested"}
                       name="finalStatus"
                       value={lineUpData.finalStatus}
                       //sahil karnekar line 1761 to 1776
@@ -1833,6 +1928,9 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                       <option value="Interview Schedule">Interview Schedule</option>
                       <option value="Attending After Some time">Attending After Some time</option>
                     </select>
+                     {/* this line added by sahil date 22-10-2024 */}
+                    {callingTracker.selectYesOrNo === "Interested" && !lineUpData.finalStatus && ( <span className="requiredFieldStar">*</span>)}
+                     </div>
                     {/* sahil karnekar line 1784 to 1789 */}
                     {errors.finalStatus && (
                       <div className="error-message error-two-input-box">
@@ -1847,33 +1945,33 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                 <label>Interview Slots</label>
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
-{/* line number 1825 to 1851 added by sahil karnekar date : 15-10-2024 */}
-                  <input
-                  disabled={callingTracker.selectYesOrNo !== "Interested"}
-  type="date"
-  name="availabilityForInterview"
-  value={lineUpData.availabilityForInterview}
-  onChange={(e) => {
-    const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
+                    {/* line number 1825 to 1851 added by sahil karnekar date : 15-10-2024 */}
+                    <input
+                      disabled={callingTracker.selectYesOrNo !== "Interested"}
+                      type="date"
+                      name="availabilityForInterview"
+                      value={lineUpData.availabilityForInterview}
+                      onChange={(e) => {
+                        const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
 
-    if (e.target.value < today) {
-      seterrorInterviewSlot("Interview Slot Should be Next Date From Today");
-    } else {
-      seterrorInterviewSlot(""); // Clear error message if the date is valid
-    }
+                        if (e.target.value < today) {
+                          seterrorInterviewSlot("Interview Slot Should be Next Date From Today");
+                        } else {
+                          seterrorInterviewSlot(""); // Clear error message if the date is valid
+                        }
 
 
-    setLineUpData({
-      ...lineUpData,
-      availabilityForInterview: e.target.value,
-    });
-  }}
-  min={new Date().toISOString().split("T")[0]} // Allow today and future dates
-/>
+                        setLineUpData({
+                          ...lineUpData,
+                          availabilityForInterview: e.target.value,
+                        });
+                      }}
+                      min={new Date().toISOString().split("T")[0]} // Allow today and future dates
+                    />
 
-{errorInterviewSlot && (
-  <div className="error-message">{errorInterviewSlot}</div>
-)}
+                    {errorInterviewSlot && (
+                      <div className="error-message">{errorInterviewSlot}</div>
+                    )}
 
 
                   </div>
@@ -1881,21 +1979,21 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                     {/* line number 1856 to 1878 added by sahil karnekar date : 15-10-2024 */}
                     <TimePicker
 
-                    placeholder="Interview Time"
-                    disabled={callingTracker.selectYesOrNo !== "Interested"}
-  value={lineUpData.interviewTime ? dayjs(lineUpData.interviewTime, 'h:mm a') : null} // ensure this is a valid dayjs object
-  onChange={(time) =>
-    setLineUpData({
-      ...lineUpData,
-      interviewTime: time ? time.format('h:mm a') : "", // 'time' is the selected time as a dayjs object
-    })
-  }
-  format="h:mm a" // this hides the seconds selection
-  
-/>
+                      placeholder="Interview Time"
+                      disabled={callingTracker.selectYesOrNo !== "Interested"}
+                      value={lineUpData.interviewTime ? dayjs(lineUpData.interviewTime, 'h:mm a') : null} // ensure this is a valid dayjs object
+                      onChange={(time) =>
+                        setLineUpData({
+                          ...lineUpData,
+                          interviewTime: time ? time.format('h:mm a') : "", // 'time' is the selected time as a dayjs object
+                        })
+                      }
+                      format="h:mm a" // this hides the seconds selection
+
+                    />
 
 
-                  {/* <input
+                    {/* <input
   type="text"
   name="interviewTime"
   placeholder="⏰(e.g 12:00 AM)"

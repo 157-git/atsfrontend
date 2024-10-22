@@ -308,146 +308,30 @@ const CallingList = ({
     }
   }, [sortCriteria, sortOrder]);
 
+  // changed this function sahil karnekar date : 22-10-2024
   const filterData = () => {
     let filteredData = [...callingList];
-
+  
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
-        if (option === "candidateId") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
+        filteredData = filteredData.filter((item) => {
+          const itemValue = item[option]?.toString().toLowerCase(); // normalize the field value to lowercase
+          return values.some((value) =>
+            itemValue === value.toLowerCase() // exact match
           );
-        } else if (option === "requirementId") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
-          );
-        } else if (option === "employeeId") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
-          );
-        } else if (option === "contactNumber") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
-          );
-        } else if (option === "alternateNumber") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
-          );
-        } else if (option === "currentCtcLakh") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) => {
-              const numericValue = parseInt(value, 10); // Convert value to integer
-              return (
-                item[option] !== undefined && item[option] === numericValue
-              ); // Compare as numbers
-            })
-          );
-
-        } else if (option === "currentCtcThousand") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) => {
-              const numericValue = parseInt(value, 10); // Convert value to integer
-              return (
-                item[option] !== undefined && item[option] === numericValue
-              ); // Compare as numbers
-            })
-          );
-        } else if (option === "empId") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) => {
-              const numericValue = parseInt(value, 10); // Convert value to integer
-              return (
-                item[option] !== undefined && item[option] === numericValue
-              ); // Compare as numbers
-            })
-          );
-        } else if (option === "expectedCtcLakh") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) => {
-              const numericValue = parseInt(value, 10); // Convert value to integer
-              return (
-                item[option] !== undefined && item[option] === numericValue
-              ); // Compare as numbers
-            })
-          );
-        } else if (option === "expectedCtcThousand") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) => {
-              const numericValue = parseInt(value, 10); // Convert value to integer
-              return (
-                item[option] !== undefined && item[option] === numericValue
-              ); // Compare as numbers
-            })
-          );
-        } else if (option === "experienceMonth") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) => {
-              const numericValue = parseInt(value, 10); // Convert value to integer
-              return (
-                item[option] !== undefined && item[option] === numericValue
-              ); // Compare as numbers
-            })
-          );
-        } else if (option === "experienceYear") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) => {
-              const numericValue = parseInt(value, 10); // Convert value to integer
-              return (
-                item[option] !== undefined && item[option] === numericValue
-              ); // Compare as numbers
-            })
-          );
-        } else if (option === "oldEmployeeId") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) => {
-              const numericValue = parseInt(value, 10); // Convert value to integer
-              return (
-                item[option] !== undefined && item[option] === numericValue
-              ); // Compare as numbers
-            })
-          );
-        } else if (option === "yearOfPassing") {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
-            )
-          );
-        } else {
-          filteredData = filteredData.filter((item) =>
-            values.some((value) => {
-              const isNumeric = !isNaN(value); // Check if the value is numeric
-              if (isNumeric) {
-                const numericValue = parseInt(value, 10); // Convert value to integer
-                return (
-                  item[option] !== undefined && item[option] === numericValue
-                ); // Compare as numbers
-              } else {
-                return item[option]?.toString().includes(value); // For non-numeric comparisons
-              }
-            })
-          );
-        }
+        });
       }
     });
     setFilteredCallingList(filteredData);
   };
 
+  // updated this function sahil karnekar date : 22-10-2024
   const handleFilterSelect = (key, value) => {
     setSelectedFilters((prev) => ({
       ...prev,
       [key]: prev[key].includes(value)
-        ? prev[key].filter((item) => item !== value)
-        : [...prev[key], value],
+        ? prev[key].filter((item) => item !== value.toLowerCase())
+        : [...prev[key], value.toLowerCase()], // store filter values in lowercase
     }));
   };
 //  filter problem solved updated by sahil karnekar date 21-10-2024 complete  handleFilterOptionClick method
@@ -928,62 +812,54 @@ const CallingList = ({
               )}
 
               <div className="filter-dropdowns">
-                {showFilterSection && (
-                  <div className="filter-section">
-                    {limitedOptions.map(([optionKey, optionLabel]) => {
-                      const uniqueValues = Array.from(
-                        new Set(callingList.map((item) => item[optionKey]))
-                      );
+                {/* updated this filter section by sahil karnekar date 22-10-2024 */}
+              {showFilterSection && (
+  <div className="filter-section">
+    {limitedOptions.map(([optionKey, optionLabel]) => {
+      const uniqueValues = Array.from(
+        new Set(
+          callingList
+            .map((item) => item[optionKey]?.toString().toLowerCase())
+            .filter((value) => value && value !== '-' && !(optionKey === 'alternateNumber' && value === '0'))
+        )
+      );
 
-                      return (
-                        <div key={optionKey} className="filter-option">
-                          <button
-                            className="white-Btn"
-                            onClick={() => handleFilterOptionClick(optionKey)}
-                          >
-                            {optionLabel}
-                            <span className="filter-icon">&#x25bc;</span>
-                          </button>
-                          {activeFilterOption === optionKey && (
-                            <div className="city-filter">
-                              <div className="optionDiv">
-                                {/* line number 938 to 959 added by sahil karnekar date 14-10-2024 */}
+      return (
+        <div key={optionKey} className="filter-option">
+          <button
+            className="white-Btn"
+            onClick={() => handleFilterOptionClick(optionKey)}
+          >
+            {optionLabel}
+            <span className="filter-icon">&#x25bc;</span>
+          </button>
 
-                                {uniqueValues.filter(value =>
-                                  value !== '' && value !== '-' && value !== undefined && !(optionKey === 'alternateNumber' && value === 0)
-                                ).length > 0 ? (
-                                  uniqueValues.map((value) => (
-                                    value !== '' && value !== '-' && value !== undefined && !(optionKey === 'alternateNumber' && value === 0) && (
-                                      <label
-                                        key={value}
-                                        className="selfcalling-filter-value"
-                                      >
-                                        <input
-                                          type="checkbox"
-                                          checked={
-                                            selectedFilters[optionKey]?.includes(value) || false
-
-                                          }
-                                          onChange={() =>
-                                            handleFilterSelect(optionKey, value)
-                                          }
-                                          style={{ marginRight: "5px" }}
-                                        />
-                                        {value}
-                                      </label>
-                                    )
-                                  ))
-                                ) : (
-                                  <div>No values</div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
+          {activeFilterOption === optionKey && (
+            <div className="city-filter">
+              <div className="optionDiv">
+                {uniqueValues.length > 0 ? (
+                  uniqueValues.map((value) => (
+                    <label key={value} className="selfcalling-filter-value">
+                      <input
+                        type="checkbox"
+                        checked={selectedFilters[optionKey]?.includes(value) || false}
+                        onChange={() => handleFilterSelect(optionKey, value)}
+                        style={{ marginRight: '5px' }}
+                      />
+                      {value}
+                    </label>
+                  ))
+                ) : (
+                  <div>No values</div>
                 )}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    })}
+  </div>
+)}
               </div>
 
               <div className="attendanceTableData">

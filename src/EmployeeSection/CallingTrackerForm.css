@@ -741,3 +741,17 @@ margin-top: 3px;
 padding-bottom: 3px;
 padding-right: 8px;
 }
+
+/* added by sahil karnekar line 746 to 757 date 20-10-2023 */
+.setRequiredStarDiv{
+  width: 100%;
+  display: flex;
+  align-items: end;
+}
+.requiredFieldStar{
+  align-content: center;
+  margin-left: 20px;
+  font-size: 15px;
+  padding: 0;
+  color: red;
+}
