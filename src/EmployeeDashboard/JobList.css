@@ -73,6 +73,8 @@
   flex-wrap: wrap;
   color: #ffe5b5;
   gap: 5px;
+  /* border: 1px solid black; */
+  padding-bottom: 10px;
 
 }
 

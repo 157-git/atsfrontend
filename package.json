@@ -21,7 +21,7 @@
     "@popperjs/core": "^2.11.8",
     "@react-pdf/renderer": "^3.4.4",
     "@stomp/stompjs": "^7.0.0",
-    "antd": "^5.21.4",
+    "antd": "^5.21.5",
     "aos": "^2.3.4",
     "ats": "file:",
     "axios": "^1.6.8",

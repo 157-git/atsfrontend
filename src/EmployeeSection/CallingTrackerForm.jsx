@@ -19,26 +19,25 @@ import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
 // this libraries added by sahil karnekar date 21-10-2024
-import { TimePicker } from 'antd';
-import dayjs from 'dayjs';
-
-
+import { TimePicker } from "antd";
+import dayjs from "dayjs";
 
 const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
   initialData = {},
   loginEmployeeName,
+  onsuccessfulDataUpdation
 }) => {
   const { employeeId } = useParams();
   const [submited, setSubmited] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const { userType } = useParams();
 
-// sahil karnekar line 33 to 38 date 15-10-2024
-const today = new Date();
-const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
-  .toISOString()
-  .split("T")[0]; // Format as YYYY-MM-DD
+  // sahil karnekar line 33 to 38 date 15-10-2024
+  const today = new Date();
+  const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
+    .toISOString()
+    .split("T")[0]; // Format as YYYY-MM-DD
 
   const initialCallingTrackerState = {
     date: new Date().toISOString().slice(0, 10),
@@ -57,7 +56,7 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
     fullAddress: "",
     communicationRating: "",
     selectYesOrNo: "",
-    callingFeedback: ""
+    callingFeedback: "",
   };
 
   const initialLineUpState = {
@@ -82,7 +81,7 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
     interviewTime: "",
     finalStatus: "",
     feedBack: "",
-    resume: []
+    resume: [],
   };
 
   const [callingTracker, setCallingTracker] = useState(
@@ -161,7 +160,6 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
 
   const ensureStringValue = (value) =>
     value !== undefined && value !== null ? String(value) : "";
-
   const fetchRequirementOptions = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/company-details`);
@@ -184,11 +182,13 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
       errors.sourceName = "Source Name is required";
     }
     // this validation added by sahil karnekar date 21-10-2024 line 187 to 195
-    const emailPattern = /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+    const emailPattern =
+      /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
     if (!callingTracker.candidateEmail) {
       errors.candidateEmail = "Email is required";
-    }else if(!emailPattern.test(callingTracker.candidateEmail)){
-      errors.candidateEmail = "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).";
+    } else if (!emailPattern.test(callingTracker.candidateEmail)) {
+      errors.candidateEmail =
+        "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).";
     } else {
       delete errors.candidateEmail;
     }
@@ -246,27 +246,25 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
     const { name, value } = e.target || e;
     // sahil karnekar line 249 to 274
     if (name === "candidateEmail") {
-      
-      const emailPattern = /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
-  
-      
+      const emailPattern =
+        /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+
       if (/\s/.test(value)) {
-        return; 
+        return;
       }
-  
-     
+
       setCallingTracker({ ...callingTracker, [name]: value });
-  
-     
+
       if (value !== "" && !emailPattern.test(value)) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          [name]: "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).",
+          [name]:
+            "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).",
         }));
       } else {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          [name]: "", 
+          [name]: "",
         }));
       }
       return;
@@ -313,7 +311,6 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
   const handleLineUpChange = (e) => {
     const { name, value } = e.target;
 
-
     // line number 314 to 324 added by sahil karnekar date : 15-10-2024
     if (name === "dateOfBirth") {
       console.log(value);
@@ -325,7 +322,6 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
         setErrorForDOB("");
       }
     }
-
 
     // Restrict non-numeric input for specific fields
     if (
@@ -353,23 +349,22 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
     const updatedLineUpData = { ...lineUpData, [name]: value };
 
     // sahil karnekar line 354 to 372
-     // Validate experienceMonth and set error message if necessary
-  if (name === "experienceMonth") { 
-    const experienceMonthValue = parseInt(value, 10);
-    if (experienceMonthValue > 11) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        experienceMonth: "Experience in months cannot exceed 11.",
-      }));
-      return;
-    } else {
-      
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        experienceMonth: "",
-      }));
+    // Validate experienceMonth and set error message if necessary
+    if (name === "experienceMonth") {
+      const experienceMonthValue = parseInt(value, 10);
+      if (experienceMonthValue > 11) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          experienceMonth: "Experience in months cannot exceed 11.",
+        }));
+        return;
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          experienceMonth: "",
+        }));
+      }
     }
-  }
 
     if (name === "currentCTCLakh" || name === "currentCTCThousand") {
       const lakhValue = parseFloat(updatedLineUpData.currentCTCLakh) || 0;
@@ -390,6 +385,7 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
 
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
+
 
   const handleSubmit = async (e) => {
     setShowConfirmation(false);
@@ -418,6 +414,7 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
     }
     setSubmited(true);
     setLoading(true);
+
     try {
       let dataToUpdate = {
         callingTracker: { ...callingTracker },
@@ -447,7 +444,7 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
 
       dataToUpdate.lineUp = {
         ...lineUpData,
-        resume: lineUpData.resume, // Ensure the resume field is added here
+        resume: lineUpData.resume,
       };
 
       if (userType === "Recruiters") {
@@ -467,29 +464,41 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
         }
       );
 
-      if (response) {
+      if(response.status === 200 || response.status === 201 || response) {
         if (callingTracker.selectYesOrNo === "Interested") {
           onsuccessfulDataAdditions(true);
-
         } else {
           onsuccessfulDataAdditions(false);
         }
         setSubmited(false);
-        setLoading(true)
+        setLoading(true);
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 4000);
         toast.success("Candidate Added Successfully..");
         setCallingTracker(initialCallingTrackerState);
         setLineUpData(initialLineUpState);
       }
+      console.log("-------    bye    ----------");
     } catch (error) {
-      setSubmited(false);
-      toast.error("An error occurred: " + error.message);
-    } finally {
+    setSubmited(false);
+    console.log("-------    Hello    ----------");
+    
+    // Check for full error details
+    if (error.response) {
+        console.log("Error Response:", error.response);
+        toast.error("Error: " + error.response.data.message || "An error occurred");
+    } else if (error.request) {
+        console.log("Error Request:", error.request);
+        toast.error("No response received from the server");
+    } else {
+        console.log("Error Message:", error.message);
+        toast.error("An error occurred: " + error.message);
+    }
+}
+finally {
       setLoading(false);
     }
   };
-
 
   //Arshad Attar Added This , Now Resume will added Proper in data base.  18-10-2024
   //Start Line 451
@@ -531,10 +540,8 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
     const value = e.target.value;
     if (value === "") {
       setIsOtherLocationSelected(true);
-
     } else {
       setIsOtherLocationSelected(false);
-
     }
     setCallingTracker((prevState) => ({
       ...prevState,
@@ -543,20 +550,15 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
     setErrors((prevErrors) => ({ ...prevErrors, currentLocation: "" }));
   };
 
-
-
   // sahil karnekar line 507 to 519 complete method date 21-10-2024
   const handleEducationChange = (e) => {
     const value = e.target.value;
     if (value === "Other") {
-      
       setLineUpData({ ...lineUpData, qualification: "" });
     } else {
-      
       setLineUpData({ ...lineUpData, qualification: value });
     }
     setErrors((prevErrors) => ({ ...prevErrors, qualification: "" }));
-   
   };
 
   const handleRequirementChange = (e) => {
@@ -877,7 +879,9 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
 
                     {/* Display error message if any */}
                     {errors.currentLocation && (
-                      <div className="error-message">{errors.currentLocation}</div>
+                      <div className="error-message">
+                        {errors.currentLocation}
+                      </div>
                     )}
                   </div>
                   <div className="calling-tracker-two-input">
@@ -921,7 +925,9 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                     {/* <option value="Other">Other</option> */}
                   </select>
                   {errors.callingFeedback && (
-                    <div className="error-message">{errors.callingFeedback}</div>
+                    <div className="error-message">
+                      {errors.callingFeedback}
+                    </div>
                   )}
                 </div>
               </div>
@@ -1014,7 +1020,6 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                 <div className="calling-tracker-two-input-container">
                   {/* sahil karnekar line 966 to 1442 */}
                   <div className="calling-tracker-two-input">
-
                     <input
                       list="educationListDropDown"
                       name="qualification"
@@ -1432,7 +1437,6 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                     </datalist>
                     {/* sahil karnekar */}
 
-
                     {errors.qualification && (
                       <div className="error-message error-two-input-box">
                         {errors.qualification}
@@ -1462,7 +1466,8 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                       if (/^\d{0,4}$/.test(value)) {
                         const year = parseInt(value, 10);
 
-                        if (value.length === 4) { // Trigger validation after 4 digits are entered
+                        if (value.length === 4) {
+                          // Trigger validation after 4 digits are entered
                           if (year > 2025) {
                             alert("Cannot enter year above 2025");
                           } else if (year < 1947) {
@@ -1569,7 +1574,6 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                     {/* sahil karnekar line 1523 to 1527 */}
 
                     {errors.experienceYear && (
-
                       <div className="error-message error-two-input-box">
                         {errors.experienceYear}
                       </div>
@@ -1591,7 +1595,6 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                     {/* sahil karnekar line 1542 to 1546 */}
 
                     {errors.experienceMonth && (
-
                       <div className="error-message error-two-input-box">
                         {errors.experienceMonth}
                       </div>
@@ -1795,21 +1798,28 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                     <select
                       name="selectYesOrNo"
                       value={callingTracker.selectYesOrNo}
-                      onChange={handleChange}>
+                      onChange={handleChange}
+                    >
                       <option value="Yet To Confirm">Yet To Confirm</option>
                       <option value="Interested">Interested</option>
-                      <option value="Interested, will confirm later">Interested, will confirm later</option>
+                      <option value="Interested, will confirm later">
+                        Interested, will confirm later
+                      </option>
                       <option value="Not Interested">Not Interested</option>
-                      <option value=" Interested But Not Eligible">Interested But Not Eligible</option>
+                      <option value=" Interested But Not Eligible">
+                        Interested But Not Eligible
+                      </option>
                       <option value="Eligible">Eligible</option>
                       <option value="Not Eligible">Not Eligible</option>
-                      <option value="Not Eligible But Interested">Not Eligible But Interested</option>
+                      <option value="Not Eligible But Interested">
+                        Not Eligible But Interested
+                      </option>
                     </select>
                   </div>
 
                   <div className="calling-tracker-two-input">
                     <select
-                    disabled={callingTracker.selectYesOrNo !== "Interested"}
+                      disabled={callingTracker.selectYesOrNo !== "Interested"}
                       name="finalStatus"
                       value={lineUpData.finalStatus}
                       //sahil karnekar line 1761 to 1776
@@ -1830,8 +1840,12 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                     >
                       <option value="">Select</option>
                       <option value="Yet To Confirm">Yet To Confirm</option>
-                      <option value="Interview Schedule">Interview Schedule</option>
-                      <option value="Attending After Some time">Attending After Some time</option>
+                      <option value="Interview Schedule">
+                        Interview Schedule
+                      </option>
+                      <option value="Attending After Some time">
+                        Attending After Some time
+                      </option>
                     </select>
                     {/* sahil karnekar line 1784 to 1789 */}
                     {errors.finalStatus && (
@@ -1847,55 +1861,55 @@ const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
                 <label>Interview Slots</label>
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
-{/* line number 1825 to 1851 added by sahil karnekar date : 15-10-2024 */}
-                  <input
-                  disabled={callingTracker.selectYesOrNo !== "Interested"}
-  type="date"
-  name="availabilityForInterview"
-  value={lineUpData.availabilityForInterview}
-  onChange={(e) => {
-    const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
+                    {/* line number 1825 to 1851 added by sahil karnekar date : 15-10-2024 */}
+                    <input
+                      disabled={callingTracker.selectYesOrNo !== "Interested"}
+                      type="date"
+                      name="availabilityForInterview"
+                      value={lineUpData.availabilityForInterview}
+                      onChange={(e) => {
+                        const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
 
-    if (e.target.value < today) {
-      seterrorInterviewSlot("Interview Slot Should be Next Date From Today");
-    } else {
-      seterrorInterviewSlot(""); // Clear error message if the date is valid
-    }
+                        if (e.target.value < today) {
+                          seterrorInterviewSlot(
+                            "Interview Slot Should be Next Date From Today"
+                          );
+                        } else {
+                          seterrorInterviewSlot(""); // Clear error message if the date is valid
+                        }
 
+                        setLineUpData({
+                          ...lineUpData,
+                          availabilityForInterview: e.target.value,
+                        });
+                      }}
+                      min={new Date().toISOString().split("T")[0]} // Allow today and future dates
+                    />
 
-    setLineUpData({
-      ...lineUpData,
-      availabilityForInterview: e.target.value,
-    });
-  }}
-  min={new Date().toISOString().split("T")[0]} // Allow today and future dates
-/>
-
-{errorInterviewSlot && (
-  <div className="error-message">{errorInterviewSlot}</div>
-)}
-
-
+                    {errorInterviewSlot && (
+                      <div className="error-message">{errorInterviewSlot}</div>
+                    )}
                   </div>
                   <div className="calling-tracker-two-input">
                     {/* line number 1856 to 1878 added by sahil karnekar date : 15-10-2024 */}
                     <TimePicker
+                      placeholder="Interview Time"
+                      disabled={callingTracker.selectYesOrNo !== "Interested"}
+                      value={
+                        lineUpData.interviewTime
+                          ? dayjs(lineUpData.interviewTime, "h:mm a")
+                          : null
+                      } // ensure this is a valid dayjs object
+                      onChange={(time) =>
+                        setLineUpData({
+                          ...lineUpData,
+                          interviewTime: time ? time.format("h:mm a") : "", // 'time' is the selected time as a dayjs object
+                        })
+                      }
+                      format="h:mm a" // this hides the seconds selection
+                    />
 
-                    placeholder="Interview Time"
-                    disabled={callingTracker.selectYesOrNo !== "Interested"}
-  value={lineUpData.interviewTime ? dayjs(lineUpData.interviewTime, 'h:mm a') : null} // ensure this is a valid dayjs object
-  onChange={(time) =>
-    setLineUpData({
-      ...lineUpData,
-      interviewTime: time ? time.format('h:mm a') : "", // 'time' is the selected time as a dayjs object
-    })
-  }
-  format="h:mm a" // this hides the seconds selection
-  
-/>
-
-
-                  {/* <input
+                    {/* <input
   type="text"
   name="interviewTime"
   placeholder="⏰(e.g 12:00 AM)"
@@ -2079,15 +2093,17 @@ const ModalComponent = ({
         <div className="calling-tracker-popup">
           <div className="calling-tracker-popup-sidebar">
             <p
-              className={`sidebar-item ${activeField === "distance" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "distance" ? "active" : ""
+              }`}
               onClick={() => setActiveField("distance")}
             >
               Distance Calculation
             </p>
             <p
-              className={`sidebar-item ${activeField === "salary" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "salary" ? "active" : ""
+              }`}
               onClick={() => setActiveField("salary")}
             >
               Salary Calculation
@@ -2104,8 +2120,9 @@ const ModalComponent = ({
             </p> */}
 
             <p
-              className={`sidebar-item ${activeField === "previousQuestion" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "previousQuestion" ? "active" : ""
+              }`}
               onClick={() => setActiveField("previousQuestion")}
             >
               Previous Question

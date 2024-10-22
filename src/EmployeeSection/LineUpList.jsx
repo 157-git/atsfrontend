@@ -826,6 +826,7 @@ const LineUpList = ({
         </div>
       ) : (
         <>
+
           {!showUpdateCallingTracker ? (
             <>
               <div className="search">
@@ -945,6 +946,7 @@ const LineUpList = ({
                       const uniqueValues = Array.from(
                         new Set(callingList.map((item) => item[optionKey]))
                       );
+                      console.log(uniqueValues);
 
                       return (
                         <div key={optionKey} className="filter-option">
@@ -1954,7 +1956,7 @@ const LineUpList = ({
       )}
       {isDataSending && (
         <div className="ShareFunc_Loading_Animation">
-          <ClipLoader size={50} color="#ffb281" />
+          <Loader  />
         </div>
       )}
     </div>

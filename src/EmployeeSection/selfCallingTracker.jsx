@@ -7,8 +7,6 @@ import UpdateCallingTracker from "./UpdateSelfCalling";
 import * as XLSX from "xlsx";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import HashLoader from "react-spinners/HashLoader";
-import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
@@ -138,6 +136,8 @@ const CallingList = ({
       setFilteredCallingList(data);
       setLoading(false);
       console.log(data);
+
+
     } catch (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
@@ -352,6 +352,7 @@ const CallingList = ({
               ); // Compare as numbers
             })
           );
+
         } else if (option === "currentCtcThousand") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
@@ -947,14 +948,12 @@ const CallingList = ({
                             <div className="city-filter">
                               <div className="optionDiv">
                                 {/* line number 938 to 959 added by sahil karnekar date 14-10-2024 */}
-                                {uniqueValues.map(
-                                  (value) =>
-                                    value !== "" &&
-                                    value !== "-" &&
-                                    !(
-                                      optionKey === "alternateNumber" &&
-                                      value === 0
-                                    ) && (
+
+                                {uniqueValues.filter(value =>
+                                  value !== '' && value !== '-' && value !== undefined && !(optionKey === 'alternateNumber' && value === 0)
+                                ).length > 0 ? (
+                                  uniqueValues.map((value) => (
+                                    value !== '' && value !== '-' && value !== undefined && !(optionKey === 'alternateNumber' && value === 0) && (
                                       <label
                                         key={value}
                                         className="selfcalling-filter-value"
@@ -962,9 +961,8 @@ const CallingList = ({
                                         <input
                                           type="checkbox"
                                           checked={
-                                            selectedFilters[
-                                              optionKey
-                                            ]?.includes(value) || false
+                                            selectedFilters[optionKey]?.includes(value) || false
+
                                           }
                                           onChange={() =>
                                             handleFilterSelect(optionKey, value)
@@ -974,6 +972,9 @@ const CallingList = ({
                                         {value}
                                       </label>
                                     )
+                                  ))
+                                ) : (
+                                  <div>No values</div>
                                 )}
                               </div>
                             </div>
@@ -1128,6 +1129,7 @@ const CallingList = ({
                             </span>
                           </div>
                         </td>
+
 
                         <td
                           className="tabledata"
@@ -1957,10 +1959,10 @@ const CallingList = ({
             <UpdateCallingTracker
               candidateId={selectedCandidateId}
               employeeId={employeeId}
-              onsuccessfulDataUpdation={onsuccessfulDataUpdation}
               fromCallingList={true}
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
+              onsuccessfulDataUpdation={onsuccessfulDataUpdation}
             />
           )}
         </>

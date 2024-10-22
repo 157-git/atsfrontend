@@ -919,24 +919,32 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
               <div className="city-filter">
                 <div className="optionDiv">
                   {/* line number 910 to 927 added by sahil karnekar date : 14-10-2024 */}
-                  {uniqueValues.map((value) => (
-                     value !== '' && value !== '-' && !(optionKey === 'alternateNumber' && value === 0) && (
-                    <label
-                      key={value}
-                      className="selfcalling-filter-value"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={
-                          selectedFilters[optionKey]?.includes(value) || false
-                        }
-                        onChange={() => handleFilterSelect(optionKey, value)}
-                        style={{marginRight:'5px'}}
-                      />
-                      {value}
-                    </label>
-                     )
-                  ))}
+                  {uniqueValues.filter(value =>
+                                  value !== '' && value !== '-' && value !== undefined && !(optionKey === 'alternateNumber' && value === 0)
+                                ).length > 0 ? (
+                                  uniqueValues.map((value) => (
+                                    value !== '' && value !== '-' && value !== undefined && !(optionKey === 'alternateNumber' && value === 0) && (
+                                      <label
+                                        key={value}
+                                        className="selfcalling-filter-value"
+                                      >
+                                        <input
+                                          type="checkbox"
+                                          checked={
+                                            selectedFilters[optionKey]?.includes(value) || false
+                                          }
+                                          onChange={() =>
+                                            handleFilterSelect(optionKey, value)
+                                          }
+                                          style={{ marginRight: "5px" }}
+                                        />
+                                        {value}
+                                      </label>
+                                    )
+                                  ))
+                                ) : (
+                                  <div>No values</div>
+                                )}
                 </div>
               </div>
             )}

@@ -128,10 +128,11 @@ button.react-calendar__tile.react-calendar__tile--now.react-calendar__month-view
 }
 
 .shortlist-table-div {
-  /* margin-top: 20px;
-  padding-top: 30px; */
+  /* margin-top: 20px; */
+  padding-top: 60px;
   padding-left: 10px;
   padding-right: 20px;
+  /* border: 1px solid black; */
 }
 
 .shortlist-table-div table {
