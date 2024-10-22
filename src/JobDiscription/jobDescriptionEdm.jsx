@@ -122,62 +122,113 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
     }
   };
 
+  const handleInputChange = (e, field) => {
+    setData({
+      ...data,
+      [field]: e.target.value, // Update the specific field
+    });
+  };
+
   if (!voiceLoaded) {
     return <div>Loading voices...</div>;
   }
 
   return (
-    <>
-
-      <div className="main-description-share1  min-h-screen  flex flex-col justify-center items-center" id='jobEDM'>
-        <div className="job-posting" id='shareEMD'>
-          <h3></h3>
-          <h3>We are Hiring</h3>
-          <h2> {data.designation}</h2>
-          <div className="details">
-            <h3 >Required Key Skills</h3>
-            <p> {data.skills}</p>
-            <br />
-            <h3>Team Handling experience is must.</h3>
-            <p>Relevant Experience {data.experience}</p>
-            <br />
-            <p className="salary">Salary upto {data.salary} LPA</p>
-            <p>{data.jobType} - {data.detailAddress}</p>
-            <div className="contact">
-              <div className="image-container">
-                <img src={profileImage} alt="Profile Image" />
-              </div>
-              <div className="details1">
-                <h4>For Details</h4>
-                <p>Name : {data.employeeName} | Contact: {data.officialContactNo} </p>
-                <p>Email: <a href="mailto:bezalwar@157ipl.com">{data.officialMail}</a> </p>
+    <div>
+      <div className="shareEDMdiv">
+        <div className="main-description-share2">
+          <div className="job-posting" id="shareEMD">
+            <div className="image-container">
+              <img src={profileImage} alt="Profile Image" />
+            </div>
+            <h3 className="share-edm-black-bold"> We are Hiring </h3>
+            <h2 className="short-edm-heading"> "{data.designation}"</h2>
+            <div className="details">
+            <h3 className="share-edm-black-skill">Required Key Skills</h3>
+                <div className="skill-content">
+                  <p className="share-edm-skill">{data.skills}</p>
+                  <h3 className="share-edm-skill">
+                    Experience Upto {data.experience}
+                  </h3>
+                  <p className="share-edm-skill">Shift :- {data.shift} </p>
+                  <p className="share-edm-skill">
+                    Week Offs : - {data.weekOff}
+                  </p>
+                  {/* <p className="share-edm-skill">
+                    Pick-up and Drop facility available.
+                  </p> */}
+                </div>{" "}
+                <br />
+                <p className="share-edm-black-skill">
+                  Salary upto {data.salary}{" "}
+                </p>
+                <p className="share-edm-black-bold-location">
+                  {data.jobType}{" "}
+                  <i
+                    id="location-share-edm"
+                    class="fa-solid fa-location-dot"
+                  ></i>{" "}
+                  {data.location}
+                </p>
+              <div className="contact">
+                <div className="details1">
+                  <br />
+                  <h3 className="share-edm-black-skill">For Details</h3>
+                  <h4 className="share-edm-contact">Contact - 157 Careers</h4>
+                  <div className="share-edm-contact-detaisl">
+                    <input
+                      id="employeeName"
+                      value={data.employeeName}
+                      onChange={(e) => handleInputChange(e, "employeeName")}
+                      className="share-edm-input"
+                    />{" | "}
+                    <input
+                      id="officialMail"
+                      value={data.officialMail}
+                      onChange={(e) => handleInputChange(e, "officialMail")}
+                      className="share-edm-input"
+                    />{" | "}
+                    <input
+                      type="tel"
+                      id="officialContactNo"
+                      value={data.officialContactNo}
+                      onChange={(e) =>
+                        handleInputChange(e, "officialContactNo")
+                      }
+                      className="share-edm-input"
+                    />
+                   </div>
+                </div>
               </div>
             </div>
-          </div>
-
-          <button
+            <button
             onClick={togglePlay}
             className="mt-4 bg-[#ffcb9b] hover:bg-white text-white hover:text-[#ffcb9b] shadow font-bold py-2 px-4 rounded transition duration-300"
           >
             <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
           </button>
+          </div>
+          
+          <section className="apply-section-share">
+            <button
+              className="apply-button-share"
+              onClick={generateAndShareVideo}
+            >
+              Share Job Description
+            </button>
+            <button
+             onClick={closeJobDescrptionShare}
+              className="apply-button-share"
+            >
+              Close
+            </button>
+          </section>
+          
         </div>
-        <section className="apply-section-share">
-          <button className="apply-button-share" onClick={generateAndShareVideo}>
-            Share Job Description
-          </button>
-
-          <button
-            onClick={closeJobDescrptionShare}
-            className="apply-button-share"
-            style={{paddingRight:"10px",paddingLeft:"10px",color:"black"}} 
-          >
-            close
-          </button>
-        </section>
+        
       </div>
-    </>
-  );
+  </div>
+);
 }
 
 export default JobDescriptionEdm;

@@ -402,9 +402,21 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     setShowFilterSection(!showFilterSection);
   };
 
+//  filter problem solved updated by sahil karnekar date 21-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
-    setActiveFilterOption(activeFilterOption === key ? null : key);
-    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
+    if (activeFilterOption === key) {
+      setActiveFilterOption(null);
+    } else {
+      setActiveFilterOption(key);
+    }
+    setSelectedFilters((prev) => {
+      const newSelectedFilters = { ...prev };
+      if (key in newSelectedFilters) {
+      } else {
+        newSelectedFilters[key] = []; 
+      }
+      return newSelectedFilters;
+    });
   };
 
   const getSortIcon = (criteria) => {

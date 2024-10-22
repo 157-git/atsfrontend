@@ -352,6 +352,13 @@ body {
     margin: 10px;
     text-align: center;
     cursor: pointer;
-    border: none;
-    
+    border: none; 
+  }
+
+  .Find-Candidate{
+    border: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 300px;
   }

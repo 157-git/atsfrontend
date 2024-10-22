@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
+import '../EmployeeSection/Incentive.css'
 
 const Incentive = () => {
   const [data, setData] = useState([]);
@@ -77,7 +78,12 @@ const Incentive = () => {
     }
   };
   return (
-    <div className="container-after1">
+    <div className="container-after1" >
+      <div className="incetive-heading-div">
+      <span id="incetive-heading">
+        Incentive Table
+      </span>
+      </div>
       <div className="attendanceTableData">
         <table className="attendance-table">
           <thead>

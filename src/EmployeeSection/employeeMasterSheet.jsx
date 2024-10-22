@@ -587,12 +587,13 @@ const EmployeeMasterSheet = () => {
                   )}
                 </div>
               )}
-              <button
-                className="master-sheet-filterbtn"
-                onClick={toggleFilterSection}
-              >
-                Filter <i className="fa-solid fa-filter"></i>
-              </button>
+               {/* sahil karnekar line 531 to 536 */}
+               <button
+                                className="lineUp-Filter-btn"
+                                onClick={toggleFilterSection}
+                            >
+                                Filter <i className="fa-solid fa-filter"></i>
+                            </button>
             </div>
           </div>
 
@@ -612,6 +613,7 @@ const EmployeeMasterSheet = () => {
                     </button>
                     {expandedFilters[field] && (
                       <div className="city-filter">
+                         {/* sahil karnekar filter edition line 552 to 567 date : 10-10-2024 */}
                         <div className="optionDiv">
 
                           {uniqueValues[field].map(

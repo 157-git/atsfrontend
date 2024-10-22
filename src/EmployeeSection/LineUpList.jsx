@@ -76,7 +76,7 @@ const LineUpList = ({
   //akash_pawar_LineUpList_ShareFunctionality_17/07_71
 
   const limitedOptions = [
-   // line number 79 edited by sahil karnekar according to tester suggestion date 14-10-2024
+    // line number 79 edited by sahil karnekar according to tester suggestion date 14-10-2024
     ["alternateNumber", "WhatsApp Number"],
     ["availabilityForInterview", "Availability For Interview"],
     ["callingFeedback", "Calling Feedback"],
@@ -202,7 +202,6 @@ const LineUpList = ({
     setFilterOptions(options);
   }, [filteredCallingList]);
 
-  
   useEffect(() => {
     filterData();
   }, [selectedFilters, callingList]);
@@ -426,7 +425,9 @@ const LineUpList = ({
               const isNumeric = !isNaN(value); // Check if the value is numeric
               if (isNumeric) {
                 const numericValue = parseInt(value, 10); // Convert value to integer
-                return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+                return (
+                  item[option] !== undefined && item[option] === numericValue
+                ); // Compare as numbers
               } else {
                 return item[option]?.toString().includes(value); // For non-numeric comparisons
               }
@@ -447,13 +448,29 @@ const LineUpList = ({
     }));
   };
 
+  //  filter problem solved updated by sahil karnekar date 21-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
     if (activeFilterOption === key) {
-      setActiveFilterOption(null); // Hide the filter details
+      
+      setActiveFilterOption(null);
     } else {
-      setActiveFilterOption(key); // Show the filter details
+      
+      setActiveFilterOption(key);
     }
-    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
+    
+    
+    setSelectedFilters((prev) => {
+      const newSelectedFilters = { ...prev };
+  
+      if (key in newSelectedFilters) {
+       
+      } else {
+       
+        newSelectedFilters[key] = []; 
+      }
+  
+      return newSelectedFilters;
+    });
   };
 
   const handleSort = (criteria) => {
@@ -602,7 +619,6 @@ const LineUpList = ({
       try {
         // Detect file type based on file name extension or content
         const fileType = fileName.split(".").pop().toLowerCase();
-
         // Convert PDF
         if (fileType === "pdf") {
           const binary = atob(byteCode);
@@ -613,7 +629,6 @@ const LineUpList = ({
           const blob = new Blob([array], { type: "application/pdf" });
           return URL.createObjectURL(blob);
         }
-
         // Convert Word document (assuming docx format)
         if (fileType === "docx") {
           const binary = atob(byteCode);
@@ -626,9 +641,7 @@ const LineUpList = ({
           });
           return URL.createObjectURL(blob);
         }
-
         // Handle other document types here if needed
-
         // If file type is not supported
         console.error(`Unsupported document type: ${fileType}`);
         return "Unsupported Document";
@@ -639,6 +652,7 @@ const LineUpList = ({
     }
     return "Document Not Found";
   };
+
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [selectedCandidateResume, setSelectedCandidateResume] = useState("");
 
@@ -651,9 +665,7 @@ const LineUpList = ({
     setSelectedCandidateResume("");
     setShowResumeModal(false);
   };
-  const onClose = () => {
-
-  }
+  const onClose = () => {};
   //Name:-Akash Pawar Component:-ShortListedCandidate Subcategory:-ResumeViewButton(added) End LineNo:-196 Date:-02/07
 
   //Mohini_Raut_LineUpList_columnsToInclude_columnsToExclude_16/07/2024//
@@ -725,13 +737,16 @@ const LineUpList = ({
         "Recruiter Incentive": item.incentive || "-",
         "Interested or Not": item.selectYesOrNo || "-",
         "Current Company": item.companyName || "-",
-        "Total Experience": `${item.experienceYear || 0} Years ${item.experienceMonth || 0
-          } Months`,
+        "Total Experience": `${item.experienceYear || 0} Years ${
+          item.experienceMonth || 0
+        } Months`,
         "Relevant Experience": item.relevantExperience || "-",
-        "Current CTC": `${item.currentCtcLakh || 0} Lakh ${item.currentCtcThousand || 0
-          } Thousand`,
-        "Expected CTC": `${item.expectedCtcLakh || 0} Lakh ${item.expectedCtcThousand || 0
-          } Thousand`,
+        "Current CTC": `${item.currentCtcLakh || 0} Lakh ${
+          item.currentCtcThousand || 0
+        } Thousand`,
+        "Expected CTC": `${item.expectedCtcLakh || 0} Lakh ${
+          item.expectedCtcThousand || 0
+        } Thousand`,
         "Date Of Birth": item.dateOfBirth || "-",
         Gender: item.gender || "-",
         Education: item.qualification || "-",
@@ -801,6 +816,8 @@ const LineUpList = ({
   };
   //Mohini_Raut_LineUpList_columnsToInclude_columnsToExclude_16/07/2024//
 
+
+ 
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -907,11 +924,8 @@ const LineUpList = ({
                   >
                     Filter <i className="fa-solid fa-filter"></i>
                   </button>
-
                 </div>
               </div>
-
-
 
               {showSearchBar && (
                 <input
@@ -924,11 +938,9 @@ const LineUpList = ({
                 />
               )}
 
-
               <div className="filter-dropdowns">
                 {showFilterSection && (
                   <div className="filter-section">
-                    
                     {limitedOptions.map(([optionKey, optionLabel]) => {
                       const uniqueValues = Array.from(
                         new Set(callingList.map((item) => item[optionKey]))
@@ -948,28 +960,34 @@ const LineUpList = ({
                             <div className="city-filter">
                               <div className="optionDiv">
                                 {/* line number 949 to 970 added by sahil karnekar on the date : 14-10-2024 */}
-                                {uniqueValues.map((value) => (
-                                   value !== '' && value !== '-' && !(optionKey === 'alternateNumber' && value === 0) && (
-                                  <label
-                                    key={value}
-                                    className="selfcalling-filter-value"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      checked={
-                                        selectedFilters[optionKey]?.includes(
-                                          value
-                                        ) || false
-                                      }
-                                      onChange={() =>
-                                        handleFilterSelect(optionKey, value)
-                                      }
-                                      style={{ marginRight: "5px" }}
-                                    />
-                                    {value}
-                                  </label>
-                                   )
-                                ))}
+                                {uniqueValues.map(
+                                  (value) =>
+                                    value !== "" &&
+                                    value !== "-" &&
+                                    !(
+                                      optionKey === "alternateNumber" &&
+                                      value === 0
+                                    ) && (
+                                      <label
+                                        key={value}
+                                        className="selfcalling-filter-value"
+                                      >
+                                        <input
+                                          type="checkbox"
+                                          checked={
+                                            selectedFilters[
+                                              optionKey
+                                            ]?.includes(value) || false
+                                          }
+                                          onChange={() =>
+                                            handleFilterSelect(optionKey, value)
+                                          }
+                                          style={{ marginRight: "5px" }}
+                                        />
+                                        {value}
+                                      </label>
+                                    )
+                                )}
                               </div>
                             </div>
                           )}
@@ -979,7 +997,6 @@ const LineUpList = ({
                   </div>
                 )}
               </div>
-
 
               <div className="attendanceTableData">
                 <table className="attendance-table">
@@ -1079,8 +1096,8 @@ const LineUpList = ({
 
                       {(userType === "TeamLeader" ||
                         userType === "Manager") && (
-                          <th className="attendanceheading">Team Leader Id</th>
-                        )}
+                        <th className="attendanceheading">Team Leader Id</th>
+                      )}
 
                       <th className="attendanceheading">Action</th>
                     </tr>
@@ -1097,7 +1114,6 @@ const LineUpList = ({
                             />
                           </td>
                         ) : null}
-
 
                         <td className="tabledata">{index + 1}</td>
 
@@ -1126,8 +1142,6 @@ const LineUpList = ({
                             </span>
                           </div>
                         </td>
-
-
 
                         <td
                           className="tabledata"
@@ -1346,14 +1360,18 @@ const LineUpList = ({
                             </div>
                           </td>
 
-
-                          <td className="tabledata"
+                          <td
+                            className="tabledata"
                             onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}>
-
-                            {item.experienceYear} {" "} Year -  {item.experienceMonth} Month
+                            onMouseOut={handleMouseOut}
+                          >
+                            {item.experienceYear} Year - {item.experienceMonth}{" "}
+                            Month
                             <div className="tooltip">
-                              <span className="tooltiptext">{item.experienceYear} {" "} Year {item.experienceMonth} Month</span>
+                              <span className="tooltiptext">
+                                {item.experienceYear} Year{" "}
+                                {item.experienceMonth} Month
+                              </span>
                             </div>
                           </td>
 
@@ -1370,21 +1388,33 @@ const LineUpList = ({
                             </div>
                           </td>
 
-                          <td className="tabledata"
+                          <td
+                            className="tabledata"
                             onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}>
-
-                            {item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand
+                            onMouseOut={handleMouseOut}
+                          >
+                            {item.currentCTCLakh} Lakh {item.currentCTCThousand}{" "}
+                            Thousand
                             <div className="tooltip">
-                              <span className="tooltiptext">{item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand</span>
+                              <span className="tooltiptext">
+                                {item.currentCTCLakh} Lakh{" "}
+                                {item.currentCTCThousand} Thousand
+                              </span>
                             </div>
                           </td>
 
-                          <td className="tabledata" onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}>
-                            {item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand} {" "} Thousand
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {item.expectedCTCLakh} Lakh{" "}
+                            {item.expectedCTCThousand} Thousand
                             <div className="tooltip">
-                              <span className="tooltiptext">{item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand}  {" "} Thousand</span>
+                              <span className="tooltiptext">
+                                {item.expectedCTCLakh} Lakh{" "}
+                                {item.expectedCTCThousand} Thousand
+                              </span>
                             </div>
                           </td>
 
@@ -1451,7 +1481,6 @@ const LineUpList = ({
                             </div>
                           </td>
 
-
                           <td
                             className="tabledata"
                             onMouseOver={handleMouseOver}
@@ -1478,10 +1507,10 @@ const LineUpList = ({
                             </div>
                           </td>
 
-
                           {/* Name:-Akash Pawar Component:-LineUpList
                   Subcategory:-ResumeViewButton(added) start LineNo:-993
                   Date:-02/07 */}
+
                           <td className="tabledata">
                             <button
                               className="table-icon-div"
@@ -1490,6 +1519,7 @@ const LineUpList = ({
                               <i className="fas fa-eye"></i>
                             </button>
                           </td>
+
                           {/* Name:-Akash Pawar Component:-LineUpList
                   Subcategory:-ResumeViewButton(added) End LineNo:-1005
                   Date:-02/07 */}
@@ -1572,29 +1602,27 @@ const LineUpList = ({
 
                           {(userType === "TeamLeader" ||
                             userType === "Manager") && (
-                              <td
-                                className="tabledata"
-                                onMouseOver={handleMouseOver}
-                                onMouseOut={handleMouseOut}
-                              >
-                                {item.teamLeaderId}
-                                <div className="tooltip">
-                                  <span className="tooltiptext">
-                                    {item.teamLeaderId}
-                                  </span>
-                                </div>
-                              </td>
-                            )}
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {item.teamLeaderId}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {item.teamLeaderId}
+                                </span>
+                              </div>
+                            </td>
+                          )}
 
                           <td className="tabledata">
-                            <button className="table-icon-div" >
+                            <button className="table-icon-div">
                               <i
                                 onClick={() => handleUpdate(item.candidateId)}
                                 className="fa-regular fa-pen-to-square"
                               ></i>
-
                             </button>
-
                           </td>
                         </>
                       </tr>
@@ -1824,33 +1852,36 @@ const LineUpList = ({
                                 <div className="accordion-content">
                                   <form>
                                     {recruiterUnderTeamLeader &&
-                                      recruiterUnderTeamLeader.map((recruiters) => (
-                                        <div
-                                          key={recruiters.recruiterId}
-                                        >
-                                          <label htmlFor={recruiters.employeeId}>
-                                            <input
-                                              type="radio"
-                                              id={recruiters.employeeId}
-                                              name="recruiter"
-                                              value={recruiters.employeeId}
-                                              checked={
-                                                selectedRecruiters.recruiterId ===
-                                                recruiters.employeeId
-                                              }
-                                              onChange={() =>
-                                                setSelectedRecruiters({
-                                                  index: 1,
-                                                  recruiterId: recruiters.employeeId,
-                                                  recruiterJobRole:
-                                                    recruiters.jobRole,
-                                                })
-                                              }
-                                            />{" "} - {" "}
-                                            {recruiters.employeeName}
-                                          </label>
-                                        </div>
-                                      ))}
+                                      recruiterUnderTeamLeader.map(
+                                        (recruiters) => (
+                                          <div key={recruiters.recruiterId}>
+                                            <label
+                                              htmlFor={recruiters.employeeId}
+                                            >
+                                              <input
+                                                type="radio"
+                                                id={recruiters.employeeId}
+                                                name="recruiter"
+                                                value={recruiters.employeeId}
+                                                checked={
+                                                  selectedRecruiters.recruiterId ===
+                                                  recruiters.employeeId
+                                                }
+                                                onChange={() =>
+                                                  setSelectedRecruiters({
+                                                    index: 1,
+                                                    recruiterId:
+                                                      recruiters.employeeId,
+                                                    recruiterJobRole:
+                                                      recruiters.jobRole,
+                                                  })
+                                                }
+                                              />{" "}
+                                              - {recruiters.employeeName}
+                                            </label>
+                                          </div>
+                                        )
+                                      )}
                                   </form>
                                 </div>
                               </div>
@@ -1917,6 +1948,7 @@ const LineUpList = ({
               employeeId={employeeId}
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
+             
             />
           )}
         </>

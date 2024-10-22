@@ -13,7 +13,8 @@ import { toast } from "react-toastify";
 
 const ShortListedCandidates = ({
   loginEmployeeName,
-  toggleShortListed /*Akash_Pawar_ShortListedCandidate_toggleShortListed(show interview candidate)_23/07_LineNo_12*/,
+  toggleShortListed, /*Akash_Pawar_ShortListedCandidate_toggleShortListed(show interview candidate)_23/07_LineNo_12*/
+  onsuccessfulDataUpdation
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOptions, setFilterOptions] = useState([]);
@@ -626,7 +627,6 @@ const ShortListedCandidates = ({
     setShowResumeModal(false);
   };
   //Name:-Akash Pawar Component:-ShortListedCandidate Subcategory:-ResumeViewButton(added) End LineNo:-196 Date:-02/07
-
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -1544,10 +1544,13 @@ const ShortListedCandidates = ({
             <UpdateCallingTracker
               candidateId={selectedCandidateId}
               employeeId={employeeId}
-              closeComponent={() => setShowUpdateCallingTracker(false)}
-              // updateSuccess={handleUpdateSuccess}
-              onSuccess={handleUpdateSuccess}
+              onsuccessfulDataUpdation={onsuccessfulDataUpdation}
               onCancel={() => setShowUpdateCallingTracker(false)}
+
+              onSuccess={handleUpdateSuccess}
+              // updateSuccess={handleUpdateSuccess}
+              // onCancel={() => setShowUpdateCallingTracker(false)}
+
             />
           )}
         </>

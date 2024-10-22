@@ -4,12 +4,9 @@ import "./rejectedcandidate.css";
 import UpdateCallingTracker from "../EmployeeSection/UpdateSelfCalling";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import HashLoader from "react-spinners/HashLoader";
 import * as XLSX from "xlsx";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
-
-import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 // SwapnilRokade_RejectedCandidate_ModifyFilters_11/07
 const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
@@ -315,9 +312,21 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
   };
   //akash_pawar_RejectedCandidate_ShareFunctionality_18/07_294
 
+  //  filter problem solved updated by sahil karnekar date 21-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
-    setActiveFilterOption(activeFilterOption === key ? null : key);
-    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
+    if (activeFilterOption === key) {
+      setActiveFilterOption(null);
+    } else {
+      setActiveFilterOption(key);
+    }
+    setSelectedFilters((prev) => {
+      const newSelectedFilters = { ...prev };
+      if (key in newSelectedFilters) {
+      } else {
+        newSelectedFilters[key] = []; 
+      }
+      return newSelectedFilters;
+    });
   };
   
 
@@ -794,6 +803,8 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
     hidePopup();
   };
   //Swapnil_Rokade_SelectedCandidate_columnsToInclude_columnsToExclude_17/07/2024//
+
+
 
   return (
     <div className="calling-list-container">
@@ -1909,13 +1920,14 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
               employeeId={employeeId}
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
+             
             />
           )}
         </>
       )}
       {isDataSending && (
         <div className="ShareFunc_Loading_Animation">
-          <ClipLoader size={50} color="#ffb281" />
+          <Loader size={50} color="#ffb281" />
         </div>
       )}
     </div>

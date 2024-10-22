@@ -99,3 +99,33 @@
   align-items: center;
 
 }
+
+
+/* Arshad Attar Added This 21-10-2024 */
+.profile-btn {
+  padding-left: 10px;
+  padding-right: 10px;
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease;
+}
+
+.profile-btn.pending {
+  background-color: #e60000; 
+  box-shadow: 0 0 5px rgba(230, 0, 0, 0.8); 
+}
+
+.profile-btn.pending:hover {
+  box-shadow: 0 0 10px rgba(230, 0, 0, 1);
+}
+
+.profile-btn.sent {
+  background-color: #008000;
+  box-shadow: 0 0 5px rgba(0, 128, 0, 0.8); 
+}
+
+.profile-btn.sent:hover {
+  box-shadow: 0 0 10px rgba(0, 128, 0, 1);
+}

@@ -23,7 +23,7 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 
-const Attendance = () => {
+const Attendance = ({loginEmployeeName}) => {
   const { employeeId, userType } = useParams();
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -68,7 +68,6 @@ const Attendance = () => {
   // const [filteredAttendanceData, setFilteredAttendanceData] = useState(attendanceData); // To store filtered data
   
     // Arshad Attar Work On Fillter 09-10-2024 ( End line 68 ) 
-
   const handleDateRangeChange = (event) => {
     const selectedRange = event.target.value;
     setDateRange(selectedRange);
@@ -98,7 +97,6 @@ const Attendance = () => {
         end = today;
         break;
       case "custom":
-        // Don't set dates for custom option
         return;
       default:
         return;
@@ -276,6 +274,7 @@ const Attendance = () => {
     });
   };
 
+
   const showDataReport = async () => {
     if (
       selectedManagers.length === 0 &&
@@ -284,8 +283,9 @@ const Attendance = () => {
       userType === "SuperUser"
     ) {
       toast.error("Please Select At Least One Manager/TeamLeader/Recruiter");
+      return;
     }
-
+  
     if (
       userType === "Manager" &&
       selectedTeamLeaders.length === 0 &&
@@ -294,34 +294,41 @@ const Attendance = () => {
       toast.error("Please Select At Least One TeamLeader/Recruiter");
       return;
     }
-
+  
     if (userType === "TeamLeader" && selectedRecruiters.length === 0) {
       toast.error("Please Select At Least 1 Recruiter");
       return;
     }
-
+  
+    // if (userType === "Recruiters" && !employeeId) {
+    //   toast.error("Invalid Recruiter ID");
+    //   return;
+    // }
+  
     if (dateRange === "") {
       toast.error("Please Select Date");
       return;
     }
+  
     let ids;
     let role;
+
     if (selectedManagers.length > 0) {
-      ids = selectedManagers.map((manager) => manager.managerId).join(","); // Join IDs with commas
+      ids = selectedManagers.map((manager) => manager.managerId).join(",");
       role = selectedManagers[0].managerJobRole;
     } else if (selectedTeamLeaders.length > 0) {
-      ids = selectedTeamLeaders
-        .map((teamLeader) => teamLeader.teamLeaderId)
-        .join(","); // Join IDs with commas
+      ids = selectedTeamLeaders.map((teamLeader) => teamLeader.teamLeaderId).join(",");
       role = selectedTeamLeaders[0].teamLeaderJobRole;
-    } else {
-      ids = selectedRecruiters
-        .map((recruiter) => recruiter.recruiterId)
-        .join(","); // Join IDs with commas
+    } else if (selectedRecruiters.length > 0) {
+      ids = selectedRecruiters.map((recruiter) => recruiter.recruiterId).join(",");
       role = selectedRecruiters[0].recruiterJobRole;
+    } else if (userType === "Recruiters") {
+      ids = employeeId; 
+      role = userType;
     }
     fetchData(ids, role, startDate, endDate);
   };
+  
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -645,12 +652,20 @@ const handleFilterOptionClick = (key) => {
       <div className="PI-full-width-PI-half-height">
         <div className="PI-container">
           <div className="PI-dropdown-container-main">
-            <div className="PI-header">{userType}</div>
+
+            {/* <div className="PI-header">{userType}</div> */}
+
+            {userType === "Recruiters" && <span>Recruiter</span>}
+          {userType === "TeamLeader" && <span>Team Leader</span>}
+          {userType === "Manager" && <span>Manager</span>}
+          {userType === "SuperUser" && <span>Super User</span>}
+
             <div className="PI-dropdown-container">
               <div className="PI-Dropdown" onClick={toggleDropdown}>
-                {userType === "SuperUser" && <span>Select Manager</span>}
-                {userType === "Manager" && <span>Select Team Leader</span>}
+                {userType === "SuperUser" && <span>Select Manager OR Team Leader </span>}
+                {userType === "Manager" && <span>Select TL OR Recruiters </span>}
                 {userType === "TeamLeader" && <span>Select Recruiters</span>}
+                {userType === "Recruiters" && <span>{loginEmployeeName}</span>}
                 <span className={`dropdown-icon`} />
                 <i
                   className={`fa-solid ${
@@ -663,6 +678,8 @@ const handleFilterOptionClick = (key) => {
                   {userType === "SuperUser" && renderManagers()}
                   {userType === "Manager" && renderTeamLeaders(employeeId)}
                   {userType === "TeamLeader" && renderRecruiters(employeeId)}
+
+
                   <button
                     onClick={() => setDropdownOpen(false)}
                     className="PI-Ok"
@@ -684,7 +701,7 @@ const handleFilterOptionClick = (key) => {
             </div>
             <div className="PI-Count">
               {userType === "SuperUser" && (
-                <>
+                <div className="PI-superuser-div">
                   <p>
                     Manager  :{" "}
                     {selectedManagers.length || employeeCount.managerCount}
@@ -695,7 +712,7 @@ const handleFilterOptionClick = (key) => {
                       selectedTeamLeaders.length}
                   </p>
                   <p>Recruiter  : {employeeCount.employeeCount}</p>
-                </>
+                </div>
               )}
               {userType === "Manager" && (
                 <div>
@@ -747,9 +764,11 @@ const handleFilterOptionClick = (key) => {
             )}
           </div>
 
+
           <div className="PI-attendance-form">
             <div className="PI-radio-buttons">
               <div>
+
               <label className="PI-radio-label">
                 <input
                   type="radio"
@@ -762,6 +781,7 @@ const handleFilterOptionClick = (key) => {
                 />
                 <span>Current Month</span>
               </label>
+
               </div>
               <div>
               <label className="PI-radio-label">
@@ -777,6 +797,7 @@ const handleFilterOptionClick = (key) => {
                 <span>Last Month</span>
               </label>
               </div>
+
               <div>
               <label className="PI-radio-label">
                 <input
@@ -855,60 +876,6 @@ const handleFilterOptionClick = (key) => {
               <button className="PI-attendence-btn" onClick={showDataReport}>
                 Get Attendance
               </button>
-              <div>
-                {/* <button
-                  className="PI-attendence-btn"
-                  onClick={() => setShowFilterOptions(!showFilterOptions)}
-                >
-                  Filter
-                </button> */}
-              </div>
-              {/* {showFilterOptions && (
-                <div className="PI-filter-options-container">
-                  {limitedOption.map((option) => {
-                    const uniqueValues = Array.from(
-                      new Set(attendanceData.map((item) => item[option])) // get unique values (e.g., employee names or job roles)
-                    );
-                    return (
-                      <div key={option} className="attendance-filter-option">
-                        <button
-                          className="PI-white-Btn"
-                          onClick={() => handleFilterOptionClick(option)}
-                        >
-                          {formatOption(option)}
-                          <span className="PI-filter-icon">&#x25bc;</span>
-                        </button>
-                        {activeFilterOption === option && (
-                          <div className="PI-option-filter">
-                            <div className="PI-optionDiv">
-                              {uniqueValues.map((value) => (
-                                <label
-                                  key={value}
-                                  className="selfcalling-filter-value"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    className="attendance-filter-checkbox"
-                                    checked={
-                                      selectedFilters[option]?.includes(
-                                        value
-                                      ) || false
-                                    }
-                                    onChange={() =>
-                                      handleFilterSelect(option, value)
-                                    }
-                                  />
-                                  {value}
-                                </label>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )} */}
             </div>
 
             <div

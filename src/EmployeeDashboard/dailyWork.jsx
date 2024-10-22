@@ -34,7 +34,7 @@ function DailyWork({
     useState(false);
 
   const [buttonColor, setButtonColor] = useState(() => {
-    return localStorage.getItem('buttonColor');
+    return localStorage.getItem("buttonColor");
   });
 
   const getStoredTime = () => {
@@ -365,10 +365,7 @@ function DailyWork({
   const updateArchieved = () => {
     console.log(successfulDataUpdation);
 
-    if (
-      successfulDataAdditions ||
-      successfulDataUpdation
-    ) {
+    if (successfulDataAdditions || successfulDataUpdation) {
       // Assuming updateCount is a function that updates states like archived and pending
       const updatedData = JSON.parse(
         localStorage.getItem(`dailyWorkData_${employeeId}`)
@@ -500,19 +497,25 @@ function DailyWork({
 
   return (
     <div className="daily-timeanddate">
-      <div className="head">
-        <div className="user-img">
-          <img src={profileImage} alt="Profile" onClick={profilePageLink} />
+      <a href="#">
+        <div className="head" onClick={profilePageLink}>
+          <div className="user-img">
+            <img src={profileImage} alt="Profile" />
+          </div>
+          <div className="user-details">
+            <p>
+              {employeeData.name} -{" "}
+              {(userType == "Recruiters" ? "Recruiter" : "") ||
+                (userType == "TeamLeader" ? "Team Leader" : "") ||
+                (userType == "Manager" ? "Manager" : "") ||
+                (userType == "SuperUser" ? "Super User" : "")}
+              <br />
+              157{employeeId}
+            </p>
+          </div>
         </div>
-        <div className="user-details">
-          <p>
-            {employeeData.name} - {(userType == "Recruiters" ? "Recruiter" : "") || (userType == "TeamLeader" ? "Team Leader" : "") ||
-              (userType == "Manager" ? "Manager" : "") || (userType == "SuperUser" ? "Super User" : "")}
-            <br />
-            157{employeeId}
-          </p>
-        </div>
-      </div>
+      </a>
+
       <button
         className="toggle-all-daily-btns"
         onClick={toggleAllDailyBtns}
@@ -522,8 +525,8 @@ function DailyWork({
       </button>
 
       {userType != "SuperUser" &&
-        userType != "Applicant" &&
-        userType != "Vendor" ? (
+      userType != "Applicant" &&
+      userType != "Vendor" ? (
         <>
           <div
             className={`all-daily-btns ${!showAllDailyBtns ? "hidden" : ""}`}
@@ -536,7 +539,6 @@ function DailyWork({
                 className="daily-tr-btn"
                 style={{
                   color: data.archived <= 3 ? "red" : "green",
-
                 }}
               >
                 Achieved : {data.archived}

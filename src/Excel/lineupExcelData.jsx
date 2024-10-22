@@ -452,6 +452,7 @@ const LineupExcelData = ({
       }
     });
   };
+ 
 
   return (
     <div className="App-after1">
@@ -834,6 +835,7 @@ const LineupExcelData = ({
           loginEmployeeName={loginEmployeeName}
           onClose={() => setSelectedCandidate(null)}
           onSuccess={handleUpdateSuccess}
+         
         />
       )}
     </div>

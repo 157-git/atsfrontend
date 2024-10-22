@@ -675,7 +675,6 @@ const EmpDashboard = ({ userGroup }) => {
       />
 
       <div className="empDash-main-content">
-
         <div className="time-and-data">
           <DailyWork
             employeeId={employeeId}
@@ -711,6 +710,7 @@ const EmpDashboard = ({ userGroup }) => {
               onSuccessAdd={handleSuccessAdd}
               loginEmployeeName={loginEmployeeName} //akash_pawar_SelectedCandidate_ShareFunctionality_16/07_545
               onsuccessfulDataUpdation={handleSuccessfulDataUpdation}
+              fromCallingList={true}
             />
           )}
         </div>
@@ -720,9 +720,9 @@ const EmpDashboard = ({ userGroup }) => {
             <ShortListedCandidates
               viewUpdatedPage={viewUpdatedPage}
               loginEmployeeName={loginEmployeeName}
-              toggleShortListed={
-                toggleShortListed
-              } /*Akash_Pawar_EmpDashboard_toggleShortListed(show interview candidate)_23/07_LineNo_636*/
+              toggleShortListed={toggleShortListed}
+              onsuccessfulDataUpdation={handleSuccessfulDataUpdation}
+              /*Akash_Pawar_EmpDashboard_toggleShortListed(show interview candidate)_23/07_LineNo_636*/
             />
           )}
         </div>
@@ -749,7 +749,11 @@ const EmpDashboard = ({ userGroup }) => {
           )}
         </div>
         <div>{incentive && <Incentive />}</div>
-        <div>{attendancesheet && <Attendancesheet />}</div>
+        <div>
+          {attendancesheet && (
+            <Attendancesheet loginEmployeeName={loginEmployeeName} />
+          )}
+        </div>
 
         <div>
           {showCallingExcelList && (
@@ -872,7 +876,11 @@ const EmpDashboard = ({ userGroup }) => {
           )}
         </div>
         <div>{showAllInterviewResponses && <InterviewDataTables />}</div>
-        <div>{showPerformanceImprovement && <PerformanceImprovement />}</div>
+        <div>
+          {showPerformanceImprovement && (
+            <PerformanceImprovement loginEmployeeName={loginEmployeeName} />
+          )}
+        </div>
         {/* <div>
           {showTeamDetails && (
             <TeamDetails></TeamDetails>

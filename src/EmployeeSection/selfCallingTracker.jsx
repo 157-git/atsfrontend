@@ -7,8 +7,6 @@ import UpdateCallingTracker from "./UpdateSelfCalling";
 import * as XLSX from "xlsx";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import HashLoader from "react-spinners/HashLoader";
-import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
@@ -18,8 +16,8 @@ const CallingList = ({
   updateState,
   funForGettingCandidateId,
   loginEmployeeName,
-  onsuccessfulDataUpdation
-
+  onsuccessfulDataUpdation,
+  fromCallingList,
 }) => {
   const [callingList, setCallingList] = useState([]);
   const { employeeId } = useParams();
@@ -138,6 +136,7 @@ const CallingList = ({
       setFilteredCallingList(data);
       setLoading(false);
       console.log(data);
+
 
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -353,8 +352,8 @@ const CallingList = ({
               ); // Compare as numbers
             })
           );
-        }
-        else if (option === "currentCtcThousand") {
+
+        } else if (option === "currentCtcThousand") {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const numericValue = parseInt(value, 10); // Convert value to integer
@@ -423,14 +422,15 @@ const CallingList = ({
               item[option]?.toString().toLowerCase().includes(value)
             )
           );
-        }
-        else {
+        } else {
           filteredData = filteredData.filter((item) =>
             values.some((value) => {
               const isNumeric = !isNaN(value); // Check if the value is numeric
               if (isNumeric) {
                 const numericValue = parseInt(value, 10); // Convert value to integer
-                return item[option] !== undefined && item[option] === numericValue; // Compare as numbers
+                return (
+                  item[option] !== undefined && item[option] === numericValue
+                ); // Compare as numbers
               } else {
                 return item[option]?.toString().includes(value); // For non-numeric comparisons
               }
@@ -450,10 +450,21 @@ const CallingList = ({
         : [...prev[key], value],
     }));
   };
-
+//  filter problem solved updated by sahil karnekar date 21-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
-    setActiveFilterOption(activeFilterOption === key ? null : key);
-    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
+    if (activeFilterOption === key) {
+      setActiveFilterOption(null);
+    } else {
+      setActiveFilterOption(key);
+    }
+    setSelectedFilters((prev) => {
+      const newSelectedFilters = { ...prev };
+      if (key in newSelectedFilters) {
+      } else {
+        newSelectedFilters[key] = []; 
+      }
+      return newSelectedFilters;
+    });
   };
 
   const handleSort = (criteria) => {
@@ -636,7 +647,6 @@ const CallingList = ({
     return "Document Not Found";
   };
 
-
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [selectedCandidateResume, setSelectedCandidateResume] = useState("");
 
@@ -720,13 +730,16 @@ const CallingList = ({
         "Recruiter Incentive": item.incentive || "-",
         "Interested or Not": item.selectYesOrNo || "-",
         "Current Company": item.companyName || "-",
-        "Total Experience": `${item.experienceYear || 0} Years ${item.experienceMonth || 0
-          } Months`,
+        "Total Experience": `${item.experienceYear || 0} Years ${
+          item.experienceMonth || 0
+        } Months`,
         "Relevant Experience": item.relevantExperience || "-",
-        "Current CTC": `${item.currentCtcLakh || 0} Lakh ${item.currentCtcThousand || 0
-          } Thousand`,
-        "Expected CTC": `${item.expectedCtcLakh || 0} Lakh ${item.expectedCtcThousand || 0
-          } Thousand`,
+        "Current CTC": `${item.currentCtcLakh || 0} Lakh ${
+          item.currentCtcThousand || 0
+        } Thousand`,
+        "Expected CTC": `${item.expectedCtcLakh || 0} Lakh ${
+          item.expectedCtcThousand || 0
+        } Thousand`,
         "Date Of Birth": item.dateOfBirth || "-",
         Gender: item.gender || "-",
         Education: item.qualification || "-",
@@ -935,6 +948,7 @@ const CallingList = ({
                             <div className="city-filter">
                               <div className="optionDiv">
                                 {/* line number 938 to 959 added by sahil karnekar date 14-10-2024 */}
+
                                 {uniqueValues.filter(value =>
                                   value !== '' && value !== '-' && value !== undefined && !(optionKey === 'alternateNumber' && value === 0)
                                 ).length > 0 ? (
@@ -948,6 +962,7 @@ const CallingList = ({
                                           type="checkbox"
                                           checked={
                                             selectedFilters[optionKey]?.includes(value) || false
+
                                           }
                                           onChange={() =>
                                             handleFilterSelect(optionKey, value)
@@ -970,7 +985,6 @@ const CallingList = ({
                   </div>
                 )}
               </div>
-
 
               <div className="attendanceTableData">
                 <table className="attendance-table">
@@ -1069,8 +1083,8 @@ const CallingList = ({
 
                       {(userType === "TeamLeader" ||
                         userType === "Manager") && (
-                          <th className="attendanceheading">Team Leader Id</th>
-                        )}
+                        <th className="attendanceheading">Team Leader Id</th>
+                      )}
 
                       <th className="attendanceheading">Action</th>
                     </tr>
@@ -1115,7 +1129,6 @@ const CallingList = ({
                             </span>
                           </div>
                         </td>
-
 
 
                         <td
@@ -1338,13 +1351,18 @@ const CallingList = ({
                             </div>
                           </td>
 
-                          <td className="tabledata"
+                          <td
+                            className="tabledata"
                             onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}>
-
-                            {item.experienceYear} {" "} Year -  {item.experienceMonth} Month
+                            onMouseOut={handleMouseOut}
+                          >
+                            {item.experienceYear} Year - {item.experienceMonth}{" "}
+                            Month
                             <div className="tooltip">
-                              <span className="tooltiptext">{item.experienceYear} {" "} Year {item.experienceMonth} Month</span>
+                              <span className="tooltiptext">
+                                {item.experienceYear} Year{" "}
+                                {item.experienceMonth} Month
+                              </span>
                             </div>
                           </td>
 
@@ -1361,21 +1379,33 @@ const CallingList = ({
                             </div>
                           </td>
 
-                          <td className="tabledata"
+                          <td
+                            className="tabledata"
                             onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}>
-
-                            {item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand
+                            onMouseOut={handleMouseOut}
+                          >
+                            {item.currentCTCLakh} Lakh {item.currentCTCThousand}{" "}
+                            Thousand
                             <div className="tooltip">
-                              <span className="tooltiptext">{item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand</span>
+                              <span className="tooltiptext">
+                                {item.currentCTCLakh} Lakh{" "}
+                                {item.currentCTCThousand} Thousand
+                              </span>
                             </div>
                           </td>
 
-                          <td className="tabledata" onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}>
-                            {item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand} {" "} Thousand
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {item.expectedCTCLakh} Lakh{" "}
+                            {item.expectedCTCThousand} Thousand
                             <div className="tooltip">
-                              <span className="tooltiptext">{item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand}  {" "} Thousand</span>
+                              <span className="tooltiptext">
+                                {item.expectedCTCLakh} Lakh{" "}
+                                {item.expectedCTCThousand} Thousand
+                              </span>
                             </div>
                           </td>
 
@@ -1584,26 +1614,28 @@ const CallingList = ({
 
                           {(userType === "TeamLeader" ||
                             userType === "Manager") && (
-                              <td
-                                className="tabledata"
-                                onMouseOver={handleMouseOver}
-                                onMouseOut={handleMouseOut}
-                              >
-                                {item.teamLeaderId}
-                                <div className="tooltip">
-                                  <span className="tooltiptext">
-                                    {item.teamLeaderId}
-                                  </span>
-                                </div>
-                              </td>
-                            )}
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {item.teamLeaderId}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {item.teamLeaderId}
+                                </span>
+                              </div>
+                            </td>
+                          )}
 
                           <td className="tabledata">
-                            <button className="table-icon-div">    <i
-                              onClick={() => handleUpdate(item.candidateId)}
-                              className="fa-regular fa-pen-to-square"
-                            ></i></button>
-
+                            <button className="table-icon-div">
+                              {" "}
+                              <i
+                                onClick={() => handleUpdate(item.candidateId)}
+                                className="fa-regular fa-pen-to-square"
+                              ></i>
+                            </button>
                           </td>
                         </>
                       </tr>
@@ -1833,33 +1865,36 @@ const CallingList = ({
                                 <div className="accordion-content">
                                   <form>
                                     {recruiterUnderTeamLeader &&
-                                      recruiterUnderTeamLeader.map((recruiters) => (
-                                        <div
-                                          key={recruiters.recruiterId}
-                                        >
-                                          <label htmlFor={recruiters.employeeId}>
-                                            <input
-                                              type="radio"
-                                              id={recruiters.employeeId}
-                                              name="recruiter"
-                                              value={recruiters.employeeId}
-                                              checked={
-                                                selectedRecruiters.recruiterId ===
-                                                recruiters.employeeId
-                                              }
-                                              onChange={() =>
-                                                setSelectedRecruiters({
-                                                  index: 1,
-                                                  recruiterId: recruiters.employeeId,
-                                                  recruiterJobRole:
-                                                    recruiters.jobRole,
-                                                })
-                                              }
-                                            />{" "} - {" "}
-                                            {recruiters.employeeName}
-                                          </label>
-                                        </div>
-                                      ))}
+                                      recruiterUnderTeamLeader.map(
+                                        (recruiters) => (
+                                          <div key={recruiters.recruiterId}>
+                                            <label
+                                              htmlFor={recruiters.employeeId}
+                                            >
+                                              <input
+                                                type="radio"
+                                                id={recruiters.employeeId}
+                                                name="recruiter"
+                                                value={recruiters.employeeId}
+                                                checked={
+                                                  selectedRecruiters.recruiterId ===
+                                                  recruiters.employeeId
+                                                }
+                                                onChange={() =>
+                                                  setSelectedRecruiters({
+                                                    index: 1,
+                                                    recruiterId:
+                                                      recruiters.employeeId,
+                                                    recruiterJobRole:
+                                                      recruiters.jobRole,
+                                                  })
+                                                }
+                                              />{" "}
+                                              - {recruiters.employeeName}
+                                            </label>
+                                          </div>
+                                        )
+                                      )}
                                   </form>
                                 </div>
                               </div>
@@ -1886,7 +1921,7 @@ const CallingList = ({
                   </>
                 ) : null}
                 {/* Name:-Akash Pawar Component:-LineUpList
-          Subcategory:-ResumeModel(added) End LineNo:-1153 Date:-02/07 */}
+                         Subcategory:-ResumeModel(added) End LineNo:-1153 Date:-02/07 */}
                 <Modal
                   show={showResumeModal}
                   onHide={closeResumeModal}
@@ -1925,6 +1960,7 @@ const CallingList = ({
               candidateId={selectedCandidateId}
               employeeId={employeeId}
               onsuccessfulDataUpdation={onsuccessfulDataUpdation}
+              fromCallingList={true}
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
             />

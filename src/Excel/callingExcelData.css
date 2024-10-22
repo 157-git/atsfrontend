@@ -194,4 +194,5 @@
   left: auto;
   background-color: white;
   width: 83%;
+  z-index: 99;
 }

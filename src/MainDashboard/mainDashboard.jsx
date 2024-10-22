@@ -12,7 +12,7 @@ const Home = () => {
     } else if (userType === "client") {
       navigate(`/employee-login/${userType}`);
     }
-    else if (userType === "applicant") {
+    else if (userType === "job-portal") {
       navigate(`/employee-login/${userType}`);
     }
     else if (userType === "vendor") {
@@ -55,7 +55,7 @@ const Home = () => {
       <div className="pricing-plan">  
         {[
           { title: "Client", userType: "client", buttonClass: "login" },
-          { title: "Applicant", userType: "applicant", buttonClass: "login" },
+          { title: "Job Portal", userType: "job-portal", buttonClass: "login" },
           { title: "Employee", userType: "employee", buttonClass: "login1" },
           { title: "Vendor", userType: "vendor", buttonClass: "login1" },
         ].map((section) => (

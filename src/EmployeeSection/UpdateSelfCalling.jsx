@@ -10,6 +10,9 @@ import "../EmployeeSection/UpdateSelfCalling.css";
 import { API_BASE_URL } from "../api/api";
 import { Button, Modal } from "react-bootstrap";
 import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker";
+// line 14 to 15 added by sahil karnekar date 17-10-2024
+import { TimePicker } from "antd";
+import dayjs from "dayjs";
 
 const UpdateSelfCalling = ({
   initialData,
@@ -17,6 +20,7 @@ const UpdateSelfCalling = ({
   onCancel,
   onsuccessfulDataUpdation,
   onSuccess,
+  fromCallingList,
 }) => {
   const [isOtherEducationSelected, setIsOtherEducationSelected] =
     useState(false);
@@ -89,7 +93,6 @@ const UpdateSelfCalling = ({
     resume: [],
   };
 
-
   const { employeeId } = useParams();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [recruiterName, setRecruiterName] = useState("");
@@ -105,6 +108,94 @@ const UpdateSelfCalling = ({
   const [endpoint, setendPoint] = useState("");
   const [lineUpData, setLineUpData] = useState(initialLineUpState);
 
+  // line 111 to 186 added by sahil karnekar date 17-10-2024
+
+  const [errors, setErrors] = useState({});
+  const [errorForDOB, setErrorForDOB] = useState("");
+  const [errorInterviewSlot, seterrorInterviewSlot] = useState("");
+  // updated by sahil karnekar date 18-10-2024
+  const today = new Date();
+  const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
+    .toISOString()
+    .split("T")[0]; // Format as YYYY-MM-DD
+
+  const validateCallingTracker = () => {
+    let newErrors = {};
+    if (!callingTracker.candidateName) {
+      newErrors.candidateName = "Candidate Name is required";
+    }
+    if (!callingTracker.contactNumber) {
+      newErrors.contactNumber = "Contact Number is required";
+    }
+    if (!callingTracker.sourceName) {
+      newErrors.sourceName = "Source Name is required";
+    }
+    // line number 135 to 144 added validation by sahil karnekar date 21-10-2024
+    const emailPattern = /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+    if (!callingTracker.candidateEmail) {
+      newErrors.candidateEmail = "Email is required";
+    } else if (!emailPattern.test(callingTracker.candidateEmail)) {
+      // If email format is invalid, show an error
+      newErrors.candidateEmail = "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).";
+    } else {
+      delete newErrors.candidateEmail;
+    }
+    if (!callingTracker.callingFeedback) {
+      newErrors.callingFeedback = "Calling Feedback is required";
+    }
+    return newErrors;
+  };
+  const validateLineUpData = () => {
+    let newErrors = {};
+    if (callingTracker.selectYesOrNo === "Interested") {
+      if (!callingTracker.requirementId) {
+        newErrors.requirementId = "Job Id is required";
+      }
+      if (!callingTracker.lineUp.experienceYear) {
+        newErrors.experienceYear = "Experience Year is required";
+      }
+      if (!callingTracker.lineUp.experienceMonth) {
+        newErrors.experienceMonth = "Experience Month is required";
+        // line 155 to 158 added by sahil karnekar date 18-10-2024
+      } else if (parseInt(callingTracker.lineUp.experienceMonth, 10) > 11) {
+        newErrors.experienceMonth = "Experience in months cannot exceed 11.";
+      }
+      if (!callingTracker.lineUp.relevantExperience) {
+        newErrors.relevantExperience = "Relevant Experience is required";
+      }
+      if (!callingTracker.currentLocation) {
+        newErrors.currentLocation = "Location is required";
+      }
+      if (!callingTracker.lineUp.qualification) {
+        newErrors.qualification = "Education is required";
+      }
+      if (!callingTracker.communicationRating) {
+        newErrors.communicationRating = "Communication Rating is required";
+      }
+      if (
+        !callingTracker.lineUp.expectedCTCLakh &&
+        !callingTracker.lineUp.expectedCTCThousand
+      ) {
+        newErrors.expectedCTCLakh = "Expected CTC is required";
+      }
+      if (
+        !callingTracker.lineUp.currentCTCLakh &&
+        !callingTracker.lineUp.currentCTCThousand
+      ) {
+        newErrors.currentCTCLakh = "Current CTC is required";
+      }
+      if (!callingTracker.lineUp.holdingAnyOffer) {
+        newErrors.holdingAnyOffer = "Holding Any Offer is required";
+      }
+      if (!callingTracker.lineUp.finalStatus) {
+        newErrors.finalStatus = "Please Select Option";
+      }
+      if (!callingTracker.lineUp.noticePeriod) {
+        newErrors.noticePeriod = "Notice Period is required";
+      }
+    }
+    return newErrors;
+  };
   useEffect(() => {
     fetchCandidateData(candidateId);
     fetchRequirementOptions();
@@ -119,7 +210,6 @@ const UpdateSelfCalling = ({
       const updatedLineUpData = { ...initialLineUpState };
     }
   }, [initialData]);
-
 
   const fetchCandidateData = async (candidateId) => {
     try {
@@ -147,6 +237,75 @@ const UpdateSelfCalling = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    // line 230 to 627 added by sahil karnekar date 17-10-2024
+
+    if (
+      (name === "candidateName" || name === "currentLocation") &&
+      !/^[a-zA-Z\s]*$/.test(value)
+    ) {
+      return;
+    }
+    if (
+      (name === "contactNumber" ||
+        name === "alternateNumber" ||
+        name === "lineUp.experienceYear" ||
+        name === "lineUp.experienceMonth" ||
+        name === "lineUp.expectedCTCLakh" ||
+        name === "lineUp.expectedCTCThousand" ||
+        name === "lineUp.currentCTCLakh" ||
+        name === "lineUp.currentCTCThousand") &&
+      !/^\d*$/.test(value)
+    ) {
+      return;
+    }
+
+    if (name === "lineUp.dateOfBirth") {
+      console.log(value);
+      console.log(maxDate);
+
+      if (value > maxDate) {
+        setErrorForDOB("MaxDate" + maxDate);
+      } else {
+        setErrorForDOB("");
+      }
+    }
+
+    if (name === "lineUp.yearOfPassing") {
+      // Allow only 4 digits
+      if (!/^\d{0,4}$/.test(value)) {
+        return; // Prevent updating state if the value doesn't match
+      }
+
+      // Check if the value is within the required range
+      const year = parseInt(value, 10);
+      if (value.length === 4 && (year < 1947 || year > 2025)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          yearOfPassing: "Year of Passing must be between 1947 and 2025.",
+        }));
+        return; // Prevent updating state if the year is out of range
+      } else {
+        // Clear error if valid
+        setErrors((prevErrors) => {
+          const { yearOfPassing, ...restErrors } = prevErrors; // Clear the yearOfPassing error if valid
+          return restErrors;
+        });
+      }
+
+      // Set the value in the state
+      setCallingTracker((prevState) => {
+        const lineUpField = name.split(".")[1];
+        return {
+          ...prevState,
+          lineUp: {
+            ...prevState.lineUp,
+            [lineUpField]: value,
+          },
+        };
+      });
+    }
+    console.log(errors);
+
     setCallingTracker((prevState) => {
       if (name.includes("lineUp")) {
         const lineUpField = name.split(".")[1];
@@ -164,23 +323,233 @@ const UpdateSelfCalling = ({
         };
       }
     });
+    // line 290 to 15 added by sahil karnekar date 17-10-2024
+
+    // Perform real-time validation
+    validateRealTime(name, value);
+  };
+
+  const validateRealTime = (name, value) => {
+    setErrors((prevErrors) => {
+      let newErrors = { ...prevErrors };
+
+      // Specific validations based on the input field
+      if (name === "candidateName") {
+        if (value === "") {
+          newErrors.candidateName = "Candidate Name is required";
+        } else {
+          delete newErrors.candidateName;
+        }
+      }
+      if (name === "candidateEmail") {
+        const emailPattern =
+          /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+        if (value === "") {
+          newErrors.candidateEmail = "Candidate Email is required";
+        } else if (!emailPattern.test(value)) {
+          // If email format is invalid, show an error
+          newErrors.candidateEmail =
+            "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).";
+        } else {
+          delete newErrors.candidateEmail;
+        }
+      }
+      if (name === "contactNumber") {
+        if (value === "") {
+          newErrors.contactNumber = "Contact Number is required";
+        } else {
+          delete newErrors.contactNumber;
+        }
+      }
+      if (name === "sourceName") {
+        if (value === "") {
+          newErrors.sourceName = "source Name is required";
+        } else {
+          delete newErrors.sourceName;
+        }
+      }
+      if (name === "callingFeedback") {
+        if (value === "") {
+          newErrors.callingFeedback = "calling Feedback is required";
+        } else {
+          delete newErrors.callingFeedback;
+        }
+      }
+      // Add yearOfPassing validation directly in errors
+      if (name === "lineUp.yearOfPassing") {
+        if (callingTracker.selectYesOrNo === "Interested" && value === "") {
+          newErrors.yearOfPassing =
+            "Year of Passing is required when Interested.";
+        } else {
+          delete newErrors.yearOfPassing; // Clear the error if valid
+        }
+      }
+      if (callingTracker.selectYesOrNo === "Interested") {
+        setErrors((prevErrors) => {
+          let newErrors = { ...prevErrors }; // Copy the previous errors
+
+          if (name === "currentLocation") {
+            if (value === "") {
+              newErrors.currentLocation = "Location is required";
+            } else {
+              delete newErrors.currentLocation; // Clear the error if value is valid
+            }
+          }
+          if (name === "communicationRating") {
+            if (value === "") {
+              newErrors.communicationRating = "Current Location is required";
+            } else {
+              delete newErrors.communicationRating; // Clear the error if value is valid
+            }
+          }
+
+          if (name.startsWith("lineUp.")) {
+            const fieldName = name.split(".")[1]; // Get the specific field name
+
+            if (fieldName === "experienceYear") {
+              if (value === "") {
+                newErrors.experienceYear = "Experience Year is required";
+              } else {
+                delete newErrors.experienceYear;
+              }
+            }
+            if (fieldName === "experienceMonth") {
+              if (value === "") {
+                newErrors.experienceMonth = "Experience Month is required";
+              } else {
+                const experienceMonthValue = parseInt(value, 10);
+
+                if (experienceMonthValue > 11) {
+                  newErrors.experienceMonth =
+                    "Experience in months cannot exceed 11.";
+                } else {
+                  delete newErrors.experienceMonth; // Clear the error if value is valid
+                }
+              }
+            }
+
+            if (fieldName === "relevantExperience") {
+              if (value === "") {
+                newErrors.relevantExperience =
+                  "relevant Experience is required";
+              } else {
+                delete newErrors.relevantExperience;
+              }
+            }
+            if (fieldName === "noticePeriod") {
+              if (value === "") {
+                newErrors.noticePeriod = "Notice Period is required";
+              } else {
+                delete newErrors.noticePeriod;
+              }
+            }
+            if (fieldName === "currentCTCLakh") {
+              if (value === "") {
+                newErrors.currentCTCLakh = "currentCTCLakh is required";
+              } else {
+                delete newErrors.currentCTCLakh;
+              }
+            }
+            if (fieldName === "expectedCTCLakh") {
+              if (value === "") {
+                newErrors.expectedCTCLakh = "expectedCTCLakh is required";
+              } else {
+                delete newErrors.expectedCTCLakh;
+              }
+            }
+            if (fieldName === "holdingAnyOffer") {
+              if (value === "") {
+                newErrors.holdingAnyOffer = "holdingAnyOffer is required";
+              } else {
+                delete newErrors.holdingAnyOffer;
+              }
+            }
+
+            // Add more validations for lineUp fields here if needed
+          }
+
+          return newErrors; // Return the updated errors
+        });
+      }
+
+      return newErrors; // Return the updated error state
+    });
   };
 
   const handleEducationChange = (e) => {
     const value = e.target.value;
+
+    if (callingTracker.selectYesOrNo === "Interested") {
+      setErrors((prevErrors) => {
+        let newErrors = { ...prevErrors }; // Copy the previous errors
+
+        if (value === "") {
+          newErrors.qualification = "Education is required";
+        } else {
+          delete newErrors.qualification; // Clear the error if value is valid
+        }
+
+        return newErrors; // Return the updated errors
+      });
+    }
+
+    // line 462 to 504 added by sahil karnekar date 17-10-2024
     if (value === "Other") {
       setIsOtherEducationSelected(true);
-      setCallingTracker({ ...callingTracker, currentEducation: "" });
+      setCallingTracker((prevState) => ({
+        ...prevState,
+        lineUp: {
+          ...prevState.lineUp,
+          qualification: "", // Clear qualification if "Other" is selected
+        },
+      }));
     } else {
       setIsOtherEducationSelected(false);
-      setCallingTracker({ ...callingTracker, currentEducation: value });
+      setCallingTracker((prevState) => ({
+        ...prevState,
+        lineUp: {
+          ...prevState.lineUp,
+          qualification: value, // Set qualification to the selected value
+        },
+      }));
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Validate the form data before submitting
+    const validationErrors = validateCallingTracker();
+    const validationErrorsForLineup = validateLineUpData();
 
+    // Check yearOfPassing errors directly
+    if (callingTracker.selectYesOrNo === "Interested") {
+      if (!callingTracker.lineUp.yearOfPassing) {
+        validationErrors.yearOfPassing =
+          "Year of Passing is required when Interested.";
+      } else {
+        const year = parseInt(callingTracker.lineUp.yearOfPassing, 10);
+        if (year < 1947 || year > 2025) {
+          validationErrors.yearOfPassing =
+            "Year of Passing must be between 1947 and 2025.";
+        }
+      }
+    }
+
+    // Combine all errors
+    const combinedErrors = {
+      ...validationErrors,
+      ...validationErrorsForLineup,
+    };
+
+    // Check if there are any errors before submission
+    if (Object.keys(combinedErrors).length > 0) {
+      setErrors(combinedErrors);
+      return; // Prevent submission if errors exist
+    }
     try {
+      // Clear all existing errors at the start of submission added by sahil karnekar date 21-10-2024
+ setErrors({});
+
       const dataToUpdate = {
         ...callingTracker,
         candidateAddedTime: callingTracker.candidateAddedTime,
@@ -189,7 +558,6 @@ const UpdateSelfCalling = ({
           resume: "",
         },
       };
-
       const response = await fetch(
         `${API_BASE_URL}/update-calling-data/${candidateId}`,
         {
@@ -200,15 +568,19 @@ const UpdateSelfCalling = ({
           body: JSON.stringify(dataToUpdate),
         }
       );
-
       if (response.ok) {
         if (callingTracker.selectYesOrNo === "Interested") {
-          onsuccessfulDataUpdation(true);
-          toast.success("Data updated successfully Please Cheack Line Up Tracker");
+          if (fromCallingList) {
+            onsuccessfulDataUpdation(true);
+            toast.success(
+              "Data updated successfully, please check Line Up Tracker"
+            );
+          } else {
+            toast.success("Data updated successfully");
+          }
         } else {
-          onsuccessfulDataUpdation(false);
           toast.success("Data updated successfully");
-        }        
+        }
         setFormSubmitted(true);
         onSuccess();
         onCancel();
@@ -226,6 +598,28 @@ const UpdateSelfCalling = ({
 
   const handleRequirementChange = (e) => {
     const { value } = e.target;
+    // line 552 to 577 added by sahil karnekar date 17-10-2024
+
+    setErrors((prevErrors) => {
+      let newErrors = { ...prevErrors };
+
+      // Check if the user is interested
+      if (callingTracker.selectYesOrNo === "Interested") {
+        // If the value is empty, set the error
+        if (value === "") {
+          newErrors.requirementId = "Job Id is required";
+        } else {
+          // If there's a value, clear the error for requirementId
+          delete newErrors.requirementId;
+        }
+      } else {
+        // If not interested, clear the error for requirementId
+        delete newErrors.requirementId;
+      }
+
+      return newErrors; // Return the updated error state
+    });
+
     const selectedRequirement = requirementOptions.find(
       (requirement) => requirement.requirementId === parseInt(value)
     );
@@ -334,19 +728,24 @@ const UpdateSelfCalling = ({
           <div className="update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
               <label>Candidate's Full Name</label>
-              <div className="update-calling-tracker-field-sub-div">
+              {/* line 738 to 1844 added and updated by sahil karnekar date 18-10-2024 */}
+              <div className="update-calling-tracker-field-sub-div setInputBlock">
                 <input
                   type="text"
                   name="candidateName"
                   className={`plain-input`}
                   value={callingTracker.candidateName || ""}
                   onChange={handleChange}
+                  maxlength="50"
                 />
+                {errors.candidateName && (
+                  <div className="error-message">{errors.candidateName}</div>
+                )}
               </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>Candidate's Email</label>
-              <div className="update-calling-tracker-field-sub-div">
+              <div className="update-calling-tracker-field-sub-div setInputBlock">
                 <input
                   type="email"
                   name="candidateEmail"
@@ -354,6 +753,9 @@ const UpdateSelfCalling = ({
                   onChange={handleChange}
                   className={`plain-input`}
                 />
+                {errors.candidateEmail && (
+                  <div className="error-message">{errors.candidateEmail}</div>
+                )}
               </div>
             </div>
           </div>
@@ -361,15 +763,18 @@ const UpdateSelfCalling = ({
           <div className="update-calling-tracker-row-gray">
             <div className="update-calling-tracker-field">
               <label>Contact Number</label>
-              <div className="update-calling-tracker-field-sub-div">
+              <div className="update-calling-tracker-field-sub-div setInputBlock">
                 <input
                   name="contactNumber"
                   value={callingTracker?.contactNumber || ""}
                   onChange={handleChange}
-                  required={callingTracker.selectYesOrNo !== "Interested"}
+                  // required={callingTracker.selectYesOrNo !== "Interested"}
                   defaultCountry="IN"
                   maxLength={11}
                 />
+                {errors.contactNumber && (
+                  <div className="error-message">{errors.contactNumber}</div>
+                )}
               </div>
             </div>
             <div className="update-calling-tracker-field">
@@ -391,13 +796,14 @@ const UpdateSelfCalling = ({
           <div className="update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
               <label>Source Name</label>
-              <div className="update-calling-tracker-field-sub-div">
+              {/* line 761 to 770 added by sahil karnekar date 17-10-2024 */}
+              <div className="update-calling-tracker-field-sub-div setInputBlock">
                 <select
                   name="sourceName"
                   className={`plain-input`}
                   value={callingTracker?.sourceName || ""}
                   onChange={handleChange}
-                  required={callingTracker.selectYesOrNo !== "Interested"}
+                  // required={callingTracker.selectYesOrNo !== "Interested"}
                 >
                   <option value="">Select Source Name</option>
                   <option value="LinkedIn">linkedIn</option>
@@ -410,37 +816,49 @@ const UpdateSelfCalling = ({
                   <option value="Friends">Friends</option>
                   <option value="others">others</option>
                 </select>
+                {/* line 782 to 825 added by sahil karnekar date 17-10-2024 */}
+                {errors.sourceName && (
+                  <div className="error-message">{errors.sourceName}</div>
+                )}
               </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>Job Id</label>
               <div className="update-calling-tracker-two-input-container">
-                <select
-                  className="update-calling-tracker-two-input"
-                  id="requirementId"
-                  name="requirementId"
-                  value={callingTracker?.requirementId || ""}
-                  onChange={handleRequirementChange}
-                  required={callingTracker.selectYesOrNo === "Interested"}
-                >
-                  <option value="">Select Job Id</option>
-                  {requirementOptions.map((option) => (
-                    <option
-                      key={option.requirementId}
-                      value={option.requirementId}
-                    >
-                      {option.requirementId} - {option.designation}
-                    </option>
-                  ))}
-                </select>
-
-                <input
-                  placeholder=" Your Incentive"
-                  value={callingTracker?.incentive || ""}
-                  readOnly
-                  className="update-calling-tracker-two-input"
-                  type="text"
-                />
+                <div>
+                  <select
+                    className="update-calling-tracker-two-input"
+                    id="requirementId"
+                    name="requirementId"
+                    value={callingTracker?.requirementId || ""}
+                    onChange={handleRequirementChange}
+                    //  required={callingTracker.selectYesOrNo === "Interested"}
+                    style={{ width: "80%" }}
+                  >
+                    <option value="">Select Job Id</option>
+                    {requirementOptions.map((option) => (
+                      <option
+                        key={option.requirementId}
+                        value={option.requirementId}
+                      >
+                        {option.requirementId} - {option.designation}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.requirementId && (
+                    <div className="error-message">{errors.requirementId}</div>
+                  )}
+                </div>
+                <div>
+                  <input
+                    placeholder=" Your Incentive"
+                    value={callingTracker?.incentive || ""}
+                    readOnly
+                    className="update-calling-tracker-two-input"
+                    type="text"
+                    style={{ width: "100%" }}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -471,22 +889,31 @@ const UpdateSelfCalling = ({
             </div>
             <div className="update-calling-tracker-field">
               <label>Current Location</label>
+              {/* line 856 to 926 added by sahil karnekar date 17-10-2024 */}
               <div className="update-calling-check-box-main-container">
+                <div>
+                  <input
+                    type="text"
+                    name="currentLocation"
+                    value={callingTracker?.currentLocation || ""}
+                    onChange={handleChange}
+                    placeholder="Enter your location"
+                    className="update-calling-check-box-main-container-input"
+                  />
+                  {errors.currentLocation && (
+                    <div className="error-message">
+                      {errors.currentLocation}
+                    </div>
+                  )}
+                </div>
                 <input
-                  type="text"
-                  name="currentLocation"
-                  value={callingTracker?.currentLocation || ""}
-                  onChange={handleChange}
-                  placeholder="Enter your location"
                   className="update-calling-check-box-main-container-input"
-                />
-                <input
-                   className="update-calling-check-box-main-container-input"
                   type="text"
                   name="fullAddress"
                   placeholder="Full Address"
                   value={callingTracker?.fullAddress || ""}
                   onChange={handleChange}
+                  style={{ height: "fit-content" }}
                 />
               </div>
             </div>
@@ -495,9 +922,9 @@ const UpdateSelfCalling = ({
           <div className="update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
               <label>Calling Remark</label>
-              <div className="update-calling-tracker-field-sub-div">
+              <div className="update-calling-tracker-field-sub-div setInputBlock">
                 <select
-                  required={callingTracker.selectYesOrNo === "Interested"}
+                  //  required={callingTracker.selectYesOrNo === "Interested"}
                   className="plain-input"
                   name="callingFeedback"
                   value={callingTracker?.callingFeedback || ""}
@@ -515,17 +942,26 @@ const UpdateSelfCalling = ({
                   <option value="Do not call again">Do not call again</option>
                   <option value="Other">Other</option>
                 </select>
+                {errors.callingFeedback && (
+                  <div className="error-message">{errors.callingFeedback}</div>
+                )}
               </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>Date Of Birth</label>
               <div className="update-calling-check-box-main-container">
-                <input
-                  type="date"
-                  name="lineUp.dateOfBirth "
-                  value={callingTracker.lineUp.dateOfBirth || ""}
-                  onChange={handleChange}
-                />
+                <div>
+                  <input
+                    type="date"
+                    name="lineUp.dateOfBirth"
+                    value={callingTracker.lineUp.dateOfBirth}
+                    onChange={handleChange}
+                    max={maxDate}
+                  />
+                  {errorForDOB && (
+                    <div className="error-message">{errorForDOB}</div>
+                  )}
+                </div>
 
                 <div className="calling-check-box-container">
                   <div className="update-callingTracker-male-div">
@@ -576,20 +1012,18 @@ const UpdateSelfCalling = ({
             </div>
             <div className="update-calling-tracker-field">
               <label>Education</label>
+              {/* line 979 to 1408 added by sahil karnekar date 17-10-2024 */}
               <div className="update-calling-tracker-two-input-container">
-                {!isOtherEducationSelected ? (
-                  <select
+                <div style={{ width: "50%", marginRight: "20px" }}>
+                  <input
+                    list="educationListDropDown"
                     name="qualification"
-                    style={{
-                      height: "30px",
-                      width: "100%",
-                      alignItems: "center",
-                      lineHeight: 1,
-                      marginRight: "10px",
-                      color: "gray",
-                    }}
                     value={callingTracker?.lineUp.qualification || ""}
-                  >
+                    onChange={handleEducationChange}
+                    placeholder="Search...."
+                  />
+
+                  <datalist id="educationListDropDown">
                     <option value="">Select</option>
                     <option value="Other">Other</option>
                     <option value="10th">10th</option>
@@ -993,23 +1427,33 @@ const UpdateSelfCalling = ({
                     <option value="Diploma in Artificial Intelligence">
                       Diploma in Artificial Intelligence
                     </option>
-                  </select>
-                ) : (
+                  </datalist>
+                  {/* sahil karnekar */}
+
+                  {errors.qualification && (
+                    <div className="error-message error-two-input-box">
+                      {errors.qualification}
+                    </div>
+                  )}
+                </div>
+                <div style={{ width: "50%", marginRight: "20px" }}>
                   <input
-                    type="text"
-                    name="lineUp.qualification"
-                    value={callingTracker?.lineUp.qualification || ""}
+                    style={{ width: "100%" }}
+                    type="number"
+                    min="1947"
+                    max="2025"
+                    name="lineUp.yearOfPassing"
+                    placeholder="Year Of PassOut"
+                    value={callingTracker?.lineUp.yearOfPassing || ""}
+                    // required={callingTracker.selectYesOrNo === "Interested"}
                     onChange={handleChange}
                   />
-                )}
-                <input
-                  type="text"
-                  name="lineUp.yearOfPassing"
-                  placeholder="Year Of PassOut"
-                  value={callingTracker?.lineUp.yearOfPassing || ""}
-                  // required={callingTracker.selectYesOrNo === "Interested"}
-                  onChange={handleChange}
-                />
+                  {errors.yearOfPassing && (
+                    <div className="error-message error-two-input-box">
+                      {errors.yearOfPassing}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -1064,28 +1508,41 @@ const UpdateSelfCalling = ({
             </div>
             <div className="update-calling-tracker-field">
               <label>Total Experience</label>
+              {/* line 1471 to 1758 added by sahil karnekar date 17-10-2024 */}
               <div className="update-calling-tracker-two-input-container">
-                <input
-                  type="text"
-                  name="lineUp.experienceYear"
-                  value={callingTracker?.lineUp.experienceYear || ""}
-                  onChange={handleChange}
-                  className="update-calling-tracker-two-input"
-                  required={callingTracker.selectYesOrNo === "Interested"}
-                  placeholder="Years"
-                  maxLength="2"
-                />
+                <div>
+                  <input
+                    style={{ width: "69%" }}
+                    type="text"
+                    name="lineUp.experienceYear"
+                    value={callingTracker?.lineUp.experienceYear || ""}
+                    onChange={handleChange}
+                    className="update-calling-tracker-two-input"
+                    // required={callingTracker.selectYesOrNo === "Interested"}
+                    placeholder="Years"
+                    maxLength="2"
+                  />
+                  {errors.experienceYear && (
+                    <div className="error-message">{errors.experienceYear}</div>
+                  )}
+                </div>
+
                 <div className="calling-tracker-two-input">
                   <input
-                    type="number"
+                    type="text"
                     name="lineUp.experienceMonth"
                     onChange={handleChange}
                     value={callingTracker?.lineUp.experienceMonth || ""}
                     placeholder="Months"
-                  // maxLength="2"
-                  // min="1"
-                  // max="12"
+                    maxLength="2"
+                    min="0"
+                    max="11"
                   />
+                  {errors.experienceMonth && (
+                    <div className="error-message">
+                      {errors.experienceMonth}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1102,8 +1559,12 @@ const UpdateSelfCalling = ({
                     value={callingTracker?.lineUp.relevantExperience || ""}
                     onChange={handleChange}
                     placeholder="Enter Relevant Experience"
-                    required={callingTracker.selectYesOrNo === "Interested"}
                   />
+                  {errors.relevantExperience && (
+                    <div className="error-message">
+                      {errors.relevantExperience}
+                    </div>
+                  )}
                 </div>
                 <div className="update-calling-tracker-two-input">
                   <input
@@ -1114,14 +1575,17 @@ const UpdateSelfCalling = ({
                     onChange={handleChange}
                     min="0"
                     max="90"
-                    required={callingTracker.selectYesOrNo === "Interested"}
+                    //  required={callingTracker.selectYesOrNo === "Interested"}
                   />
+                  {errors.noticePeriod && (
+                    <div className="error-message">{errors.noticePeriod}</div>
+                  )}
                 </div>
               </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>Communication Rating </label>
-              <div className="update-calling-tracker-field-sub-div">
+              <div className="update-calling-tracker-field-sub-div setInputBlock">
                 <input
                   type="text"
                   name="communicationRating"
@@ -1129,8 +1593,13 @@ const UpdateSelfCalling = ({
                   onChange={handleChange}
                   className="plain-input"
                   placeholder="Enter Communication Rating"
-                // required={callingTracker.selectYesOrNo === "Interested"}
+                  // required={callingTracker.selectYesOrNo === "Interested"}
                 />
+                {errors.communicationRating && (
+                  <div className="error-message">
+                    {errors.communicationRating}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -1138,55 +1607,75 @@ const UpdateSelfCalling = ({
             <div className="update-calling-tracker-field">
               <label>Current CTC(LPA)</label>
               <div className="update-calling-tracker-two-input-container">
-                <input
-                  type="text"
-                  name="lineUp.currentCTCLakh"
-                  value={callingTracker?.lineUp.currentCTCLakh || ""}
-                  onChange={handleChange}
-                  className="update-calling-tracker-two-input"
-                  placeholder="Lakh"
-                  maxLength="2"
-                  required={callingTracker.selectYesOrNo === "Interested"}
-                  pattern="\d*"
-                />
-                <input
-                  type="text"
-                  name="lineUp.currentCTCThousand"
-                  value={callingTracker?.lineUp.currentCTCThousand || ""}
-                  onChange={handleChange}
-                  className="update-calling-tracker-two-input"
-                  placeholder="Thousand"
-                  maxLength="2"
-                  pattern="\d*"
-                  inputMode="numeric"
-                />
+                <div style={{ marginLeft: "10%" }}>
+                  <input
+                    style={{ width: "75%" }}
+                    type="text"
+                    name="lineUp.currentCTCLakh"
+                    value={callingTracker?.lineUp.currentCTCLakh || ""}
+                    onChange={handleChange}
+                    className="update-calling-tracker-two-input"
+                    placeholder="Lakh"
+                    maxLength="2"
+                    // required={callingTracker.selectYesOrNo === "Interested"}
+                    pattern="\d*"
+                  />
+                  {errors.currentCTCLakh && (
+                    <div className="error-message">{errors.currentCTCLakh}</div>
+                  )}
+                </div>
+                <div style={{ marginLeft: "10%" }}>
+                  <input
+                    style={{ width: "75%" }}
+                    type="text"
+                    name="lineUp.currentCTCThousand"
+                    value={callingTracker?.lineUp.currentCTCThousand || ""}
+                    onChange={handleChange}
+                    className="update-calling-tracker-two-input"
+                    placeholder="Thousand"
+                    maxLength="2"
+                    pattern="\d*"
+                    inputMode="numeric"
+                  />
+                </div>
               </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>Expected CTC (LPA)</label>
               <div className="update-calling-tracker-two-input-container">
-                <input
-                  type="text"
-                  name="lineUp.expectedCTCLakh"
-                  value={callingTracker?.lineUp.expectedCTCLakh || ""}
-                  onChange={handleChange}
-                  className="update-calling-tracker-two-input"
-                  placeholder="Lakh"
-                  required={callingTracker.selectYesOrNo === "Interested"}
-                  maxLength="2"
-                  pattern="\d*"
-                />
-                <input
-                  type="text"
-                  name="lineUp.expectedCTCThousand"
-                  value={callingTracker?.lineUp.expectedCTCThousand || ""}
-                  onChange={handleChange}
-                  className="update-calling-tracker-two-input"
-                  placeholder="Thousand"
-                  maxLength="2"
-                  pattern="\d*"
-                  inputMode="numeric"
-                />
+                <div style={{ marginLeft: "10%" }}>
+                  <input
+                    style={{ width: "75%" }}
+                    type="text"
+                    name="lineUp.expectedCTCLakh"
+                    value={callingTracker?.lineUp.expectedCTCLakh || ""}
+                    onChange={handleChange}
+                    className="update-calling-tracker-two-input"
+                    placeholder="Lakh"
+                    // required={callingTracker.selectYesOrNo === "Interested"}
+                    maxLength="2"
+                    pattern="\d*"
+                  />
+                  {errors.expectedCTCLakh && (
+                    <div className="error-message">
+                      {errors.expectedCTCLakh}
+                    </div>
+                  )}
+                </div>
+                <div style={{ marginLeft: "10%" }}>
+                  <input
+                    style={{ width: "75%" }}
+                    type="text"
+                    name="lineUp.expectedCTCThousand"
+                    value={callingTracker?.lineUp.expectedCTCThousand || ""}
+                    onChange={handleChange}
+                    className="update-calling-tracker-two-input"
+                    placeholder="Thousand"
+                    maxLength="2"
+                    pattern="\d*"
+                    inputMode="numeric"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -1194,17 +1683,24 @@ const UpdateSelfCalling = ({
             <div className="update-calling-tracker-field">
               <label>Holding Offer Letter</label>
               <div className="update-calling-tracker-two-input-container">
-                <select
-                  type="text"
-                  name="lineUp.holdingAnyOffer"
-                  value={callingTracker?.lineUp.holdingAnyOffer || ""}
-                  required={callingTracker.selectYesOrNo === "Interested"}
-                  onChange={handleChange}
-                >
-                  <option value="">Select</option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                </select>
+                <div>
+                  <select
+                    type="text"
+                    name="lineUp.holdingAnyOffer"
+                    value={callingTracker?.lineUp.holdingAnyOffer || ""}
+                    // required={callingTracker.selectYesOrNo === "Interested"}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </select>
+                  {errors.holdingAnyOffer && (
+                    <div className="error-message">
+                      {errors.holdingAnyOffer}
+                    </div>
+                  )}
+                </div>
                 <input
                   type="text"
                   name="lineUp.offerLetterMsg"
@@ -1236,52 +1732,106 @@ const UpdateSelfCalling = ({
               <label>Status Type</label>
               <div className="update-calling-tracker-two-input-container">
                 <select
-                  required
                   className="update-calling-tracker-two-input"
                   name="selectYesOrNo"
                   placeholder="Candidate Interested"
                   value={callingTracker?.selectYesOrNo}
                   onChange={handleChange}
                 >
-                  <option value="">Select</option>
                   <option value="Yet To Confirm">Yet To Confirm</option>
-                      <option value="Interested">Interested</option>
-                      <option value="Interested, will confirm later">Interested, will confirm later</option>
-                      <option value="Not Interested">Not Interested</option>
-                      <option value=" Interested But Not Eligible">Interested But Not Eligible</option>
-                      <option value="Eligible">Eligible</option>
-                      <option value="Not Eligible">Not Eligible</option>
-                      <option value="Not Eligible But Interested">Not Eligible But Interested</option>
+                  <option value="Interested">Interested</option>
+                  <option value="Interested, will confirm later">
+                    Interested, will confirm later
+                  </option>
+                  <option value="Not Interested">Not Interested</option>
+                  <option value=" Interested But Not Eligible">
+                    Interested But Not Eligible
+                  </option>
+                  <option value="Eligible">Eligible</option>
+                  <option value="Not Eligible">Not Eligible</option>
+                  <option value="Not Eligible But Interested">
+                    Not Eligible But Interested
+                  </option>
                 </select>
+
+
+<div>
+  {/* line 1784 added by sahil karnekar date 21-10-2024 */}
                 <select
+                disabled={callingTracker.selectYesOrNo !== "Interested"}
                   type="text"
                   name="lineUp.finalStatus"
                   value={callingTracker?.lineUp.finalStatus}
                   onChange={handleChange}
-                  required={callingTracker.selectYesOrNo === "Interested"}
+                // required={callingTracker.selectYesOrNo === "Interested"}
                 >
                   <option value="">Select</option>
-                      <option value="Yet To Confirm">Yet To Confirm</option>
-                      <option value="Interview Schedule">Interview Schedule</option>
-                      <option value="Attending After Some time">Attending After Some time</option>
+                  <option value="Yet To Confirm">Yet To Confirm</option>
+                  <option value="Interview Schedule">Interview Schedule</option>
+                  <option value="Attending After Some time">Attending After Some time</option>
                 </select>
+                {errors.finalStatus && (
+                  <div className="error-message">{errors.finalStatus}</div>
+                )}
+              </div>
               </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>Interview Slots</label>
               <div className="update-calling-tracker-two-input-container">
+
+<div>
+  {/* line 1808 added by sahil karnekar date 21-10-2024 */}
                 <input
+                disabled={callingTracker.selectYesOrNo !== "Interested"}
+                style={{width:"auto"}}
                   type="date"
                   name="lineUp.availabilityForInterview"
-                  value={callingTracker?.lineUp.availabilityForInterview}
-                  onChange={handleChange}
+                  value={callingTracker?.lineUp.availabilityForInterview || ""}
+                  onChange={(e) => {
+                    const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
+
+                    if (e.target.value < today) {
+                      seterrorInterviewSlot("Interview Slot Should be Next Date From Today");
+                    } else {
+                      seterrorInterviewSlot(""); // Clear error message if the date is valid
+
+                   
+                    setCallingTracker((prevState) => ({
+                      ...prevState,
+                      lineUp: {
+                        ...prevState.lineUp,
+                        availabilityForInterview: e.target.value,
+                      },
+                    }));
+                  }}}
+                  // line 1831 changed updated by sahil karnekar date 21-10-2024
+                  min={new Date().toISOString().split("T")[0]} // Allow today and future dates 
                   className="update-calling-tracker-two-input"
                 />
-                <input
-                  type="time"
-                  name="lineUp.interviewTime"
-                  value={callingTracker?.lineUp.interviewTime}
-                  onChange={handleChange}
+
+                {errorInterviewSlot && (
+                  <div className="error-message">{errorInterviewSlot}</div>
+                )}
+</div>
+
+
+{/* complete componenet timepicker added by sahil karnekar date 21-10-2024 */}
+                <TimePicker
+                placeholder="Interview Time"
+                disabled={callingTracker.selectYesOrNo !== "Interested"}
+                  value={callingTracker.lineUp.interviewTime ? dayjs(callingTracker.lineUp.interviewTime, 'h:mm a') : null}
+
+                  onChange={(time) => {
+                    setCallingTracker((prevState) => ({
+                      ...prevState,
+                      lineUp: {
+                        ...prevState.lineUp,
+                        interviewTime: time ? time.format("h:mm a") : "", // Format the time as a string in h:mm a (AM/PM)
+                      },
+                    }));
+                  }}
+                  format="h:mm a" // Display format in the picker
                   className="update-calling-tracker-two-input"
                 />
               </div>
@@ -1378,29 +1928,33 @@ const ModalComponent = ({
         <div className="calling-tracker-popup">
           <div className="calling-tracker-popup-sidebar">
             <p
-              className={`sidebar-item ${activeField === "distance" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "distance" ? "active" : ""
+              }`}
               onClick={() => setActiveField("distance")}
             >
               Distance Calculation
             </p>
             <p
-              className={`sidebar-item ${activeField === "salary" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "salary" ? "active" : ""
+              }`}
               onClick={() => setActiveField("salary")}
             >
               Salary Calculation
             </p>
             <p
-              className={`sidebar-item ${activeField === "historyTracker" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "historyTracker" ? "active" : ""
+              }`}
               onClick={() => setActiveField("historyTracker")}
             >
               History Tracker
             </p>
             <p
-              className={`sidebar-item ${activeField === "previousQuestion" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "previousQuestion" ? "active" : ""
+              }`}
               onClick={() => setActiveField("previousQuestion")}
             >
               Previous Question
@@ -1467,7 +2021,7 @@ const ModalComponent = ({
                             className="form-control"
                             placeholder="Enter current CTC in lakh"
                             value={convertedCurrentCTC}
-                          // readOnly
+                            // readOnly
                           />
                         </div>
                       </td>
@@ -1513,7 +2067,7 @@ const ModalComponent = ({
                           className="form-control"
                           placeholder="Enter current CTC in lakh"
                           value={convertedCurrentCTC}
-                        // readOnly
+                          // readOnly
                         />
                       </td>
                       <td className="text-secondary">
