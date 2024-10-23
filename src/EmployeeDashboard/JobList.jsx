@@ -32,6 +32,8 @@ const JobListing = () => {
   const [showEDM, setShowEDM] = useState(false);
   const [showAddJobDescription, setShowAddJobDescription] = useState(false);
   const [showAddJobDiscriptionNew,setShowAddJobDescriptionNew] =useState(false);
+  // state added by sahil karnekar date 23-10-2024
+  const[isFilterVisible, setIsFilterVisible] = useState(true);
   const [searchQuery, setSearchQuery] = useState({
     designation: "",
     location: "",
@@ -187,6 +189,8 @@ const JobListing = () => {
         setRequirementData(data);
         // setJobDescription(data)
         setShowViewMore(true);
+        // line 193 added by sahil karnekar date 23-10-2024
+setIsFilterVisible(false);
       })
       .catch((error) => console.error("Error fetching data:", error));
   };
@@ -199,6 +203,8 @@ const JobListing = () => {
 
   const handleclose = () => {
     setShowViewMore(false);
+    // line 207 added by sahil karnekar date 23-10-2024
+    setIsFilterVisible(true);
   };
 
 
@@ -258,6 +264,8 @@ const JobListing = () => {
     <>
     {!showAddJobDiscriptionNew ? (
       <>
+      {/* line 268 added by sahil karnekar date : 23-10-2024 */}
+      {isFilterVisible && (
       <div className="jd-header-search" >
         <div className="search-container" >
           <div className="search-bar" >
@@ -309,7 +317,8 @@ const JobListing = () => {
           <div className="jd-filter-options-container" >
             {filterOptions.map((option) => {
               const uniqueValues = Array.from(
-                new Set(jobDescriptions.map((item) => item[option]))
+                // line 321 updated by sahil karnekar date 23-10-2024
+                new Set(jobDescriptions.map((item) => item[option]?.toString().toLowerCase().trim()))
               );
               return (
                 <div key={option} className="filter-option">
@@ -325,6 +334,8 @@ const JobListing = () => {
                     <div className="city-filter">
                       <div className="optionDiv">
                         {uniqueValues.map((value) => (
+                          // line 338 added by sahil karnekar date 23-10-2024
+                          value !== "" && value !== undefined && value !== null && (
                           <label key={value} className="selfcalling-filter-value">
                             <input
                               type="checkbox"
@@ -335,6 +346,8 @@ const JobListing = () => {
                             />
                             {value}
                           </label>
+                          // line 350 added by sahil karnekar date : 23-10-2024
+                          )
                         ))}
                       </div>
                     </div>
@@ -345,6 +358,8 @@ const JobListing = () => {
           </div>
         </div>
       </div>
+      // line 362 added by sahil karnekar date : 23-10-2024
+      )}
 
       {!showViewMore && (
         <div className="jdCards">
