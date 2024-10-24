@@ -4,6 +4,26 @@ import "../Excel/resumeList.css";
 import { useParams } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { API_BASE_URL } from "../api/api";
+ {/* this line added by sahil date 22-10-2024 */}
+import Modal from "react-modal";
+
+// custom styling added by sahil karnekar date 22-10-2024
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    padding: '20px',
+    textAlign: 'center',
+    borderRadius: '10px',
+  },
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.75)', // Black overlay
+  },
+};
 
 const ResumeList = ({ loginEmployeeName }) => {
   const [data, setData] = useState([]);
@@ -158,26 +178,31 @@ const ResumeList = ({ loginEmployeeName }) => {
                   Create Excel
                 </button>
               </div>
-              {showExportConfirmation && (
-                <div className="popup-containers">
-                  <p className="confirmation-texts">
-                    Are you sure you want to generate the Excel file?
-                  </p>
-                  <button onClick={confirmExport} className="buttoncss-ctn">
-                    Yes
-                  </button>
-                  <button onClick={cancelExport} className="buttoncss-ctn">
-                    No
-                  </button>
-                </div>
-              )}
+              {/* this modal added by sahil date 22-10-2024 */}
+              <Modal
+                isOpen={showExportConfirmation}
+                onRequestClose={hidePopup}
+                style={customStyles}
+                contentLabel="Export Confirmation Modal"
+              >
+                <p className="confirmation-texts">
+                  Are you sure you want to generate the Excel file?
+                </p>
+                <button onClick={confirmExport} className="buttoncss-ctn">
+                  Yes
+                </button>
+                <button onClick={cancelExport} className="buttoncss-ctn">
+                  No
+                </button>
+              </Modal>
             </div>
           </div>
 
           <div className="attendanceTableData">
             <table className="selfcalling-table attendance-table">
               <thead>
-                <tr className="attendancerows-head">
+                 {/* this line updated by sahil date 22-10-2024 */}
+                <tr className="attendancerows-head" style={{position:"sticky"}}>
                   <th className="attendanceheading">Sr No</th>
                   <th className="attendanceheading">Candidate Name</th>
                   <th className="attendanceheading">Candidate Email</th>

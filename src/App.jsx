@@ -20,6 +20,7 @@ import AddEmployee from "./EmployeeSection/addEmployee.jsx";
 import LoginSignup from "./MainDashboard/loginSignup.jsx";
 import EmpDashboard from "./EmployeeDashboard/empDashboard";
 import ProtectedRoute from "./MainDashboard/ProtectedRoute.jsx";
+import ApplicantForm from "./Applicant/applicantFrom.jsx";
 
 const App = () => {
   return (
@@ -72,7 +73,7 @@ const App = () => {
           ></Route>
           <Route
             path="/157industries/:employeeId/:userType/candidate-form"
-            element={<CandidateResumeLink />}
+            element={<ApplicantForm />}
           ></Route>
         </Routes>
       </BrowserRouter>

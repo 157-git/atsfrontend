@@ -81,17 +81,22 @@ function ShareEDM({ Descriptions, onShareEdm }) {
               <div className="details">
                 <h3 className="share-edm-black-skill">Required Key Skills</h3>
                 <div className="skill-content">
-                  <p className="share-edm-skill">{data.skills}</p>
+                  <p className="share-edm-skill">Mandatory Skill :- {data.skills}</p>
                   <h3 className="share-edm-skill">
                     Experience Upto {data.experience}
                   </h3>
+                  {/* <p className="share-edm-skill">The candidate must be a self-driven individual with excellent communication skills </p> */}
+                  {/* <p  className="share-edm-skill">focused solely on Oracle PLSQL development.</p> */}
+                  {/* <p  className="share-edm-skill">Strong in writing queries,</p> */}
+                  {/* <p  className="share-edm-skill"></p> */}
                   <p className="share-edm-skill">Shift :- {data.shift} </p>
                   <p className="share-edm-skill">
                     Week Offs : - {data.weekOff}
                   </p>
-                  {/* <p className="share-edm-skill">
-                    Pick-up and Drop facility available.
-                  </p> */}
+                  <p className="share-edm-skill">
+                  Notice Period : {data.noticePeriod}
+                  {/* Notice Period : Immediate to 30 days */}
+                  </p>
                 </div>{" "}
                 <br />
                 <p className="share-edm-black-skill">

@@ -384,10 +384,10 @@ const JobListing = () => {
                       Edit 
                     </button>
                     <button className="daily-tr-btn"
-                      onClick={() => handleHoldClick(job.requirementId)}
+                      // onClick={() => handleHoldClick(job.requirementId)}
                     >
-
-                      {heldJobId === job.requirementId ? "UnHold" : "Hold"}
+                      Hold
+                      {/* {heldJobId === job.requirementId ? "UnHold" : "Hold"} */}
                     </button>
                   </div>
                 ) : null}
@@ -518,7 +518,7 @@ const JobListing = () => {
                   <b>Educational Qualifications :</b>
                   {requirementData.qualification || "N/A"}
                 </p>
-                
+
                 <p>
                   <b>Experience :</b>
                   {requirementData.experience || "N/A"}

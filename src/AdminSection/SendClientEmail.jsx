@@ -457,7 +457,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
               onClick={() => setShowSearchBar(!showSearchBar)}
               style={{ margin: "10px", width: "auto", fontSize: "15px" }}
             ></i>
-            <h5 style={{ color: "gray", fontSize: "18px" }}>Candidate Data</h5>
+            <h5 style={{ color: "gray", fontSize: "18px" }}>Candidate Data </h5>
 
             <div
               style={{

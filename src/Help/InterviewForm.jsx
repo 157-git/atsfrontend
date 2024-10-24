@@ -266,7 +266,7 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
             <div className="dhansform-group">
               <div className="dhansform-label-input">
                 <div className="dhansform-label">
-                  <label>Company Name : </label>
+                  <label>Company Name h : </label>
                 </div>
                 <div className="job-id-side-input">
                   <input
