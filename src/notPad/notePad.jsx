@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../notPad/notePad.css";
 import { API_BASE_URL } from "../api/api";
+// line 6 added by sahil karnekar date 23-10-2024
+import { toast } from "react-toastify";
 
 
 const NotePad = () => {
@@ -11,18 +13,33 @@ const NotePad = () => {
   const [editMessageId, setEditMessageId] = useState(null);
   const [error, setError] = useState(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
+  // state is added by sahil karnekar date 23-10-2024
+  const [requiredError , setRequiredError] = useState("");
 
   useEffect(() => {
     fetchNotePadData();
   }, []);
   const { employeeId } = useParams();
 
+  // line 25 to 31 updated by sahil karnekar date 23-10-2024
+  const now = new Date();
   const Date1 = new Date().toISOString().slice(0, 10);
-  const time = new Date().toISOString().slice(11, 16);
+  const time = now.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true, // 12-hour format
+  });
   const timeDate = Date1 + " " + time;
 
   const saveMessage = async (e) => {
     e.preventDefault();
+// line 37 to 42 added by sahil karnekar date 23-10-2024
+    if (message.trim() === "") {
+      setRequiredError("Please Enter Your Note ⚠️");
+      return;
+    }else if(message){
+      setRequiredError("");
+    }
 
     const noteData = {
       employeeId,
@@ -49,6 +66,11 @@ const NotePad = () => {
         setMessage(""); // Clear the textarea after saving
         fetchNotePadData(); // Fetch updated data after saving
         setEditMessageId(null); // Reset edit message ID after saving
+        // line 70 to 73 added by sahil karnekar date 23-10-2024
+        if (editMessageId) {
+          toast.success("Note updated successfully!");
+          document.getElementById("editModal").style.display = "none"
+        }
       } else {
         throw new Error("Failed to save note");
       }
@@ -169,6 +191,12 @@ const NotePad = () => {
               Your Note Saved Successfully 😊!
             </div>
           )}
+          {/* line 195 to 199 added by sahil karnekar date 23-10-2024 */}
+          {(message === "") && (
+            <div className="notepad-alert-success" role="alert">
+              {requiredError}
+            </div>
+          )}
           {error && (
             <div className="alert alert-danger" role="alert">
               {error}
@@ -195,7 +223,8 @@ const NotePad = () => {
               <tbody>
                 {notePadData.map((note, index) => (
                   <tr key={index}>
-                    <td>{note.messageId}</td>
+                    {/* line 227 updated by sahil karnekar date 23-10-2024 */}
+                    <td>{index+1}</td>
                     <td
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
@@ -232,7 +261,10 @@ const NotePad = () => {
               </tbody>
             </table>
           ) : (
-            <p>No notes available.</p>
+            <p
+            // this p tag updated by sahil karnekar date 23-10-2024
+            style={{textAlign: "center",fontWeight:"500"}}
+            >No notes available.</p>
           )}
         </div>
       </div>
@@ -252,6 +284,8 @@ const NotePad = () => {
               onChange={(e) => setMessage(e.target.value)}
               cols="200"
               rows="10"
+              // line 288 added by sahil karnekar date 23-10-2024
+              style={{width: "-webkit-fill-available"}}
             ></textarea>
             <button type="submit" className="note-submit-btn">
               Save Changes

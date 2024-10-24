@@ -50,6 +50,8 @@ const CallingList = ({
   const navigator = useNavigate();
   const [showExportConfirmation, setShowExportConfirmation] = useState(false);
   const [isDataSending, setIsDataSending] = useState(false);
+  // this state is created by sahil karnekar date 24-10-2024
+  const [errorForShare, setErrorForShare] = useState("");
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_48
   const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
@@ -412,13 +414,24 @@ const CallingList = ({
   //akash_pawar_SelfCallingTracker_ShareFunctionality_17/07_472
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_475
+
+  // this code line 420 to 427 added by sahil karnekar date 24-10-2024
   const handleShare = async () => {
+    if (userType === "TeamLeader") {
+      if (selectedRecruiters.recruiterId === "") {
+        setErrorForShare("Please Select A Recruiter ! ")
+        return;
+      }else{
+        setErrorForShare("");
+      }
+    }
     setIsDataSending(true);
     let url = `${API_BASE_URL}/updateIds/${userType}`;
     let requestData;
     if (
       userType === "TeamLeader" &&
-      selectedRecruiters.recruiterId != "" &&
+      // this line updated by sahil karnekar date 24-10-2024
+      selectedRecruiters.recruiterId !== "" &&
       selectedRows.length > 0
     ) {
       requestData = {
@@ -704,6 +717,8 @@ const CallingList = ({
           {!showUpdateCallingTracker ? (
             <>
               <div className="search">
+                {/* this line updated by sahil karnekar date 24-10-2024 */}
+                <div style={{ display: "flex", alignItems: "center" }}>
                 <i
                   className="fa-solid fa-magnifying-glass"
                   onClick={() => {
@@ -712,6 +727,18 @@ const CallingList = ({
                   }}
                   style={{ margin: "10px", width: "auto", fontSize: "15px" }}
                 ></i>
+                {/* this line 731 to 741 added by sahil karnekar date 24-10-2024 */}
+                
+                {showSearchBar && (
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search here..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              )}
+              </div>
                 <h3 style={{ color: "gray" }}>Calling Tracker</h3>
 
                 <div
@@ -800,16 +827,7 @@ const CallingList = ({
                   </button>
                 </div>
               </div>
-              {showSearchBar && (
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search here..."
-                  value={searchTerm}
-                  style={{ marginBottom: "10px" }}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              )}
+
 
               <div className="filter-dropdowns">
                 {/* updated this filter section by sahil karnekar date 22-10-2024 */}
@@ -1778,6 +1796,12 @@ const CallingList = ({
                           </div>
                           {/* akash_pawar_LineUpList_ShareFunctionality_17/07_1747 */}
                         </Modal.Body>
+                        {/* this line added by sahil karnekar date 24-10-2024 */}
+                        {
+                         errorForShare && (
+                          <div style={{textAlign:"center", color:"red"}}>{errorForShare}</div>
+                         )
+                        }
                         <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
                           <button
                             onClick={handleShare}

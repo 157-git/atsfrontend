@@ -443,11 +443,12 @@ const [remainingDays, setRemainingDays] = useState(null);
               </button>
             </div>
 
+{/* this small code updated by sahil karnekar date 24-10-2024 */}
             {!isActiveInquiry ? (
-              <div className="after-main-div">
+              <div className="after-main-div" style={{ width: "-webkit-fill-available" }}>
                 <form className="Join-form-data" onSubmit={JoininghandleSubmit}>
                   <div className="after-h3">
-                    <h3>Joining Processe </h3>
+                    <h3>Joining Process </h3>
                   </div>
 
                   <div className="after-mail-div">
@@ -476,7 +477,8 @@ const [remainingDays, setRemainingDays] = useState(null);
                   <div className="after-documnet-main">
                     <div className="after-documnet-sub">
                       <hr />
-                      <div className="after-document-fisrt">
+                      {/* this line is updated by sahil karnekar date 24-10-2024 */}
+                      <div className="after-document-fisrt" style={{height:"auto"}}>
                         <div className="after-document-files">
                           <label htmlFor="adharCard" className="after-label">
                             Aadhar Card:

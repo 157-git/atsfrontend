@@ -612,7 +612,8 @@ function DailyWork({
               onClick={(e) => e.stopPropagation()}
               className="dw-modal-content"
             >
-              <Modal.Header closeButton>
+              {/* none working close button removed date : 23-10-2024 */}
+              <Modal.Header >
                 <Modal.Title className="dw-modal-title">
                   Break Runing...
                 </Modal.Title>
