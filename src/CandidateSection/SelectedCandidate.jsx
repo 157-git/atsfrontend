@@ -685,6 +685,8 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
           {!selectedCandidateId ? (
             <>
               <div className="search">
+                {/* line 689 added by sahil karnekar date 24-10-2024 */}
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <i
                   className="fa-solid fa-magnifying-glass"
                   onClick={() => {
@@ -693,6 +695,17 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                   }}
                   style={{ margin: "10px", width: "auto", fontSize: "15px" }}
                 ></i>
+                {/* line 698 to 708 added by sahil karnekar date 24-10-2024 */}
+                 {showSearchBar && (
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search here..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              )}
+              </div>
                 <h5 style={{ color: "grey", textAlign: "center" }}>
                   Selected Candidates{" "}
                 </h5>
@@ -781,16 +794,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                   </button>
                 </div>
               </div>
-              {showSearchBar && (
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search here..."
-                  value={searchTerm}
-                  style={{ marginBottom: "10px" }}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              )}
+
               {/* line 795 to 844 added by sahil karnekar date 22-10-2024 */}
 <div className="filter-dropdowns">
    {/* updated this filter section by sahil karnekar date 22-10-2024 */}
@@ -1670,6 +1674,8 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                                               htmlFor={recruiters.employeeId}
                                             >
                                               <input
+                                              // line 1678 added by sahil karnekar date 24-10-2024
+                                              style={{width:"auto"}}
                                                 type="radio"
                                                 id={recruiters.employeeId}
                                                 name="recruiter"

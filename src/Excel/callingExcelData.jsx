@@ -457,27 +457,33 @@ const CallingExcelList = ({
     <div className="App-after1">
       {!selectedCandidate && (
         <div className="table-container">
+          {/* this line462 to 485 added by sahil karnekar date 24-10-2024 */}
           <div className="search">
-            <i
-              className="fa-solid fa-magnifying-glass"
-              onClick={() => setShowSearchBar(!showSearchBar)}
-              style={{ margin: "10px", width: "auto", fontSize: "15px" }}
-            ></i>
+          <div style={{ display: "flex", alignItems: "center" }}>
+                <i
+                  className="fa-solid fa-magnifying-glass"
+                  onClick={() => {
+                    setShowSearchBar(!showSearchBar);
+                    setShowFilterSection(false);
+                  }}
+                  style={{ margin: "10px", width: "auto", fontSize: "15px" }}
+                ></i>
+                 {showSearchBar && (
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search here..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              )}
+              </div>
             <h1 className="excel-calling-data-heading">Calling Tracker Data</h1>
             <button onClick={toggleFilterSection} className="daily-tr-btn">
               Filter <i className="fa-solid fa-filter"></i>
             </button>
           </div>
-          {showSearchBar && (
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search here..."
-              value={searchTerm}
-              style={{ marginBottom: "10px" }}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          )}
+         
 
           {showFilterSection && (
             <div className="filter-section">

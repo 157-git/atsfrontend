@@ -561,6 +561,14 @@ const handleFilterSelect = (key, value) => {
                 paddingTop: "3px",
               }}
             >
+              {/* line 565 to 571 added by sahil karnekar date 24-10-2024 */}
+              <i
+                style={{ fontSize: "22px" }}
+                onClick={
+                  toggleShortListed
+                } /*Akash_Pawar_ShortlistedCandidate_toggleShortListed(show interview candidate)_23/07_LineNo_591*/
+                className="fa-regular fa-calendar"
+              ></i>
               <i
                 className="fa-solid fa-magnifying-glass"
                 onClick={() => {
@@ -569,13 +577,17 @@ const handleFilterSelect = (key, value) => {
                 }}
                 style={{ margin: "10px", width: "auto", fontSize: "15px" }}
               ></i>
-              <i
-                style={{ fontSize: "22px" }}
-                onClick={
-                  toggleShortListed
-                } /*Akash_Pawar_ShortlistedCandidate_toggleShortListed(show interview candidate)_23/07_LineNo_591*/
-                className="fa-regular fa-calendar"
-              ></i>
+              {/* line 581 to 590 updated by sahil karnekar date 24-10-2024 */}
+               {showSearchBar && (
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search here..."
+                  value={searchTerm}
+                  
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              )}
             </div>
             <h5 style={{ color: "gray", paddingTop: "5px" }}>
               Shortlisted Candidate
@@ -637,16 +649,7 @@ const handleFilterSelect = (key, value) => {
           </div>
           {!showUpdateCallingTracker ? (
             <div>
-              {showSearchBar && (
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search here..."
-                  value={searchTerm}
-                  style={{ marginBottom: "10px" }}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              )}
+                        
 
                {/* updated this filter section by sahil karnekar date 22-10-2024 */}
                {showFilterSection && (

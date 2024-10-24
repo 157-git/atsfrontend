@@ -498,7 +498,8 @@ setIsFilterVisible(false);
               </span>
               <div className="names">
                 <p>
-                  <b>Job eId : </b>
+                  {/* simple spelling mistake Corrected */}
+                  <b>Job Id : </b>
                   {requirementData.requirementId || "N/A"}
                 </p>
                 <p>

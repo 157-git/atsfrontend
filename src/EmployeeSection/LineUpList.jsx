@@ -713,6 +713,8 @@ const LineUpList = ({
           {!showUpdateCallingTracker ? (
             <>
               <div className="search">
+                {/* this line is added by sahil karnekar date 24-10-2024 */}
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <i
                   className="fa-solid fa-magnifying-glass"
                   onClick={() => {
@@ -721,6 +723,17 @@ const LineUpList = ({
                   }}
                   style={{ margin: "10px", width: "auto", fontSize: "15px" }}
                 ></i>
+                {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
+                 {showSearchBar && (
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search here..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              )}
+              </div>
                 <h5 style={{ color: "gray" }}>Lineup Tracker</h5>
 
                 <div
@@ -811,16 +824,7 @@ const LineUpList = ({
                 </div>
               </div>
 
-              {showSearchBar && (
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search here..."
-                  value={searchTerm}
-                  style={{ marginBottom: "10px" }}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              )}
+             
 
               <div className="filter-dropdowns">
                 {/* updated this filter section by sahil karnekar date 22-10-2024 */}
