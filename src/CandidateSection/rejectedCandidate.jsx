@@ -9,7 +9,7 @@ import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { toast } from "react-toastify";
 // SwapnilRokade_RejectedCandidate_ModifyFilters_11/07
-const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
+const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployeeName, }) => {
   const [showRejectedData, setShowRejectedData] = useState([]);
   const [showUpdateCallingTracker, setShowUpdateCallingTracker] =
     useState(false);
@@ -39,6 +39,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
   const [showExportConfirmation, setShowExportConfirmation] = useState(false);
   let [color, setColor] = useState("#ffcb9b");
   const [isDataSending, setIsDataSending] = useState(false);
+  const [errorForShare, setErrorForShare] = useState("");
 
   const { employeeId } = useParams();
   const newEmployeeId = parseInt(employeeId, 10);
@@ -236,6 +237,14 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
   };
 
   const handleShare = async () => {
+    if (userType === "TeamLeader") {
+      if (selectedRecruiters.recruiterId === "") {
+        setErrorForShare("Please Select A Recruiter ! ")
+        return;
+      }else{
+        setErrorForShare("");
+      }
+    }
     setIsDataSending(true);
     let url = `${API_BASE_URL}/updateIds/${userType}`;
     let requestData;
@@ -1705,6 +1714,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                                               htmlFor={recruiters.employeeId}
                                             >
                                               <input
+                                              style={{width:"auto"}}
                                                 type="radio"
                                                 id={recruiters.employeeId}
                                                 name="recruiter"
@@ -1735,6 +1745,11 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId }) => {
                           </div>
                           {/* akash_pawar_RejectedCandidate_ShareFunctionality_18/07_1563 */}
                         </Modal.Body>
+                        {
+                         errorForShare && (
+                          <div style={{textAlign:"center", color:"red"}}>{errorForShare}</div>
+                         )
+                        }
                         <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
                           <button
                             onClick={handleShare}

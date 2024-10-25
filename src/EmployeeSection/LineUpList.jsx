@@ -48,6 +48,7 @@ const LineUpList = ({
   const navigator = useNavigate();
   const [showExportConfirmation, setShowExportConfirmation] = useState(false);
   const [isDataSending, setIsDataSending] = useState(false);
+  const [errorForShare, setErrorForShare] = useState("");
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_48
   const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
@@ -419,12 +420,22 @@ const LineUpList = ({
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_475
   const handleShare = async () => {
+
+    if (userType === "TeamLeader") {
+      if (selectedRecruiters.recruiterId === "") {
+        setErrorForShare("Please Select A Recruiter ! ")
+        return;
+      }else{
+        setErrorForShare("");
+      }
+    }
+
     setIsDataSending(true);
     let url = `${API_BASE_URL}/updateIds/${userType}`;
     let requestData;
     if (
       userType === "TeamLeader" &&
-      selectedRecruiters.recruiterId != "" &&
+      selectedRecruiters.recruiterId !== "" &&
       selectedRows.length > 0
     ) {
       requestData = {
@@ -1768,6 +1779,11 @@ const LineUpList = ({
                           </div>
                           {/* akash_pawar_LineUpList_ShareFunctionality_17/07_1747 */}
                         </Modal.Body>
+                        {
+                         errorForShare && (
+                          <div style={{textAlign:"center", color:"red"}}>{errorForShare}</div>
+                         )
+                        }
                         <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
                           <button
                             onClick={handleShare}

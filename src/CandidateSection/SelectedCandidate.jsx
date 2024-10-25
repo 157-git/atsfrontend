@@ -39,6 +39,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   const [showExportConfirmation, setShowExportConfirmation] = useState(false);
   const [isDataSending, setIsDataSending] = useState(false);
   const [clickedTime, setClickedTime] = useState();
+  const [errorForShare, setErrorForShare] = useState("");
 
   //akash_pawar_SelectedCandidate_ShareFunctionality_18/07_34
   const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
@@ -400,6 +401,16 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   };
 
   const handleShare = async () => {
+
+    if (userType === "TeamLeader") {
+      if (selectedRecruiters.recruiterId === "") {
+        setErrorForShare("Please Select A Recruiter ! ")
+        return;
+      }else{
+        setErrorForShare("");
+      }
+    }
+
     setIsDataSending(true);
     let url = `${API_BASE_URL}/updateIds/${userType}`;
     let requestData;
@@ -1706,6 +1717,11 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                           </div>
                           {/* akash_pawar_SelectedCandidate_ShareFunctionality_18/07_1523 */}
                         </Modal.Body>
+                        {
+                         errorForShare && (
+                          <div style={{textAlign:"center", color:"red"}}>{errorForShare}</div>
+                         )
+                        }
                         <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
                           <button
                             onClick={handleShare}

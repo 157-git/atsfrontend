@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 
-const EmployeeMasterSheet = () => {
+const EmployeeMasterSheet = ({loginEmployeeName}) => {
   const [data, setData] = useState([]);
   // sahil karnekar line 14 to 111
   const [showFilterSection, setShowFilterSection] = useState(false);
@@ -167,6 +167,7 @@ const EmployeeMasterSheet = () => {
   const [showForwardPopup, setShowForwardPopup] = useState(false);
   const [isDataSending, setIsDataSending] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [errorForShare, setErrorForShare] = useState("");
 
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_39
   const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
@@ -317,6 +318,14 @@ const EmployeeMasterSheet = () => {
   };
 
   const handleShare = async () => {
+    if (userType === "TeamLeader") {
+      if (selectedRecruiters.recruiterId === "") {
+        setErrorForShare("Please Select A Recruiter ! ")
+        return;
+      }else{
+        setErrorForShare("");
+      }
+    }
     setIsDataSending(true);
     let url = `${API_BASE_URL}/updateIds/${userType}`;
     let requestData;
@@ -1853,6 +1862,7 @@ const EmployeeMasterSheet = () => {
                                     >
                                       <label htmlFor={recruiters.employeeId}>
                                         <input
+                                        style={{width:"auto"}}
                                           type="radio"
                                           id={recruiters.employeeId}
                                           name="recruiter"
@@ -1882,6 +1892,11 @@ const EmployeeMasterSheet = () => {
                       </div>
                       {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_1225 */}
                     </Modal.Body>
+                    {
+                         errorForShare && (
+                          <div style={{textAlign:"center", color:"red"}}>{errorForShare}</div>
+                         )
+                        }
                     <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
                       <button
                         onClick={handleShare}
