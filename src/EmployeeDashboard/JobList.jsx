@@ -398,12 +398,12 @@ setIsFilterVisible(false);
                     onClick={()=>handleEditBtn(item)}>
                       Edit 
                     </button>
-                    <button className="daily-tr-btn"
-                      // onClick={() => handleHoldClick(job.requirementId)}
-                    >
-                      Hold
+                    {/* <button className="daily-tr-btn" */}
+                      {/* // onClick={() => handleHoldClick(job.requirementId)} */}
+                    {/* > */}
+                      {/* Hold */}
                       {/* {heldJobId === job.requirementId ? "UnHold" : "Hold"} */}
-                    </button>
+                    {/* </button> */}
                   </div>
                 ) : null}
 

@@ -175,16 +175,19 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
       formData
     );
     
-    // Check if the response is successful and print the response data
     if (response.status === 200) {
-      const responseData = response.data; // Assuming it's a map { fileName: count }
+      const responseData = response.data;
+      const uploadedCount = responseData["Uploaded Resumes"] || 0;
+      const existingCount = responseData["Existing Resumes"] || 0;
+
+      // Show success message with counts
+      toast.success(
+        `Resume uploaded Successfully\n` +
+        `Uploaded Resumes Count : ${uploadedCount}\n` +
+        `Already Exists Resume :  ${existingCount}`
+      );
       
-      // Format the response data as needed for display
-      let formattedResponse = Object.entries(responseData)
-        .map(([fileName, count]) => `${fileName}: ${count} resumes processed`)
-        .join('\n');
-      
-      toast.success(`File Uploaded Successfully\n${formattedResponse}`);
+
       setUploadSuccessResume(true);
       setActiveTable("ResumeList");
       hideSuccessMessage();

@@ -1714,7 +1714,7 @@ const CallingTrackerForm = ({
                     value={callingTracker.communicationRating}
                     onChange={handleChange}
                     className="plain-input"
-                    placeholder="communicationRating"
+                    placeholder="Communication Rating"
                   />
                    {/* this line added by sahil date 22-10-2024 */}
                   {callingTracker.selectYesOrNo === "Interested" && !callingTracker.communicationRating && ( <span className="requiredFieldStar">*</span>)}

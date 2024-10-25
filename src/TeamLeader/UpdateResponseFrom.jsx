@@ -3,9 +3,9 @@
 
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
+import Loader from "../EmployeeSection/loader";
 
 
 // SwapnilRokade_UpdateResponseFrom_addedProcessImprovmentEvaluatorFunctionalityStoringInterviweResponse_08_to_486_29/07/2024
@@ -428,7 +428,7 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
       </form>
       {submited && (
         <div className="SCE_Loading_Animation">
-          <ClipLoader size={50} color="#ffb281" />
+          <Loader size={50} color="#ffb281" />
         </div>
       )}
     </div>
