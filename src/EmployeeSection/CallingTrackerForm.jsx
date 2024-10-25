@@ -2123,6 +2123,9 @@ const ModalComponent = ({
   handleClose,
   startingPoint,
   endingPoint,
+  // props added by sahil karnekar date 25-10-2024
+  currentCTCInLakh,
+  currentCTCInThousand,
   expectedCTCInLakh = "",
   expectedCTCInThousand = "",
   convertedCurrentCTC,
@@ -2136,10 +2139,15 @@ const ModalComponent = ({
   const [calculatedHike, setCalculatedHike] = useState("");
   const [expectedCTC, setExpectedCTC] = useState("");
   const [expectedCTCLakh, setExpectedCTCLakh] = useState(expectedCTCInLakh);
-  const [expectedCTCThousand, setExpectedCTCThousand] = useState(
-    expectedCTCInThousand
-  );
+  // updated by sahil karnekar date 25-10-2024
+  const [expectedCTCThousand, setExpectedCTCThousand] = useState(expectedCTCInThousand);
   const [showHikeInput, setShowHikeInput] = useState(false);
+  // this 2 states are added by sahil karnekar date 25-10-2024
+  const [currentCTCInLakhState, setCurrentCTCInLakhState] = useState(currentCTCInLakh);
+  const [currentCTCInThousandState, setCurrentCTCInThousandState] = useState(currentCTCInThousand);
+
+  console.log(currentCTCInLakhState)
+  console.log(currentCTCInThousandState)
 
   useEffect(() => {
     setOrigin(startingPoint);
@@ -2147,33 +2155,33 @@ const ModalComponent = ({
     setExpectedCTCLakh(expectedCTCInLakh);
     setExpectedCTCThousand(expectedCTCInThousand);
     setExpectedCTC("");
-    setShowHikeInput(true); // Reset hike input visibility on prop change
+    // this line updated by sahil karnekar date 25-10-2024
+    setShowHikeInput(true);
   }, [startingPoint, endingPoint, expectedCTCInLakh, expectedCTCInThousand]);
 
   useEffect(() => {
     if (expectedHike) {
-      const currentCTCNum = parseFloat(convertedCurrentCTC);
+      // this lines updated by sahil karnekar date 25-10-2024
+      const currentCTCNum = parseFloat(currentCTCInLakhState) * 100000 + parseFloat(currentCTCInThousandState) * 1000;
       const expectedHikeNum = parseFloat(expectedHike);
-      const expectedCTCNum =
-        currentCTCNum + (currentCTCNum * expectedHikeNum) / 100;
+      const expectedCTCNum = currentCTCNum + (currentCTCNum * expectedHikeNum) / 100;
       setExpectedCTC(expectedCTCNum.toFixed(2));
       setCalculatedHike("");
     }
-    setCalculatedHike("");
-  }, [expectedHike, convertedCurrentCTC]);
+  }, [expectedHike, currentCTCInLakhState, currentCTCInThousandState]);
 
   useEffect(() => {
     if (expectedCTCLakh || expectedCTCThousand) {
       const lakhValue = parseFloat(expectedCTCLakh) || 0;
       const thousandValue = parseFloat(expectedCTCThousand) || 0;
       const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
-      const currentCTCNum = parseFloat(convertedCurrentCTC);
-      const expectedCTCNum = parseFloat(combinedCTC);
-      const hikePercentage =
-        ((expectedCTCNum - currentCTCNum) / currentCTCNum) * 100;
+      // this lines updated by sahil karnekar date 25-10-2024
+      const currentCTCNum = parseFloat(currentCTCInLakhState) * 100000 + parseFloat(currentCTCInThousandState) * 1000;
+      const hikePercentage = ((combinedCTC - currentCTCNum) / currentCTCNum) * 100;
       setCalculatedHike(hikePercentage.toFixed(2));
     }
-  }, [expectedCTCLakh, expectedCTCThousand, convertedCurrentCTC]);
+    // this line is updated by sahil karnekar date 25-10-2024
+  }, [expectedCTCLakh, expectedCTCThousand, currentCTCInLakhState, currentCTCInThousandState]);
 
   return (
     <Modal size="xl" centered show={show} onHide={handleClose}>
@@ -2275,8 +2283,17 @@ const ModalComponent = ({
                             id="currentCTCLakh"
                             className="form-control"
                             placeholder="Enter current CTC in lakh"
-                            value={convertedCurrentCTC}
-                            readOnly
+                            // line number 2286 to 2372 changed by sahil karnekar date 25-10-2024
+                            value={currentCTCInLakhState}
+                          onChange={(e) => setCurrentCTCInLakhState(e.target.value)}
+                          />
+                          <input
+                            type="number"
+                            id="currentCTCLakh"
+                            className="form-control"
+                            placeholder="Enter current CTC in lakh"
+                            value={currentCTCInThousandState}
+                          onChange={(e) => setCurrentCTCInThousandState(e.target.value)}
                           />
                         </div>
                       </td>
@@ -2289,7 +2306,7 @@ const ModalComponent = ({
                             className="form-control"
                             placeholder="Enter expected hike percentage"
                             value={expectedHike}
-                            onChange={(e) => setExpectedHike(e.target.value)}
+                          onChange={(e) => setExpectedHike(e.target.value)}
                           />
                         </div>
                       </td>
@@ -2307,23 +2324,14 @@ const ModalComponent = ({
                 <table className="table table-bordered">
                   <thead>
                     <tr>
-                      <th className="sal-cal-th">Current Salary</th>
+                   
                       <th className="sal-cal-th">Expected Salary</th>
                       <th className="sal-cal-th">Calculated Hike (%)</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="text-secondary">
-                        <input
-                          type="number"
-                          id="currentCTCLakh"
-                          className="form-control"
-                          placeholder="Enter current CTC in lakh"
-                          value={convertedCurrentCTC}
-                          readOnly
-                        />
-                      </td>
+                      
                       <td className="text-secondary">
                         <div>
                           <div className="form-group">
@@ -2333,15 +2341,15 @@ const ModalComponent = ({
                               id="expectedCTCLakh"
                               className="form-control"
                               placeholder="Enter expected CTC in lakh"
-                              value={expectedCTCLakh}
                               maxLength="2"
                               pattern="\d*"
                               inputMode="numeric"
-                              onChange={(e) => {
-                                const value = e.target.value;
-                                setExpectedCTCLakh(value);
-                                onUpdateExpectedCTCLakh(value); // Send to parent
-                              }}
+                              value={expectedCTCLakh}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setExpectedCTCLakh(value);
+                            onUpdateExpectedCTCLakh(value);
+                          }}
                             />
                           </div>
                           <div className="form-group">
@@ -2357,11 +2365,11 @@ const ModalComponent = ({
                               pattern="\d*"
                               inputMode="numeric"
                               value={expectedCTCThousand}
-                              onChange={(e) => {
-                                const value = e.target.value;
-                                setExpectedCTCThousand(value);
-                                onUpdateExpectedCTCThousand(value); // Send to parent
-                              }}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setExpectedCTCThousand(value);
+                            onUpdateExpectedCTCThousand(value);
+                          }}
                             />
                           </div>
                         </div>

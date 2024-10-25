@@ -32,8 +32,6 @@ const JobListing = () => {
   const [showEDM, setShowEDM] = useState(false);
   const [showAddJobDescription, setShowAddJobDescription] = useState(false);
   const [showAddJobDiscriptionNew,setShowAddJobDescriptionNew] =useState(false);
-  // state added by sahil karnekar date 23-10-2024
-  const[isFilterVisible, setIsFilterVisible] = useState(true);
   const [searchQuery, setSearchQuery] = useState({
     designation: "",
     location: "",
@@ -189,8 +187,6 @@ const JobListing = () => {
         setRequirementData(data);
         // setJobDescription(data)
         setShowViewMore(true);
-        // line 193 added by sahil karnekar date 23-10-2024
-setIsFilterVisible(false);
       })
       .catch((error) => console.error("Error fetching data:", error));
   };
@@ -203,8 +199,7 @@ setIsFilterVisible(false);
 
   const handleclose = () => {
     setShowViewMore(false);
-    // line 207 added by sahil karnekar date 23-10-2024
-    setIsFilterVisible(true);
+
   };
 
 
@@ -264,8 +259,6 @@ setIsFilterVisible(false);
     <>
     {!showAddJobDiscriptionNew ? (
       <>
-      {/* line 268 added by sahil karnekar date : 23-10-2024 */}
-      {isFilterVisible && (
       <div className="jd-header-search" >
         <div className="search-container" >
           <div className="search-bar" >
@@ -358,8 +351,6 @@ setIsFilterVisible(false);
           </div>
         </div>
       </div>
-      // line 362 added by sahil karnekar date : 23-10-2024
-      )}
 
       {!showViewMore && (
         <div className="jdCards">
