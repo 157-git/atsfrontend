@@ -278,7 +278,7 @@ const NotePad = () => {
           >
             &times;
           </span>
-          <form onSubmit={saveMessage}>
+          <form className="note-pad-edit-form" onSubmit={saveMessage}>
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}

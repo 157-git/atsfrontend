@@ -168,14 +168,15 @@
 .tooltiptext {
   white-space: nowrap;
 }
+
 .attendancerows-head {
   background-color: var(--Bg-color);
   color:var(--text-color);
-  /* font-weight: 100; */
   text-align: center;
   font-size: 18px;
   border: 1px solid gray;
   max-width: 300px;
+  z-index: 1;
 }
 
 .attendanceTableData::-webkit-scrollbar {

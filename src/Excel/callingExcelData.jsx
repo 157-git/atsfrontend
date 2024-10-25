@@ -11,6 +11,7 @@ const CallingExcelList = ({
   onCloseTable,
   loginEmployeeName,
   toggleSection,
+  onsuccessfulDataAdditions
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOptions, setFilterOptions] = useState([]);
@@ -831,8 +832,9 @@ const CallingExcelList = ({
           loginEmployeeName={loginEmployeeName}
           onClose={() => setSelectedCandidate(null)}
           onSuccess={handleUpdateSuccess}
+          onsuccessfulDataAdditions={onsuccessfulDataAdditions}
     
-        />
+        /> 
       )}
     </div>
   );

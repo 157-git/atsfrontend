@@ -1859,10 +1859,10 @@ const CallingList = ({
             <UpdateCallingTracker
               candidateId={selectedCandidateId}
               employeeId={employeeId}
-              onsuccessfulDataUpdation={onsuccessfulDataUpdation}
               fromCallingList={true}
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
+              onsuccessfulDataUpdation={onsuccessfulDataUpdation}
             />
           )}
         </>

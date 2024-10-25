@@ -399,10 +399,10 @@ setIsFilterVisible(false);
                       Edit 
                     </button>
                     <button className="daily-tr-btn"
-                      onClick={() => handleHoldClick(job.requirementId)}
+                      // onClick={() => handleHoldClick(job.requirementId)}
                     >
-
-                      {heldJobId === job.requirementId ? "UnHold" : "Hold"}
+                      Hold
+                      {/* {heldJobId === job.requirementId ? "UnHold" : "Hold"} */}
                     </button>
                   </div>
                 ) : null}
@@ -503,6 +503,25 @@ setIsFilterVisible(false);
                   {requirementData.requirementId || "N/A"}
                 </p>
                 <p>
+                  <b>Company Name : </b>
+                  {requirementData.companyName || "N/A"}
+                </p>
+                <p>
+                  <b>Designation :</b>
+                  {requirementData.designation || "N/A"}
+                </p>
+                <p>
+                  <b>Job Role : </b>
+                  {requirementData.jobRole || "N/A"}
+                </p>
+                <p>
+                  <b>Key Skills :</b>
+                  {requirementData.skills || "N/A"}
+                </p>
+                <p>
+                  <b>Salary :</b> {requirementData.salary || "N/A"}
+                </p>
+                <p>
                   <b>Field : </b>
                   {requirementData.field}
                 </p>
@@ -510,25 +529,22 @@ setIsFilterVisible(false);
                   <b>Location :</b>
                   {requirementData.location || "N/A"}
                 </p>
-                <p>
-                  <b>Salary :</b> {requirementData.salary || "N/A"}
-                </p>
-                <p>
-                  <b>Designation :</b>
-                  {requirementData.designation || "N/A"}
-                </p>
+               
                 <p>
                   <b>Educational Qualifications :</b>
                   {requirementData.qualification || "N/A"}
                 </p>
+
                 <p>
                   <b>Experience :</b>
                   {requirementData.experience || "N/A"}
                 </p>
+
                 <p>
-                  <b>Key Skills :</b>
-                  {requirementData.skills || "N/A"}
+                  <b>Year Of Passing :</b>
+                  {requirementData.year_of_passing || "N/A"}
                 </p>
+              
                 <p>
                   <b>Company Link :</b>
                   <a href={requirementData.companyLink || "#"}>Website</a>
@@ -544,10 +560,7 @@ setIsFilterVisible(false);
                 <p>
                   <b>Notice Period :</b> {requirementData.noticePeriod || "N/A"}
                 </p>
-                <p>
-                  <b>Job Role : </b>
-                  {requirementData.jobRole || "N/A"}
-                </p>
+                
                 <p>
                   <b>Job Type : </b>
                   {requirementData.jobType || "N/A"}

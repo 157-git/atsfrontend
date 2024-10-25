@@ -19,15 +19,14 @@ import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
 // this libraries added by sahil karnekar date 21-10-2024
-import { TimePicker } from 'antd';
-import dayjs from 'dayjs';
-
-
+import { TimePicker } from "antd";
+import dayjs from "dayjs";
 
 const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
   initialData = {},
   loginEmployeeName,
+  onsuccessfulDataUpdation
 }) => {
   const { employeeId } = useParams();
   const [submited, setSubmited] = useState(false);
@@ -57,7 +56,7 @@ const CallingTrackerForm = ({
     fullAddress: "",
     communicationRating: "",
     selectYesOrNo: "",
-    callingFeedback: ""
+    callingFeedback: "",
   };
 
   const initialLineUpState = {
@@ -82,7 +81,7 @@ const CallingTrackerForm = ({
     interviewTime: "",
     finalStatus: "",
     feedBack: "",
-    resume: []
+    resume: [],
   };
 
   const [callingTracker, setCallingTracker] = useState(
@@ -161,7 +160,6 @@ const CallingTrackerForm = ({
 
   const ensureStringValue = (value) =>
     value !== undefined && value !== null ? String(value) : "";
-
   const fetchRequirementOptions = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/company-details`);
@@ -184,7 +182,8 @@ const CallingTrackerForm = ({
       errors.sourceName = "Source Name is required";
     }
     // this validation added by sahil karnekar date 21-10-2024 line 187 to 195
-    const emailPattern = /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+    const emailPattern =
+      /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
     if (!callingTracker.candidateEmail) {
       errors.candidateEmail = "Email is required";
     } else if (!emailPattern.test(callingTracker.candidateEmail)) {
@@ -246,22 +245,16 @@ const CallingTrackerForm = ({
     const { name, value } = e.target || e;
     // sahil karnekar line 249 to 274
     if (name === "candidateEmail") {
-
       const emailPattern = /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
-
-
       if (/\s/.test(value)) {
         return;
       }
-
-
       setCallingTracker({ ...callingTracker, [name]: value });
-
-
       if (value !== "" && !emailPattern.test(value)) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          [name]: "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).",
+          [name]:
+            "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).",
         }));
       } else {
         setErrors((prevErrors) => ({
@@ -313,7 +306,6 @@ const CallingTrackerForm = ({
   const handleLineUpChange = (e) => {
     const { name, value } = e.target;
 
-
     // line number 314 to 324 added by sahil karnekar date : 15-10-2024
     if (name === "dateOfBirth") {
       console.log(value);
@@ -325,7 +317,6 @@ const CallingTrackerForm = ({
         setErrorForDOB("");
       }
     }
-
 
     // Restrict non-numeric input for specific fields
     if (
@@ -363,7 +354,6 @@ const CallingTrackerForm = ({
         }));
         return;
       } else {
-
         setErrors((prevErrors) => ({
           ...prevErrors,
           experienceMonth: "",
@@ -390,6 +380,7 @@ const CallingTrackerForm = ({
 
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
+
 
   const handleSubmit = async (e) => {
     setShowConfirmation(false);
@@ -418,6 +409,7 @@ const CallingTrackerForm = ({
     }
     setSubmited(true);
     setLoading(true);
+
     try {
       let dataToUpdate = {
         callingTracker: { ...callingTracker },
@@ -447,7 +439,7 @@ const CallingTrackerForm = ({
 
       dataToUpdate.lineUp = {
         ...lineUpData,
-        resume: lineUpData.resume, // Ensure the resume field is added here
+        resume: lineUpData.resume,
       };
 
       if (userType === "Recruiters") {
@@ -467,29 +459,40 @@ const CallingTrackerForm = ({
         }
       );
 
-      if (response) {
+      if(response.status === 200 || response.status === 201 || response) {
         if (callingTracker.selectYesOrNo === "Interested") {
           onsuccessfulDataAdditions(true);
-
         } else {
           onsuccessfulDataAdditions(false);
         }
         setSubmited(false);
-        setLoading(true)
+        setLoading(true);
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 4000);
         toast.success("Candidate Added Successfully..");
         setCallingTracker(initialCallingTrackerState);
         setLineUpData(initialLineUpState);
       }
+      console.log("-------    bye    ----------");
     } catch (error) {
-      setSubmited(false);
-      toast.error("An error occurred: " + error.message);
-    } finally {
+    setSubmited(false);
+    console.log("-------    Hello    ----------");
+    
+    // Check for full error details
+    if (error.response) {
+        console.log("Error Response:", error.response);
+        toast.error("Error: " + error.response.data.message || "An error occurred");
+    } else if (error.request) {
+        console.log("Error Request:", error.request);
+        toast.error("No response received from the server");
+    } else {
+        console.log("Error Message:", error.message);
+        toast.error("An error occurred: " + error.message);
+    }
+}finally {
       setLoading(false);
     }
   };
-
 
   //Arshad Attar Added This , Now Resume will added Proper in data base.  18-10-2024
   //Start Line 451
@@ -531,10 +534,8 @@ const CallingTrackerForm = ({
     const value = e.target.value;
     if (value === "") {
       setIsOtherLocationSelected(true);
-
     } else {
       setIsOtherLocationSelected(false);
-
     }
     setCallingTracker((prevState) => ({
       ...prevState,
@@ -543,28 +544,21 @@ const CallingTrackerForm = ({
     setErrors((prevErrors) => ({ ...prevErrors, currentLocation: "" }));
   };
 
-
-
   // sahil karnekar line 507 to 519 complete method date 21-10-2024
   const handleEducationChange = (e) => {
     const value = e.target.value;
     if (value === "Other") {
-
       setLineUpData({ ...lineUpData, qualification: "" });
     } else {
-
       setLineUpData({ ...lineUpData, qualification: value });
     }
     setErrors((prevErrors) => ({ ...prevErrors, qualification: "" }));
-
   };
-
   const handleRequirementChange = (e) => {
     const { value } = e.target;
     const selectedRequirement = requirementOptions.find(
       (requirement) => requirement.requirementId === parseInt(value)
     );
-
     if (selectedRequirement) {
       setCallingTracker((prevState) => ({
         ...prevState,
@@ -908,7 +902,9 @@ const CallingTrackerForm = ({
 
                     {/* Display error message if any */}
                     {errors.currentLocation && (
-                      <div className="error-message">{errors.currentLocation}</div>
+                      <div className="error-message">
+                        {errors.currentLocation}
+                      </div>
                     )}
                   </div>
                   <div className="calling-tracker-two-input">
@@ -957,7 +953,9 @@ const CallingTrackerForm = ({
                   { !callingTracker.callingFeedback && ( <span className="requiredFieldStar">*</span>)}
                   </div>
                   {errors.callingFeedback && (
-                    <div className="error-message">{errors.callingFeedback}</div>
+                    <div className="error-message">
+                      {errors.callingFeedback}
+                    </div>
                   )}
                 </div>
               </div>
@@ -1503,7 +1501,8 @@ const CallingTrackerForm = ({
                       if (/^\d{0,4}$/.test(value)) {
                         const year = parseInt(value, 10);
 
-                        if (value.length === 4) { // Trigger validation after 4 digits are entered
+                        if (value.length === 4) {
+                          // Trigger validation after 4 digits are entered
                           if (year > 2025) {
                             alert("Cannot enter year above 2025");
                           } else if (year < 1947) {
@@ -1616,7 +1615,6 @@ const CallingTrackerForm = ({
                     {callingTracker.selectYesOrNo === "Interested" && !lineUpData.experienceYear && ( <span className="requiredFieldStar">*</span>)}
                     </div>
                     {errors.experienceYear && (
-
                       <div className="error-message error-two-input-box">
                         {errors.experienceYear}
                       </div>
@@ -1644,7 +1642,6 @@ const CallingTrackerForm = ({
                     {callingTracker.selectYesOrNo === "Interested" && !lineUpData.experienceMonth && ( <span className="requiredFieldStar">*</span>)}
                     </div>
                     {errors.experienceMonth && (
-
                       <div className="error-message error-two-input-box">
                         {errors.experienceMonth}
                       </div>
@@ -1886,15 +1883,22 @@ const CallingTrackerForm = ({
                     <select
                       name="selectYesOrNo"
                       value={callingTracker.selectYesOrNo}
-                      onChange={handleChange}>
+                      onChange={handleChange}
+                    >
                       <option value="Yet To Confirm">Yet To Confirm</option>
                       <option value="Interested">Interested</option>
-                      <option value="Interested, will confirm later">Interested, will confirm later</option>
+                      <option value="Interested, will confirm later">
+                        Interested, will confirm later
+                      </option>
                       <option value="Not Interested">Not Interested</option>
-                      <option value=" Interested But Not Eligible">Interested But Not Eligible</option>
+                      <option value=" Interested But Not Eligible">
+                        Interested But Not Eligible
+                      </option>
                       <option value="Eligible">Eligible</option>
                       <option value="Not Eligible">Not Eligible</option>
-                      <option value="Not Eligible But Interested">Not Eligible But Interested</option>
+                      <option value="Not Eligible But Interested">
+                        Not Eligible But Interested
+                      </option>
                     </select>
                   </div>
 
@@ -1925,8 +1929,12 @@ const CallingTrackerForm = ({
                     >
                       <option value="">Select</option>
                       <option value="Yet To Confirm">Yet To Confirm</option>
-                      <option value="Interview Schedule">Interview Schedule</option>
-                      <option value="Attending After Some time">Attending After Some time</option>
+                      <option value="Interview Schedule">
+                        Interview Schedule
+                      </option>
+                      <option value="Attending After Some time">
+                        Attending After Some time
+                      </option>
                     </select>
                      {/* this line added by sahil date 22-10-2024 */}
                     {callingTracker.selectYesOrNo === "Interested" && !lineUpData.finalStatus && ( <span className="requiredFieldStar">*</span>)}
@@ -1960,7 +1968,6 @@ const CallingTrackerForm = ({
                           seterrorInterviewSlot(""); // Clear error message if the date is valid
                         }
 
-
                         setLineUpData({
                           ...lineUpData,
                           availabilityForInterview: e.target.value,
@@ -1968,31 +1975,28 @@ const CallingTrackerForm = ({
                       }}
                       min={new Date().toISOString().split("T")[0]} // Allow today and future dates
                     />
-
                     {errorInterviewSlot && (
                       <div className="error-message">{errorInterviewSlot}</div>
                     )}
-
-
                   </div>
                   <div className="calling-tracker-two-input">
                     {/* line number 1856 to 1878 added by sahil karnekar date : 15-10-2024 */}
                     <TimePicker
-
                       placeholder="Interview Time"
                       disabled={callingTracker.selectYesOrNo !== "Interested"}
-                      value={lineUpData.interviewTime ? dayjs(lineUpData.interviewTime, 'h:mm a') : null} // ensure this is a valid dayjs object
+                      value={
+                        lineUpData.interviewTime
+                          ? dayjs(lineUpData.interviewTime, "h:mm a")
+                          : null
+                      } // ensure this is a valid dayjs object
                       onChange={(time) =>
                         setLineUpData({
                           ...lineUpData,
-                          interviewTime: time ? time.format('h:mm a') : "", // 'time' is the selected time as a dayjs object
+                          interviewTime: time ? time.format("h:mm a") : "", // 'time' is the selected time as a dayjs object
                         })
                       }
                       format="h:mm a" // this hides the seconds selection
-
                     />
-
-
                     {/* <input
   type="text"
   name="interviewTime"
@@ -2177,15 +2181,17 @@ const ModalComponent = ({
         <div className="calling-tracker-popup">
           <div className="calling-tracker-popup-sidebar">
             <p
-              className={`sidebar-item ${activeField === "distance" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "distance" ? "active" : ""
+              }`}
               onClick={() => setActiveField("distance")}
             >
               Distance Calculation
             </p>
             <p
-              className={`sidebar-item ${activeField === "salary" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "salary" ? "active" : ""
+              }`}
               onClick={() => setActiveField("salary")}
             >
               Salary Calculation
@@ -2202,8 +2208,9 @@ const ModalComponent = ({
             </p> */}
 
             <p
-              className={`sidebar-item ${activeField === "previousQuestion" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "previousQuestion" ? "active" : ""
+              }`}
               onClick={() => setActiveField("previousQuestion")}
             >
               Previous Question

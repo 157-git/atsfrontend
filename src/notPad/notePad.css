@@ -172,3 +172,16 @@
 .tooltiptext {
   white-space: nowrap;
 }
+
+/* Arshad Attar Added This CSS 23-10-204 */
+.note-pad-edit-form{
+  /* border: 1px solid black; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.note-pad-edit-form textarea{
+  width: 100%;
+}

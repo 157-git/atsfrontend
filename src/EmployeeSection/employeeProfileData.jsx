@@ -24,7 +24,7 @@ const EmployeeProfileData = ({
   const { userType } = useParams();
 
   const [value, setValue] = useState(0); //Arshad Attar Added This Line :- 17-10-2024
-  const targetValue = 60; //Arshad Attar Added This Line :- 17-10-2024
+  const targetValue = 45; //Arshad Attar Added This Line :- 17-10-2024
 
   //Arshad Attar Added This code  :- 17-10-2024
   //Line Start 33

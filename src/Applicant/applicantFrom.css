@@ -1,0 +1,594 @@
+/* Name : Shubhangi Mahadev Metakari 
+   Date : 21-10-2024
+   file name : this is css file of applicant form 
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
+:root {
+  --primary-color: #b18aff90;
+  --orange-100-color: hsl(39, 100%, 85%);
+  --orange-200-color: #ffd8a8;
+  --orange-300-color: #ffcb9b;
+  --orange-400-color: #fec08e;
+  --orange-500-color: #ffb281;
+}
+
+.applicant-form-main-div {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+  background-color: #ffb281;
+  display: flex;
+}
+
+.aplicant-form-label label {
+  font-family: "Libre Caslon Text", serif;
+  font-size: 16px;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.applicant-main-div.scrolled .applicant-sub-div {
+    height: 80px; /* Smaller height on scroll */
+    padding: 10px;
+  }
+
+  .applicant-main-div .applicant-sub-div {
+    height: 110px; /* Default height */
+    text-align: center;
+    align-content: center;
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    transition: height 0.3s ease, padding 0.3s ease;
+  }
+
+.applicant-main-div {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--orange-100-color);
+  transition: height 0.3s ease, padding 0.3s ease;
+}
+
+.applicant-sub-div {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* padding: 10px; */
+  z-index: 999;
+}
+
+.applicant-logo-container {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 178, 129, 1) 7%,
+    rgba(241, 190, 143, 1) 16%,
+    rgba(254, 221, 142, 1) 54%
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  text-align: center;
+  justify-content: space-between;
+  height: 25%; /* Default height on mobile view */
+  transition: height 0.3s ease, padding 0.3s ease;
+}
+
+.applicant-form-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  padding-top: 30px;
+  height: 100vh;
+  overflow-y: scroll;
+  background: rgb(255, 229, 181);
+  background: linear-gradient(
+    6deg,
+    rgba(255, 229, 181, 1) 49%,
+    rgba(227, 220, 220, 1) 100%
+  );
+}
+
+.share-link-applicant-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.applicant-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.inside-form-sub-div {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.inside-form-sub-div:last-child {
+  margin-right: 0;
+}
+
+.inside-form-sub-div label {
+  display: block;
+  margin-bottom: 3px;
+  color: #333;
+  font-size: 12px;
+}
+
+.applicant-form-input-icon {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 5px; /* Reduced padding */
+  font-size: 12px;
+}
+
+.applicant-form-input-icon input {
+  width: calc(50% - 10px);
+  padding: 5px;
+  border: none;
+  border-radius: 10px;
+  font-size: 12px; /* Reduced font size */
+}
+
+.applicant-form-input-icon input:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(136, 227, 255, 0.5);
+}
+
+.submit-button {
+  font-size: 14px; /* Reduced font size */
+  border: none;
+  border-radius: 5px;
+  background-color: var(--orange-500-color);
+  color: black;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: 10px; /* Reduced margin */
+}
+
+.submit-button:hover {
+  background-color: darken(var(--orange-500-color), 10%);
+}
+
+.submit-button:focus {
+  outline: 2px solid var(--orange-300-color);
+}
+
+.applicats-indicator {
+  display: none;
+}
+
+.form-main-div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.form-sub-div {
+  display: flex;
+  width: 50%;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding-left: 40px;
+  padding-right: 40px;
+  /* border: 2px solid yellow; */
+
+}
+
+.applicant-logo-container.scrolled {
+    height: 10%; /* Smaller height on scroll */
+  }
+
+  .applicant-logo-name-div.scrolled {
+    height: 40%; /* Adjusted height for content on scroll */
+  }
+   
+.applicant-logo-name-div {
+  display: flex;
+  justify-content: flex-end;
+  height: 60%;
+  align-items: center;
+  flex-direction: row;
+  transition: transform 0.3s ease-in-out;
+}
+
+.applicant-form-logo {
+  height: 100px;
+  width: 80px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  /* border: 1px solid gray; */
+}
+
+.appliacnt-form-heading {
+  padding-top: 10px;
+}
+
+.appliacnt-form-heading h1 {
+  color: gray;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.description {
+    font-size: 14px;
+    color: #666;
+    display: block;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .applicant-logo-container.scrolled .description {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    display: none;
+  }
+
+.applicant-main-div.scrolled .description {
+    display: none; /* Hide description on scroll */
+  }
+
+@media (max-width: 600px) {
+   
+      .applicant-logo-container.scrolled {
+        height: 10%; /* Reduce height when scrolled */
+      }
+  .applicant-form-row {
+    flex-direction: column;
+  }
+  .applicant-main-div{
+    padding: 0%;
+    /* margin: 40px; */
+  }
+
+  .applicats-indicator {
+    display: block;
+  }
+
+  .submit-form-row {
+    flex-direction: column;
+  }
+
+  .applicant-sub-div {
+    width: 100%;
+    /* border: 1px solid green; */
+    height: 22%;
+  }
+  .inside-form-sub-div {
+    margin-right: 0;
+    margin-bottom: 4px; /* Reduced margin */
+    width: 100%;
+  }
+  .share-link-applicant-form{
+    padding-top: 50px;
+  }
+
+  .applicant-logo-name-div {
+    height: auto;
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    justify-content: center;
+  }
+  .applicant-logo-container {
+    max-width: 100%;
+    height: 25%; /* Height of logo section in mobile view */
+    /* display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    text-align: center;
+    justify-content: space-between;
+    height: 90%; */
+    /* border: 2px solid yellow; */
+  }
+  .applicant-logo-name-div.scrolled {
+    justify-content: flex-end;
+    align-items: center;
+    height: 40%; /* Adjust based on the logo size */
+  }
+
+  .submit-button {
+    width: 100%;
+  }
+  .company-name {
+    font-size: 16px; /* Larger font size for the company name */
+    color: #070606; /* Dark color for contrast */
+    margin: 10px 0; /* Margin for spacing */
+    font-weight: bold; /* Make the company name bold */
+    transition: opacity 0.3s ease-in-out;
+    order: 2;
+  }
+
+  .hide {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .hide {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .description {
+    font-size: 14px;
+    color: #666;
+    /* padding: 10px; */
+    margin-bottom: 10px;
+  }
+  .appliacnt-form-heading {
+    padding-top: 10px;
+  }
+  .applicant-form-input-icon input {
+    width: calc(100% - 10px);
+    padding: 5px;
+    border: none;
+    font-size: 14px;
+    margin-left: 10px;
+    /* padding-left: 10px; */
+  }
+  .applicant-form-icons {
+    font-size: 18pxx;
+    padding-left: 8px;
+  }
+  .submit-file-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background-color: #f9f9f9;
+    padding: 5px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .applicant-file-label {
+    font-size: 14px;
+    color: black;
+    white-space: nowrap;
+    font-family: "Libre Caslon Text", serif;
+  }
+
+  .custom-file-upload {
+    display: inline-block;
+    padding: 3px 15px;
+    background-color: #6a1b9a;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .input-icon-date-picker {
+    flex-direction: row;
+    width: 100%; /* Make sure it scales with the screen size */
+  }
+
+  .applicant-form-icons-date {
+    right: 5px; /* Adjust for better mobile placement */
+  }
+  .css-jupps9-MuiInputBase-root-MuiOutlinedInput-root {
+    padding-right: 0px;
+    background-color: #f9f9f9;
+    /* border: 1px solid white; */
+  }
+}
+
+@media (max-width: 700px) {
+  .applicant-logo-container {
+    max-width: 100%;
+    height: fit-content;
+    height: 170%;
+    justify-content: space-between;
+  }
+  .main-div {
+    display: flex;
+    flex-direction: column;
+  }
+  .description {
+    font-size: 14px;
+    color: #666;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .form-main-div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    
+  }
+
+  .form-sub-div {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  h1 {
+    text-align: center;
+    color: gray;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .inside-form-sub-div {
+    width: 100%;
+  }
+  .applicant-sub-div {
+    width: 100%;
+    height: 22%;
+    /* border: 1px solid green; */
+  }
+  .applicant-form-logo {
+    /* border: 1px solid green; */
+    height: 100px;
+    width: 80px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    order: 1;
+  }
+  .applicant-form-container {
+    /* border: 2px solid black; */
+    padding-top: 0px;
+  }
+  .appliacnt-form-heading {
+    padding-top: 10px;
+  }
+  .applicant-form-input-icon input {
+    width: calc(100% - 10px);
+    padding: 5px;
+    border: none;
+    font-size: 14px;
+    margin-left: 10px;
+    /* padding-left: 10px; */
+  }
+  .applicant-form-icons {
+    font-size: 18pxx;
+    padding-left: 8px;
+  }
+  .aplicant-form-label {
+    font-family: "Libre Caslon Text", serif;
+    font-size: 18px;
+    font-weight: 700;
+    font-style: normal;
+  }
+  .submit-file-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background-color: #f9f9f9;
+    padding: 5px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .applicant-file-label label {
+    font-family: "Libre Caslon Text", serif;
+    font-size: 13px;
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  .custom-file-upload {
+    display: inline-block;
+    padding: 3px 15px;
+    background-color: #6a1b9a;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .input-icon-date-picker {
+    flex-direction: row;
+    width: 100%;
+  }
+  .applicant-form-icons-date {
+    right: 5px;
+  }
+}
+
+.input-icon-date-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.applicant-form-icons {
+  font-size: 16px;
+  padding-left: 8px;
+}
+
+.applicant-form-icons-date {
+  font-size: 17px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.logo {
+  height: 60px;
+  width: 60px;
+}
+
+.scrollable-hidden-scrollbar {
+  overflow-y: scroll;
+}
+
+.scrollable-hidden-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollable-hidden-scrollbar::-webkit-scrollbar-track {
+  display: none;
+}
+
+.form-textfield {
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  width: -webkit-fill-available;
+}
+
+.submit-form-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.submit-file-area {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #f9f9f9;
+  padding: 5px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.applicant-file-label {
+  font-size: 14px;
+  white-space: nowrap;
+  font-family: "Libre Caslon Text", serif;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 3px 15px;
+  background-color: #ffb281;
+  color: black;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}

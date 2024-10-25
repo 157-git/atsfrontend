@@ -755,13 +755,7 @@ const EmpDashboard = ({ userGroup }) => {
           )}
         </div>
 
-        <div>
-          {showCallingExcelList && (
-            <CallingExcelList
-              loginEmployeeName={loginEmployeeName}
-            ></CallingExcelList>
-          )}
-        </div>
+       
 
         <div>{showInterviewDate && <InterviewDates />}</div>
         <div>{showAddEmployee && <AddEmployee />}</div>
@@ -780,10 +774,17 @@ const EmpDashboard = ({ userGroup }) => {
             <HoldCandidate loginEmployeeName={loginEmployeeName} />
           )}
         </div>
-
         <div className="calling-excel-div">
           {showCallingExcel && (
             <CallingExcel loginEmployeeName={loginEmployeeName} />
+          )}
+        </div>
+
+        <div>
+          {showCallingExcelList && (
+            <CallingExcelList
+              loginEmployeeName={loginEmployeeName}
+            ></CallingExcelList>
           )}
         </div>
 
@@ -810,7 +811,6 @@ const EmpDashboard = ({ userGroup }) => {
           {addCandidate && (
             <CallingTrackerForm
               loginEmployeeName={loginEmployeeName}
-              onsuccessfulDataAdditions={handleSuccessfulDataAdditions}
             />
           )}
         </div>

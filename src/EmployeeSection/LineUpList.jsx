@@ -721,6 +721,7 @@ const LineUpList = ({
         </div>
       ) : (
         <>
+
           {!showUpdateCallingTracker ? (
             <>
               <div className="search">
@@ -1850,7 +1851,7 @@ const LineUpList = ({
       )}
       {isDataSending && (
         <div className="ShareFunc_Loading_Animation">
-          <ClipLoader size={50} color="#ffb281" />
+          <Loader  />
         </div>
       )}
     </div>

@@ -153,40 +153,52 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
   };
 
   const handleUploadResume = async () => {
-    if (!selectedFiles.length) {
-      // this line number 178 to 180  added by sahil karnekar
-      setHasErrorCalling(false);
-      setHasErrorLineup(false);
-      setHasErrorResume(true); // Set error only for the third input
-      toast.error("Please select files to upload.");
-      return;
-    }
-
-    const formData = new FormData();
-    for (let i = 0; i < selectedFiles.length; i++) {
-      formData.append("files", selectedFiles[i]);
-    }
-    setLoading(true);
-    try {
-      await axios.post(
-        `${API_BASE_URL}/add-multiple-resume/${employeeId}/${userType}`,
-
-        formData
-      );
+  if (!selectedFiles.length) {
+    // Set error for resume if no files are selected
+    setHasErrorCalling(false);
+    setHasErrorLineup(false);
+    setHasErrorResume(true); // Error for third input
+    toast.error("Please select files to upload.");
+    return;
+  }
+  
+  const formData = new FormData();
+  for (let i = 0; i < selectedFiles.length; i++) {
+    formData.append("files", selectedFiles[i]);
+  }
+  
+  setLoading(true);
+  try {
+    // Make the POST request
+    const response = await axios.post(
+      `${API_BASE_URL}/add-multiple-resume/${employeeId}/${userType}`,
+      formData
+    );
+    
+    // Check if the response is successful and print the response data
+    if (response.status === 200) {
+      const responseData = response.data; // Assuming it's a map { fileName: count }
+      
+      // Format the response data as needed for display
+      let formattedResponse = Object.entries(responseData)
+        .map(([fileName, count]) => `${fileName}: ${count} resumes processed`)
+        .join('\n');
+      
+      toast.success(`File Uploaded Successfully\n${formattedResponse}`);
       setUploadSuccessResume(true);
-      toast.success("File Uploaded Successfully");
       setActiveTable("ResumeList");
       hideSuccessMessage();
       setSelectedFiles([]);
       resetFileInput(resumeFileInputRef);
-      // line number 204 added by sahil karnekar
-      setHasErrorResume(false);
-    } catch (error) {
-      toast.error("Error uploading files:", error);
-    } finally {
-      setLoading(false); // Hide loader
+      setHasErrorResume(false); // Clear error state
     }
-  };
+  } catch (error) {
+    toast.error("Error uploading files.");
+  } finally {
+    setLoading(false); // Hide loader
+  }
+};
+
 
   const handleActionClick = () => {
     setShowCards(false);
