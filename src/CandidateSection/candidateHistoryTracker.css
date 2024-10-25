@@ -13,7 +13,7 @@
   width: auto;
   background-color: #fff;
   height: auto;
-  overflow-y: auto; /* Adds scrolling if content exceeds height */
+  overflow-y: auto; 
 }
 
 .can-history-data-table {
@@ -101,9 +101,6 @@
   width: auto;
 }
 
-.inner-Candi-History-tracker-div label {
-  /* border: 1px solid pink; */
-}
 
 .checkbox-label {
   font-size: 16px;

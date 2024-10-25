@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 
-
 // SwapnilRokade_UpdateResponseFrom_addedProcessImprovmentEvaluatorFunctionalityStoringInterviweResponse_08_to_486_29/07/2024
 const UpdateResponseFrom = ({ candidateId, onClose }) => {
   const [data, setData] = useState([]);
@@ -44,7 +43,6 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
     }
   };
 
-
   const fetchPerformanceId = async () => {
     try {
       const performanceId = await axios.get(
@@ -54,7 +52,7 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const validateForm = () => {
     let errors = {};
@@ -69,7 +67,6 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
     }
     return errors;
   };
-
 
   const handleSubmit = async (e) => {
     setSubmited(true);
@@ -103,10 +100,16 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
         const timeDifference = currentDateTime - responseUpdatedDate;
         const absoluteTimeDifference = Math.abs(timeDifference);
 
-        const daysDifference = Math.floor(absoluteTimeDifference / (1000 * 60 * 60 * 24));
+        const daysDifference = Math.floor(
+          absoluteTimeDifference / (1000 * 60 * 60 * 24)
+        );
 
-        const hoursDifference = Math.floor((absoluteTimeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutesDifference = Math.floor((absoluteTimeDifference % (1000 * 60 * 60)) / (1000 * 60));
+        const hoursDifference = Math.floor(
+          (absoluteTimeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutesDifference = Math.floor(
+          (absoluteTimeDifference % (1000 * 60 * 60)) / (1000 * 60)
+        );
         const difference = `${daysDifference} days, ${hoursDifference} hours, and ${minutesDifference} minutes.`;
 
         console.log(data.length);
@@ -119,9 +122,9 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                 interviewRound: "shortListed For Technical Round",
                 roundResponse: "shortListed For Technical Round",
                 time: formatDateToIST(currentDateTime),
-                diffBTNRoundToNextRound: 0
-              }
-            ]
+                diffBTNRoundToNextRound: 0,
+              },
+            ],
           };
           console.log("Sending additional data:", additionalData);
           try {
@@ -131,12 +134,12 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
             );
             console.log("Second API Response:", response1.data);
             toast.success("Response updated successfully.");
-            setSubmited(false)
+            setSubmited(false);
             onClose(true);
           } catch (error) {
             console.error("Error updating performance data:", error);
             toast.error("Failed to Update Response");
-            setSubmited(false)
+            setSubmited(false);
           }
         } else {
           const additionalData = {
@@ -145,9 +148,9 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                 interviewRound: firstResponse.interviewRound,
                 roundResponse: firstResponse.interviewResponse,
                 time: currentDateTime,
-                diffBTNRoundToNextRound: difference
-              }
-            ]
+                diffBTNRoundToNextRound: difference,
+              },
+            ],
           };
           console.log("2 additional data:", additionalData);
           try {
@@ -157,7 +160,7 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
             );
             console.log("Second API Response:", response1.data);
             toast.success("Response updated successfully.");
-            setSubmited(false)
+            setSubmited(false);
             onClose(true);
           } catch (error) {
             console.error("Error updating performance data:", error);
@@ -165,11 +168,11 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
           }
         }
       } else {
-        setSubmited(false)
+        setSubmited(false);
         toast.error("Failed to Update Response");
       }
     } catch (err) {
-      setSubmited(false)
+      setSubmited(false);
       toast.error("Failed to Update Response");
     }
   };
@@ -181,8 +184,6 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
       [name]: value,
     });
   };
-
-
 
   return (
     <div className="p-6 bg-white shadow-md rounded-lg max-w-full">
@@ -244,25 +245,16 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                       onChange={handleInputChange}
                     >
                       <option value="">Update Response</option>
-                      <option value="Shortlisted For Hr Round">
-                        Hr Round
-                      </option>
+                      <option value="Shortlisted For Hr Round">Hr Round</option>
                       <option value="Shortlisted For Technical Round">
                         Technical Round
                       </option>
-                      <option value="Shortlisted For L1 Round">
-                        L1 Round
-                      </option>
-                      <option value="Shortlisted For L2 Round">
-                        L2 Round
-                      </option>
-                      <option value="Shortlisted For L3 Round">
-                        L3 Round
-                      </option>
+                      <option value="Shortlisted For L1 Round">L1 Round</option>
+                      <option value="Shortlisted For L2 Round">L2 Round</option>
+                      <option value="Shortlisted For L3 Round">L3 Round</option>
                       <option value="Selected">Selected</option>
                       <option value="Rejected">Rejected</option>
                       <option value="Hold">Hold</option>
-                     
                     </select>
                   </td>
                   <td className="p-2">
@@ -360,7 +352,6 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                     <option value="Selected">Selected</option>
                     <option value="Rejected">Rejected</option>
                     <option value="Hold">Hold</option>
-                
                   </select>
                   {errors.interviewResponse && (
                     <div className="error-message">
@@ -415,10 +406,7 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
           </table>
         </div>
         <div className="mt-4 flex gap-2 justify-end">
-          <button
-            className="lineUp-share-btn"
-            type="submit"
-          >
+          <button className="lineUp-share-btn" type="submit">
             Update
           </button>
           <button className="lineUp-share-btn" onClick={onClose}>
@@ -432,7 +420,6 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
         </div>
       )}
     </div>
-
   );
 };
 
