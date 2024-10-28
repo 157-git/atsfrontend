@@ -64,7 +64,6 @@ const JobListing = () => {
     fetch(`${API_BASE_URL}/all-job-descriptions`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data); // Log the fetched data to inspect its structure
         const sortedData = data.sort(
           (a, b) => b.requirementId - a.requirementId
         );
@@ -151,8 +150,6 @@ const JobListing = () => {
     setFilterOptions(options);
   }, [jobDescriptions]);
 
-  console.log(filteredJobDescriptions);
-
   const handleFilter = () => {
     const filtered = jobDescriptions.filter((job) => {
       return (
@@ -191,7 +188,6 @@ const JobListing = () => {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data); // Log the fetched data to inspect its structure
         setRequirementData(data);
         // setJobDescription(data)
         setShowViewMore(true);
@@ -234,9 +230,6 @@ const JobListing = () => {
   const handleShareJobDescription = (res) => {
     setShowJobDescriptionShare(res);
   };
-  // const handleHoldClick = (requirementId) => {
-  //   setHeldJobId(requirementId);
-  // };
   const handleHoldClick = (requirementId) => {
     if (heldJobId === requirementId) {
       setHeldJobId(null);
@@ -262,30 +255,44 @@ const JobListing = () => {
     setOpenDropdownId((prevId) => (prevId === id ? null : id));
   };
 
-  const handleToggleStatus = async (jdId, currentStatus) => {
-    const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
-    const confirmChange = window.confirm(
-      `Are you sure you want to change the JD status to ${newStatus}?`
-    );
+  const handleToggleStatus = async (jdId, currentStatus, type) => {
+    let newStatus;
+    let confirmChange;
+
+    // Determine new status and confirmation message based on currentStatus and type
+    if (type === "jdStatus") {
+      newStatus = currentStatus === "Active" ? "Inactive" : "Active";
+      confirmChange = window.confirm(
+        `Are you sure you want to change the JD status to ${newStatus}?`
+      );
+    } else if (type === "holdStatus") {
+      newStatus = currentStatus === "Hold" ? "Unhold" : "Hold";
+      confirmChange = window.confirm(
+        `Are you sure you want to change the Hold status to ${newStatus}?`
+      );
+    }
+
     if (!confirmChange) return;
 
     try {
       await axios.put(`${API_BASE_URL}/update-jd-status/${jdId}/${newStatus}`);
-      toast.success("Status Updated Successfully..");
+      toast.success("Status Updated Successfully.");
+      setOpenDropdownId((prevId) => (prevId === jdId ? null : jdId));
 
-      // Update local state
+      // Update local state for jdStatus or holdStatus
       setJobDescriptions((prevDescriptions) =>
         prevDescriptions.map((job) =>
-          job.requirementId === jdId ? { ...job, jdStatus: newStatus } : job
+          job.requirementId === jdId ? { ...job, [type]: newStatus } : job
         )
       );
+
       setFilteredJobDescriptions((prevFiltered) =>
         prevFiltered.map((job) =>
-          job.requirementId === jdId ? { ...job, jdStatus: newStatus } : job
+          job.requirementId === jdId ? { ...job, [type]: newStatus } : job
         )
       );
     } catch (error) {
-      toast.error(`Failed to update JD Status: ${error.message}`);
+      toast.error(`Failed to update status: ${error.message}`);
     }
   };
 
@@ -295,14 +302,11 @@ const JobListing = () => {
       `Are you sure you want to delete JD with ID ${requirementId}?`
     );
     if (!confirmDelete) return;
-
     try {
       await axios.delete(
         `${API_BASE_URL}/delete-job-description/${requirementId}`
       );
       toast.success("JD Deleted Successfully..");
-
-      // Update local state
       setJobDescriptions((prevDescriptions) =>
         prevDescriptions.filter((job) => job.requirementId !== requirementId)
       );
@@ -338,15 +342,6 @@ const JobListing = () => {
                   value={searchQuery.experience}
                   onChange={handleInputSearch}
                 />
-
-                {/* line number 279 to 284 commented by sahil karnekar suggestionfrom tester on date : 14-10-2024 */}
-                {/* <datalist id="experienceOptions">
-              <option value="0-1 years" />
-              <option value="1-3 years" />
-              <option value="3-5 years" />
-              <option value="5+ years" />
-            </datalist> */}
-
                 <input
                   className="search-input"
                   placeholder="Enter Location"
@@ -432,104 +427,149 @@ const JobListing = () => {
               {filteredJobDescriptions.map((item) => (
                 <div className="job-listing" key={item.requirementId}>
                   <div className="job-header">
-                    <h2 className="job-title">{item.designation}</h2>
-                    <div className="job-company">{item.companyName}</div>
+                    <div className="job-title">{item.designation}</div>
+                    <div className="job-company">{item.companyName} </div>
                   </div>
-                  <div className="job-details">
-                    <div className="job-location">
-                      <i className="fas fa-map-marker-alt"></i>
-                      {item.location}
-                    </div>
-                    <div className="job-experience">
-                      <i className="fas fa-calendar-alt"></i>
-                      {item.experience}
-                    </div>
-                    <div className="job-skills">
-                      <i className="fas fa-tags"></i>
-                      {item.skills}
+
+                  <div className="card-content-div">
+                    <div className="job-details">
+                      <div className="job-location">
+                        <i className="fas fa-map-marker-alt"></i>
+                        {item.location}
+                      </div>
+                      <div className="job-experience">
+                        <i className="fas fa-calendar-alt"></i>
+                        {item.experience}
+                      </div>
+                      <div className="job-skills">
+                        <i className="fas fa-tags"></i>
+                        {item.skills}
+                      </div>
                     </div>
 
-                    {userType === "Manager" || userType === "TeamLeader" ? (
-                      <>
-                        <div className="job-incentive">
-                          <i className="fa-solid fa-indian-rupee-sign"></i>
-                          {item.incentive}
-                        </div>
-                      </>
-                    ) : null}
-
-                    <div className="job-skills">
-                      <i className="fa-solid fa-chart-line"></i>
-                      {item.jdStatus && (
-                        <span
-                          style={{
-                            fontWeight: "bold",
-                            fontSize: "15px",
-                            color: item.jdStatus === "Active" ? "green" : "red",
-                            textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
-                          }}
-                        >
-                          {item.jdStatus}
-                        </span>
-                      )}
-                    </div>
-                    <div className="job-skills">
-                      <p
-                        style={{
-                          fontSize: "14px",
-                          textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
-                        }}
-                      >
-                        Posted On {item.jdAddedDate}{" "}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="job-actions">
-                    {userType === "Manager" || userType === "TeamLeader" ? (
-                      <div className="jd-edit-hold-div">
-                        <button
-                          className="daily-tr-btn"
-                          onClick={() =>
-                            handleToggleDropdown(item.requirementId)
-                          }
-                        >
-                          {openDropdownId === item.requirementId ? (
-                            <i className="fa-solid fa-xmark"></i>
-                          ) : (
-                            <i className="fa-solid fa-pencil"></i>
-                          )}
-                        </button>
-
-                        {openDropdownId === item.requirementId && (
-                          <div className="action-joblist-options">
-                            <div onClick={() => handleEditBtn(item)}>Edit</div>
-                            <div
-                              onClick={() =>
-                                handleToggleStatus(
-                                  item.requirementId,
-                                  item.jdStatus
-                                )
-                              }
-                            >
-                              {item.jdStatus}
-                            </div>
-
-                            <div
-                              onClick={() => handleDeleteJD(item.requirementId)}
-                            >
-                              Delete
-                            </div>
+                    <div className="jd-card-right-div">
+                      <div className="job-active-status">
+                        {item.jdStatus === "Active" && (
+                          <div
+                            className="job-skills"
+                            style={{
+                              color:
+                                item.jdStatus === "Active" ? "green" : "red",
+                              fontWeight: "bold",
+                              fontSize: "16px",
+                            }}
+                          >
+                            <i className="fa-solid fa-chart-line"></i>
+                            {item.jdStatus}
                           </div>
                         )}
                       </div>
-                    ) : null}
 
-                    <button
-                      className="daily-tr-btn"
-                      onClick={() => toggleJobDescription(item.requirementId)}
-                    >
-                      View More
-                    </button>
+                      <div className="job-incentive">
+                        <i className="fa-solid fa-indian-rupee-sign"></i>{" "}
+                        {item.incentive}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="staus-msg-div">
+                    <div>
+                      {item.jdStatus === "Inactive" && (
+                        <div
+                          style={{
+                            color: item.jdStatus === "Active" ? "green" : "red",
+                            fontWeight: "bold",
+                            fontSize: "14px",
+                          }}
+                        >
+                          Currently This JD is {item.jdStatus}
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      {item.holdStatus === "Hold" && (
+                        <div
+                          className="job-skills"
+                          style={{ color: "red", fontWeight: "bold" }}
+                        >
+                          This JD is currently on {item.holdStatus}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="job-actions">
+
+                    <div className="jd-date-main-div">
+                      <div className="jd-added-date">
+                        <p
+                          style={{
+                            fontSize: "14px",
+                            textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
+                          }}
+                        >
+                          {item.jdAddedDate}{" "}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="jd-action-main-div">
+
+                      {userType === "Manager" || userType === "TeamLeader" ? (
+  <div className="jd-edit-hold-div">
+    <button
+      className="daily-tr-btn"
+      onClick={() =>
+        handleToggleDropdown(item.requirementId)
+      }
+    >
+      {openDropdownId === item.requirementId ? (
+        <i className="fa-solid fa-xmark"></i>
+      ) : (
+        <i className="fa-solid fa-pencil"></i>
+      )}
+    </button>
+
+    {openDropdownId === item.requirementId && ( 
+      <div className="action-joblist-options">
+        <div onClick={() => handleEditBtn(item)}>Edit</div>
+        <div onClick={() => handleToggleStatus(item.requirementId, item.jdStatus, "jdStatus")}>
+          {item.jdStatus === "Active" ? "Inactivate" : "Activate"}
+        </div>
+        <div onClick={() => handleToggleStatus(item.requirementId, item.holdStatus, "holdStatus")}>
+          {item.holdStatus === "Hold" ? "Unhold" : "Hold"}
+        </div>
+        <div onClick={() => handleDeleteJD(item.requirementId)}>Delete</div>
+      </div>
+    )}
+  </div>
+) : null}
+
+                          <div className="action-btn-jd-div">
+                          {userType === "Recruiters" && (
+                            <button
+                              className="daily-tr-btn"
+                              onClick={() =>
+                                toggleJobDescription(item.requirementId)
+                              }
+                            >
+                              View More
+                            </button>
+                          )}
+                          {(userType === "Manager" ||
+                            userType === "TeamLeader") && (
+                            <button
+                              className="daily-tr-btn"
+                              onClick={() =>
+                                toggleJobDescription(item.requirementId)
+                              }
+                            >
+                              View
+                            </button>
+                          )}
+                        </div>
+                    </div>
                   </div>
                 </div>
               ))}

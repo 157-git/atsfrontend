@@ -233,7 +233,7 @@ const ResumeList = ({ loginEmployeeName,onsuccessfulDataAdditions }) => {
                       </div>
                     </td>
                     <td
-                   
+                   style={{paddingLeft:"3px"}}
                       className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}

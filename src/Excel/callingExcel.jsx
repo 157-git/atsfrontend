@@ -183,8 +183,9 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
       // Show success message with counts
       toast.success(
         `Resume uploaded Successfully\n` +
-        `Uploaded Resumes Count :   \n` +
-        `Already Exists Resume :  ${existingCount}`
+        `Already Exists Resume  :  ${existingCount}\n` +
+        `Uploaded Resumes Count :  ${uploadedCount}`
+        
       );
       
 
