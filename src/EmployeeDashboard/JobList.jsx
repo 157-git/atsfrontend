@@ -10,15 +10,16 @@ import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 import ShareEDM from "../JobDiscription/shareEDM";
 import UpdateJobDescription from "../JobDiscription/UpdateJobDescription";
+import { toast } from "react-toastify";
+import axios from "../api/api";
 
 // SwapnilRokade_JobListing_filter_option__18/07
 const JobListing = () => {
-
   const { employeeId, userType } = useParams();
 
   const [jobDescriptions, setJobDescriptions] = useState([]);
   const [filterOptions, setFilterOptions] = useState([]);
-  const [updateJD,setUpdateJd] =useState([])
+  const [updateJD, setUpdateJd] = useState([]);
   const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [selectedJobIndex, setSelectedJobIndex] = useState(-1); // Track which job description is selected
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,13 +32,19 @@ const JobListing = () => {
   const [requirementData, setRequirementData] = useState();
   const [showEDM, setShowEDM] = useState(false);
   const [showAddJobDescription, setShowAddJobDescription] = useState(false);
-  const [showAddJobDiscriptionNew,setShowAddJobDescriptionNew] =useState(false);
+  const [showAddJobDiscriptionNew, setShowAddJobDescriptionNew] =
+    useState(false);
   const [searchQuery, setSearchQuery] = useState({
     designation: "",
     location: "",
     experience: "",
   });
   const [heldJobId, setHeldJobId] = useState(null);
+  const [openDropdownId, setOpenDropdownId] =
+    useState(null); /*Arshad Attar Added This Line :- 28-10-2024*/
+  const [message, setMessage] =
+    useState(""); /*Arshad Attar Added This Line :- 28-10-2024*/
+
   const limitedOption = [
     "jobRole",
     "jobType",
@@ -58,12 +65,14 @@ const JobListing = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data); // Log the fetched data to inspect its structure
-        const sortedData = data.sort((a, b) => b.requirementId - a.requirementId);
+        const sortedData = data.sort(
+          (a, b) => b.requirementId - a.requirementId
+        );
         setJobDescriptions(sortedData);
         setFilteredJobDescriptions(sortedData); // Show all jobs initially
       })
       .catch((error) => console.error("Error fetching data:", error));
-         // sahil karnekar line 65 date : 10-10-2024
+    // sahil karnekar line 65 date : 10-10-2024
   }, [showAddJobDiscriptionNew]);
 
   useEffect(() => {
@@ -130,7 +139,6 @@ const JobListing = () => {
     fetchShortListedData(); // Corrected from fetchRejectedData to fetchShortListedData
   };
 
-
   const handleInputSearch = (event) => {
     const { name, value } = event.target;
     setSearchQuery((prevQuery) => ({ ...prevQuery, [name]: value }));
@@ -178,7 +186,7 @@ const JobListing = () => {
 
   const toggleJobDescription = (requirementId) => {
     fetch(
-       // replaced base url with actual url just for testing by sahil karnekar please replace it with base url at the time of deployment
+      // replaced base url with actual url just for testing by sahil karnekar please replace it with base url at the time of deployment
       `${API_BASE_URL}/requirement-info/${requirementId}`
     )
       .then((response) => response.json())
@@ -195,17 +203,13 @@ const JobListing = () => {
     setShowEDM(!showEDM);
   };
 
-
-
   const handleclose = () => {
     setShowViewMore(false);
-
   };
 
-
-    const handleEditBtn = (item) => {
-      setUpdateJd(item);
-      setShowAddJobDescriptionNew(true);
+  const handleEditBtn = (item) => {
+    setUpdateJd(item);
+    setShowAddJobDescriptionNew(true);
   };
 
   const sharejobdescription = (e) => {
@@ -222,8 +226,8 @@ const JobListing = () => {
     setShowEDM(res);
   };
   const handleAddJD = (res) => {
-    setShowAddJobDescription
-  }
+    setShowAddJobDescription;
+  };
   const handleJobDescriptionEdm = (res) => {
     setShowJobDescriptionEdm(res);
   };
@@ -243,381 +247,507 @@ const JobListing = () => {
 
   //   This is added by sahil karnekar date : 30 sep 2024 the function for formatting the word is it is in PascalCase line 250 to 254
   function formatOption(option) {
-    // Regular expression to insert a space before any uppercase letter 
+    // Regular expression to insert a space before any uppercase letter
     // that follows a lowercase letter or another uppercase letter
-    return option.replace(/([a-z])([A-Z])/g, '$1 $2');
+    return option.replace(/([a-z])([A-Z])/g, "$1 $2");
   }
 
   // sahil karnekar line 256 to 259 date : 10-10-2024
-  const handleUpdateCompProp = (data) =>{
+  const handleUpdateCompProp = (data) => {
     setShowAddJobDescriptionNew(data);
-   
-  }
+  };
 
+  // Arshad Attar Added Code From Here 28-10-2024
+  const handleToggleDropdown = (id) => {
+    setOpenDropdownId((prevId) => (prevId === id ? null : id));
+  };
+
+  const handleToggleStatus = async (jdId, currentStatus) => {
+    const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
+    const confirmChange = window.confirm(
+      `Are you sure you want to change the JD status to ${newStatus}?`
+    );
+    if (!confirmChange) return;
+
+    try {
+      await axios.put(`${API_BASE_URL}/update-jd-status/${jdId}/${newStatus}`);
+      toast.success("Status Updated Successfully..");
+
+      // Update local state
+      setJobDescriptions((prevDescriptions) =>
+        prevDescriptions.map((job) =>
+          job.requirementId === jdId ? { ...job, jdStatus: newStatus } : job
+        )
+      );
+      setFilteredJobDescriptions((prevFiltered) =>
+        prevFiltered.map((job) =>
+          job.requirementId === jdId ? { ...job, jdStatus: newStatus } : job
+        )
+      );
+    } catch (error) {
+      toast.error(`Failed to update JD Status: ${error.message}`);
+    }
+  };
+
+  // Function to delete JD by ID
+  const handleDeleteJD = async (requirementId) => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete JD with ID ${requirementId}?`
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await axios.delete(
+        `${API_BASE_URL}/delete-job-description/${requirementId}`
+      );
+      toast.success("JD Deleted Successfully..");
+
+      // Update local state
+      setJobDescriptions((prevDescriptions) =>
+        prevDescriptions.filter((job) => job.requirementId !== requirementId)
+      );
+      setFilteredJobDescriptions((prevFiltered) =>
+        prevFiltered.filter((job) => job.requirementId !== requirementId)
+      );
+    } catch (error) {
+      toast.error(`Failed to delete JD: ${error.message}`);
+    }
+  };
 
   return (
     <>
-    {!showAddJobDiscriptionNew ? (
-      <>
-      <div className="jd-header-search" >
-        <div className="search-container" >
-          <div className="search-bar" >
-            <input
-              className="search-input"
-              placeholder="Designation"
-              type="text"
-              name="designation"
-              value={searchQuery.designation}
-              onChange={handleInputSearch}
-            />
-            <input
-              className="search-input"
-              list="experienceOptions"
-              placeholder="  Select Experience"
-              type="text"
-              name="experience"
-              value={searchQuery.experience}
-              onChange={handleInputSearch}
-            />
+      {!showAddJobDiscriptionNew ? (
+        <>
+          <div className="jd-header-search">
+            <div className="search-container">
+              <div className="search-bar">
+                <input
+                  className="search-input"
+                  placeholder="Designation"
+                  type="text"
+                  name="designation"
+                  value={searchQuery.designation}
+                  onChange={handleInputSearch}
+                />
+                <input
+                  className="search-input"
+                  list="experienceOptions"
+                  placeholder="  Select Experience"
+                  type="text"
+                  name="experience"
+                  value={searchQuery.experience}
+                  onChange={handleInputSearch}
+                />
 
-            {/* line number 279 to 284 commented by sahil karnekar suggestionfrom tester on date : 14-10-2024 */}
-            {/* <datalist id="experienceOptions">
+                {/* line number 279 to 284 commented by sahil karnekar suggestionfrom tester on date : 14-10-2024 */}
+                {/* <datalist id="experienceOptions">
               <option value="0-1 years" />
               <option value="1-3 years" />
               <option value="3-5 years" />
               <option value="5+ years" />
             </datalist> */}
 
-            <input
-              className="search-input"
-              placeholder="Enter Location"
-              type="text"
-              name="location"
-              value={searchQuery.location}
-              onChange={handleInputSearch}
-            />
-            <button className="daily-tr-btn" onClick={filterData}>
-              <span className="search-icon">
-             <div><i className="fas fa-search"></i></div> 
-             <div> Search </div>
-           
-              </span> 
-            </button>
-          </div>
-        </div>
-
-        <div className="jd-filter-section">
-          <div className="jd-filter-options-container" >
-            {filterOptions.map((option) => {
-              const uniqueValues = Array.from(
-                // line 321 updated by sahil karnekar date 23-10-2024
-                new Set(jobDescriptions.map((item) => item[option]?.toString().toLowerCase().trim()))
-              );
-              return (
-                <div key={option} className="filter-option">
-                  <button
-                    className="white-Btn"
-                    onClick={() => handleFilterOptionClick(option)}
-                  >
-                    {/* this line numeber 319 is added by sahil karnekar for saparating the word if it is in PascalCase naming convention */}
-                    {formatOption(option)}  {/* Call the formatting function here */}
-                    <span className="filter-icon">&#x25bc;</span>
-                  </button>
-                  {activeFilterOption === option && (
-                    <div className="city-filter">
-                      <div className="optionDiv">
-                        {uniqueValues.map((value) => (
-                          // line 338 added by sahil karnekar date 23-10-2024
-                          value !== "" && value !== undefined && value !== null && (
-                          <label key={value} className="selfcalling-filter-value">
-                            <input
-                              type="checkbox"
-                              checked={
-                                selectedFilters[option]?.includes(value) || false
-                              }
-                              onChange={() => handleFilterSelect(option, value)}
-                            />
-                            {value}
-                          </label>
-                          // line 350 added by sahil karnekar date : 23-10-2024
-                          )
-                        ))}
-                      </div>
+                <input
+                  className="search-input"
+                  placeholder="Enter Location"
+                  type="text"
+                  name="location"
+                  value={searchQuery.location}
+                  onChange={handleInputSearch}
+                />
+                <button className="daily-tr-btn" onClick={filterData}>
+                  <span className="search-icon">
+                    <div>
+                      <i className="fas fa-search"></i>
                     </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {!showViewMore && (
-        <div className="jdCards">
-          {filteredJobDescriptions.map((item, job, index) => (
-             // edited this line numer 348 only by sahil karnekar date : 30 sep 2024
-            <div className="job-listing" key={item.requirementId} >
-              <div className="job-header">
-
-                <h2 className="job-title">{item.designation} </h2>
-                <div className="job-company">{item.companyName}</div>
-              </div>
-              <div className="job-details">
-                <div className="job-location">
-                  <i className="fas fa-map-marker-alt"></i>
-                  {item.location}
-                </div>
-                <div className="job-experience">
-                  <i className="fas fa-calendar-alt"></i>
-                  {item.experience}
-                </div>
-                <div className="job-skills">
-                  <i className="fas fa-tags"></i>
-                  {item.skills}
-                </div>
-                <div className="job-incentive">
-                  <i class="fa-solid fa-indian-rupee-sign"></i>
-                  {item.incentive}
-                </div>
-              </div>
-              {/* Arshad Added this button to share edm  */}
-
-              <div className="job-actions">
-                {userType === "Manager" || userType === "TeamLeader" ? (
-                  <div className="jd-edit-hold-div">
-                    <button className="daily-tr-btn"
-                    onClick={()=>handleEditBtn(item)}>
-                      Edit 
-                    </button>
-                    {/* <button className="daily-tr-btn" */}
-                      {/* // onClick={() => handleHoldClick(job.requirementId)} */}
-                    {/* > */}
-                      {/* Hold */}
-                      {/* {heldJobId === job.requirementId ? "UnHold" : "Hold"} */}
-                    {/* </button> */}
-                  </div>
-                ) : null}
-
-                <button
-                  className="daily-tr-btn"
-                  onClick={() => toggleJobDescription(item.requirementId)}
-                >
-                  View More
+                    <div> Search </div>
+                  </span>
                 </button>
-                {/* <button className='daily-tr-btn' onClick={()=>toggleEdm(index)}> EDM  <i id='edm-share-icon'  className="fa-solid fa-eye"></i></button> */}
               </div>
             </div>
-          ))}
-        </div>
-      )}
 
-
-      {showViewMore && (
-        <>
-          <h1>{selectedRequirementId}</h1>
-          <main className="name">
-            <section className="overview">
-              <div className="scroll-container">
-                <div className="info">
-                  <div className="info-title">Position Overview</div>
-                  <div className="info-value">
-                    {requirementData.positionOverview?.overview || "N/A"}
-                  </div>
-                </div>
-                <div className="info">
-                  <div className="info-title">Responsibilities</div>
-                  <div className="info-value">
-                    <ul>
-                      {requirementData.responsibilities.map(
-                        (responsibility, idx) => (
-                          <li key={idx}>
-                            {responsibility.responsibilitiesMsg}
-                          </li>
-                        )
-                      ) || "N/A"}
-                    </ul>
-                  </div>
-                </div>
-                <div className="info">
-                  <div className="info-title">Requirements</div>
-                  <div className="info-value">
-                    <ul>
-                      {requirementData.jobRequirements.map((item) => (
-                        <li key={item.jobRequirementsId}>
-                          {item.jobRequirementMsg}
-                        </li>
-                      )) || "N/A"}
-                    </ul>
-                  </div>
-                </div>
-                <div className="info">
-                  <div className="info-title">Preferred Qualifications</div>
-                  <div className="info-value">
-                    <ul>
-                      {requirementData.preferredQualifications.map((item) => (
-                        <li key={item.preferredQualificationsId}>
-                          {item.preferredQualificationMsg}
-                        </li>
-                      )) || "N/A"}
-                    </ul>
-                  </div>
-                </div>
+            <div className="jd-filter-section">
+              <div className="jd-filter-options-container">
+                {filterOptions.map((option) => {
+                  const uniqueValues = Array.from(
+                    // line 321 updated by sahil karnekar date 23-10-2024
+                    new Set(
+                      jobDescriptions.map((item) =>
+                        item[option]?.toString().toLowerCase().trim()
+                      )
+                    )
+                  );
+                  return (
+                    <div key={option} className="filter-option">
+                      <button
+                        className="white-Btn"
+                        onClick={() => handleFilterOptionClick(option)}
+                      >
+                        {/* this line numeber 319 is added by sahil karnekar for saparating the word if it is in PascalCase naming convention */}
+                        {formatOption(option)}{" "}
+                        {/* Call the formatting function here */}
+                        <span className="filter-icon">&#x25bc;</span>
+                      </button>
+                      {activeFilterOption === option && (
+                        <div className="city-filter">
+                          <div className="optionDiv">
+                            {uniqueValues.map(
+                              (value) =>
+                                // line 338 added by sahil karnekar date 23-10-2024
+                                value !== "" &&
+                                value !== undefined &&
+                                value !== null && (
+                                  <label
+                                    key={value}
+                                    className="selfcalling-filter-value"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={
+                                        selectedFilters[option]?.includes(
+                                          value
+                                        ) || false
+                                      }
+                                      onChange={() =>
+                                        handleFilterSelect(option, value)
+                                      }
+                                    />
+                                    {value}
+                                  </label>
+                                  // line 350 added by sahil karnekar date : 23-10-2024
+                                )
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-            </section>
-            <section className="job-performance1">
-              <span>
-                <article>
-                  <b>SOFTWARE DEVELOPER</b>
-                </article>
-                <div className="jd-share-div">
-                  <button className="saved daily-tr-btn" onClick={toggleEdm}>
-                    Share Video
-                  </button>
-                  <button className="daily-tr-btn" onClick={toggleEdm2}>
-                    Share EDM
-                  </button>
-                  <button
-                    className="share daily-tr-btn"
-                    onClick={sharejobdescription}
-                  >
-                    Share
-                  </button>
-                  <button onClick={handleclose} className="daily-tr-btn">
-                    Close
-                  </button>
-                </div>
-              </span>
-              <div className="names">
-                <p>
-                  {/* simple spelling mistake Corrected */}
-                  <b>Job Id : </b>
-                  {requirementData.requirementId || "N/A"}
-                </p>
-                <p>
-                  <b>Company Name : </b>
-                  {requirementData.companyName || "N/A"}
-                </p>
-                <p>
-                  <b>Designation :</b>
-                  {requirementData.designation || "N/A"}
-                </p>
-                <p>
-                  <b>Job Role : </b>
-                  {requirementData.jobRole || "N/A"}
-                </p>
-                <p>
-                  <b>Key Skills :</b>
-                  {requirementData.skills || "N/A"}
-                </p>
-                <p>
-                  <b>Salary :</b> {requirementData.salary || "N/A"}
-                </p>
-                <p>
-                  <b>Field : </b>
-                  {requirementData.field}
-                </p>
-                <p>
-                  <b>Location :</b>
-                  {requirementData.location || "N/A"}
-                </p>
-               
-                <p>
-                  <b>Educational Qualifications :</b>
-                  {requirementData.qualification || "N/A"}
-                </p>
-
-                <p>
-                  <b>Experience :</b>
-                  {requirementData.experience || "N/A"}
-                </p>
-
-                <p>
-                  <b>Year Of Passing :</b>
-                  {requirementData.year_of_passing || "N/A"}
-                </p>
-              
-                <p>
-                  <b>Company Link :</b>
-                  <a href={requirementData.companyLink || "#"}>Website</a>
-                </p>
-                <p>
-                  <b>Shifts : </b>
-                  {requirementData.shift || "N/A"}
-                </p>
-                <p>
-                  <b>Week Off's : </b>
-                  {requirementData.weekOff || "N/A"}
-                </p>
-                <p>
-                  <b>Notice Period :</b> {requirementData.noticePeriod || "N/A"}
-                </p>
-                
-                <p>
-                  <b>Job Type : </b>
-                  {requirementData.jobType || "N/A"}
-                </p>
-                <p>
-                  <b>Perks:</b>
-                  {requirementData.perks || "N/A"}
-                </p>
-                <p>
-                  <b>Incentives For Recruiters : </b>
-                  {requirementData.incentive || "N/A"}
-                </p>
-                <p>
-                  <b>Reporting Hierarchy : </b>
-                  {requirementData.reportingHierarchy || "N/A"}
-                </p>
-                <p>
-                  <b>Number of Positions : </b>
-                  {requirementData.position || "N/A"}
-                </p>
-                <p>
-                  <b>Documentation : </b>
-                  {requirementData.documentation || "N/A"}
-                </p>
-                <p>
-                  <b>Gender : </b>
-                  {requirementData.gender || "N/A"}
-                </p>
-              </div>
-            </section>
-          </main>
-        </>
-      )}
-      {showJobDescriptionShare && (
-          <div>
-          <ShareDescription
-            onShareDescription={handleShareJobDescription}
-            Descriptions={requirementData}
-          />
+            </div>
           </div>
-      )}
-      {showJobDescriptionEdm && (
-        <div>
-          <JobDescriptionEdm
-            onJobDescriptionEdm={handleJobDescriptionEdm}
-            Descriptions={requirementData.requirementId}
+
+          {!showViewMore && (
+            <div className="jdCards">
+              {filteredJobDescriptions.map((item) => (
+                <div className="job-listing" key={item.requirementId}>
+                  <div className="job-header">
+                    <h2 className="job-title">{item.designation}</h2>
+                    <div className="job-company">{item.companyName}</div>
+                  </div>
+                  <div className="job-details">
+                    <div className="job-location">
+                      <i className="fas fa-map-marker-alt"></i>
+                      {item.location}
+                    </div>
+                    <div className="job-experience">
+                      <i className="fas fa-calendar-alt"></i>
+                      {item.experience}
+                    </div>
+                    <div className="job-skills">
+                      <i className="fas fa-tags"></i>
+                      {item.skills}
+                    </div>
+
+                    {userType === "Manager" || userType === "TeamLeader" ? (
+                      <>
+                        <div className="job-incentive">
+                          <i className="fa-solid fa-indian-rupee-sign"></i>
+                          {item.incentive}
+                        </div>
+                      </>
+                    ) : null}
+
+                    <div className="job-skills">
+                      <i className="fa-solid fa-chart-line"></i>
+                      {item.jdStatus && (
+                        <span
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: "15px",
+                            color: item.jdStatus === "Active" ? "green" : "red",
+                            textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
+                          }}
+                        >
+                          {item.jdStatus}
+                        </span>
+                      )}
+                    </div>
+                    <div className="job-skills">
+                      <p
+                        style={{
+                          fontSize: "14px",
+                          textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
+                        }}
+                      >
+                        Posted On {item.jdAddedDate}{" "}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="job-actions">
+                    {userType === "Manager" || userType === "TeamLeader" ? (
+                      <div className="jd-edit-hold-div">
+                        <button
+                          className="daily-tr-btn"
+                          onClick={() =>
+                            handleToggleDropdown(item.requirementId)
+                          }
+                        >
+                          {openDropdownId === item.requirementId ? (
+                            <i className="fa-solid fa-xmark"></i>
+                          ) : (
+                            <i className="fa-solid fa-pencil"></i>
+                          )}
+                        </button>
+
+                        {openDropdownId === item.requirementId && (
+                          <div className="action-joblist-options">
+                            <div onClick={() => handleEditBtn(item)}>Edit</div>
+                            <div
+                              onClick={() =>
+                                handleToggleStatus(
+                                  item.requirementId,
+                                  item.jdStatus
+                                )
+                              }
+                            >
+                              {item.jdStatus}
+                            </div>
+
+                            <div
+                              onClick={() => handleDeleteJD(item.requirementId)}
+                            >
+                              Delete
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : null}
+
+                    <button
+                      className="daily-tr-btn"
+                      onClick={() => toggleJobDescription(item.requirementId)}
+                    >
+                      View More
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {showViewMore && (
+            <>
+              <h1>{selectedRequirementId}</h1>
+              <main className="name">
+                <section className="overview">
+                  <div className="scroll-container">
+                    <div className="info">
+                      <div className="info-title">Position Overview</div>
+                      <div className="info-value">
+                        {requirementData.positionOverview?.overview || "N/A"}
+                      </div>
+                    </div>
+                    <div className="info">
+                      <div className="info-title">Responsibilities</div>
+                      <div className="info-value">
+                        <ul>
+                          {requirementData.responsibilities.map(
+                            (responsibility, idx) => (
+                              <li key={idx}>
+                                {responsibility.responsibilitiesMsg}
+                              </li>
+                            )
+                          ) || "N/A"}
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="info">
+                      <div className="info-title">Requirements</div>
+                      <div className="info-value">
+                        <ul>
+                          {requirementData.jobRequirements.map((item) => (
+                            <li key={item.jobRequirementsId}>
+                              {item.jobRequirementMsg}
+                            </li>
+                          )) || "N/A"}
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="info">
+                      <div className="info-title">Preferred Qualifications</div>
+                      <div className="info-value">
+                        <ul>
+                          {requirementData.preferredQualifications.map(
+                            (item) => (
+                              <li key={item.preferredQualificationsId}>
+                                {item.preferredQualificationMsg}
+                              </li>
+                            )
+                          ) || "N/A"}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section className="job-performance1">
+                  <span>
+                    <article>
+                      <b>SOFTWARE DEVELOPER</b>
+                    </article>
+                    <div className="jd-share-div">
+                      <button
+                        className="saved daily-tr-btn"
+                        onClick={toggleEdm}
+                      >
+                        Share Video
+                      </button>
+                      <button className="daily-tr-btn" onClick={toggleEdm2}>
+                        Share EDM
+                      </button>
+                      <button
+                        className="share daily-tr-btn"
+                        onClick={sharejobdescription}
+                      >
+                        Share
+                      </button>
+                      <button onClick={handleclose} className="daily-tr-btn">
+                        Close
+                      </button>
+                    </div>
+                  </span>
+                  <div className="names">
+                    <p>
+                      {/* simple spelling mistake Corrected */}
+                      <b>Job Id : </b>
+                      {requirementData.requirementId || "N/A"}
+                    </p>
+                    <p>
+                      <b>Company Name : </b>
+                      {requirementData.companyName || "N/A"}
+                    </p>
+                    <p>
+                      <b>Designation :</b>
+                      {requirementData.designation || "N/A"}
+                    </p>
+                    <p>
+                      <b>Job Role : </b>
+                      {requirementData.jobRole || "N/A"}
+                    </p>
+                    <p>
+                      <b>Key Skills :</b>
+                      {requirementData.skills || "N/A"}
+                    </p>
+                    <p>
+                      <b>Salary :</b> {requirementData.salary || "N/A"}
+                    </p>
+                    <p>
+                      <b>Field : </b>
+                      {requirementData.field}
+                    </p>
+                    <p>
+                      <b>Location :</b>
+                      {requirementData.location || "N/A"}
+                    </p>
+
+                    <p>
+                      <b>Educational Qualifications :</b>
+                      {requirementData.qualification || "N/A"}
+                    </p>
+
+                    <p>
+                      <b>Experience :</b>
+                      {requirementData.experience || "N/A"}
+                    </p>
+
+                    <p>
+                      <b>Year Of Passing :</b>
+                      {requirementData.year_of_passing || "N/A"}
+                    </p>
+
+                    <p>
+                      <b>Company Link :</b>
+                      <a href={requirementData.companyLink || "#"}>Website</a>
+                    </p>
+                    <p>
+                      <b>Shifts : </b>
+                      {requirementData.shift || "N/A"}
+                    </p>
+                    <p>
+                      <b>Week Off's : </b>
+                      {requirementData.weekOff || "N/A"}
+                    </p>
+                    <p>
+                      <b>Notice Period :</b>{" "}
+                      {requirementData.noticePeriod || "N/A"}
+                    </p>
+
+                    <p>
+                      <b>Job Type : </b>
+                      {requirementData.jobType || "N/A"}
+                    </p>
+                    <p>
+                      <b>Perks:</b>
+                      {requirementData.perks || "N/A"}
+                    </p>
+                    <p>
+                      <b>Incentives For Recruiters : </b>
+                      {requirementData.incentive || "N/A"}
+                    </p>
+                    <p>
+                      <b>Reporting Hierarchy : </b>
+                      {requirementData.reportingHierarchy || "N/A"}
+                    </p>
+                    <p>
+                      <b>Number of Positions : </b>
+                      {requirementData.position || "N/A"}
+                    </p>
+                    <p>
+                      <b>Documentation : </b>
+                      {requirementData.documentation || "N/A"}
+                    </p>
+                    <p>
+                      <b>Gender : </b>
+                      {requirementData.gender || "N/A"}
+                    </p>
+                  </div>
+                </section>
+              </main>
+            </>
+          )}
+          {showJobDescriptionShare && (
+            <div>
+              <ShareDescription
+                onShareDescription={handleShareJobDescription}
+                Descriptions={requirementData}
+              />
+            </div>
+          )}
+          {showJobDescriptionEdm && (
+            <div>
+              <JobDescriptionEdm
+                onJobDescriptionEdm={handleJobDescriptionEdm}
+                Descriptions={requirementData.requirementId}
+              />
+            </div>
+          )}
+          {showEDM && (
+            <div>
+              <ShareEDM
+                onShareEdm={handleShareEdm}
+                Descriptions={requirementData.requirementId}
+              />
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          <UpdateJobDescription
+            onAddJD={updateJD}
+            // sahil karnekar line 599 date : 10-10-2024
+            toggleUpdateCompProp={handleUpdateCompProp}
           />
-        </div>
-      )}
-      {showEDM && (
-        <div>
-          <ShareEDM
-            onShareEdm={handleShareEdm}
-            Descriptions={requirementData.requirementId}
-          />
-        </div>
-      )}
-      </>
-    ):(
-      <>
-      <UpdateJobDescription
-        onAddJD={updateJD}
-        // sahil karnekar line 599 date : 10-10-2024
-        toggleUpdateCompProp={handleUpdateCompProp}
-      />
-    </>
+        </>
       )}
     </>
   );

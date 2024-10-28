@@ -183,7 +183,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
       // Show success message with counts
       toast.success(
         `Resume uploaded Successfully\n` +
-        `Uploaded Resumes Count : ${uploadedCount}\n` +
+        `Uploaded Resumes Count :   \n` +
         `Already Exists Resume :  ${existingCount}`
       );
       
@@ -263,7 +263,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                   )}
                 </div>
                 <div className="gap-2 d-grid">
-                  <button onClick={handleUpload}>Upload</button>
+                  <button onClick={handleUpload}>Upload File</button>
                   {/* download added by sahil karnekar line 275 to 277 */}
                   <button
                     onClick={() =>
@@ -271,10 +271,10 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                     }
                     title="To upload the data, download Excel format"
                   >
-                    Download
+                     Download Excel Format
                   </button>
                   <button onClick={() => handleTableChange("CallingExcelList")}>
-                    View
+                    View 
                   </button>
                 </div>
               </div>
@@ -313,14 +313,14 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                 </div>
                 <div className="gap-2 d-grid">
                   {/* this line 315 added by sahil karnekar */}
-                  <button onClick={handleUploadLineupFile}>Upload</button>
+                  <button onClick={handleUploadLineupFile}>Upload File </button>
                   {/* download added by sahil karnekar line 317 to 319 */}
                   <button
                     onClick={() =>
                       handleDownloadButton("/files/Lineup_Tracker_Format.xlsx")
                     }
                   >
-                    Download
+                    Download Excel Format
                   </button>
                   <button onClick={() => handleTableChange("LineupExcelData")}>
                     View
@@ -361,7 +361,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                   )}
                 </div>
                 <div className="gap-2 d-grid">
-                  <button onClick={handleUploadResume}>Upload</button>
+                  <button onClick={handleUploadResume}>Upload Resumes</button>
                   <button onClick={() => handleTableChange("ResumeList")}>
                     View
                   </button>

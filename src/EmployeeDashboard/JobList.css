@@ -344,15 +344,19 @@
   border-radius: 10px;
   padding: 15px;
   margin-bottom: 20px;
-  height: 220px;
+  height: 280px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid red;
+  width: calc(33.33% - 20px);
+  margin: 10px;
 }
+
 
 .job-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .job-title {
@@ -383,6 +387,11 @@
   margin-bottom: 10px;
 }
 
+.job-details i {
+  margin-right: 8px;
+  
+}
+
 .job-location,
 .job-experience,
 .job-skills,
@@ -404,10 +413,6 @@
 }
 
 
-.job-listing {
-  width: calc(33.33% - 20px);
-  margin: 10px;
-}
 
 @media (max-width: 768px) {
   .job-listing {
@@ -537,4 +542,26 @@ flex-direction: row;
   text-transform: capitalize;
   gap: 5px;
 
+}
+
+/* Arshad Attar Added CSS 28-10-2024 */
+.action-joblist-options {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Ensure it appears above other elements */
+  width: 100px; /* Set a width for the dropdown */
+}
+
+.action-joblist-options div {
+padding-bottom: 5px;
+padding-left: 5px;
+padding-top: 2px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.action-joblist-options div:hover {
+  background-color: #f0f0f0; /* Highlight on hover */
 }

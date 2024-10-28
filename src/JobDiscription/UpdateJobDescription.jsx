@@ -8,7 +8,6 @@ import { API_BASE_URL } from "../api/api";
 // sahil karnekar line 9_  date : 10-10-2024
 const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
   console.log(onAddJD);
-
   const [formData, setFormData] = useState({
     companyName: onAddJD.companyName || "",
     designation: onAddJD.designation || "",
@@ -37,9 +36,6 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
     documentation: onAddJD.documentation || "",
     ageCriteria: onAddJD.ageCriteria || "",
     note: onAddJD.note || "",
-    // contactRecruiterEmail:"",
-    // contactRecruiterMobileNumber:"",
-    // contactRecruiterName:"",
     positionOverview: { overview: onAddJD.positionOverview?.overview || "" },
     responsibilities: onAddJD.responsibilities?.length
       ? onAddJD.responsibilities
@@ -50,11 +46,6 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
     preferredQualifications: onAddJD.preferredQualifications?.length
       ? onAddJD.preferredQualifications
       : [{ employeeId: "", preferredQualificationMsg: "" }],
-    // RoundOfInterView: [
-    //   {
-    //     round: "",
-    //   },
-    // ],
   });
 
   const handleChange = (e) => {

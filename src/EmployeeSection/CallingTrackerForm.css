@@ -760,3 +760,10 @@ padding-right: 8px;
   /* font-weight: bold; */
   /* text-shadow: 0 0 2px rgba(255, 0, 0, 0.1), 0 0 4px rgba(90, 88, 88, 0.5); */
 }
+
+
+/* Arshad Attar Added CSS 27-10-2024 */
+:where(.css-dev-only-do-not-override-ni1kz0).ant-picker-dropdown .ant-picker-panel-container .ant-picker-panel-layout {
+  border: 2px solid gray;
+  border-radius: 10px;
+}
