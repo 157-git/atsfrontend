@@ -10,7 +10,8 @@ const LineupExcelData = ({
   funForGettingCandidateId,
   onCloseTable,
   loginEmployeeName,
-  toggleSection, // this props toggleSection added by sahil karnekar line 13
+  toggleSection,
+  onsuccessfulDataAdditions
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOptions, setFilterOptions] = useState([]);
@@ -861,6 +862,7 @@ const LineupExcelData = ({
           loginEmployeeName={loginEmployeeName}
           onClose={() => setSelectedCandidate(null)}
           onSuccess={handleUpdateSuccess}
+          onsuccessfulDataAdditions={onsuccessfulDataAdditions}
          
         />
       )}

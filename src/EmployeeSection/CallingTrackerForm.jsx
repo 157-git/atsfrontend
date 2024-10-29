@@ -26,7 +26,7 @@ const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
   initialData = {},
   loginEmployeeName,
-  onsuccessfulDataUpdation
+  onsuccessfulDataUpdation,
 }) => {
   const { employeeId } = useParams();
   const [submited, setSubmited] = useState(false);
@@ -187,7 +187,8 @@ const CallingTrackerForm = ({
     if (!callingTracker.candidateEmail) {
       errors.candidateEmail = "Email is required";
     } else if (!emailPattern.test(callingTracker.candidateEmail)) {
-      errors.candidateEmail = "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).";
+      errors.candidateEmail =
+        "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).";
     } else {
       delete errors.candidateEmail;
     }
@@ -245,7 +246,8 @@ const CallingTrackerForm = ({
     const { name, value } = e.target || e;
     // sahil karnekar line 249 to 274
     if (name === "candidateEmail") {
-      const emailPattern = /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+      const emailPattern =
+        /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
       if (/\s/.test(value)) {
         return;
       }
@@ -381,7 +383,6 @@ const CallingTrackerForm = ({
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
-
   const handleSubmit = async (e) => {
     setShowConfirmation(false);
     e.preventDefault();
@@ -481,7 +482,9 @@ const CallingTrackerForm = ({
       // Check for full error details
       if (error.response) {
         console.log("Error Response:", error.response);
-        toast.error("Error: " + error.response.data.message || "An error occurred");
+        toast.error(
+          "Error: " + error.response.data.message || "An error occurred"
+        );
       } else if (error.request) {
         console.log("Error Request:", error.request);
         toast.error("No response received from the server");
@@ -686,7 +689,9 @@ const CallingTrackerForm = ({
                       // line 668 added by sahil karnekar date 21-10-2024
                       maxLength="50"
                     />
-                    {!callingTracker.candidateName && (<span className="requiredFieldStar">*</span>)}
+                    {!callingTracker.candidateName && (
+                      <span className="requiredFieldStar">*</span>
+                    )}
                   </div>
                   {errors.candidateName && (
                     <div className="error-message">{errors.candidateName}</div>
@@ -707,7 +712,9 @@ const CallingTrackerForm = ({
                       placeholder="Enter Candidate Email"
                     />
                     {/* this line added by sahil date 22-10-2024 */}
-                    {!callingTracker.candidateEmail && (<span className="requiredFieldStar">*</span>)}
+                    {!callingTracker.candidateEmail && (
+                      <span className="requiredFieldStar">*</span>
+                    )}
                   </div>
                   {errors.candidateEmail && (
                     <div className="error-message">{errors.candidateEmail}</div>
@@ -735,7 +742,9 @@ const CallingTrackerForm = ({
                       maxLength={20}
                     />
                     {/* this line added by sahil date 22-10-2024 */}
-                    {!callingTracker.contactNumber && (<span className="requiredFieldStar">*</span>)}
+                    {!callingTracker.contactNumber && (
+                      <span className="requiredFieldStar">*</span>
+                    )}
                   </div>
                   {errors.contactNumber && (
                     <div className="error-message">{errors.contactNumber}</div>
@@ -785,7 +794,9 @@ const CallingTrackerForm = ({
                       <option value="others">Others</option>
                     </select>
                     {/* this line added by sahil date 22-10-2024 */}
-                    {!callingTracker.sourceName && (<span className="requiredFieldStar">*</span>)}
+                    {!callingTracker.sourceName && (
+                      <span className="requiredFieldStar">*</span>
+                    )}
                   </div>
                   {errors.sourceName && (
                     <div className="error-message">{errors.sourceName}</div>
@@ -818,7 +829,10 @@ const CallingTrackerForm = ({
                         ))}
                       </select>
                       {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" && !callingTracker.requirementId && (<span className="requiredFieldStar">*</span>)}
+                      {callingTracker.selectYesOrNo === "Interested" &&
+                        !callingTracker.requirementId && (
+                          <span className="requiredFieldStar">*</span>
+                        )}
                     </div>
                     {errors.requirementId && (
                       <div className="error-message">
@@ -883,7 +897,10 @@ const CallingTrackerForm = ({
                         <option value="">Other</option>
                       </select>
                       {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" && !callingTracker.currentLocation && (<span className="requiredFieldStar">*</span>)}
+                      {callingTracker.selectYesOrNo === "Interested" &&
+                        !callingTracker.currentLocation && (
+                          <span className="requiredFieldStar">*</span>
+                        )}
                     </div>
                     {isOtherLocationSelected && (
                       <input
@@ -945,12 +962,19 @@ const CallingTrackerForm = ({
                     </option> */}
                       <option value="Network Issue">Network Issue</option>
                       <option value="Invalid Number">Invalid Number</option>
-                      <option value="Need to call back">Need to call back</option>
-                      <option value="Do not call again">Do not call again</option>
+                      <option value="Need to call back">
+                        Need to call back
+                      </option>
+                      <option value="Do not call again">
+                        Do not call again
+                      </option>
                       {/* <option value="Other">Other</option> */}
                     </select>
                     {/* this line added by sahil date 22-10-2024 */}
-                    {!callingTracker.callingFeedback && (<span className="requiredFieldStar">*</span>)}
+                    {!callingTracker.callingFeedback && (
+                      <span className="requiredFieldStar">*</span>
+                    )}
+
                   </div>
                   {errors.callingFeedback && (
                     <div className="error-message">
@@ -1200,7 +1224,9 @@ const CallingTrackerForm = ({
                         <option value="Bachelor of Physiotherapy (BPT)">
                           Bachelor of Physiotherapy (BPT)
                         </option>
-                        <option value="Master's Degrees">Master's Degrees</option>
+                        <option value="Master's Degrees">
+                          Master's Degrees
+                        </option>
                         <option value="Master of Arts (MA)">
                           Master of Arts (MA)
                         </option>
@@ -1288,7 +1314,9 @@ const CallingTrackerForm = ({
                         <option value="Master of Data Science (MDS)">
                           Master of Data Science (MDS)
                         </option>
-                        <option value="Doctoral Degrees">Doctoral Degrees</option>
+                        <option value="Doctoral Degrees">
+                          Doctoral Degrees
+                        </option>
                         <option value="Doctor of Philosophy (PhD)">
                           Doctor of Philosophy (PhD)
                         </option>
@@ -1469,7 +1497,10 @@ const CallingTrackerForm = ({
                       </datalist>
                       {/* sahil karnekar */}
                       {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" && !lineUpData.qualification && (<span className="requiredFieldStar">*</span>)}
+                      {callingTracker.selectYesOrNo === "Interested" &&
+                        !lineUpData.qualification && (
+                          <span className="requiredFieldStar">*</span>
+                        )}
                     </div>
 
                     {errors.qualification && (
@@ -1612,7 +1643,10 @@ const CallingTrackerForm = ({
                       />
                       {/* sahil karnekar line 1523 to 1527 */}
                       {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" && !lineUpData.experienceYear && (<span className="requiredFieldStar">*</span>)}
+                      {callingTracker.selectYesOrNo === "Interested" &&
+                        !lineUpData.experienceYear && (
+                          <span className="requiredFieldStar">*</span>
+                        )}
                     </div>
                     {errors.experienceYear && (
                       <div className="error-message error-two-input-box">
@@ -1639,7 +1673,10 @@ const CallingTrackerForm = ({
                       />
                       {/* sahil karnekar line 1542 to 1546 */}
                       {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" && !lineUpData.experienceMonth && (<span className="requiredFieldStar">*</span>)}
+                      {callingTracker.selectYesOrNo === "Interested" &&
+                        !lineUpData.experienceMonth && (
+                          <span className="requiredFieldStar">*</span>
+                        )}
                     </div>
                     {errors.experienceMonth && (
                       <div className="error-message error-two-input-box">
@@ -1668,7 +1705,10 @@ const CallingTrackerForm = ({
                         style={{ width: "inherit" }}
                       />
                       {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" && !lineUpData.relevantExperience && (<span className="requiredFieldStar">*</span>)}
+                      {callingTracker.selectYesOrNo === "Interested" &&
+                        !lineUpData.relevantExperience && (
+                          <span className="requiredFieldStar">*</span>
+                        )}
                     </div>
                     {errors.relevantExperience && (
                       <div className="error-message">
@@ -1691,7 +1731,10 @@ const CallingTrackerForm = ({
                         style={{ width: "inherit" }}
                       />
                       {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" && !lineUpData.noticePeriod && (<span className="requiredFieldStar">*</span>)}
+                      {callingTracker.selectYesOrNo === "Interested" &&
+                        !lineUpData.noticePeriod && (
+                          <span className="requiredFieldStar">*</span>
+                        )}
                     </div>
                     {/* sahil karnekar line 1581 to 1585  */}
                     {errors.noticePeriod && (
@@ -1714,10 +1757,13 @@ const CallingTrackerForm = ({
                       value={callingTracker.communicationRating}
                       onChange={handleChange}
                       className="plain-input"
-                      placeholder="communicationRating"
+                      placeholder="Communication Rating"
                     />
                     {/* this line added by sahil date 22-10-2024 */}
-                    {callingTracker.selectYesOrNo === "Interested" && !callingTracker.communicationRating && (<span className="requiredFieldStar">*</span>)}
+                    {callingTracker.selectYesOrNo === "Interested" &&
+                      !callingTracker.communicationRating && (
+                        <span className="requiredFieldStar">*</span>
+                      )}
                   </div>
                   {errors.communicationRating && (
                     <div className="error-message error-two-input-box">
@@ -1747,7 +1793,10 @@ const CallingTrackerForm = ({
                         style={{ width: "inherit" }}
                       />
                       {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" && !lineUpData.currentCTCLakh && (<span className="requiredFieldStar">*</span>)}
+                      {callingTracker.selectYesOrNo === "Interested" &&
+                        !lineUpData.currentCTCLakh && (
+                          <span className="requiredFieldStar">*</span>
+                        )}
                     </div>
                     {errors.currentCTCLakh && (
                       <div className="error-message error-two-input-box">
@@ -1787,7 +1836,10 @@ const CallingTrackerForm = ({
                         style={{ width: "inherit" }}
                       />
                       {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" && !lineUpData.expectedCTCLakh && (<span className="requiredFieldStar">*</span>)}
+                      {callingTracker.selectYesOrNo === "Interested" &&
+                        !lineUpData.expectedCTCLakh && (
+                          <span className="requiredFieldStar">*</span>
+                        )}
                     </div>
                     {errors.expectedCTCLakh && (
                       <div className="error-message error-two-input-box">
@@ -1829,7 +1881,10 @@ const CallingTrackerForm = ({
                         <option value="No">No</option>
                       </select>
                       {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" && !lineUpData.holdingAnyOffer && (<span className="requiredFieldStar">*</span>)}
+                      {callingTracker.selectYesOrNo === "Interested" &&
+                        !lineUpData.holdingAnyOffer && (
+                          <span className="requiredFieldStar">*</span>
+                        )}
                     </div>
                     {errors.holdingAnyOffer && (
                       <div className="error-message error-two-input-box">
@@ -1937,7 +1992,10 @@ const CallingTrackerForm = ({
                         </option>
                       </select>
                       {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" && !lineUpData.finalStatus && (<span className="requiredFieldStar">*</span>)}
+                      {callingTracker.selectYesOrNo === "Interested" &&
+                        !lineUpData.finalStatus && (
+                          <span className="requiredFieldStar">*</span>
+                        )}
                     </div>
                     {/* sahil karnekar line 1784 to 1789 */}
                     {errors.finalStatus && (
@@ -1963,7 +2021,9 @@ const CallingTrackerForm = ({
                         const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
 
                         if (e.target.value < today) {
-                          seterrorInterviewSlot("Interview Slot Should be Next Date From Today");
+                          seterrorInterviewSlot(
+                            "Interview Slot Should be Next Date From Today"
+                          );
                         } else {
                           seterrorInterviewSlot(""); // Clear error message if the date is valid
                         }
@@ -1982,7 +2042,8 @@ const CallingTrackerForm = ({
                   <div className="calling-tracker-two-input">
                     {/* line number 1856 to 1878 added by sahil karnekar date : 15-10-2024 */}
                     <TimePicker
-                      placeholder="Interview Time"
+                      style={{ border: "1px solid black" }}
+                      placeholder="Set Interview Time"
                       disabled={callingTracker.selectYesOrNo !== "Interested"}
                       value={
                         lineUpData.interviewTime
@@ -1996,8 +2057,15 @@ const CallingTrackerForm = ({
                         })
                       }
                       format="h:mm a" // this hides the seconds selection
+                      renderExtraFooter={() => (
+                        <div style={{ textAlign: "center", color: "gray" }}>
+                          Set Interview Time
+                        </div>
+                      )}
                     />
-                    {/* <input
+                  </div>
+
+                  {/* <input
   type="text"
   name="interviewTime"
   placeholder="⏰(e.g 12:00 AM)"
@@ -2014,7 +2082,6 @@ const CallingTrackerForm = ({
   }}
  
 /> */}
-                  </div>
                 </div>
               </div>
             </div>
@@ -2140,11 +2207,15 @@ const ModalComponent = ({
   const [expectedCTC, setExpectedCTC] = useState("");
   const [expectedCTCLakh, setExpectedCTCLakh] = useState(expectedCTCInLakh);
   // updated by sahil karnekar date 25-10-2024
-  const [expectedCTCThousand, setExpectedCTCThousand] = useState(expectedCTCInThousand);
+  const [expectedCTCThousand, setExpectedCTCThousand] = useState(
+    expectedCTCInThousand
+  );
   const [showHikeInput, setShowHikeInput] = useState(false);
   // this 2 states are added by sahil karnekar date 25-10-2024
-  const [currentCTCInLakhState, setCurrentCTCInLakhState] = useState(currentCTCInLakh);
-  const [currentCTCInThousandState, setCurrentCTCInThousandState] = useState(currentCTCInThousand);
+  const [currentCTCInLakhState, setCurrentCTCInLakhState] =
+    useState(currentCTCInLakh);
+  const [currentCTCInThousandState, setCurrentCTCInThousandState] =
+    useState(currentCTCInThousand);
 
   const [currentCTCInLakhState1, setCurrentCTCInLakhState1] = useState(currentCTCInLakh);
   const [currentCTCInThousandState1, setCurrentCTCInThousandState1] = useState(currentCTCInThousand);

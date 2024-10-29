@@ -25,7 +25,7 @@ const customStyles = {
   },
 };
 
-const ResumeList = ({ loginEmployeeName }) => {
+const ResumeList = ({ loginEmployeeName,onsuccessfulDataAdditions }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -204,6 +204,7 @@ const ResumeList = ({ loginEmployeeName }) => {
                  {/* this line updated by sahil date 22-10-2024 */}
                 <tr className="attendancerows-head" style={{position:"sticky"}}>
                   <th className="attendanceheading">Sr No</th>
+                  <th className="attendanceheading"> Resume Upload Date</th>
                   <th className="attendanceheading">Candidate Name</th>
                   <th className="attendanceheading">Candidate Email</th>
                   <th className="attendanceheading">Gender</th>
@@ -229,6 +230,17 @@ const ResumeList = ({ loginEmployeeName }) => {
                       {index + 1}{" "}
                       <div className="tooltip">
                         <span className="tooltiptext">{index + 1}</span>
+                      </div>
+                    </td>
+                    <td
+                   style={{paddingLeft:"3px"}}
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {item.resumeUploadDate}{" "}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{item.resumeUploadDate}</span>
                       </div>
                     </td>
                     <td
@@ -396,6 +408,7 @@ const ResumeList = ({ loginEmployeeName }) => {
           <CallingTrackerForm
             initialData={selectedCandidate}
             loginEmployeeName={loginEmployeeName}
+            onsuccessfulDataAdditions={onsuccessfulDataAdditions}
           />
         )}
       </div>

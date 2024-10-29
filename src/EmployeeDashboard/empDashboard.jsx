@@ -784,6 +784,7 @@ const EmpDashboard = ({ userGroup }) => {
           {showCallingExcelList && (
             <CallingExcelList
               loginEmployeeName={loginEmployeeName}
+              onsuccessfulDataAdditions={handleSuccessfulDataAdditions} 
             ></CallingExcelList>
           )}
         </div>
@@ -792,12 +793,14 @@ const EmpDashboard = ({ userGroup }) => {
           {showLineupExcelList && (
             <LineupExcelData
               loginEmployeeName={loginEmployeeName}
+              onsuccessfulDataAdditions={handleSuccessfulDataAdditions} 
             ></LineupExcelData>
           )}
         </div>
         <div>
           {showResumeData && (
-            <ResumeList loginEmployeeName={loginEmployeeName}></ResumeList>
+            <ResumeList onsuccessfulDataAdditions={handleSuccessfulDataAdditions} 
+            loginEmployeeName={loginEmployeeName} ></ResumeList>
           )}
         </div>
         <div>{showNotePad && <NotePad />}</div>
@@ -811,6 +814,7 @@ const EmpDashboard = ({ userGroup }) => {
           {addCandidate && (
             <CallingTrackerForm
               loginEmployeeName={loginEmployeeName}
+              onsuccessfulDataAdditions={handleSuccessfulDataAdditions}
             />
           )}
         </div>
