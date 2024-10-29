@@ -53,7 +53,8 @@
 .close-profile-popup-btn:hover {
   background-color: white;
   color: #ffcb9b;
-  border: #f2f2f2;
+  border: #f2f2f2;  
+  border: 1px solid var(--text-hover-color);
 }
 
 .employee-profile-section {
@@ -82,22 +83,20 @@
   align-items: center;
   gap: 5px;
   padding: 10px 15px;
-  /* margin-top: 15px; */
-  border-color: black;
   background-color: var(--button-color);
-  color: white;
+  color: var(--text-color);
   cursor: pointer;
   border-radius: 15px;
   font-size: 16px;
   height: 30px;
   width: auto;
-  border: 1px solid #ccc;
+  border: 1px solid gray;
 }
 
 .profile-back-button button:hover {
   background-color: var(--button-hover-color);
   color: var(--text-hover-color);
-  border: #f2f2f2;
+  border: 1px solid var(--text-hover-color);
 }
 
 .employee-profile-staticsection {

@@ -26,6 +26,7 @@
 .select:hover {
   background-color: var(--button-hover-color);
   color: var(--text-hover-color);
+  border: 1px solid var(--text-hover-color);
 }
 
 
@@ -74,13 +75,13 @@
 .timer-break-btn:hover,
 .logout-btn:hover {
   background-color: var(--button-hover-color);
-  border: 1px solid gray;
+  border: 1px solid var(--text-hover-color);  
   color: var(--text-hover-color);
 }
 
 .logout-btn:hover {
   background-color: var(--button-hover-color);
-  border: 1px solid gray;
+  border: 1px solid var(--text-hover-color);
   color: var(--text-hover-color);
 }
 
@@ -114,15 +115,12 @@
 .loging-hr:hover {
   background-color: var(--button-hover-color);
   color: var(--text-hover-color);
-  border: 1px solid gray;
+  border: 1px solid var(--text-hover-color);
 }
 
 .daily-tr-btn {
-  border: 1px solid gray;
   border-radius: 15px;
-  background-color: var(--button-color);
   font-size: 16px;
-  color: var(--text-hover-color);
   height: 30px;
   width: auto;
   padding-left: 15px;
@@ -130,12 +128,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--button-color);
+  color: var(--text-color);
+  border: 1px solid gray;
 }
 
 .daily-tr-btn:hover {
   background-color: var(--button-hover-color);
   color: var(--text-hover-color);
-  border: 1px solid gray;
+  border: 1px solid var(--text-hover-color);
 }
 
 .daily-timeanddate {
@@ -214,7 +215,7 @@
 .toggle-all-daily-btns:hover {
   background-color: var(--button-hover-color);
   color: var(--text-hover-color);
-  border: 1px solid gray;
+  border: 1px solid var(--text-hover-color);
 }
 
 @media (min-width: 1000px) {

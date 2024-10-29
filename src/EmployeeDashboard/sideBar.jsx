@@ -142,7 +142,7 @@ function Sidebar({
 
   const handleColorApplied = (color) => {
     localStorage.setItem("selectedColor", color);
-    setShowColor(false); // Close the color picker modal when color is applied
+    setShowColor(false); 
   };
 
   const getParentSubMenu = (buttonKey) => {
@@ -1480,6 +1480,7 @@ function Sidebar({
           </div>
         </div>
       </div>
+
       {showColor && (
         <div
           className="bg-black bg-opacity-50 modal show"
@@ -1490,6 +1491,7 @@ function Sidebar({
             position: "fixed",
             width: "100%",
             height: "100vh",
+           
           }}
         >
           <Modal.Dialog
@@ -1497,30 +1499,21 @@ function Sidebar({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              
             }}
           >
             <Modal.Body>
-              <div className="color-picker">
-                <ColorPicker onColorApplied={handleColorApplied} />
-                {/* {pastelColors.map((color, index) => (
-                        <button
-                          key={index}
-                          style={{
-                            backgroundColor: color,
-                            border: "none",
-                            width: "40px",
-                            height: "40px",
-                            cursor: "pointer",
-                            margin: "5px",
-                          }}
-                          onClick={() => handleColorClick(color)}
-                        />
-                      ))} */}
+              <div className="color-picker" >
+                <ColorPicker onColorApplied={handleColorApplied}
+                setShowColor={setShowColor}
+                />
               </div>
             </Modal.Body>
+           
           </Modal.Dialog>
         </div>
       )}
+
 
       {showConfirmation && (
         <div

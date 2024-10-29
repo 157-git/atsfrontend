@@ -37,8 +37,9 @@ const AddJobDescription = () => {
     ageCriteria: "",
     note: "",
     jdAddedDate: "",
-    jdType: "",
-    jdStatus: "",
+    jdType: "All Members",
+    jdStatus: "Active",
+    holdStatus: "Unhold",
     positionOverview: { overview: "", employeeId: "" },
     responsibilities: [{ employeeId: "", responsibilitiesMsg: "" }],
     jobRequirements: [{ employeeId: "", jobRequirementMsg: "" }],
@@ -50,21 +51,25 @@ const AddJobDescription = () => {
   useEffect(() => {
     const formatDate = () => {
       const date = new Date();
-
       const day = date.getDate();
       const month = date.toLocaleString("en-US", { month: "long" });
       const year = date.getFullYear();
-      const hours = date.getHours() % 12 || 12; // convert 24-hour format to 12-hour
+      const hours = date.getHours() % 12 || 12;
       const minutes = date.getMinutes().toString().padStart(2, "0");
       const ampm = date.getHours() >= 12 ? "PM" : "AM";
       return `${day} ${month} ${year} - ${hours}:${minutes} ${ampm}`;
     };
-
+  
+    // Update `jdAddedDate` only once on mount
     setFormData((prevFormData) => ({
       ...prevFormData,
       jdAddedDate: formatDate(),
     }));
-  }, []);
+  }, []); // Empty dependency array to run only once
+  
+  
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -180,8 +185,9 @@ const AddJobDescription = () => {
           ageCriteria: "",
           note: "",
           jdAddedDate: "",
-          jdType: "",
-          jdStatus: "",
+          jdType: "All Members",
+          jdStatus: "Active", 
+          holdStatus: "Unhold",
           positionOverview: { overview: "", employeeId: "" },
           responsibilities: [{ employeeId: "", responsibilitiesMsg: "" }],
           jobRequirements: [{ employeeId: "", jobRequirementMsg: "" }],
@@ -543,8 +549,7 @@ const AddJobDescription = () => {
                         >
                             <option value="Active">Active</option>
                             <option value="Inactive">Inactive</option>
-                          <option value="Hold">Hold</option>
-                          <option value="Unhold">Unhold</option>
+                         
                         
                         </select>
                       </div>

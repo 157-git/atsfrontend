@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import axios from "../api/api";
 
 // SwapnilRokade_JobListing_filter_option__18/07
+
 const JobListing = () => {
   const { employeeId, userType } = useParams();
 
@@ -57,6 +58,10 @@ const JobListing = () => {
     "companyName",
     "field",
     "companyName",
+    "incentive",
+    "jdStatus",
+    "jdAddedDate",
+    "holdStatus",
   ];
 
   useEffect(() => {
@@ -164,7 +169,7 @@ const JobListing = () => {
         (job.experience &&
           job.experience
             .toLowerCase()
-            .includes(searchQuery.experience.toLowerCase()))
+            .includes(searchQuery.experience.toLowerCase())) 
       );
     });
     setFilteredJobDescriptions(filtered);
@@ -211,7 +216,6 @@ const JobListing = () => {
   const sharejobdescription = (e) => {
     e.preventDefault();
     setShowJobDescriptionShare(!showJobDescriptionShare);
-    // document.querySelector(".main-description-share").style.display = "block";
   };
 
   const toggleEdm = () => {
@@ -240,8 +244,6 @@ const JobListing = () => {
 
   //   This is added by sahil karnekar date : 30 sep 2024 the function for formatting the word is it is in PascalCase line 250 to 254
   function formatOption(option) {
-    // Regular expression to insert a space before any uppercase letter
-    // that follows a lowercase letter or another uppercase letter
     return option.replace(/([a-z])([A-Z])/g, "$1 $2");
   }
 
@@ -316,6 +318,49 @@ const JobListing = () => {
     } catch (error) {
       toast.error(`Failed to delete JD: ${error.message}`);
     }
+  };
+
+  const formatTimeDifference = (dateString) => {
+    const date = new Date(dateString);
+    const currentDate = new Date();
+
+    const differenceInMs = currentDate - date;
+    const differenceInMinutes = Math.floor(differenceInMs / (1000 * 60));
+    const differenceInHours = Math.floor(differenceInMs / (1000 * 60 * 60));
+    const differenceInDays = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
+    const differenceInWeeks = Math.floor(differenceInDays / 7);
+    const differenceInMonths = Math.floor(differenceInDays / 30);
+    const differenceInYears = Math.floor(differenceInDays / 365);
+
+    let timeValue, timeUnit;
+    if (differenceInYears >= 1) {
+      timeValue = differenceInYears;
+      timeUnit = "Year";
+      const remainingMonths = differenceInMonths % 12;
+      if (remainingMonths > 0) {
+        return `Posted on ${timeValue} ${timeUnit}${
+          timeValue > 1 ? "s" : ""
+        } ${remainingMonths} ${remainingMonths > 1 ? "Months" : "Month"} Ago`;
+      }
+    } else if (differenceInMonths >= 1) {
+      timeValue = differenceInMonths;
+      timeUnit = "Month";
+    } else if (differenceInWeeks >= 1) {
+      timeValue = differenceInWeeks;
+      timeUnit = "Week";
+    } else if (differenceInDays >= 1) {
+      timeValue = differenceInDays;
+      timeUnit = "Day";
+    } else if (differenceInHours >= 1) {
+      timeValue = differenceInHours;
+      timeUnit = "Hour";
+    } else {
+      timeValue = differenceInMinutes;
+      timeUnit = "Minute";
+    }
+
+    const formattedTimeUnit = timeValue > 1 ? `${timeUnit}s` : timeUnit;
+    return `Posted on ${timeValue} ${formattedTimeUnit} Ago`;
   };
 
   return (
@@ -500,75 +545,102 @@ const JobListing = () => {
                   </div>
 
                   <div className="job-actions">
-
                     <div className="jd-date-main-div">
                       <div className="jd-added-date">
-                        <p
-                          style={{
-                            fontSize: "14px",
-                            textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
-                          }}
-                        >
-                          {item.jdAddedDate}{" "}
-                        </p>
+                        <TimeDifference date={item.jdAddedDate} />
                       </div>
                     </div>
 
                     <div className="jd-action-main-div">
-
                       {userType === "Manager" || userType === "TeamLeader" ? (
-  <div className="jd-edit-hold-div">
-    <button
-      className="daily-tr-btn"
-      onClick={() =>
-        handleToggleDropdown(item.requirementId)
-      }
-    >
-      {openDropdownId === item.requirementId ? (
-        <i className="fa-solid fa-xmark"></i>
-      ) : (
-        <i className="fa-solid fa-pencil"></i>
-      )}
-    </button>
+                        <div className="jd-edit-hold-div">
+                          <button
+                            className="daily-tr-btn"
+                            onClick={() =>
+                              handleToggleDropdown(item.requirementId)
+                            }
+                          >
+                            {openDropdownId === item.requirementId ? (
+                              <i className="fa-solid fa-xmark"></i>
+                            ) : (
+                              <i className="fa-solid fa-pencil"></i>
+                            )}
+                          </button>
 
-    {openDropdownId === item.requirementId && ( 
-      <div className="action-joblist-options">
-        <div onClick={() => handleEditBtn(item)}>Edit</div>
-        <div onClick={() => handleToggleStatus(item.requirementId, item.jdStatus, "jdStatus")}>
-          {item.jdStatus === "Active" ? "Inactivate" : "Activate"}
-        </div>
-        <div onClick={() => handleToggleStatus(item.requirementId, item.holdStatus, "holdStatus")}>
-          {item.holdStatus === "Hold" ? "Unhold" : "Hold"}
-        </div>
-        <div onClick={() => handleDeleteJD(item.requirementId)}>Delete</div>
-      </div>
-    )}
-  </div>
-) : null}
-
-                          <div className="action-btn-jd-div">
-                          {userType === "Recruiters" && (
-                            <button
-                              className="daily-tr-btn"
-                              onClick={() =>
-                                toggleJobDescription(item.requirementId)
-                              }
-                            >
-                              View More
-                            </button>
-                          )}
-                          {(userType === "Manager" ||
-                            userType === "TeamLeader") && (
-                            <button
-                              className="daily-tr-btn"
-                              onClick={() =>
-                                toggleJobDescription(item.requirementId)
-                              }
-                            >
-                              View
-                            </button>
+                          {openDropdownId === item.requirementId && (
+                            <div className="action-joblist-options">
+                              <a href="#">
+                                <div onClick={() => handleEditBtn(item)}>
+                                  Edit
+                                </div>
+                              </a>
+                              <a href="#">
+                                <div
+                                  onClick={() =>
+                                    handleToggleStatus(
+                                      item.requirementId,
+                                      item.jdStatus,
+                                      "jdStatus"
+                                    )
+                                  }
+                                >
+                                  {item.jdStatus === "Active"
+                                    ? "Inactivate"
+                                    : "Activate"}
+                                </div>
+                              </a>
+                              <a href="#">
+                                <div
+                                  onClick={() =>
+                                    handleToggleStatus(
+                                      item.requirementId,
+                                      item.holdStatus,
+                                      "holdStatus"
+                                    )
+                                  }
+                                >
+                                  {item.holdStatus === "Hold"
+                                    ? "Unhold"
+                                    : "Hold"}
+                                </div>
+                              </a>
+                              <a href="#">
+                                <div
+                                  onClick={() =>
+                                    handleDeleteJD(item.requirementId)
+                                  }
+                                >
+                                  Delete
+                                </div>
+                              </a>
+                            </div>
                           )}
                         </div>
+                      ) : null}
+
+                      <div className="action-btn-jd-div">
+                        {userType === "Recruiters" && (
+                          <button
+                            className="daily-tr-btn"
+                            onClick={() =>
+                              toggleJobDescription(item.requirementId)
+                            }
+                          >
+                            View More
+                          </button>
+                        )}
+                        {(userType === "Manager" ||
+                          userType === "TeamLeader") && (
+                          <button
+                            className="daily-tr-btn"
+                            onClick={() =>
+                              toggleJobDescription(item.requirementId)
+                            }
+                          >
+                            View
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -799,6 +871,73 @@ const JobList = () => {
     <div className="job-list">
       <JobListing />
     </div>
+  );
+};
+
+// Arshad Attar Added :- 29-10-2024
+// Posted date On Jd Time Calculator
+const TimeDifference = ({ date }) => {
+  const [timeDifference, setTimeDifference] = useState("");
+
+  const formatTimeDifference = (dateString) => {
+    const date = new Date(dateString);
+    const currentDate = new Date();
+
+    const differenceInMs = currentDate - date;
+    const differenceInMinutes = Math.floor(differenceInMs / (1000 * 60));
+    const differenceInHours = Math.floor(differenceInMs / (1000 * 60 * 60));
+    const differenceInDays = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
+    const differenceInWeeks = Math.floor(differenceInDays / 7);
+    const differenceInMonths = Math.floor(differenceInDays / 30);
+    const differenceInYears = Math.floor(differenceInDays / 365);
+
+    if (differenceInYears >= 1) {
+      const remainingMonths = differenceInMonths % 12;
+      return `Posted on ${differenceInYears} Year${
+        differenceInYears > 1 ? "s" : ""
+      } ${
+        remainingMonths > 0
+          ? remainingMonths + " Month" + (remainingMonths > 1 ? "s" : "")
+          : ""
+      } Ago`;
+    } else if (differenceInMonths >= 1) {
+      return `Posted on ${differenceInMonths} Month${
+        differenceInMonths > 1 ? "s" : ""
+      } Ago`;
+    } else if (differenceInWeeks >= 1) {
+      return `Posted on ${differenceInWeeks} Week${
+        differenceInWeeks > 1 ? "s" : ""
+      } Ago`;
+    } else if (differenceInDays >= 1) {
+      return `Posted on ${differenceInDays} Day${
+        differenceInDays > 1 ? "s" : ""
+      } Ago`;
+    } else if (differenceInHours >= 1) {
+      return `Posted on ${differenceInHours} Hour${
+        differenceInHours > 1 ? "s" : ""
+      } Ago`;
+    } else {
+      return `Posted on ${differenceInMinutes} Minute${
+        differenceInMinutes > 1 ? "s" : ""
+      } Ago`;
+    }
+  };
+
+  useEffect(() => {
+    setTimeDifference(formatTimeDifference(date));
+    const interval = setInterval(() => {
+      setTimeDifference(formatTimeDifference(date));
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [date]);
+
+  return (
+    <p
+      style={{ fontSize: "14px", textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)" }}
+    >
+      {timeDifference}
+    </p>
   );
 };
 

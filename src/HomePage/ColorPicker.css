@@ -43,3 +43,24 @@ path:hover {
     transform: scale(1.05);
 }
 
+
+
+/* Arshad Attarv Added CSS 29-10-2024 */
+.color-picker-main-div{
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+    /* border: 2px solid black; */
+    /* padding-bottom: 50px; */
+}
+
+.defult-color-div{
+    /* border: 1px solid red; */
+    height: 40px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+}
