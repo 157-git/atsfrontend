@@ -974,6 +974,7 @@ const CallingTrackerForm = ({
                     {!callingTracker.callingFeedback && (
                       <span className="requiredFieldStar">*</span>
                     )}
+
                   </div>
                   {errors.callingFeedback && (
                     <div className="error-message">
@@ -2216,53 +2217,84 @@ const ModalComponent = ({
   const [currentCTCInThousandState, setCurrentCTCInThousandState] =
     useState(currentCTCInThousand);
 
-  console.log(currentCTCInLakhState);
-  console.log(currentCTCInThousandState);
+  const [currentCTCInLakhState1, setCurrentCTCInLakhState1] = useState(currentCTCInLakh);
+  const [currentCTCInThousandState1, setCurrentCTCInThousandState1] = useState(currentCTCInThousand);
+
+  // Use useEffect to update state when props change
+  useEffect(() => {
+    setCurrentCTCInLakhState(currentCTCInLakh);
+    setCurrentCTCInThousandState(currentCTCInThousand);
+    setCurrentCTCInLakhState1(currentCTCInLakh);
+    setCurrentCTCInThousandState1(currentCTCInThousand);
+  }, [currentCTCInLakh, currentCTCInThousand]);
 
   useEffect(() => {
     setOrigin(startingPoint);
     setDestination(endingPoint);
     setExpectedCTCLakh(expectedCTCInLakh);
     setExpectedCTCThousand(expectedCTCInThousand);
-    setExpectedCTC("");
+
     // this line updated by sahil karnekar date 25-10-2024
     setShowHikeInput(true);
   }, [startingPoint, endingPoint, expectedCTCInLakh, expectedCTCInThousand]);
 
+
+  const formatNumberToWords = (num) => {
+    const lakh = Math.floor(num / 100000);
+    const thousand = Math.floor((num % 100000) / 1000);
+    const hundred = Math.floor((num % 1000) / 100);
+    const tensAndOnes = num % 100;
+
+    let result = "";
+    if (lakh) result += `${lakh} lakh `;
+    if (thousand) result += `${thousand} thousand `;
+    if (hundred) result += `${hundred} hundred `;
+
+    // Handle tens and ones, keeping "and" for readability when needed
+    if (tensAndOnes) {
+      if (result) result += "and ";
+      result += `${tensAndOnes}`;
+    }
+
+    return result.trim();
+  };
+
+
+
+  // Update expectedCTC in words after calculation
   useEffect(() => {
     if (expectedHike) {
-      // this lines updated by sahil karnekar date 25-10-2024
-      const currentCTCNum =
-        parseFloat(currentCTCInLakhState) * 100000 +
-        parseFloat(currentCTCInThousandState) * 1000;
+      const currentCTCNum = parseFloat(currentCTCInLakhState) * 100000 + parseFloat(currentCTCInThousandState) * 1000;
       const expectedHikeNum = parseFloat(expectedHike);
-      const expectedCTCNum =
-        currentCTCNum + (currentCTCNum * expectedHikeNum) / 100;
-      setExpectedCTC(expectedCTCNum.toFixed(2));
-      setCalculatedHike("");
+      const expectedCTCNum = currentCTCNum + (currentCTCNum * expectedHikeNum) / 100;
+
+      // Update expectedCTC with formatted words
+      setExpectedCTC(formatNumberToWords(expectedCTCNum));
+
     }
   }, [expectedHike, currentCTCInLakhState, currentCTCInThousandState]);
 
   useEffect(() => {
-    if (expectedCTCLakh || expectedCTCThousand) {
+    if (expectedCTCLakh || expectedCTCThousand || currentCTCInLakhState1 || currentCTCInThousandState1) {
       const lakhValue = parseFloat(expectedCTCLakh) || 0;
       const thousandValue = parseFloat(expectedCTCThousand) || 0;
       const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
       // this lines updated by sahil karnekar date 25-10-2024
-      const currentCTCNum =
-        parseFloat(currentCTCInLakhState) * 100000 +
-        parseFloat(currentCTCInThousandState) * 1000;
-      const hikePercentage =
-        ((combinedCTC - currentCTCNum) / currentCTCNum) * 100;
+      const currentCTCNum = parseFloat(currentCTCInLakhState1) * 100000 + parseFloat(currentCTCInThousandState1) * 1000;
+      const hikePercentage = ((combinedCTC - currentCTCNum) / currentCTCNum) * 100;
       setCalculatedHike(hikePercentage.toFixed(2));
     }
     // this line is updated by sahil karnekar date 25-10-2024
-  }, [
-    expectedCTCLakh,
-    expectedCTCThousand,
-    currentCTCInLakhState,
-    currentCTCInThousandState,
-  ]);
+  }, [expectedCTCLakh, expectedCTCThousand, currentCTCInLakhState1, currentCTCInThousandState1, calculatedHike]);
+
+  const handleNumericChange = (setter) => (event) => {
+    const value = event.target.value;
+    if (!/^\d*$/.test(value)) {
+      return; // Prevent update if value is not numeric
+    }
+    setter(value); // Update state if value is numeric
+  };
+
 
   return (
     <Modal size="xl" centered show={show} onHide={handleClose}>
@@ -2270,17 +2302,15 @@ const ModalComponent = ({
         <div className="calling-tracker-popup">
           <div className="calling-tracker-popup-sidebar">
             <p
-              className={`sidebar-item ${
-                activeField === "distance" ? "active" : ""
-              }`}
+              className={`sidebar-item ${activeField === "distance" ? "active" : ""
+                }`}
               onClick={() => setActiveField("distance")}
             >
               Distance Calculation
             </p>
             <p
-              className={`sidebar-item ${
-                activeField === "salary" ? "active" : ""
-              }`}
+              className={`sidebar-item ${activeField === "salary" ? "active" : ""
+                }`}
               onClick={() => setActiveField("salary")}
             >
               Salary Calculation
@@ -2297,9 +2327,8 @@ const ModalComponent = ({
             </p> */}
 
             <p
-              className={`sidebar-item ${
-                activeField === "previousQuestion" ? "active" : ""
-              }`}
+              className={`sidebar-item ${activeField === "previousQuestion" ? "active" : ""
+                }`}
               onClick={() => setActiveField("previousQuestion")}
             >
               Previous Question
@@ -2359,40 +2388,91 @@ const ModalComponent = ({
                       <td className="text-secondary">
                         <div className="form-group">
                           {/* <label htmlFor="currentCTCLakh"></label> */}
-                          <input
-                            type="number"
-                            id="currentCTCLakh"
-                            className="form-control"
-                            placeholder="Enter current CTC in lakh"
-                            // line number 2286 to 2372 changed by sahil karnekar date 25-10-2024
-                            value={currentCTCInLakhState}
-                            onChange={(e) =>
-                              setCurrentCTCInLakhState(e.target.value)
-                            }
-                          />
-                          <input
-                            type="number"
-                            id="currentCTCLakh"
-                            className="form-control"
-                            placeholder="Enter current CTC in lakh"
-                            value={currentCTCInThousandState}
-                            onChange={(e) =>
-                              setCurrentCTCInThousandState(e.target.value)
-                            }
-                          />
+                          <div style={{ position: "relative", marginBottom: "4px" }}>
+                            <input
+                              type="text"
+                              id="currentCTCLakh"
+                              maxLength="2"
+                              pattern="\d*"
+                              inputMode="numeric"
+                              className="form-control"
+                              placeholder="Enter current CTC in lakh"
+                              // line number 2286 to 2372 changed by sahil karnekar date 25-10-2024
+                              value={currentCTCInLakhState}
+                              onChange={handleNumericChange(setCurrentCTCInLakhState)}
+
+                            />
+                            {currentCTCInLakhState && (
+                              <span
+                                style={{
+                                  position: "absolute",
+                                  right: "10px", // Adjust for spacing between the text and input edge
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
+                                  pointerEvents: "none", // Ensure the span doesn't block input events
+                                }}
+                              >
+                                Lakh
+                              </span>
+                            )}
+                          </div>
+                          <div style={{ position: "relative" }}>
+                            <input
+                              type="text"
+                              id="currentCTCLakh"
+                              maxLength="2"
+                              pattern="\d*"
+                              inputMode="numeric"
+                              className="form-control"
+                              placeholder="Enter current CTC in Thousand"
+                              value={currentCTCInThousandState}
+                              onChange={handleNumericChange(setCurrentCTCInThousandState)}
+                            />
+                            {currentCTCInThousandState && (
+                              <span
+                                style={{
+                                  position: "absolute",
+                                  right: "10px", // Adjust for spacing between the text and input edge
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
+                                  pointerEvents: "none", // Ensure the span doesn't block input events
+                                }}
+                              >
+                                Thousand
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </td>
                       <td className="text-secondary">
                         <div className="form-group">
                           {/* <label htmlFor="expectedHike">Hike (%)</label> */}
-                          <input
-                            type="number"
-                            id="expectedHike"
-                            className="form-control"
-                            placeholder="Enter expected hike percentage"
-                            value={expectedHike}
-                            onChange={(e) => setExpectedHike(e.target.value)}
-                          />
+                          <div style={{ position: "relative" }}>
+                            <input
+                              type="text"
+                              id="expectedHike"
+                              maxLength="3"
+                              pattern="\d*"
+                              inputMode="numeric"
+                              className="form-control"
+                              placeholder="Enter expected hike percentage"
+                              value={expectedHike}
+                              onChange={handleNumericChange(setExpectedHike)}
+                            />
+                            {expectedHike && (
+                              <span
+                                style={{
+                                  position: "absolute",
+                                  right: "10px", // Adjust for spacing between the text and input edge
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
+                                  pointerEvents: "none", // Ensure the span doesn't block input events
+                                }}
+                              >
+                                %
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </td>
                       <td className="text-secondary">
@@ -2409,6 +2489,7 @@ const ModalComponent = ({
                 <table className="table table-bordered">
                   <thead>
                     <tr>
+                      <th className="sal-cal-th">Current Salary</th>
                       <th className="sal-cal-th">Expected Salary</th>
                       <th className="sal-cal-th">Calculated Hike (%)</th>
                     </tr>
@@ -2416,44 +2497,139 @@ const ModalComponent = ({
                   <tbody>
                     <tr>
                       <td className="text-secondary">
-                        <div>
-                          <div className="form-group">
-                            {/* <label htmlFor="expectedCTCLakh">Lakh</label> */}
+                        <div className="form-group">
+                          {/* <label htmlFor="currentCTCLakh"></label> */}
+                          <div style={{ position: "relative", marginBottom: "4px" }}>
                             <input
                               type="text"
-                              id="expectedCTCLakh"
-                              className="form-control"
-                              placeholder="Enter expected CTC in lakh"
+                              id="currentCTCLakh"
                               maxLength="2"
                               pattern="\d*"
                               inputMode="numeric"
-                              value={expectedCTCLakh}
-                              onChange={(e) => {
-                                const value = e.target.value;
-                                setExpectedCTCLakh(value);
-                                onUpdateExpectedCTCLakh(value);
-                              }}
+                              className="form-control"
+                              placeholder="Enter current CTC in lakh"
+                              // line number 2286 to 2372 changed by sahil karnekar date 25-10-2024
+                              value={currentCTCInLakhState1}
+                              onChange={handleNumericChange(setCurrentCTCInLakhState1)}
                             />
+                            {currentCTCInLakhState1 && (
+                              <span
+                                style={{
+                                  position: "absolute",
+                                  right: "10px", // Adjust for spacing between the text and input edge
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
+                                  pointerEvents: "none", // Ensure the span doesn't block input events
+                                }}
+                              >
+                                Lakh
+                              </span>
+                            )}
+                          </div>
+                          <div style={{ position: "relative" }}>
+                            <input
+                              type="text"
+                              id="currentCTCLakh"
+                              maxLength="2"
+                              pattern="\d*"
+                              inputMode="numeric"
+                              className="form-control"
+                              placeholder="Enter current CTC in Thousand"
+                              value={currentCTCInThousandState1}
+                              onChange={handleNumericChange(setCurrentCTCInThousandState1)}
+                            />
+                            {currentCTCInThousandState1 && (
+                              <span
+                                style={{
+                                  position: "absolute",
+                                  right: "10px", // Adjust for spacing between the text and input edge
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
+                                  pointerEvents: "none", // Ensure the span doesn't block input events
+                                }}
+                              >
+                                Thousand
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="text-secondary">
+                        <div>
+                          <div className="form-group">
+                            {/* <label htmlFor="expectedCTCLakh">Lakh</label> */}
+                            <div style={{ position: "relative" }}>
+                              <input
+                                type="text"
+                                id="expectedCTCLakh"
+                                className="form-control"
+                                placeholder="Enter expected CTC in lakh"
+                                maxLength="2"
+                                pattern="\d*"
+                                inputMode="numeric"
+                                value={expectedCTCLakh}
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  if (!/^\d*$/.test(value)) {
+                                    return; // Prevent update if value is not numeric
+                                  }
+                                  setExpectedCTCLakh(value);
+                                  onUpdateExpectedCTCLakh(value);
+                                }}
+                              />
+
+                              {expectedCTCLakh && (
+                                <span
+                                  style={{
+                                    position: "absolute",
+                                    right: "10px", // Adjust for spacing between the text and input edge
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    pointerEvents: "none", // Ensure the span doesn't block input events
+                                  }}
+                                >
+                                  Lakh
+                                </span>
+                              )}
+                            </div>
                           </div>
                           <div className="form-group">
                             {/* <label htmlFor="expectedCTCThousand">
                               Thousand
                             </label> */}
-                            <input
-                              type="text"
-                              id="expectedCTCThousand"
-                              className="form-control"
-                              placeholder="Enter expected CTC in thousand"
-                              maxLength="2"
-                              pattern="\d*"
-                              inputMode="numeric"
-                              value={expectedCTCThousand}
-                              onChange={(e) => {
-                                const value = e.target.value;
-                                setExpectedCTCThousand(value);
-                                onUpdateExpectedCTCThousand(value);
-                              }}
-                            />
+                            <div style={{ position: "relative" }}>
+                              <input
+                                type="text"
+                                id="expectedCTCThousand"
+                                className="form-control"
+                                placeholder="Enter expected CTC in thousand"
+                                maxLength="2"
+                                pattern="\d*"
+                                inputMode="numeric"
+                                value={expectedCTCThousand}
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  if (!/^\d*$/.test(value)) {
+                                    return; // Prevent update if value is not numeric
+                                  }
+                                  setExpectedCTCThousand(value);
+                                  onUpdateExpectedCTCThousand(value);
+                                }}
+                              />
+                              {expectedCTCThousand && (
+                                <span
+                                  style={{
+                                    position: "absolute",
+                                    right: "10px", // Adjust for spacing between the text and input edge
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    pointerEvents: "none", // Ensure the span doesn't block input events
+                                  }}
+                                >
+                                  Thousand
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -2462,7 +2638,7 @@ const ModalComponent = ({
                           type="text"
                           className="form-control"
                           readOnly
-                          value={calculatedHike}
+                          value={calculatedHike && !isNaN(calculatedHike) ? `${calculatedHike} %` : ""}
                         />
                       </td>
                     </tr>

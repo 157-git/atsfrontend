@@ -1021,6 +1021,7 @@ const UpdateSelfCalling = ({
                     value={callingTracker?.lineUp.qualification || ""}
                     onChange={handleEducationChange}
                     placeholder="Search...."
+                    style={{width:"-webkit-fill-available"}}
                   />
 
                   <datalist id="educationListDropDown">
