@@ -624,7 +624,7 @@ const CallingTrackerForm = ({
 
     try {
       // Send a POST request to the API
-      const response = await fetch('http://192.168.1.41:9090/api/ats/157industries/fetch-only-date/1/Recruiters', {
+      const response = await fetch(`${API_BASE_URL}/fetch-only-date/${employeeId}/${userType}`, {
         method: 'POST',
         body: formData,
       });
