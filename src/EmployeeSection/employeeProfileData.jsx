@@ -269,10 +269,6 @@ const EmployeeProfileData = ({
                   >
                     Incentive
                   </button>
-                  {/* 
-            <div className="indicator-123">
-                    <i className="fa-solid fa-i"></i>
-                  </div> */}
 
                   {userType === "Recruiters" ? (
                     <>

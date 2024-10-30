@@ -493,7 +493,10 @@
   overflow-x: hidden;
   position: absolute;
   z-index: 1000;
+  border: 1px solid gray;
 }
+
+
 
 .filter-option:hover .city-filter {
   display: block;
@@ -579,9 +582,12 @@
 }
 .jd-filter-options-container{
   display: flex;           /* Flexbox layout for responsive design */
-  flex-wrap: wrap;    
+  flex-wrap: wrap; 
+  align-items: center;
+  justify-content: center;   
   margin-top: 8px;
   margin-bottom: 8px;
+  /* border: 1px solid black; */
 }
 
 .search-icon{

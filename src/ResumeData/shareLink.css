@@ -55,5 +55,11 @@
 .shareLink-share-btn-Div h4{
     font-size: 18px;
     color:var(--text-color);
+}
 
+.share-copy-div{
+    /* border: 1px solid black; */
+gap: 10px;
+display: flex;
+align-items: center;
 }
