@@ -609,6 +609,122 @@ const CallingTrackerForm = ({
     setLineUpData({ ...lineUpData, expectedCTCThousand: value });
   };
 
+// line 612 to 727 added by sahil karnekar upload resume and autofill date 30-10-2024
+
+  const handleUploadAndSetData = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Show processing toast
+    const toastId = toast.loading("Uploading resume, please wait...");
+
+    // Create form data
+    const formData = new FormData();
+    formData.append('files', file);
+
+    try {
+      // Send a POST request to the API
+      const response = await fetch('http://192.168.1.41:9090/api/ats/157industries/fetch-only-date/1/Recruiters', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('File upload failed');
+      }
+
+      const data = await response.json();
+
+      setResumeResponse(data);
+      console.log(data);
+      console.log(callingTracker.candidateName);
+
+      // Update toast to success
+      toast.update(toastId, {
+        render: "Resume Uploaded and Data Autofilled Successfully!",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000, // Automatically close after 3 seconds
+      });
+    } catch (error) {
+      console.error('Error uploading file:', error);
+
+      // Update toast to show error
+      toast.update(toastId, {
+        render: "Failed to upload resume. Please try again.",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
+    }
+  };
+
+
+  const predefinedLocations = ["Pune City", "PCMC"]; // Add any other options here
+  // Utility function to parse and format dateOfBirth
+  const formatDateString = (dateString) => {
+    if (!dateString || dateString === "DOB not found") return ""; // Handle missing or "DOB not found" cases
+
+    const parsedDate = new Date(dateString);
+
+    // Check if date is valid
+    if (isNaN(parsedDate)) {
+      console.warn("Invalid date format:", dateString);
+      return "";
+    }
+
+    // Calculate age based on parsedDate
+    const today = new Date();
+    const age = today.getFullYear() - parsedDate.getFullYear();
+    const monthDiff = today.getMonth() - parsedDate.getMonth();
+    const dayDiff = today.getDate() - parsedDate.getDate();
+
+    // Adjust age if the birthdate hasn't occurred yet this year
+    const adjustedAge = monthDiff > 0 || (monthDiff === 0 && dayDiff >= 0) ? age : age - 1;
+
+    // Return empty string if the candidate is under 18
+    if (adjustedAge < 18) {
+      console.warn("Candidate must be at least 18 years old:", dateString);
+      return "";
+    }
+
+    // Convert to YYYY-MM-DD format for input type="date"
+    return parsedDate.toISOString().split("T")[0];
+  };
+
+
+  const validateGender = (gender) => {
+    // Validate gender to be either "Male" or "Female"
+    return gender === "Male" || gender === "Female" ? gender : "";
+  };
+
+  const setResumeResponse = (data) => {
+    // Set common fields
+    setCallingTracker((prevState) => ({
+      ...prevState,
+      candidateName: data.candidateName,
+      candidateEmail: data.candidateEmail,
+      currentLocation: data.currentLocation,
+      contactNumber: `${data.contactNumber}`,
+    }));
+    setLineUpData((prevState) => ({
+      ...prevState,
+      extraCertification: data.extraCertification,
+      relevantExperience: data.relevantExperience,
+      companyName: data.companyName,
+      dateOfBirth: formatDateString(data.dateOfBirth),
+      gender: validateGender(data.gender),
+      qualification: data.qualification,
+    }));
+
+    // Check if currentLocation matches a predefined option
+    if (!predefinedLocations.includes(data.currentLocation)) {
+      setIsOtherLocationSelected(true); // Show the "Other" input field
+    } else {
+      setIsOtherLocationSelected(false); // No additional input needed
+    }
+  };
+
   return (
     <div className="calling-tracker-main">
       <section className="calling-tracker-submain">
@@ -625,6 +741,29 @@ const CallingTrackerForm = ({
             />
           )}
           <div className="calling-tracker-form">
+          {/* this code line 744 to 766 added by sahil karnekar 30-10-2024 */}
+            <div className="calling-tracker-row-white">
+              <div className="calling-tracker-field">
+               
+                <div className="calling-tracker-field-sub-div"
+                style={{width:"auto", fontSize:"14px", justifyContent:"center"}}
+                >
+                 This field is used for autofilling data, Please verify before submitting 👉
+                </div>
+              </div>
+              <div className="calling-tracker-field">
+                <label>Upload Resume</label>
+                <div className="calling-tracker-field-sub-div">
+                <input
+                style={{width: "-webkit-fill-available"}}
+                      type="file"
+                      onChange={handleUploadAndSetData}
+                      className="plain-input"
+                      placeholder="Upload Resume"
+                    />
+                </div>
+              </div>
+            </div>
             <div className="calling-tracker-row-gray">
               <div className="calling-tracker-field">
                 <label>Date & Time:</label>

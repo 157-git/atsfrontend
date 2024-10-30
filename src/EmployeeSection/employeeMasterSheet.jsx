@@ -168,6 +168,9 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
   const [isDataSending, setIsDataSending] = useState(false);
   const [loading, setLoading] = useState(true);
   const [errorForShare, setErrorForShare] = useState("");
+  // this states created by sahil karnekar  line 172 and 173 date 30-10-2024
+  const [showSearchBar, setShowSearchBar] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_39
   const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
@@ -518,25 +521,32 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
   // this applyFilters method updated by sahil karnekar date 22-10-2024
   const applyFilters = (data) => {
     let filtered = data;
+    // line 525 to 535 added by sahil karnekar date 30-10-2024
+    if (searchTerm.trim()) {
+      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+      
+      filtered = filtered.filter((item) => {
+        return Object.keys(fieldIndexMap).some((field) => {
+          const fieldIndex = fieldIndexMap[field];
+          return String(item[fieldIndex]).toLowerCase().includes(lowerCaseSearchTerm);
+        });
+      });
+    }
+
     Object.keys(selectedFilters).forEach((field) => {
       const fieldValues = selectedFilters[field];
       if (fieldValues.length > 0) {
         const fieldIndex = fieldIndexMap[field];
         
         filtered = filtered.filter((item) => {
-          // Normalize both selected value and data value to lowercase for comparison
           const dataValueLowerCase = String(item[fieldIndex]).toLowerCase();
-          
-          // Convert the selected filter values to lowercase for case-insensitive matching
-          const selectedValuesLowerCase = fieldValues.map((v) => String(v).toLowerCase());
-  
-          // Check if the normalized data value matches any of the normalized selected filter values
+          const selectedValuesLowerCase = fieldValues.map((v) => String(v).toLowerCase()); 
           return selectedValuesLowerCase.includes(dataValueLowerCase);
         });
       }
     });
     return filtered;
-  }; 
+  };
 
   const toggleFilterSection = () => {
     setShowFilterSection(!showFilterSection);
@@ -568,7 +578,6 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
       tooltip.style.visibility = "hidden";
     }
   };
-
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -578,6 +587,27 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
       ) : (
         <>
           <div className="search">
+{/* line 590 to 610 added by sahil karnekar date 30-10-2024 */}
+          <div style={{ display: "flex", alignItems: "center" }}>
+                  <i
+                    className="fa-solid fa-magnifying-glass"
+                    onClick={() => {
+                      setShowSearchBar(!showSearchBar);
+                    }}
+                    style={{ margin: "10px", width: "auto", fontSize: "15px" }}
+                  ></i>
+                  {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
+                  {showSearchBar && (
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Search here..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  )}
+                </div>
+
             <div className="master-sheet-header">
               <h3 style={{ color: "gray", fontSize: "18px" }}>
                 Employee Master Sheet
