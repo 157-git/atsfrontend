@@ -27,7 +27,6 @@ import ShortlistedNavbar from "./shortlistedNavbar";
 import AddJobDescription from "../JobDiscription/addJobDescription";
 import AddEmployee from "../EmployeeSection/addEmployee";
 import NotePad from "../notPad/notePad";
-// import Reports from "../Reports/reports";
 import MainReportDatapage from "../Reports/MainReportDatapage";
 import EmployeeProfileData from "../EmployeeSection/employeeProfileData";
 import AddResumes from "../ResumeData/addMultipleResumes";
@@ -153,6 +152,16 @@ const EmpDashboard = ({ userGroup }) => {
     useState(false);
   const [showAddManager, setShowAddManager] = useState(false);
   const [showAddTeamLeader, setShowAddTeamLeader] = useState(false);
+  const [callFunction,setCallFunction]=useState(false)
+
+  // Arshad Attar Added this 30-10-2024
+  const handleOpenEmployeeProfile = () => {
+    setShowProfile(true);
+    setIncentive(false);
+    setShowPerformanceImprovement(false)
+    setAttendanceSheet(false)
+    
+  };
 
   const handleLogoutTime = (timestamp) => {
     setLogoutTimestamp(timestamp);
@@ -486,6 +495,9 @@ const EmpDashboard = ({ userGroup }) => {
 
   const handleCloseProfile = () => {
     setShowProfile(false);
+    setShowInterviewDate(true);
+
+    // setShortlistedCandidateData(true)
   };
 
   const toggelAddResumes = () => {
@@ -694,11 +706,13 @@ const EmpDashboard = ({ userGroup }) => {
           {showProfile && (
             <EmployeeProfileData
               onClose={handleCloseProfile}
+              // onCloseIncentive={handleCloseEmployeeProfile}
               toggleIncentive={toggleIncentive}
               toggleAttendance={toggleAttendance}
               // toggleTeamDetails={toggleTeamDetails}
               toggleTeamDetails={toggleTeamDetails}
               togglePerformanceImprovement={togglePerformanceImprovement}
+              fromIncentive={true}
             ></EmployeeProfileData>
           )}
         </div>
@@ -748,14 +762,16 @@ const EmpDashboard = ({ userGroup }) => {
             <EmployeeMasterSheet loginEmployeeName={loginEmployeeName} /> //akash_pawar_SelectedCandidate_ShareFunctionality_16/07_574
           )}
         </div>
-        <div>{incentive && <Incentive />}</div>
         <div>
-          {attendancesheet && (
-            <Attendancesheet loginEmployeeName={loginEmployeeName} />
+          {incentive && (
+            <Incentive onCloseIncentive={handleOpenEmployeeProfile} />
           )}
         </div>
-
-       
+        <div>
+          {attendancesheet && (
+            <Attendancesheet loginEmployeeName={loginEmployeeName} onCloseIncentive={handleOpenEmployeeProfile} />
+          )}
+        </div>
 
         <div>{showInterviewDate && <InterviewDates />}</div>
         <div>{showAddEmployee && <AddEmployee />}</div>
@@ -784,7 +800,7 @@ const EmpDashboard = ({ userGroup }) => {
           {showCallingExcelList && (
             <CallingExcelList
               loginEmployeeName={loginEmployeeName}
-              onsuccessfulDataAdditions={handleSuccessfulDataAdditions} 
+              onsuccessfulDataAdditions={handleSuccessfulDataAdditions}
             ></CallingExcelList>
           )}
         </div>
@@ -793,14 +809,16 @@ const EmpDashboard = ({ userGroup }) => {
           {showLineupExcelList && (
             <LineupExcelData
               loginEmployeeName={loginEmployeeName}
-              onsuccessfulDataAdditions={handleSuccessfulDataAdditions} 
+              onsuccessfulDataAdditions={handleSuccessfulDataAdditions}
             ></LineupExcelData>
           )}
         </div>
         <div>
           {showResumeData && (
-            <ResumeList onsuccessfulDataAdditions={handleSuccessfulDataAdditions} 
-            loginEmployeeName={loginEmployeeName} ></ResumeList>
+            <ResumeList
+              onsuccessfulDataAdditions={handleSuccessfulDataAdditions}
+              loginEmployeeName={loginEmployeeName}
+            ></ResumeList>
           )}
         </div>
         <div>{showNotePad && <NotePad />}</div>
@@ -882,14 +900,10 @@ const EmpDashboard = ({ userGroup }) => {
         <div>{showAllInterviewResponses && <InterviewDataTables />}</div>
         <div>
           {showPerformanceImprovement && (
-            <PerformanceImprovement loginEmployeeName={loginEmployeeName} />
+            <PerformanceImprovement loginEmployeeName={loginEmployeeName}  onCloseIncentive={handleOpenEmployeeProfile}/>
           )}
         </div>
-        {/* <div>
-          {showTeamDetails && (
-            <TeamDetails></TeamDetails>
-          )}
-        </div> */}
+
         <div>{showAddTeamLeader && <AddTeamLeader></AddTeamLeader>}</div>
         <div>{showAddManager && <AddManager></AddManager>}</div>
       </div>

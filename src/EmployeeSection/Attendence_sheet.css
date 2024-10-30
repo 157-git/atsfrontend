@@ -53,8 +53,9 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  gap: 5px;
+  gap: 10px;
   align-items: center;
+  padding-top: 10px;
 }
 .PI-filters-item {
   padding: 2px 4px;

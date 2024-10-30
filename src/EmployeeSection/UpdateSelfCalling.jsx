@@ -131,12 +131,14 @@ const UpdateSelfCalling = ({
       newErrors.sourceName = "Source Name is required";
     }
     // line number 135 to 144 added validation by sahil karnekar date 21-10-2024
-    const emailPattern = /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+    const emailPattern =
+      /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
     if (!callingTracker.candidateEmail) {
       newErrors.candidateEmail = "Email is required";
     } else if (!emailPattern.test(callingTracker.candidateEmail)) {
       // If email format is invalid, show an error
-      newErrors.candidateEmail = "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).";
+      newErrors.candidateEmail =
+        "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).";
     } else {
       delete newErrors.candidateEmail;
     }
@@ -548,7 +550,7 @@ const UpdateSelfCalling = ({
     }
     try {
       // Clear all existing errors at the start of submission added by sahil karnekar date 21-10-2024
- setErrors({});
+      setErrors({});
 
       const dataToUpdate = {
         ...callingTracker,
@@ -1021,7 +1023,7 @@ const UpdateSelfCalling = ({
                     value={callingTracker?.lineUp.qualification || ""}
                     onChange={handleEducationChange}
                     placeholder="Search...."
-                    style={{width:"-webkit-fill-available"}}
+                    style={{ width: "-webkit-fill-available" }}
                   />
 
                   <datalist id="educationListDropDown">
@@ -1755,74 +1757,82 @@ const UpdateSelfCalling = ({
                   </option>
                 </select>
 
-
-<div>
-  {/* line 1784 added by sahil karnekar date 21-10-2024 */}
-                <select
-                disabled={callingTracker.selectYesOrNo !== "Interested"}
-                  type="text"
-                  name="lineUp.finalStatus"
-                  value={callingTracker?.lineUp.finalStatus}
-                  onChange={handleChange}
-                // required={callingTracker.selectYesOrNo === "Interested"}
-                >
-                  <option value="">Select</option>
-                  <option value="Yet To Confirm">Yet To Confirm</option>
-                  <option value="Interview Schedule">Interview Schedule</option>
-                  <option value="Attending After Some time">Attending After Some time</option>
-                </select>
-                {errors.finalStatus && (
-                  <div className="error-message">{errors.finalStatus}</div>
-                )}
-              </div>
+                <div>
+                  {/* line 1784 added by sahil karnekar date 21-10-2024 */}
+                  <select
+                    disabled={callingTracker.selectYesOrNo !== "Interested"}
+                    type="text"
+                    name="lineUp.finalStatus"
+                    value={callingTracker?.lineUp.finalStatus}
+                    onChange={handleChange}
+                    // required={callingTracker.selectYesOrNo === "Interested"}
+                  >
+                    <option value="">Select</option>
+                    <option value="Yet To Confirm">Yet To Confirm</option>
+                    <option value="Interview Schedule">
+                      Interview Schedule
+                    </option>
+                    <option value="Attending After Some time">
+                      Attending After Some time
+                    </option>
+                  </select>
+                  {errors.finalStatus && (
+                    <div className="error-message">{errors.finalStatus}</div>
+                  )}
+                </div>
               </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>Interview Slots</label>
               <div className="update-calling-tracker-two-input-container">
+                <div>
+                  {/* line 1808 added by sahil karnekar date 21-10-2024 */}
+                  <input
+                    disabled={callingTracker.selectYesOrNo !== "Interested"}
+                    style={{ width: "auto" }}
+                    type="date"
+                    name="lineUp.availabilityForInterview"
+                    value={
+                      callingTracker?.lineUp.availabilityForInterview || ""
+                    }
+                    onChange={(e) => {
+                      const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
 
-<div>
-  {/* line 1808 added by sahil karnekar date 21-10-2024 */}
-                <input
-                disabled={callingTracker.selectYesOrNo !== "Interested"}
-                style={{width:"auto"}}
-                  type="date"
-                  name="lineUp.availabilityForInterview"
-                  value={callingTracker?.lineUp.availabilityForInterview || ""}
-                  onChange={(e) => {
-                    const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
+                      if (e.target.value < today) {
+                        seterrorInterviewSlot(
+                          "Interview Slot Should be Next Date From Today"
+                        );
+                      } else {
+                        seterrorInterviewSlot(""); // Clear error message if the date is valid
 
-                    if (e.target.value < today) {
-                      seterrorInterviewSlot("Interview Slot Should be Next Date From Today");
-                    } else {
-                      seterrorInterviewSlot(""); // Clear error message if the date is valid
+                        setCallingTracker((prevState) => ({
+                          ...prevState,
+                          lineUp: {
+                            ...prevState.lineUp,
+                            availabilityForInterview: e.target.value,
+                          },
+                        }));
+                      }
+                    }}
+                    // line 1831 changed updated by sahil karnekar date 21-10-2024
+                    min={new Date().toISOString().split("T")[0]} // Allow today and future dates
+                    className="update-calling-tracker-two-input"
+                  />
 
-                   
-                    setCallingTracker((prevState) => ({
-                      ...prevState,
-                      lineUp: {
-                        ...prevState.lineUp,
-                        availabilityForInterview: e.target.value,
-                      },
-                    }));
-                  }}}
-                  // line 1831 changed updated by sahil karnekar date 21-10-2024
-                  min={new Date().toISOString().split("T")[0]} // Allow today and future dates 
-                  className="update-calling-tracker-two-input"
-                />
+                  {errorInterviewSlot && (
+                    <div className="error-message">{errorInterviewSlot}</div>
+                  )}
+                </div>
 
-                {errorInterviewSlot && (
-                  <div className="error-message">{errorInterviewSlot}</div>
-                )}
-</div>
-
-
-{/* complete componenet timepicker added by sahil karnekar date 21-10-2024 */}
+                {/* complete componenet timepicker added by sahil karnekar date 21-10-2024 */}
                 <TimePicker
-                placeholder="Interview Time"
-                disabled={callingTracker.selectYesOrNo !== "Interested"}
-                  value={callingTracker.lineUp.interviewTime ? dayjs(callingTracker.lineUp.interviewTime, 'h:mm a') : null}
-
+                  placeholder="Interview Time"
+                  disabled={callingTracker.selectYesOrNo !== "Interested"}
+                  value={
+                    callingTracker.lineUp.interviewTime
+                      ? dayjs(callingTracker.lineUp.interviewTime, "h:mm a")
+                      : null
+                  }
                   onChange={(time) => {
                     setCallingTracker((prevState) => ({
                       ...prevState,

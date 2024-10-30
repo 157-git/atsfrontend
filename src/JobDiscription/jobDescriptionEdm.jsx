@@ -22,7 +22,10 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
       .then((data) => {
         console.log(data);
         setData(data);
-        console.log(Descriptions + "1st Attempt in video...");
+        setData({
+          ...data,
+          employeeName: data.employeeName.split(" ")[0] 
+        });
       })
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
@@ -36,20 +39,15 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
       setVoiceLoaded(true);
     };
 
-    // Check if speech synthesis is available
     if (!synth) {
       console.error('Speech synthesis not supported.');
       return;
     }
 
-    // Fetch voices
     fetchVoices();
-
-    // Update voices on voice change
     synth.onvoiceschanged = fetchVoices;
 
     return () => {
-      // Clean up voice change listener
       synth.onvoiceschanged = null;
     };
   }, [synth]);

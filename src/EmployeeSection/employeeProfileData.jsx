@@ -171,7 +171,7 @@ const EmployeeProfileData = ({
                   </p>
                   <p className="m-1">
                     <b>Employee Status : </b>
-                    {employeeData.employeeStatus}
+                    {employeeData.status}
                   </p>
                   <p className="m-1">
                     <b> Salary : </b>
@@ -269,6 +269,10 @@ const EmployeeProfileData = ({
                   >
                     Incentive
                   </button>
+                  {/* 
+            <div className="indicator-123">
+                    <i className="fa-solid fa-i"></i>
+                  </div> */}
 
                   {userType === "Recruiters" ? (
                     <>
@@ -515,24 +519,35 @@ const EmployeeProfileData = ({
       {employeeData != null ? (
         <Modal.Dialog style={{ padding: "10px", margin: "10px" }}>
           <Modal.Header
-            style={{ fontSize: "18px", backgroundColor: "#f2f2f2" }}
+            style={{
+              backgroundColor: "#f2f2f2",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center", 
+              paddingRight:"5px",
+              }}
           >
-            Employee Profile
+            <span style={{ fontWeight: "bold",fontSize:"18px" }}>Employee Profile</span>
             <button
               onClick={onClose}
               style={{
-                marginLeft: "250px",
                 color: "red",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize:"30px",
+                width:"40px"
               }}
-              className="close-profile-popup-btn  white-Btn"
+              className="close-profile-popup-btn"
             >
-              X
+              <i className="fa-solid fa-xmark" style={{fontSize:"25px"}}></i>
             </button>
           </Modal.Header>
+
           <Modal.Body
             style={{
               display: "flex",
-              gap: "10px",
+              gap: "10px",  
               alignItems: "center",
               backgroundColor: "#f2f2f2",
               color: "gray",
@@ -545,13 +560,27 @@ const EmployeeProfileData = ({
               <p className="m-1" style={{ color: "gray" }}>
                 Name : {employeeData.name}
               </p>
-              <p className="m-1">Job Role: {employeeData.jobRole}</p>
-              <p className="m-1">Email: {employeeData.personalEmailId}</p>
+              <p className="m-1">Job Role : {employeeData.jobRole}</p>
               <p className="m-1">
-                Mobile no: {employeeData.emergencyContactNo}
+                Official Email : {employeeData.officialMail}
               </p>
-              <p className="m-1">Gender: {employeeData.gender}</p>
-              <p className="m-1">Blood Group: {employeeData.bloodGroup}</p>
+              <p className="m-1">
+                Official Contact : {employeeData.officialContactNo}
+              </p>
+              <p className="m-1">Gender : {employeeData.gender}</p>
+              <p className="m-1">
+                Employee Status :{" "}
+                <span
+                  style={{
+                    color:
+                      employeeData?.status === "Active" ? "green" : "inherit",
+                    fontWeight:
+                      employeeData?.status === "Active" ? "bold" : "normal",
+                  }}
+                >
+                  {employeeData?.status}
+                </span>
+              </p>
             </div>
           </Modal.Body>
           <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>

@@ -167,17 +167,29 @@
   }
   .PIE-Apply-Filter-Btn{
     margin-top: 10px;
+    /* border: 1px solid black; */
+    display: flex;
+    gap: 10px;
   }
+
   .PIE-filter-Btn{
-    background-color: var(--button-color);
     border-radius: 15px;
-    padding: 0 10px;
-    color: white;
+    font-size: 16px;
+    height: 30px;
+    width: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--button-color);
+    color: var(--text-color);
+    border: 1px solid gray;
   }
   .PIE-filter-Btn:hover{
     background-color: var(--button-hover-color);
-  color: var(--text-hover-color);
-   border: 1px solid #ffcb9b;
+    color: var(--text-hover-color);
+    border: 1px solid var(--text-hover-color);
   }
   
   .PIE-dropdown-container {

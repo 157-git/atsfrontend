@@ -590,7 +590,7 @@ const handleFilterSelect = (key, value) => {
               )}
             </div>
             <h5 style={{ color: "gray", paddingTop: "5px" }}>
-              Shortlisted Candidate
+              Shortlisted Candidate 
             </h5>
 
             <div

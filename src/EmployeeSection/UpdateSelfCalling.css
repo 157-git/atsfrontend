@@ -209,10 +209,7 @@
 }
 
 .ctf-btn {
-  background-color: var(--button-color);
-  color: white;
   border-radius: 15px;
-  border: 1px solid gray;
   font-size: 16px;
   text-align: center;
   width: auto;
@@ -220,12 +217,15 @@
   backdrop-filter: blur(2px);
   transition: 0.5s;
   line-height: 0.7;
+  background-color: var(--button-color);
+  color: var(--text-color);
+  border: 1px solid gray;
 }
 
 .ctf-btn:hover {
   background-color: var(--button-hover-color);
   color: var(--text-hover-color);
-  border: 1px solid gray;
+  border: 1px solid var(--text-hover-color);
 }
 
 .updata-page-submit-div {

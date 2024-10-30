@@ -261,10 +261,7 @@
 }
 
 .ctf-btn {
-  background-color: #ffcb9b;
-  color: white;
   border-radius: 15px;
-  border: 1px solid gray;
   font-size: 16px;
   text-align: center;
   width: auto;
@@ -272,12 +269,15 @@
   backdrop-filter: blur(2px);
   transition: 0.5s;
   line-height: 0.7;
+  background-color: var(--button-color);
+  color: var(--text-color);
+  border: 1px solid gray;
 }
 
 .ctf-btn:hover {
-  background-color: white;
-  color: #ffcb9b;
-  border: 1px solid gray;
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+  border: 1px solid var(--text-hover-color);
 }
 
 .buttonDiv {
@@ -585,14 +585,14 @@ strong {
   width: fit-content;
   border-radius: 15px;
   background-color: var(--button-color);
-  border: 1px solid #ccc;
-  color: white;
+  color: var(--text-color);
+  border: 1px solid gray;
 }
 
 .calling-tracker-popup-open-btn:hover {
   background-color: var(--button-hover-color);
   color: var(--text-hover-color);
-  border: 1px solid #ccc;
+  border: 1px solid var(--text-hover-color);
 }
 
 .calling-tracker-popup {

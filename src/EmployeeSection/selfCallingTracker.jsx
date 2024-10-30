@@ -138,8 +138,6 @@ const CallingList = ({
       setFilteredCallingList(data);
       setLoading(false);
       console.log(data);
-
-
     } catch (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
@@ -313,13 +311,13 @@ const CallingList = ({
   // changed this function sahil karnekar date : 22-10-2024
   const filterData = () => {
     let filteredData = [...callingList];
-  
+
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
         filteredData = filteredData.filter((item) => {
           const itemValue = item[option]?.toString().toLowerCase(); // normalize the field value to lowercase
-          return values.some((value) =>
-            itemValue === value.toLowerCase() // exact match
+          return values.some(
+            (value) => itemValue === value.toLowerCase() // exact match
           );
         });
       }
@@ -336,7 +334,7 @@ const CallingList = ({
         : [...prev[key], value.toLowerCase()], // store filter values in lowercase
     }));
   };
-//  filter problem solved updated by sahil karnekar date 21-10-2024 complete  handleFilterOptionClick method
+  //  filter problem solved updated by sahil karnekar date 21-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
     if (activeFilterOption === key) {
       setActiveFilterOption(null);
@@ -347,7 +345,7 @@ const CallingList = ({
       const newSelectedFilters = { ...prev };
       if (key in newSelectedFilters) {
       } else {
-        newSelectedFilters[key] = []; 
+        newSelectedFilters[key] = [];
       }
       return newSelectedFilters;
     });
@@ -419,9 +417,9 @@ const CallingList = ({
   const handleShare = async () => {
     if (userType === "TeamLeader") {
       if (selectedRecruiters.recruiterId === "") {
-        setErrorForShare("Please Select A Recruiter ! ")
+        setErrorForShare("Please Select A Recruiter ! ");
         return;
-      }else{
+      } else {
         setErrorForShare("");
       }
     }
@@ -719,26 +717,26 @@ const CallingList = ({
               <div className="search">
                 {/* this line updated by sahil karnekar date 24-10-2024 */}
                 <div style={{ display: "flex", alignItems: "center" }}>
-                <i
-                  className="fa-solid fa-magnifying-glass"
-                  onClick={() => {
-                    setShowSearchBar(!showSearchBar);
-                    setShowFilterSection(false);
-                  }}
-                  style={{ margin: "10px", width: "auto", fontSize: "15px" }}
-                ></i>
-                {/* this line 731 to 741 added by sahil karnekar date 24-10-2024 */}
-                
-                {showSearchBar && (
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search here..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              )}
-              </div>
+                  <i
+                    className="fa-solid fa-magnifying-glass"
+                    onClick={() => {
+                      setShowSearchBar(!showSearchBar);
+                      setShowFilterSection(false);
+                    }}
+                    style={{ margin: "10px", width: "auto", fontSize: "15px" }}
+                  ></i>
+                  {/* this line 731 to 741 added by sahil karnekar date 24-10-2024 */}
+
+                  {showSearchBar && (
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Search here..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  )}
+                </div>
                 <h3 style={{ color: "gray" }}>Calling Tracker</h3>
 
                 <div
@@ -828,56 +826,74 @@ const CallingList = ({
                 </div>
               </div>
 
-
               <div className="filter-dropdowns">
                 {/* updated this filter section by sahil karnekar date 22-10-2024 */}
-              {showFilterSection && (
-  <div className="filter-section">
-    {limitedOptions.map(([optionKey, optionLabel]) => {
-      const uniqueValues = Array.from(
-        new Set(
-          callingList
-            .map((item) => item[optionKey]?.toString().toLowerCase())
-            .filter((value) => value && value !== '-' && !(optionKey === 'alternateNumber' && value === '0'))
-        )
-      );
+                {showFilterSection && (
+                  <div className="filter-section">
+                    {limitedOptions.map(([optionKey, optionLabel]) => {
+                      const uniqueValues = Array.from(
+                        new Set(
+                          callingList
+                            .map((item) =>
+                              item[optionKey]?.toString().toLowerCase()
+                            )
+                            .filter(
+                              (value) =>
+                                value &&
+                                value !== "-" &&
+                                !(
+                                  optionKey === "alternateNumber" &&
+                                  value === "0"
+                                )
+                            )
+                        )
+                      );
 
-      return (
-        <div key={optionKey} className="filter-option">
-          <button
-            className="white-Btn"
-            onClick={() => handleFilterOptionClick(optionKey)}
-          >
-            {optionLabel}
-            <span className="filter-icon">&#x25bc;</span>
-          </button>
+                      return (
+                        <div key={optionKey} className="filter-option">
+                          <button
+                            className="white-Btn"
+                            onClick={() => handleFilterOptionClick(optionKey)}
+                          >
+                            {optionLabel}
+                            <span className="filter-icon">&#x25bc;</span>
+                          </button>
 
-          {activeFilterOption === optionKey && (
-            <div className="city-filter">
-              <div className="optionDiv">
-                {uniqueValues.length > 0 ? (
-                  uniqueValues.map((value) => (
-                    <label key={value} className="selfcalling-filter-value">
-                      <input
-                        type="checkbox"
-                        checked={selectedFilters[optionKey]?.includes(value) || false}
-                        onChange={() => handleFilterSelect(optionKey, value)}
-                        style={{ marginRight: '5px' }}
-                      />
-                      {value}
-                    </label>
-                  ))
-                ) : (
-                  <div>No values</div>
+                          {activeFilterOption === optionKey && (
+                            <div className="city-filter">
+                              <div className="optionDiv">
+                                {uniqueValues.length > 0 ? (
+                                  uniqueValues.map((value) => (
+                                    <label
+                                      key={value}
+                                      className="selfcalling-filter-value"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={
+                                          selectedFilters[optionKey]?.includes(
+                                            value
+                                          ) || false
+                                        }
+                                        onChange={() =>
+                                          handleFilterSelect(optionKey, value)
+                                        }
+                                        style={{ marginRight: "5px" }}
+                                      />
+                                      {value}
+                                    </label>
+                                  ))
+                                ) : (
+                                  <div>No values</div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
                 )}
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    })}
-  </div>
-)}
               </div>
 
               <div className="attendanceTableData">
@@ -1023,7 +1039,6 @@ const CallingList = ({
                             </span>
                           </div>
                         </td>
-
 
                         <td
                           className="tabledata"
@@ -1797,11 +1812,11 @@ const CallingList = ({
                           {/* akash_pawar_LineUpList_ShareFunctionality_17/07_1747 */}
                         </Modal.Body>
                         {/* this line added by sahil karnekar date 24-10-2024 */}
-                        {
-                         errorForShare && (
-                          <div style={{textAlign:"center", color:"red"}}>{errorForShare}</div>
-                         )
-                        }
+                        {errorForShare && (
+                          <div style={{ textAlign: "center", color: "red" }}>
+                            {errorForShare}
+                          </div>
+                        )}
                         <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
                           <button
                             onClick={handleShare}

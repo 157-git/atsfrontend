@@ -19,7 +19,12 @@ function ShareEDM({ Descriptions, onShareEdm }) {
       .then((data) => {
         console.log(data);
         setData(data);
+        setData({
+          ...data,
+          employeeName: data.employeeName.split(" ")[0] 
+        });
       })
+     
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
@@ -27,17 +32,17 @@ function ShareEDM({ Descriptions, onShareEdm }) {
     try {
       const input = document.getElementById("shareEMD");
       const canvas = await html2canvas(input, { scale: 2, logging: true });
+
+      const imgName = `${data.designation}_job_description.png`;
       const blob = await new Promise((resolve) =>
         canvas.toBlob(resolve, "image/png")
       );
 
       if (
         navigator.canShare &&
-        navigator.canShare({ files: [new File([blob], "job_description.png")] })
+        navigator.canShare({ files: [new File([blob], imgName)] })
       ) {
-        const file = new File([blob], "job_description.png", {
-          type: "image/png",
-        });
+        const file = new File([blob], imgName, { type: "image/png" });
         await navigator.share({
           title: Descriptions.designation,
           text: "Check out this job description.",
@@ -48,7 +53,7 @@ function ShareEDM({ Descriptions, onShareEdm }) {
         const imgData = canvas.toDataURL("image/png");
         const link = document.createElement("a");
         link.href = imgData;
-        link.download = Descriptions.designation;
+        link.download = imgName;
         link.click();
       }
     } catch (error) {
@@ -56,11 +61,13 @@ function ShareEDM({ Descriptions, onShareEdm }) {
     }
   };
 
+
   const closeJobDescrptionShare = () => {
     onShareEdm(false);
   };
 
   const handleInputChange = (e, field) => {
+    
     setData({
       ...data,
       [field]: e.target.value, // Update the specific field in the state
@@ -114,7 +121,7 @@ function ShareEDM({ Descriptions, onShareEdm }) {
                   <div className="details1">
                     <br />
                     <h3 className="share-edm-black-skill">For Details</h3>
-                    <h4 className="share-edm-contact">Contact - 157 Careers</h4>
+                    <h4 className="share-edm-contact">Contact - 157  Careers</h4>
                     <div className="share-edm-contact-detaisl">
                       <input
                         id="employeeName"

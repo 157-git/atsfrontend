@@ -23,7 +23,7 @@ import { API_BASE_URL } from "../api/api";
 // this loader is imported by sahil karnekar date 24-10-2024
 import Loader from "./loader";
 
-const PerformanceImprovement = ({ loginEmployeeName }) => {
+const PerformanceImprovement = ({ loginEmployeeName,onCloseIncentive }) => {
   const { employeeId, userType } = useParams();
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -863,6 +863,7 @@ const PerformanceImprovement = ({ loginEmployeeName }) => {
           <button onClick={handleGetFilteredData} className="PIE-filter-Btn" disabled={isLoading}>
   {isLoading ? <Loader /> : "Get Data"}
 </button>
+<button className="PIE-filter-Btn" onClick={onCloseIncentive}> Back</button>
 
           </div>
         </div>

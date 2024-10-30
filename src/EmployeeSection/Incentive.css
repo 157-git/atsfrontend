@@ -120,11 +120,40 @@
   align-items: center;
   display: flex;
   justify-content: center;
-  
+  width: 100%;
 }
 
 #incetive-heading{
   font-size: 18px;
   color: black;
   color: gray; 
+}
+
+/* Arshad Attar Added this CSS 30-10-2024 */
+
+.incentive-header-main-div{
+  /* border: 1px solid black; */
+  display: flex;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.incentive-close-btn{
+  border-radius: 15px;
+  font-size: 16px;
+  text-align: center;
+  width: auto;
+  height: 30px;
+  backdrop-filter: blur(2px);
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: var(--button-color);
+  color: var(--text-color);
+  border: 1px solid gray;
+}
+
+.incentive-close-btn:hover{
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+  border: 1px solid var(--text-hover-color);
 }

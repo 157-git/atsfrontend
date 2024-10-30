@@ -23,7 +23,7 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 
-const Attendance = ({loginEmployeeName}) => {
+const Attendance = ({loginEmployeeName,onCloseIncentive}) => {
   const { employeeId, userType } = useParams();
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -873,9 +873,10 @@ const handleFilterOptionClick = (key) => {
             )}
 
             <div className="PI-filters">
-              <button className="PI-attendence-btn" onClick={showDataReport}>
+              <button className="PIE-filter-Btn" onClick={showDataReport}>
                 Get Attendance
               </button>
+              <button className="PIE-filter-Btn" onClick={onCloseIncentive}>Back</button>
             </div>
 
             <div

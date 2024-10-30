@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 import "../EmployeeSection/Incentive.css";
+import EmployeeProfileData from "./employeeProfileData";
 
-const Incentive = () => {
+const Incentive = ({onCloseIncentive}) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -95,8 +96,13 @@ const Incentive = () => {
 
   return (
     <div className="container-after1">
-      <div className="incetive-heading-div">
-        <span id="incetive-heading">Incentive Table</span>
+      <div className="incentive-header-main-div">
+        <div className="incetive-heading-div">
+          <span id="incetive-heading">Incentive Table</span>
+        </div>
+        <div className="incentive-close-btn-div">
+          <button className="incentive-close-btn" onClick={onCloseIncentive}>Close</button>
+        </div>{" "}
       </div>
       {error && <div className="error-message">{error}</div>}
 
