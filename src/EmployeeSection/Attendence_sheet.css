@@ -494,4 +494,10 @@ html::-webkit-scrollbar {
   float: right;
   padding-top: 5px;
 }
+.lineUp-Filter-btn{
+  color: var(--button-text-color);
+}
+.lineUp-Filter-btn:hover{
+border-color: var(--button-border-color);
+}
 

@@ -207,7 +207,7 @@
   border: 1px solid gray;
   border-radius: 15px;
   padding: 0px 10px 0px 10px;
-  color: gray;
+  color: var(--button-text-color);
   background-color: var(--button-color);
   margin-bottom: 6px;
   /* margin-right: 100px; */
@@ -216,8 +216,9 @@
 }
 
 .rl-create-Excel-btn:hover {
-  background-color: var(--button-hover-color);
+  background-color: var(--button-bg-hover-color);
   color: var(--text-hover-color);
+  border-color: var(--button-border-color);
 }
 
 .rl-btn-div {

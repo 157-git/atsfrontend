@@ -126,14 +126,17 @@
   padding-right: 15px;
   background-color:var(--button-color);
   color: white;
-  border: none;
+  /* border: none; */
   border-radius: 15px;
   font-size: 16px;
 }
 
 .buttons button:hover {
-  background-color: var(--button-hover-color);
+  background-color: var(--button-bg-hover-color);
   color: var(--text-hover-color);
+  border-radius: 1px;
+  border-style: solid;
+  border-color: var(--button-border-color);
 }
 
 .alert {

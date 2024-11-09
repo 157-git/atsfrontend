@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
+import * as XLSX from 'xlsx';
 
 const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
   const [file, setFile] = useState(null);
@@ -153,55 +154,55 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
   };
 
   const handleUploadResume = async () => {
-  if (!selectedFiles.length) {
-    // Set error for resume if no files are selected
-    setHasErrorCalling(false);
-    setHasErrorLineup(false);
-    setHasErrorResume(true); // Error for third input
-    toast.error("Please select files to upload.");
-    return;
-  }
-  
-  const formData = new FormData();
-  for (let i = 0; i < selectedFiles.length; i++) {
-    formData.append("files", selectedFiles[i]);
-  }
-  
-  setLoading(true);
-  try {
-    // Make the POST request
-    const response = await axios.post(
-      `${API_BASE_URL}/add-multiple-resume/${employeeId}/${userType}`,
-      formData
-    );
-    
-    if (response.status === 200) {
-      const responseData = response.data;
-      const uploadedCount = responseData["Uploaded Resumes"] || 0;
-      const existingCount = responseData["Existing Resumes"] || 0;
-
-      // Show success message with counts
-      toast.success(
-        `Resume uploaded Successfully\n` +
-        `Already Exists Resume  :  ${existingCount}\n` +
-        `Uploaded Resumes Count :  ${uploadedCount}`
-        
-      );
-      
-
-      setUploadSuccessResume(true);
-      setActiveTable("ResumeList");
-      hideSuccessMessage();
-      setSelectedFiles([]);
-      resetFileInput(resumeFileInputRef);
-      setHasErrorResume(false); // Clear error state
+    if (!selectedFiles.length) {
+      // Set error for resume if no files are selected
+      setHasErrorCalling(false);
+      setHasErrorLineup(false);
+      setHasErrorResume(true); // Error for third input
+      toast.error("Please select files to upload.");
+      return;
     }
-  } catch (error) {
-    toast.error("Error uploading files.");
-  } finally {
-    setLoading(false); // Hide loader
-  }
-};
+
+    const formData = new FormData();
+    for (let i = 0; i < selectedFiles.length; i++) {
+      formData.append("files", selectedFiles[i]);
+    }
+
+    setLoading(true);
+    try {
+      // Make the POST request
+      const response = await axios.post(
+        `${API_BASE_URL}/add-multiple-resume/${employeeId}/${userType}`,
+        formData
+      );
+
+      if (response.status === 200) {
+        const responseData = response.data;
+        const uploadedCount = responseData["Uploaded Resumes"] || 0;
+        const existingCount = responseData["Existing Resumes"] || 0;
+
+        // Show success message with counts
+        toast.success(
+          `Resume uploaded Successfully\n` +
+          `Already Exists Resume  :  ${existingCount}\n` +
+          `Uploaded Resumes Count :  ${uploadedCount}`
+
+        );
+
+
+        setUploadSuccessResume(true);
+        setActiveTable("ResumeList");
+        hideSuccessMessage();
+        setSelectedFiles([]);
+        resetFileInput(resumeFileInputRef);
+        setHasErrorResume(false); // Clear error state
+      }
+    } catch (error) {
+      toast.error("Error uploading files.");
+    } finally {
+      setLoading(false); // Hide loader
+    }
+  };
 
 
   const handleActionClick = () => {
@@ -228,70 +229,140 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
     setShowCards(value);
   };
 
+
+  const [sheetNamesCalling, setSheetNamesCalling] = useState([]);
+  const [selectedSheetsCalling, setSelectedSheetsCalling] = useState({});
+
+
+  const handleFileUploadCalling = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+
+        const sheetNamesCalling = workbook.SheetNames;
+        setSheetNamesCalling(sheetNamesCalling);
+
+        // Initialize selected sheets with all sheets set to false
+        const initialSelectedSheets = sheetNamesCalling.reduce((acc, sheetName) => {
+          acc[sheetName] = false;
+          return acc;
+        }, {});
+        setSelectedSheetsCalling(initialSelectedSheets);
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
+    console.log(sheetNamesCalling);
+  };
+
+  const handleCheckboxChangeCalling = (sheetName) => {
+    setSelectedSheetsCalling((prevSelectedSheets) => ({
+      ...prevSelectedSheets,
+      [sheetName]: !prevSelectedSheets[sheetName],
+    }));
+  };
+
+  const printSelectedSheetsCalling = () => {
+    // Get indices (1-based) of selected sheets instead of names
+    const selectedIndices = sheetNamesCalling
+      .map((sheetName, index) => (selectedSheetsCalling[sheetName] ? index + 1 : null))
+      .filter((index) => index !== null);
+
+    if (sheetNamesCalling.length === 0) {
+      alert("Please select at least one File.");
+      return;
+
+    }
+
+    if (selectedIndices.length === 0) {
+      alert("Please select at least one sheet.");
+      return;
+    }
+    console.log("Selected Sheets by Index:", selectedIndices);
+  };
+
   return (
     <div className="callingfiel">
       {showCards && (
         //  {/* this line added by sahil date 22-10-2024 */}
-        <div className="fileupload" style={{position:"sticky"}}>
+        <div className="fileupload" style={{ position: "sticky" }}>
           <div className="upload-data-cards">
             <div
               className="card fixed-card"
               style={{ width: "90%", border: "1px solid gray" }}
             >
+              {/* <div className="card-header">
+                <h5 className="mb-0 card-title">Upload Calling Tracker</h5>
+              </div> */}
+
+              {/* sahil date 8-11-2024 */}
               <div className="card-header">
                 <h5 className="mb-0 card-title">Upload Calling Tracker</h5>
               </div>
+
               <div className="card-body">
                 <div className="mb-3">
                   {!uploadSuccess && (
-                    <input
-                      type="file"
-                      className="form-control"
-                      accept=".xls,.xlsx"
-                      onChange={handleFileChange}
-                      ref={fileInputRef}
-                      // this code line 264 to line 268 added by sahil karnekar
-                      style={
-                        hasErrorCalling
-                          ? {
-                              border: "1px solid red",
-                              borderRadius: "15px",
-                              boxShadow: "0 0 2px 1px rgba(255, 0, 0, 0.7)",
-                            }
-                          : {}
-                      }
-                    />
+                    <input type="file" accept=".xlsx, .xls" onChange={handleFileUploadCalling} />
                   )}
                 </div>
+                <div>
+                  {sheetNamesCalling.length > 0 ? (
+                    <ul>
+                      {sheetNamesCalling.map((sheetName, index) => (
+                        <li key={sheetName}>
+                          <label>
+                            <input
+                              type="checkbox"
+                              checked={selectedSheetsCalling[sheetName] || false}
+                              onChange={() => handleCheckboxChangeCalling(sheetName)}
+                            />
+                            {" "}
+                            {sheetName}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No sheets found.</p>
+                  )}
+                </div>
+                {/* <div className="gap-2 d-grid">
+                  <button onClick={printSelectedSheetsCalling}>Print Selected Sheets</button>
+                </div> */}
                 <div className="gap-2 d-grid">
                   <button onClick={handleUpload}>Upload File</button>
                   {/* download added by sahil karnekar line 275 to 277 */}
-                  <button
+                  {/* <button
                     onClick={() =>
                       handleDownloadButton("/files/Calling_Tracker_Format.xlsx")
                     }
                     title="To upload the data, download Excel format"
                   >
-                     Download Excel Format
-                  </button>
+                    Download Excel Format
+                  </button> */}
                   <button onClick={() => handleTableChange("CallingExcelList")}>
-                    View 
+                    View
                   </button>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="upload-data-cards">
+          {/* <div className="upload-data-cards">
             <div
               className="card fixed-card"
               style={{ width: "90%", border: "1px solid gray" }}
-            >
-              <div className="card-header">
+            > */}
+              {/* <div className="card-header">
                 <h5 className="mb-0 card-title">Upload LineUp Tracker </h5>
-              </div>
-              <div className="card-body">
-                <div className="mb-3">
+              </div> */}
+              {/* <div className="card-body"> */}
+                {/* <div className="mb-3">
                   {!uploadSuccessLineUp && (
                     <input
                       type="file"
@@ -303,20 +374,20 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                       style={
                         hasErrorLineup
                           ? {
-                              border: "1px solid red",
-                              borderRadius: "15px",
-                              boxShadow: "0 0 2px 1px rgba(255, 0, 0, 0.7)",
-                            }
+                            border: "1px solid red",
+                            borderRadius: "15px",
+                            boxShadow: "0 0 2px 1px rgba(255, 0, 0, 0.7)",
+                          }
                           : {}
                       }
                     />
                   )}
-                </div>
-                <div className="gap-2 d-grid">
+                </div> */}
+                {/* <div className="gap-2 d-grid"> */}
                   {/* this line 315 added by sahil karnekar */}
-                  <button onClick={handleUploadLineupFile}>Upload File </button>
+                  {/* <button onClick={handleUploadLineupFile}>Upload File </button> */}
                   {/* download added by sahil karnekar line 317 to 319 */}
-                  <button
+                  {/* <button
                     onClick={() =>
                       handleDownloadButton("/files/Lineup_Tracker_Format.xlsx")
                     }
@@ -325,11 +396,11 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                   </button>
                   <button onClick={() => handleTableChange("LineupExcelData")}>
                     View
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+                  </button> */}
+                {/* </div> */}
+              {/* </div> */}
+            {/* </div> */}
+          {/* </div> */}
 
           <div className="upload-data-cards">
             <div
@@ -352,10 +423,10 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                       style={
                         hasErrorResume
                           ? {
-                              border: "1px solid red",
-                              borderRadius: "15px",
-                              boxShadow: "0 0 2px 1px rgba(255, 0, 0, 0.7)",
-                            }
+                            border: "1px solid red",
+                            borderRadius: "15px",
+                            boxShadow: "0 0 2px 1px rgba(255, 0, 0, 0.7)",
+                          }
                           : {}
                       }
                     />
@@ -382,7 +453,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
             onClick={displayCandidateForm}
             toggleSection={toggleSection}
             loginEmployeeName={loginEmployeeName}
-            // this line added by sahil karnekar line 302
+          // this line added by sahil karnekar line 302
           />
         )}
 
