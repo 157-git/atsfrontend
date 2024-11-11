@@ -46,7 +46,27 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
     preferredQualifications: onAddJD.preferredQualifications?.length
       ? onAddJD.preferredQualifications
       : [{ employeeId: "", preferredQualificationMsg: "" }],
-  });
+      // jdAddedDate:"",
+    });
+
+    // useEffect(() => {
+    //   const formatDate = () => {
+    //     const date = new Date();
+    //     const day = date.getDate();
+    //     const month = date.toLocaleString("en-US", { month: "long" });
+    //     const year = date.getFullYear();
+    //     const hours = date.getHours() % 12 || 12;
+    //     const minutes = date.getMinutes().toString().padStart(2, "0");
+    //     const ampm = date.getHours() >= 12 ? "PM" : "AM";
+    //     return `${day} ${month} ${year} ${hours}:${minutes} ${ampm}`;
+    //   };
+    
+    //   // Update jdAddedDate only once on mount
+    //   setFormData((prevFormData) => ({
+    //     ...prevFormData,
+    //     jdAddedDate: formatDate(),
+    //   }));
+    // }, []); // Empty dependency array to run only once
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,6 +74,7 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
       ...formData,
       [name]: value,
     });
+    console.log(formData);
   };
 
   const handleInputChange = (e, field, index) => {
@@ -119,6 +140,7 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
   //   sahil karnekar line 128 to 202 date : 10-10-2024
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData);
     try {
       const response = await fetch(
         `${API_BASE_URL}/update-job-description/${onAddJD.requirementId}`,
@@ -169,6 +191,7 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
           preferredQualifications: [
             { employeeId: "", preferredQualificationMsg: "" },
           ],
+          // jdAddedDate:"",
         });
 
         toggleUpdateCompProp(false);
@@ -197,6 +220,7 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
         <form onSubmit={handleSubmit}>
           <div className="job-desc-form">
             <div className="field-column">
+
               <div className="field-Row-Gray">
                 <div className="field">
                   <label>Company Name:</label>

@@ -703,10 +703,9 @@ const JobListing = () => {
                   </div>
                 </section>
                 <section className="job-performance1">
+                  <div>
+                <div className="info">
                   <span>
-                    <article>
-                      <b>SOFTWARE DEVELOPER</b>
-                    </article>
                     <div className="jd-share-div">
                       <button
                         className="saved daily-tr-btn"
@@ -724,11 +723,11 @@ const JobListing = () => {
                         Share
                       </button>
                       <button onClick={handleclose} className="daily-tr-btn">
-                        Close
+                      &#10006;
                       </button>
                     </div>
                   </span>
-                  <div className="names">
+                  
                     <p>
                       {/* simple spelling mistake Corrected */}
                       <b>Job Id : </b>
@@ -761,7 +760,8 @@ const JobListing = () => {
                       <b>Location :</b>
                       {requirementData.location || "N/A"}
                     </p>
-
+                    </div>
+                    <div className="info">
                     <p>
                       <b>Educational Qualifications :</b>
                       {requirementData.qualification || "N/A"}
@@ -776,11 +776,13 @@ const JobListing = () => {
                       <b>Year Of Passing :</b>
                       {requirementData.year_of_passing || "N/A"}
                     </p>
-
+</div>
+<div className="info">
+  {requirementData.companyLink && (
                     <p>
                       <b>Company Link :</b>
-                      <a href={requirementData.companyLink || "#"}>Website</a>
-                    </p>
+                      <a className="companyLinkTextDecorationClass" href={requirementData.companyLink || "#"}>{requirementData.companyLink}</a>
+                    </p> )}
                     <p>
                       <b>Shifts : </b>
                       {requirementData.shift || "N/A"}
@@ -804,7 +806,10 @@ const JobListing = () => {
                     </p>
                     <p>
                       <b>Incentives For Recruiters : </b>
-                      {requirementData.incentive || "N/A"}
+                      {requirementData.incentive && (
+                        <span>
+                      &#8377; </span>
+                      )} {requirementData.incentive || "N/A"} 
                     </p>
                     <p>
                       <b>Reporting Hierarchy : </b>
@@ -815,14 +820,15 @@ const JobListing = () => {
                       {requirementData.position || "N/A"}
                     </p>
                     <p>
-                      <b>Documentation : </b>
+                      <b> Required Documentation : </b>
                       {requirementData.documentation || "N/A"}
                     </p>
                     <p>
                       <b>Gender : </b>
                       {requirementData.gender || "N/A"}
                     </p>
-                  </div>
+                 </div>
+                 </div>
                 </section>
               </main>
             </>

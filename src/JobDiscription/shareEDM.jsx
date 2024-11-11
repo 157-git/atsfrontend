@@ -21,14 +21,14 @@ function ShareEDM({ Descriptions, onShareEdm }) {
         setData(data);
         setData({
           ...data,
-          employeeName: data.employeeName.split(" ")[0] 
+          employeeName: data.employeeName.split(" ")[0]
         });
       })
-     
+
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-// line 27 to 49 added by sahil karnekar date 30-10-2024
+  // line 27 to 49 added by sahil karnekar date 30-10-2024
   const handleContentChange = (event, field) => {
     const newText = event.target.innerText.replace(/^"|"$/g, ""); // Remove double quotes from start and end
     setData((prevData) => ({
@@ -40,18 +40,18 @@ function ShareEDM({ Descriptions, onShareEdm }) {
     const inputH3_1 = document.getElementById("extraField1");
     const inputH3_2 = document.getElementById("extraField2");
     const inputH3_3 = document.getElementById("extraField3");
-const extraF1 = inputH3_1.innerHTML;
-const extraF2 = inputH3_2.innerHTML;
-const extraF3 = inputH3_3.innerHTML;
-if (extraF1 === "Enter Extra Data Field 1...") {
-  inputH3_1.style.display = "none";
-}
-if (extraF2 === "Enter Extra Data Field 2...") {
-  inputH3_2.style.display = "none";
-}
-if (extraF3 === "Enter Extra Data Field 3...") {
-  inputH3_3.style.display = "none";
-}
+    const extraF1 = inputH3_1.innerHTML;
+    const extraF2 = inputH3_2.innerHTML;
+    const extraF3 = inputH3_3.innerHTML;
+    if (extraF1 === "Enter Extra Data Field 1...") {
+      inputH3_1.style.display = "none";
+    }
+    if (extraF2 === "Enter Extra Data Field 2...") {
+      inputH3_2.style.display = "none";
+    }
+    if (extraF3 === "Enter Extra Data Field 3...") {
+      inputH3_3.style.display = "none";
+    }
     try {
       const input = document.getElementById("shareEMD");
       const canvas = await html2canvas(input, { scale: 2, logging: true });
@@ -97,7 +97,7 @@ if (extraF3 === "Enter Extra Data Field 3...") {
   };
 
   const handleInputChange = (e, field) => {
-    
+
     setData({
       ...data,
       [field]: e.target.value, // Update the specific field in the state
@@ -111,179 +111,198 @@ if (extraF3 === "Enter Extra Data Field 3...") {
       "Enter Extra Data Field 2...",
       "Enter Extra Data Field 3...",
     ];
-  
+
     // Check if the current text matches the placeholder and clear it if so
     if (placeholderTexts.includes(element.innerText)) {
       element.innerText = ""; // Clear the text
     }
   };
-  
+
   return (
     <div>
       {data && (
         <div className="shareEDMdiv">
+          
           <div className="main-description-share2">
+            <div className="setCloseDivEdtSmall">
+          <button
+                onClick={closeJobDescrptionShare}
+                className="apply-button-share"
+              >
+               &#10006;
+              </button>
+              </div>
             <div className="job-posting" id="shareEMD">
               <div className="image-container">
                 <img src={profileImage} alt="Profile Image" />
               </div>
               {/* here are some code updated by sahil karnekar from line 114 to 330 date 30-10-2024 */}
-              <div style={{marginLeft:"10px", marginRight:"10px"}}>
-              <h3
-                className="share-edm-black-bold"
-                contentEditable
-                suppressContentEditableWarning={true}
-                onBlur={(e) => handleContentChange(e, "headingText")}
-              >
-                {data.headingText || "We are Hiring"}
-              </h3>
-              <h2
-                className="short-edm-heading"
-                contentEditable
-                suppressContentEditableWarning={true}
-                onBlur={(e) => handleContentChange(e, "designation")}
-              >
-                "{data.designation}"
-              </h2>
-              <div className="details">
-                <h3 className="share-edm-black-skill"
+              <div style={{ marginLeft: "10px", marginRight: "10px" }}>
+                <h3
+                  className="share-edm-black-bold"
                   contentEditable
                   suppressContentEditableWarning={true}
-                  onBlur={(e) => handleContentChange(e, "requiredSkillsHeading")}
+                  onBlur={(e) => handleContentChange(e, "headingText")}
                 >
-                  {data.requiredSkillsHeading || "Required Key Skills"}
+                  {data.headingText || "We are Hiring"}
                 </h3>
-                <div className="skill-content">
-                  <p className="share-edm-skill">
-                  <span
-                      className="share-edm-skill"
-                      contentEditable
-                      suppressContentEditableWarning={true}
-                      onBlur={(e) => handleContentChange(e, "mandSkills")}
-                    >
-                      {data.mandSkills || "Mandatory Skill :- "}
-                    </span>
-                    <span
-                      className="share-edm-skill"
-                      contentEditable
-                      suppressContentEditableWarning={true}
-                      onBlur={(e) => handleContentChange(e, "skills")}
-                    >
-                      {data.skills}
-                    </span>
-                  </p>
-                  <h3 className="share-edm-skill">
-                  <span
-                      className="share-edm-skill"
-                      contentEditable
-                      suppressContentEditableWarning={true}
-                      onBlur={(e) => handleContentChange(e, "experienceUpto")}
-                    >
-                      {data.experienceUpto || "Experience Upto "}
-                    </span>
-                  <span
-                      className="share-edm-skill"
-                      contentEditable
-                      suppressContentEditableWarning={true}
-                      onBlur={(e) => handleContentChange(e, "experience")}
-                    >
-                      {data.experience}
-                    </span>
+                {data.designation && (
+                  <h2
+                    className="short-edm-heading"
+                    contentEditable
+                    suppressContentEditableWarning={true}
+                    onBlur={(e) => handleContentChange(e, "designation")}
+                  >
+                    "{data.designation}"
+                  </h2>)}
+                <div className="details">
+                  <h3 className="share-edm-black-skill"
+                    contentEditable
+                    suppressContentEditableWarning={true}
+                    onBlur={(e) => handleContentChange(e, "requiredSkillsHeading")}
+                  >
+                    {data.requiredSkillsHeading || "Required Key Skills"}
                   </h3>
-                  {/* <p className="share-edm-skill">The candidate must be a self-driven individual with excellent communication skills </p> */}
-                  {/* <p  className="share-edm-skill">focused solely on Oracle PLSQL development.</p> */}
-                  {/* <p  className="share-edm-skill">Strong in writing queries,</p> */}
-                  {/* <p  className="share-edm-skill"></p> */}
-                  <p className="share-edm-skill">
-                  <span
-                      className="share-edm-skill"
-                      contentEditable
-                      suppressContentEditableWarning={true}
-                      onBlur={(e) => handleContentChange(e, "shiftHeadTxt")}
-                    >
-                      {data.shiftHeadTxt || "Shift :- "}
-                    </span>
-                  <span
-                      className="share-edm-skill"
-                      contentEditable
-                      suppressContentEditableWarning={true}
-                      onBlur={(e) => handleContentChange(e, "shift")}
-                    >
-                      {data.shift}
-                    </span> 
+                  <div className="skill-content">
+                    <p className="share-edm-skill">
+                      {data.skills && (
+                        <span
+                          className="share-edm-skill"
+                          contentEditable
+                          suppressContentEditableWarning={true}
+                          onBlur={(e) => handleContentChange(e, "mandSkills")}
+                        >
+                          {data.mandSkills || "Mandatory Skill :- "}
+                        </span>
+                      )}
+                      {data.skills && (
+
+                        <span
+                          className="share-edm-skill"
+                          contentEditable
+                          suppressContentEditableWarning={true}
+                          onBlur={(e) => handleContentChange(e, "skills")}
+                        >
+                          {data.skills}
+                        </span>)}
                     </p>
-                  <p className="share-edm-skill">
-                  <span
+                    {data.experience && (
+                    <h3 className="share-edm-skill">
+                      <span
+                        className="share-edm-skill"
+                        contentEditable
+                        suppressContentEditableWarning={true}
+                        onBlur={(e) => handleContentChange(e, "experienceUpto")}
+                      >
+                        {data.experienceUpto || "Experience Upto "}
+                      </span>
+                      <span
+                        className="share-edm-skill"
+                        contentEditable
+                        suppressContentEditableWarning={true}
+                        onBlur={(e) => handleContentChange(e, "experience")}
+                      >
+                        {data.experience}
+                      </span>
+                    </h3>)}
+                    {/* <p className="share-edm-skill">The candidate must be a self-driven individual with excellent communication skills </p> */}
+                    {/* <p  className="share-edm-skill">focused solely on Oracle PLSQL development.</p> */}
+                    {/* <p  className="share-edm-skill">Strong in writing queries,</p> */}
+                    {/* <p  className="share-edm-skill"></p> */}
+                    {data.shift && (
+                    <p className="share-edm-skill">
+                      <span
+                        className="share-edm-skill"
+                        contentEditable
+                        suppressContentEditableWarning={true}
+                        onBlur={(e) => handleContentChange(e, "shiftHeadTxt")}
+                      >
+                        {data.shiftHeadTxt || "Shift :- "}
+                      </span>
+                      <span
+                        className="share-edm-skill"
+                        contentEditable
+                        suppressContentEditableWarning={true}
+                        onBlur={(e) => handleContentChange(e, "shift")}
+                      >
+                        {data.shift}
+                      </span>
+                    </p> )}
+                    {data.weekOff && (
+                    <p className="share-edm-skill">
+                      <span
+                        className="share-edm-skill"
+                        contentEditable
+                        suppressContentEditableWarning={true}
+                        onBlur={(e) => handleContentChange(e, "weekOffHead")}
+                      >
+                        {data.weekOffHead || "Week Offs : - "}
+                      </span>
+                      <span
+                        className="share-edm-skill"
+                        contentEditable
+                        suppressContentEditableWarning={true}
+                        onBlur={(e) => handleContentChange(e, "weekOff")}
+                      >
+                        {data.weekOff}
+                      </span>
+                    </p>)}
+                    {data.noticePeriod && (
+                    <p className="share-edm-skill">
+                      <span
+                        className="share-edm-skill"
+                        contentEditable
+                        suppressContentEditableWarning={true}
+                        onBlur={(e) => handleContentChange(e, "noticePeriodHead")}
+                      >
+                        {data.noticePeriodHead || "Notice Period : "}
+                      </span>
+                      <span
+                        className="share-edm-skill"
+                        contentEditable
+                        suppressContentEditableWarning={true}
+                        onBlur={(e) => handleContentChange(e, "noticePeriod")}
+                      >
+                        {data.noticePeriod}
+                      </span>
+                      {/* Notice Period : Immediate to 30 days */}
+                    </p>)}
+                    <h3
+                      id="extraField1"
                       className="share-edm-skill"
                       contentEditable
                       suppressContentEditableWarning={true}
-                      onBlur={(e) => handleContentChange(e, "weekOffHead")}
+                      onBlur={(e) => handleContentChange(e, "extra1")}
+                      onClick={handleRemoveInnerText}
                     >
-                      {data.weekOffHead || "Week Offs : - "}
-                    </span>
-                  <span
+                      {data.extra1 || "Enter Extra Data Field 1..."}
+                    </h3>
+                    <h3
+                      id="extraField2"
                       className="share-edm-skill"
                       contentEditable
                       suppressContentEditableWarning={true}
-                      onBlur={(e) => handleContentChange(e, "weekOff")}
+                      onBlur={(e) => handleContentChange(e, "extra2")}
+                      onClick={handleRemoveInnerText}
                     >
-                      {data.weekOff}
-                    </span> 
-                  </p>
-                  <p className="share-edm-skill">
-                  <span
+                      {data.extra2 || "Enter Extra Data Field 2..."}
+                    </h3>
+                    <h3
+                      id="extraField3"
                       className="share-edm-skill"
                       contentEditable
                       suppressContentEditableWarning={true}
-                      onBlur={(e) => handleContentChange(e, "noticePeriodHead")}
+                      onBlur={(e) => handleContentChange(e, "extra3")}
+                      onClick={handleRemoveInnerText}
                     >
-                      {data.noticePeriodHead || "Notice Period : "}
-                    </span>
-                  <span
-                      className="share-edm-skill"
-                      contentEditable
-                      suppressContentEditableWarning={true}
-                      onBlur={(e) => handleContentChange(e, "noticePeriod")}
-                    >
-                      {data.noticePeriod}
-                    </span> 
-                    {/* Notice Period : Immediate to 30 days */}
-                  </p>
-                  <h3
-                  id="extraField1"
-                className="share-edm-skill"
-                contentEditable
-                suppressContentEditableWarning={true}
-                onBlur={(e) => handleContentChange(e, "extra1")}
-                onClick={handleRemoveInnerText}
-              >
-                {data.extra1 || "Enter Extra Data Field 1..."}
-              </h3>
-              <h3
-              id="extraField2"
-                className="share-edm-skill"
-                contentEditable
-                suppressContentEditableWarning={true}
-                onBlur={(e) => handleContentChange(e, "extra2")}
-                onClick={handleRemoveInnerText}
-              >
-                {data.extra2 || "Enter Extra Data Field 2..."}
-              </h3>
-              <h3
-              id="extraField3"
-                className="share-edm-skill"
-                contentEditable
-                suppressContentEditableWarning={true}
-                onBlur={(e) => handleContentChange(e, "extra3")}
-                onClick={handleRemoveInnerText}
-              >
-                {data.extra3 || "Enter Extra Data Field 3..."}
-              </h3>
-              <br />
-                </div>{" "}
-              
-                <p className="share-edm-black-skill">
-                <span
+                      {data.extra3 || "Enter Extra Data Field 3..."}
+                    </h3>
+                    <br />
+                  </div>{" "}
+
+                  {data.salary && (
+                  <p className="share-edm-black-skill">
+                    <span
                       className="share-edm-black-skill"
                       contentEditable
                       suppressContentEditableWarning={true}
@@ -291,22 +310,24 @@ if (extraF3 === "Enter Extra Data Field 3...") {
                     >
                       {data.salaryUptoHead || "Salary Upto "}
                     </span>
-                <span
+                    <span
                       className="share-edm-black-skill"
                       contentEditable
                       suppressContentEditableWarning={true}
                       onBlur={(e) => handleContentChange(e, "salary")}
                     >
                       {data.salary}{" "}
-                    </span> 
-                </p>
-                <p className="share-edm-black-bold-location">
-                  {data.jobType}{" "}
-                  <i
-                    id="location-share-edm"
-                    className="fa-solid fa-location-dot"
-                  ></i>{" "}
-                  <span
+                    </span>
+                  </p> )}
+
+                  {data.location && (
+                  <p className="share-edm-black-bold-location">
+                    {data.jobType}{" "}
+                    <i
+                      id="location-share-edm"
+                      className="fa-solid fa-location-dot"
+                    ></i>{" "}
+                    <span
                       className="share-edm-black-bold-location"
                       contentEditable
                       suppressContentEditableWarning={true}
@@ -314,38 +335,38 @@ if (extraF3 === "Enter Extra Data Field 3...") {
                     >
                       {data.location}{" "}
                     </span>
-                </p>
-                <div className="contact">
-                  <div className="details1">
-                    <br />
-                    <h3 className="share-edm-black-skill">For Details</h3>
-                    <h4 className="share-edm-contact">Contact - 157  Careers</h4>
-                    <div className="share-edm-contact-detaisl">
-                      <input
-                        id="employeeName"
-                        value={data.employeeName}
-                        onChange={(e) => handleInputChange(e, "employeeName")}
-                        className="share-edm-input"
-                      />{" | "}
-                      <input
-                        id="officialMail"
-                        value={data.officialMail}
-                        onChange={(e) => handleInputChange(e, "officialMail")}
-                        className="share-edm-input"
-                      />{" | "}
-                      <input
-                        type="tel"
-                        id="officialContactNo"
-                        value={data.officialContactNo}
-                        onChange={(e) =>
-                          handleInputChange(e, "officialContactNo")
-                        }
-                        className="share-edm-input"
-                      />
+                  </p> )}
+                  <div className="contact">
+                    <div className="details1">
+                      <br />
+                      <h3 className="share-edm-black-skill">For Details</h3>
+                      <h4 className="share-edm-contact">Contact - 157  Careers</h4>
+                      <div className="share-edm-contact-detaisl">
+                        <input
+                          id="employeeName"
+                          value={data.employeeName}
+                          onChange={(e) => handleInputChange(e, "employeeName")}
+                          className="share-edm-input"
+                        />{" | "}
+                        <input
+                          id="officialMail"
+                          value={data.officialMail}
+                          onChange={(e) => handleInputChange(e, "officialMail")}
+                          className="share-edm-input"
+                        />{" | "}
+                        <input
+                          type="tel"
+                          id="officialContactNo"
+                          value={data.officialContactNo}
+                          onChange={(e) =>
+                            handleInputChange(e, "officialContactNo")
+                          }
+                          className="share-edm-input"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
               </div>
             </div>
             <section className="apply-section-share">
@@ -355,12 +376,7 @@ if (extraF3 === "Enter Extra Data Field 3...") {
               >
                 Share Job Description
               </button>
-              <button
-                onClick={closeJobDescrptionShare}
-                className="apply-button-share"
-              >
-                Close
-              </button>
+              
             </section>
           </div>
         </div>

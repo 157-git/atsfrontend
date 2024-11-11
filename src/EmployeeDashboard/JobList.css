@@ -101,15 +101,21 @@
 .responsibilities,
 .requirements,
 .preferred-qualifications {
-  flex: 4;
+  flex: 3;
   margin-right: 12px;
   overflow-y: scroll;
-  max-height: 650px;
+  /* max-height: 650px; */
   /* Adjust as needed */
+}
+.setCloseDivEdtSmall{
+  display: flex;
+  justify-content: end;
+  max-width: 420px;
+  margin: auto;
 }
 
 .overview {
-  height: 100vh;
+  height: 97vh;
 }
 
 .overview::-webkit-scrollbar {
@@ -125,11 +131,8 @@
 
 .info,
 .job-performance1 {
-  background-color: #f2f2f2;
-  padding: 10px;
   margin: 10px 0;
   border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .info-title,
@@ -154,7 +157,10 @@
   margin-top: 1px;
 }
 
-
+.companyLinkTextDecorationClass{
+  text-decoration: underline;
+  color: #0000EE;
+}
 .info {
   background-color: #f2f2f2;
   padding: 10px;

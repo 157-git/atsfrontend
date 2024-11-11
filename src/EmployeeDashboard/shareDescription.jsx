@@ -70,28 +70,45 @@ const ShareDescription = ({ Descriptions }) => {
 
   return (
     <main className="main-description-share">
+      <section className="closeButtonDiv">
+      <button
+          onClick={closeJobDescrptionShare}
+          className="apply-button-share"
+        >
+          &#10006;
+        </button>
+      </section>
       <div className="job-post-share" id="job-description-share">
         <section className="job-details-section-share">
+        {Descriptions.designation && (
           <div className="job-title-share">
             <p className="job-title-share-title"
             contentEditable
             >
-              !!.. We are Hiring For {Descriptions.designation} ..!!
+              We are Hiring For "{Descriptions.designation}"
             </p>
-          </div>
+          </div> )}
           <hr />
+          
           <div className="job-details-share">
-            <div className="job-details-firstsection-share">
-              <h2
+
+<div className="setEdmWith">
+<h2
                 style={{
                   fontWeight: "bold",
-                  textDecoration: "underline",
+                  paddingTop:"8px",
                   marginRight: "10px",
+                  fontSize:"20px"
                 }}
                 contentEditable
               >
                 Job Description
               </h2>
+</div>
+
+<div className="setDisplayFlexForEdm">
+            <div className="job-details-firstsection-share">
+              {Descriptions.companyName && (
               <p>
                 <b
                 contentEditable
@@ -100,41 +117,52 @@ const ShareDescription = ({ Descriptions }) => {
                   {" "}
                   {Descriptions.companyName}
                 </a>
-              </p>
+              </p> )}
+              {Descriptions.location && (
               <p
               contentEditable
               >
                 <b
                 contentEditable
                 >Location:</b> {Descriptions.location}
-              </p>
+              </p> )}
+              {Descriptions.salary && (
               <p contentEditable>
                 <b contentEditable>Salary:</b> {Descriptions.salary}
-              </p>
+              </p> )}
+              {Descriptions.designation && (
               <p contentEditable>
                 <b contentEditable>Designation:</b> {Descriptions.designation}
-              </p>
+              </p> )}
+              {Descriptions.qualification && (
               <p contentEditable>
                 <b contentEditable>Educational Qualifications:</b> {Descriptions.qualification}
-              </p>
+              </p> )}
+              {Descriptions.experience && (
               <p contentEditable>
                 <b contentEditable>Experience:</b> {Descriptions.experience}
-              </p>
+              </p> )}
+              {Descriptions.skills && (
               <p contentEditable>
                 <b contentEditable>Key Skills:</b> {Descriptions.skills}
-              </p>
+              </p> )}
+              {Descriptions.jobType && (
               <p contentEditable>
                 <b contentEditable>Company Link:</b>{" "}
                 <a href={`${Descriptions.companyLink}`}>
                   {Descriptions.companyLink}
                 </a>
               </p>
+              )}
+              {Descriptions.detailAddress && (
               <p contentEditable>
                 <b contentEditable>Address:</b> {Descriptions.detailAddress}
-              </p>
+              </p> )}
+              {Descriptions.shift && (
               <p contentEditable>
                 <b contentEditable>Shifts:</b> {Descriptions.shift}
               </p>
+              )}
             </div>
 
             <div className="job-details-secondsection-share">
@@ -142,37 +170,48 @@ const ShareDescription = ({ Descriptions }) => {
                 <img src={LoginImage} alt="Logo" className="jd-logo" />
               </div>
               <div className="jd-logo-below-div">
+              {Descriptions.weekOff && (
                 <p contentEditable>
                   <b contentEditable>Week Off's:</b> {Descriptions.weekOff}
                 </p>
+                )}
+                {Descriptions.noticePeriod && (
                 <p contentEditable>
                   <b contentEditable>Notice Period:</b> {Descriptions.noticePeriod}
-                </p>
+                </p> )}
+                {Descriptions.jobRole && (
                 <p contentEditable>
                   <b contentEditable>Job Role:</b> {Descriptions.jobRole}
                 </p>
+                )}
                 {/* <p>
                   <b>Incentives For Recruiters:</b> {Descriptions.incentive}
                 </p> */}
+                {Descriptions.position > 0 && (
                 <p contentEditable>
                   <b contentEditable>Number of Positions:</b> {Descriptions.position}
-                </p>
+                </p> )}
+                {Descriptions.jobType && (
                 <p id="job-roles-share">
                   <b contentEditable >Job Type:</b> <span contentEditable>{Descriptions.jobType}</span>
-                </p>
+                </p> )}
+                {Descriptions.perks && (
                 <p>
                   <b contentEditable>Perks:</b> <span contentEditable>{Descriptions.perks}</span>
-                </p>
+                </p> )}
               </div>
+            </div>
             </div>
           </div>
         </section>
+        {Descriptions.positionOverview.overview &&  (
         <section className="positionOverview-share">
           <h2>
             <b contentEditable className="jd-sub-headings">Position Overview</b>
           </h2>
           <p contentEditable>{Descriptions.positionOverview.overview}</p>
-        </section>
+        </section> )}
+        
         <section className="responsibilities-share">
           <h2>
             <b contentEditable className="jd-sub-headings">Responsibilities</b>
@@ -180,8 +219,10 @@ const ShareDescription = ({ Descriptions }) => {
           <div>
             {Descriptions.responsibilities.map((responsibilites) => (
               <div contentEditable key={responsibilites.responsibilitiesId}>
-                <i className="fa-solid fa-arrow-right"></i>{" "}
+                {responsibilites.responsibilitiesMsg && (
+                <i className="fa-solid fa-arrow-right"></i>  )} {" "}
                 {responsibilites.responsibilitiesMsg}{" "}
+              
               </div>
             ))}
           </div>
@@ -193,12 +234,14 @@ const ShareDescription = ({ Descriptions }) => {
           <div>
             {Descriptions.jobRequirements.map((requirements) => (
               <div contentEditable key={requirements.jobRequirementId}>
-                <i className="fa-solid fa-arrow-right"></i>{" "}
+                {requirements.jobRequirementMsg && (
+                <i className="fa-solid fa-arrow-right"></i> )} {" "}
                 {requirements.jobRequirementMsg}{" "}
               </div>
             ))}
           </div>
         </section>
+
 
         <section className="preferred-qualifications-share">
           <h2>
@@ -207,7 +250,8 @@ const ShareDescription = ({ Descriptions }) => {
           <div>
             {Descriptions.preferredQualifications.map((qualifications) => (
               <div contentEditable key={qualifications.preferredQualificationId}>
-                <i className="fa-solid fa-arrow-right"></i>{" "}
+                {qualifications.preferredQualificationMsg && (
+                <i className="fa-solid fa-arrow-right"></i> )} {" "}
                 {qualifications.preferredQualificationMsg}
               </div>
             ))}
@@ -250,12 +294,7 @@ const ShareDescription = ({ Descriptions }) => {
         <button className="apply-button-share" onClick={generateAndShareImage}>
           Share Job Description
         </button>
-        <button
-          onClick={closeJobDescrptionShare}
-          className="apply-button-share"
-        >
-          close
-        </button>
+       
       </section>
     </main>
   );

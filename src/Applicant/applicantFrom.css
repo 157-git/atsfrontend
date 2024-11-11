@@ -5,6 +5,8 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
 :root {
   --primary-color: #b18aff90;
   --orange-100-color: hsl(39, 100%, 85%);
@@ -13,13 +15,17 @@
   --orange-400-color: #fec08e;
   --orange-500-color: #ffb281;
 }
+body{
+  background-color: white;
+}
 
 .applicant-form-main-div {
   margin: 0;
   padding: 0;
   font-family: "Roboto", sans-serif;
-  background-color: #ffb281;
-  display: flex;
+  /* background-color: #ffb281; */
+  /* display: flex; */
+  justify-content: center;
 }
 
 .aplicant-form-label label {
@@ -31,25 +37,30 @@
 
 .applicant-main-div.scrolled .applicant-sub-div {
     height: 80px; /* Smaller height on scroll */
+    width: 40%;
     padding: 10px;
   }
 
   .applicant-main-div .applicant-sub-div {
-    height: 110px; /* Default height */
+    /* height: 110px; Default height */
     text-align: center;
     align-content: center;
-    display: block;
+    /* display: block; */
     position: sticky;
     top: 0;
     z-index: 999;
     transition: height 0.3s ease, padding 0.3s ease;
+    width: 40%;
+    justify-content: center;
   }
 
 .applicant-main-div {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  background-color: var(--orange-100-color);
+  /* background-color: var(--orange-100-color); */
   transition: height 0.3s ease, padding 0.3s ease;
+  display: flex;
+  justify-content: center;
 }
 
 .applicant-sub-div {
@@ -63,21 +74,21 @@
 }
 
 .applicant-logo-container {
-  background: linear-gradient(
+  /* background: linear-gradient(
     90deg,
     rgba(255, 178, 129, 1) 7%,
     rgba(241, 190, 143, 1) 16%,
     rgba(254, 221, 142, 1) 54%
-  );
+  ); */
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+  /* max-width: 400px; */
   text-align: center;
   justify-content: space-between;
-  height: 25%; /* Default height on mobile view */
+  /* height: 25%; Default height on mobile view */
   transition: height 0.3s ease, padding 0.3s ease;
 }
 
@@ -136,7 +147,7 @@
 }
 
 .applicant-form-input-icon input {
-  width: calc(50% - 10px);
+  width: -webkit-fill-available;
   padding: 5px;
   border: none;
   border-radius: 10px;
@@ -157,6 +168,7 @@
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
   margin-top: 10px; /* Reduced margin */
+  padding: 10px;
 }
 
 .submit-button:hover {
@@ -172,7 +184,7 @@
 }
 
 .form-main-div {
-  width: 100%;
+  width: 55%;
   display: flex;
   justify-content: center;
 }
@@ -198,7 +210,7 @@
   }
    
 .applicant-logo-name-div {
-  display: flex;
+  /* display: flex; */
   justify-content: flex-end;
   height: 60%;
   align-items: center;
@@ -207,8 +219,8 @@
 }
 
 .applicant-form-logo {
-  height: 100px;
-  width: 80px;
+  /* height: 100px;
+  width: 80px; */
   align-items: center;
   display: flex;
   justify-content: center;
@@ -217,6 +229,8 @@
 
 .appliacnt-form-heading {
   padding-top: 10px;
+  text-align: center;
+  font-size: xx-large;
 }
 
 .appliacnt-form-heading h1 {
@@ -226,7 +240,7 @@
 }
 
 .description {
-    font-size: 14px;
+    font-size: larger;
     color: #666;
     display: block;
     opacity: 1;
@@ -242,9 +256,60 @@
 .applicant-main-div.scrolled .description {
     display: none; /* Hide description on scroll */
   }
+  .logo{
+    width: 300px;
+    height: 300px;
+  }
+  .company-name{
+    text-align: center;
+    font-size: xx-large;
+  }
+  .setFormButtonsDiv{
+    display: flex;
+    justify-content: space-around;
+  }
 
 @media (max-width: 600px) {
-   
+   .applicant-main-div {
+    display: block;
+   }
+   .applicant-main-div.scrolled .applicant-sub-div {
+   width: auto;
+  }
+  .logo {
+    height: 60px;
+    width: 60px;
+  }
+  .applicant-main-div .applicant-sub-div {
+    /* height: 110px; Default height */
+ width: auto;
+    display: block;
+    
+  }
+  .appliacnt-form-heading {
+    font-size: inherit;
+  }
+  .applicant-logo-container {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 178, 129, 1) 7%,
+      rgba(241, 190, 143, 1) 16%,
+      rgba(254, 221, 142, 1) 54%
+    );
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* max-width: 400px; */
+    text-align: center;
+    justify-content: space-between;
+    /* height: 25%; Default height on mobile view */
+    transition: height 0.3s ease, padding 0.3s ease;
+  }
+  .setFormButtonsDiv{
+    display: block;
+  }
       .applicant-logo-container.scrolled {
         height: 10%; /* Reduce height when scrolled */
       }
@@ -267,7 +332,7 @@
   .applicant-sub-div {
     width: 100%;
     /* border: 1px solid green; */
-    height: 22%;
+    /* height: 22%; */
   }
   .inside-form-sub-div {
     margin-right: 0;
@@ -275,7 +340,7 @@
     width: 100%;
   }
   .share-link-applicant-form{
-    padding-top: 50px;
+    padding-top: 10px;
   }
 
   .applicant-logo-name-div {
@@ -287,7 +352,7 @@
   }
   .applicant-logo-container {
     max-width: 100%;
-    height: 25%; /* Height of logo section in mobile view */
+    /* height: 25%; Height of logo section in mobile view */
     /* display: flex;
     flex-direction: column;
     align-items: center;
@@ -396,7 +461,7 @@
   .applicant-logo-container {
     max-width: 100%;
     height: fit-content;
-    height: 170%;
+    /* height: 170%; */
     justify-content: space-between;
   }
   .main-div {
@@ -438,7 +503,7 @@
   }
   .applicant-sub-div {
     width: 100%;
-    height: 22%;
+    /* height: 22%; */
     /* border: 1px solid green; */
   }
   .applicant-form-logo {
@@ -470,9 +535,9 @@
     padding-left: 8px;
   }
   .aplicant-form-label {
-    font-family: "Libre Caslon Text", serif;
+    /* font-family: "Libre Caslon Text", serif; */
     font-size: 18px;
-    font-weight: 700;
+    /* font-weight: 700; */
     font-style: normal;
   }
   .submit-file-area {
@@ -531,10 +596,10 @@
   padding-right: 8px;
 }
 
-.logo {
+/* .logo {
   height: 60px;
   width: 60px;
-}
+} */
 
 .scrollable-hidden-scrollbar {
   overflow-y: scroll;

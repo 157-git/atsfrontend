@@ -89,13 +89,16 @@
 }
 
 .job-details-share {
-  display: grid;
+  display: block;
   width: 100%;
   background-color: white;
   box-shadow: 0 0 1px black;
   border-radius: 15px;
   margin-bottom: 5px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.setDisplayFlexForEdm{
+  display: flex;
 }
 
 .job-title-share {
@@ -115,6 +118,7 @@
   border-right: 2px solid #ffd8a8;
   grid-column: span 1;
   padding: 20px;
+  width: 50%;
 }
 
 .job-details-firstsection-share b,
@@ -125,6 +129,7 @@
 .job-details-secondsection-share {
   grid-column: span 1;
   padding: 20px;
+  width: 50%;
 }
 
 .job-details-share p,
@@ -194,11 +199,21 @@
   display: flex;
   margin-top: -20px;
 }
+.jd-employeeinfo{
+  display: flex;
+  justify-content: space-between;
+}
 
 .jd-employeeinfo h2 {
-  text-align: left;
+  
   font-weight: normal;
   margin: 5px 0;
+}
+.closeButtonDiv{
+  display: flex;
+  justify-content: end;
+  max-width: 950px;
+  margin: 0 auto;
 }
 
 .jd-employeeinfo .label {
