@@ -115,7 +115,7 @@ const Incentive = ({onCloseIncentive}) => {
               <th className="attendanceheading">Company Name</th>
               <th className="attendanceheading">Job ID</th>
               <th className="attendanceheading">Position</th>
-              <th className="attendanceheading">Joining Date</th>
+              <th className="attendanceheading" style={{paddingRight:"5px"}}>Joining Date</th>
               <th className="attendanceheading">Last Call Date</th>
               <th className="attendanceheading">After 90 Days Date</th>
               <th className="attendanceheading">Remaining Days</th>

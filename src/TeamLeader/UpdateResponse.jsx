@@ -285,7 +285,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                   >
                     <i className="fa-solid fa-magnifying-glass"></i>
                   </div>
-                  <h1 style={{ color: "gray" }}>Update Response</h1>
+                  <h1 style={{ color: "gray" }}>Update Response </h1>
                   <div>
                     <button
                       className="lineUp-share-btn"

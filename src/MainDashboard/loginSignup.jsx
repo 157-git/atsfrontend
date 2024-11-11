@@ -8,9 +8,7 @@ import ForgotPasswordForms from "./empForgotPasswords";
 import { API_BASE_URL } from "../api/api";
 import axios from "../api/api";
 
-
-
-  //  sahil karnekar Worked on : - date 27 sep 2024
+//  sahil karnekar Worked on : - date 27 sep 2024
 // Sahil Karnekar Added line num 8 to line num 77
 
 const LoginSignup = ({ onLogin }) => {
@@ -23,15 +21,15 @@ const LoginSignup = ({ onLogin }) => {
   const navigate = useNavigate();
 
   // only functionality javascript code added by sahil karnekar dont use html code , html code is not styled or not applied any css
-// please check the logic once 
+  // please check the logic once
 
-// here is getting employeeId from localstorage and initially removing the id if present in localstorage
+  // here is getting employeeId from localstorage and initially removing the id if present in localstorage
 
-const localStrId = localStorage.getItem("employeeId");
+  const localStrId = localStorage.getItem("employeeId");
 
-if (localStrId) {
-  localStorage.removeItem("employeeId");
-}
+  if (localStrId) {
+    localStorage.removeItem("employeeId");
+  }
 
   useEffect(() => {
     AOS.init({ duration: 3000 });
@@ -43,7 +41,6 @@ if (localStrId) {
       applyColor(savedColor);
     }
   }, []);
-
 
   const applyColor = (color) => {
     const darkenColor = (color, amount) => {
@@ -61,7 +58,10 @@ if (localStrId) {
     const hoverColor = darkenColor(color, -30);
     document.documentElement.style.setProperty("--Bg-color", color);
     document.documentElement.style.setProperty("--button-color", color);
-    document.documentElement.style.setProperty("--button-hover-color", hoverColor);
+    document.documentElement.style.setProperty(
+      "--button-hover-color",
+      hoverColor
+    );
     document.documentElement.style.setProperty("--hover-effect", hoverColor);
     document.documentElement.style.setProperty("--filter-color", color);
   };
@@ -81,35 +81,32 @@ if (localStrId) {
   //   }
   // }, [employeeId, userType]);
 
-
-
   // sahil karnekar
-// This is same method handlechange as previous just newly added validations from line num 30 to line num 50
+  // This is same method handlechange as previous just newly added validations from line num 30 to line num 50
 
-const handleChange = (event) => {
-  const { name, value } = event.target;
+  const handleChange = (event) => {
+    const { name, value } = event.target;
 
-  // applied validations here for max length 20 char's
-  if (name === "employeeId") {
-    if (value.length > 20) { 
-      setError("Username should not exceed 20 characters");
-    } else {
-      setError("");
-      setEmployeeId(value);
+    // applied validations here for max length 20 char's
+    if (name === "employeeId") {
+      if (value.length > 20) {
+        setError("Username should not exceed 20 characters");
+      } else {
+        setError("");
+        setEmployeeId(value);
+      }
+    } else if (name === "password") {
+      if (value.length > 20) {
+        setError("Password should not exceed 8 characters");
+      } else {
+        setError("");
+        setPassword(value);
+      }
     }
-  } else if (name === "password") {
-    if (value.length > 20) {
-      setError("Password should not exceed 8 characters");
-    } else {
-      setError("");
-      setPassword(value);
-    }
-  }
-};
+  };
 
-
-//old logic arshad comment this
-// handle submit method for authenticate user by username and password from line num 53 to line num 77
+  //old logic arshad comment this
+  // handle submit method for authenticate user by username and password from line num 53 to line num 77
   // const handleSubmit = async (event) => {
   //   event.preventDefault();
   //   if (!employeeId || !password) {
@@ -131,35 +128,34 @@ const handleChange = (event) => {
   //   }
   // };
 
-        
-// handle submit method for authenticate user by username and password from line num 53 to line num 77
-const handleSubmit = async (event) => {
-  event.preventDefault();
-  
-  if (!employeeId || !password) {
-    setError("Please fill in both fields before submitting.");
-    return;
-  }
+  // handle submit method for authenticate user by username and password from line num 53 to line num 77
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  try {
-    // statically added base url please change it according to you
-    const response = await axios.get(`${API_BASE_URL}/fetch-pass-on-role/${employeeId}/${userType}`);
-    const fetchedPassword = response.data;
-  
-    // authenticate user and navigating on Dashboard page with employeedId added in route
-    if (fetchedPassword === password) {
-      localStorage.setItem("employeeId", employeeId);
-      navigate(`/Dashboard/${employeeId}/${userType}`);
-    } else {
-      setError("Invalid login for this user. Please try again.");
+    if (!employeeId || !password) {
+      setError("Please fill in both fields before submitting.");
+      return;
     }
 
-  } catch (error) {
-    console.error("Error during login:", error);
-    setError("Error occurred. Please try again.");
-  }
-};
+    try {
+      // statically added base url please change it according to you
+      const response = await axios.get(
+        `${API_BASE_URL}/fetch-pass-on-role/${employeeId}/${userType}`
+      );
+      const fetchedPassword = response.data;
 
+      // authenticate user and navigating on Dashboard page with employeedId added in route
+      if (fetchedPassword === password) {
+        localStorage.setItem("employeeId", employeeId);
+        navigate(`/Dashboard/${employeeId}/${userType}`);
+      } else {
+        setError("Invalid login for this user. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      setError("Error occurred. Please try again.");
+    }
+  };
 
   return (
     <div className="main-body">
@@ -174,25 +170,56 @@ const handleSubmit = async (event) => {
             </div>
           )}
           <div
-            className={`${showForgotPassword ? "full-width-panel" : "right-panel"
-              }`}
+            className={`${
+              showForgotPassword ? "full-width-panel" : "right-panel"
+            }`}
             data-aos="fade-left"
           >
             {showForgotPassword ? (
               <ForgotPasswordForms userType={userType} />
             ) : (
               <form onSubmit={handleSubmit}>
-                <h2>{userType.charAt(0).toUpperCase() + userType.slice(1)}</h2>
+                {userType === "Recruiters" && (
+                  <>
+                    <h2>Recruiter</h2>
+                  </>
+                )}
+                {userType === "TeamLeader" && (
+                  <>
+                    <h2>Team Leader</h2>
+                  </>
+                )}
+                {userType === "Manager" && (
+                  <>
+                    <h2>Manager</h2>
+                  </>
+                )}
+                {userType === "SuperUser" && (
+                  <>
+                    <h2>Super User</h2>
+                  </>
+                )}
                 <div className="input-groups">
                   <i className="fas fa-user"></i>
-                  <input type="text" id="loginpage-employeeId" name="employeeId"
-                  placeholder="Username" className="loginpage-form-control" value={employeeId}
-                  onChange={handleChange}  />
+                  <input
+                    type="text"
+                    id="loginpage-employeeId"
+                    name="employeeId"
+                    placeholder="Username"
+                    className="loginpage-form-control"
+                    value={employeeId}
+                    onChange={handleChange}
+                  />
                 </div>
                 <div className="input-groups" hidden>
                   <i className="fas fa-briefcase"></i>
-                  <input type="text" id="loginpage-userType" name="userType"
-                   placeholder="User Type" className="loginpage-form-control" />
+                  <input
+                    type="text"
+                    id="loginpage-userType"
+                    name="userType"
+                    placeholder="User Type"
+                    className="loginpage-form-control"
+                  />
                 </div>
                 <div className="input-groups">
                   <i className="fas fa-lock"></i>
@@ -212,7 +239,7 @@ const handleSubmit = async (event) => {
                   type="submit"
                   data-aos="fade-top"
                 >
-                  Login  
+                  Login
                 </button>
                 <div className="acc-create-div">
                   <span

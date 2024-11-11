@@ -14,7 +14,7 @@ const SubscriptionPlans = () => {
   useEffect(() => {
     // Fetch subscription plans from the backend
     axios
-      .get(`${API_BASE_URL}/fetchAllPlans`)
+      .get(`${API_BASE_URL}/fetch-all-plan`)
       .then((response) => {
         setPlans(response.data);
       })

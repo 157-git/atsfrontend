@@ -849,7 +849,7 @@ const EmpDashboard = ({ userGroup }) => {
         <div>{showInvoicePdf && <InvoicePdf />}</div>
         <div>
           {showUpdateCallingTracker && (
-            <UpdateCallingTracker candidateId={candidateIdForUpdate} />
+            <UpdateCallingTracker loginEmployeeName={loginEmployeeName} candidateId={candidateIdForUpdate} />
           )}
         </div>
         <div>{assignColumns && <Team_Leader />}</div>

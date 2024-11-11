@@ -948,7 +948,7 @@ const handleFilterOptionClick = (key) => {
             <th className="PI-attendanceheading">Working Date</th>
             <th className="PI-attendanceheading">Employee Name</th>
             <th className="PI-attendanceheading">Job Role</th>
-            <th className="PI-attendanceheading">Login Time</th>
+            <th className="PI-attendanceheading" style={{paddingRight:"15px"}}>Login Time</th>
             <th className="PI-attendanceheading">Late Mark</th>
             <th className="PI-attendanceheading">Calling Count</th>
             <th className="PI-attendanceheading">Target</th>
@@ -960,7 +960,7 @@ const handleFilterOptionClick = (key) => {
             <th className="PI-attendanceheading">Work Type</th>
             <th className="PI-attendanceheading">Day Status</th>
             <th className="PI-attendanceheading">Working Hours</th>
-            <th className="PI-attendanceheading">Logout Time</th>
+            <th className="PI-attendanceheading" style={{paddingRight:"15px"}}>Logout Time</th>
             <th className="PI-attendanceheading">Employee Id</th>
             <th className="PI-attendanceheading">Team Leader Id</th>
           </thead>

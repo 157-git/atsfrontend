@@ -1878,6 +1878,7 @@ const CallingList = ({
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
               onsuccessfulDataUpdation={onsuccessfulDataUpdation}
+              loginEmployeeName={loginEmployeeName}
             />
           )}
         </>

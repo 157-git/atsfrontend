@@ -6,7 +6,8 @@
 
 .App-after1 {
   width: 100%;
-  height: auto
+  height: auto;
+  /* overflow-y: scroll; */
 }
 
 .container {
@@ -229,3 +230,13 @@
   margin-top: 10px;
 }
 
+/* Arshad Attar Added CSS 07-11-2024 */
+
+.resume-data-modal{
+  border: 3px solid black;
+  width: 50%;
+  align-items: center;
+  display: flex;
+  
+  /* margin-top: 150px; */
+}

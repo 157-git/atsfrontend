@@ -21,6 +21,7 @@ const UpdateSelfCalling = ({
   onsuccessfulDataUpdation,
   onSuccess,
   fromCallingList,
+  loginEmployeeName
 }) => {
   const [isOtherEducationSelected, setIsOtherEducationSelected] =
     useState(false);
@@ -28,7 +29,7 @@ const UpdateSelfCalling = ({
     date: new Date().toISOString().slice(0, 10),
     candidateId: candidateId,
     candidateAddedTime: "",
-    recruiterName: "",
+    recruiterName: loginEmployeeName,
     candidateName: "",
     candidateEmail: "",
     jobDesignation: "",
@@ -519,6 +520,16 @@ const UpdateSelfCalling = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+      // Display loginEmployeeName in the input field
+  setCallingTracker({
+    ...callingTracker,
+    recruiterName: loginEmployeeName, // Set recruiterName to loginEmployeeName
+  });
+
+  console.log("Recruiter Name to be sent:", callingTracker.recruiterName); // Print recruiterName
+  
+
     // Validate the form data before submitting
     const validationErrors = validateCallingTracker();
     const validationErrorsForLineup = validateLineUpData();
@@ -554,6 +565,7 @@ const UpdateSelfCalling = ({
 
       const dataToUpdate = {
         ...callingTracker,
+        recruiterName: loginEmployeeName,
         candidateAddedTime: callingTracker.candidateAddedTime,
         lineUp: {
           ...callingTracker.lineUp,
@@ -671,6 +683,7 @@ const UpdateSelfCalling = ({
     setLineUpData({ ...lineUpData, expectedCTCThousand: value });
   };
 
+  
   return (
     <div className="update-main-div">
       <form onSubmit={handleSubmit}>
@@ -705,8 +718,8 @@ const UpdateSelfCalling = ({
                 <input
                   type="text"
                   name="recruiterName"
-                  value={callingTracker?.recruiterName}
-                  readOnly
+                  value={loginEmployeeName}
+                  // readOnly
                   onChange={handleChange}
                   className="plain-input"
                 />

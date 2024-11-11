@@ -30,7 +30,6 @@
 
 .calling-tracker-row-gray {
   width: 100%;
-  background-color: #f2f2f2;
   display: flex;
   justify-content: space-between;
   min-height: 40px;
@@ -38,6 +37,7 @@
 
 .calling-tracker-row-white {
   width: 100%;
+  background-color: #f2f2f2;
   display: flex;
   justify-content: space-between;
   min-height: 40px;
@@ -766,4 +766,14 @@ padding-right: 8px;
 :where(.css-dev-only-do-not-override-ni1kz0).ant-picker-dropdown .ant-picker-panel-container .ant-picker-panel-layout {
   border: 2px solid gray;
   border-radius: 10px;
+}
+
+
+/* Arshad Attar Added CSS 05-11-2024 */
+/* All Interview Questiond Component CSS */
+.interview-name-div{
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  gap: 20px;
 }

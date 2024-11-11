@@ -65,7 +65,7 @@ const ColorPicker = ({ onColorApplied , setShowColor}) => {
     localStorage.removeItem("hoverColor");
     localStorage.removeItem("hover-effect");
 
-    document.documentElement.style.setProperty("--Bg-color", "#ffe5b5 ");
+    document.documentElement.style.setProperty("--Bg-color", "#ffe5b5");
     document.documentElement.style.setProperty("--button-color", "#ffcb9b"); 
     document.documentElement.style.setProperty("--button-hover-color", "white"); 
     document.documentElement.style.setProperty("--text-color", "gray"); 
@@ -84,7 +84,7 @@ const ColorPicker = ({ onColorApplied , setShowColor}) => {
   };
 
   const segmentColors = [
-    '#a8d5ba', '#f5d0c5', '#f9f1a5', '#d5e1df', '#ffdfba', '#c6e2e9', '#f7c8e0', '#f8c8dc',
+    '#ffe5b5', '#f5d0c5', '#f9f1a5', '#d5e1df', '#ffdfba', '#c6e2e9', '#f7c8e0', '#f8c8dc',
     '#e4c2d1', '#ffdac1', '#FFFF9F', '#FECCB1', '#FFB6AD', '#7ECACA', '#FED0AF', '#CDA0CB',
     '#F7E7B3', '#B0CFB0', '#FFD9E4', '#BDC5EA', '#CCEFF1', '#DEEFC2', '#E9BDBE', '#89C8E6',
     '#BBACA5', '#f9d5e5', '#f3e0b0', '#d2c6f2', '#b4e0a4', '#e2b8c5', '#e8f4e6', '#c2d6f9',

@@ -129,10 +129,16 @@ const LineUpList = ({
       const response = await fetch(
         `${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`
       );
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+
+      console.log("Full response object:", response); // Log full response
+
       const data = await response.json();
+      console.log("Response data:", data); // Log the parsed JSON data
+
       setCallingList(data);
       setFilteredCallingList(data);
       setLoading(false);
@@ -306,16 +312,16 @@ const LineUpList = ({
       setFilteredCallingList(sortedList);
     }
   }, [sortCriteria, sortOrder]);
-// updated by sahil karnekar date 22-10-2024
+  // updated by sahil karnekar date 22-10-2024
   const filterData = () => {
     let filteredData = [...callingList];
-  
+
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
         filteredData = filteredData.filter((item) => {
           const itemValue = item[option]?.toString().toLowerCase(); // normalize the field value to lowercase
-          return values.some((value) =>
-            itemValue === value.toLowerCase() // exact match
+          return values.some(
+            (value) => itemValue === value.toLowerCase() // exact match
           );
         });
       }
@@ -323,37 +329,32 @@ const LineUpList = ({
     setFilteredCallingList(filteredData);
   };
 
- // updated this function sahil karnekar date : 22-10-2024
- const handleFilterSelect = (key, value) => {
-  setSelectedFilters((prev) => ({
-    ...prev,
-    [key]: prev[key].includes(value)
-      ? prev[key].filter((item) => item !== value.toLowerCase())
-      : [...prev[key], value.toLowerCase()], // store filter values in lowercase
-  }));
-};
+  // updated this function sahil karnekar date : 22-10-2024
+  const handleFilterSelect = (key, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [key]: prev[key].includes(value)
+        ? prev[key].filter((item) => item !== value.toLowerCase())
+        : [...prev[key], value.toLowerCase()], // store filter values in lowercase
+    }));
+  };
 
   //  filter problem solved updated by sahil karnekar date 21-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
     if (activeFilterOption === key) {
-      
       setActiveFilterOption(null);
     } else {
-      
       setActiveFilterOption(key);
     }
-    
-    
+
     setSelectedFilters((prev) => {
       const newSelectedFilters = { ...prev };
-  
+
       if (key in newSelectedFilters) {
-       
       } else {
-       
-        newSelectedFilters[key] = []; 
+        newSelectedFilters[key] = [];
       }
-  
+
       return newSelectedFilters;
     });
   };
@@ -420,12 +421,11 @@ const LineUpList = ({
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_475
   const handleShare = async () => {
-
     if (userType === "TeamLeader") {
       if (selectedRecruiters.recruiterId === "") {
-        setErrorForShare("Please Select A Recruiter ! ")
+        setErrorForShare("Please Select A Recruiter ! ");
         return;
-      }else{
+      } else {
         setErrorForShare("");
       }
     }
@@ -711,8 +711,6 @@ const LineUpList = ({
   };
   //Mohini_Raut_LineUpList_columnsToInclude_columnsToExclude_16/07/2024//
 
-
- 
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -721,31 +719,30 @@ const LineUpList = ({
         </div>
       ) : (
         <>
-
           {!showUpdateCallingTracker ? (
             <>
               <div className="search">
                 {/* this line is added by sahil karnekar date 24-10-2024 */}
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <i
-                  className="fa-solid fa-magnifying-glass"
-                  onClick={() => {
-                    setShowSearchBar(!showSearchBar);
-                    setShowFilterSection(false);
-                  }}
-                  style={{ margin: "10px", width: "auto", fontSize: "15px" }}
-                ></i>
-                {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
-                 {showSearchBar && (
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search here..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              )}
-              </div>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <i
+                    className="fa-solid fa-magnifying-glass"
+                    onClick={() => {
+                      setShowSearchBar(!showSearchBar);
+                      setShowFilterSection(false);
+                    }}
+                    style={{ margin: "10px", width: "auto", fontSize: "15px" }}
+                  ></i>
+                  {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
+                  {showSearchBar && (
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Search here..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  )}
+                </div>
                 <h5 style={{ color: "gray" }}>Lineup Tracker</h5>
 
                 <div
@@ -836,57 +833,74 @@ const LineUpList = ({
                 </div>
               </div>
 
-             
-
               <div className="filter-dropdowns">
                 {/* updated this filter section by sahil karnekar date 22-10-2024 */}
-              {showFilterSection && (
-  <div className="filter-section">
-    {limitedOptions.map(([optionKey, optionLabel]) => {
-      const uniqueValues = Array.from(
-        new Set(
-          callingList
-            .map((item) => item[optionKey]?.toString().toLowerCase())
-            .filter((value) => value && value !== '-' && !(optionKey === 'alternateNumber' && value === '0'))
-        )
-      );
+                {showFilterSection && (
+                  <div className="filter-section">
+                    {limitedOptions.map(([optionKey, optionLabel]) => {
+                      const uniqueValues = Array.from(
+                        new Set(
+                          callingList
+                            .map((item) =>
+                              item[optionKey]?.toString().toLowerCase()
+                            )
+                            .filter(
+                              (value) =>
+                                value &&
+                                value !== "-" &&
+                                !(
+                                  optionKey === "alternateNumber" &&
+                                  value === "0"
+                                )
+                            )
+                        )
+                      );
 
-      return (
-        <div key={optionKey} className="filter-option">
-          <button
-            className="white-Btn"
-            onClick={() => handleFilterOptionClick(optionKey)}
-          >
-            {optionLabel}
-            <span className="filter-icon">&#x25bc;</span>
-          </button>
+                      return (
+                        <div key={optionKey} className="filter-option">
+                          <button
+                            className="white-Btn"
+                            onClick={() => handleFilterOptionClick(optionKey)}
+                          >
+                            {optionLabel}
+                            <span className="filter-icon">&#x25bc;</span>
+                          </button>
 
-          {activeFilterOption === optionKey && (
-            <div className="city-filter">
-              <div className="optionDiv">
-                {uniqueValues.length > 0 ? (
-                  uniqueValues.map((value) => (
-                    <label key={value} className="selfcalling-filter-value">
-                      <input
-                        type="checkbox"
-                        checked={selectedFilters[optionKey]?.includes(value) || false}
-                        onChange={() => handleFilterSelect(optionKey, value)}
-                        style={{ marginRight: '5px' }}
-                      />
-                      {value}
-                    </label>
-                  ))
-                ) : (
-                  <div>No values</div>
+                          {activeFilterOption === optionKey && (
+                            <div className="city-filter">
+                              <div className="optionDiv">
+                                {uniqueValues.length > 0 ? (
+                                  uniqueValues.map((value) => (
+                                    <label
+                                      key={value}
+                                      className="selfcalling-filter-value"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={
+                                          selectedFilters[optionKey]?.includes(
+                                            value
+                                          ) || false
+                                        }
+                                        onChange={() =>
+                                          handleFilterSelect(optionKey, value)
+                                        }
+                                        style={{ marginRight: "5px" }}
+                                      />
+                                      {value}
+                                    </label>
+                                  ))
+                                ) : (
+                                  <div>No values</div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
                 )}
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    })}
-  </div>
-)}
               </div>
 
               <div className="attendanceTableData">
@@ -1780,11 +1794,11 @@ const LineUpList = ({
                           </div>
                           {/* akash_pawar_LineUpList_ShareFunctionality_17/07_1747 */}
                         </Modal.Body>
-                        {
-                         errorForShare && (
-                          <div style={{textAlign:"center", color:"red"}}>{errorForShare}</div>
-                         )
-                        }
+                        {errorForShare && (
+                          <div style={{ textAlign: "center", color: "red" }}>
+                            {errorForShare}
+                          </div>
+                        )}
                         <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
                           <button
                             onClick={handleShare}
@@ -1804,7 +1818,7 @@ const LineUpList = ({
                   </>
                 ) : null}
                 {/* Name:-Akash Pawar Component:-LineUpList
-          Subcategory:-ResumeModel(added) End LineNo:-1153 Date:-02/07 */}
+                Subcategory:-ResumeModel(added) End LineNo:-1153 Date:-02/07 */}
                 <Modal
                   show={showResumeModal}
                   onHide={closeResumeModal}
@@ -1835,7 +1849,7 @@ const LineUpList = ({
                   </Modal.Footer>
                 </Modal>
                 {/* Name:-Akash Pawar Component:-LineUpList
-          Subcategory:-ResumeModel(added) End LineNo:-1184 Date:-02/07 */}
+                     Subcategory:-ResumeModel(added) End LineNo:-1184 Date:-02/07 */}
               </div>
             </>
           ) : (
@@ -1844,14 +1858,14 @@ const LineUpList = ({
               employeeId={employeeId}
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
-             
+              loginEmployeeName={loginEmployeeName}
             />
           )}
         </>
       )}
       {isDataSending && (
         <div className="ShareFunc_Loading_Animation">
-          <Loader  />
+          <Loader />
         </div>
       )}
     </div>

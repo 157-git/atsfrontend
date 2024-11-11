@@ -16,6 +16,7 @@ import { Button, Modal } from "react-bootstrap";
 import Confetti from "react-confetti";
 // import ClipLoader from "react-spinners/ClipLoader";
 import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker";
+import InterviewPreviousQuestion from "./interviewPreviousQuestion";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
 // this libraries added by sahil karnekar date 21-10-2024
@@ -55,7 +56,7 @@ const CallingTrackerForm = ({
     currentLocation: "",
     fullAddress: "",
     communicationRating: "",
-    selectYesOrNo: "",
+    selectYesOrNo: "Yet To Confirm",
     callingFeedback: "",
   };
 
@@ -474,10 +475,10 @@ const CallingTrackerForm = ({
         setCallingTracker(initialCallingTrackerState);
         setLineUpData(initialLineUpState);
       }
-      console.log("-------    bye    ----------");
+      // console.log("-------    bye    ----------");
     } catch (error) {
       setSubmited(false);
-      console.log("-------    Hello    ----------");
+      // console.log("-------    Hello    ----------");
 
       // Check for full error details
       if (error.response) {
@@ -609,7 +610,7 @@ const CallingTrackerForm = ({
     setLineUpData({ ...lineUpData, expectedCTCThousand: value });
   };
 
-// line 612 to 727 added by sahil karnekar upload resume and autofill date 30-10-2024
+  // line 612 to 727 added by sahil karnekar upload resume and autofill date 30-10-2024
 
   const handleUploadAndSetData = async (event) => {
     const file = event.target.files[0];
@@ -620,17 +621,20 @@ const CallingTrackerForm = ({
 
     // Create form data
     const formData = new FormData();
-    formData.append('files', file);
+    formData.append("files", file);
 
     try {
       // Send a POST request to the API
-      const response = await fetch(`${API_BASE_URL}/fetch-only-date/${employeeId}/${userType}`, {
-        method: 'POST',
-        body: formData,
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/fetch-only-date/${employeeId}/${userType}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (!response.ok) {
-        throw new Error('File upload failed');
+        throw new Error("File upload failed");
       }
 
       const data = await response.json();
@@ -647,7 +651,7 @@ const CallingTrackerForm = ({
         autoClose: 3000, // Automatically close after 3 seconds
       });
     } catch (error) {
-      console.error('Error uploading file:', error);
+      console.error("Error uploading file:", error);
 
       // Update toast to show error
       toast.update(toastId, {
@@ -658,7 +662,6 @@ const CallingTrackerForm = ({
       });
     }
   };
-
 
   const predefinedLocations = ["Pune City", "PCMC"]; // Add any other options here
   // Utility function to parse and format dateOfBirth
@@ -680,7 +683,8 @@ const CallingTrackerForm = ({
     const dayDiff = today.getDate() - parsedDate.getDate();
 
     // Adjust age if the birthdate hasn't occurred yet this year
-    const adjustedAge = monthDiff > 0 || (monthDiff === 0 && dayDiff >= 0) ? age : age - 1;
+    const adjustedAge =
+      monthDiff > 0 || (monthDiff === 0 && dayDiff >= 0) ? age : age - 1;
 
     // Return empty string if the candidate is under 18
     if (adjustedAge < 18) {
@@ -691,7 +695,6 @@ const CallingTrackerForm = ({
     // Convert to YYYY-MM-DD format for input type="date"
     return parsedDate.toISOString().split("T")[0];
   };
-
 
   const validateGender = (gender) => {
     // Validate gender to be either "Male" or "Female"
@@ -715,8 +718,10 @@ const CallingTrackerForm = ({
       dateOfBirth: formatDateString(data.dateOfBirth),
       gender: validateGender(data.gender),
       qualification: data.qualification,
+      resume: data.resume
     }));
 
+    
     // Check if currentLocation matches a predefined option
     if (!predefinedLocations.includes(data.currentLocation)) {
       setIsOtherLocationSelected(true); // Show the "Other" input field
@@ -741,26 +746,31 @@ const CallingTrackerForm = ({
             />
           )}
           <div className="calling-tracker-form">
-          {/* this code line 744 to 766 added by sahil karnekar 30-10-2024 */}
+            {/* this code line 744 to 766 added by sahil karnekar 30-10-2024 */}
             <div className="calling-tracker-row-white">
               <div className="calling-tracker-field">
-               
-                <div className="calling-tracker-field-sub-div"
-                style={{width:"auto", fontSize:"14px", justifyContent:"center"}}
+                <div
+                  className="calling-tracker-field-sub-div"
+                  style={{
+                    width: "auto",
+                    fontSize: "14px",
+                    justifyContent: "center",
+                  }}
                 >
-                 This field is used for autofilling data, Please verify before submitting 👉
+                  This field is used for autofilling data, Please verify before
+                  submitting 👉
                 </div>
               </div>
               <div className="calling-tracker-field">
                 <label>Upload Resume</label>
                 <div className="calling-tracker-field-sub-div">
-                <input
-                style={{width: "-webkit-fill-available"}}
-                      type="file"
-                      onChange={handleUploadAndSetData}
-                      className="plain-input"
-                      placeholder="Upload Resume"
-                    />
+                  <input
+                    style={{ width: "-webkit-fill-available" }}
+                    type="file"
+                    onChange={handleUploadAndSetData}
+                    className="plain-input"
+                    placeholder="Upload Resume"
+                  />
                 </div>
               </div>
             </div>
@@ -1113,7 +1123,6 @@ const CallingTrackerForm = ({
                     {!callingTracker.callingFeedback && (
                       <span className="requiredFieldStar">*</span>
                     )}
-
                   </div>
                   {errors.callingFeedback && (
                     <div className="error-message">
@@ -2356,8 +2365,10 @@ const ModalComponent = ({
   const [currentCTCInThousandState, setCurrentCTCInThousandState] =
     useState(currentCTCInThousand);
 
-  const [currentCTCInLakhState1, setCurrentCTCInLakhState1] = useState(currentCTCInLakh);
-  const [currentCTCInThousandState1, setCurrentCTCInThousandState1] = useState(currentCTCInThousand);
+  const [currentCTCInLakhState1, setCurrentCTCInLakhState1] =
+    useState(currentCTCInLakh);
+  const [currentCTCInThousandState1, setCurrentCTCInThousandState1] =
+    useState(currentCTCInThousand);
 
   // Use useEffect to update state when props change
   useEffect(() => {
@@ -2376,7 +2387,6 @@ const ModalComponent = ({
     // this line updated by sahil karnekar date 25-10-2024
     setShowHikeInput(true);
   }, [startingPoint, endingPoint, expectedCTCInLakh, expectedCTCInThousand]);
-
 
   const formatNumberToWords = (num) => {
     const lakh = Math.floor(num / 100000);
@@ -2398,33 +2408,47 @@ const ModalComponent = ({
     return result.trim();
   };
 
-
-
   // Update expectedCTC in words after calculation
   useEffect(() => {
     if (expectedHike) {
-      const currentCTCNum = parseFloat(currentCTCInLakhState) * 100000 + parseFloat(currentCTCInThousandState) * 1000;
+      const currentCTCNum =
+        parseFloat(currentCTCInLakhState) * 100000 +
+        parseFloat(currentCTCInThousandState) * 1000;
       const expectedHikeNum = parseFloat(expectedHike);
-      const expectedCTCNum = currentCTCNum + (currentCTCNum * expectedHikeNum) / 100;
+      const expectedCTCNum =
+        currentCTCNum + (currentCTCNum * expectedHikeNum) / 100;
 
       // Update expectedCTC with formatted words
       setExpectedCTC(formatNumberToWords(expectedCTCNum));
-
     }
   }, [expectedHike, currentCTCInLakhState, currentCTCInThousandState]);
 
   useEffect(() => {
-    if (expectedCTCLakh || expectedCTCThousand || currentCTCInLakhState1 || currentCTCInThousandState1) {
+    if (
+      expectedCTCLakh ||
+      expectedCTCThousand ||
+      currentCTCInLakhState1 ||
+      currentCTCInThousandState1
+    ) {
       const lakhValue = parseFloat(expectedCTCLakh) || 0;
       const thousandValue = parseFloat(expectedCTCThousand) || 0;
       const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
       // this lines updated by sahil karnekar date 25-10-2024
-      const currentCTCNum = parseFloat(currentCTCInLakhState1) * 100000 + parseFloat(currentCTCInThousandState1) * 1000;
-      const hikePercentage = ((combinedCTC - currentCTCNum) / currentCTCNum) * 100;
+      const currentCTCNum =
+        parseFloat(currentCTCInLakhState1) * 100000 +
+        parseFloat(currentCTCInThousandState1) * 1000;
+      const hikePercentage =
+        ((combinedCTC - currentCTCNum) / currentCTCNum) * 100;
       setCalculatedHike(hikePercentage.toFixed(2));
     }
     // this line is updated by sahil karnekar date 25-10-2024
-  }, [expectedCTCLakh, expectedCTCThousand, currentCTCInLakhState1, currentCTCInThousandState1, calculatedHike]);
+  }, [
+    expectedCTCLakh,
+    expectedCTCThousand,
+    currentCTCInLakhState1,
+    currentCTCInThousandState1,
+    calculatedHike,
+  ]);
 
   const handleNumericChange = (setter) => (event) => {
     const value = event.target.value;
@@ -2434,22 +2458,23 @@ const ModalComponent = ({
     setter(value); // Update state if value is numeric
   };
 
-
   return (
     <Modal size="xl" centered show={show} onHide={handleClose}>
       <Modal.Body className="p-0">
         <div className="calling-tracker-popup">
           <div className="calling-tracker-popup-sidebar">
             <p
-              className={`sidebar-item ${activeField === "distance" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "distance" ? "active" : ""
+              }`}
               onClick={() => setActiveField("distance")}
             >
               Distance Calculation
             </p>
             <p
-              className={`sidebar-item ${activeField === "salary" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "salary" ? "active" : ""
+              }`}
               onClick={() => setActiveField("salary")}
             >
               Salary Calculation
@@ -2466,8 +2491,9 @@ const ModalComponent = ({
             </p> */}
 
             <p
-              className={`sidebar-item ${activeField === "previousQuestion" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "previousQuestion" ? "active" : ""
+              }`}
               onClick={() => setActiveField("previousQuestion")}
             >
               Previous Question
@@ -2527,7 +2553,12 @@ const ModalComponent = ({
                       <td className="text-secondary">
                         <div className="form-group">
                           {/* <label htmlFor="currentCTCLakh"></label> */}
-                          <div style={{ position: "relative", marginBottom: "4px" }}>
+                          <div
+                            style={{
+                              position: "relative",
+                              marginBottom: "4px",
+                            }}
+                          >
                             <input
                               type="text"
                               id="currentCTCLakh"
@@ -2538,8 +2569,9 @@ const ModalComponent = ({
                               placeholder="Enter current CTC in lakh"
                               // line number 2286 to 2372 changed by sahil karnekar date 25-10-2024
                               value={currentCTCInLakhState}
-                              onChange={handleNumericChange(setCurrentCTCInLakhState)}
-
+                              onChange={handleNumericChange(
+                                setCurrentCTCInLakhState
+                              )}
                             />
                             {currentCTCInLakhState && (
                               <span
@@ -2565,7 +2597,9 @@ const ModalComponent = ({
                               className="form-control"
                               placeholder="Enter current CTC in Thousand"
                               value={currentCTCInThousandState}
-                              onChange={handleNumericChange(setCurrentCTCInThousandState)}
+                              onChange={handleNumericChange(
+                                setCurrentCTCInThousandState
+                              )}
                             />
                             {currentCTCInThousandState && (
                               <span
@@ -2638,7 +2672,12 @@ const ModalComponent = ({
                       <td className="text-secondary">
                         <div className="form-group">
                           {/* <label htmlFor="currentCTCLakh"></label> */}
-                          <div style={{ position: "relative", marginBottom: "4px" }}>
+                          <div
+                            style={{
+                              position: "relative",
+                              marginBottom: "4px",
+                            }}
+                          >
                             <input
                               type="text"
                               id="currentCTCLakh"
@@ -2649,7 +2688,9 @@ const ModalComponent = ({
                               placeholder="Enter current CTC in lakh"
                               // line number 2286 to 2372 changed by sahil karnekar date 25-10-2024
                               value={currentCTCInLakhState1}
-                              onChange={handleNumericChange(setCurrentCTCInLakhState1)}
+                              onChange={handleNumericChange(
+                                setCurrentCTCInLakhState1
+                              )}
                             />
                             {currentCTCInLakhState1 && (
                               <span
@@ -2675,7 +2716,9 @@ const ModalComponent = ({
                               className="form-control"
                               placeholder="Enter current CTC in Thousand"
                               value={currentCTCInThousandState1}
-                              onChange={handleNumericChange(setCurrentCTCInThousandState1)}
+                              onChange={handleNumericChange(
+                                setCurrentCTCInThousandState1
+                              )}
                             />
                             {currentCTCInThousandState1 && (
                               <span
@@ -2777,7 +2820,11 @@ const ModalComponent = ({
                           type="text"
                           className="form-control"
                           readOnly
-                          value={calculatedHike && !isNaN(calculatedHike) ? `${calculatedHike} %` : ""}
+                          value={
+                            calculatedHike && !isNaN(calculatedHike)
+                              ? `${calculatedHike} %`
+                              : ""
+                          }
                         />
                       </td>
                     </tr>
@@ -2789,68 +2836,15 @@ const ModalComponent = ({
               <div className="history-Tracker">
                 <div className="form-group">
                   <CandidateHistoryTracker />
-                  <div></div>
                 </div>
               </div>
             )}
             {activeField === "previousQuestion" && (
-              <div className="previousQuestion">
-                <h5>Previous Question</h5>
-                <div className="form-group">
-                  <label htmlFor="jobId">Job Id</label>
-                  <input
-                    type="text"
-                    id="jobId"
-                    className="form-control"
-                    placeholder="Enter Job Id"
-                  />
+              <>
+                <div>
+                  <InterviewPreviousQuestion />
                 </div>
-
-                <div className="card">
-                  <h2 className="card-title">Previous Question</h2>
-                  <p className="card-content">
-                    Q.1. What is Java Full Stack Development?
-                  </p>
-                  <p className="card-content">
-                    Q.2. Explain the difference between front-end and back-end
-                    development.
-                  </p>
-                  <p className="card-content">
-                    Q.3. What do you need to build a typical web application?
-                  </p>
-                  <p className="card-content">
-                    Q.4. What is the Java Virtual Machine (JVM), and why is it
-                    important?
-                  </p>
-                  <p className="card-content">
-                    Q.5. What's a servlet, and why is it used in Java web
-                    development?
-                  </p>
-                </div>
-                <div className="card">
-                  <h2 className="card-title">Previous Question</h2>
-                  <p className="card-content">
-                    Q.1. What's the Spring Framework, and why is it useful for
-                    Java?
-                  </p>
-                  <p className="card-content">
-                    Q.2. What are RESTful web services, and why are they
-                    important in Java?
-                  </p>
-                  <p className="card-content">
-                    Q.3. What's Hibernate, and how does it help with databases
-                    in Java?
-                  </p>
-                  <p className="card-content">
-                    Q.4. Can you explain what dependency injection means in
-                    Spring?
-                  </p>
-                  <p className="card-content">
-                    Q.5. What's a singleton pattern, and why does it matter in
-                    Java?
-                  </p>
-                </div>
-              </div>
+              </>
             )}
           </div>
         </div>
