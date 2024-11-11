@@ -863,6 +863,7 @@ const ApplicantForm = () => {
                     </div>
                   </div>
 
+<div className="setFormButtonsDiv">
                   <div className="submit-div">
                     <button className="submit-button" type="hyperlink">
                       Aptitude Test
@@ -873,6 +874,7 @@ const ApplicantForm = () => {
                     <button className="submit-button" type="submit">
                       Submit
                     </button>
+                  </div>
                   </div>
                 </form>
               </div>

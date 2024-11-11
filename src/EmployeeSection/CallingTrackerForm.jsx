@@ -718,10 +718,9 @@ const CallingTrackerForm = ({
       dateOfBirth: formatDateString(data.dateOfBirth),
       gender: validateGender(data.gender),
       qualification: data.qualification,
-      resume: data.resume
+      resume: data.resume,
     }));
 
-    
     // Check if currentLocation matches a predefined option
     if (!predefinedLocations.includes(data.currentLocation)) {
       setIsOtherLocationSelected(true); // Show the "Other" input field
@@ -757,7 +756,7 @@ const CallingTrackerForm = ({
                     justifyContent: "center",
                   }}
                 >
-                  This field is used for autofilling data, Please verify before
+                  This field used for autofetch data, Please verify before
                   submitting 👉
                 </div>
               </div>
@@ -1036,7 +1035,7 @@ const CallingTrackerForm = ({
                         name="currentLocation"
                         value={callingTracker.currentLocation}
                         onChange={handleLocationChange}
-                        style={{width:"200px"}}
+                        style={{ width: "200px" }}
                       >
                         <option value="" style={{ color: "gray" }}>
                           Select Location
@@ -1661,7 +1660,7 @@ const CallingTrackerForm = ({
                   </div>
                   {/* sahil karnekar line 1376 to 1420 */}
                   <input
-                     type="text"
+                    type="text"
                     min="1947"
                     name="yearOfPassing"
                     placeholder="YOP"
@@ -1718,7 +1717,7 @@ const CallingTrackerForm = ({
             <div className="calling-tracker-row-white">
               <div className="calling-tracker-field">
                 <label>
-                  Upload Resume
+                  Save Resume File
                   {resumeUploaded && (
                     <FaCheckCircle className="upload-success-icon" />
                   )}
@@ -1809,13 +1808,12 @@ const CallingTrackerForm = ({
                     {/* this line added by sahil date 22-10-2024 */}
                     <div className="setRequiredStarDiv">
                       <input
-                     type="text"
+                        type="text"
                         name="experienceMonth"
                         value={lineUpData.experienceMonth}
                         onChange={handleLineUpChange}
                         placeholder="Months"
                         style={{ width: "inherit" }}
-
                         maxLength="2"
                         // line number 1563 added by sahil karnekar date : 15-10-2024
                         min="0"
@@ -2026,7 +2024,7 @@ const CallingTrackerForm = ({
                         name="holdingAnyOffer"
                         value={lineUpData.holdingAnyOffer}
                         onChange={handleLineUpChange}
-                        style={{width:"200px"}}
+                        style={{ width: "200px" }}
                       >
                         <option value="">Select</option>
                         <option value="Yes">Yes</option>
@@ -2244,7 +2242,7 @@ const CallingTrackerForm = ({
                 <button
                   type="button"
                   onClick={() => setShowConfirmation(true)}
-                  className="ctf-btn"
+                  className="daily-tr-btn"
                 >
                   Add To Calling
                 </button>
@@ -2253,7 +2251,7 @@ const CallingTrackerForm = ({
                 <button
                   type="button"
                   onClick={() => setShowConfirmation(true)}
-                  className="ctf-btn"
+                  className="daily-tr-btn"
                   id="uploadbtn2"
                 >
                   Add To LineUp

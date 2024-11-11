@@ -355,7 +355,7 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                       />
                     )}
                   </div>
-                  <h1 className="resume-data-heading">Resume Data</h1>
+                  <h1 className="resume-data-heading">Resume Data </h1>
                   <div className="rl-btn-div">
                     <button
                       style={{ marginRight: "20px" }}
@@ -505,9 +505,9 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                     {filteredData.map((item, index) => (
                       <tr key={item.candidateId} className="attendancerows">
                         <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
+                           className="tabledata "
+                           onMouseOver={handleMouseOver}
+                           onMouseOut={handleMouseOut}
                         >
                           {index + 1}{" "}
                           <div className="tooltip">
@@ -561,14 +561,11 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOut={handleMouseOut}
                         >
                           {item.candidateEmail}
-                          <div className="tooltip">
-                            {item.candidateEmail}
                             <div className="tooltip">
                               <span className="tooltiptext">
                                 {item.candidateEmail}
                               </span>
                             </div>
-                          </div>
                         </td>
 
                         <td

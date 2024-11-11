@@ -169,7 +169,7 @@ const JobListing = () => {
         (job.experience &&
           job.experience
             .toLowerCase()
-            .includes(searchQuery.experience.toLowerCase())) 
+            .includes(searchQuery.experience.toLowerCase()))
       );
     });
     setFilteredJobDescriptions(filtered);
@@ -626,7 +626,7 @@ const JobListing = () => {
                               toggleJobDescription(item.requirementId)
                             }
                           >
-                            View More
+                            View
                           </button>
                         )}
                         {(userType === "Manager" ||
@@ -703,125 +703,140 @@ const JobListing = () => {
                   </div>
                 </section>
                 <section className="job-performance1">
-                  <span>
-                    <article>
-                      <b>SOFTWARE DEVELOPER</b>
-                    </article>
-                    <div className="jd-share-div">
-                      <button
-                        className="saved daily-tr-btn"
-                        onClick={toggleEdm}
-                      >
-                        Share Video
-                      </button>
-                      <button className="daily-tr-btn" onClick={toggleEdm2}>
-                        Share EDM
-                      </button>
-                      <button
-                        className="share daily-tr-btn"
-                        onClick={sharejobdescription}
-                      >
-                        Share
-                      </button>
-                      <button onClick={handleclose} className="daily-tr-btn">
-                        Close
-                      </button>
+                  <div>
+                    <div className="info">
+                      <span>
+                        <div className="jd-share-div">
+                          <button
+                            className="saved daily-tr-btn"
+                            onClick={toggleEdm}
+                          >
+                            Share Video
+                          </button>
+                          <button className="daily-tr-btn" onClick={toggleEdm2}>
+                            Share EDM
+                          </button>
+                          <button
+                            className="share daily-tr-btn"
+                            onClick={sharejobdescription}
+                          >
+                            Share
+                          </button>
+                          <button onClick={handleclose}>
+  <i id="jd-cancle-btn" className="fa-solid fa-xmark" title="Cancel"></i>
+</button>
+
+                        </div>
+                      </span>
+
+                      <p>
+                        {/* simple spelling mistake Corrected */}
+                        <b>Job Id : </b>
+                        {requirementData.requirementId || "N/A"}
+                      </p>
+                      <p>
+                        <b>Company Name : </b>
+                        {requirementData.companyName || "N/A"}
+                      </p>
+                      <p>
+                        <b>Designation : </b>
+                        {requirementData.designation || "N/A"}
+                      </p>
+                      <p>
+                        <b>Job Role : </b>
+                        {requirementData.jobRole || "N/A"}
+                      </p>
+                      <p>
+                        <b>Key Skills : </b>
+                        {requirementData.skills || "N/A"}
+                      </p>
+                      <p>
+                        <b>Salary : </b> {requirementData.salary || "N/A"}
+                      </p>
+                      <p>
+                        <b>Field : </b>
+                        {requirementData.field}
+                      </p>
+                      <p>
+                        <b>Location : </b>
+                        {requirementData.location || "N/A"}
+                      </p>
                     </div>
-                  </span>
-                  <div className="names">
-                    <p>
-                      {/* simple spelling mistake Corrected */}
-                      <b>Job Id : </b>
-                      {requirementData.requirementId || "N/A"}
-                    </p>
-                    <p>
-                      <b>Company Name : </b>
-                      {requirementData.companyName || "N/A"}
-                    </p>
-                    <p>
-                      <b>Designation :</b>
-                      {requirementData.designation || "N/A"}
-                    </p>
-                    <p>
-                      <b>Job Role : </b>
-                      {requirementData.jobRole || "N/A"}
-                    </p>
-                    <p>
-                      <b>Key Skills :</b>
-                      {requirementData.skills || "N/A"}
-                    </p>
-                    <p>
-                      <b>Salary :</b> {requirementData.salary || "N/A"}
-                    </p>
-                    <p>
-                      <b>Field : </b>
-                      {requirementData.field}
-                    </p>
-                    <p>
-                      <b>Location :</b>
-                      {requirementData.location || "N/A"}
-                    </p>
+                    <div className="info">
+                      <p>
+                        <b>Qualifications : </b>
+                        {requirementData.qualification || "N/A"}
+                      </p>
 
-                    <p>
-                      <b>Educational Qualifications :</b>
-                      {requirementData.qualification || "N/A"}
-                    </p>
+                      <p>
+                        <b>Experience : </b>
+                        {requirementData.experience || "N/A"}
+                      </p>
 
-                    <p>
-                      <b>Experience :</b>
-                      {requirementData.experience || "N/A"}
-                    </p>
+                      <p>
+                        <b>Year Of Passing : </b>
+                        {requirementData.yearOfPassing || "N/A"}
+                      </p>
+                      <p>
+                        <b>Gender :  </b>
+                        {requirementData.gender || "N/A"}
+                      </p>
+                      <p>
+                        <b>Incentives For Recruiters : </b>
+                        {requirementData.incentive && (
+                          <span>&#8377; </span>
+                        )}{" "}
+                        {requirementData.incentive || "N/A"}
+                      </p>
+                    </div>
+                    <div className="info">
+                      {requirementData.companyLink && (
+                        <p>
+                          <b>Company Link :</b>
+                          <a
+                            className="companyLinkTextDecorationClass"
+                            href={requirementData.companyLink || "#"}
+                          >
+                            {requirementData.companyLink}
+                          </a>
+                        </p>
+                      )}
+                      <p>
+                        <b>Shifts : </b>
+                        {requirementData.shift || "N/A"}
+                      </p>
+                      <p>
+                        <b>Week Off's : </b>
+                        {requirementData.weekOff || "N/A"}
+                      </p>
+                      <p>
+                        <b>Notice Period :</b>{" "}
+                        {requirementData.noticePeriod || "N/A"}
+                      </p>
 
-                    <p>
-                      <b>Year Of Passing :</b>
-                      {requirementData.yearOfPassing || "N/A"}
-                    </p>
-
-                    <p>
-                      <b>Company Link :</b>
-                      <a href={requirementData.companyLink || "#"}>Website</a>
-                    </p>
-                    <p>
-                      <b>Shifts : </b>
-                      {requirementData.shift || "N/A"}
-                    </p>
-                    <p>
-                      <b>Week Off's : </b>
-                      {requirementData.weekOff || "N/A"}
-                    </p>
-                    <p>
-                      <b>Notice Period :</b>{" "}
-                      {requirementData.noticePeriod || "N/A"}
-                    </p>
-
-                    <p>
-                      <b>Job Type : </b>
-                      {requirementData.jobType || "N/A"}
-                    </p>
-                    <p>
-                      <b>Perks:</b>
-                      {requirementData.perks || "N/A"}
-                    </p>
-                    <p>
-                      <b>Incentives For Recruiters : </b>
-                      {requirementData.incentive || "N/A"}
-                    </p>
-                    <p>
-                      <b>Reporting Hierarchy : </b>
-                      {requirementData.reportingHierarchy || "N/A"}
-                    </p>
-                    <p>
-                      <b>Number of Positions : </b>
-                      {requirementData.position || "N/A"}
-                    </p>
-                    <p>
-                      <b>Documentation : </b>
-                      {requirementData.documentation || "N/A"}
-                    </p>
-                    <p>
-                      <b>Gender : </b>
-                      {requirementData.gender || "N/A"}
-                    </p>
+                      <p>
+                        <b>Job Type : </b>
+                        {requirementData.jobType || "N/A"}
+                      </p>
+                      <p>
+                        <b>Perks : </b>
+                        {requirementData.perks || "N/A"}
+                      </p>
+                     
+                      <p>
+                        <b>Reporting Hierarchy : </b>
+                        {requirementData.reportingHierarchy || "N/A"}
+                      </p>
+                      <p>
+                        <b>Number of Positions : </b>
+                        {requirementData.position || "N/A"}
+                      </p>
+                      <p>
+                        <b> Required Documentation : </b>
+                        {requirementData.documentation || "N/A"}
+                      </p>
+                     
+                    </div>
                   </div>
                 </section>
               </main>

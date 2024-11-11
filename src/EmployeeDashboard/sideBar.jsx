@@ -1187,7 +1187,7 @@ function Sidebar({
                         <a href="#">
                           {/* <img src={Circle} style={{ width: "10px" }} alt="" /> */}
                           <span className="sidebar-text">
-                            Excel Calling Data
+                            Uploaded Excel Data
                           </span>
                         </a>
                       </li>
