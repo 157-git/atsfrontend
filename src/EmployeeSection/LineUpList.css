@@ -75,7 +75,7 @@
 .lineUp-forward-btn:hover,
 .lineUp-share-forward-popup-btn:hover,
 .lineUp-close-forward-popup-btn:hover {
-  background-color: var(--button-hover-color);
+  background-color: var(--button-bg-hover-color);
   color: var(--text-hover-color);
   border: 1px solid var(--text-hover-color);
 }

@@ -7,10 +7,12 @@ import { API_BASE_URL } from "../api/api";
 {
   /* this line added by sahil date 22-10-2024 */
 }
-import { Modal } from "react-bootstrap"; 
+import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import Loader from "../EmployeeSection/loader";
-
+{
+  /* this line added by sahil date 22-10-2024 */
+}
 const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +22,13 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   const [showExportConfirmation, setShowExportConfirmation] = useState(false);
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [selectedCandidateResume, setSelectedCandidateResume] = useState("");
+  const [searchTerm, setSearchTerm] = useState(""); // For search input
+  const [filteredData, setFilteredData] = useState([]); // To store filtered results
   const { employeeId, userType } = useParams();
+  const [showFilterSection, setShowFilterSection] = useState(false);
+  const [activeFilterOption, setActiveFilterOption] = useState(null);
+  const [selectedFilters, setSelectedFilters] = useState({});
+  const [showSearchBar, setShowSearchBar] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,6 +41,8 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
         }
         const result = await response.json();
         setData(result);
+        setFilteredData(result);
+        console.log(filteredData);
       } catch (error) {
         setError(error);
       } finally {
@@ -195,7 +205,121 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
     return "Document Not Found";
   };
 
-  
+  const toggleFilterSection = () => {
+    setShowFilterSection(!showFilterSection);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+  const limitedOptions = [
+    ["candidateEmail", "Candidate Email"],
+    ["candidateName", "Candidate Name"],
+    ["contactNumber", "Contact Number"],
+    ["currentLocation", "Current Location"],
+    ["date", "Date"],
+    ["fullAddress", "Full Address"],
+    ["jobDesignation", "Job Designation"],
+    ["requirementCompany", "Requirement Company"],
+    ["empId", "Employee Id"],
+    ["companyName", "Company Name"],
+    ["currentCTCLakh", "Current CTC (Lakh)"],
+    ["currentCTCThousand", "Current CTC (Thousand)"],
+    ["dateOfBirth", "Date Of Birth"],
+    ["expectedCTCLakh", "Expected CTC (Lakh)"],
+    ["expectedCTCThousand", "Expected CTC (Thousand)"],
+    ["experienceMonth", "Experience (Months)"],
+    ["experienceYear", "Experience (Years)"],
+    ["finalStatus", "Final Status"],
+    ["holdingAnyOffer", "Holding Any Offer"],
+    ["noticePeriod", "Notice Period"],
+  ];
+  const handleFilterOptionClick = (key) => {
+    if (activeFilterOption === key) {
+      setActiveFilterOption(null); // Close the current filter
+    } else {
+      setActiveFilterOption(key); // Open a new filter section
+    }
+
+    // Initialize the selected filter array if it doesn't exist
+    setSelectedFilters((prev) => {
+      const newSelectedFilters = { ...prev };
+      if (!newSelectedFilters[key]) {
+        newSelectedFilters[key] = []; // Create an empty array for values
+      }
+      return newSelectedFilters;
+    });
+  };
+
+  const handleFilterSelect = (key, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [key]: prev[key].includes(value)
+        ? prev[key].filter((item) => item !== value) // Deselect the value
+        : [...prev[key], value], // Select the value
+    }));
+  };
+  const applyFilters = () => {
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    let filteredResults = data.filter((item) => {
+      // Apply search term filtering first
+      return (
+        item.candidateName?.toLowerCase().includes(lowerSearchTerm) ||
+        item.candidateEmail?.toLowerCase().includes(lowerSearchTerm) ||
+        item.jobDesignation?.toLowerCase().includes(lowerSearchTerm) ||
+        item.currentLocation?.toLowerCase().includes(lowerSearchTerm) ||
+        item.companyName?.toLowerCase().includes(lowerSearchTerm) ||
+        item.contactNumber
+          ?.toString()
+          .toLowerCase()
+          .includes(lowerSearchTerm) ||
+        item.dateOfBirth?.toLowerCase().includes(lowerSearchTerm) ||
+        item.extraCertification?.toLowerCase().includes(lowerSearchTerm) ||
+        item.gender?.toLowerCase().includes(lowerSearchTerm) ||
+        item.jobRole?.toLowerCase().includes(lowerSearchTerm) ||
+        item.qualification?.toLowerCase().includes(lowerSearchTerm) ||
+        item.relevantExperience?.toLowerCase().includes(lowerSearchTerm) ||
+        item.resumeUploadDate?.toLowerCase().includes(lowerSearchTerm)
+      );
+    });
+
+    // Apply selected filters
+    Object.entries(selectedFilters).forEach(([option, values]) => {
+      if (values.length > 0) {
+        filteredResults = filteredResults.filter((item) =>
+          values.some((value) =>
+            item[option]
+              ?.toString()
+              .toLowerCase()
+              .includes(value.toString().toLowerCase())
+          )
+        );
+      }
+    });
+
+    setFilteredData(filteredResults);
+  };
+
+  useEffect(() => {
+    applyFilters(); // Reapply filters whenever the data or selected filters change
+  }, [searchTerm, data, selectedFilters]);
+
+  const formatToIndianTime = (dateString) => {
+    const date = new Date(dateString);
+    const indianOffset = 5.5 * 60; // IST offset in minutes
+    const utcOffset = date.getTimezoneOffset();
+    const istDate = new Date(date.getTime() + (indianOffset + utcOffset) * 60000);
+    return istDate.toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "Asia/Kolkata", // Force IST format
+    });
+  };
+
   return (
     <div className="App-after1">
       {loading ? (
@@ -208,15 +332,129 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
             <>
               <div className="rl-filterSection">
                 <div className="filterSection">
-                  <h1 className="resume-data-heading">Resume Data </h1>
-                </div>
-                {/* Swapnil_Rokade_ResumeList_CreateExcel_18/07/2024 */}
-                <div>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <i
+                      className="fa-solid fa-magnifying-glass"
+                      onClick={() => {
+                        setShowSearchBar(!showSearchBar);
+                        setShowFilterSection(false);
+                      }}
+                      style={{
+                        margin: "10px",
+                        width: "auto",
+                        fontSize: "15px",
+                      }}
+                    ></i>
+                    {showSearchBar && (
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Search here..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                    )}
+                  </div>
+                  <h1 className="resume-data-heading">Resume Data</h1>
                   <div className="rl-btn-div">
+                    <button
+                      style={{ marginRight: "20px" }}
+                      onClick={toggleFilterSection}
+                      className="daily-tr-btn"
+                    >
+                      Filter <i className="fa-solid fa-filter"></i>
+                    </button>
                     <button className="rl-create-Excel-btn" onClick={showPopup}>
                       Create Excel
                     </button>
                   </div>
+                </div>
+                {/* Swapnil_Rokade_ResumeList_CreateExcel_18/07/2024 */}
+                <div>
+                  {showFilterSection && (
+                    <div className="filter-section">
+                      {limitedOptions.map(([optionKey, optionLabel]) => {
+                        const uniqueValues = Array.from(
+                          new Set(
+                            data
+                              .map((item) => {
+                                const value = item[optionKey];
+                                // Ensure the value is a string before converting to lowercase
+                                return typeof value === "string"
+                                  ? value.toLowerCase()
+                                  : value;
+                              })
+                              .filter(
+                                (value) => value !== undefined && value !== null
+                              ) // Remove null or undefined values
+                          )
+                        );
+
+                        return (
+                          <div key={optionKey} className="filter-option">
+                            <button
+                              className="white-Btn"
+                              onClick={() => handleFilterOptionClick(optionKey)}
+                            >
+                              {optionLabel}
+                              <span className="filter-icon">&#x25bc;</span>
+                            </button>
+                            {activeFilterOption === optionKey && (
+                              <div className="city-filter">
+                                <div className="optionDiv">
+                                  {uniqueValues.filter(
+                                    (value) =>
+                                      value !== "" &&
+                                      value !== "-" &&
+                                      value !== undefined &&
+                                      !(
+                                        optionKey === "alternateNumber" &&
+                                        value === 0
+                                      )
+                                  ).length > 0 ? (
+                                    uniqueValues.map(
+                                      (value) =>
+                                        value !== "" &&
+                                        value !== "-" &&
+                                        value !== undefined &&
+                                        !(
+                                          optionKey === "alternateNumber" &&
+                                          value === 0
+                                        ) && (
+                                          <label
+                                            key={value}
+                                            className="selfcalling-filter-value"
+                                          >
+                                            <input
+                                              type="checkbox"
+                                              checked={
+                                                selectedFilters[
+                                                  optionKey
+                                                ]?.includes(value) || false
+                                              }
+                                              onChange={() =>
+                                                handleFilterSelect(
+                                                  optionKey,
+                                                  value
+                                                )
+                                              }
+                                              style={{ marginRight: "5px" }}
+                                            />
+                                            {value}
+                                          </label>
+                                        )
+                                    )
+                                  ) : (
+                                    <div>No values</div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                   {/* this modal added by sahil date 22-10-2024 */}
                   <Modal
                     isOpen={showExportConfirmation}
@@ -246,12 +484,7 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                       style={{ position: "sticky" }}
                     >
                       <th className="attendanceheading">Sr No</th>
-                      <th
-                        className="attendanceheading"
-                        style={{ paddingLeft: "5px", paddingRight: "5px" }}
-                      >
-                        Resume Upload Date
-                      </th>
+                      <th className="attendanceheading"> Resume Upload Date</th>
                       <th className="attendanceheading">Candidate Name</th>
                       <th className="attendanceheading">Candidate Email</th>
                       <th className="attendanceheading">Gender</th>
@@ -264,11 +497,12 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                       <th className="attendanceheading">Extra Certification</th>
                       <th className="attendanceheading">Current Location</th>
                       <th className="attendanceheading">Resume</th>
+
                       <th className="attendanceheading">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {data.map((item, index) => (
+                    {filteredData.map((item, index) => (
                       <tr key={item.candidateId} className="attendancerows">
                         <td
                           className="tabledata"
@@ -280,19 +514,21 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                             <span className="tooltiptext">{index + 1}</span>
                           </div>
                         </td>
+
                         <td
                           style={{ paddingLeft: "3px" }}
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.resumeUploadDate}{" "}
+                          {formatToIndianTime(item.resumeUploadDate)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.resumeUploadDate}
+                              {formatToIndianTime(item.resumeUploadDate)}
                             </span>
                           </div>
                         </td>
+
                         <td
                           hidden
                           className="tabledata"
@@ -318,6 +554,7 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                             </span>
                           </div>
                         </td>
+
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
@@ -325,9 +562,12 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                         >
                           {item.candidateEmail}
                           <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.candidateEmail}
-                            </span>
+                            {item.candidateEmail}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {item.candidateEmail}
+                              </span>
+                            </div>
                           </div>
                         </td>
 
@@ -469,6 +709,7 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                   </tbody>
                 </table>
               </div>
+
               <div>
                 <Modal
                   show={showResumeModal}

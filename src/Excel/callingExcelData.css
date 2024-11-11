@@ -191,5 +191,24 @@
 }
 
 
-/* Arshad Added CSS, 06-11-2024 */
+/* Arshad Added CSS, 11-11-2024 */
+.uploaded-excel-data{
+  /* border: 2px solid black; */
+  width: 900px;
+}
 
+.modal-sections{
+  border: 1px solid red;
+  display: flex;
+
+}
+
+.modal-section{
+  border: 1px solid gray;
+  width: 500px;
+}
+.excel-data-close-btn{
+  /* border: 1px solid blue; */
+  float: right;
+  /* align-items: start; */
+}

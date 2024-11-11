@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HomePage from "./HomePage/homePage";
 import MainDashboard from "../src/MainDashboard/mainDashboard";
 import Login from "./LoginPage/loginPage";
@@ -22,7 +22,30 @@ import EmpDashboard from "./EmployeeDashboard/empDashboard";
 import ProtectedRoute from "./MainDashboard/ProtectedRoute.jsx";
 import ApplicantForm from "./Applicant/applicantFrom.jsx";
 
+
+const applySavedColors = () => {
+  const bgColor = localStorage.getItem("bgColor");
+  const buttonColor = localStorage.getItem("buttonColor");
+  const hoverColor = localStorage.getItem("hover-effect");
+
+  if (bgColor) document.documentElement.style.setProperty("--Bg-color", bgColor);
+  if (buttonColor) document.documentElement.style.setProperty("--button-color", buttonColor);
+  if (hoverColor) document.documentElement.style.setProperty("--hover-effect", hoverColor);
+  if (buttonColor) document.documentElement.style.setProperty("--button-hover-color", "white");
+  if (bgColor) document.documentElement.style.setProperty("--text-hover-color", bgColor);
+  if (bgColor) document.documentElement.style.setProperty("--button-text-color", "white");
+  if (bgColor) document.documentElement.style.setProperty("--button-border-color", "gray");
+  if (bgColor) document.documentElement.style.setProperty("--button-bg-hover-color", "white");
+};
+
+
 const App = () => {
+
+  useEffect(() => {
+    applySavedColors();
+  }, []);
+
+
   return (
     <div>
       <BrowserRouter>

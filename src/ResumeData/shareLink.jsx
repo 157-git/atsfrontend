@@ -8,64 +8,54 @@ const ShareLink = ({ toggleResumeLink }) => {
   const [copyMessage, setCopyMessage] = useState("");
 
   // Hardcoded base URL for sharing
-  const shareUrl = `http://93.127.199.85/157industries/${employeeId}/${userType}/candidate-form`; // Ensure HTTPS
+  const shareUrl = `http://93.127.199.85/157industries/${employeeId}/${userType}/candidate-form`;
 
-  const handleFallbackShare = () => {
+  const handleCopyLink = () => {
     navigator.clipboard.writeText(shareUrl)
       .then(() => {
         setCopyMessage("The link has been copied to your clipboard.");
         setTimeout(() => setCopyMessage(""), 3000); // Clear message after 3 seconds
       })
-      .catch(err => {
+      .catch((err) => {
         setCopyMessage("Failed to copy the link. Please try again.");
         console.error("Copy failed: ", err);
       });
   };
 
-  const handleCopyClick = () => {
-    handleFallbackShare(); // Call the same function for copying
-  };
-
   return (
     <div className="shareLink-mainDiv">
-      {navigator.share ? (
-        <RWebShare
-          data={{
-            url: shareUrl, // This will be shared and will open directly in the browser when clicked
-            title: "Share Candidate Form",
-            text: "Click the link to fill out the candidate form",
-          }}
-        >
-          <div className="shareLink-share-btn-Div">
-            <h1>Share Link To Candidate</h1>
-            <div className="share-copy-div">
+      <div className="shareLink-share-btn-Div">
+        <h1>Share Link To Candidate</h1>
+        <div className="share-copy-div">
+          {navigator.share ? (
+            <RWebShare
+              data={{
+                url: shareUrl,
+                title: "Share Candidate Form",
+                text: "Click the link to fill out the candidate form",
+              }}
+            >
               <button className="shareLink-share-btn">Share 🔗</button>
-              <button className="shareLink-share-btn" onClick={handleCopyClick}>
-                Copy Link 🔗
-              </button>
-            </div>
-            <span style={{ color: "black", fontSize: "14px" }}>
-              Share this link with the candidate so they can fill in their information through the link.
-            </span>
-            {copyMessage && (
-        <div className="copyMessage">
-          <span style={{ color: "green", fontSize: "14px" }}>{copyMessage}</span>
-        </div>
-      )}
-          </div>
-        </RWebShare>
-      ) : (
-        <div className="shareLink-share-btn-Div">
-          <h1>Share Link To Candidate</h1>
-          <button className="shareLink-share-btn" onClick={handleFallbackShare}>
+            </RWebShare>
+          ) : (
+            <button className="shareLink-share-btn" onClick={() => alert("Sharing is not supported on this device.")}>
+              Share 🔗
+            </button>
+          )}
+          <button className="shareLink-share-btn" onClick={handleCopyLink}>
             Copy Link 🔗
           </button>
-          <span style={{ color: "black", fontSize: "14px" }}>
-            Copy this link and send it to the candidate: {shareUrl}
-          </span>
         </div>
-      )}
-     
+        <span style={{ color: "black", fontSize: "14px" }}>
+          Share this link with the candidate so they can fill in their information through the link.
+        </span>
+        {copyMessage && (
+          <div className="copyMessage">
+            <span style={{ color: "green", fontSize: "14px" }}>{copyMessage}</span>
+          </div>
+        )}
+      </div>
+      
       <div className="shareLink-view-btn-Div">
         <h1>Resume Builder</h1>
         <button className="shareLink-view-btn" onClick={toggleResumeLink}>

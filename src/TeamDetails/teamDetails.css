@@ -115,3 +115,9 @@
   .App-after.blurred {
     background-color: #f2f2f2;
   }
+  .emp-details-act-btn{
+    color: var(--button-text-color);
+  }
+  .emp-details-act-btn:hover{
+    border-color: var(--button-border-color);
+  }

@@ -1036,6 +1036,7 @@ const CallingTrackerForm = ({
                         name="currentLocation"
                         value={callingTracker.currentLocation}
                         onChange={handleLocationChange}
+                        style={{width:"200px"}}
                       >
                         <option value="" style={{ color: "gray" }}>
                           Select Location
@@ -1225,6 +1226,7 @@ const CallingTrackerForm = ({
                       <input
                         list="educationListDropDown"
                         name="qualification"
+                        type="text"
                         value={lineUpData.qualification}
                         onChange={handleEducationChange}
                         placeholder="Search...."
@@ -1659,7 +1661,7 @@ const CallingTrackerForm = ({
                   </div>
                   {/* sahil karnekar line 1376 to 1420 */}
                   <input
-                    type="number"
+                     type="text"
                     min="1947"
                     name="yearOfPassing"
                     placeholder="YOP"
@@ -1807,17 +1809,18 @@ const CallingTrackerForm = ({
                     {/* this line added by sahil date 22-10-2024 */}
                     <div className="setRequiredStarDiv">
                       <input
-                        type="number"
+                     type="text"
                         name="experienceMonth"
                         value={lineUpData.experienceMonth}
                         onChange={handleLineUpChange}
                         placeholder="Months"
+                        style={{ width: "inherit" }}
+
                         maxLength="2"
                         // line number 1563 added by sahil karnekar date : 15-10-2024
                         min="0"
                         max="11"
                         //  {/* this line added by sahil date 22-10-2024 */}
-                        style={{ width: "inherit" }}
                       />
                       {/* sahil karnekar line 1542 to 1546 */}
                       {/* this line added by sahil date 22-10-2024 */}
@@ -2023,6 +2026,7 @@ const CallingTrackerForm = ({
                         name="holdingAnyOffer"
                         value={lineUpData.holdingAnyOffer}
                         onChange={handleLineUpChange}
+                        style={{width:"200px"}}
                       >
                         <option value="">Select</option>
                         <option value="Yes">Yes</option>

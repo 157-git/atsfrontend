@@ -13,12 +13,12 @@ const AddJobDescription = () => {
     designation: "",
     position: "",
     qualification: "",
-    year_of_passing: "",
+    yearOfPassing: "",
     field: "",
     stream: "",
     location: "",
     salary: "",
-    job_type: "",
+    jobType: "",
     experience: "",
     bond: "",
     percentage: "",
@@ -161,7 +161,7 @@ const AddJobDescription = () => {
           designation: "",
           position: "",
           qualification: "",
-          year_of_passing: "",
+          yearOfPassing: "",
           field: "",
           stream: "",
           location: "",
@@ -255,7 +255,7 @@ const AddJobDescription = () => {
                           name="position"
                           value={formData.position}
                           onChange={handleChange}
-                          placeholder="Number Of Position"
+                          placeholder="Enter Number"
                         />
                       </div>
                       <div className="field">
@@ -274,8 +274,8 @@ const AddJobDescription = () => {
                         <label>Year of Passing:</label>
                         <input
                           type="text"
-                          name="year_of_passing"
-                          value={formData.year_of_passing}
+                          name="yearOfPassing"
+                          value={formData.yearOfPassing}
                           onChange={handleChange}
                           placeholder="Enter Year of Passing"
                         />
@@ -329,8 +329,8 @@ const AddJobDescription = () => {
                       <div className="field">
                         <label>Job Type:</label>
                         <select
-                          name="job_type"
-                          value={formData.job_type}
+                          name="jobType"
+                          value={formData.jobType}
                           onChange={handleChange}
                         >
                           <option value="">Select Job Type</option>

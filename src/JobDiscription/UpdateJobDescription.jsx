@@ -13,12 +13,12 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
     designation: onAddJD.designation || "",
     position: onAddJD.position || "",
     qualification: onAddJD.qualification || "",
-    year_of_passing: onAddJD.yearOfPassing || "",
+    yearOfPassing: onAddJD.yearOfPassing || "",
     field: onAddJD.field || "",
     stream: onAddJD.stream || "",
     location: onAddJD.location || "",
     salary: onAddJD.salary || "",
-    job_type: onAddJD.jobType || "",
+    jobType: onAddJD.jobType || "",
     experience: onAddJD.experience || "",
     bond: onAddJD.bond || "",
     percentage: onAddJD.percentage || "",
@@ -140,7 +140,7 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
           designation: "",
           position: "",
           qualification: "",
-          year_of_passing: "",
+          yearOfPassing: "",
           field: "",
           stream: "",
           location: "",
@@ -248,8 +248,8 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
                   <label>Year of Passing:</label>
                   <input
                     type="text"
-                    name="year_of_passing"
-                    value={formData.year_of_passing}
+                    name="yearOfPassing"
+                    value={formData.yearOfPassing}
                     onChange={handleChange}
                     placeholder="Enter Year of Passing"
                   />
@@ -303,8 +303,8 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
                 <div className="field">
                   <label>Job Type:</label>
                   <select
-                    name="job_type"
-                    value={formData.job_type}
+                    name="jobType"
+                    value={formData.jobType}
                     onChange={handleChange}
                   >
                     <option value="">Select Job Type</option>

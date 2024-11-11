@@ -774,7 +774,7 @@ const JobListing = () => {
 
                     <p>
                       <b>Year Of Passing :</b>
-                      {requirementData.year_of_passing || "N/A"}
+                      {requirementData.yearOfPassing || "N/A"}
                     </p>
 
                     <p>

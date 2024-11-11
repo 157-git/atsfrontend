@@ -26,8 +26,10 @@ import logo1 from "../LogoImages/logoweb2.png";
 import "../Applicant/applicantFrom.css";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
+import { useParams } from "react-router-dom";
 
 const ApplicantForm = () => {
+  const { userType, employeeId } = useParams();
   const [loading, setLoading] = useState(false);
   const dateInputRef = useRef(null);
   const handlePlaceholderClick = () => {
@@ -52,7 +54,7 @@ const ApplicantForm = () => {
     communicationRating: "",
     fullAddress: "",
     callingFeedback: "",
-    selectYesOrNo: "",
+    selectYesOrNo: "Yet To Confirm",
     incentive: "",
     oldEmployeeId: "",
     distance: "",
@@ -162,11 +164,16 @@ const ApplicantForm = () => {
           ? await convertToBase64(formData.lineUp.photo)
           : null,
       },
+      ...(userType === "Recruiters"
+        ? { employee: { employeeId, teamLeaderId: employeeId } }
+        : userType === "TeamLeader"
+        ? { teamLeader: { teamLeaderId: employeeId } }
+        : userType === "Manager"
+        ? { manager: { managerId: employeeId } }
+        : {}),
     };
 
     console.log(updatedFormData);
-
-    // Perform the API request with the modified formData
     try {
       const response = await axios.post(
         `${API_BASE_URL}/save-applicant`,

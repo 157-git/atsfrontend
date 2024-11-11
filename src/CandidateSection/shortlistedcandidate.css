@@ -234,3 +234,10 @@ display: flex;
 text-align: center;
 padding-right: 8px;
 }
+.lineUp-share-btn{
+  color: var(--button-text-color);
+  border-color: var(--button-border-color);
+}
+.lineUp-share-btn:hover{
+  border-color: var(--button-border-color);
+}
