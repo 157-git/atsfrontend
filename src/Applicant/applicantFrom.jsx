@@ -11,7 +11,7 @@ import {
   faGraduationCap,
   faMapMarkerAlt,
   faPhone,
-  faUser,
+  faUser,faCheckCircle
 } from "@fortawesome/free-solid-svg-icons";
 
 import { toast } from "react-toastify";
@@ -28,9 +28,11 @@ import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { useParams } from "react-router-dom";
 
-const ApplicantForm = () => {
+const ApplicantForm = ({loginEmployeeName}) => {
   const { userType, employeeId } = useParams();
   const [loading, setLoading] = useState(false);
+  const [resumeSelected, setResumeSelected] = useState(false);
+  const [photoSelected, setPhotoSelected] = useState(false);
   const dateInputRef = useRef(null);
   const handlePlaceholderClick = () => {
     if (dateInputRef.current) {
@@ -48,7 +50,7 @@ const ApplicantForm = () => {
     currentLocation: "",
     recruiterName: "",
     alternateNumber: "",
-    sourceName: "",
+    sourceName: "Applicant Form",
     requirementId: "",
     requirementCompany: "",
     communicationRating: "",
@@ -72,8 +74,8 @@ const ApplicantForm = () => {
       relocateStatus: "",
       holdingAnyOffer: "",
       expectedJoinDate: "",
-      resume: null,
-      photo: null,
+      resume: [],
+      photo: [],
       offerdetails: "",
       companyName: "",
       offersalary: "",
@@ -95,8 +97,50 @@ const ApplicantForm = () => {
 
   const [formData, setFormData] = useState(initialFormData);
 
-  const handleChange = (e) => {
-    const { name, value, type, files } = e.target;
+// Set recruiterName when loginEmployeeName is available
+useEffect(() => {
+  console.log("Checking loginEmployeeName:", loginEmployeeName); // Log to verify value
+  if (loginEmployeeName) {
+    setFormData((prevData) => ({
+      ...prevData,
+      recruiterName: loginEmployeeName,
+    }));
+  }
+}, [loginEmployeeName]);
+
+
+const handleChange = (e) => {
+  const { name, files } = e.target;
+
+  if (name === "lineUp.resume" && files.length > 0) {
+    setResumeSelected(true);
+  }
+  if (name === "lineUp.photo" && files.length > 0) {
+    setPhotoSelected(true);
+  }
+
+  // File handling logic
+  if (files && files.length > 0) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const arrayBuffer = reader.result;
+      const byteArray = new Uint8Array(arrayBuffer);
+      const chunkSize = 0x8000;
+      let base64String = "";
+
+      for (let i = 0; i < byteArray.length; i += chunkSize) {
+        base64String += String.fromCharCode.apply(
+          null,
+          byteArray.subarray(i, i + chunkSize)
+        );
+      }
+      base64String = btoa(base64String);
+      // Update form data here if needed
+    };
+    reader.readAsArrayBuffer(files[0]);
+  }
+
+    
 
     if (name.startsWith("questions[")) {
       const questionIndex = parseInt(name.split("[")[1].split("]")[0], 10);
@@ -106,7 +150,7 @@ const ApplicantForm = () => {
         const updatedQuestions = [...prevData.questions];
         updatedQuestions[questionIndex] = {
           ...updatedQuestions[questionIndex],
-          [questionKey]: type === "file" ? files[0] : value,
+          [questionKey]: e.target.type === "file" ? files[0] :e.target.value,
         };
 
         return {
@@ -120,13 +164,14 @@ const ApplicantForm = () => {
         ...prevData,
         lineUp: {
           ...prevData.lineUp,
-          [nestedField]: type === "file" ? files[0] : value,
+          [nestedField]: e.target.type === "file" ? files[0] :  e.target.value,
         },
       }));
     } else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: type === "file" ? files[0] : value,
+        [name]: e.target.type === "file" ? files[0] : e.target.value,
+
       }));
     }
   };
@@ -136,17 +181,18 @@ const ApplicantForm = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        const base64String = reader.result.split(",")[1]; // Remove MIME type part
-        resolve(base64String); // Resolve with only Base64 content
+        const base64String = reader.result.split(",")[1]; // Extract base64 content only
+        resolve(base64String);
       };
       reader.onerror = (error) => reject(error);
     });
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     const currentDate = new Date();
     const updatedFormData = {
       ...formData,
@@ -157,12 +203,13 @@ const ApplicantForm = () => {
       }),
       lineUp: {
         ...formData.lineUp,
-        resume: formData.lineUp.resume
+        // Convert resume and photo to base64 if they exist
+        resume: formData.lineUp.resume instanceof File
           ? await convertToBase64(formData.lineUp.resume)
-          : null,
-        photo: formData.lineUp.photo
+          : formData.lineUp.resume,
+        photo: formData.lineUp.photo instanceof File
           ? await convertToBase64(formData.lineUp.photo)
-          : null,
+          : formData.lineUp.photo,
       },
       ...(userType === "Recruiters"
         ? { employee: { employeeId, teamLeaderId: employeeId } }
@@ -172,8 +219,8 @@ const ApplicantForm = () => {
         ? { manager: { managerId: employeeId } }
         : {}),
     };
-
-    console.log(updatedFormData);
+  
+    console.log("FormData before submission:", updatedFormData);
     try {
       const response = await axios.post(
         `${API_BASE_URL}/save-applicant`,
@@ -185,16 +232,18 @@ const ApplicantForm = () => {
         }
       );
       console.log("Form submitted successfully:", response.data);
-      setLoading(true);
       toast.success("Your Details Submitted Successfully");
       setFormData(initialFormData);
+      setResumeSelected(false);
+      setPhotoSelected(false);
     } catch (error) {
       console.error("Error submitting form:", error);
+      toast.error("Failed to submit details");
     } finally {
       setLoading(false);
     }
   };
-
+  
   const [lastScrollPos, setLastScrollPos] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollingUp, setScrollingUp] = useState(false);
@@ -764,52 +813,58 @@ const ApplicantForm = () => {
                       </div>
                     </div>
                   </div>
-
                   <div className="submit-form-row">
-                    <div className="submit-file-area">
-                      <div className="applicant-file-label">
-                        <label htmlFor="resumeUpload">Upload Resume</label>
-                      </div>
-                      <div className="applicant-file-div">
-                        <input
-                          type="file"
-                          id="resumeUpload"
-                          name="lineUp.resume"
-                          onChange={handleChange}
-                          accept=".pdf,.doc,.docx"
-                          style={{ display: "none" }}
-                        />
-                        <label
-                          htmlFor="resumeUpload"
-                          className="custom-file-upload"
-                        >
-                          Choose File
-                        </label>
-                      </div>
-                    </div>
+      <div className="submit-file-area">
+        <div className="applicant-file-label">
+          <label htmlFor="resumeUpload">Upload Resume</label>
+          {resumeSelected && (
+            <FontAwesomeIcon
+              icon={faCheckCircle}
+              style={{ color: "green", marginLeft: "8px" }}
+            />
+          )}
+        </div>
+        <div className="applicant-file-div">
+          <input
+            type="file"
+            id="resumeUpload"
+            name="lineUp.resume"
+            onChange={handleChange}
+            accept=".pdf,.doc,.docx"
+            style={{ display: "none" }}
+          
+          />
+          <label htmlFor="resumeUpload" className="custom-file-upload">
+            Choose File
+          </label>
+        </div>
+      </div>
 
-                    <div className="submit-file-area">
-                      <div className="applicant-file-label">
-                        <label htmlFor="photoUpload">Upload Photo</label>
-                      </div>
-                      <div className="applicant-file-div">
-                        <input
-                          type="file"
-                          id="photoUpload"
-                          name="lineUp.photo"
-                          onChange={handleChange}
-                          accept="image/*"
-                          style={{ display: "none" }}
-                        />
-                        <label
-                          htmlFor="photoUpload"
-                          className="custom-file-upload"
-                        >
-                          Choose File
-                        </label>
-                      </div>
-                    </div>
-                  </div>
+      <div className="submit-file-area">
+        <div className="applicant-file-label">
+          <label htmlFor="photoUpload">Upload Photo</label>
+          {photoSelected && (
+            <FontAwesomeIcon
+              icon={faCheckCircle}
+              style={{ color: "green", marginLeft: "8px" }}
+            />
+          )}
+        </div>
+        <div className="applicant-file-div">
+          <input
+            type="file"
+            id="photoUpload"
+            name="lineUp.photo"
+            onChange={handleChange}
+            accept="image/*"
+            style={{ display: "none" }}
+          />
+          <label htmlFor="photoUpload" className="custom-file-upload">
+            Choose File
+          </label>
+        </div>
+      </div>
+    </div>
 
                   <div className="applicant-form-row">
                     <div className="inside-form-sub-div">
@@ -864,14 +919,14 @@ const ApplicantForm = () => {
                   </div>
 
 <div className="setFormButtonsDiv">
-                  <div className="submit-div">
+                  {/* <div className="submit-div">
                     <button className="submit-button" type="hyperlink">
                       Aptitude Test
                     </button>
-                  </div>
+                  </div> */}
 
                   <div className="submit-div">
-                    <button className="submit-button" type="submit">
+                    <button className="applicant-submit-button" type="submit">
                       Submit
                     </button>
                   </div>

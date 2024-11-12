@@ -104,6 +104,8 @@ textarea {
   border: 1px solid #ccc; /* Light gray border */
   box-sizing: border-box; /* Ensure padding and border are included in element's total width and height */
   overflow: hidden; /* Hide any overflowing content */
+  padding-left: 5px;
+
 }
 
 /* Ensure text fields adjust */

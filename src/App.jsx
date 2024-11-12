@@ -40,6 +40,7 @@ const applySavedColors = () => {
 
 
 const App = () => {
+  const [loginEmployeeName, setLoginEmployeeName] = useState("");
 
   useEffect(() => {
     applySavedColors();
@@ -61,7 +62,10 @@ const App = () => {
               // protected route created for the child or children Dashboard created by sahil karnekar
               // ProtectedRoute is a component
               <ProtectedRoute>
-                <EmpDashboard />
+                <EmpDashboard
+                  loginEmployeeName={loginEmployeeName}
+                  setLoginEmployeeName={setLoginEmployeeName} 
+                />
               </ProtectedRoute>
             }
           />
@@ -96,7 +100,7 @@ const App = () => {
           ></Route>
           <Route
             path="/157industries/:employeeId/:userType/candidate-form"
-            element={<ApplicantForm />}
+            element={<ApplicantForm loginEmployeeName={loginEmployeeName}  />}
           ></Route>
         </Routes>
       </BrowserRouter>

@@ -7,7 +7,7 @@ import { Form, json, useParams } from "react-router-dom";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { FaCheckCircle } from "react-icons/fa";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../EmployeeSection/CallingTrackerForm.css";
@@ -22,6 +22,7 @@ import Loader from "./loader";
 // this libraries added by sahil karnekar date 21-10-2024
 import { TimePicker } from "antd";
 import dayjs from "dayjs";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
@@ -109,6 +110,7 @@ const CallingTrackerForm = ({
   const [errorForYOP, setErrorForYOP] = useState("");
   const [errorForDOB, setErrorForDOB] = useState("");
   const [errorInterviewSlot, seterrorInterviewSlot] = useState("");
+  // const [resumeSelected, setResumeSelected] = useState(false);
 
   useEffect(() => {
     fetchRequirementOptions();
@@ -470,6 +472,7 @@ const CallingTrackerForm = ({
         setSubmited(false);
         setLoading(true);
         setShowConfetti(true);
+        setResumeSelected(false);
         setTimeout(() => setShowConfetti(false), 4000);
         toast.success("Candidate Added Successfully..");
         setCallingTracker(initialCallingTrackerState);
@@ -502,7 +505,9 @@ const CallingTrackerForm = ({
   //Start Line 451
   const handleResumeFileChange = (e) => {
     const file = e.target.files[0];
+    
     if (file) {
+      setResumeUploaded(true);
       const reader = new FileReader();
       reader.onloadend = () => {
         const arrayBuffer = reader.result;
@@ -1172,7 +1177,7 @@ const CallingTrackerForm = ({
                             })
                           }
                         />
-                        <span style={{ paddingLeft: "10px" }}>Male</span>
+                        <span style={{ paddingLeft: "5px" }}>Male</span>
                       </div>
                     </div>
 
@@ -1192,7 +1197,7 @@ const CallingTrackerForm = ({
                             })
                           }
                         />
-                        <span style={{ paddingLeft: "10px" }}>Female</span>
+                        <span style={{ paddingLeft: "5px" }}>Female</span>
                       </div>
                     </div>
                   </div>
@@ -1718,11 +1723,8 @@ const CallingTrackerForm = ({
               <div className="calling-tracker-field">
                 <label>
                   Save Resume File
-                  {resumeUploaded && (
-                    <FaCheckCircle className="upload-success-icon" />
-                  )}
                 </label>
-                <div className="calling-tracker-field-sub-div">
+                <div style={{display:"flex",flexDirection:"row"}} className="calling-tracker-field-sub-div">
                   <input
                     type="file"
                     name="resume"
@@ -1730,6 +1732,12 @@ const CallingTrackerForm = ({
                     accept=".pdf,.doc,.docx"
                     className="plain-input"
                   />
+                  {resumeUploaded && (
+                     <FontAwesomeIcon
+                     icon={faCheckCircle}
+                     style={{ color: "green", marginLeft: "3px",marginTop:"5px",fontSize:"22px" }}
+                   />
+                  )}
                   {errors.resume && (
                     <div className="error-message">{errors.resume}</div>
                   )}

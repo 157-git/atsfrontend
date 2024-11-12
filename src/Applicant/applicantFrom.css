@@ -159,20 +159,25 @@ body{
   box-shadow: 0 0 5px rgba(136, 227, 255, 0.5);
 }
 
-.submit-button {
-  font-size: 14px; /* Reduced font size */
-  border: none;
-  border-radius: 5px;
-  background-color: var(--button-color);
-  color: var(--button-text-color);
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-  margin-top: 10px; /* Reduced margin */
-  padding: 10px;
+.applicant-submit-button {
+  border-radius: 15px;
+  font-size: 16px;
+  height: 30px;
+  width: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid gray;
+  background-color: #ffcb9b;
+  color: white;
 }
 
-.submit-button:hover {
-  background-color: darken(var(--button-bg-hover-color), 10%);
+.applicant-submit-button:hover {
+  /* background-color: var(--button-bg-hover-color); */
+  color: #ffcb9b;
+  border: 1px solid var(--button-border-color);
 }
 
 .submit-button:focus {

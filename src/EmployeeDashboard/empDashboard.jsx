@@ -64,6 +64,7 @@ import PerformanceImprovement from "../EmployeeSection/performanceImprovement";
 import { faL } from "@fortawesome/free-solid-svg-icons";
 import AddTeamLeader from "../EmployeeSection/addTeamLeader";
 import AddManager from "../EmployeeSection/addManager";
+import ApplicantForm from "../Applicant/applicantFrom";
 
 const EmpDashboard = ({ userGroup }) => {
   const { userType } = useParams();
@@ -152,15 +153,15 @@ const EmpDashboard = ({ userGroup }) => {
     useState(false);
   const [showAddManager, setShowAddManager] = useState(false);
   const [showAddTeamLeader, setShowAddTeamLeader] = useState(false);
-  const [callFunction,setCallFunction]=useState(false)
+  const [callFunction, setCallFunction] = useState(false);
+  const [showApplicantForm, setShowApplicantForm] = useState(false);
 
   // Arshad Attar Added this 30-10-2024
   const handleOpenEmployeeProfile = () => {
     setShowProfile(true);
     setIncentive(false);
-    setShowPerformanceImprovement(false)
-    setAttendanceSheet(false)
-    
+    setShowPerformanceImprovement(false);
+    setAttendanceSheet(false);
   };
 
   const handleLogoutTime = (timestamp) => {
@@ -769,7 +770,10 @@ const EmpDashboard = ({ userGroup }) => {
         </div>
         <div>
           {attendancesheet && (
-            <Attendancesheet loginEmployeeName={loginEmployeeName} onCloseIncentive={handleOpenEmployeeProfile} />
+            <Attendancesheet
+              loginEmployeeName={loginEmployeeName}
+              onCloseIncentive={handleOpenEmployeeProfile}
+            />
           )}
         </div>
 
@@ -849,7 +853,10 @@ const EmpDashboard = ({ userGroup }) => {
         <div>{showInvoicePdf && <InvoicePdf />}</div>
         <div>
           {showUpdateCallingTracker && (
-            <UpdateCallingTracker loginEmployeeName={loginEmployeeName} candidateId={candidateIdForUpdate} />
+            <UpdateCallingTracker
+              loginEmployeeName={loginEmployeeName}
+              candidateId={candidateIdForUpdate}
+            />
           )}
         </div>
         <div>{assignColumns && <Team_Leader />}</div>
@@ -889,7 +896,11 @@ const EmpDashboard = ({ userGroup }) => {
             <CandidateHistoryTracker></CandidateHistoryTracker>
           )}
         </div>
-
+        <div>
+          {showApplicantForm && (
+            <ApplicantForm loginEmployeeName={loginEmployeeName} />
+          )}
+        </div>
         <div>
           {showInterviewForm && (
             <InterviewForm
@@ -900,7 +911,10 @@ const EmpDashboard = ({ userGroup }) => {
         <div>{showAllInterviewResponses && <InterviewDataTables />}</div>
         <div>
           {showPerformanceImprovement && (
-            <PerformanceImprovement loginEmployeeName={loginEmployeeName}  onCloseIncentive={handleOpenEmployeeProfile}/>
+            <PerformanceImprovement
+              loginEmployeeName={loginEmployeeName}
+              onCloseIncentive={handleOpenEmployeeProfile}
+            />
           )}
         </div>
 
