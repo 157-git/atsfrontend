@@ -627,7 +627,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                   <th className="attendanceheading">Interview Time</th>
                   <th className="attendanceheading">Profile Status</th>
                   <th className="attendanceheading">Interview Status</th>
-                  <th className="attendanceheading">Action</th>
+                  {/* <th className="attendanceheading">Action</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -1143,12 +1143,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         </div>
                       </td>
 
-                      <td className="tabledata">
+                      {/* <td className="tabledata">
                         <i
                           // onClick={() => handleUpdate(item.candidateId)}
                           className="fa-regular fa-pen-to-square"
                         ></i>
-                      </td>
+                      </td> */}
                     </>
                   </tr>
                 ))}

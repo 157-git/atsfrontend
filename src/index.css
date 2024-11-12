@@ -5,7 +5,9 @@
 :root {
   --Bg-color: #ffe5b5;
   --button-color: #ffcb9b;
+  --button-bg-hover-color: white;
   --button-hover-color: white;
+  --button-text-color: white;
   --text-color: gray;
   --text-hover-color: #ffb281;
   --heading-text-color: gray;
@@ -13,6 +15,7 @@
   --hover-effect: #ffcb9b;
   --filter-color: #ffcb9b;
   --dailyWork-btn: #ffcb9b;
+  --button-border-color: gray;
 }
 
 .accordion {

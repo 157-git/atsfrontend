@@ -73,7 +73,7 @@
     margin-bottom: 10px;
 }
 .selectedcan-Filter-btn:hover,.selectedcan-share-btn:hover,.selectedcan-share-select-btn:hover,.selectedcan-forward-btn:hover,.selectedcan-share-forward-popup-btn:hover,.selectedcan-close-forward-popup-btn:hover,.selectedcan-share-close-btn:hover{
-  background-color: var(--button-hover-color);
+  background-color: var(--button-bg-hover-color);
   color: var(--text-hover-color);
     opacity: 0.8;
 }

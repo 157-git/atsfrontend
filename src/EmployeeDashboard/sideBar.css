@@ -331,7 +331,7 @@ body {
  .buttoncss:hover{
      background-color: var(--button-hover-color);
      color: var(--text-hover-color);
-     border: 1px solid #ffb281;
+     border: 1px solid var(--button-border-color);
  }
  
  .confirmation-text {

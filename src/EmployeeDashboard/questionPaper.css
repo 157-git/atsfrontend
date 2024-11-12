@@ -116,6 +116,7 @@
   justify-content: center;
   gap: 20px;
   margin-top: 20px;
+  
   /* Added margin-top to center align buttons */
 }
 
@@ -129,14 +130,16 @@
   /* border: none; */
   border-radius: 15px;
   font-size: 16px;
+  border: 1px solid;
+  border-color: var(--button-border-color);
 }
 
 .buttons button:hover {
   background-color: var(--button-bg-hover-color);
   color: var(--text-hover-color);
-  border-radius: 1px;
   border-style: solid;
   border-color: var(--button-border-color);
+  border-radius: 15px;
 }
 
 .alert {
@@ -241,10 +244,11 @@
   cursor: pointer;
   height: 30px;
   padding: 0 15px;
-  background-color: #ffcb9b;
+  background-color: var(--button-color);
   /* Example color (blue), adjust as needed */
   color: white;
-  border: none;
+  border: 1px solid;
+  border-color: var(--button-border-color);
   border-radius: 15px;
   font-size: 16px;
 }
@@ -252,7 +256,7 @@
 .pdf-buttons .button:hover {
   background-color: white;
   /* Darker shade for hover effect */
-  color: #ffcb9b;
+  color: var(--text-hover-color);
 }
 
 

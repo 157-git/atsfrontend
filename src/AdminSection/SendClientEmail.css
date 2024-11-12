@@ -75,7 +75,7 @@
 .SCE-forward-btn:hover,
 .SCE-share-forward-popup-btn:hover,
 .SCE-close-forward-popup-btn:hover {
-  background-color: var(--button-hover-color);
+  background-color: var(--button-bg-hover-color);
   color: var(--text-hover-color);
   opacity: 0.8;
 }

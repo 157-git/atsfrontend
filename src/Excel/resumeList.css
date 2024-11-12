@@ -100,8 +100,7 @@
 }
 
 .d-grid button {
-  background: var(--button-color);
-  border: none;
+  background-color: var(--button-color);
   height: 30px;
   width: 100%;
   /* Adjust width as needed */
@@ -114,6 +113,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid;
+  border-color: var(--button-border-color);
 }
 
 .mt-3 {
@@ -121,7 +122,6 @@
 }
 
 .d-grid button:hover {
-  background-color: var(--button-hover-color);
   color: var(--text-hover-color);
 }
 

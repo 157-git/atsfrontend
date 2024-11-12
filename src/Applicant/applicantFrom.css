@@ -163,8 +163,8 @@ body{
   font-size: 14px; /* Reduced font size */
   border: none;
   border-radius: 5px;
-  background-color: var(--orange-500-color);
-  color: black;
+  background-color: var(--button-color);
+  color: var(--button-text-color);
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
   margin-top: 10px; /* Reduced margin */
@@ -172,7 +172,7 @@ body{
 }
 
 .submit-button:hover {
-  background-color: darken(var(--orange-500-color), 10%);
+  background-color: darken(var(--button-bg-hover-color), 10%);
 }
 
 .submit-button:focus {

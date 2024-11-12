@@ -167,14 +167,14 @@ input[type='number'] {
   width: 120px;
 
   background-color: var(--Bg-color);
-  color: white;
+  color: var(--button-text-color);
   border: 1px solid gray;
   transition: background-color 0.3s, color 0.3s;
 }
 
 .submit-button-add-emp:hover {
 
-  background-color: var(--button-hover-color);
+  background-color: var(--button-bg-hover-color);
   color: var( --text-hover-color);
 
 }
