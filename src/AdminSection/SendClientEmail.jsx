@@ -432,6 +432,8 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const handleShow = () => {
     if (selectedRows.length > 0) {
       setShowModal(true);
+    }else{
+      toast.error("Please Select At Least 1 Row")
     }
   };
   const handleClose = () => setShowModal(false);
