@@ -105,27 +105,97 @@
 .profile-btn {
   padding-left: 10px;
   padding-right: 10px;
-  color: white;
+  color: black;
+  font-weight: 500;
   border-radius: 4px;
   font-size: 14px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   transition: box-shadow 0.3s ease;
+  width: 120px;
 }
 
+/* Profile Pending - Gray */
 .profile-btn.pending {
-  background-color: #e60000; 
-  box-shadow: 0 0 5px rgba(230, 0, 0, 0.8); 
+  background-color: #a9a9a9;
+  box-shadow: 0 0 5px rgba(169, 169, 169, 0.8);
 }
-
 .profile-btn.pending:hover {
-  box-shadow: 0 0 10px rgba(230, 0, 0, 1);
+  box-shadow: 0 0 10px rgba(169, 169, 169, 1);
 }
 
+/* Profile Sent - Blue */
 .profile-btn.sent {
-  background-color: #008000;
-  box-shadow: 0 0 5px rgba(0, 128, 0, 0.8); 
+  background-color: #4682b4;
+  box-shadow: 0 0 5px rgba(70, 130, 180, 0.8);
+}
+.profile-btn.sent:hover {
+  box-shadow: 0 0 10px rgba(70, 130, 180, 1);
 }
 
-.profile-btn.sent:hover {
-  box-shadow: 0 0 10px rgba(0, 128, 0, 1);
+/* Profile Rejected - Red */
+.profile-btn.rejected {
+  background-color: red;
+  box-shadow: 0 0 5px rgba(237, 12, 12, 0.8);
+}
+.profile-btn.rejected:hover {
+  box-shadow: 0 0 5px rgba(237, 12, 12, 0.8);
+}
+
+/* Profile Selected - Green */
+.profile-btn.selected {
+  background-color: #32cd32;
+  box-shadow: 0 0 5px rgba(50, 205, 50, 0.8);
+}
+.profile-btn.selected:hover {
+  box-shadow: 0 0 10px rgba(50, 205, 50, 1);
+}
+
+/* No Response - Orange */
+.profile-btn.no-response {
+  background-color: #ffa500;
+  box-shadow: 0 0 5px rgba(255, 165, 0, 0.8);
+}
+.profile-btn.no-response:hover {
+  box-shadow: 0 0 10px rgba(255, 165, 0, 1);
+}
+
+/* Profile On Hold - Yellow */
+.profile-btn.on-hold {
+  background-color: #ffd700;
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+}
+.profile-btn.on-hold:hover {
+  box-shadow: 0 0 10px rgba(255, 215, 0, 1);
+}
+
+
+/* Arshad added CSS 13-11-2024 */
+
+.update-profile-drop-down {
+  width: 200px;
+  max-width: 250px;
+  padding-right: 5px;
+  padding-left: 5px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #333;
+  background-color: #f9f9f9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  appearance: none; /* Removes default dropdown arrow for customization */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.update-profile-drop-down:focus {
+  box-shadow: 0 0 5px rgba(243, 199, 118, 0.5);
+  outline: none;
+}
+
+.update-profile-drop-down option {
+  color: #333;
+  background-color: #fff;
+  padding-bottom: 10px;
 }

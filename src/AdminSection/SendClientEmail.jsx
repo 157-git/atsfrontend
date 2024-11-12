@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./SendClientEmail.css";
 import { differenceInDays, differenceInSeconds } from "date-fns";
-
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import HashLoader from "react-spinners/HashLoader";
@@ -19,9 +18,6 @@ import Loader from "../EmployeeSection/loader";
 // SwapnilRokade_SendClientEmail_addedProcessImprovmentEvaluatorFunctionalityStoringInterviweResponse_18_to_1251_29/07/2024
 
 const SendClientEmail = ({ clientEmailSender }) => {
-  // const buttonValue="Pending"
-  const buttonValue = "Profile Sent";
-
   const [callingList, setCallingList] = useState([]);
   const { employeeId, userType } = useParams();
 
@@ -45,6 +41,9 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [difference, setDifference] = useState();
+  const [showUpdateModal, setShowUpdateModal] = useState();
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedCandidate, setSelectedCandidate] = useState(null);
 
   const navigator = useNavigate();
 
@@ -419,6 +418,59 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [selectedCandidateResume, setSelectedCandidateResume] = useState("");
 
+  const updateProfileStatus = async () => {
+    if (!selectedStatus) {
+      toast.error("Please select a status!");
+      return;
+    }
+
+    try {
+      // Adjust the API endpoint to include `profileStatus` as a path variable
+      const response = await fetch(
+        `${API_BASE_URL}/update-profile-status/${selectedCandidate.candidateId}/${selectedStatus}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        toast.success("Profile status updated successfully!");
+        setShowUpdateModal(false);
+        setSelectedStatus("");
+
+        // Update the local filteredCallingList to reflect the new status
+        const updatedList = filteredCallingList.map((candidate) =>
+          candidate.candidateId === selectedCandidate.candidateId
+            ? { ...candidate, profileStatus: selectedStatus }
+            : candidate
+        );
+
+        setFilteredCallingList(updatedList);
+        setSelectedCandidate(null);
+      } else if (response.status === 404) {
+        const errorMessage = await response.text();
+        toast.error(errorMessage || "Candidate not found.");
+      } else {
+        const errorMessage = await response.text();
+        toast.error(errorMessage || "Failed to update profile status.");
+      }
+    } catch (error) {
+      toast.error("An error occurred.");
+    }
+  };
+
+  const handleUpdate = (item) => {
+    setSelectedCandidate(item);
+    setShowUpdateModal(true);
+  };
+
+  const handleStatusChange = (e) => {
+    setSelectedStatus(e.target.value);
+  };
+
   const openResumeModal = (byteCode) => {
     setSelectedCandidateResume(byteCode);
     setShowResumeModal(true);
@@ -427,6 +479,9 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const closeResumeModal = () => {
     setSelectedCandidateResume("");
     setShowResumeModal(false);
+    setShowUpdateModal(false);
+    setSelectedCandidate(null);
+    setSelectedStatus("");
   };
 
   const handleShow = () => {
@@ -457,7 +512,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
               onClick={() => setShowSearchBar(!showSearchBar)}
               style={{ margin: "10px", width: "auto", fontSize: "15px" }}
             ></i>
-            <h5 style={{ color: "gray", fontSize: "18px" }}>Candidate Data  </h5>
+            <h5 style={{ color: "gray", fontSize: "18px" }}>Candidate Data </h5>
 
             <div
               style={{
@@ -625,8 +680,14 @@ const SendClientEmail = ({ clientEmailSender }) => {
                     Availability For Interview
                   </th>
                   <th className="attendanceheading">Interview Time</th>
-                  <th className="attendanceheading">Profile Status</th>
+
                   <th className="attendanceheading">Interview Status</th>
+                  <th
+                    className="attendanceheading"
+                    style={{ paddingLeft: "22px", paddingRight: "22px" }}
+                  >
+                    Profile Status
+                  </th>
                   <th className="attendanceheading">Action</th>
                 </tr>
               </thead>
@@ -1106,26 +1167,10 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                        <button
-                          className={
-                            buttonValue === "Pending"
-                              ? "profile-btn pending"
-                              : "profile-btn sent"
-                          }
-                        >
-                          {buttonValue}
-                        </button>
+                        {item.finalStatus || "-"}
                         <div className="tooltip">
                           <span className="tooltiptext">
-                            <button
-                              className={
-                                buttonValue === "Pending"
-                                  ? "profile-btn pending"
-                                  : "profile-btn sent"
-                              }
-                            >
-                              {buttonValue}
-                            </button>
+                            {item.finalStatus}
                           </span>
                         </div>
                       </td>
@@ -1135,17 +1180,30 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                        {item.finalStatus || "-"}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
-                            {item.finalStatus}
-                          </span>
-                        </div>
+                        <button
+                          className={`profile-btn ${
+                            item.profileStatus === "Profile Pending"
+                              ? "pending"
+                              : item.profileStatus === "Profile Sent"
+                              ? "sent"
+                              : item.profileStatus === "Profile Rejected"
+                              ? "rejected"
+                              : item.profileStatus === "Profile Selected"
+                              ? "selected"
+                              : item.profileStatus === "No Response"
+                              ? "no-response"
+                              : item.profileStatus === "Profile On Hold"
+                              ? "on-hold"
+                              : ""
+                          }`}
+                        >
+                          {item.profileStatus}
+                        </button>
                       </td>
 
                       <td className="tabledata">
                         <i
-                          // onClick={() => handleUpdate(item.candidateId)}
+                          onClick={() => handleUpdate(item)}
                           className="fa-regular fa-pen-to-square"
                         ></i>
                       </td>
@@ -1193,6 +1251,98 @@ const SendClientEmail = ({ clientEmailSender }) => {
             </Modal>
             {/* Name:-Akash Pawar Component:-LineUpList
           Subcategory:-ResumeModel(added) End LineNo:-1184 Date:-02/07 */}
+
+            <Modal
+              show={showUpdateModal}
+              onHide={closeResumeModal}
+              dialogClassName="centered-modal"
+              centered
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Update Profile Status</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                {selectedCandidate && (
+                  <>
+                    <div>
+                      <p>
+                        <strong>Candidate Name : </strong>{" "}
+                        {selectedCandidate.candidateName}
+                      </p>
+                      <p>
+                        <strong>Company Name : </strong>{" "}
+                        {selectedCandidate.requirementCompany}
+                      </p>
+                      <p>
+                        <strong>Job Designation :</strong>{" "}
+                        {selectedCandidate.jobDesignation}
+                      </p>
+                      <p>
+                        <strong>Profile Status :</strong>{" "}
+                        <span
+                          style={{
+                            fontWeight: "bold",
+                            color:
+                              selectedCandidate.profileStatus ===
+                              "Profile Pending"
+                                ? "#A9A9A9" // Gray
+                                : selectedCandidate.profileStatus ===
+                                  "Profile Sent"
+                                ? "#4682B4" // Blue
+                                : selectedCandidate.profileStatus ===
+                                  "Profile Rejected"
+                                ? "#FF6347" // Red
+                                : selectedCandidate.profileStatus ===
+                                  "Profile Selected"
+                                ? "#32CD32" // Green
+                                : selectedCandidate.profileStatus ===
+                                  "No Response"
+                                ? "#FFA500" // Orange
+                                : selectedCandidate.profileStatus ===
+                                  "Profile On Hold"
+                                ? "#FFD700" // Yellow
+                                : "black", // Default color if none match
+                          }}
+                        >
+                          {selectedCandidate.profileStatus}
+                        </span>
+                      </p>
+                    </div>
+                    <hr style={{ marginTop: "10px" }} />
+
+                    <div className="update-profile-modal">
+                      <label htmlFor="">Select Status</label>
+                      <select
+                        value={selectedStatus}
+                        onChange={handleStatusChange}
+                        className="update-profile-drop-down"
+                      >
+                        <option value="">Select Status</option>
+                        <option value="Profile Pending">Profile Pending</option>
+                        <option value="Profile Sent">Profile Sent</option>
+                        <option value="Profile Rejected">
+                          Profile Rejected
+                        </option>
+                        <option value="Profile Selected">
+                          Profile Selected
+                        </option>
+                        <option value="No Response">No Response</option>
+                        <option value="Profile On Hold">Profile On Hold</option>
+                      </select>
+                    </div>
+                  </>
+                )}
+                <center>
+                  {" "}
+                  <button
+                    className="daily-tr-btn"
+                    onClick={updateProfileStatus}
+                  >
+                    Update
+                  </button>
+                </center>
+              </Modal.Body>
+            </Modal>
           </div>
         </>
       )}
@@ -1273,10 +1423,9 @@ const SendEmailPopup = ({
         fileName: `${can.candidateName}_${can.jobDesignation}.pdf`, // Assuming all resumes are in PDF format
         fileContent: can.resume,
       })),
-      // tableData: selectedCandidate,
       tableData: selectedCandidate.map((can, index) => ({
         ...can,
-        perDayBillingSentToClient: 10000, // Assuming a static value for demonstration
+        perDayBillingSentToClient: 10000, 
       })),
     };
     axios
