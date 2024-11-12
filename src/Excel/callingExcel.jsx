@@ -109,6 +109,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
   };
 
   const handleUpload = async () => {
+    setActiveTable("");
     setLoading(true);
 
     // Check if a file is selected
@@ -203,6 +204,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
   };
 
   const handleUploadResume = async () => {
+    setActiveTable("");
     var openTable="ResumeList";
     if (!selectedFiles.length) {
       // Set error for resume if no files are selected
