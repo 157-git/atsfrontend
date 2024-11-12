@@ -251,7 +251,7 @@ h6 {
 }
 
 .submit-button:hover {
-  background-color: var(--button-hover-color);
+  background-color: var(--button-bg-hover-color);
   color: var(--text-hover-color);/* Text color on hover */
   border: 1px solid gray;
 }

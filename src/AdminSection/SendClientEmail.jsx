@@ -487,6 +487,8 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const handleShow = () => {
     if (selectedRows.length > 0) {
       setShowModal(true);
+    }else{
+      toast.error("Please Select At Least 1 Candidate")
     }
   };
   const handleClose = () => setShowModal(false);
@@ -1201,12 +1203,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         </button>
                       </td>
 
-                      <td className="tabledata">
+                      {/* <td className="tabledata">
                         <i
                           onClick={() => handleUpdate(item)}
                           className="fa-regular fa-pen-to-square"
                         ></i>
-                      </td>
+                      </td> */}
                     </>
                   </tr>
                 ))}

@@ -116,6 +116,6 @@
 
 .status-button:hover,
 .view-details-button:hover {
-  background-color: var(--button-hover-color);
+  background-color: var(--button-bg-hover-color);
   color: var(--text-hover-color);
 }

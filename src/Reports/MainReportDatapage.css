@@ -778,10 +778,10 @@ color: grey;
       width: auto;
       /* width: 85px; */
       margin-top: 2px;
-      color: var(--button-color); 
+      color: var(--button-text-color); 
       padding-left: 8px;
       padding-right:8px;
-      background-color: white;
+      background-color: var(--button-color);
       border: 1px solid gray;
       cursor: pointer;
     }

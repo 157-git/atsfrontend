@@ -20,7 +20,7 @@
     padding: 0px 10px;
 }
 .action-button:hover{
-    background-color: var(--button-hover-color);
+    background-color: var(--button-bg-hover-color);
     color: var(--text-hover-color);
 }
 

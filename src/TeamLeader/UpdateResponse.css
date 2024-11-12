@@ -87,13 +87,18 @@ padding-top: 5px;
 
 .TeamLead-main-table-button {
   border: 1px solid gray;
+  border-color: var(--button-border-color);
   font-size: 15px;
   border-radius: 15px;
   padding: 0px 8px 0px 8px;
   background-color: var(--button-color);
   color: white;
 }
+.TeamLead-main-table-button:hover {
+  background-color: var(--button-bg-hover-color);
+  color: var(--text-hover-color);
 
+}
 .updateResponse-table-div {
   width: 100%;
 }

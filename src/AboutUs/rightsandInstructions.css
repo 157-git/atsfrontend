@@ -80,9 +80,9 @@ list-style-type:none;
     margin-top: 20px;
     margin-right: 10px; /* Added margin-right for spacing between buttons */
     padding: 10px 20px;
-    background-color: #ffcb9b;
+    background-color: var(--Bg-color);
     color: white;
-    border: none;
+    border: 1px solid var(--button-border-color);
     height: 30px;
     display: flex;
     justify-content: center;
@@ -93,9 +93,9 @@ list-style-type:none;
 }
 
 .issue-button:hover {
-    background-color: white;
-    color: #ffcb9b;
-    border: 1px solid #ffcb9b;
+    background-color: var(--button-bg-hover-color);
+    color: var(--text-hover-color);
+   
 }
 
 .issue-button{

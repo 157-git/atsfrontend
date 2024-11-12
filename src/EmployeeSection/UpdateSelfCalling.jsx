@@ -686,7 +686,7 @@ const UpdateSelfCalling = ({
   
   return (
     <div className="update-main-div">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="setFormAdjustmentTag">
         <div className="update-calling-tracker-form">
           <div className="update-calling-tracker-row-gray">
             <div className="update-calling-tracker-field">
