@@ -10,6 +10,7 @@ import { API_BASE_URL } from "../api/api";
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import Loader from "../EmployeeSection/loader";
+import { parse } from 'date-fns';
 {
   /* this line added by sahil date 22-10-2024 */
 }
@@ -305,10 +306,19 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   }, [searchTerm, data, selectedFilters]);
 
   const formatToIndianTime = (dateString) => {
-    const date = new Date(dateString);
+    // Parse the custom format "dd-MM-yyyy h:mm a"
+    const date = parse(dateString, "dd-MM-yyyy h:mm a", new Date());
+    
+    // Check if the parsed date is valid
+    if (isNaN(date)) {
+      return "Invalid Date";
+    }
+  
+    // Format the date to Indian Time (IST)
     const indianOffset = 5.5 * 60; // IST offset in minutes
     const utcOffset = date.getTimezoneOffset();
     const istDate = new Date(date.getTime() + (indianOffset + utcOffset) * 60000);
+  
     return istDate.toLocaleString("en-GB", {
       day: "2-digit",
       month: "short",
@@ -319,7 +329,7 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
       timeZone: "Asia/Kolkata", // Force IST format
     });
   };
-
+  
   return (
     <div className="App-after1">
       {loading ? (
@@ -516,18 +526,18 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                         </td>
 
                         <td
-                          style={{ paddingLeft: "3px" }}
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {formatToIndianTime(item.resumeUploadDate)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {formatToIndianTime(item.resumeUploadDate)}
-                            </span>
-                          </div>
-                        </td>
+    style={{ paddingLeft: "3px", position: "relative" }}
+    className="tabledata"
+    onMouseOver={handleMouseOver}
+    onMouseOut={handleMouseOut}
+  >
+    {formatToIndianTime(item.resumeUploadDate)}
+    <div className="tooltip">
+      <span className="tooltiptext">
+        {formatToIndianTime(item.resumeUploadDate)}
+      </span>
+    </div>
+  </td>
 
                         <td
                           hidden

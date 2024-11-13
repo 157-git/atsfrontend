@@ -749,23 +749,23 @@ const CallingExcelList = ({
               
                   <p>
                     <strong>Recruiter Name: </strong>
-                    {showModal?.recruiterName || "N/A"}
+                    {showModal?.recruiterName || "-"}
                   </p>
                   <p>
                     <strong>Candidate Alternate No: </strong>
-                    {showModal?.alternateNumber || "N/A"}
+                    {showModal?.alternateNumber || "-"}
                   </p>
                   <p>
                     <strong>Source Name: </strong>
-                    {showModal?.sourceName || "N/A"}
+                    {showModal?.sourceName || "-"}
                   </p>
                   <p>
                     <strong>Applying Company: </strong>
-                    {showModal?.requirementCompany || "N/A"}
+                    {showModal?.requirementCompany || "-"}
                   </p>
                   <p>
                     <strong>Date of Birth: </strong>
-                    {showModal?.dateOfBirth || "N/A"}
+                    {showModal?.dateOfBirth || "-"}
                   </p>
                   <p>
                     <strong>Communication Rating: </strong>
@@ -773,23 +773,23 @@ const CallingExcelList = ({
                   </p>
                   <p>
                     <strong>Current Location: </strong>
-                    {showModal?.currentLocation || "N/A"}
+                    {showModal?.currentLocation || "-"}
                   </p>
                   <p>
                     <strong>Full Address: </strong>
-                    {showModal?.fullAddress || "N/A"}
+                    {showModal?.fullAddress || "-"}
                   </p>
                   <p>
                     <strong>Calling Feedback: </strong>
-                    {showModal?.callingFeedback || "N/A"}
+                    {showModal?.callingFeedback || "-"}
                   </p>
                   <p>
                     <strong>Incentive: </strong>
-                    {showModal?.incentive || "N/A"}
+                    {showModal?.incentive || "-"}
                   </p>
                   <p>
                     <strong>Old Employee Id: </strong>
-                    {showModal?.oldEmployeeId || "N/A"}
+                    {showModal?.oldEmployeeId || "-"}
                   </p>
                 </div>
 
@@ -798,45 +798,45 @@ const CallingExcelList = ({
                 
                   <p>
                     <strong>Distance: </strong>
-                    {showModal?.distance || "N/A"}
+                    {showModal?.distance || "-"}
                   </p>
                   <p>
                     <strong>Current CTC: </strong>
-                    {showModal?.currentCTCLakh || "N/A"} Lakh{" "}
-                    {showModal?.currentCTCThousand || "N/A"} Thousand
+                    {showModal?.currentCTCLakh || "0"} Lakh{" "}
+                    {showModal?.currentCTCThousand || "0"} Thousand
                   </p>
                   <p>
                     <strong>Expected CTC: </strong>
-                    {showModal?.expectedCTCLakh || "N/A"} Lakh{" "}
-                    {showModal?.expectedCTCThousand || "N/A"} Thousand
+                    {showModal?.expectedCTCLakh || "0"} Lakh{" "}
+                    {showModal?.expectedCTCThousand || "0"} Thousand
                   </p>
                   <p>
                     <strong>Notice Period: </strong>
-                    {showModal?.noticePeriod || "N/A"}
+                    {showModal?.noticePeriod || "-"}
                   </p>
                   <p>
                     <strong>Holding Any Offer: </strong>
-                    {showModal?.holdingAnyOffer || "N/A"}
+                    {showModal?.holdingAnyOffer || "-"}
                   </p>
                   <p>
                     <strong>Final Status: </strong>
-                    {showModal?.finalStatus || "N/A"}
+                    {showModal?.finalStatus || "-"}
                   </p>
                   <p>
                     <strong>Relevant Experience: </strong>
-                    {showModal?.relevantExperience || "N/A"}
+                    {showModal?.relevantExperience || "-"}
                   </p>
                   <p>
                     <strong>Gender: </strong>
-                    {showModal?.gender || "N/A"}
+                    {showModal?.gender || "-"}
                   </p>
                   <p>
                     <strong>Qualification: </strong>
-                    {showModal?.qualification || "N/A"}
+                    {showModal?.qualification || "-"}
                   </p>
                   <p>
                     <strong>Year of Passing: </strong>
-                    {showModal?.yearOfPassing || "N/A"}
+                    {showModal?.yearOfPassing || "-"}
                   </p>
                 </div>
 
@@ -845,35 +845,35 @@ const CallingExcelList = ({
                  
                   <p>
                     <strong>Feedback: </strong>
-                    {showModal?.feedBack || "N/A"}
+                    {showModal?.feedBack || "-"}
                   </p>
                   <p>
                     <strong>Offer Letter Msg: </strong>
-                    {showModal?.offerLetterMsg || "N/A"}
+                    {showModal?.offerLetterMsg || "-"}
                   </p>
                   <p>
                     <strong>Marital Status: </strong>
-                    {showModal?.maritalStatus || "N/A"}
+                    {showModal?.maritalStatus || "-"}
                   </p>
                   <p>
                     <strong>Pick Up and Drop: </strong>
-                    {showModal?.pickUpAndDrop || "N/A"}
+                    {showModal?.pickUpAndDrop || "-"}
                   </p>
                   <p>
                     <strong>Message for Team Leader: </strong>
-                    {showModal?.msgForTeamLeader || "N/A"}
+                    {showModal?.msgForTeamLeader || "-"}
                   </p>
                   <p>
                     <strong>Availability for Interview: </strong>
-                    {showModal?.availabilityForInterview || "N/A"}
+                    {showModal?.availabilityForInterview || "-"}
                   </p>
                   <p>
                     <strong>Interview Time: </strong>
-                    {showModal?.interviewTime || "N/A"}
+                    {showModal?.interviewTime || "-"}
                   </p>
                   <p>
                     <strong>Preferred Location: </strong>
-                    {showModal?.preferredLocation || "N/A"}
+                    {showModal?.preferredLocation || "-"}
                   </p>
                 </div>
 
@@ -881,43 +881,43 @@ const CallingExcelList = ({
                 <div className="popup-section">
                   <p>
                     <strong>Extra Columns 1: </strong>
-                    {showModal?.extra1 || "N/A"}
+                    {showModal?.extra1 || "-"}
                   </p>
                   <p>
                     <strong>Extra Columns 2: </strong>
-                    {showModal?.extra2 || "N/A"}
+                    {showModal?.extra2 || "-"}
                   </p>
                   <p>
                     <strong>Extra Columns 3: </strong>
-                    {showModal?.extra3 || "N/A"}
+                    {showModal?.extra3 || "-"}
                   </p>
                   <p>
                     <strong>Extra Columns 4: </strong>
-                    {showModal?.extra4 || "N/A"}
+                    {showModal?.extra4 || "-"}
                   </p>
                   <p>
                     <strong>Extra Columns 5: </strong>
-                    {showModal?.extra5 || "N/A"}
+                    {showModal?.extra5 || "-"}
                   </p>
                   <p>
                     <strong>Extra Columns 6: </strong>
-                    {showModal?.extra6 || "N/A"}
+                    {showModal?.extra6 || "-"}
                   </p>
                   <p>
                     <strong>Extra Columns 7: </strong>
-                    {showModal?.extra7 || "N/A"}
+                    {showModal?.extra7 || "-"}
                   </p>
                   <p>
                     <strong>Extra Columns 8: </strong>
-                    {showModal?.extra8 || "N/A"}
+                    {showModal?.extra8 || "-"}
                   </p>
                   <p>
                     <strong>Extra Columns 9: </strong>
-                    {showModal?.extra9 || "N/A"}
+                    {showModal?.extra9 || "-"}
                   </p>
                   <p>
                     <strong>Extra Columns 10: </strong>
-                    {showModal?.extra10 || "N/A"}
+                    {showModal?.extra10 || "-"}
                   </p>
                 </div>
                 </div>

@@ -260,18 +260,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     setActiveFilterOption(activeFilterOption === key ? null : key);
     setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
   };
-console.log(filteredCallingList);
+  console.log(filteredCallingList);
 
   return (
     // SwapnilRokade_UpdateResponse_FilterAdded_7_to_504_10/07"
     <div className="TeamLead-main">
       {loading ? (
         <div className="register">
-          {/* <HashLoader
-             color={`${localStorage.getItem("selectedColor")}`}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          /> */}
           <Loader></Loader>
         </div>
       ) : (
@@ -289,7 +284,7 @@ console.log(filteredCallingList);
                   >
                     <i className="fa-solid fa-magnifying-glass"></i>
                   </div>
-                  <h1 style={{ color: "gray" }}>Update Response </h1>
+                  <h1 style={{ color: "gray" }}>Update Response</h1>
                   <div>
                     <button
                       className="lineUp-share-btn"
@@ -493,13 +488,13 @@ console.log(filteredCallingList);
                             </span>
                           </div>
                         </td>
-                        <td className="tabledata">
+
+                        <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                         >
                           {data.commentForTL || "-"}
-                          <div
-                            className="tooltip"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
+                          <div className="tooltip">
                             <span className="tooltiptext">
                               {data.commentForTL}
                             </span>
@@ -599,7 +594,10 @@ console.log(filteredCallingList);
                           </div>
                         </td>
 
-                        <td className="tabledata">
+                        <td className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                         >
                           <button
                             className="text-secondary"
                             onClick={() => openResumeModal(data.resume)}

@@ -192,6 +192,7 @@ const LoginSignup = ({ onLogin }) => {
                       top: "50%",
                       transform: "translateY(-50%)",
                       cursor: "pointer",
+                      color:"gray"
                     }}
                   />
                 </div>

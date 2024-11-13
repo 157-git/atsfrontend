@@ -69,18 +69,18 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
   };
 
   // Define formatDateToIST function
-const formatDateToIST = (date) => {
-  const options = {
-    timeZone: "Asia/Kolkata",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
+  const formatDateToIST = (date) => {
+    const options = {
+      timeZone: "Asia/Kolkata",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    };
+    return new Intl.DateTimeFormat("en-IN", options).format(date);
   };
-  return new Intl.DateTimeFormat("en-IN", options).format(date);
-};
   const handleSubmit = async (e) => {
     setSubmited(true);
     e.preventDefault();
@@ -152,7 +152,7 @@ const formatDateToIST = (date) => {
             onClose(true);
           } catch (error) {
             console.error("Error updating performance data:", error);
-            toast.error("Failed to Update Response line 141"+error);
+            toast.error("Failed to Update Response line 141" + error);
             setSubmited(false);
           }
         } else {
@@ -178,7 +178,7 @@ const formatDateToIST = (date) => {
             onClose(true);
           } catch (error) {
             console.error("Error updating performance data:", error);
-            toast.error("Failed to Update Response line 167"+error);
+            toast.error("Failed to Update Response line 167" + error);
           }
         }
       } else {
@@ -188,13 +188,13 @@ const formatDateToIST = (date) => {
       onClose(true);
     } catch (err) {
       setSubmited(false);
-      toast.error("Failed to Update Response line 176"+err);
+      toast.error("Failed to Update Response line 176" + err);
     }
   };
 
   const handleInputChange = (event, index = null) => {
     const { name, value } = event.target;
-  
+
     if (index !== null) {
       // Update specific entry in `data` at the given index
       const updatedData = data.map((entry, i) =>
@@ -209,8 +209,8 @@ const formatDateToIST = (date) => {
       });
     }
   };
-  
-console.log(data);
+
+  console.log(data);
   return (
     <div className="p-6 bg-white shadow-md rounded-lg max-w-full">
       <div className="mb-4">
