@@ -24,6 +24,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [filterOptions, setFilterOptions] = useState([]);
+  const [formClosed, setFormClosed] = useState(false);
 
   const limitedOptions = [
     ["candidateId", "Candidate Id"],
@@ -51,7 +52,8 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
 
   useEffect(() => {
     fetchUpdateResponseList();
-  }, []);
+    setFormClosed(false);
+  }, [formClosed]);
 
   useEffect(() => {
     applyFilters();
@@ -71,6 +73,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
         setCallingList(data);
         setFilteredCallingList(data);
         setUpdateResponseList(data);
+        setFormClosed(false);
       } else {
         console.error("Expected array but received:", data);
         setCallingList([]);
@@ -165,6 +168,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     setShowEmployeeId(null);
     setShowRequirementId(null);
     setShowUpdateResponseForm(false);
+    setFormClosed(true);
   };
 
   const handleMouseOver = (event) => {
@@ -256,7 +260,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     setActiveFilterOption(activeFilterOption === key ? null : key);
     setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
   };
-
+console.log(filteredCallingList);
 
   return (
     // SwapnilRokade_UpdateResponse_FilterAdded_7_to_504_10/07"
