@@ -116,11 +116,13 @@
 
 /* Profile Pending - Gray */
 .profile-btn.pending {
-  background-color: #a9a9a9;
-  box-shadow: 0 0 5px rgba(169, 169, 169, 0.8);
+  background-color: #d65296;
+  box-shadow: 0 0 5px rgba(231, 48, 48, 0.8);
+  color: white;
 }
 .profile-btn.pending:hover {
-  box-shadow: 0 0 10px rgba(169, 169, 169, 1);
+  box-shadow: 0 0 5px rgba(231, 48, 48, 0.8);
+  color: white;
 }
 
 /* Profile Sent - Blue */

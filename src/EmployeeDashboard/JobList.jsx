@@ -796,6 +796,7 @@ const JobListing = () => {
                           <a
                             className="companyLinkTextDecorationClass"
                             href={requirementData.companyLink || "#"}
+                            target="_blank"
                           >
                             {requirementData.companyLink}
                           </a>

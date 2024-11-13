@@ -92,7 +92,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
     ["yearOfPassing", "Year Of Passing"],
   ];
 
-  useEffect(() => {
+  const fetchCallingList = () => {
     fetch(`${API_BASE_URL}/calling-lineup/${employeeId}/${userType}`)
       .then((response) => response.json())
       .then((data) => {
@@ -104,6 +104,10 @@ const SendClientEmail = ({ clientEmailSender }) => {
         console.error("Error fetching data:", error);
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchCallingList();
   }, [employeeId]);
 
   useEffect(() => {
@@ -487,8 +491,8 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const handleShow = () => {
     if (selectedRows.length > 0) {
       setShowModal(true);
-    }else{
-      toast.error("Please Select At Least 1 Candidate")
+    } else {
+      toast.error("Select At Least 1 Candidate");
     }
   };
   const handleClose = () => setShowModal(false);
@@ -628,7 +632,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       />
                     </th>
                   ) : null}
-                  <th className="attendanceheading">Sr No.</th>
+                  <th className="attendanceheading">No.</th>
                   <th
                     className="attendanceheading"
                     onClick={() => handleSort("date")}
@@ -1203,12 +1207,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         </button>
                       </td>
 
-                      {/* <td className="tabledata">
+                      <td className="tabledata">
                         <i
                           onClick={() => handleUpdate(item)}
                           className="fa-regular fa-pen-to-square"
                         ></i>
-                      </td> */}
+                      </td>
                     </>
                   </tr>
                 ))}
@@ -1221,7 +1225,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                 selectedCandidate={selectedRows}
                 onSuccessFullEmailSend={handleSuccessEmailSend}
                 clientEmailSender={clientEmailSender}
-                // date1={date1}
+                fetchCallingList={fetchCallingList}
               />
             ) : null}
             {/* Name:-Akash Pawar Component:-LineUpList
@@ -1263,6 +1267,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
               <Modal.Header closeButton>
                 <Modal.Title>Update Profile Status</Modal.Title>
               </Modal.Header>
+
               <Modal.Body>
                 {selectedCandidate && (
                   <>
@@ -1311,7 +1316,6 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       </p>
                     </div>
                     <hr style={{ marginTop: "10px" }} />
-
                     <div className="update-profile-modal">
                       <label htmlFor="">Select Status</label>
                       <select
@@ -1320,22 +1324,28 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         className="update-profile-drop-down"
                       >
                         <option value="">Select Status</option>
-                        <option value="Profile Pending">Profile Pending</option>
-                        <option value="Profile Sent">Profile Sent</option>
-                        <option value="Profile Rejected">
-                          Profile Rejected
-                        </option>
-                        <option value="Profile Selected">
-                          Profile Selected
-                        </option>
-                        <option value="No Response">No Response</option>
-                        <option value="Profile On Hold">Profile On Hold</option>
+                        {[
+                          "Profile Pending",
+                          "Profile Sent",
+                          "Profile Rejected",
+                          "Profile Selected",
+                          "No Response",
+                          "Profile On Hold",
+                        ]
+                          .filter(
+                            (status) =>
+                              status !== selectedCandidate.profileStatus
+                          )
+                          .map((status) => (
+                            <option key={status} value={status}>
+                              {status}
+                            </option>
+                          ))}
                       </select>
                     </div>
                   </>
                 )}
                 <center>
-                  {" "}
                   <button
                     className="daily-tr-btn"
                     onClick={updateProfileStatus}
@@ -1358,7 +1368,7 @@ const SendEmailPopup = ({
   selectedCandidate,
   onSuccessFullEmailSend,
   clientEmailSender,
-  // date1
+  fetchCallingList,
 }) => {
   const [to, setTo] = useState("");
   const [cc, setCc] = useState("");
@@ -1384,6 +1394,7 @@ const SendEmailPopup = ({
       let year = date.getFullYear();
 
       let currentDate = `${day}-${month}-${year}`;
+
       const clientData = {
         mailReceiverName: emailBody.replace(/Hi\s*,?\s*/i, "").split(",")[0],
         receiverCompanyMail: to,
@@ -1414,28 +1425,54 @@ const SendEmailPopup = ({
 
   const handleSendEmail = () => {
     setIsMailSending(true);
+    console.log(selectedCandidate + " ---------- 00001");
+
+    const filteredAttachments = selectedCandidate
+      .filter((can) => can.resume) // Include only candidates with resumes
+      .map((can) => ({
+        fileName: `${can.candidateName}_${can.jobDesignation}.pdf`,
+        fileContent: can.resume,
+      }));
+
     const emailData = {
       to,
       cc,
       bcc,
       subject,
+      footer: emailFooter,
       body: emailBody.replace(/\n/g, "<br>"),
       signatureImage,
-      attachments: selectedCandidate.map((can) => ({
-        fileName: `${can.candidateName}_${can.jobDesignation}.pdf`, // Assuming all resumes are in PDF format
-        fileContent: can.resume,
+      ...(filteredAttachments.length > 0 && {
+        attachments: filteredAttachments,
+      }),
+      tableData: selectedCandidate.map((can) => ({
+        date: new Date().toLocaleDateString(),
+        jobDesignation: can.jobDesignation,
+        candidateName: can.candidateName,
+        contactNumber: can.contactNumber,
+        candidateEmail: can.candidateEmail,
+        experienceYear: can.experienceYear,
+        experienceMonth: can.experienceMonth,
+        companyName: can.companyName,
+        noticePeriod: can.noticePeriod,
+        holdingAnyOffer: can.holdingAnyOffer,
+        currentLocation: can.currentLocation,
+        perDayBillingSentToClient: "300",
       })),
-      tableData: selectedCandidate.map((can, index) => ({
-        ...can,
-        perDayBillingSentToClient: 10000, 
-      })),
+      candidateIds: selectedCandidate.map((can) => can.candidateId),
     };
     axios
       .post(`${API_BASE_URL}/send-email`, emailData)
       .then((response) => {
         handleStoreClientInformation();
         onSuccessFullEmailSend(true);
-        toast.success("Email sent successfully");
+        const message = response.data;
+        if (message.includes("Already Shared")) {
+          toast.info(message); // For cases where some profiles are already shared
+        } else {
+          toast.success(message); // For cases where profiles are shared successfully
+        }
+
         selectedCandidate.forEach(async (can) => {
           try {
             const performanceId = await axios.get(
@@ -1446,8 +1483,8 @@ const SendEmailPopup = ({
             console.log(error);
           }
         });
+        fetchCallingList();
       })
-
       .catch((error) => {
         setIsMailSending(false);
         setResponse("Error Sending Email");

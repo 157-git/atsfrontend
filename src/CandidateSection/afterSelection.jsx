@@ -674,10 +674,13 @@ const [remainingDays, setRemainingDays] = useState(null);
                             onChange={handleJoinStatusChange}
                           >
                             <option value="">Select Option</option>
-                            <option value="join">Join</option>
-                            <option value="drop">Drop</option>
-                            <option value="hold">Hold</option>
-                            <option value="toJoin">To Join</option>
+                            <option value="Joining">Joining</option>
+                            <option value="Not Joining">Not Joining</option>
+                            <option value="Joined">Joined</option>
+                            <option value="Drop Out">Drop Out</option>
+                            <option value="Hold">Hold</option>
+                            <option value="To Join">To Join</option>
+                            <option value="No Show">No Show</option>
                           </select>
                         </div>
 

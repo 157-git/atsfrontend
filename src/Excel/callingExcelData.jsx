@@ -465,6 +465,7 @@ const CallingExcelList = ({
   };
 
   const closeModal = () => {
+    setShowModal(false);
     setModalIsOpen(false);
     setSelectedCandidate(null);
   };
@@ -607,7 +608,7 @@ const CallingExcelList = ({
                 <table className="selfcalling-table attendance-table">
                   <thead>
                     <tr className="attendancerows-head">
-                      <th className="attendanceheading">Sr No.</th>
+                      <th className="attendanceheading">No.</th>
                       <th className="attendanceheading">Added Date</th>
                       <th className="attendanceheading">Candidate Name</th>
                       <th className="attendanceheading">Candidate Email</th>
@@ -623,13 +624,15 @@ const CallingExcelList = ({
                     {filteredCallingList.map((item, index) => (
                       <tr key={item.candidateId} className="attendancerows">
                         <td className="tabledata">{index + 1}</td>
-                        <td className="tabledata "
+                        <td
+                          className="tabledata "
                           onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}>
+                          onMouseOut={handleMouseOut}
+                        >
                           {item.date} {item.candidateAddedTime}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                            {item.date} {" "} {item.candidateAddedTime}
+                              {item.date} {item.candidateAddedTime}
                             </span>
                           </div>
                         </td>
@@ -641,7 +644,7 @@ const CallingExcelList = ({
                           {item.candidateName}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                            {item.candidateName}
+                              {item.candidateName}
                             </span>
                           </div>
                         </td>
@@ -653,7 +656,7 @@ const CallingExcelList = ({
                           {item.candidateEmail}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                            {item.candidateEmail}
+                              {item.candidateEmail}
                             </span>
                           </div>
                         </td>
@@ -663,9 +666,9 @@ const CallingExcelList = ({
                           onMouseOut={handleMouseOut}
                         >
                           {item.contactNumber}
-                           <div className="tooltip">
+                          <div className="tooltip">
                             <span className="tooltiptext">
-                            {item.contactNumber}
+                              {item.contactNumber}
                             </span>
                           </div>
                         </td>
@@ -677,7 +680,7 @@ const CallingExcelList = ({
                           {item.jobDesignation}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                            {item.jobDesignation}
+                              {item.jobDesignation}
                             </span>
                           </div>
                         </td>
@@ -688,11 +691,10 @@ const CallingExcelList = ({
                         >
                           {item.experienceYear} Years {item.experienceMonth}{" "}
                           Months{" "}
-
                           <div className="tooltip">
                             <span className="tooltiptext">
-                            {item.experienceYear} Years {item.experienceMonth}{" "}
-                          Months{" "}
+                              {item.experienceYear} Years {item.experienceMonth}{" "}
+                              Months{" "}
                             </span>
                           </div>
                         </td>
@@ -704,14 +706,17 @@ const CallingExcelList = ({
                           {item.companyName}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                            {item.companyName}
+                              {item.companyName}
                             </span>
                           </div>
                         </td>
-                        <td className="tabledata">
+                        <td   className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
                           <button
                             className="daily-tr-btn"
                             onClick={() => openModal(item)}
+                            style={{marginLeft:"3px"}}
                           >
                             View
                           </button>
@@ -729,263 +734,202 @@ const CallingExcelList = ({
                     ))}
                   </tbody>
                 </table>
-                {showModal && (
-                  <>
-                    <Modal
-                      isOpen={modalIsOpen}
-                      show={modalIsOpen}
-                      onRequestClose={closeModal}
-                      className="candidate-modal"
-                      overlayClassName="modal-overlay"
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        paddingTop: "50px",
-                      }}
-                    >
-                      <div
-                        className="uploaded-excel-data"
-                        style={{
-                          width: "100%",
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "flex-start",
-                          flexWrap: "wrap",
-                        }}
-                      >
-                        <h2
-                          style={{
-                            width: "100%",
-                            textAlign: "center",
-                            fontSize: "20px",
-                            margin: "10px",
-                          }}
-                        >
-                          Candidate Details
-                        </h2>
-
-                        {/* Section 1 */}
-                        <div
-                          className="modal-section"
-                          style={{
-                            width: "100%",
-                            padding: "20px",
-                            boxSizing: "border-box",
-                          }}
-                        >
-                          {/* <h3>Section 1</h3> */}
-                          <p>
-                            <strong>Recruiter Name: </strong>
-                            {showModal?.recruiterName || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Candidate Alternate No: </strong>
-                            {showModal?.alternateNumber || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Source Name: </strong>
-                            {showModal?.sourceName || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Applying Company: </strong>
-                            {showModal?.requirementCompany || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Date of Birth: </strong>
-                            {showModal?.dateOfBirth || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Communication Rating: </strong>
-                            {showModal?.communicationRating}
-                          </p>
-                          <p>
-                            <strong>Current Location: </strong>
-                            {showModal?.currentLocation || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Full Address: </strong>
-                            {showModal?.fullAddress || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Calling Feedback: </strong>
-                            {showModal?.callingFeedback || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Incentive: </strong>
-                            {showModal?.incentive || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Old Employee Id: </strong>
-                            {showModal?.oldEmployeeId || "N/A"}
-                          </p>
-                        </div>
-
-                        {/* Section 2 */}
-                        <div
-                          className="modal-section"
-                          style={{
-                            width: "100%",
-                            padding: "20px",
-                            boxSizing: "border-box",
-                          }}
-                        >
-                          {/* <h3>Section 2</h3> */}
-                          <p>
-                            <strong>Distance: </strong>
-                            {showModal?.distance || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Current CTC: </strong>
-                            {showModal?.currentCTCLakh || "N/A"} Lakh{" "}
-                            {showModal?.currentCTCThousand || "N/A"} Thousand
-                          </p>
-                          <p>
-                            <strong>Expected CTC: </strong>
-                            {showModal?.expectedCTCLakh || "N/A"} Lakh{" "}
-                            {showModal?.expectedCTCThousand || "N/A"} Thousand
-                          </p>
-                          <p>
-                            <strong>Notice Period: </strong>
-                            {showModal?.noticePeriod || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Holding Any Offer: </strong>
-                            {showModal?.holdingAnyOffer || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Final Status: </strong>
-                            {showModal?.finalStatus || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Relevant Experience: </strong>
-                            {showModal?.relevantExperience || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Gender: </strong>
-                            {showModal?.gender || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Qualification: </strong>
-                            {showModal?.qualification || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Year of Passing: </strong>
-                            {showModal?.yearOfPassing || "N/A"}
-                          </p>
-                        </div>
-
-                        {/* Section 3 */}
-                        <div
-                          className="modal-section"
-                          style={{
-                            width: "100%",
-                            padding: "20px",
-                            boxSizing: "border-box",
-                          }}
-                        >
-                          {/* <h3>Section 3</h3> */}
-                          <p>
-                            <strong>Feedback: </strong>
-                            {showModal?.feedBack || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Offer Letter Msg: </strong>
-                            {showModal?.offerLetterMsg || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Marital Status: </strong>
-                            {showModal?.maritalStatus || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Pick Up and Drop: </strong>
-                            {showModal?.pickUpAndDrop || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Message for Team Leader: </strong>
-                            {showModal?.msgForTeamLeader || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Availability for Interview: </strong>
-                            {showModal?.availabilityForInterview || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Interview Time: </strong>
-                            {showModal?.interviewTime || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Preferred Location: </strong>
-                            {showModal?.preferredLocation || "N/A"}
-                          </p>
-                        </div>
-
-                        {/* Section 4 */}
-                        <div
-                          className="modal-section"
-                          style={{
-                            width: "100%",
-                            padding: "20px",
-                            boxSizing: "border-box",
-                          }}
-                        >
-                          {/* <h3>Section 4</h3> */}
-                          <p>
-                            <strong>Extra Columns 1: </strong>
-                            {showModal?.extra1 || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Extra Columns 2: </strong>
-                            {showModal?.extra2 || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Extra Columns 3: </strong>
-                            {showModal?.extra3 || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Extra Columns 4: </strong>
-                            {showModal?.extra4 || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Extra Columns 5: </strong>
-                            {showModal?.extra5 || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Extra Columns 6: </strong>
-                            {showModal?.extra6 || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Extra Columns 7: </strong>
-                            {showModal?.extra7 || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Extra Columns 8: </strong>
-                            {showModal?.extra8 || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Extra Columns 9: </strong>
-                            {showModal?.extra9 || "N/A"}
-                          </p>
-                          <p>
-                            <strong>Extra Columns 10: </strong>
-                            {showModal?.extra10 || "N/A"}
-                          </p>
-                        </div>
-                      </div>
-                      <center>
-                        <div className="excel-data-close-btn">
-                          <button className="daily-tr-btn" onClick={closeModal}>
-                            Close
-                          </button>
-                        </div>
-                      </center>
-                    </Modal>
-                  </>
-                )}
               </div>
             </div>
           )}
+          {showModal && (
+            <div className="popup-container">
+              <div className="popup-content">
+                <h2>Candidate Details</h2>
 
+      <div className="excel-data-content-div">
+
+    
+                <div className="popup-section">
+              
+                  <p>
+                    <strong>Recruiter Name: </strong>
+                    {showModal?.recruiterName || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Candidate Alternate No: </strong>
+                    {showModal?.alternateNumber || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Source Name: </strong>
+                    {showModal?.sourceName || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Applying Company: </strong>
+                    {showModal?.requirementCompany || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Date of Birth: </strong>
+                    {showModal?.dateOfBirth || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Communication Rating: </strong>
+                    {showModal?.communicationRating}
+                  </p>
+                  <p>
+                    <strong>Current Location: </strong>
+                    {showModal?.currentLocation || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Full Address: </strong>
+                    {showModal?.fullAddress || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Calling Feedback: </strong>
+                    {showModal?.callingFeedback || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Incentive: </strong>
+                    {showModal?.incentive || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Old Employee Id: </strong>
+                    {showModal?.oldEmployeeId || "N/A"}
+                  </p>
+                </div>
+
+       
+                <div className="popup-section">
+                
+                  <p>
+                    <strong>Distance: </strong>
+                    {showModal?.distance || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Current CTC: </strong>
+                    {showModal?.currentCTCLakh || "N/A"} Lakh{" "}
+                    {showModal?.currentCTCThousand || "N/A"} Thousand
+                  </p>
+                  <p>
+                    <strong>Expected CTC: </strong>
+                    {showModal?.expectedCTCLakh || "N/A"} Lakh{" "}
+                    {showModal?.expectedCTCThousand || "N/A"} Thousand
+                  </p>
+                  <p>
+                    <strong>Notice Period: </strong>
+                    {showModal?.noticePeriod || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Holding Any Offer: </strong>
+                    {showModal?.holdingAnyOffer || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Final Status: </strong>
+                    {showModal?.finalStatus || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Relevant Experience: </strong>
+                    {showModal?.relevantExperience || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Gender: </strong>
+                    {showModal?.gender || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Qualification: </strong>
+                    {showModal?.qualification || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Year of Passing: </strong>
+                    {showModal?.yearOfPassing || "N/A"}
+                  </p>
+                </div>
+
+              
+                <div className="popup-section">
+                 
+                  <p>
+                    <strong>Feedback: </strong>
+                    {showModal?.feedBack || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Offer Letter Msg: </strong>
+                    {showModal?.offerLetterMsg || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Marital Status: </strong>
+                    {showModal?.maritalStatus || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Pick Up and Drop: </strong>
+                    {showModal?.pickUpAndDrop || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Message for Team Leader: </strong>
+                    {showModal?.msgForTeamLeader || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Availability for Interview: </strong>
+                    {showModal?.availabilityForInterview || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Interview Time: </strong>
+                    {showModal?.interviewTime || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Preferred Location: </strong>
+                    {showModal?.preferredLocation || "N/A"}
+                  </p>
+                </div>
+
+            
+                <div className="popup-section">
+                  <p>
+                    <strong>Extra Columns 1: </strong>
+                    {showModal?.extra1 || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Extra Columns 2: </strong>
+                    {showModal?.extra2 || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Extra Columns 3: </strong>
+                    {showModal?.extra3 || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Extra Columns 4: </strong>
+                    {showModal?.extra4 || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Extra Columns 5: </strong>
+                    {showModal?.extra5 || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Extra Columns 6: </strong>
+                    {showModal?.extra6 || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Extra Columns 7: </strong>
+                    {showModal?.extra7 || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Extra Columns 8: </strong>
+                    {showModal?.extra8 || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Extra Columns 9: </strong>
+                    {showModal?.extra9 || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Extra Columns 10: </strong>
+                    {showModal?.extra10 || "N/A"}
+                  </p>
+                </div>
+                </div>
+
+               <center>
+               <button className="daily-tr-btn" onClick={closeModal}>
+                  Close
+                </button>
+               </center>
+              </div>
+            </div>
+          )}
           {selectedCandidate && (
             <CallingTrackerForm
               initialData={selectedCandidate}
