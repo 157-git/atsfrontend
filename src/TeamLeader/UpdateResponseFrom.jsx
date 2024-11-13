@@ -68,10 +68,24 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
     return errors;
   };
 
+  // Define formatDateToIST function
+const formatDateToIST = (date) => {
+  const options = {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  };
+  return new Intl.DateTimeFormat("en-IN", options).format(date);
+};
   const handleSubmit = async (e) => {
     setSubmited(true);
     e.preventDefault();
     const validationErrors = validateForm();
+    console.log(validationErrors);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
@@ -88,7 +102,7 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
         }
       );
       console.log(response);
-      if (response) {
+      if (response.status === 200) {
         console.log("response received");
         const firstResponse = response.data;
         console.log(firstResponse); // Assuming you want the first response's date
@@ -138,7 +152,7 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
             onClose(true);
           } catch (error) {
             console.error("Error updating performance data:", error);
-            toast.error("Failed to Update Response");
+            toast.error("Failed to Update Response line 141"+error);
             setSubmited(false);
           }
         } else {
@@ -164,27 +178,39 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
             onClose(true);
           } catch (error) {
             console.error("Error updating performance data:", error);
-            toast.error("Failed to Update Response");
+            toast.error("Failed to Update Response line 167"+error);
           }
         }
       } else {
         setSubmited(false);
-        toast.error("Failed to Update Response");
+        toast.error("Failed to Update Response line 172");
       }
+      onClose(true);
     } catch (err) {
       setSubmited(false);
-      toast.error("Failed to Update Response");
+      toast.error("Failed to Update Response line 176"+err);
     }
   };
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event, index = null) => {
     const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  
+    if (index !== null) {
+      // Update specific entry in `data` at the given index
+      const updatedData = data.map((entry, i) =>
+        i === index ? { ...entry, [name]: value } : entry
+      );
+      setData(updatedData);
+    } else {
+      // Update `formData` for the new entry row
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
-
+  
+console.log(data);
   return (
     <div className="p-6 bg-white shadow-md rounded-lg max-w-full">
       <div className="mb-4">
@@ -225,7 +251,8 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                       className="form-select w-full  border rounded text-xs sm:text-base"
                       name="interviewRound"
                       value={response.interviewRound}
-                      onChange={handleInputChange}
+                      onChange={(e) => handleInputChange(e, index)}
+                      disabled={index < data.length - 1}
                     >
                       <option value="">Select Interview</option>
                       <option value="Shortlisted For Hr Round">Hr Round</option>
@@ -242,7 +269,8 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                       className="form-select w-full border rounded text-xs sm:text-base"
                       name="interviewResponse"
                       value={response.interviewResponse}
-                      onChange={handleInputChange}
+                      onChange={(e) => handleInputChange(e, index)}
+                      disabled={index < data.length - 1}
                     >
                       <option value="">Update Response</option>
                       <option value="Shortlisted For Hr Round">Hr Round</option>
@@ -263,8 +291,9 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                       type="text"
                       name="commentForTl"
                       value={response.commentForTl}
-                      onChange={handleInputChange}
+                      onChange={(e) => handleInputChange(e, index)}
                       placeholder="Enter Comment here..."
+                      disabled={index < data.length - 1}
                     />
                   </td>
                   <td className="p-2">
@@ -273,7 +302,8 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                       type="date"
                       name="responseUpdatedDate"
                       value={response.responseUpdatedDate}
-                      onChange={handleInputChange}
+                      onChange={(e) => handleInputChange(e, index)}
+                      disabled={index < data.length - 1}
                     />
                   </td>
                   <td className="p-2">
@@ -282,7 +312,8 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                       type="date"
                       name="nextInterviewDate"
                       value={response.nextInterviewDate}
-                      onChange={handleInputChange}
+                      onChange={(e) => handleInputChange(e, index)}
+                      disabled={index < data.length - 1}
                     />
                   </td>
                   <td className="p-2">
@@ -291,7 +322,8 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                       type="time"
                       name="nextInterviewTiming"
                       value={response.nextInterviewTiming}
-                      onChange={handleInputChange}
+                      onChange={(e) => handleInputChange(e, index)}
+                      disabled={index < data.length - 1}
                     />
                   </td>
                 </tr>
