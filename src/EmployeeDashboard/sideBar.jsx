@@ -674,20 +674,25 @@ function Sidebar({
                               : ""
                             }`}
                         >
+                          
+
                           <li
                             onClick={handleButtonClick(
-                              "payRoll",
-                              togglePayRoll
+                              "sendCandidate",
+                              toggleSendCandidate
                             )}
                             style={{ marginLeft: "10px" }}
                             className={
-                              activeButton === "payRoll" ? "active" : ""
+                              activeButton === "sendCandidate" ? "active" : ""
                             }
                           >
                             <a href="#">
-                              <span className="sidebar-text">Pay Roll</span>
+                              <span className="sidebar-text">
+                                Sent Profile
+                              </span>
                             </a>
                           </li>
+                            
                           <li
                             onClick={handleButtonClick(
                               "updateResponse",
@@ -700,8 +705,23 @@ function Sidebar({
                           >
                             <a href="#">
                               <span className="sidebar-text">
-                                Update Response
+                                Update Response 
                               </span>
+                            </a>
+                          </li>
+
+                          <li
+                            onClick={handleButtonClick(
+                              "payRoll",
+                              togglePayRoll
+                            )}
+                            style={{ marginLeft: "10px" }}
+                            className={
+                              activeButton === "payRoll" ? "active" : ""
+                            }
+                          >
+                            <a href="#">
+                              <span className="sidebar-text">Pay Roll</span>
                             </a>
                           </li>
 
@@ -758,22 +778,7 @@ function Sidebar({
                               </span>
                             </a>
                           </li>
-                          <li
-                            onClick={handleButtonClick(
-                              "sendCandidate",
-                              toggleSendCandidate
-                            )}
-                            style={{ marginLeft: "10px" }}
-                            className={
-                              activeButton === "sendCandidate" ? "active" : ""
-                            }
-                          >
-                            <a href="#">
-                              <span className="sidebar-text">
-                                Mail To Client
-                              </span>
-                            </a>
-                          </li>
+                          
                           <li
                             onClick={toggleEmployeeDetails}
                             style={{ marginLeft: "10px" }}
@@ -978,7 +983,7 @@ function Sidebar({
                         }
                       >
                         <a href="#">
-                          <span className="sidebar-text">Mail To Client</span>
+                          <span className="sidebar-text">Sent Profile</span>
                         </a>
                       </li>
 
@@ -1086,7 +1091,7 @@ function Sidebar({
                         }
                       >
                         <a href="#">
-                          <span className="sidebar-text">Mail To Client</span>
+                          <span className="sidebar-text">Sent Profile</span>
                         </a>
                       </li>
                       <li

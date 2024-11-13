@@ -8,6 +8,8 @@ import ForgotPasswordForms from "./empForgotPasswords";
 import { API_BASE_URL } from "../api/api";
 import axios from "../api/api";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 //  sahil karnekar Worked on : - date 27 sep 2024
 // Sahil Karnekar Added line num 8 to line num 77
 
@@ -18,6 +20,7 @@ const LoginSignup = ({ onLogin }) => {
   const [error, setError] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [login, setLogin] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false); 
   const navigate = useNavigate();
 
   // only functionality javascript code added by sahil karnekar dont use html code , html code is not styled or not applied any css
@@ -66,21 +69,6 @@ const LoginSignup = ({ onLogin }) => {
     document.documentElement.style.setProperty("--filter-color", color);
   };
 
-  //old logic arshad comment this 03-10-2024
-  // useEffect(() => {
-  //   if (employeeId && userType) {
-  //     fetch(`${API_BASE_URL}/fetch-pass-on-role/${employeeId}/${userType}`
-  //     )
-  //       .then((response) => response.text())
-  //       .then((data) => {
-  //         setLogin(data);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching data:", error);
-  //       });
-  //   }
-  // }, [employeeId, userType]);
-
   // sahil karnekar
   // This is same method handlechange as previous just newly added validations from line num 30 to line num 50
 
@@ -104,29 +92,6 @@ const LoginSignup = ({ onLogin }) => {
       }
     }
   };
-
-  //old logic arshad comment this
-  // handle submit method for authenticate user by username and password from line num 53 to line num 77
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-  //   if (!employeeId || !password) {
-  //     setError("Please fill in both fields before submitting.");
-  //     return;
-  //   }
-
-  //   try {
-  //     if (login === password) {
-  //       localStorage.setItem("employeeId", employeeId);
-  //       navigate(`/Dashboard/${employeeId}/${userType}`);
-  //       onLogin();
-  //     } else {
-  //       setError("Invalid login for this user. Please try again.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching password:", error);
-  //     setError("Error occurred. Please try again.");
-  //   }
-  // };
 
   // handle submit method for authenticate user by username and password from line num 53 to line num 77
   const handleSubmit = async (event) => {
@@ -179,36 +144,21 @@ const LoginSignup = ({ onLogin }) => {
               <ForgotPasswordForms userType={userType} />
             ) : (
               <form onSubmit={handleSubmit}>
-                {userType === "Recruiters" && (
-                  <>
-                    <h2>Recruiter</h2>
-                  </>
-                )}
-                {userType === "TeamLeader" && (
-                  <>
-                    <h2>Team Leader</h2>
-                  </>
-                )}
-                {userType === "Manager" && (
-                  <>
-                    <h2>Manager</h2>
-                  </>
-                )}
-                {userType === "SuperUser" && (
-                  <>
-                    <h2>Super User</h2>
-                  </>
-                )}
+                {userType === "Recruiters" && <h2>Recruiter</h2>}
+                {userType === "TeamLeader" && <h2>Team Leader</h2>}
+                {userType === "Manager" && <h2>Manager</h2>}
+                {userType === "SuperUser" && <h2>Super User</h2>}
                 <div className="input-groups">
                   <i className="fas fa-user"></i>
                   <input
                     type="text"
                     id="loginpage-employeeId"
                     name="employeeId"
-                    placeholder="Username"
+                    placeholder="User name"
                     className="loginpage-form-control"
                     value={employeeId}
                     onChange={handleChange}
+                    style={{paddingLeft:"30px"}}
                   />
                 </div>
                 <div className="input-groups" hidden>
@@ -224,13 +174,25 @@ const LoginSignup = ({ onLogin }) => {
                 <div className="input-groups">
                   <i className="fas fa-lock"></i>
                   <input
-                    type="password"
+                  type={passwordVisible ? "text" : "password"}
                     id="loginpage-password"
                     name="password"
                     placeholder="Password"
                     value={password}
                     onChange={handleChange}
                     className="loginpage-form-control"
+                    style={{paddingLeft:"30px"}}
+                  />
+                   <FontAwesomeIcon
+                    icon={passwordVisible ? faEyeSlash : faEye}
+                    onClick={() => setPasswordVisible((prev) => !prev)} 
+                    style={{
+                      position: "absolute",
+                      right: "10px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      cursor: "pointer",
+                    }}
                   />
                 </div>
                 <div className="loginpage-error">{error}</div>
