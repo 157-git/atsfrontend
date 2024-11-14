@@ -526,16 +526,18 @@ const CallingExcelList = ({
 
 
   const handleMergeResumes = async () => {
+    setLoading(true)
     try {
       const response = await axios.put(`${API_BASE_URL}/merge-resumes`);
       if (response.status === 200) {
-        console.log('Resumes merged successfully!');
-        toast.success("Resumes merged successfully");
+        toast.success("Resumes Merged Successfully");
       } else {
         console.log('Error merging resumes:', response.statusText);
       }
     } catch (error) {
       console.error('Error merging resumes:', error);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -678,6 +680,7 @@ const CallingExcelList = ({
                 </div>
               )}
               <div className="attendanceTableData">
+              
                 <table className="selfcalling-table attendance-table">
                   <thead>
                     <tr className="attendancerows-head">
@@ -787,7 +790,6 @@ const CallingExcelList = ({
 
                         <td className="tabledata">
                           <button
-                            className="table-icon-div"
                             onClick={() => openResumeModal(item.resume)}
                           >
                             <i className="fas fa-eye"></i>

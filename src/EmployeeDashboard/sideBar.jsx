@@ -70,6 +70,7 @@ function Sidebar({
   togglePerformanceImprovement,
   toggeleAddTeamLeader,
   toggeleAddManager,
+  toggleSharedProfiles
 }) {
   const [error, setError] = useState("");
   const [isActive, setIsActive] = useState(false);
@@ -705,10 +706,28 @@ function Sidebar({
                           >
                             <a href="#">
                               <span className="sidebar-text">
-                                Update Response 
+                                Update Response  
                               </span>
                             </a>
                           </li>
+
+                          <li
+                            onClick={handleButtonClick(
+                              "sharedProfiles",
+                              toggleSharedProfiles
+                            )}
+                            className={
+                              activeButton === "sharedProfiles" ? "active" : ""
+                            }
+                            style={{ marginLeft: "10px" }}
+                          >
+                            <a href="#">
+                              <span className="sidebar-text">
+                                Shared Profiles
+                              </span>
+                            </a>
+                          </li>
+
 
                           <li
                             onClick={handleButtonClick(
@@ -874,6 +893,23 @@ function Sidebar({
                             </span>
                           </a>
                         </li>
+                        <li
+                            onClick={handleButtonClick(
+                              "sharedProfiles",
+                              toggleSharedProfiles
+                            )}
+                            className={
+                              activeButton === "sharedProfiles" ? "active" : ""
+                            }
+                            style={{ marginLeft: "10px" }}
+                          >
+                            <a href="#">
+                              <span className="sidebar-text">
+                                Shared Profiles
+                              </span>
+                            </a>
+                          </li>
+
                         {/* <li
                           onClick={handleButtonClick(
                             "questionPaper",

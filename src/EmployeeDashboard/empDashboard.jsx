@@ -65,6 +65,7 @@ import { faL } from "@fortawesome/free-solid-svg-icons";
 import AddTeamLeader from "../EmployeeSection/addTeamLeader";
 import AddManager from "../EmployeeSection/addManager";
 import ApplicantForm from "../Applicant/applicantFrom";
+import ShareProfileData from "../TeamLeader/shareProfileData";
 
 const EmpDashboard = ({ userGroup }) => {
   const { userType } = useParams();
@@ -155,6 +156,7 @@ const EmpDashboard = ({ userGroup }) => {
   const [showAddTeamLeader, setShowAddTeamLeader] = useState(false);
   const [callFunction, setCallFunction] = useState(false);
   const [showApplicantForm, setShowApplicantForm] = useState(false);
+  const [showSharedProfile,setShowSharedProfile] = useState(false)
 
   // Arshad Attar Added this 30-10-2024
   const handleOpenEmployeeProfile = () => {
@@ -346,6 +348,7 @@ const EmpDashboard = ({ userGroup }) => {
     setShowAddManager(false);
     setShowAddTeamLeader(false);
     setShowUpdateCallingTracker(false);
+    setShowSharedProfile(false)
   };
 
   /* ArshadAttar_EmpDashboa_Added_showProfitLoss_11/07/2024_LineNo_221-225 */
@@ -612,6 +615,11 @@ const EmpDashboard = ({ userGroup }) => {
     setShowAddTeamLeader(true);
   };
 
+  const toggleSharedProfiles = ()=>{
+    resetAllToggles();
+    setShowSharedProfile(!showSharedProfile)
+  };
+
   return (
     <div
       className={`grid-container ${
@@ -685,6 +693,7 @@ const EmpDashboard = ({ userGroup }) => {
         toggeleInterviewForm={toggeleInterviewForm}
         toggeleAddTeamLeader={toggeleAddTeamLeader}
         toggeleAddManager={toggeleAddManager}
+        toggleSharedProfiles={toggleSharedProfiles}
       />
 
       <div className="empDash-main-content">
@@ -920,6 +929,9 @@ const EmpDashboard = ({ userGroup }) => {
 
         <div>{showAddTeamLeader && <AddTeamLeader></AddTeamLeader>}</div>
         <div>{showAddManager && <AddManager></AddManager>}</div>
+        <div>
+          {showSharedProfile && <ShareProfileData></ShareProfileData>}
+        </div>
       </div>
     </div>
   );

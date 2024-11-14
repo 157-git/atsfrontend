@@ -1105,10 +1105,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                   Subcategory:-ResumeViewButton(added) start LineNo:-993
                   Date:-02/07 */}
                       <td className="tabledata">
-                        <button
-                          className="text-secondary"
-                          onClick={() => openResumeModal(item.resume)}
-                        >
+                        <button onClick={() => openResumeModal(item.resume)}>
                           <i className="fas fa-eye"></i>
                         </button>
                       </td>
