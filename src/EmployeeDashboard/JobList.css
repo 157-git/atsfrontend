@@ -38,7 +38,8 @@
   padding-left: 10px;
   justify-content: space-between;
   /* border: 1px solid red; */
-  height: 120vh;
+  /* hight removed by sahil karnekar to fix the css issue of jd */
+  /* height: 120vh; */
 }
 
 

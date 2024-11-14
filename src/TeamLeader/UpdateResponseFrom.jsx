@@ -59,12 +59,13 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
     if (!formData.interviewRound) {
       errors.interviewRound = "Interview Round is required";
     }
+    // this lines commented by sahil karnekar please check them if it is required in my scenario there is no required to updation
     // if (!formData.interviewResponse) {
     //   errors.interviewResponse = "Interview Response is required";
     // }
-    if (!formData.responseUpdatedDate) {
-      errors.responseUpdatedDate = "Update Date is required";
-    }
+    // if (!formData.responseUpdatedDate) {
+    //   errors.responseUpdatedDate = "Update Date is required";
+    // }
     return errors;
   };
 
@@ -216,10 +217,20 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
       <div className="mb-4">
         <h6 className="text-lg font-semibold">{data.length > 0 ? "Update Interview Response" : "Schedule Interview"}</h6>
       </div>
+      {/* line 222 to 233 updated by sahil karnekar date 14-11-2024 */}
       <form onSubmit={handleSubmit}>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto"
+        style={{
+          width: "fit-content"
+        }}
+        >
           <table className="min-w-full border-collapse table-auto">
-            <thead className="bg-[#ffcb9b] text-gray-500">
+            <thead className="bg-[#ffcb9b] text-gray-500"
+            style={{
+              backgroundColor:`var(--Bg-color)`,
+              lineHeight:"1",
+            }}
+            >
               <tr>
                 <th className="p-2 font-semibold text-xs sm:text-base">No</th>
                 <th className="p-2 font-semibold text-xs sm:text-base">
@@ -253,6 +264,16 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                       value={response.interviewRound}
                       onChange={(e) => handleInputChange(e, index)}
                       disabled={index < data.length - 1}
+                      // inline styling for different html tags added by sahil karnekar , for ovveriding the link css properties
+                      style={
+                        index < data.length - 1
+                          ? {
+                              backgroundImage: "none",
+                              boxShadow: `1px 1px 4px var(--Bg-color)`,
+                              lineHeight:"1",
+                            }
+                          : {boxShadow: `1px 1px 4px var(--Bg-color)`, lineHeight:"1",}
+                      }
                     >
                       <option value="">Select Interview</option>
                       <option value="Shortlisted For Hr Round">Hr Round</option>
@@ -262,6 +283,10 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                       <option value="Shortlisted For L1 Round">L1 Round</option>
                       <option value="Shortlisted For L2 Round">L2 Round</option>
                       <option value="Shortlisted For L3 Round">L3 Round</option>
+                      {/* lines added by sahil karnekar this lines added in all the selectors  */}
+                      <option value="Selected">Selected</option>
+                      <option value="Rejected">Rejected</option>
+                      <option value="Hold">Hold</option>
                     </select>
                   </td>
                   <td className="p-2">
@@ -271,6 +296,13 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                       value={response.interviewResponse ? response.interviewResponse : response.interviewRound}
                       onChange={(e) => handleInputChange(e, index)}
                       disabled={index < data.length - 1}
+                      style={index < data.length - 1
+                        ? {
+                            backgroundImage: "none",
+                            boxShadow: `1px 1px 4px var(--Bg-color)`,
+                            lineHeight:"1",
+                          }
+                        : {boxShadow: `1px 1px 4px var(--Bg-color)`,lineHeight:"1",}}
                     >
                       <option value="">Update Response</option>
                       <option value="Shortlisted For Hr Round">Hr Round</option>
@@ -294,6 +326,10 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                       onChange={(e) => handleInputChange(e, index)}
                       placeholder="Enter Comment here..."
                       disabled={index < data.length - 1}
+                      style={{
+                        boxShadow: `1px 1px 4px var(--Bg-color)`,
+                        lineHeight:"1",
+                      }}
                     />
                   </td>
                   <td className="p-2">
@@ -304,6 +340,10 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                       value={response.responseUpdatedDate}
                       onChange={(e) => handleInputChange(e, index)}
                       disabled={index < data.length - 1}
+                      style={{
+                        boxShadow: `1px 1px 4px var(--Bg-color)`,
+                        lineHeight:"1",
+                      }}
                     />
                   </td>
                   <td className="p-2">
@@ -314,6 +354,10 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                       value={response.nextInterviewDate}
                       onChange={(e) => handleInputChange(e, index)}
                       disabled={index < data.length - 1}
+                      style={{
+                        boxShadow: `1px 1px 4px var(--Bg-color)`,
+                        lineHeight:"1",
+                      }}
                     />
                   </td>
                   <td className="p-2">
@@ -324,6 +368,10 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                       value={response.nextInterviewTiming}
                       onChange={(e) => handleInputChange(e, index)}
                       disabled={index < data.length - 1}
+                      style={{
+                        boxShadow: `1px 1px 4px var(--Bg-color)`,
+                        lineHeight:"1",
+                      }}
                     />
                   </td>
                 </tr>
@@ -335,8 +383,13 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                   <select
                     className="form-select w-full border rounded text-xs sm:text-base"
                     name="interviewRound"
-                    value={data[data.length - 1].interviewResponse ? data[data.length - 1].interviewResponse : data[data.length - 1].interviewRound}
+                    // retriving data added by sahil karnekar
+                    value={formData.interviewRound = data[data.length - 1].interviewResponse ? data[data.length - 1].interviewResponse : data[data.length - 1].interviewRound}
                     onChange={handleInputChange}
+                    style={{
+                      boxShadow: `1px 1px 4px var(--Bg-color)`,
+                      lineHeight:"1",
+                    }}
                   >
                     <option value="">Select interview Round</option>
                     <option value="Shortlisted For Hr Round">
@@ -354,6 +407,9 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                     <option value="Shortlisted For L3 Round">
                     Shortlisted For L3 Round
                     </option>
+                    <option value="Selected">Selected</option>
+                      <option value="Rejected">Rejected</option>
+                      <option value="Hold">Hold</option>
                   </select>
                   {errors.interviewRound && (
                     <div className="error-message">{errors.interviewRound}</div>
@@ -366,6 +422,10 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                     name="interviewRound"
                     value={formData.interviewRound}
                     onChange={handleInputChange}
+                    style={{
+                      boxShadow: `1px 1px 4px var(--Bg-color)`,
+                      lineHeight:"1",
+                    }}
                   >
                     <option value="">Select interview Round</option>
                     <option value="Shortlisted For Hr Round">
@@ -383,6 +443,9 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                     <option value="Shortlisted For L3 Round">
                       L3 Round
                     </option>
+                    <option value="Selected">Selected</option>
+                      <option value="Rejected">Rejected</option>
+                      <option value="Hold">Hold</option>
                   </select>
                   {errors.interviewRound && (
                     <div className="error-message">{errors.interviewRound}</div>
@@ -398,6 +461,10 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                     name="interviewResponse"
                     value={formData.interviewResponse}
                     onChange={handleInputChange}
+                    style={{
+                      boxShadow: `1px 1px 4px var(--Bg-color)`,
+                      lineHeight:"1",
+                    }}
                   >
                     <option value="">Update Response</option>
                     <option value="Shortlisted For Hr Round">
@@ -435,6 +502,10 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                     value={formData.commentForTl}
                     onChange={handleInputChange}
                     placeholder="Enter Comment here..."
+                    style={{
+                      boxShadow: `1px 1px 4px var(--Bg-color)`,
+                      lineHeight:"1",
+                    }}
                   />
                 </td>
                 <td className="p-2">
@@ -444,6 +515,10 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                     name="responseUpdatedDate"
                     value={formData.responseUpdatedDate}
                     onChange={handleInputChange}
+                    style={{
+                      boxShadow: `1px 1px 4px var(--Bg-color)`,
+                      lineHeight:"1",
+                    }}
                   />
                   {errors.responseUpdatedDate && (
                     <div className="error-message">
@@ -458,6 +533,10 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                     name="nextInterviewDate"
                     value={formData.nextInterviewDate}
                     onChange={handleInputChange}
+                    style={{
+                      boxShadow: `1px 1px 4px var(--Bg-color)`,
+                      lineHeight:"1",
+                    }}
                   />
                 </td>
                 <td className="p-2">
@@ -467,6 +546,10 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                     name="nextInterviewTiming"
                     value={formData.nextInterviewTiming}
                     onChange={handleInputChange}
+                    style={{
+                      boxShadow: `1px 1px 4px var(--Bg-color)`,
+                      lineHeight:"1",
+                    }}
                   />
                 </td>
               </tr>

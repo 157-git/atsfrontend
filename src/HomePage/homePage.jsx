@@ -8,7 +8,8 @@ import { Modal } from "react-bootstrap";
 import ColorPicker from "./ColorPicker";
 
 const HomePage = () => {
-  const [chooseColor, setChooseColor] = useState(false);
+  // the showColor implemented instead of choose color by sahil karnekar date 14-11-2024
+  const [showColor, setShowColor] = useState(false);
   const [bgColor, setBgColor] = useState("#ffcb9b");
 
   useEffect(() => {
@@ -21,18 +22,18 @@ const HomePage = () => {
   const handleColorApplied = (color) => {
     setBgColor(color);
     localStorage.setItem("selectedColor", color);
-    setChooseColor(false); // Close the color picker modal when color is applied
+    setShowColor(false); // Close the color picker modal when color is applied
   };
 
   const handleMouseEnter = () => {
     enterTimeout = setTimeout(() => {
-      setChooseColor(true);
+      setShowColor(true);
     }, 300); // Delay in milliseconds
   };
 
   const handleMouseOut = () => {
     clearTimeout(enterTimeout); // Clear timeout if the mouse leaves before the delay
-    setChooseColor(false);
+    setShowColor(false);
   };
   return (
     <div className="bigb">
@@ -42,7 +43,7 @@ const HomePage = () => {
       <div
         style={{
           position: "absolute",
-          backgroundColor: bgColor,
+          backgroundColor: `var(--Bg-color)`,
           width: "100%",
           height: "100vh",
         }}
@@ -100,14 +101,14 @@ const HomePage = () => {
           <div
             className="Choose-color-container"
           >
-            <button className="Choose-Color-Btn" onClick={()=>setChooseColor(true)}>
+            <button className="Choose-Color-Btn" onClick={()=>setShowColor(true)}>
     <i className="fa-solid fa-chevron-right"></i>
     <span>Choose Color</span>
   </button>
           </div>
         </div>
       </div>
-      {chooseColor && (
+      {showColor && (
         <div
           className="bg-black bg-opacity-50 modal show"
           style={{
@@ -127,7 +128,9 @@ const HomePage = () => {
             }}
           >
             <Modal.Body>
-              <ColorPicker onColorApplied={handleColorApplied} />
+              <ColorPicker onColorApplied={handleColorApplied} 
+              setShowColor={setShowColor}
+              />
             </Modal.Body>
           </Modal.Dialog>
         </div>
