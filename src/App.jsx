@@ -79,10 +79,11 @@ const App = () => {
             path="api/ats/157industries/verify"
             element={<CandidateVerification></CandidateVerification>}
           ></Route>
-          <Route
+          {/* this is commented by sahil karnekar please verify it at once before deployment */}
+          {/* <Route
             path="/callingtracker"
             element={<CallingTrackerForm />}
-          ></Route>
+          ></Route> */}
           <Route path="/employee-login" element={<RecruiterPage />} />
           <Route path="/login/:userType" element={<LoginSignup />} />
           <Route
