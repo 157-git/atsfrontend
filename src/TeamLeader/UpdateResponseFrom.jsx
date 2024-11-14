@@ -59,9 +59,9 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
     if (!formData.interviewRound) {
       errors.interviewRound = "Interview Round is required";
     }
-    if (!formData.interviewResponse) {
-      errors.interviewResponse = "Interview Response is required";
-    }
+    // if (!formData.interviewResponse) {
+    //   errors.interviewResponse = "Interview Response is required";
+    // }
     if (!formData.responseUpdatedDate) {
       errors.responseUpdatedDate = "Update Date is required";
     }
@@ -214,7 +214,7 @@ console.log(data);
   return (
     <div className="p-6 bg-white shadow-md rounded-lg max-w-full">
       <div className="mb-4">
-        <h6 className="text-lg font-semibold">Response Update</h6>
+        <h6 className="text-lg font-semibold">{data.length > 0 ? "Update Interview Response" : "Schedule Interview"}</h6>
       </div>
       <form onSubmit={handleSubmit}>
         <div className="overflow-x-auto">
@@ -268,7 +268,7 @@ console.log(data);
                     <select
                       className="form-select w-full border rounded text-xs sm:text-base"
                       name="interviewResponse"
-                      value={response.interviewResponse}
+                      value={response.interviewResponse ? response.interviewResponse : response.interviewRound}
                       onChange={(e) => handleInputChange(e, index)}
                       disabled={index < data.length - 1}
                     >
@@ -330,7 +330,37 @@ console.log(data);
               ))}
               <tr className="border-b">
                 <td className="p-2 text-xs sm:text-base"></td>
+                { data.length > 0 ? (
                 <td className="p-2">
+                  <select
+                    className="form-select w-full border rounded text-xs sm:text-base"
+                    name="interviewRound"
+                    value={data[data.length - 1].interviewResponse ? data[data.length - 1].interviewResponse : data[data.length - 1].interviewRound}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select interview Round</option>
+                    <option value="Shortlisted For Hr Round">
+                    Shortlisted For Hr Round
+                    </option>
+                    <option value="Shortlisted For Technical Round">
+                    Shortlisted For Technical Round
+                    </option>
+                    <option value="Shortlisted For L1 Round">
+                    Shortlisted For L1 Round
+                    </option>
+                    <option value="Shortlisted For L2 Round">
+                    Shortlisted For L2 Round
+                    </option>
+                    <option value="Shortlisted For L3 Round">
+                    Shortlisted For L3 Round
+                    </option>
+                  </select>
+                  {errors.interviewRound && (
+                    <div className="error-message">{errors.interviewRound}</div>
+                  )}
+                </td>
+                ):(
+                  <td className="p-2">
                   <select
                     className="form-select w-full border rounded text-xs sm:text-base"
                     name="interviewRound"
@@ -339,25 +369,29 @@ console.log(data);
                   >
                     <option value="">Select interview Round</option>
                     <option value="Shortlisted For Hr Round">
-                      Shortlisted For Hr Round
+                      Hr Round
                     </option>
                     <option value="Shortlisted For Technical Round">
-                      Shortlisted For Technical Round
+                      Technical Round
                     </option>
                     <option value="Shortlisted For L1 Round">
-                      Shortlisted For L1 Round
+                      L1 Round
                     </option>
                     <option value="Shortlisted For L2 Round">
-                      Shortlisted For L2 Round
+                      L2 Round
                     </option>
                     <option value="Shortlisted For L3 Round">
-                      Shortlisted For L3 Round
+                      L3 Round
                     </option>
                   </select>
                   {errors.interviewRound && (
                     <div className="error-message">{errors.interviewRound}</div>
                   )}
                 </td>
+                )
+              
+              }
+                { data.length > 0 && (
                 <td className="p-2">
                   <select
                     className="form-select w-full border rounded text-xs sm:text-base"
@@ -390,7 +424,9 @@ console.log(data);
                       {errors.interviewResponse}
                     </div>
                   )}
-                </td>
+                </td> 
+                )
+                }
                 <td className="p-2">
                   <input
                     className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
