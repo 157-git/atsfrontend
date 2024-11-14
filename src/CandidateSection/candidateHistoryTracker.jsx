@@ -175,6 +175,8 @@ const CandidateHistoryTracker = () => {
 
     setStartDate(format(start, "yyyy-MM-dd"));
     setEndDate(format(end, "yyyy-MM-dd"));
+    console.log(startDate);
+    console.log(endDate);
   };
 
   const handleCustomStartDateChange = (event) => {
@@ -191,28 +193,28 @@ const CandidateHistoryTracker = () => {
   const selectAllFilters = (event) => {
     if (selectAll) {
       const allFilters = [
-        "communicationRating",
-        "holdingAnyOffers",
-        "sourceNames",
-        "tatCounts",
-        "pickUpAndDrops",
-        "ageGroupCounts",
-        "extraCertification",
-        "maritalStatuses",
-        "genders",
-        "qualifications",
-        "requirementCompanies",
-        "noticePeriods",
-        "companyNames",
-        "experienceYearCounts",
-        "positions",
+        "extraCertificationCounts",
+        "onRoleCounts",
         "distanceCounts",
-        "extraCertifications",
-        "joiningTypeCounts",
-        "Incentive Recruiters",
-        "Last Company",
-        "On Role Third Party",
-        "Salary"
+        "genderCounts",
+        "ageCounts",
+        "jobDesignationCounts",
+        "salaryCounts",
+        "communicationRatingCounts",
+        "lastCompanyCounts",
+        "companyTypeCounts",
+        "sourceNameCounts",
+        "pickUpAndDropCounts",
+        "experienceCounts",
+        "holdingAnyOfferCounts",
+        "tatReportsCounts",
+        "requirementCompanyCounts",
+        "noticePeriodCounts",
+        "incentiveCounts",
+        "qualificationCounts",
+        "maritalStatusCounts",
+        // "On Role Third Party",
+        // "Salary"
       ];
       setSelectedFilters(allFilters);
     } else {
@@ -224,15 +226,16 @@ const CandidateHistoryTracker = () => {
   const fetchData = async () => {
     if (startDate && endDate && openDropdown !== null) {
       try {
-        const response = await axios.get(`${API_BASE_URL}/history-allCounts`, {
+        const response = await axios.get(`http://192.168.1.38:9391/api/calling-trackers/count`, {
           params: {
-            startDate: startDate,
-            endDate: endDate,
-            finalStatus: openDropdown,
+            startDate: "1900-01-01",
+            endDate: "2024-11-13",
+            status: openDropdown,
           },
         });
         console.log("API response:", response.data);
         setData(response.data);
+        console.log(data);
       } catch (error) {
         console.error("Error fetching data from API:", error);
       }
@@ -340,16 +343,21 @@ const CandidateHistoryTracker = () => {
 
       <div className="bhabutton-container">
         {[
+          "Yet To Confirm",
+          "Interview Schedule",
+          "Attending After Some time",
+          "In Process ( Shortlisted )",
           "Selected",
           "Rejected",
           "Hold",
+          "Joining",
+          "Drop Out",
+          "To Join",
           "Joined",
-          "Not joined",
+          "Not Joined",
+          "No Show",
           "Active",
           "Inactive",
-          "Dropout",
-          "Noshow",
-          "Yet to schedule",
         ].map((label) => (
           <div key={label} className="bha-dropdown">
             <button
@@ -421,31 +429,22 @@ const CandidateHistoryTracker = () => {
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="communicationRating"
-                    checked={selectedFilters.includes("communicationRating")}
+                    value="extraCertificationCounts"
+                    checked={selectedFilters.includes("extraCertificationCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  Communication Rating
+                  Extra Certification
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="companyNames"
-                    checked={selectedFilters.includes("companyNames")}
+                    value="onRoleCounts"
+                    checked={selectedFilters.includes("onRoleCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  Company Type
+                  On Role
                 </label>
 
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="positions"
-                    checked={selectedFilters.includes("positions")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Designations
-                </label>
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
@@ -453,43 +452,61 @@ const CandidateHistoryTracker = () => {
                     checked={selectedFilters.includes("distanceCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  Distance ( Company Near Location)
+                  Distance
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="qualifications"
-                    checked={selectedFilters.includes("qualifications")}
+                    value="genderCounts"
+                    checked={selectedFilters.includes("genderCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  Education
+                  Gender
+                </label>
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    value="ageCounts"
+                    checked={selectedFilters.includes("ageCounts")}
+                    onChange={handleFilterChange}
+                  />{" "}
+                  Age
                 </label>
               </div>
               <div className="inner-Candi-History-tracker-div">
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="experienceYearCounts"
-                    checked={selectedFilters.includes("experienceYearCounts")}
+                    value="jobDesignationCounts"
+                    checked={selectedFilters.includes("jobDesignationCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  Experience
+                  Job Designation
                 </label>
 
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="Incentive Recruiters"
-                    checked={selectedFilters.includes("Incentive Recruiters")}
+                    value="salaryCounts"
+                    checked={selectedFilters.includes("salaryCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  Incentive Recruiters
+                  Salary Counts
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="Last Company"
-                    checked={selectedFilters.includes("Last Company")}
+                    value="communicationRatingCounts"
+                    checked={selectedFilters.includes("communicationRatingCounts")}
+                    onChange={handleFilterChange}
+                  />{" "}
+                  Communication Rating
+                </label>
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    value="lastCompanyCounts"
+                    checked={selectedFilters.includes("lastCompanyCounts")}
                     onChange={handleFilterChange}
                   />{" "}
                   Last Company
@@ -497,20 +514,11 @@ const CandidateHistoryTracker = () => {
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="maritalStatuses"
-                    checked={selectedFilters.includes("maritalStatuses")}
+                    value="companyTypeCounts"
+                    checked={selectedFilters.includes("companyTypeCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  Marital Status
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="noticePeriods"
-                    checked={selectedFilters.includes("noticePeriods")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Notice Period
+                  Company Type Counts
                 </label>
               </div>
 
@@ -518,17 +526,17 @@ const CandidateHistoryTracker = () => {
               <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="On Role Third Party"
-                    checked={selectedFilters.includes("On Role Third Party")}
+                    value="sourceNameCounts"
+                    checked={selectedFilters.includes("sourceNameCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  On Role(Third Party)
+                  Source Name
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="pickUpAndDrops"
-                    checked={selectedFilters.includes("pickUpAndDrops")}
+                    value="pickUpAndDropCounts"
+                    checked={selectedFilters.includes("pickUpAndDropCounts")}
                     onChange={handleFilterChange}
                   />{" "}
                   Pick Up and Drop
@@ -536,20 +544,20 @@ const CandidateHistoryTracker = () => {
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="requirementCompanies"
-                    checked={selectedFilters.includes("requirementCompanies")}
+                    value="experienceCounts"
+                    checked={selectedFilters.includes("experienceCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  Requirements
+                  Experience Count
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="Salary"
-                    checked={selectedFilters.includes("Salary")}
+                    value="holdingAnyOfferCounts"
+                    checked={selectedFilters.includes("holdingAnyOfferCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  Salary
+                  Holding Any Offer
                 </label>
                 {/* <label className="checkbox-label">
                   <input
@@ -563,58 +571,58 @@ const CandidateHistoryTracker = () => {
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="sourceNames"
-                    checked={selectedFilters.includes("sourceNames")}
+                    value="tatReportsCounts"
+                    checked={selectedFilters.includes("tatReportsCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  Source Name
+                  TAT Reports
                 </label>
               </div>
               <div className="inner-Candi-History-tracker-div">
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="ageGroupCounts"
-                    checked={selectedFilters.includes("ageGroupCounts")}
+                    value="requirementCompanyCounts"
+                    checked={selectedFilters.includes("requirementCompanyCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  Age
+                  Requirement Company
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="extraCertification"
-                    checked={selectedFilters.includes("extraCertification")}
+                    value="noticePeriodCounts"
+                    checked={selectedFilters.includes("noticePeriodCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  Certification
+                  Notice Period
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="genders"
-                    checked={selectedFilters.includes("genders")}
+                    value="incentiveCounts"
+                    checked={selectedFilters.includes("incentiveCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  Gender
+                  Incentive Counts
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="holdingAnyOffers"
-                    checked={selectedFilters.includes("holdingAnyOffers")}
+                    value="qualificationCounts"
+                    checked={selectedFilters.includes("qualificationCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  Holding Offer Letters
+                  Qualification
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    value="tatCounts"
-                    checked={selectedFilters.includes("tatCounts")}
+                    value="maritalStatusCounts"
+                    checked={selectedFilters.includes("maritalStatusCounts")}
                     onChange={handleFilterChange}
                   />{" "}
-                  TAT Reports
+                  Marital Status
                 </label>
               </div>
             </div>
@@ -650,7 +658,8 @@ const CandidateHistoryTracker = () => {
                     <thead>
                       <tr>
                         <th>{filter}</th>
-                        <th>Count</th>
+                        <th>{openDropdown +" "+ "Count"}</th>
+                        <th>Total Count</th>
                         <th>Percentage</th>
                       </tr>
                     </thead>
@@ -688,7 +697,7 @@ const CandidateHistoryTracker = () => {
                               item.sourceName ||
                               item.reportName ||
                               item.option ||
-                              item.rating ||
+                              item.communicationRating ||
                               item.maritalStatus ||
                               item.gender ||
                               item.qualification ||
@@ -696,27 +705,36 @@ const CandidateHistoryTracker = () => {
                               item.recruiter ||
                               item.noticePeriod ||
                               item.type ||
-                              item.role ||
+                              item.onRole ||
                               item.experienceGroup ||
                               item.skill ||
-                              item.designation ||
+                              item.jobDesignation ||
                               item.salaryRange ||
-                              item.distance ||
+                              item.distanceRange ||
                               item.department ||
                               item.tat ||
                               item.holdingAnyOffer ||
                               item.position ||
                               item.pickUpAndDrop ||
                               item.joiningType ||
-                              item.extraCertification}
+                              item.lastCompany ||
+                              item.companyType ||
+                              item.experienceRange ||
+                              item.extraCertification ||
+                              item.tatReports ||
+                              item.incentiveRange
+                              }
                           </td>
                           <td>
-                            {item.count ||
+                            {item.SelectedCount}
+                          </td>
+                          <td>
+                            {item.totalCount ||
                               item.COUNT ||
                               item.countCallingTracker ||
                               item.candidateCount}
                           </td>
-                          <td>{item.percentage}%</td>
+                          <td>{((item.SelectedCount / item.totalCount)*100).toFixed(2) + " " + "%"}</td>
                         </tr>
                       ))}
                     </tbody>
