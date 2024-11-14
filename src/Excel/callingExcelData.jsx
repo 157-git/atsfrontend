@@ -6,6 +6,9 @@ import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { Modal } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import axios from "../api/api";
+import { toast } from "react-toastify";
 
 const CallingExcelList = ({
   updateState,
@@ -33,6 +36,9 @@ const CallingExcelList = ({
   const [showModal, setShowModal] = useState();
   const [loading, setLoading] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const [showResumeModal, setShowResumeModal] = useState(false);
+  const [selectedCandidateResume, setSelectedCandidateResume] = useState("");
 
   const { employeeId, userType } = useParams();
   const employeeIdw = parseInt(employeeId);
@@ -470,6 +476,70 @@ const CallingExcelList = ({
     setSelectedCandidate(null);
   };
 
+  const openResumeModal = (byteCode) => {
+    setSelectedCandidateResume(byteCode);
+    setShowResumeModal(true);
+  };
+
+  const closeResumeModal = () => {
+    setSelectedCandidateResume("");
+    setShowResumeModal(false);
+  };
+
+  
+  const convertToDocumentLink = (byteCode, fileName) => {
+    if (byteCode) {
+      try {
+        const fileType = fileName.split(".").pop().toLowerCase();
+
+        if (fileType === "pdf") {
+          const binary = atob(byteCode);
+          const array = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) {
+            array[i] = binary.charCodeAt(i);
+          }
+          const blob = new Blob([array], { type: "application/pdf" });
+          return URL.createObjectURL(blob);
+        }
+
+        if (fileType === "docx") {
+          const binary = atob(byteCode);
+          const array = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) {
+            array[i] = binary.charCodeAt(i);
+          }
+          const blob = new Blob([array], {
+            type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          });
+          return URL.createObjectURL(blob);
+        }
+
+        console.error(`Unsupported document type: ${fileType}`);
+        return "Unsupported Document";
+      } catch (error) {
+        console.error("Error converting byte code to document:", error);
+        return "Invalid Document";
+      }
+    }
+    return "Document Not Found";
+  };
+
+
+  const handleMergeResumes = async () => {
+    try {
+      const response = await axios.put(`${API_BASE_URL}/merge-resumes`);
+      if (response.status === 200) {
+        console.log('Resumes merged successfully!');
+        toast.success("Resumes merged successfully");
+      } else {
+        console.log('Error merging resumes:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error merging resumes:', error);
+    }
+  };
+
+
   return (
     <div className="App-after1">
       {loading ? (
@@ -502,9 +572,12 @@ const CallingExcelList = ({
                   )}
                 </div>
                 <h1 className="excel-calling-data-heading">Excel Data</h1>
-                <button onClick={toggleFilterSection} className="daily-tr-btn">
+               <div style={{display:"flex",gap:"5px"}}>
+               <button onClick={toggleFilterSection} className="daily-tr-btn">
                   Filter <i className="fa-solid fa-filter"></i>
                 </button>
+      <button className="daily-tr-btn" onClick={handleMergeResumes}>Merge Resumes</button>
+               </div>
               </div>
 
               {showFilterSection && (
@@ -616,6 +689,7 @@ const CallingExcelList = ({
                       <th className="attendanceheading">Designation</th>
                       <th className="attendanceheading">Experience</th>
                       <th className="attendanceheading">Company Name</th>
+                      <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">Full Data</th>
                       <th className="attendanceheading">Action</th>
                     </tr>
@@ -710,6 +784,16 @@ const CallingExcelList = ({
                             </span>
                           </div>
                         </td>
+
+                        <td className="tabledata">
+                          <button
+                            className="table-icon-div"
+                            onClick={() => openResumeModal(item.resume)}
+                          >
+                            <i className="fas fa-eye"></i>
+                          </button>
+                        </td>
+
                         <td   className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
@@ -734,6 +818,37 @@ const CallingExcelList = ({
                     ))}
                   </tbody>
                 </table>
+              </div>
+              <div>
+                <Modal
+                  show={showResumeModal}
+                  onHide={closeResumeModal}
+                  size="md"
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>Resume</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    {selectedCandidateResume ? (
+                      <iframe
+                        src={convertToDocumentLink(
+                          selectedCandidateResume,
+                          "Resume.pdf"
+                        )}
+                        width="100%"
+                        height="550px"
+                        title="PDF Viewer"
+                      ></iframe>
+                    ) : (
+                      <p>No resume available</p>
+                    )}
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={closeResumeModal}>
+                      Close
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
               </div>
             </div>
           )}
