@@ -269,3 +269,25 @@
   font-size: 16px;
 }
 
+
+/* Arshad Added CSS ON 15-11-2024 */
+/* Style for the container */
+.search-input-div {
+  border-radius: 15px;
+  width: 250px; /* Start width */
+  max-width: 600px; /* Maximum width it can expand to */
+  transition: width 0.3s ease; /* Smooth transition when width changes */
+  display: inline-block;
+  border: 1px solid black;
+}
+
+/* Style for the input */
+.search-input {
+  width: 100%; /* Input takes full width of the container */
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  box-sizing: border-box; /* Include padding and border in element's total width */
+  outline: none;
+  font-size: 14px;
+  max-width: 600px;
+}

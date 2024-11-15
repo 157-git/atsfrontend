@@ -262,10 +262,11 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
         : [...prev[key], value], // Select the value
     }));
   };
+
+  
   const applyFilters = () => {
     const lowerSearchTerm = searchTerm.toLowerCase();
     let filteredResults = data.filter((item) => {
-      // Apply search term filtering first
       return (
         item.candidateName?.toLowerCase().includes(lowerSearchTerm) ||
         item.candidateEmail?.toLowerCase().includes(lowerSearchTerm) ||
@@ -705,10 +706,15 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
 
                         <td className="tabledata">
                           <button
-                          
                             onClick={() => openResumeModal(item.resume)}
+                            style={{ background: "none", border: "none" }}
                           >
-                            <i className="fas fa-eye"></i>
+                            <i
+                              className="fas fa-eye"
+                              style={{
+                                color: item.resume ? "green" : "inherit",
+                              }}
+                            ></i>
                           </button>
                         </td>
 
