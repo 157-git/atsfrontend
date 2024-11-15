@@ -1418,7 +1418,7 @@ const LineUpList = ({
 
                           <td className="tabledata">
                             <button
-                              className="table-icon-div"
+                          
                               onClick={() => openResumeModal(item.resume)}
                             >
                               <i className="fas fa-eye"></i>

@@ -681,6 +681,7 @@ const CallingList = ({
     XLSX.utils.book_append_sheet(wb, ws, "LineUp List");
     XLSX.writeFile(wb, "LineUp_list.xlsx");
   };
+
   const showPopup = () => {
     setShowExportConfirmation(true);
     document.querySelector(".calling-list-container").classList.add("blurred");
@@ -1435,7 +1436,7 @@ const CallingList = ({
                   Date:-02/07 */}
                           <td className="tabledata">
                             <button
-                              className="table-icon-div"
+                             
                               onClick={() => openResumeModal(item.resume)}
                             >
                               <i className="fas fa-eye"></i>

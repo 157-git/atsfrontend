@@ -214,11 +214,8 @@
         html::-webkit-scrollbar{
           display: none;
         }  
-        .attendancerows i{
-          font-size: 15px;
-          color: grey;
-          margin-left: 15px;
-        }
+
+      
       
         .attendanceTableData h3{
           color: grey;

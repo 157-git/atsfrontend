@@ -1068,7 +1068,7 @@ const handleFilterSelect = (key, value) => {
                   Date:-02/07 */}
                         <td className="tabledata">
                           <button
-                            className="table-icon-div"
+                        
                             onClick={() => openResumeModal(item.resume)}
                           >
                             <i className="fas fa-eye"></i>

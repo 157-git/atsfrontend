@@ -4,17 +4,13 @@ import "../Excel/resumeList.css";
 import { useParams } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { API_BASE_URL } from "../api/api";
-{
-  /* this line added by sahil date 22-10-2024 */
-}
+{/* this line added by sahil date 22-10-2024 */}
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import Loader from "../EmployeeSection/loader";
 import { parse } from "date-fns";
-{
-  /* this line added by sahil date 22-10-2024 */
-}
-const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
+{/* this line added by sahil date 22-10-2024 */}
+const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -35,7 +31,7 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${API_BASE_URL}/fetch-resumes-data/${employeeId}/${userType}`
+          `${API_BASE_URL}/share-profile-count-data`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -78,82 +74,6 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
     if (tooltip) {
       tooltip.style.visibility = "hidden";
     }
-  };
-
-  //Swapnil_Rokade_ResumeList_columnsToInclude_columnsToExclude_18/07/2024//
-  const handleExportToExcel = () => {
-    const columnsToInclude = [
-      "No.",
-      "Candidate's Name",
-      "Contact Number",
-      "Alternate Number",
-      "Candidate Email",
-      "Education",
-      "Experience",
-      "Current Location",
-    ];
-
-    const dataToExport = data.map((item, index) => {
-      const filteredItem = {
-        "No.": index + 1,
-        "Candidate's Name": item.candidateName || "-",
-        "Contact Number": item.phone || "-",
-        "Alternate Number": item.phone || "-",
-        "Candidate Email": item.email || "-",
-        Education: item.education || "-",
-        Experience: item.experience || "-",
-        "Current Location": item.location || "-",
-      };
-      return filteredItem;
-    });
-
-    const ws = XLSX.utils.json_to_sheet(dataToExport, {
-      header: columnsToInclude,
-    });
-
-    const headerRange = XLSX.utils.decode_range(ws["!ref"]);
-    for (let C = headerRange.s.c; C <= headerRange.e.c; ++C) {
-      const cell = ws[XLSX.utils.encode_cell({ r: headerRange.s.r, c: C })];
-      if (cell) {
-        cell.s = {
-          font: {
-            bold: true,
-            color: { rgb: "000000" },
-            sz: 20,
-          },
-          fill: {
-            patternType: "solid",
-            fgColor: { rgb: "FF0000" }, // Red background
-          },
-        };
-      }
-    }
-    // Save the Excel file
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Resume List");
-    XLSX.writeFile(wb, "ResumeList.xlsx");
-  };
-
-  const showPopup = () => {
-    setShowExportConfirmation(true);
-    document.querySelector(".calling-list-container").classList.add("blurred");
-  };
-
-  const hidePopup = () => {
-    setShowExportConfirmation(false);
-    document
-      .querySelector(".calling-list-container")
-      .classList.remove("blurred");
-  };
-
-  const confirmExport = () => {
-    setShowExportConfirmation(false);
-    handleExportToExcel();
-    hidePopup();
-  };
-
-  const cancelExport = () => {
-    hidePopup();
   };
 
   const handleUpdate = (candidateData) => {
@@ -310,12 +230,10 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   const formatToIndianTime = (dateString) => {
     // Parse the custom format "dd-MM-yyyy h:mm a"
     const date = parse(dateString, "dd-MM-yyyy h:mm a", new Date());
-
     // Check if the parsed date is valid
     if (isNaN(date)) {
       return "Invalid Date";
     }
-
     // Format the date to Indian Time (IST)
     const indianOffset = 5.5 * 60; // IST offset in minutes
     const utcOffset = date.getTimezoneOffset();
@@ -369,7 +287,7 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                       />
                     )}
                   </div>
-                  <h1 className="resume-data-heading">Resume Data </h1>
+                  <h1 className="resume-data-heading">Shared Profile Data</h1>
                   <div className="rl-btn-div">
                     <button
                       style={{ marginRight: "20px" }}
@@ -378,11 +296,11 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                     >
                       Filter <i className="fa-solid fa-filter"></i>
                     </button>
-                    {(userType === "Manager" || userType === "TeamLeader") && (
-                      <button className="lineUp-share-btn" onClick={showPopup}>
+                    {/* {(userType === "Manager" || userType === "TeamLeader") && (
+                      <button className="lineUp-share-btn" >
                         Create Excel
                       </button>
-                    )}
+                    )} */}
 
                     {showExportConfirmation && (
                       <div className="popup-containers">
@@ -503,27 +421,32 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                       className="attendancerows-head"
                       style={{ position: "sticky" }}
                     >
-                      <th className="attendanceheading">Sr No</th>
-                      <th className="attendanceheading"> Resume Upload Date</th>
-                      <th className="attendanceheading">Candidate Name</th>
-                      <th className="attendanceheading">Candidate Email</th>
-                      <th className="attendanceheading">Gender</th>
-                      <th className="attendanceheading">Date Of Birth</th>
-                      <th className="attendanceheading">Contact Number</th>
-                      <th className="attendanceheading">Job Designation</th>
-                      <th className="attendanceheading">Last Company</th>
-                      <th className="attendanceheading">Relevant Experience</th>
-                      <th className="attendanceheading">Education</th>
-                      <th className="attendanceheading">Extra Certification</th>
-                      <th className="attendanceheading">Current Location</th>
-                      <th className="attendanceheading">Resume</th>
+                      <th className="attendanceheading">No</th>
+                      <th className="attendanceheading">Company Name</th>
+                      <th className="attendanceheading">Job Id</th>
+                      <th className="attendanceheading">Designation</th>
+                      <th className="attendanceheading">Receiver E-Mail</th>
+                      <th className="attendanceheading">Sender E-Mail</th>
+                      <th className="attendanceheading">Mail Send Date</th>
 
-                      <th className="attendanceheading">Action</th>
+                      <th className="attendanceheading">Total Sent Profiles</th>
+                      <th className="attendanceheading">Selected Profiles</th>
+                      <th className="attendanceheading">Rejected Profiles</th>
+                      <th className="attendanceheading">Pending Profiles</th>
+                      <th className="attendanceheading">Hold Profile</th>
+                      <th className="attendanceheading">No Response</th>
+
+                      <th className="attendanceheading">Profiles In Process</th>
+                      <th className="attendanceheading">Selected Candidate</th>
+                      <th className="attendanceheading">Rejected Candidate</th>
+                      <th className="attendanceheading">Hold Candidate</th>
+
+                      {/* <th className="attendanceheading">Action</th> */}
                     </tr>
                   </thead>
                   <tbody>
                     {filteredData.map((item, index) => (
-                      <tr key={item.candidateId} className="attendancerows">
+                      <tr className="attendancerows">
                         <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
@@ -536,114 +459,11 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                         </td>
 
                         <td
-                          style={{ paddingLeft: "3px", position: "relative" }}
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {formatToIndianTime(item.resumeUploadDate)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {formatToIndianTime(item.resumeUploadDate)}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td
-                          hidden
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.candidateId}{" "}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.candidateId}
-                            </span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.candidateName}{" "}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.candidateName}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.candidateEmail}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.candidateEmail}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.gender}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.gender}</span>
-                          </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.dateOfBirth}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.dateOfBirth}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.contactNumber}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.contactNumber}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.jobDesignation}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.jobDesignation}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.companyName}
+                          {item.companyName}{" "}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {item.companyName}
@@ -656,10 +476,10 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.relevantExperience}
+                          {item.requirementId}{" "}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.relevantExperience}
+                              {item.requirementId}
                             </span>
                           </div>
                         </td>
@@ -669,10 +489,10 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.qualification}
+                          {item.designation}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.qualification}
+                              {item.designation}
                             </span>
                           </div>
                         </td>
@@ -682,10 +502,21 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.extraCertification}
+                          {item.receiverCompanyMail}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.receiverCompanyMail}</span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.senderEmailId}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.extraCertification}
+                              {item.senderEmailId}
                             </span>
                           </div>
                         </td>
@@ -695,15 +526,145 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.currentLocation}
+                          {item.mailSendDate}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.currentLocation}
+                              {item.mailSendDate}
                             </span>
                           </div>
                         </td>
 
-                        <td className="tabledata">
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.profileSentCount}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.profileSentCount}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.profileSelected}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.profileSelected}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.profileRejected}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.profileRejected}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.profilePending}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.profilePending}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.profileOnHold}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.profileOnHold}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.noResponse}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.noResponse}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.inProcessCount}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.inProcessCount}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.selectedCount}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.selectedCount}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.rejectedCount}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.rejectedCount}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.holdCount}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.holdCount}
+                            </span>
+                          </div>
+                        </td>
+
+                        {/* <td className="tabledata">
                           <button
                           
                             onClick={() => openResumeModal(item.resume)}
@@ -720,7 +681,8 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                             onClick={() => handleUpdate(item)}
                             className="fa-regular fa-pen-to-square"
                           ></i>
-                        </td>
+                        </td> */}
+
                       </tr>
                     ))}
                   </tbody>
@@ -776,4 +738,4 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   );
 };
 
-export default ResumeList;
+export default ShareProfileData;

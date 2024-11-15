@@ -1339,7 +1339,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                   Date:-02/07 */}
                         <td className="tabledata">
                           <button
-                             className="table-icon-div"
+                           
                             onClick={() => openResumeModal(item.resume)}
                           >
                             <i className="fas fa-eye"></i>
