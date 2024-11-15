@@ -236,9 +236,12 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                 <th className="p-2 font-semibold text-xs sm:text-base">
                   Interview Round
                 </th>
-                <th className="p-2 font-semibold text-xs sm:text-base">
+                {data.length > 0 && (
+                  <th className="p-2 font-semibold text-xs sm:text-base">
                   Interview Response
                 </th>
+                )}
+                
                 <th className="p-2 font-semibold text-xs sm:text-base">
                   Comment for TL
                 </th>
@@ -246,7 +249,7 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                   Update Date
                 </th>
                 <th className="p-2 font-semibold text-xs sm:text-base">
-                  Next Interview Date
+                  Interview Date
                 </th>
                 <th className="p-2 font-semibold text-xs sm:text-base">
                   Interview Time
