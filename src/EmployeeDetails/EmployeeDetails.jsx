@@ -262,12 +262,18 @@ const EmployeeDetails = () => {
                       </td>
 
                       <td className="tabledata">
-                        <button
-                          onClick={() => openResumeModal(employee.resume)}
-                        >
-                          <i className="fas fa-eye"></i>
-                        </button>
-                      </td>
+                          <button
+                            onClick={() => openResumeModal(employee.resume)}
+                            style={{ background: "none", border: "none" }}
+                          >
+                            <i
+                              className="fas fa-eye"
+                              style={{
+                                color: employee.resume ? "green" : "inherit",
+                              }}
+                            ></i>
+                          </button>
+                        </td>
 
                       <td
                         className="tabledata"

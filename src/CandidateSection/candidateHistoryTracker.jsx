@@ -175,8 +175,6 @@ const CandidateHistoryTracker = () => {
 
     setStartDate(format(start, "yyyy-MM-dd"));
     setEndDate(format(end, "yyyy-MM-dd"));
-    console.log(startDate);
-    console.log(endDate);
   };
 
   const handleCustomStartDateChange = (event) => {
@@ -225,17 +223,22 @@ const CandidateHistoryTracker = () => {
 
   const fetchData = async () => {
     if (startDate && endDate && openDropdown !== null) {
+      console.log(startDate + "--------- 01");
+      console.log(endDate + "--------- 02");
+      console.log(openDropdown + "--------- 03");
+      
       try {
-        const response = await axios.get(`http://192.168.1.38:9391/api/calling-trackers/count`, {
+        const response = await axios.get(`${API_BASE_URL}/candidate-history-tracker`, {
           params: {
-            startDate: "1900-01-01",
-            endDate: "2024-11-13",
+            startDate: startDate,
+            endDate: endDate,
             status: openDropdown,
           },
         });
-        console.log("API response:", response.data);
+        console.log(startDate + "--------- After API 01");
+        console.log(endDate + "--------- After API 02");
+        console.log(openDropdown + "--------- After API 03");
         setData(response.data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching data from API:", error);
       }
@@ -726,13 +729,17 @@ const CandidateHistoryTracker = () => {
                               }
                           </td>
                           <td>
-                            {item.SelectedCount}
+                            {/* This td for 2nd column  */}
+                            {item.SelectedCount ||
+                            item.InterviewScheduleCount}
                           </td>
                           <td>
+                            {/* this td for total count */}
                             {item.totalCount ||
                               item.COUNT ||
                               item.countCallingTracker ||
-                              item.candidateCount}
+                              item.candidateCount ||
+                              item.InterviewScheduleCount}
                           </td>
                           <td>{((item.SelectedCount / item.totalCount)*100).toFixed(2) + " " + "%"}</td>
                         </tr>

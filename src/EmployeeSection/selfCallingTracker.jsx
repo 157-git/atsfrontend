@@ -1434,14 +1434,19 @@ const CallingList = ({
                           {/* Name:-Akash Pawar Component:-LineUpList
                   Subcategory:-ResumeViewButton(added) start LineNo:-993
                   Date:-02/07 */}
-                          <td className="tabledata">
-                            <button
-                             
-                              onClick={() => openResumeModal(item.resume)}
-                            >
-                              <i className="fas fa-eye"></i>
-                            </button>
-                          </td>
+                           <td className="tabledata">
+                          <button
+                            onClick={() => openResumeModal(item.resume)}
+                            style={{ background: "none", border: "none" }}
+                          >
+                            <i
+                              className="fas fa-eye"
+                              style={{
+                                color: item.resume ? "green" : "inherit",
+                              }}
+                            ></i>
+                          </button>
+                        </td>
                           {/* Name:-Akash Pawar Component:-LineUpList
                   Subcategory:-ResumeViewButton(added) End LineNo:-1005
                   Date:-02/07 */}
