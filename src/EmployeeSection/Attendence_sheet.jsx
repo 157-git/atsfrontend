@@ -677,7 +677,7 @@ const handleFilterOptionClick = (key) => {
                 <div className="PI-dropdown-content">
                   {userType === "SuperUser" && renderManagers()}
                   {userType === "Manager" && renderTeamLeaders(employeeId)}
-                  {userType === "TeamLeader" && renderRecruiters(employeeId)}
+                  {userType === "TeamLeader" && rendeccrRecruiters(employeeId)}
 
 
                   <button
