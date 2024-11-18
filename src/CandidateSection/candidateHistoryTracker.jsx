@@ -26,6 +26,8 @@ const CandidateHistoryTracker = () => {
   const [dateRange, setDateRange] = useState("");
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
+  // state created by sahil karnekar date 18-11-2024
+  const [displayShowButtons, setDisplayShowButtons] = useState(false);
 
   const popupRef = useRef();
 
@@ -147,27 +149,35 @@ const CandidateHistoryTracker = () => {
 
     switch (selectedRange) {
       case "Current Month":
+        // implemented by sahil karnekar to toggle status dive date 18-11-2024
+        setshowCustomDiv(false);
         start = startOfMonth(today);
         end = today;
         break;
       case "Last Month":
+        setshowCustomDiv(false);
         start = startOfMonth(subMonths(today, 1));
         end = endOfMonth(subMonths(today, 1));
         break;
       case "Last 3 Months":
+        setshowCustomDiv(false);
         start = startOfMonth(subMonths(today, 2));
         end = endOfMonth(today);
         break;
       case "Last 6 Months":
+        setshowCustomDiv(false);
         start = startOfMonth(subMonths(today, 5));
         end = endOfMonth(today);
         break;
       case "Last 1 Year":
+        setshowCustomDiv(false);
         start = startOfMonth(subYears(today, 1));
         end = today;
+        console.log(start, end);
         break;
       case "custom":
         // Don't set dates for custom option
+        setshowCustomDiv(true);
         return;
       default:
         return;
@@ -175,18 +185,23 @@ const CandidateHistoryTracker = () => {
 
     setStartDate(format(start, "yyyy-MM-dd"));
     setEndDate(format(end, "yyyy-MM-dd"));
+    console.log(startDate);
+    console.log(endDate);
   };
-
+  console.log(startDate);
+  console.log(endDate);
   const handleCustomStartDateChange = (event) => {
     const date = new Date(event.target.value);
     setCustomStartDate(event.target.value);
-    setStartDate(format(startOfDay(date), "yyyy-MM-dd"));
+    // updated by sahil karnekar dat 18-11-2024
+    setStartDate(format(date, "yyyy-MM-dd"));
   };
 
   const handleCustomEndDateChange = (event) => {
     const date = new Date(event.target.value);
     setCustomEndDate(event.target.value);
-    setEndDate(format(endOfDay(date), "yyyy-MM-dd"));
+    // updated by sahil karnekar dat 18-11-2024
+    setEndDate(format(date, "yyyy-MM-dd"));
   };
   const selectAllFilters = (event) => {
     if (selectAll) {
@@ -221,12 +236,58 @@ const CandidateHistoryTracker = () => {
     setSelectAll(!selectAll);
   };
 
+// conditional case created by sahil karnekar date 18-11-2024
+
+  const getDisplayName = (filter) => {
+    switch (filter) {
+      case "extraCertificationCounts":
+        return "Extra Certification";
+      case "onRoleCounts":
+        return "On Role";
+      case "distanceCounts":
+        return "Distance";
+      case "genderCounts":
+        return "Gender";
+      case "ageCounts":
+        return "Age";
+      case "jobDesignationCounts":
+        return "Job Designation";
+      case "salaryCounts":
+        return "Salary";
+      case "communicationRatingCounts":
+        return "Communication Rating";
+      case "lastCompanyCounts":
+        return "Last Company";
+      case "companyTypeCounts":
+        return "Company Type";
+      case "sourceNameCounts":
+        return "Source Name";
+      case "pickUpAndDropCounts":
+        return "Pick Up and Drop";
+      case "experienceCounts":
+        return "Experience";
+      case "holdingAnyOfferCounts":
+        return "Holding Any Offer";
+      case "tatReportsCounts":
+        return "TAT Reports";
+      case "requirementCompanyCounts":
+        return "Requirement Company";
+      case "noticePeriodCounts":
+        return "Notice Period";
+      case "incentiveCounts":
+        return "Incentive";
+      case "qualificationCounts":
+        return "Qualification";
+      case "maritalStatusCounts":
+        return "Marital Status";
+      default:
+        return filter; // if no match, return the filter name itself
+    }
+  };
+  
+
   const fetchData = async () => {
     if (startDate && endDate && openDropdown !== null) {
-      console.log(startDate + "--------- 01");
-      console.log(endDate + "--------- 02");
-      console.log(openDropdown + "--------- 03");
-      
       try {
         const response = await axios.get(`${API_BASE_URL}/candidate-history-tracker`, {
           params: {
@@ -235,10 +296,9 @@ const CandidateHistoryTracker = () => {
             status: openDropdown,
           },
         });
-        console.log(startDate + "--------- After API 01");
-        console.log(endDate + "--------- After API 02");
-        console.log(openDropdown + "--------- After API 03");
+        console.log("API response:", response.data);
         setData(response.data);
+        console.log(data);
       } catch (error) {
         console.error("Error fetching data from API:", error);
       }
@@ -343,17 +403,30 @@ const CandidateHistoryTracker = () => {
           )}
         </div>
       </div>
-
-      <div className="bhabutton-container">
+      {/* LINE 356 to 403 updated by sahil karnekar dat 18-11-2024 */}
+<div className="centerbuttonContainer">
+  <div className="statusDiv"
+  style={{display:"flex",justifyContent:"end",marginRight:"20px"}}
+  onClick={() => setDisplayShowButtons(!displayShowButtons)
+    
+  }
+  > <div className="adjustStatusDiv">Status <svg className={`svgimgstatusicon ${
+    displayShowButtons ? "rotate" : ""
+  }`} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M480-360 280-560h400L480-360Z"/></svg></div></div>
+     {displayShowButtons && ( 
+      <div className="setNewButtonsClass">
+      <div className={`bhabutton-container ${
+          displayShowButtons ? "show" : ""
+        }`}>
         {[
           "Yet To Confirm",
           "Interview Schedule",
           "Attending After Some time",
-          "In Process ( Shortlisted )",
+          "Shortlisted",
           "Selected",
           "Rejected",
           "Hold",
-          "Joining",
+          // "Joining",
           "Drop Out",
           "To Join",
           "Joined",
@@ -374,7 +447,10 @@ const CandidateHistoryTracker = () => {
           </div>
         ))}
       </div>
-
+      </div>
+)}
+      </div>
+      
       {openDropdown && (
         <div className="Candi-History-tracker-div">
           <div className="history-filtter-data-div">
@@ -395,7 +471,7 @@ const CandidateHistoryTracker = () => {
                 </button>
               )}
             </div>
-            <div className="company-position-container">
+            {/* <div className="company-position-container">
               <div className="combobox-container">
                 <select value={companyName} onChange={handleCompanyChange}>
                   <option value="">Select Company</option>
@@ -410,7 +486,7 @@ const CandidateHistoryTracker = () => {
                   <option value="Designer">Designer</option>
                 </select>
               </div>
-            </div>
+            </div> */}
 
             <div className="">
               {selectedFilters.length > 0 && (
@@ -646,13 +722,16 @@ const CandidateHistoryTracker = () => {
             .slice(0, 6);
           const hasMoreItems = setData.length > 6;
 
+          // added by sahil karnekar
+          const displayName = getDisplayName(filter);
+
           return (
             <div className="can-history-filter-data" key={filter}>
               <div className="history-tracker-table-header">
                <p> <strong>Company Name :</strong> {companyName}</p>
                <p> <strong>Position :</strong> {position}</p>
                <p><strong>Category :</strong> {openDropdown}</p>
-               <p><strong>Filtered Data by :</strong> {filter}</p>
+               <p><strong>Filtered Data by :</strong> {displayName}</p>
                {/* <p> <strong>Data for : - </strong> {monthSelector}</p> */}
               </div>
               <div className="can-history-filter-data-content">
@@ -660,39 +739,60 @@ const CandidateHistoryTracker = () => {
                   <table className="can-history-data-table">
                     <thead>
                       <tr>
-                        <th>{filter}</th>
+                        <th>{displayName}</th>
                         <th>{openDropdown +" "+ "Count"}</th>
                         <th>Total Count</th>
                         <th>Percentage</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {calculatePercentages(sortedData).map((item) => (
-                        <tr
-                          key={
-                            item.companyName ||
-                            item.ageRange ||
-                            item.sourceName ||
-                            item.certification ||
-                            item.reportName ||
-                            item.option ||
-                            item.rating ||
-                            item.maritalStatuses ||
-                            item.gender ||
-                            item.degree ||
-                            item.requirement ||
-                            item.recruiter ||
-                            item.period ||
-                            item.type ||
-                            item.role ||
-                            item.experience ||
-                            item.skill ||
-                            item.designation ||
-                            item.salaryRange ||
-                            item.distance ||
-                            item.department ||
-                            item.extraCertification
-                          }
+                      {/* updated by sahil karnekar date 18-11-2024 */}
+                      {calculatePercentages(sortedData).map((item,index) => (
+                       (((item.gender !== '' && item.gender !== null) 
+                       && (item.communicationRating !== '' && item.communicationRating !== null) 
+                       && (item.companyType !== '' && item.companyType !== null) 
+                       && (item.distanceRange !== '' && item.distanceRange !== null) 
+                       && (item.extraCertification !== '' && item.extraCertification !== null) 
+                       && (item.holdingAnyOffer !== '' && item.holdingAnyOffer !== null) 
+                       && (item.incentiveRange !== '' && item.incentiveRange !== null) 
+                       && (item.jobDesignation !== '' && item.jobDesignation !== null) 
+                       && (item.lastCompany !== '' && item.lastCompany !== null) 
+                       && (item.maritalStatus !== '' && item.maritalStatus !== null) 
+                       && (item.onRole !== '' && item.onRole !== null) 
+                       && (item.pickUpAndDrop !== '' && item.pickUpAndDrop !== null) 
+                       && (item.qualification !== '' && item.qualification !== null) 
+                       && (item.requirementCompany !== '' && item.requirementCompany !== null) 
+                       && (item.salaryRange !== '' && item.salaryRange !== null) 
+                       && (item.sourceName !== '' && item.sourceName !== null) 
+                       && (item.tatReports !== '' && item.tatReports !== null) 
+          
+                      ) && (
+                       <tr
+                       key={index}
+                          // key={
+                          //   item.companyName ||
+                          //   item.ageRange ||
+                          //   item.sourceName ||
+                          //   item.certification ||
+                          //   item.reportName ||
+                          //   item.option ||
+                          //   item.rating ||
+                          //   item.maritalStatuses ||
+                          //   item.gender ||
+                          //   item.degree ||
+                          //   item.requirement ||
+                          //   item.recruiter ||
+                          //   item.period ||
+                          //   item.type ||
+                          //   item.role ||
+                          //   item.experience ||
+                          //   item.skill ||
+                          //   item.designation ||
+                          //   item.salaryRange ||
+                          //   item.distance ||
+                          //   item.department ||
+                          //   item.extraCertification
+                          // }
                         >
                           <td>
                             {item.companyName ||
@@ -729,20 +829,63 @@ const CandidateHistoryTracker = () => {
                               }
                           </td>
                           <td>
-                            {/* This td for 2nd column  */}
-                            {item.SelectedCount ||
-                            item.InterviewScheduleCount}
-                          </td>
+                            {/* updated by sahil karnekar date 18-11-2024 */}
+  {item.SelectedCount ??
+    item.YetToConfirmCount ??
+    item.InterviewScheduleCount ??
+    item.AttendingAfterSometimeCount ??
+    item.RejectedCount ??
+    item.HoldCount ??
+    item.DropOutCount ??
+    item.ToJoinCount ??
+    item.JoinedCount ??
+    item.NotJoinedCount ??
+    item.NoShowCount ??
+    item.ActiveCount ??
+    item.InactiveCount ??
+    item.ShortlistedCount
+    }
+</td>
+
+
                           <td>
-                            {/* this td for total count */}
                             {item.totalCount ||
                               item.COUNT ||
                               item.countCallingTracker ||
-                              item.candidateCount ||
-                              item.InterviewScheduleCount}
+                              item.candidateCount}
                           </td>
-                          <td>{((item.SelectedCount / item.totalCount)*100).toFixed(2) + " " + "%"}</td>
-                        </tr>
+                          <td>
+                            {/* updated by sahil karnekar date 18-11-2024 */}
+  {(() => {
+    // Array of all possible fields
+    const fields = [
+      item.SelectedCount,
+      item.YetToConfirmCount,
+      item.InterviewScheduleCount,
+      item.AttendingAfterSometimeCount,
+      item.RejectedCount,
+      item.HoldCount,
+      item.DropOutCount,
+      item.ToJoinCount,
+      item.JoinedCount,
+      item.NotJoinedCount,
+      item.NoShowCount,
+      item.ActiveCount,
+      item.InactiveCount,
+    ];
+
+    // Find the first non-null or non-undefined value
+    const firstNonNullValue = fields.find((value) => value != null) ?? 0;
+
+    // Calculate percentage
+    const percentage = ((firstNonNullValue / (item.totalCount ?? 1)) * 100).toFixed(2);
+
+    // Return percentage with a fallback for empty data
+    return item.totalCount ? `${percentage} %` : "N/A";
+  })()}
+</td>
+
+                        </tr>))
                       ))}
                     </tbody>
                   </table>
@@ -761,6 +904,7 @@ const CandidateHistoryTracker = () => {
         })}
       </div>
       {popupData && (
+        
         <div className="can-history-popup">
           <div className="can-history-popup-content" ref={popupRef}>
             <button
@@ -770,80 +914,152 @@ const CandidateHistoryTracker = () => {
               ×
             </button>
             <h3>
-              <strong>{popupData.filter}</strong>
+              <strong>{getDisplayName(popupData.filter)}</strong>
             </h3>
             <table className="can-history-data-table">
               <thead>
                 <tr>
-                  <th>{popupData.filter}</th>
-                  <th>Count</th>
+                  <th>{getDisplayName(popupData.filter)}</th>
+                  <th>{openDropdown +" "+ "Count"}</th>
+                  <th>Total Count</th>
                   <th> Percentage</th>
                 </tr>
               </thead>
               <tbody>
-                {popupData.data.map((item) => (
+                {/* updated by sahil karnekar date 18-11-2024 */}
+                {popupData.data.map((item,index) => (
+                   (((item.gender !== '' && item.gender !== null) 
+                   && (item.communicationRating !== '' && item.communicationRating !== null) 
+                   && (item.companyType !== '' && item.companyType !== null) 
+                   && (item.distanceRange !== '' && item.distanceRange !== null) 
+                   && (item.extraCertification !== '' && item.extraCertification !== null) 
+                   && (item.holdingAnyOffer !== '' && item.holdingAnyOffer !== null) 
+                   && (item.incentiveRange !== '' && item.incentiveRange !== null) 
+                   && (item.jobDesignation !== '' && item.jobDesignation !== null) 
+                   && (item.lastCompany !== '' && item.lastCompany !== null) 
+                   && (item.maritalStatus !== '' && item.maritalStatus !== null) 
+                   && (item.onRole !== '' && item.onRole !== null) 
+                   && (item.pickUpAndDrop !== '' && item.pickUpAndDrop !== null) 
+                   && (item.qualification !== '' && item.qualification !== null) 
+                   && (item.requirementCompany !== '' && item.requirementCompany !== null) 
+                   && (item.salaryRange !== '' && item.salaryRange !== null) 
+                   && (item.sourceName !== '' && item.sourceName !== null) 
+                   && (item.tatReports !== '' && item.tatReports !== null) 
+      
+                  ) && (
                   <tr
-                  key={
-                    item.companyName ||
-                    item.ageRange ||
-                    item.sourceName ||
-                    item.certification ||
-                    item.reportName ||
-                    item.option ||
-                    item.rating ||
-                    item.maritalStatuses ||
-                    item.gender ||
-                    item.degree ||
-                    item.requirement ||
-                    item.recruiter ||
-                    item.period ||
-                    item.type ||
-                    item.role ||
-                    item.experience ||
-                    item.skill ||
-                    item.designation ||
-                    item.salaryRange ||
-                    item.distance ||
-                    item.department ||
-                    item.extraCertification
-                  }
+                  key={index}
+                  // key={
+                  //   item.companyName ||
+                  //   item.ageRange ||
+                  //   item.sourceName ||
+                  //   item.certification ||
+                  //   item.reportName ||
+                  //   item.option ||
+                  //   item.rating ||
+                  //   item.maritalStatuses ||
+                  //   item.gender ||
+                  //   item.degree ||
+                  //   item.requirement ||
+                  //   item.recruiter ||
+                  //   item.period ||
+                  //   item.type ||
+                  //   item.role ||
+                  //   item.experience ||
+                  //   item.skill ||
+                  //   item.designation ||
+                  //   item.salaryRange ||
+                  //   item.distance ||
+                  //   item.department ||
+                  //   item.extraCertification
+                  // }
                 >
                   <td>
                     {item.companyName ||
-                      item.ageRange ||
-                      item.sourceName ||
-                      item.reportName ||
-                      item.option ||
-                      item.rating ||
-                      item.maritalStatus ||
-                      item.gender ||
-                      item.qualification ||
-                      item.requirementCompany ||
-                      item.recruiter ||
-                      item.noticePeriod ||
-                      item.type ||
-                      item.role ||
-                      item.experienceGroup ||
-                      item.skill ||
-                      item.designation ||
-                      item.salaryRange ||
-                      item.distance ||
-                      item.department ||
-                      item.tat ||
-                      item.holdingAnyOffer ||
-                      item.position ||
-                      item.pickUpAndDrop ||
-                      item.joiningType ||
-                      item.extraCertification}
+                              item.ageRange ||
+                              item.sourceName ||
+                              item.reportName ||
+                              item.option ||
+                              item.communicationRating ||
+                              item.maritalStatus ||
+                              item.gender ||
+                              item.qualification ||
+                              item.requirementCompany ||
+                              item.recruiter ||
+                              item.noticePeriod ||
+                              item.type ||
+                              item.onRole ||
+                              item.experienceGroup ||
+                              item.skill ||
+                              item.jobDesignation ||
+                              item.salaryRange ||
+                              item.distanceRange ||
+                              item.department ||
+                              item.tat ||
+                              item.holdingAnyOffer ||
+                              item.position ||
+                              item.pickUpAndDrop ||
+                              item.joiningType ||
+                              item.lastCompany ||
+                              item.companyType ||
+                              item.experienceRange ||
+                              item.extraCertification ||
+                              item.tatReports ||
+                              item.incentiveRange}
                   </td>
                   <td>
-                    {item.count ||
+  {item.SelectedCount ??
+    item.YetToConfirmCount ??
+    item.InterviewScheduleCount ??
+    item.AttendingAfterSometimeCount ??
+    item.RejectedCount ??
+    item.HoldCount ??
+    item.DropOutCount ??
+    item.ToJoinCount ??
+    item.JoinedCount ??
+    item.NotJoinedCount ??
+    item.NoShowCount ??
+    item.ActiveCount ??
+    item.InactiveCount ??
+    item.ShortlistedCount
+    }
+</td>
+                  <td>
+                    {item.totalCount ||
                       item.COUNT ||
                       item.countCallingTracker ||
                       item.candidateCount}
                   </td>
-                  <td>{item.percentage}%</td>
-                </tr>
+                  <td>
+  {(() => {
+    // Array of all possible fields
+    const fields = [
+      item.SelectedCount,
+      item.YetToConfirmCount,
+      item.InterviewScheduleCount,
+      item.AttendingAfterSometimeCount,
+      item.RejectedCount,
+      item.HoldCount,
+      item.DropOutCount,
+      item.ToJoinCount,
+      item.JoinedCount,
+      item.NotJoinedCount,
+      item.NoShowCount,
+      item.ActiveCount,
+      item.InactiveCount,
+    ];
+
+    // Find the first non-null or non-undefined value
+    const firstNonNullValue = fields.find((value) => value != null) ?? 0;
+
+    // Calculate percentage
+    const percentage = ((firstNonNullValue / (item.totalCount ?? 1)) * 100).toFixed(2);
+
+    // Return percentage with a fallback for empty data
+    return item.totalCount ? `${percentage} %` : "N/A";
+  })()}
+</td>
+                </tr>))
                 ))}
               </tbody>
             </table>

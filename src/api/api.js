@@ -10,6 +10,7 @@ export const CHAT_BASE_URL = "http://93.127.199.85";
 // export const CHAT_BASE_URL = "http://192.168.1.37:9090";
 
 
+
 export const addEmployee = (employee) => {
   return axios.post(`${API_BASE_URL}/add-payroll-details`, employee);
 };
