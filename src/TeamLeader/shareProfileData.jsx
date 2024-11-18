@@ -91,43 +91,6 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
     setShowResumeModal(false);
   };
 
-  const convertToDocumentLink = (byteCode, fileName) => {
-    if (byteCode) {
-      try {
-        const fileType = fileName.split(".").pop().toLowerCase();
-
-        if (fileType === "pdf") {
-          const binary = atob(byteCode);
-          const array = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) {
-            array[i] = binary.charCodeAt(i);
-          }
-          const blob = new Blob([array], { type: "application/pdf" });
-          return URL.createObjectURL(blob);
-        }
-
-        if (fileType === "docx") {
-          const binary = atob(byteCode);
-          const array = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) {
-            array[i] = binary.charCodeAt(i);
-          }
-          const blob = new Blob([array], {
-            type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          });
-          return URL.createObjectURL(blob);
-        }
-
-        console.error(`Unsupported document type: ${fileType}`);
-        return "Unsupported Document";
-      } catch (error) {
-        console.error("Error converting byte code to document:", error);
-        return "Invalid Document";
-      }
-    }
-    return "Document Not Found";
-  };
-
   const toggleFilterSection = () => {
     setShowFilterSection(!showFilterSection);
   };
@@ -136,26 +99,12 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
     setSearchTerm(e.target.value);
   };
   const limitedOptions = [
-    ["candidateEmail", "Candidate Email"],
-    ["candidateName", "Candidate Name"],
-    ["contactNumber", "Contact Number"],
-    ["currentLocation", "Current Location"],
-    ["date", "Date"],
-    ["fullAddress", "Full Address"],
-    ["jobDesignation", "Job Designation"],
-    ["requirementCompany", "Requirement Company"],
-    ["empId", "Employee Id"],
     ["companyName", "Company Name"],
-    ["currentCTCLakh", "Current CTC (Lakh)"],
-    ["currentCTCThousand", "Current CTC (Thousand)"],
-    ["dateOfBirth", "Date Of Birth"],
-    ["expectedCTCLakh", "Expected CTC (Lakh)"],
-    ["expectedCTCThousand", "Expected CTC (Thousand)"],
-    ["experienceMonth", "Experience (Months)"],
-    ["experienceYear", "Experience (Years)"],
-    ["finalStatus", "Final Status"],
-    ["holdingAnyOffer", "Holding Any Offer"],
-    ["noticePeriod", "Notice Period"],
+    ["requirementId", "Job Id"],
+    ["designation", "Designation"],
+    ["receiverCompanyMail", "Receiver E-Mail"],
+    ["senderEmailId", "Sender E-Mail"],
+    ["mailSendDate", "E-Mail Send Date"]
   ];
   const handleFilterOptionClick = (key) => {
     if (activeFilterOption === key) {
@@ -187,22 +136,20 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
     let filteredResults = data.filter((item) => {
       // Apply search term filtering first
       return (
-        item.candidateName?.toLowerCase().includes(lowerSearchTerm) ||
-        item.candidateEmail?.toLowerCase().includes(lowerSearchTerm) ||
-        item.jobDesignation?.toLowerCase().includes(lowerSearchTerm) ||
-        item.currentLocation?.toLowerCase().includes(lowerSearchTerm) ||
         item.companyName?.toLowerCase().includes(lowerSearchTerm) ||
-        item.contactNumber
-          ?.toString()
-          .toLowerCase()
-          .includes(lowerSearchTerm) ||
-        item.dateOfBirth?.toLowerCase().includes(lowerSearchTerm) ||
-        item.extraCertification?.toLowerCase().includes(lowerSearchTerm) ||
-        item.gender?.toLowerCase().includes(lowerSearchTerm) ||
-        item.jobRole?.toLowerCase().includes(lowerSearchTerm) ||
-        item.qualification?.toLowerCase().includes(lowerSearchTerm) ||
-        item.relevantExperience?.toLowerCase().includes(lowerSearchTerm) ||
-        item.resumeUploadDate?.toLowerCase().includes(lowerSearchTerm)
+        item.designation?.toLowerCase().includes(lowerSearchTerm) ||
+        item.receiverCompanyMail?.toLowerCase().includes(lowerSearchTerm) ||
+        item.senderEmailId?.toLowerCase().includes(lowerSearchTerm) ||
+        item.mailSendDate?.toLowerCase().includes(lowerSearchTerm) ||
+        item.profileSentCount ?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.selectedCount?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.holdCount?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.inProcessCount?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.rejectedCount?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.profileSelected?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.noResponse?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.profileOnHold?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.requirementId?.toString().toLowerCase().includes(lowerSearchTerm) 
       );
     });
 
@@ -226,31 +173,6 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   useEffect(() => {
     applyFilters(); // Reapply filters whenever the data or selected filters change
   }, [searchTerm, data, selectedFilters]);
-
-  const formatToIndianTime = (dateString) => {
-    // Parse the custom format "dd-MM-yyyy h:mm a"
-    const date = parse(dateString, "dd-MM-yyyy h:mm a", new Date());
-    // Check if the parsed date is valid
-    if (isNaN(date)) {
-      return "Invalid Date";
-    }
-    // Format the date to Indian Time (IST)
-    const indianOffset = 5.5 * 60; // IST offset in minutes
-    const utcOffset = date.getTimezoneOffset();
-    const istDate = new Date(
-      date.getTime() + (indianOffset + utcOffset) * 60000
-    );
-
-    return istDate.toLocaleString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-      timeZone: "Asia/Kolkata", // Force IST format
-    });
-  };
 
   return (
     <div className="App-after1">
@@ -663,75 +585,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                             </span>
                           </div>
                         </td>
-
-                        {/* <td className="tabledata">
-                          <button
-                          
-                            onClick={() => openResumeModal(item.resume)}
-                          >
-                            <i className="fas fa-eye"></i>
-                          </button>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          style={{ textAlign: "center" }}
-                        >
-                          <i
-                            onClick={() => handleUpdate(item)}
-                            className="fa-regular fa-pen-to-square"
-                          ></i>
-                        </td> */}
-
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-
-              <div>
-                <Modal
-                  show={showResumeModal}
-                  onHide={closeResumeModal}
-                  size="md"
-                >
-                  <Modal.Header closeButton>
-                    <Modal.Title>Resume</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    {selectedCandidateResume ? (
-                      <iframe
-                        src={convertToDocumentLink(
-                          selectedCandidateResume,
-                          "Resume.pdf"
-                        )}
-                        width="100%"
-                        height="550px"
-                        title="PDF Viewer"
-                      ></iframe>
-                    ) : (
-                      <p>No resume available</p>
-                    )}
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button variant="secondary" onClick={closeResumeModal}>
-                      Close
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
-              </div>
             </>
           )}
-
-          <div className="callingExcelData-update-form">
-            {selectedCandidate && (
-              <CallingTrackerForm
-                initialData={selectedCandidate}
-                loginEmployeeName={loginEmployeeName}
-                onsuccessfulDataAdditions={onsuccessfulDataAdditions}
-              />
-            )}
-          </div>
         </>
       )}
     </div>

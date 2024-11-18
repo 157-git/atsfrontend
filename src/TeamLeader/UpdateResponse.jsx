@@ -594,15 +594,17 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           </div>
                         </td>
 
-                        <td className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                         >
+                        <td className="tabledata">
                           <button
-                            className="text-secondary"
                             onClick={() => openResumeModal(data.resume)}
+                            style={{ background: "none", border: "none" }}
                           >
-                            <i className="fas fa-eye"></i>
+                            <i
+                              className="fas fa-eye"
+                              style={{
+                                color: data.resume ? "green" : "inherit",
+                              }}
+                            ></i>
                           </button>
                         </td>
 

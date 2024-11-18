@@ -48,16 +48,25 @@ const CallingExcelList = ({
 
   const navigator = useNavigate();
 
-  useEffect(() => {
+  const fetchUpdatedData = () => {
+    setLoading(true); // Set loading to true before fetching the updated data
     fetch(`${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}`)
       .then((response) => response.json())
       .then((data) => {
         setCallingList(data);
         setFilteredCallingList(data);
-        setLoading(false);
+        setLoading(false); // Set loading to false when data is successfully fetched
       })
-      .catch((error) => console.error("Error fetching data:", error));
-  }, [employeeId]);
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false); // Set loading to false in case of an error
+      });
+  };
+  
+  useEffect(() => {
+    // Fetch initial data on component mount
+    fetchUpdatedData();
+  }, [employeeId, userType]);
 
   useEffect(() => {
     const options = Object.keys(filteredCallingList[0] || {}).filter(
@@ -132,36 +141,136 @@ const CallingExcelList = ({
     const filtered = callingList.filter((item) => {
       const searchTermLower = searchTerm.toLowerCase();
       return (
+        (item.extra1 && item.extra1.toLowerCase().includes(searchTermLower)) ||
+        (item.extra2 && item.extra2.toLowerCase().includes(searchTermLower)) ||
+        (item.extra3 && item.extra3.toLowerCase().includes(searchTermLower)) ||
+        (item.extra4 && item.extra4.toLowerCase().includes(searchTermLower)) ||
+        (item.extra5 && item.extra5.toLowerCase().includes(searchTermLower)) ||
+        (item.extra6 && item.extra6.toLowerCase().includes(searchTermLower)) ||
+        (item.extra7 && item.extra7.toLowerCase().includes(searchTermLower)) ||
+        (item.extra8 && item.extra8.toLowerCase().includes(searchTermLower)) ||
+        (item.extra9 && item.extra9.toLowerCase().includes(searchTermLower)) ||
+        (item.extra10 &&
+          item.extra10.toLowerCase().includes(searchTermLower)) ||
         (item.date && item.date.toLowerCase().includes(searchTermLower)) ||
+        (item.candidateAddedTime &&
+          item.candidateAddedTime.toLowerCase().includes(searchTermLower)) ||
         (item.recruiterName &&
           item.recruiterName.toLowerCase().includes(searchTermLower)) ||
         (item.candidateName &&
           item.candidateName.toLowerCase().includes(searchTermLower)) ||
         (item.candidateEmail &&
           item.candidateEmail.toLowerCase().includes(searchTermLower)) ||
-        (item.contactNumber &&
-          item.contactNumber.toString().includes(searchTermLower)) ||
-        (item.alternateNumber &&
-          item.alternateNumber.toString().includes(searchTermLower)) ||
         (item.sourceName &&
           item.sourceName.toLowerCase().includes(searchTermLower)) ||
-        (item.requirementId &&
-          item.requirementId
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
+        (item.jobDesignation &&
+          item.jobDesignation.toLowerCase().includes(searchTermLower)) ||
         (item.requirementCompany &&
           item.requirementCompany.toLowerCase().includes(searchTermLower)) ||
         (item.communicationRating &&
           item.communicationRating.toLowerCase().includes(searchTermLower)) ||
         (item.currentLocation &&
           item.currentLocation.toLowerCase().includes(searchTermLower)) ||
-        (item.personalFeedback &&
-          item.personalFeedback.toLowerCase().includes(searchTermLower)) ||
+        (item.fullAddress &&
+          item.fullAddress.toLowerCase().includes(searchTermLower)) ||
         (item.callingFeedback &&
           item.callingFeedback.toLowerCase().includes(searchTermLower)) ||
-        (item.selectYesOrNo &&
-          item.selectYesOrNo.toLowerCase().includes(searchTermLower))
+        (item.incentive &&
+          item.incentive.toLowerCase().includes(searchTermLower)) ||
+        (item.distance &&
+          item.distance.toLowerCase().includes(searchTermLower)) ||
+        (item.companyName &&
+          item.companyName.toLowerCase().includes(searchTermLower)) ||
+        (item.noticePeriod &&
+          item.noticePeriod.toLowerCase().includes(searchTermLower)) ||
+        (item.holdingAnyOffer &&
+          item.holdingAnyOffer.toLowerCase().includes(searchTermLower)) ||
+        (item.finalStatus &&
+          item.finalStatus.toLowerCase().includes(searchTermLower)) ||
+        (item.dateOfBirth &&
+          item.dateOfBirth.toLowerCase().includes(searchTermLower)) ||
+        (item.relevantExperience &&
+          item.relevantExperience.toLowerCase().includes(searchTermLower)) ||
+        (item.gender && item.gender.toLowerCase().includes(searchTermLower)) ||
+        (item.qualification &&
+          item.qualification.toLowerCase().includes(searchTermLower)) ||
+        (item.yearOfPassing &&
+          item.yearOfPassing.toLowerCase().includes(searchTermLower)) ||
+        (item.extraCertification &&
+          item.extraCertification.toLowerCase().includes(searchTermLower)) ||
+        (item.feedBack &&
+          item.feedBack.toLowerCase().includes(searchTermLower)) ||
+        (item.offerLetterMsg &&
+          item.offerLetterMsg.toLowerCase().includes(searchTermLower)) ||
+        (item.maritalStatus &&
+          item.maritalStatus.toLowerCase().includes(searchTermLower)) ||
+        (item.pickUpAndDrop &&
+          item.pickUpAndDrop.toLowerCase().includes(searchTermLower)) ||
+        (item.msgForTeamLeader &&
+          item.msgForTeamLeader.toLowerCase().includes(searchTermLower)) ||
+        (item.availabilityForInterview &&
+          item.availabilityForInterview
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.interviewTime &&
+          item.interviewTime.toLowerCase().includes(searchTermLower)) ||
+        (item.preferredLocation &&
+          item.preferredLocation.toLowerCase().includes(searchTermLower)) ||
+        (item.sslCertificates &&
+          item.sslCertificates.toLowerCase().includes(searchTermLower)) ||
+        (item.relocateStatus &&
+          item.relocateStatus.toLowerCase().includes(searchTermLower)) ||
+        (item.expectedJoinDate &&
+          item.expectedJoinDate.toLowerCase().includes(searchTermLower)) ||
+        (item.interviewType &&
+          item.interviewType.toLowerCase().includes(searchTermLower)) ||
+        (item.interviewStatus &&
+          item.interviewStatus.toLowerCase().includes(searchTermLower)) ||
+        (item.offerDetails &&
+          item.offerDetails.toLowerCase().includes(searchTermLower)) ||
+        (item.offerSalary &&
+          item.offerSalary.toLowerCase().includes(searchTermLower)) ||
+        (item.keySkills &&
+          item.keySkills.toLowerCase().includes(searchTermLower)) ||
+        (item.resumeTitle &&
+          item.resumeTitle.toLowerCase().includes(searchTermLower)) ||
+        (item.lastActiveDate &&
+          item.lastActiveDate.toLowerCase().includes(searchTermLower)) ||
+        (item.joiningDate &&
+          item.joiningDate.toLowerCase().includes(searchTermLower)) ||
+        (item.jobRole &&
+          item.jobRole.toLowerCase().includes(searchTermLower)) ||
+        (item.oldJobRole &&
+          item.oldJobRole.toLowerCase().includes(searchTermLower)) ||
+        (item.sharedStatus &&
+          item.sharedStatus.toLowerCase().includes(searchTermLower)) ||
+        (item.oldRecruiterName &&
+          item.oldRecruiterName.toLowerCase().includes(searchTermLower)) ||
+        (item.contactNumber &&
+          item.contactNumber.toString().includes(searchTermLower)) ||
+        (item.alternateNumber &&
+          item.alternateNumber.toString().includes(searchTermLower)) ||
+        (item.requirementId &&
+          item.requirementId
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.oldEmployeeId &&
+          item.oldEmployeeId.toString().includes(searchTermLower)) ||
+        (item.experienceYear &&
+          item.experienceYear.toString().includes(searchTermLower)) ||
+        (item.experienceMonth &&
+          item.experienceMonth.toString().includes(searchTermLower)) ||
+        (item.currentCTCLakh &&
+          item.currentCTCLakh.toString().includes(searchTermLower)) ||
+        (item.currentCTCThousand &&
+          item.currentCTCThousand.toString().includes(searchTermLower)) ||
+        (item.expectedCTCLakh &&
+          item.expectedCTCLakh.toString().includes(searchTermLower)) ||
+        (item.expectedCTCThousand &&
+          item.expectedCTCThousand.toString().includes(searchTermLower)) ||
+        (item.employeeId &&
+          item.employeeId.toString().includes(searchTermLower))
       );
     });
     setFilteredCallingList(filtered);
@@ -389,14 +498,16 @@ const CallingExcelList = ({
   };
 
   const handleUpdateSuccess = () => {
-    fetch(`${API_BASE_URL}/calling-excel-data/${employeeId}/${userType}`)
+    fetch(`${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}`)
       .then((response) => response.json())
       .then((data) => {
         setCallingList(data);
         setFilteredCallingList(data);
         setShowUpdateCallingTracker(false);
+        setLoading(false);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => console.error("Error fetching data:", error));  
+      setLoading(false);
   };
 
   const handleMouseOver = (event) => {
@@ -486,7 +597,6 @@ const CallingExcelList = ({
     setShowResumeModal(false);
   };
 
-  
   const convertToDocumentLink = (byteCode, fileName) => {
     if (byteCode) {
       try {
@@ -524,23 +634,35 @@ const CallingExcelList = ({
     return "Document Not Found";
   };
 
-
   const handleMergeResumes = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const response = await axios.put(`${API_BASE_URL}/merge-resumes`);
       if (response.status === 200) {
-        toast.success("Resumes Merged Successfully");
+        const formattedMessage = response.data.replace(/\n/g, "<br>");
+        toast.success(<div dangerouslySetInnerHTML={{ __html: formattedMessage }} />);
+        
+        // Call the function to fetch updated data after successful merge
+        fetchUpdatedData();
       } else {
-        console.log('Error merging resumes:', response.statusText);
+        console.log("Error merging resumes:", response.statusText);
+        toast.error("Error merging resumes: " + response.statusText);
       }
     } catch (error) {
-      console.error('Error merging resumes:', error);
-    }finally{
-      setLoading(false)
+      console.error("Error merging resumes:", error);
+      toast.error("Error merging resumes: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
+  
 
+  const calculateWidth = () => {
+    const baseWidth = 250; 
+    const increment = 10; 
+    const maxWidth = 600; 
+    return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
+  };
 
   return (
     <div className="App-after1">
@@ -563,23 +685,35 @@ const CallingExcelList = ({
                     }}
                     style={{ margin: "10px", width: "auto", fontSize: "15px" }}
                   ></i>
-                  {showSearchBar && (
+                  {/* Arshad Comments This On 15-11-2024 */}
+                  {/* {showSearchBar && ( */}
+                  <div
+                    className="search-input-div"
+                    style={{ width: `${calculateWidth()}px` }}
+                  >
                     <input
                       type="text"
-                      className="form-control"
+                      className="search-input"
                       placeholder="Search here..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                  )}
+                  </div>
+
+                  {/* )} */}
                 </div>
                 <h1 className="excel-calling-data-heading">Excel Data</h1>
-               <div style={{display:"flex",gap:"5px"}}>
-               <button onClick={toggleFilterSection} className="daily-tr-btn">
-                  Filter <i className="fa-solid fa-filter"></i>
-                </button>
-      <button className="daily-tr-btn" onClick={handleMergeResumes}>Merge Resumes</button>
-               </div>
+                <div style={{ display: "flex", gap: "5px" }}>
+                  <button
+                    onClick={toggleFilterSection}
+                    className="daily-tr-btn"
+                  >
+                    Filter <i className="fa-solid fa-filter"></i>
+                  </button>
+                  <button className="daily-tr-btn" onClick={handleMergeResumes}>
+                    Merge Resumes
+                  </button>
+                </div>
               </div>
 
               {showFilterSection && (
@@ -680,7 +814,6 @@ const CallingExcelList = ({
                 </div>
               )}
               <div className="attendanceTableData">
-              
                 <table className="selfcalling-table attendance-table">
                   <thead>
                     <tr className="attendancerows-head">
@@ -692,6 +825,7 @@ const CallingExcelList = ({
                       <th className="attendanceheading">Designation</th>
                       <th className="attendanceheading">Experience</th>
                       <th className="attendanceheading">Company Name</th>
+                      <th className="attendanceheading">Shared Status</th>
                       <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">Full Data</th>
                       <th className="attendanceheading">Action</th>
@@ -775,6 +909,7 @@ const CallingExcelList = ({
                             </span>
                           </div>
                         </td>
+
                         <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
@@ -788,24 +923,46 @@ const CallingExcelList = ({
                           </div>
                         </td>
 
+                        <td
+                          className="tabledata "
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.sharedStatus}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.sharedStatus}
+                            </span>
+                          </div>
+                        </td>
+
                         <td className="tabledata">
                           <button
                             onClick={() => openResumeModal(item.resume)}
+                            style={{ background: "none", border: "none" }}
                           >
-                            <i className="fas fa-eye"></i>
+                            <i
+                              className="fas fa-eye"
+                              style={{
+                                color: item.resume ? "green" : "inherit",
+                              }}
+                            ></i>
                           </button>
                         </td>
-
-                        <td   className="tabledata"
+                        <td
+                          className="tabledata"
                           onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}>
-                          <button
+                          onMouseOut={handleMouseOut}
+                          onClick={() => openModal(item)}
+                        >
+                          <i class="fa-solid fa-database"></i>
+                          {/* <button
                             className="daily-tr-btn"
                             onClick={() => openModal(item)}
-                            style={{marginLeft:"3px"}}
+                            style={{ marginLeft: "3px" }}
                           >
                             View
-                          </button>
+                          </button> */}
                         </td>
                         <td
                           className="tabledata"
@@ -859,191 +1016,183 @@ const CallingExcelList = ({
               <div className="popup-content">
                 <h2>Candidate Details</h2>
 
-      <div className="excel-data-content-div">
+                <div className="excel-data-content-div">
+                  <div className="popup-section">
+                    <p>
+                      <strong>Recruiter Name: </strong>
+                      {showModal?.recruiterName || "-"}
+                    </p>
+                    <p>
+                      <strong>Candidate Alternate No: </strong>
+                      {showModal?.alternateNumber}
+                    </p>
+                    <p>
+                      <strong>Source Name: </strong>
+                      {showModal?.sourceName || "-"}
+                    </p>
+                    <p>
+                      <strong>Applying Company: </strong>
+                      {showModal?.requirementCompany || "-"}
+                    </p>
+                    <p>
+                      <strong>Date of Birth: </strong>
+                      {showModal?.dateOfBirth || "-"}
+                    </p>
+                    <p>
+                      <strong>Communication Rating: </strong>
+                      {showModal?.communicationRating}
+                    </p>
+                    <p>
+                      <strong>Current Location: </strong>
+                      {showModal?.currentLocation || "-"}
+                    </p>
+                    <p>
+                      <strong>Full Address: </strong>
+                      {showModal?.fullAddress || "-"}
+                    </p>
+                    <p>
+                      <strong>Calling Feedback: </strong>
+                      {showModal?.callingFeedback || "-"}
+                    </p>
+                    <p>
+                      <strong>Incentive: </strong>
+                      {showModal?.incentive || "-"}
+                    </p>
+                    <p>
+                      <strong>Old Employee Id: </strong>
+                      {showModal?.oldEmployeeId || "-"}
+                    </p>
+                  </div>
 
-    
-                <div className="popup-section">
-              
-                  <p>
-                    <strong>Recruiter Name: </strong>
-                    {showModal?.recruiterName || "-"}
-                  </p>
-                  <p>
-                    <strong>Candidate Alternate No: </strong>
-                    {showModal?.alternateNumber || "-"}
-                  </p>
-                  <p>
-                    <strong>Source Name: </strong>
-                    {showModal?.sourceName || "-"}
-                  </p>
-                  <p>
-                    <strong>Applying Company: </strong>
-                    {showModal?.requirementCompany || "-"}
-                  </p>
-                  <p>
-                    <strong>Date of Birth: </strong>
-                    {showModal?.dateOfBirth || "-"}
-                  </p>
-                  <p>
-                    <strong>Communication Rating: </strong>
-                    {showModal?.communicationRating}
-                  </p>
-                  <p>
-                    <strong>Current Location: </strong>
-                    {showModal?.currentLocation || "-"}
-                  </p>
-                  <p>
-                    <strong>Full Address: </strong>
-                    {showModal?.fullAddress || "-"}
-                  </p>
-                  <p>
-                    <strong>Calling Feedback: </strong>
-                    {showModal?.callingFeedback || "-"}
-                  </p>
-                  <p>
-                    <strong>Incentive: </strong>
-                    {showModal?.incentive || "-"}
-                  </p>
-                  <p>
-                    <strong>Old Employee Id: </strong>
-                    {showModal?.oldEmployeeId || "-"}
-                  </p>
+                  <div className="popup-section">
+                    <p>
+                      <strong>Distance: </strong>
+                      {showModal?.distance || "-"}
+                    </p>
+                    <p>
+                      <strong>Current CTC: </strong>
+                      {showModal?.currentCTCLakh || "0"} Lakh{" "}
+                      {showModal?.currentCTCThousand || "0"} Thousand
+                    </p>
+                    <p>
+                      <strong>Expected CTC: </strong>
+                      {showModal?.expectedCTCLakh || "0"} Lakh{" "}
+                      {showModal?.expectedCTCThousand || "0"} Thousand
+                    </p>
+                    <p>
+                      <strong>Notice Period: </strong>
+                      {showModal?.noticePeriod || "-"}
+                    </p>
+                    <p>
+                      <strong>Holding Any Offer: </strong>
+                      {showModal?.holdingAnyOffer || "-"}
+                    </p>
+                    <p>
+                      <strong>Final Status: </strong>
+                      {showModal?.finalStatus || "-"}
+                    </p>
+                    <p>
+                      <strong>Relevant Experience: </strong>
+                      {showModal?.relevantExperience || "-"}
+                    </p>
+                    <p>
+                      <strong>Gender: </strong>
+                      {showModal?.gender || "-"}
+                    </p>
+                    <p>
+                      <strong>Qualification: </strong>
+                      {showModal?.qualification || "-"}
+                    </p>
+                    <p>
+                      <strong>Year of Passing: </strong>
+                      {showModal?.yearOfPassing || "-"}
+                    </p>
+                  </div>
+
+                  <div className="popup-section">
+                    <p>
+                      <strong>Feedback: </strong>
+                      {showModal?.feedBack || "-"}
+                    </p>
+                    <p>
+                      <strong>Offer Letter Msg: </strong>
+                      {showModal?.offerLetterMsg || "-"}
+                    </p>
+                    <p>
+                      <strong>Marital Status: </strong>
+                      {showModal?.maritalStatus || "-"}
+                    </p>
+                    <p>
+                      <strong>Pick Up and Drop: </strong>
+                      {showModal?.pickUpAndDrop || "-"}
+                    </p>
+                    <p>
+                      <strong>Message for Team Leader: </strong>
+                      {showModal?.msgForTeamLeader || "-"}
+                    </p>
+                    <p>
+                      <strong>Availability for Interview: </strong>
+                      {showModal?.availabilityForInterview || "-"}
+                    </p>
+                    <p>
+                      <strong>Interview Time: </strong>
+                      {showModal?.interviewTime || "-"}
+                    </p>
+                    <p>
+                      <strong>Preferred Location: </strong>
+                      {showModal?.preferredLocation || "-"}
+                    </p>
+                  </div>
+
+                  <div className="popup-section">
+                    <p>
+                      <strong>Extra Columns 1: </strong>
+                      {showModal?.extra1 || "-"}
+                    </p>
+                    <p>
+                      <strong>Extra Columns 2: </strong>
+                      {showModal?.extra2 || "-"}
+                    </p>
+                    <p>
+                      <strong>Extra Columns 3: </strong>
+                      {showModal?.extra3 || "-"}
+                    </p>
+                    <p>
+                      <strong>Extra Columns 4: </strong>
+                      {showModal?.extra4 || "-"}
+                    </p>
+                    <p>
+                      <strong>Extra Columns 5: </strong>
+                      {showModal?.extra5 || "-"}
+                    </p>
+                    <p>
+                      <strong>Extra Columns 6: </strong>
+                      {showModal?.extra6 || "-"}
+                    </p>
+                    <p>
+                      <strong>Extra Columns 7: </strong>
+                      {showModal?.extra7 || "-"}
+                    </p>
+                    <p>
+                      <strong>Extra Columns 8: </strong>
+                      {showModal?.extra8 || "-"}
+                    </p>
+                    <p>
+                      <strong>Extra Columns 9: </strong>
+                      {showModal?.extra9 || "-"}
+                    </p>
+                    <p>
+                      <strong>Extra Columns 10: </strong>
+                      {showModal?.extra10 || "-"}
+                    </p>
+                  </div>
                 </div>
 
-       
-                <div className="popup-section">
-                
-                  <p>
-                    <strong>Distance: </strong>
-                    {showModal?.distance || "-"}
-                  </p>
-                  <p>
-                    <strong>Current CTC: </strong>
-                    {showModal?.currentCTCLakh || "0"} Lakh{" "}
-                    {showModal?.currentCTCThousand || "0"} Thousand
-                  </p>
-                  <p>
-                    <strong>Expected CTC: </strong>
-                    {showModal?.expectedCTCLakh || "0"} Lakh{" "}
-                    {showModal?.expectedCTCThousand || "0"} Thousand
-                  </p>
-                  <p>
-                    <strong>Notice Period: </strong>
-                    {showModal?.noticePeriod || "-"}
-                  </p>
-                  <p>
-                    <strong>Holding Any Offer: </strong>
-                    {showModal?.holdingAnyOffer || "-"}
-                  </p>
-                  <p>
-                    <strong>Final Status: </strong>
-                    {showModal?.finalStatus || "-"}
-                  </p>
-                  <p>
-                    <strong>Relevant Experience: </strong>
-                    {showModal?.relevantExperience || "-"}
-                  </p>
-                  <p>
-                    <strong>Gender: </strong>
-                    {showModal?.gender || "-"}
-                  </p>
-                  <p>
-                    <strong>Qualification: </strong>
-                    {showModal?.qualification || "-"}
-                  </p>
-                  <p>
-                    <strong>Year of Passing: </strong>
-                    {showModal?.yearOfPassing || "-"}
-                  </p>
-                </div>
-
-              
-                <div className="popup-section">
-                 
-                  <p>
-                    <strong>Feedback: </strong>
-                    {showModal?.feedBack || "-"}
-                  </p>
-                  <p>
-                    <strong>Offer Letter Msg: </strong>
-                    {showModal?.offerLetterMsg || "-"}
-                  </p>
-                  <p>
-                    <strong>Marital Status: </strong>
-                    {showModal?.maritalStatus || "-"}
-                  </p>
-                  <p>
-                    <strong>Pick Up and Drop: </strong>
-                    {showModal?.pickUpAndDrop || "-"}
-                  </p>
-                  <p>
-                    <strong>Message for Team Leader: </strong>
-                    {showModal?.msgForTeamLeader || "-"}
-                  </p>
-                  <p>
-                    <strong>Availability for Interview: </strong>
-                    {showModal?.availabilityForInterview || "-"}
-                  </p>
-                  <p>
-                    <strong>Interview Time: </strong>
-                    {showModal?.interviewTime || "-"}
-                  </p>
-                  <p>
-                    <strong>Preferred Location: </strong>
-                    {showModal?.preferredLocation || "-"}
-                  </p>
-                </div>
-
-            
-                <div className="popup-section">
-                  <p>
-                    <strong>Extra Columns 1: </strong>
-                    {showModal?.extra1 || "-"}
-                  </p>
-                  <p>
-                    <strong>Extra Columns 2: </strong>
-                    {showModal?.extra2 || "-"}
-                  </p>
-                  <p>
-                    <strong>Extra Columns 3: </strong>
-                    {showModal?.extra3 || "-"}
-                  </p>
-                  <p>
-                    <strong>Extra Columns 4: </strong>
-                    {showModal?.extra4 || "-"}
-                  </p>
-                  <p>
-                    <strong>Extra Columns 5: </strong>
-                    {showModal?.extra5 || "-"}
-                  </p>
-                  <p>
-                    <strong>Extra Columns 6: </strong>
-                    {showModal?.extra6 || "-"}
-                  </p>
-                  <p>
-                    <strong>Extra Columns 7: </strong>
-                    {showModal?.extra7 || "-"}
-                  </p>
-                  <p>
-                    <strong>Extra Columns 8: </strong>
-                    {showModal?.extra8 || "-"}
-                  </p>
-                  <p>
-                    <strong>Extra Columns 9: </strong>
-                    {showModal?.extra9 || "-"}
-                  </p>
-                  <p>
-                    <strong>Extra Columns 10: </strong>
-                    {showModal?.extra10 || "-"}
-                  </p>
-                </div>
-                </div>
-
-               <center>
-               <button className="daily-tr-btn" onClick={closeModal}>
-                  Close
-                </button>
-               </center>
+                <center>
+                  <button className="daily-tr-btn" onClick={closeModal}>
+                    Close
+                  </button>
+                </center>
               </div>
             </div>
           )}

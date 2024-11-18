@@ -3,8 +3,6 @@ import "../EmployeeDashboard/JobList.css";
 import { bottom } from "@popperjs/core";
 import ShareDescription from "./shareDescription";
 import JobDescriptionEdm from "../JobDiscription/jobDescriptionEdm";
-import jobDiscriptions from "../employeeComponents/jobDiscriptions";
-import AddJobDescription from "../JobDiscription/addJobDescription";
 import { values } from "pdf-lib";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
@@ -17,7 +15,6 @@ import axios from "../api/api";
 
 const JobListing = () => {
   const { employeeId, userType } = useParams();
-
   const [jobDescriptions, setJobDescriptions] = useState([]);
   const [filterOptions, setFilterOptions] = useState([]);
   const [updateJD, setUpdateJd] = useState([]);
@@ -657,7 +654,7 @@ const JobListing = () => {
                     <div className="info">
                       <div className="info-title">Position Overview</div>
                       <div className="info-value">
-                        {requirementData.positionOverview?.overview || "N/A"}
+                        {requirementData.positionOverview?.overview || "-"}
                       </div>
                     </div>
                     <div className="info">
@@ -670,7 +667,7 @@ const JobListing = () => {
                                 {responsibility.responsibilitiesMsg}
                               </li>
                             )
-                          ) || "N/A"}
+                          ) || "-"}
                         </ul>
                       </div>
                     </div>
@@ -682,7 +679,7 @@ const JobListing = () => {
                             <li key={item.jobRequirementsId}>
                               {item.jobRequirementMsg}
                             </li>
-                          )) || "N/A"}
+                          )) || "-"}
                         </ul>
                       </div>
                     </div>
@@ -696,7 +693,7 @@ const JobListing = () => {
                                 {item.preferredQualificationMsg}
                               </li>
                             )
-                          ) || "N/A"}
+                          ) || "-"}
                         </ul>
                       </div>
                     </div>
@@ -732,26 +729,26 @@ const JobListing = () => {
                       <p>
                         {/* simple spelling mistake Corrected */}
                         <b>Job Id : </b>
-                        {requirementData.requirementId || "N/A"}
+                        {requirementData.requirementId || "-"}
                       </p>
                       <p>
                         <b>Company Name : </b>
-                        {requirementData.companyName || "N/A"}
+                        {requirementData.companyName || "-"}
                       </p>
                       <p>
                         <b>Designation : </b>
-                        {requirementData.designation || "N/A"}
+                        {requirementData.designation || "-"}
                       </p>
                       <p>
                         <b>Job Role : </b>
-                        {requirementData.jobRole || "N/A"}
+                        {requirementData.jobRole || "-"}
                       </p>
                       <p>
                         <b>Key Skills : </b>
-                        {requirementData.skills || "N/A"}
+                        {requirementData.skills || "-"}
                       </p>
                       <p>
-                        <b>Salary : </b> {requirementData.salary || "N/A"}
+                        <b>Salary : </b> {requirementData.salary || "-"}
                       </p>
                       <p>
                         <b>Field : </b>
@@ -759,34 +756,34 @@ const JobListing = () => {
                       </p>
                       <p>
                         <b>Location : </b>
-                        {requirementData.location || "N/A"}
+                        {requirementData.location || "-"}
                       </p>
                     </div>
                     <div className="info">
                       <p>
                         <b>Qualifications : </b>
-                        {requirementData.qualification || "N/A"}
+                        {requirementData.qualification || "-"}
                       </p>
 
                       <p>
                         <b>Experience : </b>
-                        {requirementData.experience || "N/A"}
+                        {requirementData.experience || "-"}
                       </p>
 
                       <p>
                         <b>Year Of Passing : </b>
-                        {requirementData.yearOfPassing || "N/A"}
+                        {requirementData.yearOfPassing || "-"}
                       </p>
                       <p>
                         <b>Gender :  </b>
-                        {requirementData.gender || "N/A"}
+                        {requirementData.gender || "-"}
                       </p>
                       <p>
                         <b>Incentives For Recruiters : </b>
                         {requirementData.incentive && (
                           <span>&#8377; </span>
                         )}{" "}
-                        {requirementData.incentive || "N/A"}
+                        {requirementData.incentive || "-"}
                       </p>
                     </div>
                     <div className="info">
@@ -804,37 +801,37 @@ const JobListing = () => {
                       )}
                       <p>
                         <b>Shifts : </b>
-                        {requirementData.shift || "N/A"}
+                        {requirementData.shift || "-"}
                       </p>
                       <p>
                         <b>Week Off's : </b>
-                        {requirementData.weekOff || "N/A"}
+                        {requirementData.weekOff || "-"}
                       </p>
                       <p>
                         <b>Notice Period :</b>{" "}
-                        {requirementData.noticePeriod || "N/A"}
+                        {requirementData.noticePeriod || "-"}
                       </p>
 
                       <p>
                         <b>Job Type : </b>
-                        {requirementData.jobType || "N/A"}
+                        {requirementData.jobType || "-"}
                       </p>
                       <p>
                         <b>Perks : </b>
-                        {requirementData.perks || "N/A"}
+                        {requirementData.perks || "-"}
                       </p>
                      
                       <p>
                         <b>Reporting Hierarchy : </b>
-                        {requirementData.reportingHierarchy || "N/A"}
+                        {requirementData.reportingHierarchy || "-"}
                       </p>
                       <p>
                         <b>Number of Positions : </b>
-                        {requirementData.position || "N/A"}
+                        {requirementData.position || "-"}
                       </p>
                       <p>
                         <b> Required Documentation : </b>
-                        {requirementData.documentation || "N/A"}
+                        {requirementData.documentation || "-"}
                       </p>
                      
                     </div>

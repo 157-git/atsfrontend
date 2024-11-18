@@ -1,6 +1,6 @@
 .can-history-filter-data-section {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(490px, 1fr));
   gap: 20px;
   color: var(--text-color);
 }
@@ -136,14 +136,74 @@
   border: #f2f2f2;
   border: 1px solid #ffcb9b;
 }
-
+/* line 140 to 207 added by sahil karnekar for status date 18-11-2024 */
 /* Dhanashree_Filters_Date(29/07)_Css Start line no. 4*/
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
 .bhabutton-container {
+  width: 80%;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   justify-content: center;
   padding: 5px;
+  opacity: 0; /* Hide by default */
+  animation: fadeOut 1s ease forwards; /* Run animation */
+}
+.bhabutton-container.show {
+  animation: fadeIn 1s ease forwards;
+  pointer-events: auto; /* Enable interaction when visible */
+}
+.svgimgstatusicon {
+  margin-left: 8px;
+  transition: transform 0.3s ease; /* Smooth rotation */
+}
+
+.svgimgstatusicon.rotate {
+  transform: rotate(180deg); /* Rotated state */
+}
+.setNewButtonsClass{
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+.adjustStatusDiv{
+  display: flex;
+    background-color: var(--button-color);
+    color: var(--text-color);
+    border-radius: 50px;
+    padding: 8px;
+    border: 1px solid;
+    border-color: var(--button-border-color);
+}
+.adjustStatusDiv:hover{
+    background-color: var(--button-bg-hover-color);
+    color: var(--text-hover-color);
+
+}
+.statusDiv:hover{
+cursor: pointer;
+
 }
 
 .bha-dropdown {

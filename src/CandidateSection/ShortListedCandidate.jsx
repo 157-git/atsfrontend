@@ -1068,10 +1068,15 @@ const handleFilterSelect = (key, value) => {
                   Date:-02/07 */}
                         <td className="tabledata">
                           <button
-                        
                             onClick={() => openResumeModal(item.resume)}
+                            style={{ background: "none", border: "none" }}
                           >
-                            <i className="fas fa-eye"></i>
+                            <i
+                              className="fas fa-eye"
+                              style={{
+                                color: item.resume ? "green" : "inherit",
+                              }}
+                            ></i>
                           </button>
                         </td>
                         {/* Name:-Akash Pawar Component:-ShortListedCandidate

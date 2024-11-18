@@ -21,6 +21,7 @@ import LoginSignup from "./MainDashboard/loginSignup.jsx";
 import EmpDashboard from "./EmployeeDashboard/empDashboard";
 import ProtectedRoute from "./MainDashboard/ProtectedRoute.jsx";
 import ApplicantForm from "./Applicant/applicantFrom.jsx";
+import ApplicationForm1 from "./Applicant/ApplicationForm1.jsx";
 
 
 const applySavedColors = () => {
@@ -99,9 +100,14 @@ const App = () => {
             path="/create-account/:userType"
             element={<AddEmployee />}
           ></Route>
-          <Route
+          {/* <Route
             path="/157industries/:employeeId/:userType/candidate-form"
             element={<ApplicantForm loginEmployeeName={loginEmployeeName}  />}
+          ></Route> */}
+          {/* temporary route for the applicant registration sahil karnekar date 18-11-2024 */}
+          <Route
+            path="/157industries/:employeeId/:userType/candidate-form"
+            element={<ApplicationForm1 loginEmployeeName={loginEmployeeName}  />}
           ></Route>
         </Routes>
       </BrowserRouter>

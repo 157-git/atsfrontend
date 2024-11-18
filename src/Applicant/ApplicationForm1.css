@@ -1,0 +1,187 @@
+/* please use this css file for application form 1 updated by sahil karnekar date 18-11-2024 */
+
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@900&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+.mainDivTop{
+    width: 100%;
+    justify-content: center;
+    display: flex;
+}
+
+.main1{
+    width: 1070px;
+   
+}
+.applicationHeadDiv{
+    width: 1012px;
+    height: 142px;
+   
+}
+.applicationhead{
+    font-size: 42px;
+    font-family: "M PLUS Rounded 1c";
+    color: #FF7162;
+    margin-bottom: 1px;
+    
+}
+.applicationdesc{
+    font-family: "M PLUS Rounded 1c";
+    font-size: 18px;
+    color: #767676;
+    margin-top: 5px;
+}
+.firstDiv{
+    background-color: #FFF1F1;
+    margin-top: 20px;
+    border-radius: 30px;
+    padding: 20px;
+}
+.firstDiv:hover{
+    filter: drop-shadow(0.5px 1px 4px  #C06363);
+    transition: filter 0.5s;
+}
+.AdmissionAttxt{
+    font-family: "M PLUS Rounded 1c";
+    font-size: 24px;
+    color: #000000;
+    text-align: left;
+}
+.p11{
+    font-family: "M PLUS Rounded 1c";
+    font-size: 16px;
+    color: #767676;
+}
+.input1class{
+    border-radius: 50px;
+    padding: 18px;
+    border: 1px solid #FF7162;
+    /* box-shadow: 1px 1px 4px #C06363; */
+    filter: drop-shadow(1px 1px 4px  #C06363);
+    width: 400px;
+    color: #FF7162;
+    font-size: 20px;
+    text-align: center;
+    font-family: "Roboto", serif;
+    font-weight: 500;
+    font-style: normal;
+    
+}
+.input1class:hover{
+    box-shadow: inset 1px 1px 8px rgba(250, 50, 50, 0.2);
+    filter: none;
+    transition:filter 0.5s;
+}
+.input1class::placeholder{
+    font-family: "M PLUS Rounded 1c";
+    color: #767676;
+    font-size: 16px;
+}
+.firstdivsubdiv1{
+    display: flex;
+    justify-content: space-between;
+}
+.requiredError{
+    display: flex;
+    margin: 0;
+    padding-top: 5px;
+    font-family: "Mulish";
+    font-size: 10px;
+    /* font-style: italic; */
+    color: red;
+    filter: drop-shadow(1px 1px 4px  red);
+    display: none;
+    
+}
+.flextdiv{
+    display: flex;
+    
+}
+.svgimg{
+    transform: translateX(-390px);
+    margin-top: 20px;
+    background-color: white;
+}
+.radioinputgender{
+    width: 150px;
+    border-radius: 50px;
+    background-color: white;
+    padding: 15px;
+    margin-right: 5px;
+    font-family: "M PLUS Rounded 1c";
+    font-weight: bolder;
+    font-size: 16px;
+    color: #FF7162;
+}
+.radioinputgender:hover{
+    background-color: #FF7162;
+    color: white;
+    transition: background-color 2s;
+    box-shadow: inset 0px 1px 8px rgba(0, 0, 0, 0.2);
+}
+.textareaadditional{
+ width: 1012px;
+    border: none;
+    height: 120px;
+    border-radius: 15px;
+    padding: 5px;
+    font-size: 18px;   
+}
+.buttondiv{
+    margin-top: 20px;
+    justify-content: end;
+    display: flex;
+}
+.applybtn{
+    padding: 15px;
+    border-radius: 50px;
+    border: none;
+    background-color: #FF7162;
+    color: white;
+    width: 200px;
+    filter: drop-shadow(0.5px 1px 4px  #C06363);
+    font-family: "M PLUS Rounded 1c";
+}
+.applybtn:hover{
+    background-color: white;
+    color: #FF7162;
+    filter: none;
+    transition: background-color 1s;
+    transition: filter 1s;
+    box-shadow: inset 0px 1px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+
+@media screen and (max-width: 480px) {
+    .mainDivTop{
+        display: block;
+        padding: 10px;
+    }
+    .main1{
+        width: 100%;
+    }
+    .applicationHeadDiv{
+        width: 100%;
+        height: auto;
+    }
+.firstdivsubdiv1{
+    display: block;
+}
+.svgimg {
+    transform: translateX(-1650%);
+    margin-top: 15px;
+}
+.currSalary{
+    margin-bottom: 6px;
+}
+.input1class{
+    font-size: 12px;    
+}
+.AdmissionAttxt{
+    font-size: 20px;
+}
+
+  }
