@@ -26,8 +26,6 @@ const CandidateHistoryTracker = () => {
   const [dateRange, setDateRange] = useState("");
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
-  // state created by sahil karnekar date 18-11-2024
-  const [displayShowButtons, setDisplayShowButtons] = useState(false);
 
   const popupRef = useRef();
 
@@ -310,8 +308,12 @@ const CandidateHistoryTracker = () => {
   return (
     <div>
       <div className="HeadingHistory">Candidate History</div>
+      {/* here are some fields updated by sahil karnekar date 19-11-2024 */}
+      <div className="setborderdiv">
       <div className="tracker-date-report-option">
-        <label>
+        <label
+        className="PI-radio-label"
+        >
           <input
             type="radio"
             value="Current Month"
@@ -321,7 +323,9 @@ const CandidateHistoryTracker = () => {
           />
           Current Month
         </label>
-        <label>
+        <label
+        className="PI-radio-label"
+        >
           <input
             type="radio"
             value="Last Month"
@@ -331,7 +335,9 @@ const CandidateHistoryTracker = () => {
           />
           Last Month
         </label>
-        <label>
+        <label
+        className="PI-radio-label"
+        >
           <input
             type="radio"
             value="Last 3 Months"
@@ -341,7 +347,9 @@ const CandidateHistoryTracker = () => {
           />
           Last 3 Months
         </label>
-        <label>
+        <label
+        className="PI-radio-label"
+        >
           <input
             type="radio"
             value="Last 6 Months"
@@ -351,7 +359,9 @@ const CandidateHistoryTracker = () => {
           />
           Last 6 Months
         </label>
-        <label>
+        <label
+        className="PI-radio-label"
+        >
           <input
             type="radio"
             value="Last 1 Year"
@@ -361,7 +371,9 @@ const CandidateHistoryTracker = () => {
           />
           Last 1 Year
         </label>
-        <label>
+        <label
+        className="PI-radio-label"
+        >
           <input
             type="radio"
             value="custom"
@@ -404,20 +416,10 @@ const CandidateHistoryTracker = () => {
         </div>
       </div>
       {/* LINE 356 to 403 updated by sahil karnekar dat 18-11-2024 */}
-<div className="centerbuttonContainer">
-  <div className="statusDiv"
-  style={{display:"flex",justifyContent:"end",marginRight:"20px"}}
-  onClick={() => setDisplayShowButtons(!displayShowButtons)
-    
-  }
-  > <div className="adjustStatusDiv">Status <svg className={`svgimgstatusicon ${
-    displayShowButtons ? "rotate" : ""
-  }`} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M480-360 280-560h400L480-360Z"/></svg></div></div>
-     {displayShowButtons && ( 
+
+
       <div className="setNewButtonsClass">
-      <div className={`bhabutton-container ${
-          displayShowButtons ? "show" : ""
-        }`}>
+      <div className={`bhabutton-container`}>
         {[
           "Yet To Confirm",
           "Interview Schedule",
@@ -448,8 +450,8 @@ const CandidateHistoryTracker = () => {
         ))}
       </div>
       </div>
-)}
       </div>
+
       
       {openDropdown && (
         <div className="Candi-History-tracker-div">
@@ -492,7 +494,7 @@ const CandidateHistoryTracker = () => {
               {selectedFilters.length > 0 && (
                 <span className="handlePrintDiv">
                   <button
-                    className="Candi-History-tracker-button"
+                    className="Candi-History-tracker-button margin-left-set"
                     onClick={handlePrint}
                   >
                     Export PDF
