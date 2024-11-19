@@ -148,6 +148,7 @@ const ShortListedCandidates = ({
       console.error("Error fetching shortlisted data:", error);
     }
   };
+
   const fetchRecruiters = async (teamLeaderId) => {
     try {
       const response = await fetch(
@@ -159,6 +160,7 @@ const ShortListedCandidates = ({
       console.error("Error fetching shortlisted data:", error);
     }
   };
+  
   useEffect(() => {
     if (userType === "SuperUser") {
       fetchManager();
@@ -1163,6 +1165,7 @@ const handleFilterSelect = (key, value) => {
                   </tbody>
                 </table>
               </div>
+
               {showForwardPopup ? (
                 <>
                   <div
