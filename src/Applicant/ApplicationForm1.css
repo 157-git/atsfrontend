@@ -104,6 +104,23 @@
     margin-top: 20px;
     background-color: white;
 }
+/* line 108 to 123 added by sahil karnekar date 19-11-2024 */
+.inputUploads{
+    padding-left: 40px;
+    background: transparent;
+   filter: none;
+   box-shadow: 1px 1px 4px #C06363;
+}
+.svgimguploads{
+    background-color: transparent;
+}
+input#file-upload-button{
+    background-color: aqua;
+}
+::-webkit-file-upload-button {
+   border-radius: 20px;
+   border: 1px solid #FF7162;
+  }
 .radioinputgender{
     width: 150px;
     border-radius: 50px;
@@ -177,11 +194,33 @@
 .currSalary{
     margin-bottom: 6px;
 }
+/* updated by sahil karnekar date 19-11-2024 */
 .input1class{
-    font-size: 12px;    
+    font-size: 16px;    
 }
 .AdmissionAttxt{
     font-size: 20px;
 }
-
+.genderinputdiv{
+    justify-content: space-between;
+}
+.inputUploads{
+    width: 100%;
+   padding-left: 1px;
+   padding-right: 50px;
+}
+.currentSalarydiv{
+    display: flex;
+    justify-content: space-between;
+}
+.inputSalary{
+    width: 100%;
+    height: 40px;
+}
+.svgimgSalarySet{
+    transform: translate(-733%, -22%);
+}
+.svgimguploads{
+    transform: translate(-200%, 20%);
+}
   }

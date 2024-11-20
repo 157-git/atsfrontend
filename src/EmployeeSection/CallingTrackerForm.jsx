@@ -839,7 +839,8 @@ const CallingTrackerForm = ({
                     <input
                       type="text"
                       name="candidateName"
-                      value={callingTracker.candidateName}
+                      // validation added by sahil karnekar date 19-11-2024
+                      value={callingTracker.candidateName.trim()} 
                       className={`plain-input`}
                       onChange={handleChange}
                       placeholder="Enter Candidate Name"

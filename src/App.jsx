@@ -100,15 +100,15 @@ const App = () => {
             path="/create-account/:userType"
             element={<AddEmployee />}
           ></Route>
-          {/* <Route
-            path="/157industries/:employeeId/:userType/candidate-form"
-            element={<ApplicantForm loginEmployeeName={loginEmployeeName}  />}
-          ></Route> */}
-          {/* temporary route for the applicant registration sahil karnekar date 18-11-2024 */}
           <Route
             path="/157industries/:employeeId/:userType/candidate-form"
-            element={<ApplicationForm1 loginEmployeeName={loginEmployeeName}  />}
+            element={<ApplicantForm loginEmployeeName={loginEmployeeName}  />}
           ></Route>
+          {/* temporary route for the applicant registration sahil karnekar date 18-11-2024 */}
+          {/* <Route
+            path="/157industries/:employeeId/:userType/candidate-form"
+            element={<ApplicationForm1 loginEmployeeName={loginEmployeeName}  />}
+          ></Route> */}
         </Routes>
       </BrowserRouter>
       <ToastContainer />

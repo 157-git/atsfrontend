@@ -749,7 +749,8 @@ const UpdateSelfCalling = ({
                   type="text"
                   name="candidateName"
                   className={`plain-input`}
-                  value={callingTracker.candidateName || ""}
+                  // validation added by sahil karnekar date 19-11-2024
+                  value={callingTracker.candidateName.trim() || ""}
                   onChange={handleChange}
                   maxlength="50"
                 />
