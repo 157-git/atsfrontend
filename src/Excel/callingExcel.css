@@ -57,6 +57,10 @@
   /* margin-bottom: 0; */
   font-size: 18px;
 }
+/* added by sahil karnekar */
+.setDisplayLoader{
+  display: flex;
+}
 
 /* Add media queries to handle smaller screens */
 @media (max-width: 576px) {

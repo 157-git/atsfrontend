@@ -415,13 +415,17 @@ const CallingTrackerForm = ({
     setLoading(true);
 
     try {
+      // lines updated sahil karnekar
       let dataToUpdate = {
-        callingTracker: { ...callingTracker },
+        callingTracker: {
+          ...callingTracker,
+          candidateName: callingTracker.candidateName.trim(), // Trim candidateName here
+        },
         performanceIndicator: {
           employeeId: employeeId,
           employeeName: loginEmployeeName,
           jobRole: userType,
-          candidateName: callingTracker.candidateName,
+          candidateName: callingTracker.candidateName.trim(),
           jobId: callingTracker.requirementId,
           salary: convertedCurrentCTC,
           experience: `${lineUpData.experienceYear} years ${lineUpData.experienceMonth} months`,
@@ -478,27 +482,23 @@ const CallingTrackerForm = ({
         setCallingTracker(initialCallingTrackerState);
         setLineUpData(initialLineUpState);
       }
+      // console.log("-------    bye    ----------");
     } catch (error) {
       setSubmited(false);
-      setLoading(false);
-      if (error.response) {
+      // console.log("-------    Hello    ----------");
 
+      // Check for full error details
+      if (error.response) {
         console.log("Error Response:", error.response);
         toast.error(
           "Error: " + error.response.data.message || "An error occurred"
         );
-        setSubmited(false);
-      setLoading(false);
       } else if (error.request) {
         console.log("Error Request:", error.request);
         toast.error("No response received from the server");
-        setSubmited(false);
-      setLoading(false);
       } else {
         console.log("Error Message:", error.message);
         toast.error("An error occurred: " + error.message);
-        setSubmited(false);
-      setLoading(false);
       }
     } finally {
       setLoading(false);
@@ -2691,7 +2691,6 @@ const ModalComponent = ({
                             style={{
                               position: "relative",
                               marginBottom: "4px",
-                              display:"flex"
                             }}
                           >
                             <input
