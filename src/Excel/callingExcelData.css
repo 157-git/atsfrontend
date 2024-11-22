@@ -375,3 +375,23 @@
   margin-left: 20px
 }
 
+
+/* Arshad Attrar Added CSS On 19-11-2024 */
+
+.share-select-number-div{
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  
+}
+
+.share-select-number-sub-div{
+  display: flex;
+  justify-content: space-evenly;
+  margin: 5px;
+}
+.share-date-rang-select{
+  background-color: #f2f2f2;
+  width: 200px;
+}

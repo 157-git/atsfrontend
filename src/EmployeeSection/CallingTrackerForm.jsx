@@ -478,23 +478,27 @@ const CallingTrackerForm = ({
         setCallingTracker(initialCallingTrackerState);
         setLineUpData(initialLineUpState);
       }
-      // console.log("-------    bye    ----------");
     } catch (error) {
       setSubmited(false);
-      // console.log("-------    Hello    ----------");
-
-      // Check for full error details
+      setLoading(false);
       if (error.response) {
+
         console.log("Error Response:", error.response);
         toast.error(
           "Error: " + error.response.data.message || "An error occurred"
         );
+        setSubmited(false);
+      setLoading(false);
       } else if (error.request) {
         console.log("Error Request:", error.request);
         toast.error("No response received from the server");
+        setSubmited(false);
+      setLoading(false);
       } else {
         console.log("Error Message:", error.message);
         toast.error("An error occurred: " + error.message);
+        setSubmited(false);
+      setLoading(false);
       }
     } finally {
       setLoading(false);
@@ -2687,6 +2691,7 @@ const ModalComponent = ({
                             style={{
                               position: "relative",
                               marginBottom: "4px",
+                              display:"flex"
                             }}
                           >
                             <input

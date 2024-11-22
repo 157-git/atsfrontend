@@ -9,22 +9,33 @@ const InterviewPreviousQuestion = () => {
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(""); // Error state
 
+  //Arshad Attar Added This New Function On 19-11-2024 According to new Backend Logic, 
   // Fetch interview data based on jobId
   const fetchInterviewData = async (id) => {
     setLoading(true);
-    setError(""); // Reset error state on new fetch
-
+    setError(""); 
+  
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/interview-questions/${id}`
-      );
-      setInterviewData(response.data); // Set the fetched interview data
+      const response = await axios.get(`${API_BASE_URL}/interview-questions/${id}`);
+  
+      if (response.status === 200) {
+        // Successfully fetched data
+        setInterviewData(response.data); // Set the fetched interview data
+      } else if (response.status === 404) {
+        // Data not foundIn
+        setError(response.data || `Interview Questions not found for Job ID : -  ${id}`);
+        setInterviewData([]); // Clear any existing data
+      }
     } catch (error) {
-      setError("Failed to fetch interview data. Please try again later."); // Set error message
+      // Handle errors returned by the backend or network errors
+      const backendErrorMessage = error.response?.data || `An error occurred while fetching data for Job ID: ${id}`;
+      setError(backendErrorMessage);
     } finally {
-      setLoading(false); // Set loading to false after fetch attempt
+      setLoading(false); // Ensure loading is stopped after the fetch attempt
     }
   };
+  
+  
 
   // Handle change in jobId input field
   const handleJobIdChange = (e) => {

@@ -162,46 +162,44 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
     }
   };
 
-  const handleUploadLineupFile = async () => {
-    // this variable should be changed in if condition added by sahil karnekar, previous variable file new variable lineupFile
-    if (!lineupFile) {
-      // line number 135 to 137 added by sahil karnekar
-      setHasErrorCalling(false);
-      setHasErrorResume(false);
-      setHasErrorLineup(true);
-      toast.error("Please select a file to upload."); //Swapnil Error&success message
-      return;
-    }
-    const formData = new FormData();
-    // this variable should be changed in formData.append("file", lineupFile); added by sahil karnekar, previous variable name file new variable lineupFile
-    formData.append("file", lineupFile);
-    setLoading(true);
-    try {
-      await axios.post(
-        `${API_BASE_URL}/upload-lineup-tracker/${employeeId}/${userType}`,
-
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      setUploadSuccessLineUp(true);
-      toast.success("File Uploaded Successfully");
-      setActiveTable("LineupExcelData");
-      hideSuccessMessage();
-      setLineupFile(null);
-      resetFileInput(lineupFileInputRef);
-      // this line number 166 added by sahil karnekar
-      setHasErrorLineup(false);
-    } catch (error) {
-      toast.error("Upload error:", error);
-    } finally {
-      setLoading(false); // Hide loader
-    }
-  };
+  // const handleUploadLineupFile = async () => {
+  //   // this variable should be changed in if condition added by sahil karnekar, previous variable file new variable lineupFile
+  //   if (!lineupFile) {
+  //     // line number 135 to 137 added by sahil karnekar
+  //     setHasErrorCalling(false);
+  //     setHasErrorResume(false);
+  //     setHasErrorLineup(true);
+  //     toast.error("Please select a file to upload."); //Swapnil Error&success message
+  //     return;
+  //   }
+  //   const formData = new FormData();
+  //   // this variable should be changed in formData.append("file", lineupFile); added by sahil karnekar, previous variable name file new variable lineupFile
+  //   formData.append("file", lineupFile);
+  //   setLoading(true);
+  //   try {
+  //     await axios.post(
+  //       `${API_BASE_URL}/upload-lineup-tracker/${employeeId}/${userType}`,
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       }
+  //     );
+  //     setUploadSuccessLineUp(true);
+  //     toast.success("File Uploaded Successfully");
+  //     setActiveTable("LineupExcelData");
+  //     hideSuccessMessage();
+  //     setLineupFile(null);
+  //     resetFileInput(lineupFileInputRef);
+  //     // this line number 166 added by sahil karnekar
+  //     setHasErrorLineup(false);
+  //   } catch (error) {
+  //     toast.error("Upload error:", error);
+  //   } finally {
+  //     setLoading(false); // Hide loader
+  //   }
+  // };
 
   const handleUploadResume = async () => {
     setActiveTable("");
@@ -361,7 +359,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                   <input
                     ref={fileInputRef} // Attach the ref here
                     type="file"
-                    accept=".xlsx, .xls"
+                    accept=".xlsx, .xls, .xlsm, .xlsb, .xltx, .xlt"
                     onChange={handleFileUpload}
                     className="form-control"
                     style={
