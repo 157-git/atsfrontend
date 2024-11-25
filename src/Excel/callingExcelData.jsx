@@ -155,6 +155,7 @@ const CallingExcelList = ({
         (item.extra7 && item.extra7.toLowerCase().includes(searchTermLower)) ||
         (item.extra8 && item.extra8.toLowerCase().includes(searchTermLower)) ||
         (item.extra9 && item.extra9.toLowerCase().includes(searchTermLower)) ||
+        (item.excelFileUploadDate && item.excelFileUploadDate.toLowerCase().includes(searchTermLower)) ||
         (item.extra10 &&
           item.extra10.toLowerCase().includes(searchTermLower)) ||
         (item.date && item.date.toLowerCase().includes(searchTermLower)) ||
@@ -1694,6 +1695,10 @@ const [customEnd, setCustomEnd] = useState("");
                   </div>
 
                   <div className="popup-section">
+                  <p>
+                      <strong>Excel Upload Date: </strong>
+                      {showModal?.excelFileUploadDate || "-"}
+                    </p>
                     <p>
                       <strong>Extra Columns 1: </strong>
                       {showModal?.extra1 || "-"}

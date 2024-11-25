@@ -395,7 +395,6 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                             border: "1px solid red",
                             borderRadius: "15px",
                             boxShadow: "0 0 2px 1px rgba(255, 0, 0, 0.7)",
-                            
                           }
                         : {}
                     }
@@ -431,9 +430,9 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                   {/* {
                     displayUploadButton && ( */}
 <button
-style={{
-  backgroundColor: !displayUploadButton ? "red" : ""
-}}
+// style={{
+//   backgroundColor: !displayUploadButton ? "gray" : ""
+// }}
 id="buttonUploadDynamic" onClick={handleUpload}>Upload</button>
                     {/* )
                   } */}

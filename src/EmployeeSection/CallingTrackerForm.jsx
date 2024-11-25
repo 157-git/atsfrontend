@@ -841,6 +841,8 @@ const CallingTrackerForm = ({
     }
   };
 
+  console.log(lineUpData);
+  
   return (
     <div className="calling-tracker-main">
       <section className="calling-tracker-submain">
