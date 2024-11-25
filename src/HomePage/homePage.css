@@ -268,7 +268,7 @@
     left: 0;
     width: 200%;
     height: 200vh;
-    /* background: url('/src/LogoImages/clouds.png') repeat-x; */
+    background: url('/src/LogoImages/clouds.png') repeat-x;
     background-size: cover;
     background-position: center;
     animation: moveclouds 30s linear infinite;

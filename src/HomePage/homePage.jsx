@@ -38,7 +38,7 @@ const HomePage = () => {
   return (
     <div className="bigb">
       <div className="main-homepage-clouds">
-        {/* <video src="../"></video> */}
+        <video src="../"></video>
       </div>
       <div
         style={{
@@ -93,19 +93,18 @@ const HomePage = () => {
                 paddingTop: "20px",
               }}
             >
-              <Link to="/Main-Dashboard">
+            <Link to="/Main-Dashboard">
                 <button className="main-homepage-btn">Let's begin</button>
               </Link>
             </div>
           </div>
-          <div className="Choose-color-container">
-            <button
-              className="Choose-Color-Btn"
-              onClick={() => setShowColor(true)}
-            >
-              <i className="fa-solid fa-chevron-right"></i>
-              <span>Choose Color</span>
-            </button>
+          <div
+            className="Choose-color-container"
+          >
+            <button className="Choose-Color-Btn" onClick={()=>setShowColor(true)}>
+    <i className="fa-solid fa-chevron-right"></i>
+    <span>Choose Color</span>
+  </button>
           </div>
         </div>
       </div>
@@ -129,9 +128,8 @@ const HomePage = () => {
             }}
           >
             <Modal.Body>
-              <ColorPicker
-                onColorApplied={handleColorApplied}
-                setShowColor={setShowColor}
+              <ColorPicker onColorApplied={handleColorApplied} 
+              setShowColor={setShowColor}
               />
             </Modal.Body>
           </Modal.Dialog>

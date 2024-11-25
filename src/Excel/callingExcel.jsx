@@ -10,6 +10,7 @@ import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import * as XLSX from "xlsx";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
   const [file, setFile] = useState(null);
@@ -38,6 +39,8 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
 
   const [sheetNames, setSheetNames] = useState([]);
   const [selectedSheets, setSelectedSheets] = useState({});
+  const [displayLoader, setDisplayLoader ] = useState(false);
+  const [displayUploadButton, setDisplayUploadButton ] = useState(false);
 
 
   // this code from line number 43 to 59 added by sahil karnekar methods are same as previous just added new code but all three methods complete code is required
@@ -73,12 +76,16 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
     }
   };
 
-  const handleFileUpload = (event) => {
+  const handleFileUpload = async (event) => {
+  
+   
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
     setUploadSuccess(false);
 
     if (selectedFile) {
+      setDisplayLoader(true);
+      setHasErrorCalling(false);
       const reader = new FileReader();
       reader.onload = (e) => {
         const data = new Uint8Array(e.target.result);
@@ -96,9 +103,14 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
           return acc;
         }, {});
         setSelectedSheets(initialSelectedSheets);
+      setDisplayLoader(false)
+      setDisplayUploadButton(true)
+      const uploadButton = document.getElementById("buttonUploadDynamic");
+      uploadButton.classList.add("newUploadStyle");
       };
       reader.readAsArrayBuffer(selectedFile);
     }
+  
   };
 
   const handleCheckboxChange = (index) => {
@@ -114,6 +126,8 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
 
     // Check if a file is selected
     if (!file) {
+      setHasErrorResume(false);
+      setHasErrorCalling(true);
       toast.error("Please select a file to upload.");
       setLoading(false);
       return;
@@ -358,7 +372,15 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
               </div>
 
               <div className="card-body">
-                <div className="mb-3">
+                <div className="mb-3 setDisplayLoader">
+                  {
+                    displayLoader && (
+                      <ClipLoader
+                      color={"#34D1B2"}
+                      />
+                    )
+                  }
+                  
                   {/* {!uploadSuccess && ( */}
                   <input
                     ref={fileInputRef} // Attach the ref here
@@ -367,11 +389,13 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                     onChange={handleFileUpload}
                     className="form-control"
                     style={
-                      hasErrorResume
+                      // this is updated by sahil karnekar
+                      hasErrorCalling
                         ? {
                             border: "1px solid red",
                             borderRadius: "15px",
                             boxShadow: "0 0 2px 1px rgba(255, 0, 0, 0.7)",
+                            
                           }
                         : {}
                     }
@@ -380,7 +404,9 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                 </div>
                 <div>
                   {sheetNames.length > 0 ? (
+                   
                     <ul>
+                      <p>Please Select Sheet</p>
                       {sheetNames.map(({ name, index }) => (
                         <li key={index}>
                           <label>
@@ -396,12 +422,22 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                       ))}
                     </ul>
                   ) : (
-                    file && <p>No sheets found in the selected file.</p>
+                    !sheetNames && <p>No sheets found in the selected file.</p>
                   )}
                 </div>
 
                 <div className="gap-2 d-grid">
-                  <button onClick={handleUpload}>Upload</button>
+                  {/* updated by sahil karnekar */}
+                  {/* {
+                    displayUploadButton && ( */}
+<button
+style={{
+  backgroundColor: !displayUploadButton ? "red" : ""
+}}
+id="buttonUploadDynamic" onClick={handleUpload}>Upload</button>
+                    {/* )
+                  } */}
+                  
                   {/* download added by sahil karnekar line 275 to 277 */}
                   {/* <button
                     onClick={() =>

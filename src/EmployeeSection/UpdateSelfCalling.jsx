@@ -562,9 +562,12 @@ const UpdateSelfCalling = ({
     try {
       // Clear all existing errors at the start of submission added by sahil karnekar date 21-10-2024
       setErrors({});
+// this line added by sahil karnekar to trim the candidate name 
+      const forTrimCandidateName = callingTracker.candidateName.trim();
 
       const dataToUpdate = {
         ...callingTracker,
+        candidateName: forTrimCandidateName,
         recruiterName: loginEmployeeName,
         candidateAddedTime: callingTracker.candidateAddedTime,
         lineUp: {
@@ -750,7 +753,7 @@ const UpdateSelfCalling = ({
                   name="candidateName"
                   className={`plain-input`}
                   // validation added by sahil karnekar date 19-11-2024
-                  value={callingTracker.candidateName.trim() || ""}
+                  value={callingTracker.candidateName || ""}
                   onChange={handleChange}
                   maxlength="50"
                 />

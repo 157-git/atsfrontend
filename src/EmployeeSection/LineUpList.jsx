@@ -88,14 +88,14 @@ const LineUpList = ({
     ["communicationRating", "Communication Rating"],
     ["companyName", "Company Name"],
     ["contactNumber", "Contact Number"],
-    ["currentCtcLakh", "Current CTC (Lakh)"],
-    ["currentCtcThousand", "Current CTC (Thousand)"],
+    ["currentCTCLakh", "Current CTC (Lakh)"],
+    ["currentCTCThousand", "Current CTC (Thousand)"],
     ["currentLocation", "Current Location"],
     ["date", "Date"],
     ["dateOfBirth", "Date of Birth"],
     ["empId", "Employee ID"],
-    ["expectedCtcLakh", "Expected CTC (Lakh)"],
-    ["expectedCtcThousand", "Expected CTC (Thousand)"],
+    ["expectedCTCLakh", "Expected CTC (Lakh)"],
+    ["expectedCTCThousand", "Expected CTC (Thousand)"],
     ["experienceMonth", "Experience (Month)"],
     ["experienceYear", "Experience (Year)"],
     ["extraCertification", "Extra Certification"],
@@ -842,7 +842,9 @@ const LineUpList = ({
                         new Set(
                           callingList
                             .map((item) =>
+                              // console.log(item, item[optionKey]),
                               item[optionKey]?.toString().toLowerCase()
+                              
                             )
                             .filter(
                               (value) =>
@@ -870,6 +872,7 @@ const LineUpList = ({
                             <div className="city-filter">
                               <div className="optionDiv">
                                 {uniqueValues.length > 0 ? (
+                                  console.log(uniqueValues),
                                   uniqueValues.map((value) => (
                                     <label
                                       key={value}

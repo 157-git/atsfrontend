@@ -88,7 +88,23 @@ const [displayTickPhoto, setDisplayTickPhoto] = useState(false);
       } else if (name === "lineup.photo") {
           setDisplayTickPhoto(true);
       }
-  } else {
+  } else if (name.startsWith("questions[")) {
+    const questionIndex = parseInt(name.split("[")[1].split("]")[0], 10);
+    const questionKey = name.split(".")[1];
+
+    setFormData((prevData) => {
+      const updatedQuestions = [...prevData.questions];
+      updatedQuestions[questionIndex] = {
+        ...updatedQuestions[questionIndex],
+        [questionKey]: e.target.type === "file" ? files[0] :e.target.value,
+      };
+
+      return {
+        ...prevData,
+        questions: updatedQuestions,
+      };
+    });
+  }else {
       const [parentKey, childKey] = name.split('.');
       if (parentKey && childKey) {
           setFormData((prev) => ({
@@ -453,8 +469,8 @@ toast.success("Your Details Submitted Successfully");
         <p className="p11">What motivated you to apply for this position?</p>
         <div className="flextdiv">
           <textarea className="textareaadditional" placeholder="Type Here..."  
-          name="questions.question1"
-          value={formData.questions.question1}
+          name="questions[0].question1"
+          value={formData.questions[0].question1}
           onChange={handleInputChange}
           />
         </div>
@@ -467,8 +483,8 @@ toast.success("Your Details Submitted Successfully");
         </p>
         <div className="flextdiv">
           <textarea className="textareaadditional" placeholder="Type Here..." 
-          name="questions.question2"
-          value={formData.questions.question2}
+          name="questions[0].question2"
+          value={formData.questions[0].question2}
           onChange={handleInputChange}
           />
         </div>
@@ -481,8 +497,8 @@ toast.success("Your Details Submitted Successfully");
         </p>
         <div className="flextdiv">
           <textarea className="textareaadditional" placeholder="Type Here..."
-          name="questions.question3"
-          value={formData.questions.question3}
+          name="questions[0].question3"
+          value={formData.questions[0].question3}
           onChange={handleInputChange}
           />
         </div>

@@ -15,6 +15,8 @@ const CallingExcelList = ({
   funForGettingCandidateId,
   onCloseTable,
   loginEmployeeName,
+  // updated by sahil karnekar
+   toggleSection,
   onsuccessfulDataAdditions,
   // toggleSection,
 
@@ -709,6 +711,8 @@ const CallingExcelList = ({
   const openCallingExcelList = (candidateData) => {
     console.log("Link Come here....");
     setSelectedCandidate(candidateData);
+    // updated by sahil karnekar
+     toggleSection(false);
   };
 
   const openModal = (candidate) => {
@@ -1451,7 +1455,7 @@ const [customEnd, setCustomEnd] = useState("");
                           onMouseOut={handleMouseOut}
                           onClick={() => openModal(item)}
                         >
-                          <i class="fa-solid fa-database"></i>
+                          <i className="fa-solid fa-database"></i>
                         </td>
                         <td
                           className="tabledata"

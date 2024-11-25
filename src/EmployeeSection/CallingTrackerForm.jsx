@@ -447,13 +447,17 @@ const CallingTrackerForm = ({
     setLoading(true);
 
     try {
+      // lines updated sahil karnekar
       let dataToUpdate = {
-        callingTracker: { ...callingTracker },
+        callingTracker: {
+          ...callingTracker,
+          candidateName: callingTracker.candidateName.trim(), // Trim candidateName here
+        },
         performanceIndicator: {
           employeeId: employeeId,
           employeeName: loginEmployeeName,
           jobRole: userType,
-          candidateName: callingTracker.candidateName,
+          candidateName: callingTracker.candidateName.trim(),
           jobId: callingTracker.requirementId,
           salary: convertedCurrentCTC,
           experience: `${lineUpData.experienceYear} years ${lineUpData.experienceMonth} months`,
@@ -522,11 +526,12 @@ const CallingTrackerForm = ({
         setCallingTracker(initialCallingTrackerState);
         setLineUpData(initialLineUpState);
       }
+      // console.log("-------    bye    ----------");
     } catch (error) {
       setSubmited(false);
       setLoading(false);
       if (error.response) {
-        console.log("Error Response 09 --- :", error.response);
+        console.log("Error Response:", error.response);
         toast.error(
           "Error: " + error.response.data.message || "An error occurred"
         );
@@ -938,7 +943,7 @@ const CallingTrackerForm = ({
                       type="text"
                       name="candidateName"
                       // validation added by sahil karnekar date 19-11-2024
-                      value={callingTracker.candidateName}
+                      value={callingTracker.candidateName} 
                       className={`plain-input`}
                       onChange={handleChange}
                       placeholder="Enter Candidate Name"
@@ -2795,7 +2800,6 @@ const ModalComponent = ({
                             style={{
                               position: "relative",
                               marginBottom: "4px",
-                              display: "flex",
                             }}
                           >
                             <input
