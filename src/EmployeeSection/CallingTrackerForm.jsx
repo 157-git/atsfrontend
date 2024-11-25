@@ -52,7 +52,7 @@ const CallingTrackerForm = ({
     requirementCompany: "",
     sourceName: "",
     contactNumber: "",
-    incentive: "",
+    incentive: "0.0",
     alternateNumber: "",
     currentLocation: "",
     fullAddress: "",
@@ -130,11 +130,15 @@ const CallingTrackerForm = ({
         } else if (["candidateId", "candidateAddedTime"].includes(key)) {
           updatedCallingTracker[key] = "";
           updatedLineUpData[key] = "";
-        } else {
+        } else if (updatedCallingTracker.hasOwnProperty(key)) {
           updatedCallingTracker[key] = ensureStringValue(initialData[key]);
+        } else if (updatedLineUpData.hasOwnProperty(key)) {
           updatedLineUpData[key] = ensureStringValue(initialData[key]);
         }
       });
+
+      // Explicitly set recruiterName to loginEmployeeName
+      updatedCallingTracker.recruiterName = loginEmployeeName;
 
       setCallingTracker(updatedCallingTracker);
       setLineUpData(updatedLineUpData);
@@ -298,6 +302,20 @@ const CallingTrackerForm = ({
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
+  const handleIncentiveChange = (e) => {
+    const value = e.target.value;
+  
+    // Remove any non-numeric characters (except for "." for decimal point) using regex
+    const sanitizedValue = value.replace(/[^0-9.]/g, "");
+  
+    // Update incentive only if sanitized value is a valid number or an empty string
+    setCallingTracker((prevState) => ({
+      ...prevState,
+      incentive: sanitizedValue === "" || isNaN(parseFloat(sanitizedValue)) ? "0.0" : sanitizedValue,
+    }));
+  };
+  
+
   const handlePhoneNumberChange = (value, name) => {
     const sanitizedValue =
       typeof value === "string" ? value.replace(/\s+/g, "") : value;
@@ -389,6 +407,8 @@ const CallingTrackerForm = ({
   const handleSubmit = async (e) => {
     setShowConfirmation(false);
     e.preventDefault();
+
+    // Validate fields
     let callingTrackerErrors = validateCallingTracker() || {};
     let lineUpDataErrors = validateLineUpData() || {};
 
@@ -399,6 +419,17 @@ const CallingTrackerForm = ({
       setErrors({ ...callingTrackerErrors, ...lineUpDataErrors });
       return;
     }
+
+
+  // Ensure 'incentive' is a valid number (if it's invalid, default to 0.0)
+  const incentiveValue = parseFloat(callingTracker.incentive);
+  const validIncentive = isNaN(incentiveValue) ? 0.0 : incentiveValue;
+
+  // Update the incentive field in the state to ensure it's valid
+  setCallingTracker((prevState) => ({
+    ...prevState,
+    incentive: validIncentive.toFixed(1), // Ensure it's a number with one decimal point
+  }));
 
     let formFillingTime = null;
     if (startTime) {
@@ -411,6 +442,7 @@ const CallingTrackerForm = ({
       );
       formFillingTime = `${minutes} minutes and ${seconds} seconds`;
     }
+
     setSubmited(true);
     setLoading(true);
 
@@ -452,7 +484,6 @@ const CallingTrackerForm = ({
         dataToUpdate.callingTracker.teamLeader = { teamLeaderId: employeeId };
       }
 
-      dataToUpdate.lineUp = lineUpData;
       const response = await axios.post(
         `${API_BASE_URL}/calling-tracker`,
         dataToUpdate,
@@ -463,7 +494,20 @@ const CallingTrackerForm = ({
         }
       );
 
-      if (response.status === 200 || response.status === 201 || response) {
+      if (response.status === 200 || response.status === 201) {
+
+        //Arshad Attar Added this function to add data from excel and Resume data base and
+        // after added in data based delete from excel & resume data base
+        //added On Date : 22-11-2024
+        if (initialData && initialData.candidateId) {
+          if (initialData.sourceComponent === "ResumeList") {
+            await deleteResumeDataById(initialData.candidateId);
+          } else if (initialData.sourceComponent === "CallingExcelList") {
+            await deleteExcelDataById(initialData.candidateId);
+          }
+        }
+        
+
         if (callingTracker.selectYesOrNo === "Interested") {
           onsuccessfulDataAdditions(true);
         } else {
@@ -482,34 +526,88 @@ const CallingTrackerForm = ({
       setSubmited(false);
       setLoading(false);
       if (error.response) {
-
-        console.log("Error Response:", error.response);
+        console.log("Error Response 09 --- :", error.response);
         toast.error(
           "Error: " + error.response.data.message || "An error occurred"
         );
-        setSubmited(false);
-      setLoading(false);
       } else if (error.request) {
-        console.log("Error Request:", error.request);
+        console.log("Error Request 09 --- :", error.request);
         toast.error("No response received from the server");
-        setSubmited(false);
-      setLoading(false);
       } else {
-        console.log("Error Message:", error.message);
+        console.log("Error Message  09 --- :", error.message);
         toast.error("An error occurred: " + error.message);
-        setSubmited(false);
-      setLoading(false);
       }
     } finally {
       setLoading(false);
     }
   };
 
+//Arshad Attar Added this function to add data from excel and after added in data based delete from excel
+//added On Date : 22-11-2024
+  const deleteExcelDataById = async (candidateId) => {
+    try {
+      const response = await axios.delete(
+        `${API_BASE_URL}/delete-excel-data/${candidateId}`
+      );
+  
+      if (response.status === 200 || response.status === 204) {
+        console.log(`Data with candidateId ${candidateId} deleted successfully.`);
+        toast.success("Candidate Data Transfered Succefully...");
+      } else {
+        console.warn(`Unexpected response status: ${response.status}`);
+        toast.warning("Unable to Transfered Candidate Data");
+      }
+    } catch (error) {
+      console.error("Error while deleting data:", error);
+      if (error.response) {
+        toast.error(
+          `Delete Error: ${error.response.data.message || "An error occurred"}`
+        );
+      } else if (error.request) {
+        toast.error("Delete Error: No response received from the server");
+      } else {
+        toast.error(`Delete Error: ${error.message}`);
+      }
+    }
+  };
+
+  
+//Arshad Attar Added this function to add data from Resume Data Base and after added in data based delete from Resume Data Base
+//added On Date : 22-11-2024Res
+  const deleteResumeDataById = async (candidateId) => {
+    try {
+      const response = await axios.delete(
+        `${API_BASE_URL}/delete-resume-data/${candidateId}`
+      );
+  
+      if (response.status === 200 || response.status === 204) {
+        console.log(`Data with candidateId ${candidateId} deleted successfully.`);
+        toast.success("Candidate Data Transfered Succefully...");
+      } else {
+        console.warn(`Unexpected response status: ${response.status}`);
+        toast.warning("Unable to Transfered Candidate Data");
+      }
+    } catch (error) {
+      console.error("Error while deleting data:", error);
+      if (error.response) {
+        toast.error(
+          `Delete Error: ${error.response.data.message || "An error occurred"}`
+        );
+      } else if (error.request) {
+        toast.error("Delete Error: No response received from the server");
+      } else {
+        toast.error(`Delete Error: ${error.message}`);
+      }
+    }
+  };
+
+  
+
   //Arshad Attar Added This , Now Resume will added Proper in data base.  18-10-2024
   //Start Line 451
   const handleResumeFileChange = (e) => {
     const file = e.target.files[0];
-    
+
     if (file) {
       setResumeUploaded(true);
       const reader = new FileReader();
@@ -840,7 +938,7 @@ const CallingTrackerForm = ({
                       type="text"
                       name="candidateName"
                       // validation added by sahil karnekar date 19-11-2024
-                      value={callingTracker.candidateName.trim()} 
+                      value={callingTracker.candidateName}
                       className={`plain-input`}
                       onChange={handleChange}
                       placeholder="Enter Candidate Name"
@@ -1002,8 +1100,8 @@ const CallingTrackerForm = ({
                     <input
                       placeholder="Your Incentive"
                       value={callingTracker.incentive}
-                      readOnly
                       type="text"
+                      onChange={handleIncentiveChange}
                     />
                   </div>
                 </div>
@@ -1726,10 +1824,11 @@ const CallingTrackerForm = ({
             </div>
             <div className="calling-tracker-row-white">
               <div className="calling-tracker-field">
-                <label>
-                  Save Resume File
-                </label>
-                <div style={{display:"flex",flexDirection:"row"}} className="calling-tracker-field-sub-div">
+                <label>Save Resume File</label>
+                <div
+                  style={{ display: "flex", flexDirection: "row" }}
+                  className="calling-tracker-field-sub-div"
+                >
                   <input
                     type="file"
                     name="resume"
@@ -1738,10 +1837,15 @@ const CallingTrackerForm = ({
                     className="plain-input"
                   />
                   {resumeUploaded && (
-                     <FontAwesomeIcon
-                     icon={faCheckCircle}
-                     style={{ color: "green", marginLeft: "3px",marginTop:"5px",fontSize:"22px" }}
-                   />
+                    <FontAwesomeIcon
+                      icon={faCheckCircle}
+                      style={{
+                        color: "green",
+                        marginLeft: "3px",
+                        marginTop: "5px",
+                        fontSize: "22px",
+                      }}
+                    />
                   )}
                   {errors.resume && (
                     <div className="error-message">{errors.resume}</div>
@@ -2691,7 +2795,7 @@ const ModalComponent = ({
                             style={{
                               position: "relative",
                               marginBottom: "4px",
-                              display:"flex"
+                              display: "flex",
                             }}
                           >
                             <input

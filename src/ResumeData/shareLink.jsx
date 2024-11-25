@@ -1,25 +1,63 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { RWebShare } from "react-web-share";
 import "../ResumeData/shareLink.css";
 
 const ShareLink = ({ toggleResumeLink }) => {
   const { employeeId, userType } = useParams();
   const [copyMessage, setCopyMessage] = useState("");
 
+  //Arshad Attar Added This Code on 25-11-2024 ( New Code According to share link and copy link )
   // Hardcoded base URL for sharing
   const shareUrl = `http://93.127.199.85/157industries/${employeeId}/${userType}/candidate-form`;
 
+  // Share using Web Share API
+  const handleShareLink = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Share Candidate Form",
+          text: "Click the link to fill out the candidate form",
+          url: shareUrl,
+        });
+      } catch (err) {
+        console.error("Error sharing:", err);
+        alert("Failed to share. Please try again.");
+      }
+    } else {
+      alert("Sharing is not supported on this device or browser.");
+    }
+  };
+
+  // Copy URL to clipboard
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(shareUrl)
-      .then(() => {
+    if (navigator.clipboard) {
+      navigator.clipboard
+        .writeText(shareUrl)
+        .then(() => {
+          setCopyMessage("The link has been copied to your clipboard.");
+          setTimeout(() => setCopyMessage(""), 3000); // Clear message after 3 seconds
+        })
+        .catch((err) => {
+          console.error("Copy failed: ", err);
+          setCopyMessage("Failed to copy the link. Please try again.");
+        });
+    } else {
+      // Fallback for older browsers
+      const textArea = document.createElement("textarea");
+      textArea.value = shareUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand("copy");
         setCopyMessage("The link has been copied to your clipboard.");
-        setTimeout(() => setCopyMessage(""), 3000); // Clear message after 3 seconds
-      })
-      .catch((err) => {
+      } catch (err) {
+        console.error("Fallback copy failed: ", err);
         setCopyMessage("Failed to copy the link. Please try again.");
-        console.error("Copy failed: ", err);
-      });
+      } finally {
+        document.body.removeChild(textArea);
+        setTimeout(() => setCopyMessage(""), 3000);
+      }
+    }
   };
 
   return (
@@ -27,21 +65,9 @@ const ShareLink = ({ toggleResumeLink }) => {
       <div className="shareLink-share-btn-Div">
         <h1>Share Link To Candidate</h1>
         <div className="share-copy-div">
-          {navigator.share ? (
-            <RWebShare
-              data={{
-                url: shareUrl,
-                title: "Share Candidate Form",
-                text: "Click the link to fill out the candidate form",
-              }}
-            >
-              <button className="shareLink-share-btn">Share 🔗</button>
-            </RWebShare>
-          ) : (
-            <button className="shareLink-share-btn" onClick={() => alert("Sharing is not supported on this device.")}>
-              Share 🔗
-            </button>
-          )}
+          <button className="shareLink-share-btn" onClick={handleShareLink}>
+            Share 🔗
+          </button>
           <button className="shareLink-share-btn" onClick={handleCopyLink}>
             Copy Link 🔗
           </button>
@@ -55,7 +81,7 @@ const ShareLink = ({ toggleResumeLink }) => {
           </div>
         )}
       </div>
-      
+
       <div className="shareLink-view-btn-Div">
         <h1>Resume Builder</h1>
         <button className="shareLink-view-btn" onClick={toggleResumeLink}>

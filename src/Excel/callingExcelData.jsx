@@ -15,8 +15,9 @@ const CallingExcelList = ({
   funForGettingCandidateId,
   onCloseTable,
   loginEmployeeName,
-  // toggleSection,
   onsuccessfulDataAdditions,
+  // toggleSection,
+
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOptions, setFilterOptions] = useState([]);
@@ -706,8 +707,8 @@ const CallingExcelList = ({
   };
 
   const openCallingExcelList = (candidateData) => {
+    console.log("Link Come here....");
     setSelectedCandidate(candidateData);
-    // toggleSection(false);
   };
 
   const openModal = (candidate) => {
@@ -1751,7 +1752,7 @@ const [customEnd, setCustomEnd] = useState("");
           )}
           {selectedCandidate && (
             <CallingTrackerForm
-              initialData={selectedCandidate}
+            initialData={{ ...selectedCandidate, sourceComponent: "CallingExcelList" }}
               loginEmployeeName={loginEmployeeName}
               onClose={() => setSelectedCandidate(null)}
               onSuccess={handleUpdateSuccess}
