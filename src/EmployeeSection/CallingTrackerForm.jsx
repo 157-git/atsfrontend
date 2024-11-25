@@ -738,6 +738,48 @@ const CallingTrackerForm = ({
     }
   };
 
+  console.log(lineUpData);
+
+  // this fucntion is made by sahil karnekar on date 25-11-2024
+  const handleResumeUploadBoth = async (e)=>{
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file) {
+
+await handleUploadAndSetData(e);
+
+      setResumeUploaded(true);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const arrayBuffer = reader.result;
+        const byteArray = new Uint8Array(arrayBuffer);
+        const chunkSize = 0x8000;
+        let base64String = "";
+
+        for (let i = 0; i < byteArray.length; i += chunkSize) {
+          base64String += String.fromCharCode.apply(
+            null,
+            byteArray.subarray(i, i + chunkSize)
+          );
+        }
+        base64String = btoa(base64String);
+        setLineUpData((prevState) => {
+          if (prevState.resume !== base64String) {
+            return {
+              ...prevState,
+              resume: base64String,
+            };
+          }
+          return prevState;
+        });
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+
+  }
+
   return (
     <div className="calling-tracker-main">
       <section className="calling-tracker-submain">
@@ -771,14 +813,34 @@ const CallingTrackerForm = ({
               </div>
               <div className="calling-tracker-field">
                 <label>Upload Resume</label>
-                <div className="calling-tracker-field-sub-div">
-                  <input
+                <div className="calling-tracker-field-sub-div"
+                style={{display:"block"}}
+                >
+                  {/* <input
                     style={{ width: "-webkit-fill-available" }}
                     type="file"
-                    onChange={handleUploadAndSetData}
+                    name="resumeSet"
+                    onChange={handleResumeUploadBoth}
                     className="plain-input"
                     placeholder="Upload Resume"
+                  /> */}
+
+<input
+                    type="file"
+                    name="resume"
+                    onChange={handleResumeUploadBoth}
+                    accept=".pdf,.doc,.docx"
+                    className="plain-input"
                   />
+                  {resumeUploaded && (
+                     <FontAwesomeIcon
+                     icon={faCheckCircle}
+                     style={{ color: "green", marginLeft: "3px",marginTop:"5px",fontSize:"22px" }}
+                   />
+                  )}
+                  {errors.resume && (
+                    <div className="error-message">{errors.resume}</div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1730,10 +1792,11 @@ const CallingTrackerForm = ({
                   Save Resume File
                 </label>
                 <div style={{display:"flex",flexDirection:"row"}} className="calling-tracker-field-sub-div">
-                  <input
+                  {/* this lines commented by sahil karnekar on date 25-11-2024 */}
+                  {/* <input
                     type="file"
                     name="resume"
-                    onChange={handleResumeFileChange}
+                    onChange={handleResumeUploadBoth}
                     accept=".pdf,.doc,.docx"
                     className="plain-input"
                   />
@@ -1745,7 +1808,42 @@ const CallingTrackerForm = ({
                   )}
                   {errors.resume && (
                     <div className="error-message">{errors.resume}</div>
-                  )}
+                  )} */}
+                {/* line 1812 to 1846 added by sahil karnekar on date 25-11-2024 */}
+          <div className="calling-tracker-two-input"
+          style={{
+            width: "-webkit-fill-available",
+            marginRight:"40px"
+          }}
+          >
+                    {/* this line added by sahil date 22-10-2024 */}
+                    <div className="setRequiredStarDiv">
+                      <input
+                        type="text"
+                        name="noticePeriod"
+                        placeholder="Notice Period"
+                        value={lineUpData.noticePeriod}
+                        onChange={handleLineUpChange}
+                        min="0"
+                        max="90"
+                        //  {/* this line added by sahil date 22-10-2024 */}
+                        style={{ width: "inherit" }}
+                      />
+                      {/* this line added by sahil date 22-10-2024 */}
+                      {callingTracker.selectYesOrNo === "Interested" &&
+                        !lineUpData.noticePeriod && (
+                          <span className="requiredFieldStar">*</span>
+                        )}
+                    </div>
+                    {/* sahil karnekar line 1581 to 1585  */}
+                    {errors.noticePeriod && (
+                      <div className="error-message">
+                        {errors.noticePeriod || errors.noticePeriod}
+                      </div>
+                    )}
+                  </div>
+       
+      
                 </div>
               </div>
               <div className="calling-tracker-field">
@@ -1854,7 +1952,13 @@ const CallingTrackerForm = ({
               <div className="calling-tracker-field">
                 <label>Relevant Experience</label>
                 <div className="calling-tracker-two-input-container">
-                  <div className="calling-tracker-two-input">
+                  <div className="calling-tracker-two-input"
+                  style={{
+                    width: "-webkit-fill-available",
+                    marginRight:"43px",
+                    marginLeft:"4px"
+                  }}
+                  >
                     {/* this line added by sahil date 22-10-2024 */}
                     <div className="setRequiredStarDiv">
                       <input
@@ -1878,33 +1982,37 @@ const CallingTrackerForm = ({
                       </div>
                     )}
                   </div>
-                  <div className="calling-tracker-two-input">
+
+                  {/* this lines commened by sahil karnekar date 25-11-2024 */}
+
+                  {/* this lines commented by sahil karnekar on date 25-11-2024 to move the notice period input */}
+                  {/* <div className="calling-tracker-two-input"> */}
                     {/* this line added by sahil date 22-10-2024 */}
-                    <div className="setRequiredStarDiv">
-                      <input
+                    {/* <div className="setRequiredStarDiv"> */}
+                      {/* <input
                         type="text"
                         name="noticePeriod"
                         placeholder="Notice Period"
                         value={lineUpData.noticePeriod}
                         onChange={handleLineUpChange}
                         min="0"
-                        max="90"
-                        //  {/* this line added by sahil date 22-10-2024 */}
-                        style={{ width: "inherit" }}
-                      />
+                        max="90" */}
+                        {/* //  this line added by sahil date 22-10-2024 */}
+                        {/* // style={{ width: "inherit" }} */}
+                      {/* // /> */}
                       {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" &&
+                      {/* {callingTracker.selectYesOrNo === "Interested" &&
                         !lineUpData.noticePeriod && (
                           <span className="requiredFieldStar">*</span>
-                        )}
-                    </div>
-                    {/* sahil karnekar line 1581 to 1585  */}
+                        )} */}
+                    {/* </div> */}
+                    {/* sahil karnekar line 1581 to 1585 
                     {errors.noticePeriod && (
                       <div className="error-message">
                         {errors.noticePeriod || errors.noticePeriod}
                       </div>
-                    )}
-                  </div>
+                    )} */}
+                  {/* </div> */}
                 </div>
               </div>
 
