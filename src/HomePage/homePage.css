@@ -148,6 +148,7 @@
       transform: translateX(-50%);
   }
 }
+
 @media screen and (max-width: 768px) {
   .main-homepage-Member,
   .main-homepage-candidate {

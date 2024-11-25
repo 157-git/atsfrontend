@@ -39,9 +39,9 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
 
   const [sheetNames, setSheetNames] = useState([]);
   const [selectedSheets, setSelectedSheets] = useState({});
-  const [displayLoader, setDisplayLoader ] = useState(false);
-  const [displayUploadButton, setDisplayUploadButton ] = useState(false);
-
+  const [displayLoader, setDisplayLoader] = useState(false);
+  const [displayUploadButton, setDisplayUploadButton] = useState(false);
+  const [viewsSearchTerm,setSearchTerm]=useState();
 
   // this code from line number 43 to 59 added by sahil karnekar methods are same as previous just added new code but all three methods complete code is required
   const handleFileChange = (e) => {
@@ -77,8 +77,6 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
   };
 
   const handleFileUpload = async (event) => {
-  
-   
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
     setUploadSuccess(false);
@@ -103,14 +101,13 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
           return acc;
         }, {});
         setSelectedSheets(initialSelectedSheets);
-      setDisplayLoader(false)
-      setDisplayUploadButton(true)
-      const uploadButton = document.getElementById("buttonUploadDynamic");
-      uploadButton.classList.add("newUploadStyle");
+        setDisplayLoader(false);
+        setDisplayUploadButton(true);
+        const uploadButton = document.getElementById("buttonUploadDynamic");
+        uploadButton.classList.add("newUploadStyle");
       };
       reader.readAsArrayBuffer(selectedFile);
     }
-  
   };
 
   const handleCheckboxChange = (index) => {
@@ -162,6 +159,9 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
 
       setUploadSuccess(true);
       toast.success("File Uploaded Successfully");
+      fetchUpdatedData();
+      const currentTime = getCurrentIndianTime();
+      setSearchTerm(currentTime); 
 
       // Reset file input and related state
       setFile(null);
@@ -173,7 +173,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
       }
     } catch (error) {
       // Error: show error toast but keep the file selected
-      toast.error(`Upload error: ${error.message}`);
+      toast.error(`Upload error 009 : ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -218,10 +218,9 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
   //   }
   // };
 
-  
   const handleUploadResume = async () => {
     setActiveTable("");
-    var openTable="ResumeList";
+    var openTable = "ResumeList";
     if (!selectedFiles.length) {
       // Set error for resume if no files are selected
       setHasErrorCalling(false);
@@ -261,7 +260,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
         hideSuccessMessage();
         setSelectedFiles([]);
         resetFileInput(resumeFileInputRef);
-        setHasErrorResume(false); 
+        setHasErrorResume(false);
       }
     } catch (error) {
       toast.error("Error uploading files.");
@@ -270,9 +269,27 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
     }
   };
 
-  const handleTableChange = (tableName) => {
-    setActiveTable(tableName);
+  const getCurrentIndianTime = () => {
+    const date = new Date();
+    return new Intl.DateTimeFormat('en-IN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    }).format(date).replace(',', ''); // Ensure no comma in the output
   };
+  
+  const handleTableChange = (tableName) => { 
+    setActiveTable(tableName);
+    if (tableName === "CallingExcelList") {
+        const currentTime = getCurrentIndianTime();
+        setSearchTerm(currentTime); // Set the current time as the search term
+    }
+};
+
+  
 
   const handleActionClick = () => {
     setShowCards(false);
@@ -373,14 +390,8 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
 
               <div className="card-body">
                 <div className="mb-3 setDisplayLoader">
-                  {
-                    displayLoader && (
-                      <ClipLoader
-                      color={"#34D1B2"}
-                      />
-                    )
-                  }
-                  
+                  {displayLoader && <ClipLoader color={"#34D1B2"} />}
+
                   {/* {!uploadSuccess && ( */}
                   <input
                     ref={fileInputRef} // Attach the ref here
@@ -403,7 +414,6 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                 </div>
                 <div>
                   {sheetNames.length > 0 ? (
-                   
                     <ul>
                       <p>Please Select Sheet</p>
                       {sheetNames.map(({ name, index }) => (
@@ -429,14 +439,18 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                   {/* updated by sahil karnekar */}
                   {/* {
                     displayUploadButton && ( */}
-<button
-// style={{
-//   backgroundColor: !displayUploadButton ? "gray" : ""
-// }}
-id="buttonUploadDynamic" onClick={handleUpload}>Upload</button>
-                    {/* )
+                  <button
+                    // style={{
+                    //   backgroundColor: !displayUploadButton ? "gray" : ""
+                    // }}
+                    id="buttonUploadDynamic"
+                    onClick={handleUpload}
+                  >
+                    Upload
+                  </button>
+                  {/* )
                   } */}
-                  
+
                   {/* download added by sahil karnekar line 275 to 277 */}
                   {/* <button
                     onClick={() =>
@@ -554,6 +568,9 @@ id="buttonUploadDynamic" onClick={handleUpload}>Upload</button>
             onClick={displayCandidateForm}
             toggleSection={toggleSection}
             loginEmployeeName={loginEmployeeName}
+            viewsSearchTerm={viewsSearchTerm} 
+            fetchUpdatedData={fetchUpdatedData}
+
             // this line added by sahil karnekar line 302
           />
         )}
