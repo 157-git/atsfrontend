@@ -19,7 +19,7 @@ const CallingExcelList = ({
    toggleSection,
   onsuccessfulDataAdditions,
   // toggleSection,
-
+  viewsSearchTerm,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOptions, setFilterOptions] = useState([]);
@@ -39,7 +39,6 @@ const CallingExcelList = ({
   const [showModal, setShowModal] = useState();
   const [loading, setLoading] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [selectedCandidateResume, setSelectedCandidateResume] = useState("");
   // Arshad Attar Added This Code On 18-11-2024
@@ -137,6 +136,14 @@ const CallingExcelList = ({
       return newSelectedFilters;
     });
   };
+
+  useEffect(() => {
+    if (viewsSearchTerm) {
+        setSearchTerm(viewsSearchTerm); // Sync viewsSearchTerm to local searchTerm
+        filterData(); // Re-trigger data filtering
+    }
+}, [viewsSearchTerm]);
+
 
   useEffect(() => {
     filterData();
