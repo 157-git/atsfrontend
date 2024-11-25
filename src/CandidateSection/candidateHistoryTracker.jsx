@@ -304,6 +304,7 @@ const CandidateHistoryTracker = () => {
       console.warn("Missing parameters: startDate, endDate, or openDropdown");
     }
   };
+  
 
   return (
     <div>

@@ -215,6 +215,7 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
+  
   const limitedOptions = [
     ["candidateEmail", "Candidate Email"],
     ["candidateName", "Candidate Name"],
@@ -770,7 +771,7 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
           <div className="callingExcelData-update-form">
             {selectedCandidate && (
               <CallingTrackerForm
-                initialData={selectedCandidate}
+              initialData={{ ...selectedCandidate, sourceComponent: "ResumeList" }}
                 loginEmployeeName={loginEmployeeName}
                 onsuccessfulDataAdditions={onsuccessfulDataAdditions}
               />

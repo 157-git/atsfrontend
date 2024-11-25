@@ -75,7 +75,7 @@ const HoldCandidate = ({
   const navigator = useNavigate();
   // prachi Hold candidate filter 11/09
 
-  const limitedOptions=[
+  const limitedOptions = [
     ["alternateNumber", "Alternate Number"],
     ["availabilityForInterview", "Availability For Interview"],
     ["callingFeedback", "Calling Feedback"],
@@ -116,9 +116,8 @@ const HoldCandidate = ({
     ["requirementId", "Job Id"],
     ["selectYesOrNo", "Status"],
     ["sourceName", "Source Name"],
-    ["yearOfPassing", "Year Of Passing"]
-  ]
-
+    ["yearOfPassing", "Year Of Passing"],
+  ];
 
   const { userType } = useParams();
   useEffect(() => {
@@ -128,9 +127,7 @@ const HoldCandidate = ({
   //akash_pawar_HoldCandidate_ShareFunctionality_18/07_119
   const fetchManager = async () => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/get-all-managers`
-      );
+      const response = await fetch(`${API_BASE_URL}/get-all-managers`);
       const data = await response.json();
       setFetchAllManager(data);
     } catch (error) {
@@ -140,9 +137,7 @@ const HoldCandidate = ({
 
   const fetchTeamLeader = async (empId) => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/tl-namesIds/${empId}`
-      );
+      const response = await fetch(`${API_BASE_URL}/tl-namesIds/${empId}`);
       const data = await response.json();
       setFetchTeamleader(data);
     } catch (error) {
@@ -177,7 +172,7 @@ const HoldCandidate = ({
         Object.keys(filteredCallingList[0] || {}).includes(key)
       )
       .map(([key]) => key);
-      
+
     setFilterOptions(options);
   }, [filteredCallingList]);
 
@@ -258,17 +253,16 @@ const HoldCandidate = ({
     }
   }, [sortCriteria, sortOrder]);
 
-
   // changed this function sahil karnekar date : 22-10-2024
   const filterData = () => {
     let filteredData = [...callingList];
-  
+
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
         filteredData = filteredData.filter((item) => {
           const itemValue = item[option]?.toString().toLowerCase(); // normalize the field value to lowercase
-          return values.some((value) =>
-            itemValue === value.toLowerCase() // exact match
+          return values.some(
+            (value) => itemValue === value.toLowerCase() // exact match
           );
         });
       }
@@ -355,7 +349,7 @@ const HoldCandidate = ({
       const newSelectedFilters = { ...prev };
       if (key in newSelectedFilters) {
       } else {
-        newSelectedFilters[key] = []; 
+        newSelectedFilters[key] = [];
       }
       return newSelectedFilters;
     });
@@ -407,12 +401,11 @@ const HoldCandidate = ({
   };
 
   const handleShare = async () => {
-
     if (userType === "TeamLeader") {
       if (selectedRecruiters.recruiterId === "") {
-        setErrorForShare("Please Select A Recruiter ! ")
+        setErrorForShare("Please Select A Recruiter ! ");
         return;
-      }else{
+      } else {
         setErrorForShare("");
       }
     }
@@ -709,26 +702,26 @@ const HoldCandidate = ({
             <>
               <div className="search">
                 {/* this line is added by sahil karnekar date 24-10-2024 */}
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <i
-                  className="fa-solid fa-magnifying-glass"
-                  onClick={() => {
-                    setShowSearchBar(!showSearchBar);
-                    setShowFilterSection(false);
-                  }}
-                  style={{ margin: "10px", width: "auto", fontSize: "15px" }}
-                ></i>
-                {/* line 711 to 720 added by sahil karnekar date 24-10-2024 */}
-                 {showSearchBar && (
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search here..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              )}
-              </div>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <i
+                    className="fa-solid fa-magnifying-glass"
+                    onClick={() => {
+                      setShowSearchBar(!showSearchBar);
+                      setShowFilterSection(false);
+                    }}
+                    style={{ margin: "10px", width: "auto", fontSize: "15px" }}
+                  ></i>
+                  {/* line 711 to 720 added by sahil karnekar date 24-10-2024 */}
+                  {showSearchBar && (
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Search here..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  )}
+                </div>
                 <h5 style={{ color: "gray" }}>Hold Candidates</h5>
                 <div
                   style={{
@@ -740,11 +733,11 @@ const HoldCandidate = ({
                   }}
                 >
                   <div>
-                    {(userType === 'Manager' || userType === 'TeamLeader') && (
-                    <button className="lineUp-share-btn" onClick={showPopup}>
-                    Create Excel
-                    </button>
-                     )}
+                    {(userType === "Manager" || userType === "TeamLeader") && (
+                      <button className="lineUp-share-btn" onClick={showPopup}>
+                        Create Excel
+                      </button>
+                    )}
 
                     {showExportConfirmation && (
                       <div className="popup-containers">
@@ -790,7 +783,7 @@ const HoldCandidate = ({
                           {/* akash_pawar_HoldCandidate_ShareFunctionality_18/07_603 */}
                           {userType === "TeamLeader" && (
                             <button
-                           className="lineUp-share-btn"
+                              className="lineUp-share-btn"
                               onClick={handleSelectAll}
                             >
                               {allSelected ? "Deselect All" : "Select All"}
@@ -815,55 +808,73 @@ const HoldCandidate = ({
                   </button>
                 </div>
               </div>
-                 
+
               {/* added by sahil karnekar date 22-10-2024 */}
-               {showFilterSection && (
-  <div className="filter-section">
-    {limitedOptions.map(([optionKey, optionLabel]) => {
-      const uniqueValues = Array.from(
-        new Set(
-          callingList
-            .map((item) => item[optionKey]?.toString().toLowerCase())
-            .filter((value) => value && value !== '-' && !(optionKey === 'alternateNumber' && value === '0'))
-        )
-      );
+              {showFilterSection && (
+                <div className="filter-section">
+                  {limitedOptions.map(([optionKey, optionLabel]) => {
+                    const uniqueValues = Array.from(
+                      new Set(
+                        callingList
+                          .map((item) =>
+                            item[optionKey]?.toString().toLowerCase()
+                          )
+                          .filter(
+                            (value) =>
+                              value &&
+                              value !== "-" &&
+                              !(
+                                optionKey === "alternateNumber" && value === "0"
+                              )
+                          )
+                      )
+                    );
 
-      return (
-        <div key={optionKey} className="filter-option">
-          <button
-            className="white-Btn"
-            onClick={() => handleFilterOptionClick(optionKey)}
-          >
-            {optionLabel}
-            <span className="filter-icon">&#x25bc;</span>
-          </button>
+                    return (
+                      <div key={optionKey} className="filter-option">
+                        <button
+                          className="white-Btn"
+                          onClick={() => handleFilterOptionClick(optionKey)}
+                        >
+                          {optionLabel}
+                          <span className="filter-icon">&#x25bc;</span>
+                        </button>
 
-          {activeFilterOption === optionKey && (
-            <div className="city-filter">
-              <div className="optionDiv">
-                {uniqueValues.length > 0 ? (
-                  uniqueValues.map((value) => (
-                    <label key={value} className="selfcalling-filter-value">
-                      <input
-                        type="checkbox"
-                        checked={selectedFilters[optionKey]?.includes(value) || false}
-                        onChange={() => handleFilterSelect(optionKey, value)}
-                        style={{ marginRight: '5px' }}
-                      />
-                      {value}
-                    </label>
-                  ))
-                ) : (
-                  <div>No values</div>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    })}
-  </div>
-)}
+                        {activeFilterOption === optionKey && (
+                          <div className="city-filter">
+                            <div className="optionDiv">
+                              {uniqueValues.length > 0 ? (
+                                uniqueValues.map((value) => (
+                                  <label
+                                    key={value}
+                                    className="selfcalling-filter-value"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={
+                                        selectedFilters[optionKey]?.includes(
+                                          value
+                                        ) || false
+                                      }
+                                      onChange={() =>
+                                        handleFilterSelect(optionKey, value)
+                                      }
+                                      style={{ marginRight: "5px" }}
+                                    />
+                                    {value}
+                                  </label>
+                                ))
+                              ) : (
+                                <div>No values</div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
 
               <div className="attendanceTableData">
                 <table className="attendance-table">
@@ -881,15 +892,15 @@ const HoldCandidate = ({
                           />
                         </th>
                       ) : null}
-                      
-<th className="attendanceheading">Sr No.</th>
+
+                      <th className="attendanceheading">Sr No.</th>
                       <th className="attendanceheading">Candidate Id</th>
 
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("date")}
                       >
-                       Added Date Time
+                        Added Date Time
                       </th>
                       <th
                         className="attendanceheading"
@@ -931,24 +942,29 @@ const HoldCandidate = ({
                       <th className="attendanceheading">Gender</th>
                       <th className="attendanceheading">Education</th>
                       <th className="attendanceheading">Year Of Passing</th>
-                      <th className="attendanceheading">Any Extra Certification</th>
+                      <th className="attendanceheading">
+                        Any Extra Certification
+                      </th>
                       {/* <th className="attendanceheading">Feedback</th> */}
                       <th className="attendanceheading">Holding Any Offer</th>
                       <th className="attendanceheading">Offer Letter Msg</th>
                       <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">Notice Period</th>
-                      {userType === 'TeamLeader' &&
+                      {userType === "TeamLeader" && (
                         <th className="attendanceheading">
                           Message For Manager
-                        </th>}
-                      {userType === 'Recruiters' &&
+                        </th>
+                      )}
+                      {userType === "Recruiters" && (
                         <th className="attendanceheading">
                           Message For Team Leader
-                        </th>}
-                      {userType === 'Manager' &&
+                        </th>
+                      )}
+                      {userType === "Manager" && (
                         <th className="attendanceheading">
                           Message For Super User
-                        </th>}
+                        </th>
+                      )}
                       <th className="attendanceheading">
                         Availability For Interview
                       </th>
@@ -957,7 +973,8 @@ const HoldCandidate = ({
                       <th className="attendanceheading">Interview Status</th>
                       <th className="attendanceheading">Employee ID</th>
 
-                      {(userType === 'TeamLeader' || userType === 'Manager') && (
+                      {(userType === "TeamLeader" ||
+                        userType === "Manager") && (
                         <th className="attendanceheading">Team Leader Id</th>
                       )}
 
@@ -976,49 +993,47 @@ const HoldCandidate = ({
                             />
                           </td>
                         ) : null}
- 
- <td className="tabledata">{index + 1}</td>
 
-<td
-  className="tabledata"
-  onMouseOver={handleMouseOver}
-  onMouseOut={handleMouseOut}
->
-  {item.candidateId}
-  <div className="tooltip">
-    <span className="tooltiptext">
-      {item.candidateId}
-    </span>
-  </div>
-</td>
+                        <td className="tabledata">{index + 1}</td>
 
-<td
-  className="tabledata"
-  onMouseOver={handleMouseOver}
-  onMouseOut={handleMouseOut}
->
-  {item.date} - {item.candidateAddedTime || "-"}
-  <div className="tooltip">
-    <span className="tooltiptext">
-      {item.date} - {item.candidateAddedTime}
-    </span>
-  </div>
-</td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.candidateId}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.candidateId}
+                            </span>
+                          </div>
+                        </td>
 
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.date} - {item.candidateAddedTime || "-"}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.date} - {item.candidateAddedTime}
+                            </span>
+                          </div>
+                        </td>
 
-
-<td
-  className="tabledata"
-  onMouseOver={handleMouseOver}
-  onMouseOut={handleMouseOut}
->
-  {item.recruiterName}
-  <div className="tooltip">
-    <span className="tooltiptext">
-      {item.recruiterName}
-    </span>
-  </div>
-</td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.recruiterName}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.recruiterName}
+                            </span>
+                          </div>
+                        </td>
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
@@ -1175,17 +1190,17 @@ const HoldCandidate = ({
                           </div>
                         </td>
                         <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {item.feedBack}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
+                          className="tabledata "
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
                           {item.feedBack}{" "}
-                        </span>
-                      </div>
-                    </td>
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.feedBack}{" "}
+                            </span>
+                          </div>
+                        </td>
 
                         <td
                           className="tabledata"
@@ -1226,15 +1241,20 @@ const HoldCandidate = ({
                               </span>
                             </div>
                           </td>
-                          <td className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}>
-                          
-                          {item.experienceYear} {" "} Year -  {item.experienceMonth} Month
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.experienceYear} {" "} Year {item.experienceMonth} Month</span>
-                          </div>
-                        </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {item.experienceYear} Year - {item.experienceMonth}{" "}
+                            Month
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {item.experienceYear} Year{" "}
+                                {item.experienceMonth} Month
+                              </span>
+                            </div>
+                          </td>
 
                           <td
                             className="tabledata"
@@ -1249,24 +1269,36 @@ const HoldCandidate = ({
                             </div>
                           </td>
 
-                          <td className="tabledata"
+                          <td
+                            className="tabledata"
                             onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}>
-
-                            {item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand
+                            onMouseOut={handleMouseOut}
+                          >
+                            {item.currentCTCLakh} Lakh {item.currentCTCThousand}{" "}
+                            Thousand
                             <div className="tooltip">
-                              <span className="tooltiptext">{item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand</span>
+                              <span className="tooltiptext">
+                                {item.currentCTCLakh} Lakh{" "}
+                                {item.currentCTCThousand} Thousand
+                              </span>
                             </div>
                           </td>
 
-                          <td className="tabledata" onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}>
-                            {item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand} {" "} Thousand
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {item.expectedCTCLakh} Lakh{" "}
+                            {item.expectedCTCThousand} Thousand
                             <div className="tooltip">
-                              <span className="tooltiptext">{item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand}  {" "} Thousand</span>
+                              <span className="tooltiptext">
+                                {item.expectedCTCLakh} Lakh{" "}
+                                {item.expectedCTCThousand} Thousand
+                              </span>
                             </div>
                           </td>
-                        
+
                           <td
                             className="tabledata"
                             onMouseOver={handleMouseOver}
@@ -1370,34 +1402,34 @@ const HoldCandidate = ({
                           </td>
 
                           {/* <td
-      className="tabledata"
-      onMouseOver={handleMouseOver}
-      onMouseOut={handleMouseOut}
-    >
-      {item.resume || "-"}
-      <div className="tooltip">
-        <span className="tooltiptext">{item.resume}</span>
-      </div>
-    </td> */}
+                                className="tabledata"
+                                onMouseOver={handleMouseOver}
+                                onMouseOut={handleMouseOut}
+                              >
+                                {item.resume || "-"}
+                                <div className="tooltip">
+                                  <span className="tooltiptext">{item.resume}</span>
+                                </div>
+                              </td> */}
+                                                    {/* Name:-Akash Pawar Component:-LineUpList
+                          Subcategory:-ResumeViewButton(added) start LineNo:-993
+                          Date:-02/07 */}
+                          <td className="tabledata">
+                            <button
+                              onClick={() => openResumeModal(item.resume)}
+                              style={{ background: "none", border: "none" }}
+                            >
+                              <i
+                                className="fas fa-eye"
+                                style={{
+                                  color: item.resume ? "green" : "inherit",
+                                }}
+                              ></i>
+                            </button>
+                          </td>
                           {/* Name:-Akash Pawar Component:-LineUpList
-Subcategory:-ResumeViewButton(added) start LineNo:-993
-Date:-02/07 */}
-                           <td className="tabledata">
-                          <button
-                            onClick={() => openResumeModal(item.resume)}
-                            style={{ background: "none", border: "none" }}
-                          >
-                            <i
-                              className="fas fa-eye"
-                              style={{
-                                color: item.resume ? "green" : "inherit",
-                              }}
-                            ></i>
-                          </button>
-                        </td>
-                          {/* Name:-Akash Pawar Component:-LineUpList
-Subcategory:-ResumeViewButton(added) End LineNo:-1005
-Date:-02/07 */}
+                                Subcategory:-ResumeViewButton(added) End LineNo:-1005
+                                Date:-02/07 */}
 
                           <td
                             className="tabledata"
@@ -1465,18 +1497,17 @@ Date:-02/07 */}
                           </td>
 
                           <td
-                          className="tabledata "
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.empId}{" "}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.empId}
-                            </span>
-                          </div>
-                        </td>
-                        {(userType === 'TeamLeader' || userType === 'Manager') && (
+                            className="tabledata "
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {item.empId}{" "}
+                            <div className="tooltip">
+                              <span className="tooltiptext">{item.empId}</span>
+                            </div>
+                          </td>
+                          {(userType === "TeamLeader" ||
+                            userType === "Manager") && (
                             <td
                               className="tabledata"
                               onMouseOver={handleMouseOver}
@@ -1735,7 +1766,7 @@ Date:-02/07 */}
                                               htmlFor={recruiters.employeeId}
                                             >
                                               <input
-                                              style={{width:"auto"}}
+                                                style={{ width: "auto" }}
                                                 type="radio"
                                                 id={recruiters.employeeId}
                                                 name="recruiter"
@@ -1766,11 +1797,11 @@ Date:-02/07 */}
                           </div>
                           {/* akash_pawar_HoldCandidate_ShareFunctionality_18/07_1580 */}
                         </Modal.Body>
-                        {
-                         errorForShare && (
-                          <div style={{textAlign:"center", color:"red"}}>{errorForShare}</div>
-                         )
-                        }
+                        {errorForShare && (
+                          <div style={{ textAlign: "center", color: "red" }}>
+                            {errorForShare}
+                          </div>
+                        )}
                         <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
                           <button
                             onClick={handleShare}
@@ -1832,8 +1863,6 @@ Date:-02/07 */}
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
               loginEmployeeName={loginEmployeeName}
-
-             
             />
           )}
         </>

@@ -28,13 +28,14 @@
 .left-card {
   height: 100%; /* Ensure it takes full height of the container */
   background-color: var(--Bg-color);
- width: 500px;
+ width: 550px;
+ border: 2px solid black;
 }
 
 /* Right Card with Fixed Width */
 .right-card {
   flex: 0 0 75%; /* 75% width for right card */
-  width: 750px; /* Set a fixed width for the right card */
+  width: 550px; /* Set a fixed width for the right card */
   height: 100%; /* Ensure it takes full height of the container */
   max-width: 100%; /* Ensure it does not exceed the container width */
 }

@@ -150,6 +150,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
 
     try {
       // Upload file to API
+      console.log("Link come here 001");
       await axios.post(
         `${API_BASE_URL}/upload-excel-files/${employeeId}/${userType}`,
         formData,
@@ -157,6 +158,8 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
       );
 
       // Success: reset states and show success toast
+      console.log("Link come here 002");
+
       setUploadSuccess(true);
       toast.success("File Uploaded Successfully");
 
@@ -215,6 +218,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
   //   }
   // };
 
+  
   const handleUploadResume = async () => {
     setActiveTable("");
     var openTable="ResumeList";
@@ -391,7 +395,6 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                             border: "1px solid red",
                             borderRadius: "15px",
                             boxShadow: "0 0 2px 1px rgba(255, 0, 0, 0.7)",
-                            
                           }
                         : {}
                     }
@@ -427,9 +430,9 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                   {/* {
                     displayUploadButton && ( */}
 <button
-style={{
-  backgroundColor: !displayUploadButton ? "red" : ""
-}}
+// style={{
+//   backgroundColor: !displayUploadButton ? "gray" : ""
+// }}
 id="buttonUploadDynamic" onClick={handleUpload}>Upload</button>
                     {/* )
                   } */}
