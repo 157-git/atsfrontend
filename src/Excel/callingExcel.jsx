@@ -117,6 +117,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
     }));
   };
 
+
   const handleUpload = async () => {
     setActiveTable("");
     setLoading(true);
@@ -159,18 +160,19 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
 
       setUploadSuccess(true);
       toast.success("File Uploaded Successfully");
-      fetchUpdatedData();
+
       const currentTime = getCurrentIndianTime();
       setSearchTerm(currentTime); 
+      handleTableChange("CallingExcelList");
 
       // Reset file input and related state
       setFile(null);
-      setSheetNames([]);
-      setSelectedSheets({});
+      // setSheetNames([]);
+      // setSelectedSheets({});
 
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
+      // if (fileInputRef.current) {
+      //   fileInputRef.current.value = "";
+      // }
     } catch (error) {
       // Error: show error toast but keep the file selected
       toast.error(`Upload error 009 : ${error.message}`);
@@ -256,7 +258,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
         );
 
         setUploadSuccessResume(true);
-        setActiveTable("ResumeList");
+        handleTableChange("ResumeList");
         hideSuccessMessage();
         setSelectedFiles([]);
         resetFileInput(resumeFileInputRef);
@@ -269,28 +271,63 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
     }
   };
 
+  const getCurrentIndianTimeForResume = () => {
+    const date = new Date();
+  
+    // Format day, month, and year
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+  
+    // Format hour and minute
+    let hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const period = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12 || 12;
+    return `${day}-${month}-${year} ${hours}:${minutes} ${period}`;
+  };
+
   const getCurrentIndianTime = () => {
     const date = new Date();
-    return new Intl.DateTimeFormat('en-IN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    }).format(date).replace(',', ''); // Ensure no comma in the output
+  
+    // Format day, month, and year
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+  
+    // Format hour and minute
+    let hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const period = hours >= 12 ? 'pm' : 'am';
+  
+    // Convert 24-hour to 12-hour format
+    hours = hours % 12 || 12;
+  
+    return `${day}-${month}-${year} ${hours}:${minutes} ${period}`;
+  };
+  
+  const truncateMinutes = (timeString) => {
+    // Split the time string into parts
+    const [date, timePeriod] = timeString.split(' ');
+    const [time, period] = timePeriod.split(' ');
+    const [hours, minutes] = time.split(':');
+    const truncatedMinutes = minutes.charAt(0);
+    return `${date} ${hours}:${truncatedMinutes}`;
   };
   
   const handleTableChange = (tableName) => { 
     setActiveTable(tableName);
     if (tableName === "CallingExcelList") {
-        const currentTime = getCurrentIndianTime();
-        setSearchTerm(currentTime); // Set the current time as the search term
+      const currentTime = getCurrentIndianTime();
+      const truncatedTime = truncateMinutes(currentTime);
+      setSearchTerm(truncatedTime); // Set the truncated time as the search term
     }
-};
-
+    if (tableName === "ResumeList") {
+      const currentTime = getCurrentIndianTimeForResume();
+      setSearchTerm(currentTime); // Set the truncated time as the search term
+    }
+  };
   
-
   const handleActionClick = () => {
     setShowCards(false);
     setShowCallingTrackerForm(true); // Show CallingTrackerForm when action icon is clicked
@@ -569,8 +606,6 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
             toggleSection={toggleSection}
             loginEmployeeName={loginEmployeeName}
             viewsSearchTerm={viewsSearchTerm} 
-            fetchUpdatedData={fetchUpdatedData}
-
             // this line added by sahil karnekar line 302
           />
         )}
@@ -589,6 +624,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
             onCloseTable={() => setActiveTable("")}
             onActionClick={handleActionClick} // Pass the handler to the table component
             loginEmployeeName={loginEmployeeName}
+            viewsSearchTerm={viewsSearchTerm} 
           />
         )}
       </div>

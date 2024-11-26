@@ -14,7 +14,7 @@ import { parse } from "date-fns";
 {
   /* this line added by sahil date 22-10-2024 */
 }
-const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
+const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions, viewsSearchTerm }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -52,6 +52,14 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
     };
     fetchData();
   }, []);
+
+
+  useEffect(() => {
+    if (viewsSearchTerm) {
+        setSearchTerm(viewsSearchTerm); // Sync viewsSearchTerm to local searchTerm
+        applyFilters(); // Re-trigger data filtering
+    }
+}, [viewsSearchTerm]);
 
   const handleMouseOver = (event) => {
     const tableData = event.currentTarget;
@@ -215,7 +223,7 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
-  
+
   const limitedOptions = [
     ["candidateEmail", "Candidate Email"],
     ["candidateName", "Candidate Name"],
@@ -336,6 +344,14 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
     });
   };
 
+  const calculateWidth = () => {
+    const baseWidth = 250;
+    const increment = 10;
+    const maxWidth = 600;
+    return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
+  };
+
+
   return (
     <div className="App-after1">
       {loading ? (
@@ -361,15 +377,20 @@ const ResumeList = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                         fontSize: "15px",
                       }}
                     ></i>
-                    {showSearchBar && (
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Search here..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                      />
-                    )}
+              
+              <div
+                    className="search-input-div"
+                    style={{ width: `${calculateWidth()}px` }}
+                  >
+                    <input
+                      type="text"
+                      className="search-input"
+                      placeholder="Search here..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+            
                   </div>
                   <h1 className="resume-data-heading">Resume Data </h1>
                   <div className="rl-btn-div">
