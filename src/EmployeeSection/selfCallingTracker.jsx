@@ -167,6 +167,7 @@ const CallingList = ({
   const fetchTeamLeader = async (empId) => {
     try {
       const response = await fetch(`${API_BASE_URL}/tl-namesIds/${empId}`);
+      console.log(response);
       const data = await response.json();
       setFetchTeamleader(data);
     } catch (error) {
@@ -281,6 +282,50 @@ const CallingList = ({
           item.personalFeedback.toLowerCase().includes(searchTermLower)) ||
         (item.callingFeedback &&
           item.callingFeedback.toLowerCase().includes(searchTermLower)) ||
+          (item.jobDesignation &&
+            item.jobDesignation.toString().toLowerCase().includes(searchTermLower)) ||
+            (item.requirementId &&
+              item.requirementId.toString().toLowerCase().includes(searchTermLower)) ||
+              (item.fullAddress &&
+                item.fullAddress.toString().toLowerCase().includes(searchTermLower)) ||
+                (item.experienceYear &&
+                  item.experienceYear.toString().toLowerCase().includes(searchTermLower)) ||
+                  (item.experienceMonth &&
+                    item.experienceMonth.toString().toLowerCase().includes(searchTermLower)) ||
+                    (item.relevantExperience &&
+                      item.relevantExperience.toString().toLowerCase().includes(searchTermLower)) ||
+                      (item.currentCTCLakh &&
+                        item.currentCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
+                        (item.currentCTCThousand &&
+                          item.currentCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
+                          (item.expectedCTCLakh &&
+                            item.expectedCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
+                            (item.expectedCTCThousand &&
+                              item.expectedCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
+                              (item.yearOfPassing &&
+                                item.yearOfPassing.toString().toLowerCase().includes(searchTermLower)) ||
+                                (item.extraCertification &&
+                                  item.extraCertification.toString().toLowerCase().includes(searchTermLower)) ||
+                                  (item.holdingAnyOffer &&
+                                    item.holdingAnyOffer.toString().toLowerCase().includes(searchTermLower)) ||
+                                    (item.offerLetterMsg &&
+                                      item.offerLetterMsg.toString().toLowerCase().includes(searchTermLower)) ||
+                                      (item.noticePeriod &&
+                                        item.noticePeriod.toString().toLowerCase().includes(searchTermLower)) ||
+                                        (item.msgForTeamLeader &&
+                                          item.msgForTeamLeader.toString().toLowerCase().includes(searchTermLower)) ||
+                                          (item.availabilityForInterview &&
+                                            item.availabilityForInterview.toString().toLowerCase().includes(searchTermLower)) ||
+                                            (item.interviewTime &&
+                                              item.interviewTime.toString().toLowerCase().includes(searchTermLower)) ||
+                                              (item.finalStatus &&
+                                                item.finalStatus.toString().toLowerCase().includes(searchTermLower)) ||
+                                                (item.dateOfBirth &&
+                                                  item.dateOfBirth.toString().toLowerCase().includes(searchTermLower)) ||
+                                                  (item.gender &&
+                                                    item.gender.toString().toLowerCase().includes(searchTermLower)) ||
+                                                    (item.qualification &&
+                                                      item.qualification.toString().toLowerCase().includes(searchTermLower)) ||
         (item.selectYesOrNo &&
           item.selectYesOrNo.toLowerCase().includes(searchTermLower))
       );
@@ -457,6 +502,7 @@ const CallingList = ({
         body: JSON.stringify(requestData),
       };
       const response = await fetch(url, requestOptions);
+  
       if (!response.ok) {
         setIsDataSending(false);
         throw new Error(`HTTP error! Status: ${response.status}`);

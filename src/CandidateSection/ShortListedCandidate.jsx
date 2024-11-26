@@ -422,6 +422,24 @@ const ShortListedCandidates = ({
                             item.expectedCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
                             (item.expectedCTCThousand &&
                               item.expectedCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
+                              (item.yearOfPassing &&
+                                item.yearOfPassing.toString().toLowerCase().includes(searchTermLower)) ||
+                                (item.extraCertification &&
+                                  item.extraCertification.toString().toLowerCase().includes(searchTermLower)) ||
+                                  (item.holdingAnyOffer &&
+                                    item.holdingAnyOffer.toString().toLowerCase().includes(searchTermLower)) ||
+                                    (item.offerLetterMsg &&
+                                      item.offerLetterMsg.toString().toLowerCase().includes(searchTermLower)) ||
+                                      (item.noticePeriod &&
+                                        item.noticePeriod.toString().toLowerCase().includes(searchTermLower)) ||
+                                        (item.msgForTeamLeader &&
+                                          item.msgForTeamLeader.toString().toLowerCase().includes(searchTermLower)) ||
+                                          (item.availabilityForInterview &&
+                                            item.availabilityForInterview.toString().toLowerCase().includes(searchTermLower)) ||
+                                            (item.interviewTime &&
+                                              item.interviewTime.toString().toLowerCase().includes(searchTermLower)) ||
+                                              (item.finalStatus &&
+                                                item.finalStatus.toString().toLowerCase().includes(searchTermLower)) ||
                               
         (item.companyName &&
           item.companyName.toLowerCase().includes(searchTermLower))
