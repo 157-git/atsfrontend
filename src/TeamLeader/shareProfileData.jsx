@@ -173,7 +173,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   useEffect(() => {
     applyFilters(); // Reapply filters whenever the data or selected filters change
   }, [searchTerm, data, selectedFilters]);
-
+  
+  const calculateWidth = () => {
+    const baseWidth = 250;
+    const increment = 10;
+    const maxWidth = 600;
+    return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
+  };
   return (
     <div className="App-after1">
       {loading ? (
@@ -197,13 +203,18 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                       }}
                     ></i>
 
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Search here..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                      />
+<div
+                    className="search-input-div"
+                    style={{ width: `${calculateWidth()}px` }}
+                  >
+                    <input
+                      type="text"
+                      className="search-input"
+                      placeholder="Search here..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
 
                   </div>
                   <h1 className="resume-data-heading">Shared Profile Data</h1>

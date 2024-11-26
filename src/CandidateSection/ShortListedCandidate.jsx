@@ -584,6 +584,14 @@ const handleFilterSelect = (key, value) => {
     setShowResumeModal(false);
   };
   //Name:-Akash Pawar Component:-ShortListedCandidate Subcategory:-ResumeViewButton(added) End LineNo:-196 Date:-02/07
+
+  const calculateWidth = () => {
+    const baseWidth = 250;
+    const increment = 10;
+    const maxWidth = 600;
+    return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
+  };
+
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -617,14 +625,18 @@ const handleFilterSelect = (key, value) => {
               ></i>
               {/* line 581 to 590 updated by sahil karnekar date 24-10-2024 */}
 
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search here..."
-                  value={searchTerm}
-                  
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
+              <div
+                    className="search-input-div"
+                    style={{ width: `${calculateWidth()}px` }}
+                  >
+                    <input
+                      type="text"
+                      className="search-input"
+                      placeholder="Search here..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
 
             </div>
             <h5 style={{ color: "gray", paddingTop: "5px" }}>

@@ -728,6 +728,13 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   };
 
   
+  const calculateWidth = () => {
+    const baseWidth = 250;
+    const increment = 10;
+    const maxWidth = 600;
+    return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
+  };
+
   //Swapnil_Rokade_SelectedCandidate_columnsToInclude_columnsToExclude_17/07/2024//
   return (
     <div className="App-after">
@@ -749,13 +756,18 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                 ></i>
                 {/* line 698 to 708 added by sahil karnekar date 24-10-2024 */}
      
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search here..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
+                <div
+                    className="search-input-div"
+                    style={{ width: `${calculateWidth()}px` }}
+                  >
+                    <input
+                      type="text"
+                      className="search-input"
+                      placeholder="Search here..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
       
               </div>
                 <h5 style={{ color: "grey", textAlign: "center" }}>

@@ -751,6 +751,13 @@ const CallingList = ({
   };
   //Mohini_Raut_LineUpList_columnsToInclude_columnsToExclude_16/07/2024//
 
+  const calculateWidth = () => {
+    const baseWidth = 250;
+    const increment = 10;
+    const maxWidth = 600;
+    return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
+  };
+
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -772,13 +779,18 @@ const CallingList = ({
                   {/* this line 731 to 741 added by sahil karnekar date 24-10-2024 */}
 
 
+                  <div
+                    className="search-input-div"
+                    style={{ width: `${calculateWidth()}px` }}
+                  >
                     <input
                       type="text"
-                      className="form-control"
+                      className="search-input"
                       placeholder="Search here..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
+                  </div>
 
                 </div>
                 <h3 style={{ color: "gray" }}>Calling Tracker</h3>

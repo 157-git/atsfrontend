@@ -729,6 +729,13 @@ const HoldCandidate = ({
   };
   //Swapnil_Rokade_SelectedCandidate_columnsToInclude_columnsToExclude_17/07/2024//
 
+  const calculateWidth = () => {
+    const baseWidth = 250;
+    const increment = 10;
+    const maxWidth = 600;
+    return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
+  };
+
   return (
     <div className="App-after">
       {loading ? (
@@ -754,13 +761,18 @@ const HoldCandidate = ({
                   ></i>
                   {/* line 711 to 720 added by sahil karnekar date 24-10-2024 */}
           
+                  <div
+                    className="search-input-div"
+                    style={{ width: `${calculateWidth()}px` }}
+                  >
                     <input
                       type="text"
-                      className="form-control"
+                      className="search-input"
                       placeholder="Search here..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
+                  </div>
   
                 </div>
                 <h5 style={{ color: "gray" }}>Hold Candidates</h5>
