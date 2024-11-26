@@ -32,6 +32,21 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     ["jobDesignation", "Job Designation"],
     ["requirementId", "Requirement Id"],
     ["employeeId", "Employee Id"],
+
+    ["candidateEmail", "Candidate Email"],
+    ["commentForTL", "Comment For TL"],
+    ["contactNumber", "Contact Number"],
+    ["finalStatus", "Final Status"],
+    ["interviewResponse", "Interview Response"],
+    ["interviewRound", "Interview Round"],
+    ["jobRole", "Job Role"],
+    ["nextInterviewDate", "Next Interview Date"],
+    ["nextInterviewTiming", "Next Interview Timing"],
+    ["officialMail", "Official Mail"],
+    ["requirementCompany", "Requirement Company"],
+    ["responseUpdatedDate", "Response Updated Date"],
+    ["sourceName", "Source Name"],
+
     ["employeeName", "Employee Name"]
   ];
   useEffect(() => {
@@ -88,20 +103,75 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     }
   };
 
-  const applyFilters = () => {
-    if (!filterType || !filterValue) {
-      setFilteredCallingList(updateResponseList);
-      return;
-    }
+  // const applyFilters = () => {
+  //   if (!filterType || !filterValue) {
+  //     setFilteredCallingList(updateResponseList);
+  //     return;
+  //   }
 
-    const filteredList = updateResponseList.filter((data) => {
-      return data[filterType]
-        ?.toString()
-        .toLowerCase()
-        .includes(filterValue.toLowerCase());
+  //   const filteredList = updateResponseList.filter((data) => {
+  //     return data[filterType]
+  //       ?.toString()
+  //       .toLowerCase()
+  //       .includes(filterValue.toLowerCase());
+  //   });
+
+  //   setFilteredCallingList(filteredList);
+  // };
+
+  const applyFilters = () => {
+    const lowerSearchTerm = filterValue.toLowerCase();
+    let filteredResults = updateResponseList.filter((item) => {
+      return (
+        item.candidateName?.toLowerCase().includes(lowerSearchTerm) ||
+        item.candidateEmail?.toLowerCase().includes(lowerSearchTerm) ||
+        item.jobDesignation?.toLowerCase().includes(lowerSearchTerm) ||
+        // this is not found in data but it is not affecting other code so keep this for future purpose added by sahil karnekar date 25-11-2024
+        item.currentLocation?.toLowerCase().includes(lowerSearchTerm) ||
+        item.companyName?.toLowerCase().includes(lowerSearchTerm) ||
+        item.contactNumber
+          ?.toString()
+          .toLowerCase()
+          .includes(lowerSearchTerm) ||
+        item.dateOfBirth?.toLowerCase().includes(lowerSearchTerm) ||
+        item.extraCertification?.toLowerCase().includes(lowerSearchTerm) ||
+        item.gender?.toLowerCase().includes(lowerSearchTerm) ||
+        item.jobRole?.toLowerCase().includes(lowerSearchTerm) ||
+        item.qualification?.toLowerCase().includes(lowerSearchTerm) ||
+        item.relevantExperience?.toLowerCase().includes(lowerSearchTerm) ||
+        item.candidateId?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.commentForTL?.toLowerCase().includes(lowerSearchTerm) ||
+        item.sourceName?.toLowerCase().includes(lowerSearchTerm) ||
+        item.requirementId?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.requirementCompany?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.finalStatus?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.interviewRound?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.interviewResponse?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.nextInterviewDate?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.nextInterviewTiming?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.employeeId?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.employeeName?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.officialMail?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.jobRole?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.resumeUploadDate?.toLowerCase().includes(lowerSearchTerm)
+      );
     });
 
-    setFilteredCallingList(filteredList);
+    // Apply selected filters
+    Object.entries(selectedFilters).forEach(([option, values]) => {
+      if (values.length > 0) {
+        filteredResults = filteredResults.filter((item) =>
+          values.some((value) =>
+            item[option]
+              ?.toString()
+              .toLowerCase()
+              .includes(value.toString().toLowerCase())
+          )
+        );
+      }
+    });
+
+    setFilteredCallingList(filteredResults);
   };
 
   const handleFilterTypeChange = (e) => {
@@ -247,18 +317,30 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     setFilteredCallingList(filteredData);
   }; 
 
+  const handleFilterOptionClick = (key) => {
+    if (activeFilterOption === key) {
+      setActiveFilterOption(null); // Close the current filter
+    } else {
+      setActiveFilterOption(key); // Open a new filter section
+    }
+
+    // Initialize the selected filter array if it doesn't exist
+    setSelectedFilters((prev) => {
+      const newSelectedFilters = { ...prev };
+      if (!newSelectedFilters[key]) {
+        newSelectedFilters[key] = []; // Create an empty array for values
+      }
+      return newSelectedFilters;
+    });
+  };
+
   const handleFilterSelect = (key, value) => {
     setSelectedFilters((prev) => ({
       ...prev,
       [key]: prev[key].includes(value)
-        ? prev[key].filter((item) => item !== value)
-        : [...prev[key], value],
+        ? prev[key].filter((item) => item !== value) // Deselect the value
+        : [...prev[key], value], // Select the value
     }));
-  };
-
-  const handleFilterOptionClick = (key) => {
-    setActiveFilterOption(activeFilterOption === key ? null : key);
-    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
   };
   console.log(filteredCallingList);
 
@@ -276,38 +358,26 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
               <div className="TeamLead-main-filter-section">
                 <div className="TeamLead-main-filter-section-header">
                   <div
+                  style={{display:"flex"}}
+                  >
+                  <div
                     className="search"
-                    onClick={() => {
-                      setShowSearch(!showSearch);
-                      setShowFilterOptions(false);
-                    }}
                   >
                     <i className="fa-solid fa-magnifying-glass"></i>
                   </div>
-                  <h1 style={{ color: "gray" }}>Update Response</h1>
-                  <div>
-                    <button
-                      className="lineUp-share-btn"
-                      onClick={() => {
-                        setShowFilterOptions(!showFilterOptions);
-                        setShowSearch(false);
-                      }}
-                    >
-                      Filter
-                    </button>
-                  </div>
-                </div>
-                {showSearch && (
-                  <div className="TeamLead-main-filter-section-container">
+
+                  <div className="TeamLead-main-filter-section-container"
+                  style={{width:"100%"}}
+                  >
                     <input
                       type="text"
-                      placeholder="Enter filter value"
+                      placeholder="Search Here ..."
                       className="search-input"
                       value={filterValue}
-                      onChange={handleFilterValueChange}
-                      disabled={!filterType}
+                      onChange={(e) => setFilterValue(e.target.value)}
+                      // disabled={!filterType}
                     />
-                    <select
+                    {/* <select
                       className="white-Btn"
                       value={filterType}
                       onChange={handleFilterTypeChange}
@@ -322,17 +392,45 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                       <option value="jobDesignation">Job Designation</option>
                       <option value="employeeName">Employee Name</option>
                       <option value="employeeId">Employee ID</option>
-                    </select>
+                    </select> */}
                   </div>
-                )}
+                  </div>
+                  <div>
+                  <h1 style={{ color: "gray" }}>Update Response</h1>
+                  </div>
+                  <div>
+                    <button
+                      className="lineUp-share-btn"
+                      onClick={() => {
+                        setShowFilterOptions(!showFilterOptions);
+                        setShowSearch(false);
+                      }}
+                    >
+                      Filter
+                    </button>
+                  </div>
+                </div>
+               
                 <div className="filter-dropdowns">
                 {showFilterOptions && (
                    <div className="filter-section">
                    {limitedOptions.map(([optionKey, optionLabel]) => {
                      const uniqueValues = Array.from(
-                       new Set(callingList.map((item) => item[optionKey]))
+                       new Set(
+                        callingList
+                           .map((item) => {
+                             const value = item[optionKey];
+                             // Ensure the value is a string before converting to lowercase
+                             return typeof value === "string"
+                               ? value.toLowerCase()
+                               : value;
+                           })
+                           .filter(
+                             (value) => value !== undefined && value !== null
+                           ) // Remove null or undefined values
+                       )
                      );
-             
+
                      return (
                        <div key={optionKey} className="filter-option">
                          <button
@@ -345,21 +443,51 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                          {activeFilterOption === optionKey && (
                            <div className="city-filter">
                              <div className="optionDiv">
-                               {uniqueValues.map((value) => (
-                                 <label
-                                   key={value}
-                                   className="selfcalling-filter-value"
-                                 >
-                                   <input
-                                     type="checkbox"
-                                     checked={
-                                       selectedFilters[optionKey]?.includes(value) || false
-                                     }
-                                     onChange={() => handleFilterSelect(optionKey, value)}
-                                   />
-                                   {value}
-                                 </label>
-                               ))}
+                               {uniqueValues.filter(
+                                 (value) =>
+                                   value !== "" &&
+                                   value !== "-" &&
+                                   value !== undefined &&
+                                   !(
+                                     optionKey === "alternateNumber" &&
+                                     value === 0
+                                   )
+                               ).length > 0 ? (
+                                 uniqueValues.map(
+                                   (value) =>
+                                     value !== "" &&
+                                     value !== "-" &&
+                                     value !== undefined &&
+                                     !(
+                                       optionKey === "alternateNumber" &&
+                                       value === 0
+                                     ) && (
+                                       <label
+                                         key={value}
+                                         className="selfcalling-filter-value"
+                                       >
+                                         <input
+                                           type="checkbox"
+                                           checked={
+                                             selectedFilters[
+                                               optionKey
+                                             ]?.includes(value) || false
+                                           }
+                                           onChange={() =>
+                                             handleFilterSelect(
+                                               optionKey,
+                                               value
+                                             )
+                                           }
+                                           style={{ marginRight: "5px" }}
+                                         />
+                                         {value}
+                                       </label>
+                                     )
+                                 )
+                               ) : (
+                                 <div>No values</div>
+                               )}
                              </div>
                            </div>
                          )}

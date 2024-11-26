@@ -513,11 +513,23 @@ const SendClientEmail = ({ clientEmailSender }) => {
       ) : (
         <>
           <div className="search">
+            <div
+            style={{display:"flex"}}
+            >
             <i
               className="fa-solid fa-magnifying-glass"
-              onClick={() => setShowSearchBar(!showSearchBar)}
+             
               style={{ margin: "10px", width: "auto", fontSize: "15px" }}
             ></i>
+              <input
+              type="text"
+              className="form-control"
+              placeholder="Search here..."
+              value={searchTerm}
+              style={{ marginBottom: "10px",width:"100%" }}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            </div>
             <h5 style={{ color: "gray", fontSize: "18px" }}>Candidate Data </h5>
 
             <div
@@ -557,16 +569,9 @@ const SendClientEmail = ({ clientEmailSender }) => {
               </button>
             </div>
           </div>
-          {showSearchBar && (
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search here..."
-              value={searchTerm}
-              style={{ marginBottom: "10px" }}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          )}
+
+          
+
 
           <div className="filter-dropdowns">
             {showFilterSection && (

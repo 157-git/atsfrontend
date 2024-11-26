@@ -304,17 +304,19 @@ const CallingTrackerForm = ({
 
   const handleIncentiveChange = (e) => {
     const value = e.target.value;
-  
+
     // Remove any non-numeric characters (except for "." for decimal point) using regex
     const sanitizedValue = value.replace(/[^0-9.]/g, "");
-  
+
     // Update incentive only if sanitized value is a valid number or an empty string
     setCallingTracker((prevState) => ({
       ...prevState,
-      incentive: sanitizedValue === "" || isNaN(parseFloat(sanitizedValue)) ? "0.0" : sanitizedValue,
+      incentive:
+        sanitizedValue === "" || isNaN(parseFloat(sanitizedValue))
+          ? "0.0"
+          : sanitizedValue,
     }));
   };
-  
 
   const handlePhoneNumberChange = (value, name) => {
     const sanitizedValue =
@@ -420,16 +422,15 @@ const CallingTrackerForm = ({
       return;
     }
 
+    // Ensure 'incentive' is a valid number (if it's invalid, default to 0.0)
+    const incentiveValue = parseFloat(callingTracker.incentive);
+    const validIncentive = isNaN(incentiveValue) ? 0.0 : incentiveValue;
 
-  // Ensure 'incentive' is a valid number (if it's invalid, default to 0.0)
-  const incentiveValue = parseFloat(callingTracker.incentive);
-  const validIncentive = isNaN(incentiveValue) ? 0.0 : incentiveValue;
-
-  // Update the incentive field in the state to ensure it's valid
-  setCallingTracker((prevState) => ({
-    ...prevState,
-    incentive: validIncentive.toFixed(1), // Ensure it's a number with one decimal point
-  }));
+    // Update the incentive field in the state to ensure it's valid
+    setCallingTracker((prevState) => ({
+      ...prevState,
+      incentive: validIncentive.toFixed(1), // Ensure it's a number with one decimal point
+    }));
 
     let formFillingTime = null;
     if (startTime) {
@@ -499,7 +500,6 @@ const CallingTrackerForm = ({
       );
 
       if (response.status === 200 || response.status === 201) {
-
         //Arshad Attar Added this function to add data from excel and Resume data base and
         // after added in data based delete from excel & resume data base
         //added On Date : 22-11-2024
@@ -510,7 +510,6 @@ const CallingTrackerForm = ({
             await deleteExcelDataById(initialData.candidateId);
           }
         }
-        
 
         if (callingTracker.selectYesOrNo === "Interested") {
           onsuccessfulDataAdditions(true);
@@ -547,16 +546,18 @@ const CallingTrackerForm = ({
     }
   };
 
-//Arshad Attar Added this function to add data from excel and after added in data based delete from excel
-//added On Date : 22-11-2024
+  //Arshad Attar Added this function to add data from excel and after added in data based delete from excel
+  //added On Date : 22-11-2024
   const deleteExcelDataById = async (candidateId) => {
     try {
       const response = await axios.delete(
         `${API_BASE_URL}/delete-excel-data/${candidateId}`
       );
-  
+
       if (response.status === 200 || response.status === 204) {
-        console.log(`Data with candidateId ${candidateId} deleted successfully.`);
+        console.log(
+          `Data with candidateId ${candidateId} deleted successfully.`
+        );
         toast.success("Candidate Data Transfered Succefully...");
       } else {
         console.warn(`Unexpected response status: ${response.status}`);
@@ -576,17 +577,18 @@ const CallingTrackerForm = ({
     }
   };
 
-  
-//Arshad Attar Added this function to add data from Resume Data Base and after added in data based delete from Resume Data Base
-//added On Date : 22-11-2024Res
+  //Arshad Attar Added this function to add data from Resume Data Base and after added in data based delete from Resume Data Base
+  //added On Date : 22-11-2024Res
   const deleteResumeDataById = async (candidateId) => {
     try {
       const response = await axios.delete(
         `${API_BASE_URL}/delete-resume-data/${candidateId}`
       );
-  
+
       if (response.status === 200 || response.status === 204) {
-        console.log(`Data with candidateId ${candidateId} deleted successfully.`);
+        console.log(
+          `Data with candidateId ${candidateId} deleted successfully.`
+        );
         toast.success("Candidate Data Transfered Succefully...");
       } else {
         console.warn(`Unexpected response status: ${response.status}`);
@@ -605,8 +607,6 @@ const CallingTrackerForm = ({
       }
     }
   };
-
-  
 
   //Arshad Attar Added This , Now Resume will added Proper in data base.  18-10-2024
   //Start Line 451
@@ -842,7 +842,44 @@ const CallingTrackerForm = ({
   };
 
   console.log(lineUpData);
-  
+
+  // this fucntion is made by sahil karnekar on date 25-11-2024
+  const handleResumeUploadBoth = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file) {
+      await handleUploadAndSetData(e);
+
+      setResumeUploaded(true);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const arrayBuffer = reader.result;
+        const byteArray = new Uint8Array(arrayBuffer);
+        const chunkSize = 0x8000;
+        let base64String = "";
+
+        for (let i = 0; i < byteArray.length; i += chunkSize) {
+          base64String += String.fromCharCode.apply(
+            null,
+            byteArray.subarray(i, i + chunkSize)
+          );
+        }
+        base64String = btoa(base64String);
+        setLineUpData((prevState) => {
+          if (prevState.resume !== base64String) {
+            return {
+              ...prevState,
+              resume: base64String,
+            };
+          }
+          return prevState;
+        });
+      };
+      reader.readAsArrayBuffer(file);
+    }
+  };
+
   return (
     <div className="calling-tracker-main">
       <section className="calling-tracker-submain">
@@ -876,14 +913,40 @@ const CallingTrackerForm = ({
               </div>
               <div className="calling-tracker-field">
                 <label>Upload Resume</label>
-                <div className="calling-tracker-field-sub-div">
-                  <input
+                <div
+                  className="calling-tracker-field-sub-div"
+                  style={{ display: "block" }}
+                >
+                  {/* <input
                     style={{ width: "-webkit-fill-available" }}
                     type="file"
-                    onChange={handleUploadAndSetData}
+                    name="resumeSet"
+                    onChange={handleResumeUploadBoth}
                     className="plain-input"
                     placeholder="Upload Resume"
+                  /> */}
+
+                  <input
+                    type="file"
+                    name="resume"
+                    onChange={handleResumeUploadBoth}
+                    accept=".pdf,.doc,.docx"
+                    className="plain-input"
                   />
+                  {resumeUploaded && (
+                    <FontAwesomeIcon
+                      icon={faCheckCircle}
+                      style={{
+                        color: "green",
+                        marginLeft: "3px",
+                        marginTop: "5px",
+                        fontSize: "22px",
+                      }}
+                    />
+                  )}
+                  {errors.resume && (
+                    <div className="error-message">{errors.resume}</div>
+                  )}
                 </div>
               </div>
             </div>
@@ -945,7 +1008,7 @@ const CallingTrackerForm = ({
                       type="text"
                       name="candidateName"
                       // validation added by sahil karnekar date 19-11-2024
-                      value={callingTracker.candidateName} 
+                      value={callingTracker.candidateName}
                       className={`plain-input`}
                       onChange={handleChange}
                       placeholder="Enter Candidate Name"
@@ -1831,15 +1894,16 @@ const CallingTrackerForm = ({
             </div>
             <div className="calling-tracker-row-white">
               <div className="calling-tracker-field">
-                <label>Save Resume File</label>
+                <label>Notice Period</label>
                 <div
                   style={{ display: "flex", flexDirection: "row" }}
                   className="calling-tracker-field-sub-div"
                 >
-                  <input
+                  {/* this lines commented by sahil karnekar on date 25-11-2024 */}
+                  {/* <input
                     type="file"
                     name="resume"
-                    onChange={handleResumeFileChange}
+                    onChange={handleResumeUploadBoth}
                     accept=".pdf,.doc,.docx"
                     className="plain-input"
                   />
@@ -1856,7 +1920,41 @@ const CallingTrackerForm = ({
                   )}
                   {errors.resume && (
                     <div className="error-message">{errors.resume}</div>
-                  )}
+                  )} */}
+                  {/* line 1812 to 1846 added by sahil karnekar on date 25-11-2024 */}
+                  <div
+                    className="calling-tracker-two-input"
+                    style={{
+                      width: "-webkit-fill-available",
+                      marginRight: "40px",
+                    }}
+                  >
+                    {/* this line added by sahil date 22-10-2024 */}
+                    <div className="setRequiredStarDiv">
+                      <input
+                        type="text"
+                        name="noticePeriod"
+                        placeholder="Enter Notice Period"
+                        value={lineUpData.noticePeriod}
+                        onChange={handleLineUpChange}
+                        min="0"
+                        max="90"
+                        //  {/* this line added by sahil date 22-10-2024 */}
+                        style={{ width: "inherit" }}
+                      />
+                      {/* this line added by sahil date 22-10-2024 */}
+                      {callingTracker.selectYesOrNo === "Interested" &&
+                        !lineUpData.noticePeriod && (
+                          <span className="requiredFieldStar">*</span>
+                        )}
+                    </div>
+                    {/* sahil karnekar line 1581 to 1585  */}
+                    {errors.noticePeriod && (
+                      <div className="error-message">
+                        {errors.noticePeriod || errors.noticePeriod}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="calling-tracker-field">
@@ -1965,7 +2063,14 @@ const CallingTrackerForm = ({
               <div className="calling-tracker-field">
                 <label>Relevant Experience</label>
                 <div className="calling-tracker-two-input-container">
-                  <div className="calling-tracker-two-input">
+                  <div
+                    className="calling-tracker-two-input"
+                    style={{
+                      width: "-webkit-fill-available",
+                      marginRight: "43px",
+                      marginLeft: "4px",
+                    }}
+                  >
                     {/* this line added by sahil date 22-10-2024 */}
                     <div className="setRequiredStarDiv">
                       <input
@@ -1989,33 +2094,37 @@ const CallingTrackerForm = ({
                       </div>
                     )}
                   </div>
-                  <div className="calling-tracker-two-input">
-                    {/* this line added by sahil date 22-10-2024 */}
-                    <div className="setRequiredStarDiv">
-                      <input
+
+                  {/* this lines commened by sahil karnekar date 25-11-2024 */}
+
+                  {/* this lines commented by sahil karnekar on date 25-11-2024 to move the notice period input */}
+                  {/* <div className="calling-tracker-two-input"> */}
+                  {/* this line added by sahil date 22-10-2024 */}
+                  {/* <div className="setRequiredStarDiv"> */}
+                  {/* <input
                         type="text"
                         name="noticePeriod"
                         placeholder="Notice Period"
                         value={lineUpData.noticePeriod}
                         onChange={handleLineUpChange}
                         min="0"
-                        max="90"
-                        //  {/* this line added by sahil date 22-10-2024 */}
-                        style={{ width: "inherit" }}
-                      />
-                      {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" &&
+                        max="90" */}
+                  {/* //  this line added by sahil date 22-10-2024 */}
+                  {/* // style={{ width: "inherit" }} */}
+                  {/* // /> */}
+                  {/* this line added by sahil date 22-10-2024 */}
+                  {/* {callingTracker.selectYesOrNo === "Interested" &&
                         !lineUpData.noticePeriod && (
                           <span className="requiredFieldStar">*</span>
-                        )}
-                    </div>
-                    {/* sahil karnekar line 1581 to 1585  */}
+                        )} */}
+                  {/* </div> */}
+                  {/* sahil karnekar line 1581 to 1585 
                     {errors.noticePeriod && (
                       <div className="error-message">
                         {errors.noticePeriod || errors.noticePeriod}
                       </div>
-                    )}
-                  </div>
+                    )} */}
+                  {/* </div> */}
                 </div>
               </div>
 
