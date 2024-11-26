@@ -402,6 +402,27 @@ const ShortListedCandidates = ({
         (item.gender && item.gender.toLowerCase().includes(searchTermLower)) ||
         (item.qualification &&
           item.qualification.toLowerCase().includes(searchTermLower)) ||
+          (item.jobDesignation &&
+            item.jobDesignation.toLowerCase().includes(searchTermLower)) ||
+            (item.requirementId &&
+              item.requirementId.toString().toLowerCase().includes(searchTermLower)) ||
+              (item.fullAddress &&
+                item.fullAddress.toString().toLowerCase().includes(searchTermLower)) ||
+                (item.experienceYear &&
+                  item.experienceYear.toString().toLowerCase().includes(searchTermLower)) ||
+                  (item.experienceMonth &&
+                    item.experienceMonth.toString().toLowerCase().includes(searchTermLower)) ||
+                    (item.relevantExperience &&
+                      item.relevantExperience.toString().toLowerCase().includes(searchTermLower)) ||
+                      (item.currentCTCLakh &&
+                        item.currentCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
+                        (item.currentCTCThousand &&
+                          item.currentCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
+                          (item.expectedCTCLakh &&
+                            item.expectedCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
+                            (item.expectedCTCThousand &&
+                              item.expectedCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
+                              
         (item.companyName &&
           item.companyName.toLowerCase().includes(searchTermLower))
       );
@@ -573,14 +594,11 @@ const handleFilterSelect = (key, value) => {
               ></i>
               <i
                 className="fa-solid fa-magnifying-glass"
-                onClick={() => {
-                  setShowSearchBar(!showSearchBar);
-                  setShowFilterSection(false);
-                }}
+               
                 style={{ margin: "10px", width: "auto", fontSize: "15px" }}
               ></i>
               {/* line 581 to 590 updated by sahil karnekar date 24-10-2024 */}
-               {showSearchBar && (
+
                 <input
                   type="text"
                   className="form-control"
@@ -589,7 +607,7 @@ const handleFilterSelect = (key, value) => {
                   
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-              )}
+
             </div>
             <h5 style={{ color: "gray", paddingTop: "5px" }}>
               Shortlisted Candidate 

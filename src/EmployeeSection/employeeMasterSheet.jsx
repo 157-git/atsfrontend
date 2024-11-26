@@ -591,13 +591,11 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
           <div style={{ display: "flex", alignItems: "center" }}>
                   <i
                     className="fa-solid fa-magnifying-glass"
-                    onClick={() => {
-                      setShowSearchBar(!showSearchBar);
-                    }}
+                   
                     style={{ margin: "10px", width: "auto", fontSize: "15px" }}
                   ></i>
                   {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
-                  {showSearchBar && (
+           
                     <input
                       type="text"
                       className="form-control"
@@ -605,7 +603,7 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                  )}
+        
                 </div>
 
             <div className="master-sheet-header">

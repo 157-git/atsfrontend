@@ -189,17 +189,14 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <i
                       className="fa-solid fa-magnifying-glass"
-                      onClick={() => {
-                        setShowSearchBar(!showSearchBar);
-                        setShowFilterSection(false);
-                      }}
+                     
                       style={{
                         margin: "10px",
                         width: "auto",
                         fontSize: "15px",
                       }}
                     ></i>
-                    {showSearchBar && (
+
                       <input
                         type="text"
                         className="form-control"
@@ -207,7 +204,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                       />
-                    )}
+
                   </div>
                   <h1 className="resume-data-heading">Shared Profile Data</h1>
                   <div className="rl-btn-div">

@@ -720,15 +720,12 @@ const CallingList = ({
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <i
                     className="fa-solid fa-magnifying-glass"
-                    onClick={() => {
-                      setShowSearchBar(!showSearchBar);
-                      setShowFilterSection(false);
-                    }}
+
                     style={{ margin: "10px", width: "auto", fontSize: "15px" }}
                   ></i>
                   {/* this line 731 to 741 added by sahil karnekar date 24-10-2024 */}
 
-                  {showSearchBar && (
+
                     <input
                       type="text"
                       className="form-control"
@@ -736,7 +733,7 @@ const CallingList = ({
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                  )}
+
                 </div>
                 <h3 style={{ color: "gray" }}>Calling Tracker</h3>
 

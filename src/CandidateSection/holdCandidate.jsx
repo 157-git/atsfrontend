@@ -705,14 +705,11 @@ const HoldCandidate = ({
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <i
                     className="fa-solid fa-magnifying-glass"
-                    onClick={() => {
-                      setShowSearchBar(!showSearchBar);
-                      setShowFilterSection(false);
-                    }}
+                  
                     style={{ margin: "10px", width: "auto", fontSize: "15px" }}
                   ></i>
                   {/* line 711 to 720 added by sahil karnekar date 24-10-2024 */}
-                  {showSearchBar && (
+          
                     <input
                       type="text"
                       className="form-control"
@@ -720,7 +717,7 @@ const HoldCandidate = ({
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                  )}
+  
                 </div>
                 <h5 style={{ color: "gray" }}>Hold Candidates</h5>
                 <div
