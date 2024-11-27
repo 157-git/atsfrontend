@@ -578,6 +578,14 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
       tooltip.style.visibility = "hidden";
     }
   };
+
+  const calculateWidth = () => {
+    const baseWidth = 250;
+    const increment = 10;
+    const maxWidth = 600;
+    return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
+  };
+
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -596,13 +604,18 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
                   ></i>
                   {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
            
+                  <div
+                    className="search-input-div"
+                    style={{ width: `${calculateWidth()}px` }}
+                  >
                     <input
                       type="text"
-                      className="form-control"
+                      className="search-input"
                       placeholder="Search here..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
+                  </div>
         
                 </div>
 

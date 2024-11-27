@@ -422,6 +422,24 @@ const ShortListedCandidates = ({
                             item.expectedCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
                             (item.expectedCTCThousand &&
                               item.expectedCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
+                              (item.yearOfPassing &&
+                                item.yearOfPassing.toString().toLowerCase().includes(searchTermLower)) ||
+                                (item.extraCertification &&
+                                  item.extraCertification.toString().toLowerCase().includes(searchTermLower)) ||
+                                  (item.holdingAnyOffer &&
+                                    item.holdingAnyOffer.toString().toLowerCase().includes(searchTermLower)) ||
+                                    (item.offerLetterMsg &&
+                                      item.offerLetterMsg.toString().toLowerCase().includes(searchTermLower)) ||
+                                      (item.noticePeriod &&
+                                        item.noticePeriod.toString().toLowerCase().includes(searchTermLower)) ||
+                                        (item.msgForTeamLeader &&
+                                          item.msgForTeamLeader.toString().toLowerCase().includes(searchTermLower)) ||
+                                          (item.availabilityForInterview &&
+                                            item.availabilityForInterview.toString().toLowerCase().includes(searchTermLower)) ||
+                                            (item.interviewTime &&
+                                              item.interviewTime.toString().toLowerCase().includes(searchTermLower)) ||
+                                              (item.finalStatus &&
+                                                item.finalStatus.toString().toLowerCase().includes(searchTermLower)) ||
                               
         (item.companyName &&
           item.companyName.toLowerCase().includes(searchTermLower))
@@ -566,6 +584,14 @@ const handleFilterSelect = (key, value) => {
     setShowResumeModal(false);
   };
   //Name:-Akash Pawar Component:-ShortListedCandidate Subcategory:-ResumeViewButton(added) End LineNo:-196 Date:-02/07
+
+  const calculateWidth = () => {
+    const baseWidth = 250;
+    const increment = 10;
+    const maxWidth = 600;
+    return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
+  };
+
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -599,14 +625,18 @@ const handleFilterSelect = (key, value) => {
               ></i>
               {/* line 581 to 590 updated by sahil karnekar date 24-10-2024 */}
 
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search here..."
-                  value={searchTerm}
-                  
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
+              <div
+                    className="search-input-div"
+                    style={{ width: `${calculateWidth()}px` }}
+                  >
+                    <input
+                      type="text"
+                      className="search-input"
+                      placeholder="Search here..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
 
             </div>
             <h5 style={{ color: "gray", paddingTop: "5px" }}>

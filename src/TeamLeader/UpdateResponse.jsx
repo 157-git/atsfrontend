@@ -344,6 +344,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
   };
   console.log(filteredCallingList);
 
+  const calculateWidth = () => {
+    const baseWidth = 250;
+    const increment = 10;
+    const maxWidth = 600;
+    return Math.min(baseWidth + filterValue.length * increment, maxWidth);
+  };
+
   return (
     // SwapnilRokade_UpdateResponse_FilterAdded_7_to_504_10/07"
     <div className="TeamLead-main">
@@ -369,14 +376,19 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                   <div className="TeamLead-main-filter-section-container"
                   style={{width:"100%"}}
                   >
+                       <div
+                    className="search-input-div"
+                    style={{ width: `${calculateWidth()}px` }}
+                  >
                     <input
                       type="text"
-                      placeholder="Search Here ..."
                       className="search-input"
+                      placeholder="Search here..."
                       value={filterValue}
                       onChange={(e) => setFilterValue(e.target.value)}
-                      // disabled={!filterType}
                     />
+                  </div>
+
                     {/* <select
                       className="white-Btn"
                       value={filterType}

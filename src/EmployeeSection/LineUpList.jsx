@@ -286,6 +286,50 @@ const LineUpList = ({
           item.personalFeedback.toLowerCase().includes(searchTermLower)) ||
         (item.callingFeedback &&
           item.callingFeedback.toLowerCase().includes(searchTermLower)) ||
+          (item.jobDesignation &&
+            item.jobDesignation.toString().toLowerCase().includes(searchTermLower)) ||
+            (item.requirementId &&
+              item.requirementId.toString().toLowerCase().includes(searchTermLower)) ||
+              (item.fullAddress &&
+                item.fullAddress.toString().toLowerCase().includes(searchTermLower)) ||
+                (item.experienceYear &&
+                  item.experienceYear.toString().toLowerCase().includes(searchTermLower)) ||
+                  (item.experienceMonth &&
+                    item.experienceMonth.toString().toLowerCase().includes(searchTermLower)) ||
+                    (item.relevantExperience &&
+                      item.relevantExperience.toString().toLowerCase().includes(searchTermLower)) ||
+                      (item.currentCTCLakh &&
+                        item.currentCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
+                        (item.currentCTCThousand &&
+                          item.currentCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
+                          (item.expectedCTCLakh &&
+                            item.expectedCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
+                            (item.expectedCTCThousand &&
+                              item.expectedCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
+                              (item.yearOfPassing &&
+                                item.yearOfPassing.toString().toLowerCase().includes(searchTermLower)) ||
+                                (item.extraCertification &&
+                                  item.extraCertification.toString().toLowerCase().includes(searchTermLower)) ||
+                                  (item.holdingAnyOffer &&
+                                    item.holdingAnyOffer.toString().toLowerCase().includes(searchTermLower)) ||
+                                    (item.offerLetterMsg &&
+                                      item.offerLetterMsg.toString().toLowerCase().includes(searchTermLower)) ||
+                                      (item.noticePeriod &&
+                                        item.noticePeriod.toString().toLowerCase().includes(searchTermLower)) ||
+                                        (item.msgForTeamLeader &&
+                                          item.msgForTeamLeader.toString().toLowerCase().includes(searchTermLower)) ||
+                                          (item.availabilityForInterview &&
+                                            item.availabilityForInterview.toString().toLowerCase().includes(searchTermLower)) ||
+                                            (item.interviewTime &&
+                                              item.interviewTime.toString().toLowerCase().includes(searchTermLower)) ||
+                                              (item.finalStatus &&
+                                                item.finalStatus.toString().toLowerCase().includes(searchTermLower)) ||
+                                                (item.dateOfBirth &&
+                                                  item.dateOfBirth.toString().toLowerCase().includes(searchTermLower)) ||
+                                                  (item.gender &&
+                                                    item.gender.toString().toLowerCase().includes(searchTermLower)) ||
+                                                    (item.qualification &&
+                                                      item.qualification.toString().toLowerCase().includes(searchTermLower)) ||
         (item.selectYesOrNo &&
           item.selectYesOrNo.toLowerCase().includes(searchTermLower))
       );
@@ -711,6 +755,13 @@ const LineUpList = ({
   };
   //Mohini_Raut_LineUpList_columnsToInclude_columnsToExclude_16/07/2024//
 
+  const calculateWidth = () => {
+    const baseWidth = 250;
+    const increment = 10;
+    const maxWidth = 600;
+    return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
+  };
+
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -731,13 +782,19 @@ const LineUpList = ({
                   ></i>
                   {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
 
+                  <div
+                    className="search-input-div"
+                    style={{ width: `${calculateWidth()}px` }}
+                  >
                     <input
                       type="text"
-                      className="form-control"
+                      className="search-input"
                       placeholder="Search here..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
+                  </div>
+
 
                 </div>
                 <h5 style={{ color: "gray" }}>Lineup Tracker</h5>
