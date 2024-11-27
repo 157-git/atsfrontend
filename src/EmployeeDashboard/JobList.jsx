@@ -469,7 +469,8 @@ const JobListing = () => {
               {filteredJobDescriptions.map((item) => (
                 <div className="job-listing" key={item.requirementId}>
                   <div className="job-header">
-                    <div className="job-title">{item.designation}</div>
+                    {/* Arshad Attar , Added Job Id In Jd Card As per requirement on 27-11-2024 */}
+                    <div className="job-title">{item.requirementId}{" - "}{item.designation} </div>
                     <div className="job-company">{item.companyName} </div>
                   </div>
 
@@ -623,7 +624,7 @@ const JobListing = () => {
                               toggleJobDescription(item.requirementId)
                             }
                           >
-                            View
+                            View 
                           </button>
                         )}
                         {(userType === "Manager" ||

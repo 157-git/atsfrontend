@@ -144,10 +144,11 @@ const LoginSignup = ({ onLogin }) => {
               <ForgotPasswordForms userType={userType} />
             ) : (
               <form onSubmit={handleSubmit}>
-                {userType === "Recruiters" && <h2>Recruiter</h2>}
-                {userType === "TeamLeader" && <h2>Team Leader</h2>}
-                {userType === "Manager" && <h2>Manager</h2>}
-                {userType === "SuperUser" && <h2>Super User</h2>}
+                {/* Arshad Attar  , Added inline CSS For Headers As per requirement on 27-11-2024 */}
+                {userType === "Recruiters" && <h2 style={{color:"gray",fontWeight:"bold"}}>Recruiter</h2>}
+                {userType === "TeamLeader" && <h2 style={{color:"gray",fontWeight:"bold"}}>Team Leader</h2>}
+                {userType === "Manager" && <h2 style={{color:"gray",fontWeight:"bold"}}>Manager</h2>}
+                {userType === "SuperUser" && <h2 style={{color:"gray",fontWeight:"bold"}}>Super User</h2>}
                 <div className="input-groups">
                   <i className="fas fa-user"></i>
                   <input
