@@ -1536,10 +1536,10 @@ function Sidebar({
                 </li>
 
                 <li onClick={() => setShowConfirmation(true)}>
-                  <a href="#">
+                  <p>
                     <i className="fa-solid fa-power-off"></i>
                     <span className="sidebar-text">Logout</span>
-                  </a>
+                  </p>
                 </li>
               </ul>
             </div>
