@@ -28,11 +28,18 @@ const LoginSignup = ({ onLogin }) => {
 
   // here is getting employeeId from localstorage and initially removing the id if present in localstorage
 
-  const localStrId = localStorage.getItem("employeeId");
+  // const localStrId = localStorage.getItem("employeeId");
 
-  if (localStrId) {
-    localStorage.removeItem("employeeId");
-  }
+  // if (localStrId) {
+  //   localStorage.removeItem("employeeId");
+  // }
+
+  // const storedData = JSON.parse(localStorage.getItem(`user_${userType}`));
+
+
+  // if (storedData) {
+  //   localStorage.removeItem(`user_${userType}`);
+  // }
 
   useEffect(() => {
     AOS.init({ duration: 3000 });
@@ -113,37 +120,38 @@ const LoginSignup = ({ onLogin }) => {
           superUserPassword: password,
         }
       );
-  
       console.log("Response Status:", loginResponse.status);
-   
-  
-      switch (loginResponse.status) {
-        case 200:
-          console.log("Login successful!");
-          setEmployeeId(loginResponse.data.employeeId);
-          localStorage.setItem("employeeId", loginResponse.data.employeeId);
-          navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
-          break;
-  
-        case 403:
-          console.log("403: Access denied. Invalid credentials.");
-          setError("Access denied. Please check your credentials.");
-          break;
-  
-        case 404:
-          console.log("404: User not found.");
-          setError("User not found. Please try again.");
-          break;
-  
-        case 500:
-          console.log("500: Server error.");
-          setError("Server error. Please try again later.");
-          break;
-  
-        default:
-          console.log(`Unexpected status code: ${loginResponse.status}`);
-          setError("Unexpected error. Please try again.");
-      }
+// line 125 to 154 added by sahil karnekar on date 28-11-2024
+if (loginResponse.status === 200) {
+  console.log(loginResponse);
+  if (loginResponse.data.statusCode === "200 OK") {
+    console.log(loginResponse.data.status);
+     // Create a unique key for each user based on their userType and employeeId
+     const storageKey = `user_${userType}${loginResponse.data.employeeId}`;
+
+     // Store user details in localStorage with the unique key
+     localStorage.setItem(
+       storageKey,
+       JSON.stringify({
+         employeeId: loginResponse.data.employeeId.toString(),
+         userType: userType,
+       })
+     );
+
+     setEmployeeId(loginResponse.data.employeeId);
+         // Navigate to the dashboard
+         navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
+  }else if (loginResponse.data.statusCode === "401 Unauthorized") {
+    setError(loginResponse.data.status);
+  }else if (loginResponse.data.statusCode === "402 Payment Required") {
+    setError(loginResponse.data.status);
+  }else if (loginResponse.data.statusCode === "403 Forbidden") {
+    setError(loginResponse.data.status);
+  }else if (loginResponse.data.statusCode === "404 Not Found") {
+    setError(loginResponse.data.status);
+  }
+}
+
     } catch (error) {
       console.error("Error during login request:", error);
   

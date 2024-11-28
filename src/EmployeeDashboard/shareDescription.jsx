@@ -29,7 +29,19 @@ const ShareDescription = ({ Descriptions }) => {
     document.querySelector(".main-description-share").style.display = "none";
   };
   const generateAndShareImage = async () => {
+    console.log(Descriptions);
     try {
+
+      // line 37 to 43 added by sahil karnekar
+
+      const editableElements = document.querySelectorAll("[contenteditable]");
+
+      // Remove spaces only after the last character of the entire content
+      editableElements.forEach((element) => {
+        const cleanedContent = element.innerText.trimEnd(); // Trim spaces only at the end
+        element.innerText = cleanedContent; // Update the element's text
+      });
+      
       const input = document.getElementById("job-description-share");
       const canvas = await html2canvas(input, { scale: 2, logging: true });
       const blob = await new Promise((resolve) =>

@@ -126,7 +126,7 @@ function Sidebar({
     localStorage.removeItem(`stopwatchTime_${employeeId}`);
     localStorage.removeItem(`dailyWorkData_${employeeId}`);
     localStorage.removeItem(`breaks_${employeeId}`);
-    localStorage.removeItem("employeeId");
+    localStorage.removeItem(`user_${userType}${employeeId}`);
 
  // Construct request body based on userType
 {/* Arshad Attar , Added new Logout logic as As per requirement on 27-11-2024, Start Line 130 - end line 167 */}
@@ -1536,10 +1536,11 @@ function Sidebar({
                 </li>
 
                 <li onClick={() => setShowConfirmation(true)}>
-                  <p>
+                  {/* removed href from ancor tg */}
+                  <a>
                     <i className="fa-solid fa-power-off"></i>
                     <span className="sidebar-text">Logout</span>
-                  </p>
+                  </a>
                 </li>
               </ul>
             </div>
