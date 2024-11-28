@@ -122,12 +122,12 @@ function Sidebar({
 
   const temproryLogout = async () => {
     try {
-      localStorage.removeItem(`loginTimeSaved_${employeeId}`);
-      localStorage.removeItem(`loginDetailsSaved_${employeeId}`);
-      localStorage.removeItem(`stopwatchTime_${employeeId}`);
-      localStorage.removeItem(`dailyWorkData_${employeeId}`);
-      localStorage.removeItem(`breaks_${employeeId}`);
-      localStorage.removeItem("employeeId");
+    localStorage.removeItem(`loginTimeSaved_${employeeId}`);
+    localStorage.removeItem(`loginDetailsSaved_${employeeId}`);
+    localStorage.removeItem(`stopwatchTime_${employeeId}`);
+    localStorage.removeItem(`dailyWorkData_${employeeId}`);
+    localStorage.removeItem(`breaks_${employeeId}`);
+    localStorage.removeItem(`user_${userType}${employeeId}`);
 
       // Construct request body based on userType
       {
@@ -1627,7 +1627,8 @@ function Sidebar({
                 </li>
 
                 <li onClick={() => setShowConfirmation(true)}>
-                  <a href="#">
+                  {/* removed href from ancor tg */}
+                  <a>
                     <i className="fa-solid fa-power-off"></i>
                     <span className="sidebar-text">Logout</span>
                   </a>

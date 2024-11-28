@@ -132,6 +132,8 @@ body {
   /* color: gray; */
   /* padding: 7px; */
   background-color: var(--hover-effect);
+  /* this line is added by sahil karnekar for hover pointer effect */
+  cursor: pointer;
 }
 .sidebar-menu ul li a ul li {
   margin-left: 30px;

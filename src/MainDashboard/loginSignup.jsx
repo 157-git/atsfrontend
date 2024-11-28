@@ -25,16 +25,21 @@ const LoginSignup = ({ onLogin }) => {
   const [paymentMade, setPaymentMade] = useState(false);
   const [paymentLink, setPaymentLink] = useState("");
 
-
   // only functionality javascript code added by sahil karnekar dont use html code , html code is not styled or not applied any css
   // please check the logic once
   // here is getting employeeId from localstorage and initially removing the id if present in localstorage
 
-  const localStrId = localStorage.getItem("employeeId");
+  // const localStrId = localStorage.getItem("employeeId");
 
-  if (localStrId) {
-    localStorage.removeItem("employeeId");
-  }
+  // if (localStrId) {
+  //   localStorage.removeItem("employeeId");
+  // }
+
+  // const storedData = JSON.parse(localStorage.getItem(`user_${userType}`));
+
+  // if (storedData) {
+  //   localStorage.removeItem(`user_${userType}`);
+  // }
 
   useEffect(() => {
     AOS.init({ duration: 3000 });
@@ -98,12 +103,12 @@ const LoginSignup = ({ onLogin }) => {
   // handle submit method for authenticate user by username and password from line num 53 to line num 77
   const handleSubmit = async (event, paymentMade = false) => {
     event.preventDefault();
-  
+
     if (!employeeId || !password) {
       setError("Please fill in both fields before submitting.");
       return;
     }
-  
+
     try {
       const loginResponse = await axios.post(
         `${API_BASE_URL}/user-login-157/${userType}`,
@@ -115,76 +120,54 @@ const LoginSignup = ({ onLogin }) => {
           superUserPassword: password,
         }
       );
-  
-      const { statusCode, status, employeeId: responseEmployeeId } =
-        loginResponse.data;
-  
-      console.log("Response Status Code:", statusCode);
-      console.log("Response Status Message:", status);
-      console.log("Response Employee Id:", responseEmployeeId);
-   
+      console.log("Response Status:", loginResponse.status);
+      // line 125 to 154 added by sahil karnekar on date 28-11-2024
+      if (loginResponse.status === 200) {
+        console.log(loginResponse);
+        if (loginResponse.data.statusCode === "200 OK") {
+          console.log(loginResponse.data.status);
+          // Create a unique key for each user based on their userType and employeeId
+          const storageKey = `user_${userType}${loginResponse.data.employeeId}`;
 
-      switch (statusCode) {
-        case "200 OK":
-          console.log("Login successful!");
-          setEmployeeId(responseEmployeeId);
-          console.log(responseEmployeeId + " -- Employee ID");
-  
-          localStorage.setItem("employeeId", responseEmployeeId);        
-          navigate(`/Dashboard/${responseEmployeeId}/${userType}`, {
-            state: { paymentMade: true },
-          });
-          break;
-          
-        case "404 Not Found":
-          setError(status);
-          break;
-          
-        case "401 Unauthorized":
-          setError(status);
-          break;
-  
-        case "403 Forbidden":
-          setError(status);
-          break;
-  
-        case "402 Payment Required":
-          console.log(`Payment required for employeeId 001 -- : ${responseEmployeeId}`);
-          localStorage.setItem("employeeId", responseEmployeeId);  
-          console.log(`Payment required for employeeId 002 -- : ${responseEmployeeId}`);
-          let paymentLink = "";
-  
-          if (userType.toLowerCase() === "superuser") {
+          // Store user details in localStorage with the unique key
+          localStorage.setItem(
+            storageKey,
+            JSON.stringify({
+              employeeId: loginResponse.data.employeeId.toString(),
+              userType: userType,
+            })
+          );
+
+          setEmployeeId(loginResponse.data.employeeId);
+          // Navigate to the dashboard
+          navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
+        } else if (loginResponse.data.statusCode === "401 Unauthorized") {
+          setError(loginResponse.data.status);
+        } else if (loginResponse.data.statusCode === "402 Payment Required") {
+          if (userType === 'SuperUser') {
             setError("Payment Pending Please Make Payment ASAP");
-            paymentLink = `/Dashboard/1/SuperUser`;
-          } else {
-            setError("Payment not done, Please Contact Super User");
+          }else{
+            setError("Payment Pending, Contact Super User");
           }
-  
-          setPaymentLink(paymentLink);
-          break;
-  
-        case "500 Internal Server Error":
-          setError(status);
-          break;
-  
-        default:
-          console.log(`Unexpected status code: ${statusCode}`);
-          setError("Unexpected error occurred. Please try again.");
+         
+        } else if (loginResponse.data.statusCode === "403 Forbidden") {
+          setError(loginResponse.data.status);
+        } else if (loginResponse.data.statusCode === "404 Not Found") {
+          setError(loginResponse.data.status);
+        }
       }
     } catch (error) {
       console.error("Error during login request:", error);
       setError("An error occurred. Please try again.");
     }
   };
-  
+
   useEffect(() => {
     const savedEmployeeId = localStorage.getItem("employeeId");
     if (savedEmployeeId) {
       setEmployeeId(savedEmployeeId);
     }
   }, []);
-
 
   //Set By defult false if payment done
   // useEffect(() => {
@@ -300,18 +283,18 @@ const LoginSignup = ({ onLogin }) => {
                 </div>
                 <div className="loginpage-error">{error}</div>
 
-                {error === "Payment Pending Please Make Payment ASAP" && userType.toLowerCase() === "superuser" && (
-                  <div className="acc-create-div">
-                    <span
-                      className="account-create-span"
-                      type="button"
-                      onClick={() => navigate(paymentLink)}
-                    >
-                      Payment Link
-                    </span>
-                  </div>
-                )}
-
+                {error === "Payment Pending Please Make Payment ASAP" &&
+                  userType.toLowerCase() === "superuser" && (
+                    <div className="acc-create-div">
+                      <span
+                        className="account-create-span"
+                        type="button"
+                        onClick={() => navigate(paymentLink)}
+                      >
+                        Payment Link
+                      </span>
+                    </div>
+                  )}
 
                 <button
                   className="login-button"
