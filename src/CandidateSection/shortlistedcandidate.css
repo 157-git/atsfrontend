@@ -237,3 +237,12 @@ padding-right: 8px;
 .lineUp-share-btn:hover{
   border-color: var(--button-border-color);
 }
+.forxmarkdiv{
+  display: flex;
+}
+.removeBorderForSearchInput{
+  border: none;
+}
+.svgimagesetinInput{
+  align-content: center;
+}

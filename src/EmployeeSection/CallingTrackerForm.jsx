@@ -1844,10 +1844,12 @@ const CallingTrackerForm = ({
                       const value = e.target.value;
 
                       // Check if the input is empty and clear the error
+                      const dateforYearOfPassout = new Date();
+                      let yearOfPassout = dateforYearOfPassout.getFullYear()+2;
                       if (value === "") {
                         setErrorForYOP("");
-                      } else if (value < 1947 || value > 2025) {
-                        setErrorForYOP("YOP Should be between 1947 and 2025");
+                      } else if (value < 1947 || value > yearOfPassout) {
+                        setErrorForYOP("YOP Should be between 1947 and "+yearOfPassout);
                       } else {
                         setErrorForYOP("");
                       }
@@ -1858,12 +1860,12 @@ const CallingTrackerForm = ({
 
                         if (value.length === 4) {
                           // Trigger validation after 4 digits are entered
-                          if (year > 2025) {
-                            alert("Cannot enter year above 2025");
+                          if (year > yearOfPassout) {
+                            alert("Cannot enter year above "+yearOfPassout);
                           } else if (year < 1947) {
                             alert("Cannot enter year below 1947");
                           } else {
-                            // Update the value if it's valid (between 1947 and 2025)
+                            // Update the value if it's valid (between 1947 and yearOfPassout)
                             setLineUpData({
                               ...lineUpData,
                               yearOfPassing: value,

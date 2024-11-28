@@ -22,6 +22,7 @@ import EmpDashboard from "./EmployeeDashboard/empDashboard";
 import ProtectedRoute from "./MainDashboard/ProtectedRoute.jsx";
 import ApplicantForm from "./Applicant/applicantFrom.jsx";
 import ApplicationForm1 from "./Applicant/ApplicationForm1.jsx";
+import SubscriptionForm from "./Subscription/SubscriptionForm.jsx";
 
 
 const applySavedColors = () => {
@@ -109,6 +110,12 @@ const App = () => {
             path="/157industries/:employeeId/:userType/candidate-form"
             element={<ApplicationForm1 loginEmployeeName={loginEmployeeName}  />}
           ></Route> */}
+
+<Route
+            path="/157industries/testing/form"
+            element={<SubscriptionForm   />}
+          ></Route>
+
         </Routes>
       </BrowserRouter>
       <ToastContainer />

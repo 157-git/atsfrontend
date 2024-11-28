@@ -548,6 +548,13 @@ const SendClientEmail = ({ clientEmailSender }) => {
     }
   };
 
+  const calculateWidth = () => {
+    const baseWidth = 250;
+    const increment = 10;
+    const maxWidth = 600;
+    return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
+  };
+
   return (
     <div className="SCE-list-container">
       {loading ? (
@@ -566,14 +573,26 @@ const SendClientEmail = ({ clientEmailSender }) => {
 
               style={{ margin: "10px", width: "auto", fontSize: "15px" }}
             ></i>
-              <input
-              type="text"
-              className="form-control"
-              placeholder="Search here..."
-              value={searchTerm}
-              style={{ marginBottom: "10px",width:"100%" }}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+                <div
+                    className="search-input-div"
+                    style={{ width: `${calculateWidth()}px` }}
+                  >
+                    <div className="forxmarkdiv">
+                    <input
+                      type="text"
+                      className="search-input removeBorderForSearchInput"
+                      placeholder="Search here..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    { searchTerm && (
+                      <div className="svgimagesetinInput">
+                    <svg onClick={(()=>setSearchTerm(""))} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                    </div>
+                    )}
+                    
+                    </div>
+                  </div>
             </div>
             <h5 style={{ color: "gray", fontSize: "18px" }}>Candidate Data </h5>
 
