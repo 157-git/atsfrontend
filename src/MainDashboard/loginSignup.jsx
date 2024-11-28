@@ -20,12 +20,14 @@ const LoginSignup = ({ onLogin }) => {
   const [error, setError] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [login, setLogin] = useState("");
-  const [passwordVisible, setPasswordVisible] = useState(false); 
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
+  const [paymentMade, setPaymentMade] = useState(false);
+  const [paymentLink, setPaymentLink] = useState("");
+
 
   // only functionality javascript code added by sahil karnekar dont use html code , html code is not styled or not applied any css
   // please check the logic once
-
   // here is getting employeeId from localstorage and initially removing the id if present in localstorage
 
   const localStrId = localStorage.getItem("employeeId");
@@ -94,7 +96,7 @@ const LoginSignup = ({ onLogin }) => {
   };
 
   // handle submit method for authenticate user by username and password from line num 53 to line num 77
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event, paymentMade = false) => {
     event.preventDefault();
   
     if (!employeeId || !password) {
@@ -114,79 +116,98 @@ const LoginSignup = ({ onLogin }) => {
         }
       );
   
-      console.log("Response Status:", loginResponse.status);
+      const { statusCode, status, employeeId: responseEmployeeId } =
+        loginResponse.data;
+  
+      console.log("Response Status Code:", statusCode);
+      console.log("Response Status Message:", status);
+      console.log("Response Employee Id:", responseEmployeeId);
    
-  
-      switch (loginResponse.status) {
-        case 200:
+
+      switch (statusCode) {
+        case "200 OK":
           console.log("Login successful!");
-          setEmployeeId(loginResponse.data.employeeId);
-          localStorage.setItem("employeeId", loginResponse.data.employeeId);
-          navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
+          setEmployeeId(responseEmployeeId);
+          console.log(responseEmployeeId + " -- Employee ID");
+  
+          localStorage.setItem("employeeId", responseEmployeeId);        
+          navigate(`/Dashboard/${responseEmployeeId}/${userType}`, {
+            state: { paymentMade: true },
+          });
+          break;
+          
+        case "404 Not Found":
+          setError(status);
+          break;
+          
+        case "401 Unauthorized":
+          setError(status);
           break;
   
-        case 403:
-          console.log("403: Access denied. Invalid credentials.");
-          setError("Access denied. Please check your credentials.");
+        case "403 Forbidden":
+          setError(status);
           break;
   
-        case 404:
-          console.log("404: User not found.");
-          setError("User not found. Please try again.");
+        case "402 Payment Required":
+          console.log(`Payment required for employeeId 001 -- : ${responseEmployeeId}`);
+          localStorage.setItem("employeeId", responseEmployeeId);  
+          console.log(`Payment required for employeeId 002 -- : ${responseEmployeeId}`);
+          let paymentLink = "";
+  
+          if (userType.toLowerCase() === "superuser") {
+            setError("Payment Pending Please Make Payment ASAP");
+            paymentLink = `/Dashboard/1/SuperUser`;
+          } else {
+            setError("Payment not done, Please Contact Super User");
+          }
+  
+          setPaymentLink(paymentLink);
           break;
   
-        case 500:
-          console.log("500: Server error.");
-          setError("Server error. Please try again later.");
+        case "500 Internal Server Error":
+          setError(status);
           break;
   
         default:
-          console.log(`Unexpected status code: ${loginResponse.status}`);
-          setError("Unexpected error. Please try again.");
+          console.log(`Unexpected status code: ${statusCode}`);
+          setError("Unexpected error occurred. Please try again.");
       }
     } catch (error) {
       console.error("Error during login request:", error);
-  
-
-      if (error.response) {
- 
-        console.log("Error Response Status:", error.response.status);
-        switch (error.response.status) {
-          case 403:
-            setError(`${userType} is already logged in`);
-            break;
-  
-          case 404:
-            setError(`${userType} not found. Please try again.`);
-            break;
-  
-          case 500:
-            setError("Server error. Please try again later.");
-            break;
-          
-          case 401:
-            setError("Invalid Credentials");
-            break;
-
-          case 402:
-            setError("Payment not done, Please Contact Super User");
-            break;
-  
-          default:
-            setError("Unexpected error occurred.");
-        }
-      } else if (error.request) {
-
-        console.log("No response received from the server.");
-        setError("Network error. Please try again.");
-      } else {
-    
-        console.log("Error setting up the request:", error.message);
-        setError("An error occurred. Please try again.");
-      }
+      setError("An error occurred. Please try again.");
     }
   };
   
+  useEffect(() => {
+    const savedEmployeeId = localStorage.getItem("employeeId");
+    if (savedEmployeeId) {
+      setEmployeeId(savedEmployeeId);
+    }
+  }, []);
+
+
+  //Set By defult false if payment done
+  // useEffect(() => {
+  //   const savedPaymentStatus = localStorage.getItem("paymentMade");
+  //   // If savedPaymentStatus exists, use it; otherwise, default to false
+  //   if (savedPaymentStatus) {
+  //     setPaymentMade(JSON.parse(savedPaymentStatus));
+  //   } else {
+  //     setPaymentMade(false); // Default to false if no value is saved
+  //     localStorage.setItem("paymentMade", JSON.stringify(false)); // Save the default value to localStorage
+  //   }
+  // }, []);
+
+  //Set By defult true if payment done
+  useEffect(() => {
+    const savedPaymentStatus = localStorage.getItem("paymentMade");
+    if (savedPaymentStatus) {
+      setPaymentMade(JSON.parse(savedPaymentStatus));
+    } else {
+      setPaymentMade(true);
+      localStorage.setItem("paymentMade", JSON.stringify(true));
+    }
+  }, []);
 
   return (
     <div className="main-body">
@@ -211,10 +232,24 @@ const LoginSignup = ({ onLogin }) => {
             ) : (
               <form onSubmit={handleSubmit}>
                 {/* Arshad Attar  , Added inline CSS For Headers As per requirement on 27-11-2024 */}
-                {userType === "Recruiters" && <h2 style={{color:"gray",fontWeight:"bold"}}>Recruiter</h2>}
-                {userType === "TeamLeader" && <h2 style={{color:"gray",fontWeight:"bold"}}>Team Leader</h2>}
-                {userType === "Manager" && <h2 style={{color:"gray",fontWeight:"bold"}}>Manager</h2>}
-                {userType === "SuperUser" && <h2 style={{color:"gray",fontWeight:"bold"}}>Super User</h2>}
+                {userType === "Recruiters" && (
+                  <h2 style={{ color: "gray", fontWeight: "bold" }}>
+                    Recruiter
+                  </h2>
+                )}
+                {userType === "TeamLeader" && (
+                  <h2 style={{ color: "gray", fontWeight: "bold" }}>
+                    Team Leader
+                  </h2>
+                )}
+                {userType === "Manager" && (
+                  <h2 style={{ color: "gray", fontWeight: "bold" }}>Manager</h2>
+                )}
+                {userType === "SuperUser" && (
+                  <h2 style={{ color: "gray", fontWeight: "bold" }}>
+                    Super User
+                  </h2>
+                )}
                 <div className="input-groups">
                   <i className="fas fa-user"></i>
                   <input
@@ -225,7 +260,7 @@ const LoginSignup = ({ onLogin }) => {
                     className="loginpage-form-control"
                     value={employeeId}
                     onChange={handleChange}
-                    style={{paddingLeft:"30px"}}
+                    style={{ paddingLeft: "30px" }}
                   />
                 </div>
                 <div className="input-groups" hidden>
@@ -241,29 +276,43 @@ const LoginSignup = ({ onLogin }) => {
                 <div className="input-groups">
                   <i className="fas fa-lock"></i>
                   <input
-                  type={passwordVisible ? "text" : "password"}
+                    type={passwordVisible ? "text" : "password"}
                     id="loginpage-password"
                     name="password"
                     placeholder="Password"
                     value={password}
                     onChange={handleChange}
                     className="loginpage-form-control"
-                    style={{paddingLeft:"30px"}}
+                    style={{ paddingLeft: "30px" }}
                   />
-                   <FontAwesomeIcon
+                  <FontAwesomeIcon
                     icon={passwordVisible ? faEyeSlash : faEye}
-                    onClick={() => setPasswordVisible((prev) => !prev)} 
+                    onClick={() => setPasswordVisible((prev) => !prev)}
                     style={{
                       position: "absolute",
                       right: "10px",
                       top: "50%",
                       transform: "translateY(-50%)",
                       cursor: "pointer",
-                      color:"gray"
+                      color: "gray",
                     }}
                   />
                 </div>
                 <div className="loginpage-error">{error}</div>
+
+                {error === "Payment Pending Please Make Payment ASAP" && userType.toLowerCase() === "superuser" && (
+                  <div className="acc-create-div">
+                    <span
+                      className="account-create-span"
+                      type="button"
+                      onClick={() => navigate(paymentLink)}
+                    >
+                      Payment Link
+                    </span>
+                  </div>
+                )}
+
+
                 <button
                   className="login-button"
                   type="submit"
@@ -278,15 +327,6 @@ const LoginSignup = ({ onLogin }) => {
                   >
                     Forgot password ?
                   </span>
-                </div>
-                <div className="acc-create-div">
-                <button
-                  className="login-button"
-                  type="submit"
-                  data-aos="fade-top"
-                >
-                  Make Payment
-                </button>
                 </div>
               </form>
             )}
