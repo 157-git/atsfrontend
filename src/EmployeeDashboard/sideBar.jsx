@@ -7,6 +7,7 @@ import { RiTeamFill } from "react-icons/ri";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
 import ColorPicker from "../HomePage/ColorPicker";
+import { API_BASE_URL } from "../api/api";
 
 // Swapnil_Sidebar_AddingEmployeeDetailsinto_ManagerSection_17/07
 
@@ -117,15 +118,52 @@ function Sidebar({
   //   onLogout(logoutTime);
   // };
 
-  const temproryLogout = () => {
+
+  const temproryLogout = async () => {
+    try {
     localStorage.removeItem(`loginTimeSaved_${employeeId}`);
     localStorage.removeItem(`loginDetailsSaved_${employeeId}`);
     localStorage.removeItem(`stopwatchTime_${employeeId}`);
     localStorage.removeItem(`dailyWorkData_${employeeId}`);
     localStorage.removeItem(`breaks_${employeeId}`);
     localStorage.removeItem("employeeId");
-    console.log("Temp Logout Successfully");
-    navigate(`/login/${userType}`, { replace: true });
+
+ // Construct request body based on userType
+{/* Arshad Attar , Added new Logout logic as As per requirement on 27-11-2024, Start Line 130 - end line 167 */}
+
+      let requestBody = {};
+      switch (userType) {
+        case "SuperUser":
+          requestBody = { superUserId: employeeId };
+          break;
+        case "Manager":
+          requestBody = { managerId: employeeId };
+          break;
+        case "TeamLeader":
+          requestBody = { teamLeaderId: employeeId };
+          break;
+        case "Recruiters":
+          requestBody = { employeeId: employeeId };
+          break;
+        default:
+          console.error("Invalid user type");
+          return;
+      }
+
+      // Make API call
+      const response = await axios.post(
+        `${API_BASE_URL}/user-logout-157/${userType}`,
+        requestBody
+      );
+
+      console.log("API Response:", response.data);
+      console.log("Logout Successfully And Status Updated Successfully..");
+
+      navigate(`/login/${userType}`, { replace: true });
+      console.log("Temp Logout Successfully");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
   };
 
   const handleColorClick = (color) => {

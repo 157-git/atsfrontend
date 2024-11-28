@@ -1136,24 +1136,21 @@ const CallingTrackerForm = ({
                   <div className="calling-tracker-two-input">
                     {/* this line added by sahil date 22-10-2024 */}
                     <div className="setRequiredStarDiv">
-                      <select
-                        id="requirementId"
-                        name="requirementId"
-                        value={callingTracker.requirementId}
-                        onChange={handleRequirementChange}
-                        //  {/* this line added by sahil date 22-10-2024 */}
-                        style={{ width: "inherit" }}
-                      >
-                        <option value="">Select Job Id</option>
-                        {requirementOptions.map((option) => (
-                          <option
-                            key={option.requirementId}
-                            value={option.requirementId}
-                          >
-                            {option.requirementId} - {option.designation}
-                          </option>
-                        ))}
-                      </select>
+                    <select
+                      id="requirementId"
+                      name="requirementId"
+                      value={callingTracker.requirementId}
+                      onChange={handleRequirementChange}
+                      style={{ width: "inherit" }}
+                    >
+                      <option value="">Select Job Id</option>
+                      {requirementOptions.map((option) => (
+                        <option key={option.requirementId} value={option.requirementId}>
+                          {option.requirementId} - {option.designation}
+                        </option>
+                      ))}
+                    </select>
+
                       {/* this line added by sahil date 22-10-2024 */}
                       {callingTracker.selectYesOrNo === "Interested" &&
                         !callingTracker.requirementId && (
