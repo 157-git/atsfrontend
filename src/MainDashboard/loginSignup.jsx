@@ -96,31 +96,97 @@ const LoginSignup = ({ onLogin }) => {
   // handle submit method for authenticate user by username and password from line num 53 to line num 77
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     if (!employeeId || !password) {
       setError("Please fill in both fields before submitting.");
       return;
     }
-
+  
     try {
-      // statically added base url please change it according to you
-      const response = await axios.get(
-        `${API_BASE_URL}/fetch-pass-on-role/${employeeId}/${userType}`
+      const loginResponse = await axios.post(
+        `${API_BASE_URL}/user-login-157/${userType}`,
+        {
+          userName: employeeId,
+          employeePassword: password,
+          tlPassword: password,
+          managerPassword: password,
+          superUserPassword: password,
+        }
       );
-      const fetchedPassword = response.data;
-
-      // authenticate user and navigating on Dashboard page with employeedId added in route
-      if (fetchedPassword === password) {
-        localStorage.setItem("employeeId", employeeId);
-        navigate(`/Dashboard/${employeeId}/${userType}`);
-      } else {
-        setError("Invalid login for this user. Please try again.");
+  
+      console.log("Response Status:", loginResponse.status);
+   
+  
+      switch (loginResponse.status) {
+        case 200:
+          console.log("Login successful!");
+          setEmployeeId(loginResponse.data.employeeId);
+          localStorage.setItem("employeeId", loginResponse.data.employeeId);
+          navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
+          break;
+  
+        case 403:
+          console.log("403: Access denied. Invalid credentials.");
+          setError("Access denied. Please check your credentials.");
+          break;
+  
+        case 404:
+          console.log("404: User not found.");
+          setError("User not found. Please try again.");
+          break;
+  
+        case 500:
+          console.log("500: Server error.");
+          setError("Server error. Please try again later.");
+          break;
+  
+        default:
+          console.log(`Unexpected status code: ${loginResponse.status}`);
+          setError("Unexpected error. Please try again.");
       }
     } catch (error) {
-      console.error("Error during login:", error);
-      setError("Error occurred. Please try again.");
+      console.error("Error during login request:", error);
+  
+
+      if (error.response) {
+ 
+        console.log("Error Response Status:", error.response.status);
+        switch (error.response.status) {
+          case 403:
+            setError(`${userType} is already logged in`);
+            break;
+  
+          case 404:
+            setError(`${userType} not found. Please try again.`);
+            break;
+  
+          case 500:
+            setError("Server error. Please try again later.");
+            break;
+          
+          case 401:
+            setError("Invalid Credentials");
+            break;
+
+          case 402:
+            setError("Payment not done, Please Contact Super User");
+            break;
+  
+          default:
+            setError("Unexpected error occurred.");
+        }
+      } else if (error.request) {
+
+        console.log("No response received from the server.");
+        setError("Network error. Please try again.");
+      } else {
+    
+        console.log("Error setting up the request:", error.message);
+        setError("An error occurred. Please try again.");
+      }
     }
   };
+  
 
   return (
     <div className="main-body">

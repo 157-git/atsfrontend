@@ -376,17 +376,25 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                   <div className="TeamLead-main-filter-section-container"
                   style={{width:"100%"}}
                   >
-                       <div
+                  <div
                     className="search-input-div"
                     style={{ width: `${calculateWidth()}px` }}
                   >
+                    <div className="forxmarkdiv">
                     <input
                       type="text"
-                      className="search-input"
+                      className="search-input removeBorderForSearchInput"
                       placeholder="Search here..."
                       value={filterValue}
                       onChange={(e) => setFilterValue(e.target.value)}
                     />
+                    { filterValue && (
+                      <div className="svgimagesetinInput">
+                    <svg onClick={(()=>setFilterValue(""))} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                    </div>
+                    )}
+                    
+                    </div>
                   </div>
 
                     {/* <select
