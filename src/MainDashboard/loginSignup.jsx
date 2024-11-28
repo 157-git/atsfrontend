@@ -213,6 +213,13 @@ const LoginSignup = ({ onLogin }) => {
                     Forgot password ?
                   </span>
                 </div>
+                <div className="acc-create-div">
+                  <span
+                    className="account-create-span"
+                  >
+                    Make Payment
+                  </span>
+                </div>
               </form>
             )}
           </div>
