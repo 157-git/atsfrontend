@@ -6,7 +6,7 @@ import "./empDashboard.css";
 import EmpTimeTracker from "./EmpTimeTracker";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
 import Help from "../Help/help";
-import { Outlet, useParams } from "react-router-dom";
+import { Outlet, useLocation, useParams } from "react-router-dom";
 import DataComponent from "../EmployeeSection/DataComponent";
 import Incentive from "../EmployeeSection/Incentive";
 import Attendancesheet from "../EmployeeSection/Attendence_sheet";
@@ -634,14 +634,13 @@ const EmpDashboard = ({ userGroup }) => {
         toggleSelfCalling={toggleSelfCalling}
         toggelLineUp={toggelLineUp}
         toggleCallingTrackerForm={toggleCallingTrackerForm}
-        // toggleAttendance={toggleAttendance}
         toggleShortListed={toggleShortListed}
         toggleSelectCandidate={toggleSelectCandidate}
         toggleRejectedCandidate={toggleRejectedCandidate}
         toggleHoldCandidate={toggleHoldCandidate}
         toggleExcelCalling={toggleExcelCalling}
         toggleResumeData={toggelResumeData}
-        toggleJobDescription={toggleJobDescription} // toggleInterviewDate={toggleInterviewDate}
+        toggleJobDescription={toggleJobDescription} 
         toggleEmployeeMasterSheet={toggleEmployeeMasterSheet}
         toggleShortListedCandidates={toggleShortListedCandidates}
         toggleAddJobDescription={toggleAddJobDescription}
@@ -703,7 +702,6 @@ const EmpDashboard = ({ userGroup }) => {
             profilePageLink={profilePageLink}
             successCount={successCount}
             successfulDataAdditions={successfulDataAdditions}
-            // handleDataAdditionSuccess={handleDataAdditionSuccess}
             logoutTimestamp={logoutTimestamp}
             onCurrentEmployeeJobRoleSet={handleJobRoles}
             jobRole={jobRoles}
@@ -870,7 +868,7 @@ const EmpDashboard = ({ userGroup }) => {
         </div>
         <div>{assignColumns && <Team_Leader />}</div>
         <div>
-          {showSubscription && (
+          {userType === 'SuperUser'&& (
             <SubscriptionPlans togglePayment={togglePayment} />
           )}
         </div>
