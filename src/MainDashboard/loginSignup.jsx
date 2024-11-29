@@ -22,6 +22,8 @@ const LoginSignup = ({ onLogin }) => {
   const [login, setLogin] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false); 
   const navigate = useNavigate();
+  // this state is crearted by sahil karnekar date 29-11-2024 for display payment link
+  const [displayPaymentLink, setDisplayPaymentLink] = useState(false);
 
   // only functionality javascript code added by sahil karnekar dont use html code , html code is not styled or not applied any css
   // please check the logic once
@@ -145,6 +147,27 @@ if (loginResponse.status === 200) {
     setError(loginResponse.data.status);
   }else if (loginResponse.data.statusCode === "402 Payment Required") {
     setError(loginResponse.data.status);
+    // this line  151 to 170 added by sahil karnekar on date 29-11-2024
+    console.log(loginResponse.data.status);
+    // Create a unique key for each user based on their userType and employeeId
+
+if (userType === "SuperUser") {
+  setError("Payment Pending Please Make Payment ASAP");
+  const storageKey = `user_${userType}${loginResponse.data.employeeId}`;
+
+  // Store user details in localStorage with the unique key
+  localStorage.setItem(
+    storageKey,
+    JSON.stringify({
+      employeeId: loginResponse.data.employeeId.toString(),
+      userType: userType,
+    })
+  );
+
+  setEmployeeId(loginResponse.data.employeeId);
+  setDisplayPaymentLink(true);
+}
+
   }else if (loginResponse.data.statusCode === "403 Forbidden") {
     setError(loginResponse.data.status);
   }else if (loginResponse.data.statusCode === "404 Not Found") {
@@ -194,7 +217,16 @@ if (loginResponse.status === 200) {
       }
     }
   };
+  // line 220 to 229 added by sahil karnekar on date 29-11-2024
+  const handleNavigatePaymentLink = () => {
+    // Navigate to the payment link
+    const storageKey = `user_${userType}${employeeId}`;
   
+// Retrieve the stored user data from localStorage
+const storedData = JSON.parse(localStorage.getItem(storageKey));
+
+    navigate(`/Dashboard/${storedData.employeeId}/${userType}`);
+  };
 
   return (
     <div className="main-body">
@@ -272,6 +304,18 @@ if (loginResponse.status === 200) {
                   />
                 </div>
                 <div className="loginpage-error">{error}</div>
+                
+                {displayPaymentLink && (
+                  <div className="acc-create-div">
+                    <span
+                      className="account-create-span"
+                      type="button"
+                      onClick={handleNavigatePaymentLink}
+                    >
+                      Payment Link
+                    </span>
+                  </div>
+                )}
                 <button
                   className="login-button"
                   type="submit"
