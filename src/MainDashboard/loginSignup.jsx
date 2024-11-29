@@ -170,27 +170,29 @@ const LoginSignup = ({ onLogin }) => {
   }, []);
 
   //Set By defult false if payment done
-  // useEffect(() => {
-  //   const savedPaymentStatus = localStorage.getItem("paymentMade");
-  //   // If savedPaymentStatus exists, use it; otherwise, default to false
-  //   if (savedPaymentStatus) {
-  //     setPaymentMade(JSON.parse(savedPaymentStatus));
-  //   } else {
-  //     setPaymentMade(false); // Default to false if no value is saved
-  //     localStorage.setItem("paymentMade", JSON.stringify(false)); // Save the default value to localStorage
-  //   }
-  // }, []);
-
-  //Set By defult true if payment done
   useEffect(() => {
     const savedPaymentStatus = localStorage.getItem("paymentMade");
+    // If savedPaymentStatus exists, use it; otherwise, default to false
     if (savedPaymentStatus) {
       setPaymentMade(JSON.parse(savedPaymentStatus));
     } else {
-      setPaymentMade(true);
-      localStorage.setItem("paymentMade", JSON.stringify(true));
+      setPaymentMade(false); // Default to false if no value is saved
+      localStorage.setItem("paymentMade", JSON.stringify(false)); // Save the default value to localStorage
     }
   }, []);
+
+
+  //Set By defult true if payment done
+  // useEffect(() => {
+  //   const savedPaymentStatus = localStorage.getItem("paymentMade");
+  //   if (savedPaymentStatus) {
+  //     setPaymentMade(JSON.parse(savedPaymentStatus));
+  //   } else {
+  //     setPaymentMade(true);
+  //     localStorage.setItem("paymentMade", JSON.stringify(true));
+  //   }
+  // }, []);
+
 
   return (
     <div className="main-body">
