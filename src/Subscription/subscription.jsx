@@ -58,7 +58,8 @@ const SubscriptionPlans = () => {
   useEffect(() => {
     if (superUserSubscriptionData?.paymentStatus) {
       const paymentStatus = superUserSubscriptionData.paymentStatus === "Payment Completed";
-      localStorage.setItem("paymentMade", paymentStatus);
+      // updated by sahil karnekar date 2-12-2024
+      localStorage.setItem(`user_${userType}${employeeId}paymentMade`, paymentStatus);
     }
   }, [superUserSubscriptionData]);
   
@@ -107,7 +108,8 @@ const isConfirmed = window.confirm('Are you sure you want to update the payment 
 
       if (response.ok) {
         console.log('Payment status updated successfully!');
-        localStorage.setItem("paymentMade", true);
+        // updated by sahil karnekar date 2-12-2024
+        localStorage.setItem(`user_${userType}${employeeId}paymentMade`, true);
 setShowThankYouPage(true);
 
 setTimeout(() => {

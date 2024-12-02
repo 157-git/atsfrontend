@@ -255,10 +255,13 @@ function Sidebar({
   // Fetch `paymentMade` from local storage
   useEffect(() => {
     // Check if there is a saved value for paymentMade in localStorage
-    const savedPaymentStatus = localStorage.getItem("paymentMade");
+    // this line is updated by sahil karnekar date 2-12-2024
+    const savedPaymentStatus = localStorage.getItem(`user_${userType}${employeeId}paymentMade`);
 
     if (savedPaymentStatus) {
       setPaymentMade(JSON.parse(savedPaymentStatus)); // Set the value from localStorage
+    }else{
+      setPaymentMade(JSON.parse(savedPaymentStatus));
     }
   }, []);
 

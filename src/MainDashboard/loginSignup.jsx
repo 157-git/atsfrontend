@@ -10,6 +10,8 @@ import axios from "../api/api";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+// added by sahil karnekar date 2-12-2024
+import ForceLogout from "../LoginPage/ForceLogout";
 //  sahil karnekar Worked on : - date 27 sep 2024
 // Sahil Karnekar Added line num 8 to line num 77
 
@@ -24,6 +26,9 @@ const LoginSignup = ({ onLogin }) => {
   const navigate = useNavigate();
   // this state is crearted by sahil karnekar date 29-11-2024 for display payment link
   const [displayPaymentLink, setDisplayPaymentLink] = useState(false);
+  // added by sahil karnekar date 2-12-2024
+  const [displayForcefullyLogout, setDisplayForcefullyLogout] = useState(false);
+  const [displayForcefullyLogoutForm, setDisplayForcefullyLogoutForm] = useState(false);
 
   // only functionality javascript code added by sahil karnekar dont use html code , html code is not styled or not applied any css
   // please check the logic once
@@ -127,6 +132,8 @@ const LoginSignup = ({ onLogin }) => {
 if (loginResponse.status === 200) {
   console.log(loginResponse);
   if (loginResponse.data.statusCode === "200 OK") {
+    // added by sahil karnekar date 2-12-2024
+    localStorage.setItem(`user_${userType}${loginResponse.data.employeeId}paymentMade`, true);
     console.log(loginResponse.data.status);
      // Create a unique key for each user based on their userType and employeeId
      const storageKey = `user_${userType}${loginResponse.data.employeeId}`;
@@ -146,6 +153,7 @@ if (loginResponse.status === 200) {
          navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
   }else if (loginResponse.data.statusCode === "401 Unauthorized") {
     setError(loginResponse.data.status);
+    setDisplayForcefullyLogout(true);
   }else if (loginResponse.data.statusCode === "402 Payment Required") {
     setError(loginResponse.data.status);
     // this line  151 to 170 added by sahil karnekar on date 29-11-2024
@@ -167,11 +175,14 @@ if (userType === "SuperUser") {
 
   setEmployeeId(loginResponse.data.employeeId);
   setDisplayPaymentLink(true);
-  localStorage.setItem("paymentMade", false);
+  // added by sahil karnekar date 2-12-2024
+  localStorage.setItem(`user_${userType}${loginResponse.data.employeeId}paymentMade`, false);
 }
 
   }else if (loginResponse.data.statusCode === "403 Forbidden") {
     setError(loginResponse.data.status);
+    // added by sahil karnekar date 2-12-2024
+setDisplayForcefullyLogout(true);
   }else if (loginResponse.data.statusCode === "404 Not Found") {
     setError(loginResponse.data.status);
   }
@@ -229,13 +240,18 @@ const storedData = JSON.parse(localStorage.getItem(storageKey));
 
     navigate(`/Dashboard/${storedData.employeeId}/${userType}`);
   };
+// added by sahil karnekar date 2-12-2024
+  const handleDisplayForcefullyLogoutForm = () => {
+    setDisplayForcefullyLogoutForm(true);
+  };
 
   return (
     <div className="main-body">
       <div className="main-login-container">
         <div className="main-loginpage-clouds"></div>
+        {/* updated by sahil karnekar date 2-12-2024 */}
         <div
-          className={`container22 ${showForgotPassword ? "full-width" : ""}`}
+          className={`container22 justify-center align-center ${showForgotPassword ? "full-width" : ""}`}
         >
           {!showForgotPassword && (
             <div className="left-panel" data-aos="fade-right">
@@ -250,6 +266,9 @@ const storedData = JSON.parse(localStorage.getItem(storageKey));
           >
             {showForgotPassword ? (
               <ForgotPasswordForms userType={userType} />
+              // added by sahil karnekar date 2-12-2024
+            ) : displayForcefullyLogoutForm ?(
+              <ForceLogout userType={userType} />
             ) : (
               <form onSubmit={handleSubmit}>
                 {/* Arshad Attar  , Added inline CSS For Headers As per requirement on 27-11-2024 */}
@@ -318,6 +337,18 @@ const storedData = JSON.parse(localStorage.getItem(storageKey));
                     </span>
                   </div>
                 )}
+                {/* added by sahil karnekar date 2-12-2024 */}
+               {displayForcefullyLogout && (
+  <div className="acc-create-div">
+    <span
+      className="account-create-span"
+      type="button"
+    onClick={handleDisplayForcefullyLogoutForm}
+    >
+      Forcefully Logout
+    </span>
+  </div>
+)}
                 <button
                   className="login-button"
                   type="submit"

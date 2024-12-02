@@ -279,4 +279,6 @@
     color: blue;
     transform: scale(1.02); /* Slightly increase size */
     text-decoration: underline;
+    /* added by sahil */
+    cursor: pointer;
 }
