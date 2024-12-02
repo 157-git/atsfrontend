@@ -22,24 +22,11 @@ const LoginSignup = ({ onLogin }) => {
   const [login, setLogin] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
+  // this state is crearted by sahil karnekar date 29-11-2024 for display payment link
+  const [displayPaymentLink, setDisplayPaymentLink] = useState(false);
+
   const [paymentMade, setPaymentMade] = useState(false);
-  const [paymentLink, setPaymentLink] = useState("");
-
-  // only functionality javascript code added by sahil karnekar dont use html code , html code is not styled or not applied any css
-  // please check the logic once
-  // here is getting employeeId from localstorage and initially removing the id if present in localstorage
-
-  // const localStrId = localStorage.getItem("employeeId");
-
-  // if (localStrId) {
-  //   localStorage.removeItem("employeeId");
-  // }
-
-  // const storedData = JSON.parse(localStorage.getItem(`user_${userType}`));
-
-  // if (storedData) {
-  //   localStorage.removeItem(`user_${userType}`);
-  // }
+  const [expiryMessage, setExpiryMessage] = useState("");
 
   useEffect(() => {
     AOS.init({ duration: 3000 });
@@ -81,7 +68,6 @@ const LoginSignup = ({ onLogin }) => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-
     // applied validations here for max length 20 char's
     if (name === "employeeId") {
       if (value.length > 20) {
@@ -101,9 +87,9 @@ const LoginSignup = ({ onLogin }) => {
   };
 
   // handle submit method for authenticate user by username and password from line num 53 to line num 77
-  const handleSubmit = async (event, paymentMade = false) => {
+  const handleSubmit = async (event) => {
+    fetchSubscriptionDetails();
     event.preventDefault();
-
     if (!employeeId || !password) {
       setError("Please fill in both fields before submitting.");
       return;
@@ -123,12 +109,9 @@ const LoginSignup = ({ onLogin }) => {
       console.log("Response Status:", loginResponse.status);
       // line 125 to 154 added by sahil karnekar on date 28-11-2024
       if (loginResponse.status === 200) {
-        console.log(loginResponse);
         if (loginResponse.data.statusCode === "200 OK") {
-          console.log(loginResponse.data.status);
           // Create a unique key for each user based on their userType and employeeId
           const storageKey = `user_${userType}${loginResponse.data.employeeId}`;
-
           // Store user details in localStorage with the unique key
           localStorage.setItem(
             storageKey,
@@ -144,12 +127,27 @@ const LoginSignup = ({ onLogin }) => {
         } else if (loginResponse.data.statusCode === "401 Unauthorized") {
           setError(loginResponse.data.status);
         } else if (loginResponse.data.statusCode === "402 Payment Required") {
-          if (userType === 'SuperUser') {
+          setError(loginResponse.data.status);
+          // this line  151 to 170 added by sahil karnekar on date 29-11-2024
+          console.log(loginResponse.data.status);
+          // Create a unique key for each user based on their userType and employeeId
+
+          if (userType === "SuperUser") {
             setError("Payment Pending Please Make Payment ASAP");
-          }else{
-            setError("Payment Pending, Contact Super User");
+            const storageKey = `user_${userType}${loginResponse.data.employeeId}`;
+
+            // Store user details in localStorage with the unique key
+            localStorage.setItem(
+              storageKey,
+              JSON.stringify({
+                employeeId: loginResponse.data.employeeId.toString(),
+                userType: userType,
+              })
+            );
+
+            setEmployeeId(loginResponse.data.employeeId);
+            setDisplayPaymentLink(true);
           }
-         
         } else if (loginResponse.data.statusCode === "403 Forbidden") {
           setError(loginResponse.data.status);
         } else if (loginResponse.data.statusCode === "404 Not Found") {
@@ -158,41 +156,98 @@ const LoginSignup = ({ onLogin }) => {
       }
     } catch (error) {
       console.error("Error during login request:", error);
-      setError("An error occurred. Please try again.");
+
+      if (error.response) {
+        console.log("Error Response Status:", error.response.status);
+        switch (error.response.status) {
+          case 403:
+            setError(`${userType} is already logged in`);
+            break;
+
+          case 404:
+            setError(`${userType} not found. Please try again.`);
+            break;
+
+          case 500:
+            setError("Server error. Please try again later.");
+            break;
+
+          case 401:
+            setError("Invalid Credentials");
+            break;
+
+          case 402:
+            setError("Payment not done, Please Contact Super User");
+            break;
+
+          default:
+            setError("Unexpected error occurred.");
+        }
+      } else if (error.request) {
+        console.log("No response received from the server.");
+        setError("Network error. Please try again.");
+      } else {
+        console.log("Error setting up the request:", error.message);
+        setError("An error occurred. Please try again.");
+      }
     }
   };
+  // line 220 to 229 added by sahil karnekar on date 29-11-2024
+  const handleNavigatePaymentLink = () => {
+    // Navigate to the payment link
+    const storageKey = `user_${userType}${employeeId}`;
 
-  useEffect(() => {
-    const savedEmployeeId = localStorage.getItem("employeeId");
-    if (savedEmployeeId) {
-      setEmployeeId(savedEmployeeId);
+    // Retrieve the stored user data from localStorage
+    const storedData = JSON.parse(localStorage.getItem(storageKey));
+    navigate(`/Dashboard/${storedData.employeeId}/${userType}`);
+  };
+
+
+  // Fetch the subscription details from the API
+  const fetchSubscriptionDetails = async () => {
+    const storageKey = `user_${userType}${employeeId}`;
+    const storedData = JSON.parse(localStorage.getItem(storageKey));
+    console.log(employeeId + "---------- 0098");
+
+    try {
+      const response = await fetch(
+        `http://localhost:9090/api/ats/157industries/fetch-subscriptions-details/390/SuperUser`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch subscription details");
+      }
+      const data = await response.json();
+
+      // Find the subscription that matches the employeeId
+      const subscription = data.find(
+        (item) => item.superUserId === parseInt(employeeId, 10)
+      );
+
+      console.log(subscription.paymentStatus + " Status 00999");
+
+      if (subscription) {
+        if (subscription.paymentStatus === "Payment Completed") {
+          setPaymentMade(true);
+          localStorage.setItem("paymentMade", JSON.stringify(true));
+        } else {
+          setPaymentMade(false);
+          localStorage.setItem("paymentMade", JSON.stringify(false));
+        }
+
+        if (subscription.remainingDays < 7) {
+          setExpiryMessage(
+            `Your subscription expires in ${subscription.remainingDays} days; please renew to maintain access.`
+          );
+        } else {
+          setExpiryMessage(""); 
+        }
+      } else {
+        console.error("No subscription found for this employeeId");
+      }
+    } catch (error) {
+      console.error("Error fetching subscription details:", error);
     }
-  }, []);
-
-  //Set By defult false if payment done
-  useEffect(() => {
-    const savedPaymentStatus = localStorage.getItem("paymentMade");
-    // If savedPaymentStatus exists, use it; otherwise, default to false
-    if (savedPaymentStatus) {
-      setPaymentMade(JSON.parse(savedPaymentStatus));
-    } else {
-      setPaymentMade(false); // Default to false if no value is saved
-      localStorage.setItem("paymentMade", JSON.stringify(false)); // Save the default value to localStorage
-    }
-  }, []);
-
-
-  //Set By defult true if payment done
-  // useEffect(() => {
-  //   const savedPaymentStatus = localStorage.getItem("paymentMade");
-  //   if (savedPaymentStatus) {
-  //     setPaymentMade(JSON.parse(savedPaymentStatus));
-  //   } else {
-  //     setPaymentMade(true);
-  //     localStorage.setItem("paymentMade", JSON.stringify(true));
-  //   }
-  // }, []);
-
+  };
 
   return (
     <div className="main-body">
@@ -285,19 +340,17 @@ const LoginSignup = ({ onLogin }) => {
                 </div>
                 <div className="loginpage-error">{error}</div>
 
-                {error === "Payment Pending Please Make Payment ASAP" &&
-                  userType.toLowerCase() === "superuser" && (
-                    <div className="acc-create-div">
-                      <span
-                        className="account-create-span"
-                        type="button"
-                        onClick={() => navigate(paymentLink)}
-                      >
-                        Payment Link
-                      </span>
-                    </div>
-                  )}
-
+                {displayPaymentLink && (
+                  <div className="acc-create-div">
+                    <span
+                      className="account-create-span"
+                      type="button"
+                      onClick={handleNavigatePaymentLink}
+                    >
+                      Payment Link
+                    </span>
+                  </div>
+                )}
                 <button
                   className="login-button"
                   type="submit"
@@ -313,6 +366,7 @@ const LoginSignup = ({ onLogin }) => {
                     Forgot password ?
                   </span>
                 </div>
+                {expiryMessage && <p>{expiryMessage}</p>}
               </form>
             )}
           </div>

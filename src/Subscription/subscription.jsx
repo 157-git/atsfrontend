@@ -3,9 +3,10 @@ import axios from "axios";
 import "./subscription.css";
 import AddUser from "./AddUser";
 import { API_BASE_URL } from "../api/api";
-
+import { useParams } from "react-router-dom";
 
 const SubscriptionPlans = () => {
+  const {employeeId} = useParams()
   const [plans, setPlans] = useState([]);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);

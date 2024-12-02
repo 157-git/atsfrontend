@@ -274,7 +274,53 @@
   width: 450x;
   height: 500px;
   margin: 10px;
+  border: 2px solid black;
   }
+
+  .dw-reminder-content {
+    background-color: white;
+    border-radius: 3px;
+    width: 450x;
+    height: 280px;
+    margin: 10px;
+    /* border: 2px solid black; */
+    }
+  .dw-reminder-div{
+    background-color: white;
+    border-radius: 3px;
+    width: 450x;
+    height: 200px;
+    margin: 10px;
+    /* border: 2px solid red; */
+  }
+
+.dw-reminder-button-div{
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+  .profile-back-button {
+    border-radius: 15px;
+    font-size: 16px;
+    height: 30px;
+    width: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--button-color);
+    color: var(--button-text-color);
+    border: 1px solid gray;
+  }
+  
+  .profile-back-button:hover {
+    background-color: var(--button-bg-hover-color);
+    color: var(--text-hover-color);
+    border: 1px solid var(--button-border-color);
+  }
+  
+
 
 /* Waiting image styling */
 .dw-waiting-img {

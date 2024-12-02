@@ -128,6 +128,7 @@ function Sidebar({
     localStorage.removeItem(`dailyWorkData_${employeeId}`);
     localStorage.removeItem(`breaks_${employeeId}`);
     localStorage.removeItem(`user_${userType}${employeeId}`);
+    localStorage.removeItem("paymentMade")
 
       // Construct request body based on userType
       {
@@ -168,6 +169,63 @@ function Sidebar({
       console.error("Error during logout:", error);
     }
   };
+
+
+  const LogoutOnEvent = () => {
+    useEffect(() => {
+      let lastActivityTime = Date.now();
+  
+      // Trigger logout on tab/window close
+      const handleBeforeUnload = (event) => {
+        event.preventDefault();
+        temproryLogout();
+        event.returnValue = '';
+      };
+  
+      // Trigger logout on page visibility change
+      const handleVisibilityChange = () => {
+        if (document.hidden) {
+          temproryLogout();
+        }
+      };
+  
+      // Trigger logout on network offline
+      const handleOffline = () => {
+        console.log("Internet disconnected, logging out...");
+        temproryLogout();
+      };
+  
+      // Detect machine sleep or hibernation
+      const detectSleep = () => {
+        const currentTime = Date.now();
+        if (currentTime - lastActivityTime > 10000) {
+          // If more than 30 seconds have passed unexpectedly, assume sleep or hibernation
+          console.log("Machine went to sleep or hibernation, logging out...");
+          temproryLogout();
+        }
+        lastActivityTime = currentTime;
+      };
+  
+      // Attach event listeners
+      window.addEventListener("beforeunload", handleBeforeUnload);
+      // document.addEventListener("visibilitychange", handleVisibilityChange);
+      window.addEventListener("offline", handleOffline);
+  
+      // Monitor for sleep with setInterval
+      const sleepInterval = setInterval(detectSleep, 10000); // Check every 10 seconds
+  
+      // Cleanup event listeners and interval on component unmount
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+        // document.removeEventListener("visibilitychange", handleVisibilityChange);
+        window.removeEventListener("offline", handleOffline);
+        clearInterval(sleepInterval);
+      };
+    }, []);
+  
+    return null; 
+  };
+
 
   const handleColorClick = (color) => {
     applyColor(color);
