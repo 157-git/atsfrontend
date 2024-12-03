@@ -153,7 +153,6 @@ if (loginResponse.status === 200) {
          navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
   }else if (loginResponse.data.statusCode === "401 Unauthorized") {
     setError(loginResponse.data.status);
-    setDisplayForcefullyLogout(true);
   }else if (loginResponse.data.statusCode === "402 Payment Required") {
     setError(loginResponse.data.status);
     // this line  151 to 170 added by sahil karnekar on date 29-11-2024
