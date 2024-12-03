@@ -10,6 +10,8 @@ import axios from "../api/api";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+// added by sahil karnekar date 2-12-2024
+import ForceLogout from "../LoginPage/ForceLogout";
 //  sahil karnekar Worked on : - date 27 sep 2024
 // Sahil Karnekar Added line num 8 to line num 77
 
@@ -20,10 +22,14 @@ const LoginSignup = ({ onLogin }) => {
   const [error, setError] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [login, setLogin] = useState("");
-  const [passwordVisible, setPasswordVisible] = useState(false); 
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
   // this state is crearted by sahil karnekar date 29-11-2024 for display payment link
   const [displayPaymentLink, setDisplayPaymentLink] = useState(false);
+  // added by sahil karnekar date 2-12-2024
+  const [displayForcefullyLogout, setDisplayForcefullyLogout] = useState(false);
+  const [displayForcefullyLogoutForm, setDisplayForcefullyLogoutForm] =
+    useState(false);
 
   // only functionality javascript code added by sahil karnekar dont use html code , html code is not styled or not applied any css
   // please check the logic once
@@ -37,7 +43,6 @@ const LoginSignup = ({ onLogin }) => {
   // }
 
   // const storedData = JSON.parse(localStorage.getItem(`user_${userType}`));
-
 
   // if (storedData) {
   //   localStorage.removeItem(`user_${userType}`);
@@ -105,12 +110,12 @@ const LoginSignup = ({ onLogin }) => {
   // handle submit method for authenticate user by username and password from line num 53 to line num 77
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     if (!employeeId || !password) {
       setError("Please fill in both fields before submitting.");
       return;
     }
-  
+
     try {
       const loginResponse = await axios.post(
         `${API_BASE_URL}/user-login-157/${userType}`,
@@ -123,80 +128,88 @@ const LoginSignup = ({ onLogin }) => {
         }
       );
       console.log("Response Status:", loginResponse.status);
-// line 125 to 154 added by sahil karnekar on date 28-11-2024
-if (loginResponse.status === 200) {
-  console.log(loginResponse);
-  if (loginResponse.data.statusCode === "200 OK") {
-    console.log(loginResponse.data.status);
-     // Create a unique key for each user based on their userType and employeeId
-     const storageKey = `user_${userType}${loginResponse.data.employeeId}`;
+      // line 125 to 154 added by sahil karnekar on date 28-11-2024
+      if (loginResponse.status === 200) {
+        console.log(loginResponse);
+        if (loginResponse.data.statusCode === "200 OK") {
+          // added by sahil karnekar date 2-12-2024
+          localStorage.setItem(
+            `user_${userType}${loginResponse.data.employeeId}paymentMade`,
+            true
+          );
+          console.log(loginResponse.data.status);
+          // Create a unique key for each user based on their userType and employeeId
+          const storageKey = `user_${userType}${loginResponse.data.employeeId}`;
 
-     // Store user details in localStorage with the unique key
-     localStorage.setItem(
-       storageKey,
-       JSON.stringify({
-         employeeId: loginResponse.data.employeeId.toString(),
-         userType: userType,
-       })
-     );
+          // Store user details in localStorage with the unique key
+          localStorage.setItem(
+            storageKey,
+            JSON.stringify({
+              employeeId: loginResponse.data.employeeId.toString(),
+              userType: userType,
+            })
+          );
 
-     setEmployeeId(loginResponse.data.employeeId);
-         // Navigate to the dashboard
+          setEmployeeId(loginResponse.data.employeeId);
+          // Navigate to the dashboard
 
-         navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
-  }else if (loginResponse.data.statusCode === "401 Unauthorized") {
-    setError(loginResponse.data.status);
-  }else if (loginResponse.data.statusCode === "402 Payment Required") {
-    setError(loginResponse.data.status);
-    // this line  151 to 170 added by sahil karnekar on date 29-11-2024
-    console.log(loginResponse.data.status);
-    // Create a unique key for each user based on their userType and employeeId
+          navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
+        } else if (loginResponse.data.statusCode === "401 Unauthorized") {
+          setError(loginResponse.data.status);
+          // setDisplayForcefullyLogout(true);
+        } else if (loginResponse.data.statusCode === "402 Payment Required") {
+          setError(loginResponse.data.status);
+          // this line  151 to 170 added by sahil karnekar on date 29-11-2024
+          console.log(loginResponse.data.status);
+          // Create a unique key for each user based on their userType and employeeId
 
-if (userType === "SuperUser") {
-  setError("Payment Pending Please Make Payment ASAP");
-  const storageKey = `user_${userType}${loginResponse.data.employeeId}`;
+          if (userType === "SuperUser") {
+            setError("Payment Pending Please Make Payment ASAP");
+            const storageKey = `user_${userType}${loginResponse.data.employeeId}`;
 
-  // Store user details in localStorage with the unique key
-  localStorage.setItem(
-    storageKey,
-    JSON.stringify({
-      employeeId: loginResponse.data.employeeId.toString(),
-      userType: userType,
-    })
-  );
+            // Store user details in localStorage with the unique key
+            localStorage.setItem(
+              storageKey,
+              JSON.stringify({
+                employeeId: loginResponse.data.employeeId.toString(),
+                userType: userType,
+              })
+            );
 
-  setEmployeeId(loginResponse.data.employeeId);
-  setDisplayPaymentLink(true);
-  localStorage.setItem("paymentMade", false);
-}
-
-  }else if (loginResponse.data.statusCode === "403 Forbidden") {
-    setError(loginResponse.data.status);
-  }else if (loginResponse.data.statusCode === "404 Not Found") {
-    setError(loginResponse.data.status);
-  }
-}
-
+            setEmployeeId(loginResponse.data.employeeId);
+            setDisplayPaymentLink(true);
+            // added by sahil karnekar date 2-12-2024
+            localStorage.setItem(
+              `user_${userType}${loginResponse.data.employeeId}paymentMade`,
+              false
+            );
+          }
+        } else if (loginResponse.data.statusCode === "403 Forbidden") {
+          setError(loginResponse.data.status);
+          // added by sahil karnekar date 2-12-2024
+          setDisplayForcefullyLogout(true);
+        } else if (loginResponse.data.statusCode === "404 Not Found") {
+          setError(loginResponse.data.status);
+        }
+      }
     } catch (error) {
       console.error("Error during login request:", error);
-  
 
       if (error.response) {
- 
         console.log("Error Response Status:", error.response.status);
         switch (error.response.status) {
           case 403:
             setError(`${userType} is already logged in`);
             break;
-  
+
           case 404:
             setError(`${userType} not found. Please try again.`);
             break;
-  
+
           case 500:
             setError("Server error. Please try again later.");
             break;
-          
+
           case 401:
             setError("Invalid Credentials");
             break;
@@ -204,16 +217,14 @@ if (userType === "SuperUser") {
           case 402:
             setError("Payment not done, Please Contact Super User");
             break;
-  
+
           default:
             setError("Unexpected error occurred.");
         }
       } else if (error.request) {
-
         console.log("No response received from the server.");
         setError("Network error. Please try again.");
       } else {
-    
         console.log("Error setting up the request:", error.message);
         setError("An error occurred. Please try again.");
       }
@@ -223,19 +234,26 @@ if (userType === "SuperUser") {
   const handleNavigatePaymentLink = () => {
     // Navigate to the payment link
     const storageKey = `user_${userType}${employeeId}`;
-  
-// Retrieve the stored user data from localStorage
-const storedData = JSON.parse(localStorage.getItem(storageKey));
+
+    // Retrieve the stored user data from localStorage
+    const storedData = JSON.parse(localStorage.getItem(storageKey));
 
     navigate(`/Dashboard/${storedData.employeeId}/${userType}`);
+  };
+  // added by sahil karnekar date 2-12-2024
+  const handleDisplayForcefullyLogoutForm = () => {
+    setDisplayForcefullyLogoutForm(true);
   };
 
   return (
     <div className="main-body">
       <div className="main-login-container">
         <div className="main-loginpage-clouds"></div>
+        {/* updated by sahil karnekar date 2-12-2024 */}
         <div
-          className={`container22 ${showForgotPassword ? "full-width" : ""}`}
+          className={`container22 justify-center align-center ${
+            showForgotPassword ? "full-width" : ""
+          }`}
         >
           {!showForgotPassword && (
             <div className="left-panel" data-aos="fade-right">
@@ -250,13 +268,30 @@ const storedData = JSON.parse(localStorage.getItem(storageKey));
           >
             {showForgotPassword ? (
               <ForgotPasswordForms userType={userType} />
+            ) : // added by sahil karnekar date 2-12-2024
+            displayForcefullyLogoutForm ? (
+              <ForceLogout userType={userType} />
             ) : (
               <form onSubmit={handleSubmit}>
                 {/* Arshad Attar  , Added inline CSS For Headers As per requirement on 27-11-2024 */}
-                {userType === "Recruiters" && <h2 style={{color:"gray",fontWeight:"bold"}}>Recruiter</h2>}
-                {userType === "TeamLeader" && <h2 style={{color:"gray",fontWeight:"bold"}}>Team Leader</h2>}
-                {userType === "Manager" && <h2 style={{color:"gray",fontWeight:"bold"}}>Manager</h2>}
-                {userType === "SuperUser" && <h2 style={{color:"gray",fontWeight:"bold"}}>Super User</h2>}
+                {userType === "Recruiters" && (
+                  <h2 style={{ color: "gray", fontWeight: "bold" }}>
+                    Recruiter
+                  </h2>
+                )}
+                {userType === "TeamLeader" && (
+                  <h2 style={{ color: "gray", fontWeight: "bold" }}>
+                    Team Leader
+                  </h2>
+                )}
+                {userType === "Manager" && (
+                  <h2 style={{ color: "gray", fontWeight: "bold" }}>Manager</h2>
+                )}
+                {userType === "SuperUser" && (
+                  <h2 style={{ color: "gray", fontWeight: "bold" }}>
+                    Super User
+                  </h2>
+                )}
                 <div className="input-groups">
                   <i className="fas fa-user"></i>
                   <input
@@ -267,7 +302,7 @@ const storedData = JSON.parse(localStorage.getItem(storageKey));
                     className="loginpage-form-control"
                     value={employeeId}
                     onChange={handleChange}
-                    style={{paddingLeft:"30px"}}
+                    style={{ paddingLeft: "30px" }}
                   />
                 </div>
                 <div className="input-groups" hidden>
@@ -283,30 +318,31 @@ const storedData = JSON.parse(localStorage.getItem(storageKey));
                 <div className="input-groups">
                   <i className="fas fa-lock"></i>
                   <input
-                  type={passwordVisible ? "text" : "password"}
+                    type={passwordVisible ? "text" : "password"}
                     id="loginpage-password"
                     name="password"
                     placeholder="Password"
                     value={password}
                     onChange={handleChange}
                     className="loginpage-form-control"
-                    style={{paddingLeft:"30px"}}
+                    style={{ paddingLeft: "30px" }}
                   />
-                   <FontAwesomeIcon
+                  <FontAwesomeIcon
                     icon={passwordVisible ? faEyeSlash : faEye}
-                    onClick={() => setPasswordVisible((prev) => !prev)} 
+                    onClick={() => setPasswordVisible((prev) => !prev)}
                     style={{
                       position: "absolute",
                       right: "10px",
                       top: "50%",
                       transform: "translateY(-50%)",
                       cursor: "pointer",
-                      color:"gray"
+                      color: "gray",
                     }}
                   />
                 </div>
-                <div className="loginpage-error">{error}</div>
-                
+      
+           <div className="loginpage-error">{error}</div>
+
                 {displayPaymentLink && (
                   <div className="acc-create-div">
                     <span
@@ -315,6 +351,18 @@ const storedData = JSON.parse(localStorage.getItem(storageKey));
                       onClick={handleNavigatePaymentLink}
                     >
                       Payment Link
+                    </span>
+                  </div>
+                )}
+                {/* added by sahil karnekar date 2-12-2024 */}
+                {displayForcefullyLogout && (
+                  <div className="acc-create-div">
+                    <span
+                      className="account-create-span"
+                      type="button"
+                      onClick={handleDisplayForcefullyLogoutForm}
+                    >
+                      Forcefully Logout
                     </span>
                   </div>
                 )}

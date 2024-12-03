@@ -729,11 +729,11 @@ function DailyWork({
                 <div className="dw-reminder-button-div">
               <b>Thank you for your attention to this matter!</b>
 
-              <div style={{display:"flex",gap:"20px"}}>
-              <button className="profile-back-button" onClick={handleSkip}>
+              <div style={{display:"flex",gap:"20px",paddingTop:"10px"}} >
+              <button  onClick={handleSkip} className="daily-tr-btn" >
                   Ok
                 </button>
-                <button className="profile-back-button" onClick={handleSkip}>
+                <button className="daily-tr-btn" onClick={handleSkip}>
                   Skip
                 </button>
               </div>

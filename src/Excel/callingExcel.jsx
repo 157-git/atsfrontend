@@ -414,11 +414,11 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
     <div className="callingfiel">
       {showCards && (
         //  {/* this line added by sahil date 22-10-2024 */}
-        <div className="fileupload" style={{ position: "sticky" }}>
+        <div className="fileupload" style={{ position: "sticky"}}>
           <div className="upload-data-cards">
             <div
               className="card fixed-card"
-              style={{ width: "100%", border: "1px solid gray" }}
+              style={{ width: "100%", border: "1px solid gray",backgroundColor:"#f2f2f2" }}
             >
               {/* sahil date 8-11-2024 */}
               <div className="card-header">
@@ -555,9 +555,9 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
           {/* </div> */}
 
           <div className="upload-data-cards">
-            <div
+          <div
               className="card fixed-card"
-              style={{ width: "100%", border: "1px solid gray" }}
+              style={{ width: "100%", border: "1px solid gray",backgroundColor:"#f2f2f2" }}
             >
               <div className="card-header">
                 <h5 className="mb-0 card-title">Upload Resume </h5>

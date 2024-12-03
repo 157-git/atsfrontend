@@ -309,17 +309,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--button-color);
+    /* background-color: var(--button-color); */
     color: var(--button-text-color);
-    border: 1px solid gray;
+    /* border: 1px solid gray; */
   }
   
-  .profile-back-button:hover {
+  /* .profile-back-button:hover {
     background-color: var(--button-bg-hover-color);
     color: var(--text-hover-color);
     border: 1px solid var(--button-border-color);
   }
-  
+   */
 
 
 /* Waiting image styling */

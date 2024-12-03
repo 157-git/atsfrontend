@@ -108,7 +108,7 @@
     width: 50%;
     height: 100%;
     background-color: #f2f2f2;
-    padding: 40px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -279,4 +279,6 @@
     color: blue;
     transform: scale(1.02); /* Slightly increase size */
     text-decoration: underline;
+    /* added by sahil */
+    cursor: pointer;
 }

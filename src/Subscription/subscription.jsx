@@ -60,9 +60,9 @@ const SubscriptionPlans = () => {
 
   useEffect(() => {
     if (superUserSubscriptionData?.paymentStatus) {
-      const paymentStatus =
-        superUserSubscriptionData.paymentStatus === "Payment Completed";
-      localStorage.setItem("paymentMade", paymentStatus);
+      const paymentStatus = superUserSubscriptionData.paymentStatus === "Payment Completed";
+      // updated by sahil karnekar date 2-12-2024
+      localStorage.setItem(`user_${userType}${employeeId}paymentMade`, paymentStatus);
     }
   }, [superUserSubscriptionData]);
 
@@ -107,10 +107,10 @@ const SubscriptionPlans = () => {
       });
 
       if (response.ok) {
-        console.log("Payment status updated successfully!");
-        localStorage.setItem("paymentMade", true);
+        console.log('Payment status updated successfully!');
+        // updated by sahil karnekar date 2-12-2024
+        localStorage.setItem(`user_${userType}${employeeId}paymentMade`, true);
         setShowThankYouPage(true);
-
         setTimeout(() => {
           try {
             localStorage.removeItem(`loginTimeSaved_${employeeId}`);
@@ -188,6 +188,7 @@ const SubscriptionPlans = () => {
           {/* Abhijit Mehakar */}
           {/* 28/11/2024 */}
           <h1 className="subscriptiontxt">Subscription Payment</h1>
+         <center> <hr style={{width:"700px"}} /></center>
           {message && <p className="success">{message}</p>}
           {error && <p className="error">{error}</p>}
           {formError && <p className="form-errorsubs">{formError}</p>}
