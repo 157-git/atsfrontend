@@ -122,3 +122,568 @@
   color: white;
   border: 1px solid gray;
 }
+
+
+
+
+
+
+
+
+
+
+
+.subscriptiontxt{
+  color: #0f0f0f;
+  font-size: 35px;
+  display:flex;
+  justify-content: center;
+  border: 1px solid black;
+  background-color: #f39c12;
+  
+  
+ 
+  
+  }
+
+
+  .creditdebit{
+
+      color:  black;
+      font-size: 20px ;
+      width: 400px;
+      border: 1px solid gray;
+      padding: 10px;
+      margin: 20px;
+      border-radius: 15px;
+      height: 100px;
+      border-top: 5px solid #0eaee9;
+  }
+
+  
+.visa {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.visa i {
+  position: absolute;
+  right: 51px; /* Adjust position of the icon */
+  font-size: 18px;
+  color: #007bff; /* Adjust color */
+}
+
+
+
+.visa input {
+  width: 400px;
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  color: rgb(19, 10, 10);
+}
+
+.visa input::placeholder {
+  color: #aaa;
+}
+
+
+.paypal {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.paypal i {
+  position: absolute;
+  left: 330px; /* Adjust position of the icon */
+  font-size: 18px;
+  color: #eab907; /* Adjust color */
+}
+
+
+
+.paypal input {
+  width: 400px;
+  padding: 15px 15px 15px 40px; /* Add padding for the icon */
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  color: rgb(19, 10, 10);
+}
+
+.paypal input::placeholder {
+  color: #aaa;
+}
+
+
+
+
+.stripe {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.stripe i {
+  position: absolute;
+  left: 353px; /* Adjust position of the icon */
+  font-size: 18px;
+  color: #14130f; /* Adjust color */
+}
+
+
+
+.stripe input {
+  width: 400px;
+  padding: 15px 15px 15px 40px; /* Add padding for the icon */
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  color: rgb(19, 10, 10);
+}
+
+.stripe input::placeholder {
+  color: #aaa;
+}
+
+
+
+.debit1 {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.debit1 i {
+  position: absolute;
+  left: 307px; /* Adjust position of the icon */
+  font-size: 18px;
+  color: #14130f; /* Adjust color */
+}
+
+
+
+.debit1 input {
+  width: 400px;
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  color: rgb(19, 10, 10);
+}
+
+.debit1 input::placeholder {
+  color: #aaa;
+}
+
+
+
+.debit2 {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.debit2 i {
+  position: absolute;
+  left: 330px; /* Adjust position of the icon */
+  font-size: 18px;
+  color: #e5ba0f; /* Adjust color */
+}
+
+
+
+.debit2 input {
+  width: 400px;
+  padding: 15px 15px 15px 40px; /* Add padding for the icon */
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  color: rgb(11, 10, 10);
+}
+
+.debit2 input::placeholder {
+  color: #aaa;
+}
+
+
+
+.debit3 {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.debit3 i {
+  position: absolute;
+  left: 353px; /* Adjust position of the icon */
+  font-size: 18px;
+  color: #1d071d; /* Adjust color */
+}
+
+
+
+.debit3 input {
+  width: 400px;
+  padding: 15px 15px 15px 40px; /* Add padding for the icon */
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  color: rgb(17, 16, 16);
+}
+
+.debit3 input::placeholder {
+  color: #aaa;
+}
+
+
+.qr-section {
+  text-align: center;
+  display: contents;
+ justify-content:left ;
+
+}
+
+.qr-section h3 {
+ display: flex;
+
+ justify-content: center;
+}
+
+.qr-section svg {
+  border: 2px solid #ddd;
+  padding: 10px;
+  border-radius: 10px;
+
+}
+
+
+.payment-icons .icon {
+
+ 
+  color: #ee9104;
+  margin:10px;
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.payment-icons .icon:hover {
+  transform: scale(1.1);
+  color: #007bff; /* Change to desired hover color */
+}
+
+
+.centbutton{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+}
+
+.gpayphonepayicon{
+  display: flex
+  ;
+justify-content: center;
+}
+
+.qrcode{
+  display: flex;
+  justify-content: center;
+ 
+}
+
+
+
+.perimiumdropdown {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px; /* Add spacing between the label and the dropdown */
+}
+
+.perimiumdropdown label {
+  font-size: 18px;
+  font-weight: bold;
+ 
+  
+}
+
+
+
+
+
+
+
+
+
+.spinnerdiv12{
+  width: 100%;
+  display: block;
+  
+}
+.selectplan12{
+  width: 150px;
+  
+ 
+}
+
+.checkboxpayment{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border: 2px solid rgb(247, 245, 245);
+  background-color:#478392;
+  color: white;
+  border-radius: 5px;
+  font-size: 25px;
+}
+.checkcheck{
+  margin-top: 20px;
+display: flex;
+justify-content: center;
+width: 100%;
+ 
+}
+.containerpaymentmode{
+  display: flex;
+  justify-content: left;
+}
+.containerpaymentmode ul{
+  width: 100%;
+}
+.containerpaymentmode ul li input{
+  margin-right: 10px;
+}
+
+.plan-details{
+  width: 100%;
+  border: 7px solid #f39c12;
+ 
+  background-color: #d4d7d7;
+}
+.amount{
+display: flex;
+justify-content: center;
+border: 2px solid rgb(194, 200, 194);
+font-weight: bold;
+
+
+}
+
+
+.new1{
+width: 100%;
+height: 100px;
+
+}
+
+.submitbuttonsubs{
+width: auto;
+padding-left: 15px;
+padding-right: 15px;
+background-color: #ffcb9b;
+color: white;
+border: 1px solid gray;
+border-radius: 15px;
+font-size: 16px;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 30px;
+
+
+}
+
+.submitbuttonsubs:hover{
+background-color: white;
+color:#ffcb9b ;
+}
+.form-errorsubs{
+display: flex;
+justify-content:center;
+color: #007bff;
+}
+.returnlogin{
+width: auto;
+padding-left: 15px;
+padding-right: 15px;
+background-color: #ffcb9b;
+color: white;
+border: 1px solid gray;
+border-radius: 15px;
+font-size: 16px;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 30px;
+}
+.returnlogin:hover{
+background-color: white;
+color:#ffcb9b ;
+}
+
+.returnlogincentdiv{
+display: flex;
+justify-content: center;
+}
+
+.thank-you {
+text-align: center;
+padding: 20px;
+border-radius: 8px;
+}
+.thank-you h1{
+  font-size: 25px;
+    color: green;
+}
+.thankyoupagealigncenterdiv{
+  height: 85vh;
+  align-content: center;
+}
+
+
+.spinnerdiv {
+  width: 57%;
+display: block;
+justify-content: center;
+align-items: center;
+}
+
+.maincarddiv1 {
+display: flex;
+
+}
+
+.card {
+/* background: #f9f9f9; */
+border: 1px solid #ddd;
+border-radius: 10px;
+padding: 20px;
+width: 200px;
+margin: 1px;
+text-align: center;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+transform: translateY(-5px);
+box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+font-size: 1.2rem;
+margin-bottom: 10px;
+color: #333;
+}
+
+.card-description {
+font-size: 0.9rem;
+color: #555;
+margin-bottom: 15px;
+}
+
+.subscribe-button {
+background-color: #007bff;
+color: white;
+border: none;
+padding: 10px 15px;
+border-radius: 5px;
+cursor: pointer;
+transition: background-color 0.3s ease;
+margin-top: 10px;
+}
+
+.subscribe-button:hover {
+background-color: #0056b3;
+}
+
+.premium-card {
+border-top: 5px solid #ff5733;
+}
+
+.gold-card {
+border-top: 5px solid #ffd700;
+}
+
+.silver-card {
+border-top: 5px solid #c0c0c0;
+}
+
+
+.paymentmodediv1{
+width: 50%;
+}
+
+.paymentcenter{
+display: block;
+justify-content: center;
+margin-top: 20px;
+}
+
+.paymentcenter2{
+display: flex;
+justify-content: center;
+}
+
+.onlinebutton{
+border: 2px solid black;
+border-radius: 5px;
+color: rgb(12, 111, 188);
+
+}
+
+.cardbutton{
+border: 2px solid black;
+border-radius: 5px;
+color: rgb(47, 228, 24);
+
+}
+
+.cashbutton{
+border: 2px solid black;
+border-radius: 5px;
+color: rgb(177, 20, 208);
+font-weight: bold;
+
+}
+
+.returnlogincentdiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.loading-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333; /* Adjust color as needed */
+}
+
+.dots::after {
+  content: '';
+  display: inline-block;
+  animation: dotsAnimation 1.5s infinite;
+}
+
+@keyframes dotsAnimation {
+  0% {
+    content: '';
+  }
+  33% {
+    content: '.';
+  }
+  66% {
+    content: '..';
+  }
+  100% {
+    content: '...';
+  }
+}

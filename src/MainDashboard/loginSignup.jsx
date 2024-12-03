@@ -20,13 +20,28 @@ const LoginSignup = ({ onLogin }) => {
   const [error, setError] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [login, setLogin] = useState("");
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false); 
   const navigate = useNavigate();
   // this state is crearted by sahil karnekar date 29-11-2024 for display payment link
   const [displayPaymentLink, setDisplayPaymentLink] = useState(false);
 
-  const [paymentMade, setPaymentMade] = useState(false);
-  const [expiryMessage, setExpiryMessage] = useState("");
+  // only functionality javascript code added by sahil karnekar dont use html code , html code is not styled or not applied any css
+  // please check the logic once
+
+  // here is getting employeeId from localstorage and initially removing the id if present in localstorage
+
+  // const localStrId = localStorage.getItem("employeeId");
+
+  // if (localStrId) {
+  //   localStorage.removeItem("employeeId");
+  // }
+
+  // const storedData = JSON.parse(localStorage.getItem(`user_${userType}`));
+
+
+  // if (storedData) {
+  //   localStorage.removeItem(`user_${userType}`);
+  // }
 
   useEffect(() => {
     AOS.init({ duration: 3000 });
@@ -68,6 +83,7 @@ const LoginSignup = ({ onLogin }) => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+
     // applied validations here for max length 20 char's
     if (name === "employeeId") {
       if (value.length > 20) {
@@ -88,13 +104,13 @@ const LoginSignup = ({ onLogin }) => {
 
   // handle submit method for authenticate user by username and password from line num 53 to line num 77
   const handleSubmit = async (event) => {
-    fetchSubscriptionDetails();
     event.preventDefault();
+  
     if (!employeeId || !password) {
       setError("Please fill in both fields before submitting.");
       return;
     }
-
+  
     try {
       const loginResponse = await axios.post(
         `${API_BASE_URL}/user-login-157/${userType}`,
@@ -107,71 +123,80 @@ const LoginSignup = ({ onLogin }) => {
         }
       );
       console.log("Response Status:", loginResponse.status);
-      // line 125 to 154 added by sahil karnekar on date 28-11-2024
-      if (loginResponse.status === 200) {
-        if (loginResponse.data.statusCode === "200 OK") {
-          // Create a unique key for each user based on their userType and employeeId
-          const storageKey = `user_${userType}${loginResponse.data.employeeId}`;
-          // Store user details in localStorage with the unique key
-          localStorage.setItem(
-            storageKey,
-            JSON.stringify({
-              employeeId: loginResponse.data.employeeId.toString(),
-              userType: userType,
-            })
-          );
+// line 125 to 154 added by sahil karnekar on date 28-11-2024
+if (loginResponse.status === 200) {
+  console.log(loginResponse);
+  if (loginResponse.data.statusCode === "200 OK") {
+    console.log(loginResponse.data.status);
+     // Create a unique key for each user based on their userType and employeeId
+     const storageKey = `user_${userType}${loginResponse.data.employeeId}`;
 
-          setEmployeeId(loginResponse.data.employeeId);
-          // Navigate to the dashboard
-          navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
-        } else if (loginResponse.data.statusCode === "401 Unauthorized") {
-          setError(loginResponse.data.status);
-        } else if (loginResponse.data.statusCode === "402 Payment Required") {
-          setError(loginResponse.data.status);
-          // this line  151 to 170 added by sahil karnekar on date 29-11-2024
-          console.log(loginResponse.data.status);
-          // Create a unique key for each user based on their userType and employeeId
+     // Store user details in localStorage with the unique key
+     localStorage.setItem(
+       storageKey,
+       JSON.stringify({
+         employeeId: loginResponse.data.employeeId.toString(),
+         userType: userType,
+       })
+     );
 
-          if (userType === "SuperUser") {
-            setError("Payment Pending Please Make Payment ASAP");
-            const storageKey = `user_${userType}${loginResponse.data.employeeId}`;
+     setEmployeeId(loginResponse.data.employeeId);
+         // Navigate to the dashboard
 
-            // Store user details in localStorage with the unique key
-            localStorage.setItem(
-              storageKey,
-              JSON.stringify({
-                employeeId: loginResponse.data.employeeId.toString(),
-                userType: userType,
-              })
-            );
+         navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
+  }else if (loginResponse.data.statusCode === "401 Unauthorized") {
+    setError(loginResponse.data.status);
+  }else if (loginResponse.data.statusCode === "402 Payment Required") {
+    setError(loginResponse.data.status);
+    // this line  151 to 170 added by sahil karnekar on date 29-11-2024
+    console.log(loginResponse.data.status);
+    // Create a unique key for each user based on their userType and employeeId
 
-            setEmployeeId(loginResponse.data.employeeId);
-            setDisplayPaymentLink(true);
-          }
-        } else if (loginResponse.data.statusCode === "403 Forbidden") {
-          setError(loginResponse.data.status);
-        } else if (loginResponse.data.statusCode === "404 Not Found") {
-          setError(loginResponse.data.status);
-        }
-      }
+if (userType === "SuperUser") {
+  setError("Payment Pending Please Make Payment ASAP");
+  const storageKey = `user_${userType}${loginResponse.data.employeeId}`;
+
+  // Store user details in localStorage with the unique key
+  localStorage.setItem(
+    storageKey,
+    JSON.stringify({
+      employeeId: loginResponse.data.employeeId.toString(),
+      userType: userType,
+    })
+  );
+
+  setEmployeeId(loginResponse.data.employeeId);
+  setDisplayPaymentLink(true);
+  localStorage.setItem("paymentMade", false);
+}
+
+  }else if (loginResponse.data.statusCode === "403 Forbidden") {
+    setError(loginResponse.data.status);
+  }else if (loginResponse.data.statusCode === "404 Not Found") {
+    setError(loginResponse.data.status);
+  }
+}
+
     } catch (error) {
       console.error("Error during login request:", error);
+  
 
       if (error.response) {
+ 
         console.log("Error Response Status:", error.response.status);
         switch (error.response.status) {
           case 403:
             setError(`${userType} is already logged in`);
             break;
-
+  
           case 404:
             setError(`${userType} not found. Please try again.`);
             break;
-
+  
           case 500:
             setError("Server error. Please try again later.");
             break;
-
+          
           case 401:
             setError("Invalid Credentials");
             break;
@@ -179,14 +204,16 @@ const LoginSignup = ({ onLogin }) => {
           case 402:
             setError("Payment not done, Please Contact Super User");
             break;
-
+  
           default:
             setError("Unexpected error occurred.");
         }
       } else if (error.request) {
+
         console.log("No response received from the server.");
         setError("Network error. Please try again.");
       } else {
+    
         console.log("Error setting up the request:", error.message);
         setError("An error occurred. Please try again.");
       }
@@ -196,57 +223,11 @@ const LoginSignup = ({ onLogin }) => {
   const handleNavigatePaymentLink = () => {
     // Navigate to the payment link
     const storageKey = `user_${userType}${employeeId}`;
+  
+// Retrieve the stored user data from localStorage
+const storedData = JSON.parse(localStorage.getItem(storageKey));
 
-    // Retrieve the stored user data from localStorage
-    const storedData = JSON.parse(localStorage.getItem(storageKey));
     navigate(`/Dashboard/${storedData.employeeId}/${userType}`);
-  };
-
-
-  // Fetch the subscription details from the API
-  const fetchSubscriptionDetails = async () => {
-    const storageKey = `user_${userType}${employeeId}`;
-    const storedData = JSON.parse(localStorage.getItem(storageKey));
-    console.log(employeeId + "---------- 0098");
-
-    try {
-      const response = await fetch(
-        `http://localhost:9090/api/ats/157industries/fetch-subscriptions-details/390/SuperUser`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch subscription details");
-      }
-      const data = await response.json();
-
-      // Find the subscription that matches the employeeId
-      const subscription = data.find(
-        (item) => item.superUserId === parseInt(employeeId, 10)
-      );
-
-      console.log(subscription.paymentStatus + " Status 00999");
-
-      if (subscription) {
-        if (subscription.paymentStatus === "Payment Completed") {
-          setPaymentMade(true);
-          localStorage.setItem("paymentMade", JSON.stringify(true));
-        } else {
-          setPaymentMade(false);
-          localStorage.setItem("paymentMade", JSON.stringify(false));
-        }
-
-        if (subscription.remainingDays < 7) {
-          setExpiryMessage(
-            `Your subscription expires in ${subscription.remainingDays} days; please renew to maintain access.`
-          );
-        } else {
-          setExpiryMessage(""); 
-        }
-      } else {
-        console.error("No subscription found for this employeeId");
-      }
-    } catch (error) {
-      console.error("Error fetching subscription details:", error);
-    }
   };
 
   return (
@@ -272,24 +253,10 @@ const LoginSignup = ({ onLogin }) => {
             ) : (
               <form onSubmit={handleSubmit}>
                 {/* Arshad Attar  , Added inline CSS For Headers As per requirement on 27-11-2024 */}
-                {userType === "Recruiters" && (
-                  <h2 style={{ color: "gray", fontWeight: "bold" }}>
-                    Recruiter
-                  </h2>
-                )}
-                {userType === "TeamLeader" && (
-                  <h2 style={{ color: "gray", fontWeight: "bold" }}>
-                    Team Leader
-                  </h2>
-                )}
-                {userType === "Manager" && (
-                  <h2 style={{ color: "gray", fontWeight: "bold" }}>Manager</h2>
-                )}
-                {userType === "SuperUser" && (
-                  <h2 style={{ color: "gray", fontWeight: "bold" }}>
-                    Super User
-                  </h2>
-                )}
+                {userType === "Recruiters" && <h2 style={{color:"gray",fontWeight:"bold"}}>Recruiter</h2>}
+                {userType === "TeamLeader" && <h2 style={{color:"gray",fontWeight:"bold"}}>Team Leader</h2>}
+                {userType === "Manager" && <h2 style={{color:"gray",fontWeight:"bold"}}>Manager</h2>}
+                {userType === "SuperUser" && <h2 style={{color:"gray",fontWeight:"bold"}}>Super User</h2>}
                 <div className="input-groups">
                   <i className="fas fa-user"></i>
                   <input
@@ -300,7 +267,7 @@ const LoginSignup = ({ onLogin }) => {
                     className="loginpage-form-control"
                     value={employeeId}
                     onChange={handleChange}
-                    style={{ paddingLeft: "30px" }}
+                    style={{paddingLeft:"30px"}}
                   />
                 </div>
                 <div className="input-groups" hidden>
@@ -316,30 +283,30 @@ const LoginSignup = ({ onLogin }) => {
                 <div className="input-groups">
                   <i className="fas fa-lock"></i>
                   <input
-                    type={passwordVisible ? "text" : "password"}
+                  type={passwordVisible ? "text" : "password"}
                     id="loginpage-password"
                     name="password"
                     placeholder="Password"
                     value={password}
                     onChange={handleChange}
                     className="loginpage-form-control"
-                    style={{ paddingLeft: "30px" }}
+                    style={{paddingLeft:"30px"}}
                   />
-                  <FontAwesomeIcon
+                   <FontAwesomeIcon
                     icon={passwordVisible ? faEyeSlash : faEye}
-                    onClick={() => setPasswordVisible((prev) => !prev)}
+                    onClick={() => setPasswordVisible((prev) => !prev)} 
                     style={{
                       position: "absolute",
                       right: "10px",
                       top: "50%",
                       transform: "translateY(-50%)",
                       cursor: "pointer",
-                      color: "gray",
+                      color:"gray"
                     }}
                   />
                 </div>
                 <div className="loginpage-error">{error}</div>
-
+                
                 {displayPaymentLink && (
                   <div className="acc-create-div">
                     <span
@@ -366,7 +333,6 @@ const LoginSignup = ({ onLogin }) => {
                     Forgot password ?
                   </span>
                 </div>
-                {expiryMessage && <p>{expiryMessage}</p>}
               </form>
             )}
           </div>
