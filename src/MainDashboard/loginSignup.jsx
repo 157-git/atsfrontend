@@ -152,16 +152,14 @@ const LoginSignup = ({ onLogin }) => {
 
           setEmployeeId(loginResponse.data.employeeId);
           // Navigate to the dashboard
-
-          navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
-        } else if (loginResponse.data.statusCode === "401 Unauthorized") {
-          setError(loginResponse.data.status);
-          // setDisplayForcefullyLogout(true);
-        } else if (loginResponse.data.statusCode === "402 Payment Required") {
-          setError(loginResponse.data.status);
-          // this line  151 to 170 added by sahil karnekar on date 29-11-2024
-          console.log(loginResponse.data.status);
-          // Create a unique key for each user based on their userType and employeeId
+         navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
+  }else if (loginResponse.data.statusCode === "401 Unauthorized") {
+    setError(loginResponse.data.status);
+  }else if (loginResponse.data.statusCode === "402 Payment Required") {
+    setError(loginResponse.data.status);
+    // this line  151 to 170 added by sahil karnekar on date 29-11-2024
+    console.log(loginResponse.data.status);
+    // Create a unique key for each user based on their userType and employeeId
 
           if (userType === "SuperUser") {
             setError("Payment Pending Please Make Payment ASAP");

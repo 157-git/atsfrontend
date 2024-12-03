@@ -217,3 +217,21 @@
   display: flex;
   justify-content: center;
 }
+/* added by sahil karnekar date 3-12-2024 */
+.setStarAsError{
+  /* width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center; */
+    color: red;
+    /* font-size: 20px; */
+}
+.setDivDisplayBlockForJDValidation{
+  width: 69%;
+}
+.setDivWidth100ForResponsiveness{
+  width: 100%;
+}
+.setDivWidth100ForResponsiveness textarea{
+  width: 100%;
+}
