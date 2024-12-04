@@ -10,6 +10,8 @@ import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
+// added by sahil karnekar
+import { Pagination } from "antd";
 
 // SwapnilRokade_lineUpList_ModifyFilters_47to534_11/07
 const CallingList = ({
@@ -123,30 +125,59 @@ const CallingList = ({
     ["yearOfPassing", "Year Of Passing"],
   ];
   const { userType } = useParams();
+// added by sahil karnekar date 4-12-2024
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
 
   //akash_pawar_LineUpList_ShareFunctionality_16/07_128
-  const fetchCallingTrackerData = async () => {
+  // const fetchCallingTrackerData = async (page) => {
+  //   try {
+  //     const response = await fetch(
+  //       `${API_BASE_URL}/callingData/${employeeId}/${userType}?page=${page}&size=${pageSize}`,
+  //     );
+  //     if (!response.ok) {
+  //       console.log(response);
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
+  //     const data = await response.json();
+  //     console.log(data);
+  //     setCallingList(data.content);
+  //     setFilteredCallingList(data.content);
+  //     setTotalRecords(data.totalElements);
+  //     console.log(totalRecords);
+  //     setLoading(false);
+  //     console.log(data.content);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     setLoading(false);
+  //   }
+  // };
+
+  // updated by sahil karnekar date 4-12-2024
+  const fetchCallingTrackerData = async (page, size) => {
+    setLoading(true);
     try {
       const response = await fetch(
-        `${API_BASE_URL}/callingData/${employeeIdnew}/${userType}`
+        `${API_BASE_URL}/callingData/${employeeId}/${userType}?page=${page}&size=${size}`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data = await response.json();
-      setCallingList(data);
-      setFilteredCallingList(data);
-      setLoading(false);
-      console.log(data);
+      setCallingList(data.content);
+      setFilteredCallingList(data.content);
+      setTotalRecords(data.totalElements);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchCallingTrackerData();
-  }, [employeeIdnew]);
+    fetchCallingTrackerData(currentPage, pageSize);
+  }, [employeeIdnew,currentPage, pageSize]);
 
   //akash_pawar_selfCallingTracker_ShareFunctionality_17/07_171
 
@@ -756,6 +787,16 @@ const CallingList = ({
     const increment = 10;
     const maxWidth = 600;
     return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
+  };
+
+  // added by sahil karnekar date 4-12-2024
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleSizeChange = (current, size) => {
+    setPageSize(size); // Update the page size
+    setCurrentPage(1); // Reset to the first page after page size changes
   };
 
   return (
@@ -1953,11 +1994,37 @@ const CallingList = ({
           )}
         </>
       )}
+{/* added by sahil karnekar date 4-12-2024 */}
+<Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper 
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: 'center',
+        }}
+      />
+
+
       {isDataSending && (
         <div className="ShareFunc_Loading_Animation">
           <Loader />
         </div>
       )}
+   {/* <Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+      /> */}
+
+
+      
     </div>
   );
 };

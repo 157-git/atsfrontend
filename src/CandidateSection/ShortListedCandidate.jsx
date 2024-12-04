@@ -9,6 +9,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { toast } from "react-toastify";
+import { Pagination } from "antd";
 // SwapnilRokade_ShortListedCandidates_ModifyFilters_11/07
 
 const ShortListedCandidates = ({
@@ -119,10 +120,13 @@ const ShortListedCandidates = ({
   ];
 
   const { userType } = useParams();
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
 
   useEffect(() => {
-    fetchShortListedData();
-  }, []);
+    fetchShortListedData(currentPage,pageSize);
+  }, [currentPage, pageSize]);
 
   //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_116
   const fetchManager = async () => {
@@ -181,14 +185,15 @@ const ShortListedCandidates = ({
     }
   };
 
-  const fetchShortListedData = async () => {
+  const fetchShortListedData = async (page, size) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/shortListed-date/${newEmployeeId}/${userType}`
+        `${API_BASE_URL}/shortListed-data/${employeeId}/${userType}?page=${page}&size=${size}`
       );
       const data = await response.json();
-      setShortListedData(data);
-      setFilteredShortListed(data);
+      setShortListedData(data.content);
+      setFilteredShortListed(data.content);
+      setTotalRecords(data.totalElements);
       console.log(data);
       setLoading(false);
     } catch (error) {
@@ -592,6 +597,14 @@ const handleFilterSelect = (key, value) => {
     return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleSizeChange = (current, size) => {
+    setPageSize(size); // Update the page size
+    setCurrentPage(1); // Reset to the first page after page size changes
+  };
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -1538,6 +1551,19 @@ const handleFilterSelect = (key, value) => {
           )}
         </>
       )}
+
+<Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper 
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: 'center',
+        }}
+      />
 
       {isDataSending && (
         <div className="ShareFunc_Loading_Animation">

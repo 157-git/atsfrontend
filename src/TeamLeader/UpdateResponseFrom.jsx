@@ -92,7 +92,11 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
       return;
     }
     try {
-      // Save new interview response
+      // added by sahil karnekar date 4-12-2024
+      console.log(formData);
+      if (formData.interviewResponse === "") {
+        formData.interviewResponse = formData.interviewRound;
+      }
       const response = await axios.post(
         `${API_BASE_URL}/save-interview-response`,
         formData,

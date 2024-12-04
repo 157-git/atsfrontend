@@ -62,19 +62,16 @@ const AddJobDescription = () => {
       const ampm = date.getHours() >= 12 ? "PM" : "AM";
       return `${day} ${month} ${year} ${hours}:${minutes} ${ampm}`;
     };
-  
     // Update `jdAddedDate` only once on mount
     setFormData((prevFormData) => ({
       ...prevFormData,
       jdAddedDate: formatDate(),
     }));
   }, []); // Empty dependency array to run only once
-  
   // Validate specific field
   // line 75 to  167 added by sahil karnekar date 3-12-2024
   const validateField = (name, value) => {
     let error = "";
-  
     // Check if the field is required and not empty
     if (!value.toString().trim()) {
       switch (name) {
@@ -84,37 +81,30 @@ const AddJobDescription = () => {
         case "salary":
         case "experience":
         case "skills":
-          error = "This field is required";
+          error = "*";
           break;
         default:
           break;
       }
     }
-  
+
     // Check if the length exceeds 60000 characters
     if (value.length > 60000) {
       error = "Character length should be less than 60,000";
     }
-  
     return error;
   };
-  
-
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-  
     // Apply validation for numeric position field
     if (name === "position" && !/^\d*$/.test(value)) {
       return; // Do not update state if the value is not numeric
     }
-  
     // Update form data state
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-  
     // Validate the field and update errors state
     const error = validateField(name, value);
     setErrors((prevErrors) => ({
@@ -123,18 +113,17 @@ const AddJobDescription = () => {
     }));
     console.log(value.length);
   };
-  
 
   const handleInputChange = (e, field, index) => {
     const { name, value } = e.target;
-    
+
     // Update form data
     const newFormData = { ...formData };
     newFormData[field][index][name] = value;
-  
+
     // Validate length (max 60,000 characters)
     const errorMessage = value.length > 60000 ? "Maximum length is 60,000 characters" : "";
-  
+
     // Update errors state
     setFormData(newFormData);
     setErrors((prevErrors) => ({
@@ -148,7 +137,7 @@ const AddJobDescription = () => {
       },
     }));
   };
-  
+
 
 
   const handlePositionOverviewChange = (e) => {
@@ -219,10 +208,10 @@ const AddJobDescription = () => {
       console.log(errorForOverView);
       return;
     }
-  
+
     // Revalidate all fields before submission
     const newErrors = {};
-  
+
     // Validate top-level fields
     Object.keys(formData).forEach((key) => {
       if (!["responsibilities", "jobRequirements", "preferredQualifications"].includes(key)) {
@@ -230,7 +219,7 @@ const AddJobDescription = () => {
         if (error) newErrors[key] = error;
       }
     });
-  
+
     // Validate nested fields (responsibilities, jobRequirements, preferredQualifications)
     ["responsibilities", "jobRequirements", "preferredQualifications"].forEach((field) => {
       formData[field].forEach((item, index) => {
@@ -249,15 +238,15 @@ const AddJobDescription = () => {
         }
       });
     });
-  
+
     setErrors(newErrors);
-  
+
     // If errors exist, prevent form submission
     if (Object.keys(newErrors).length > 0) {
       setLoading(false);
       return;
     }
-console.log(errors);
+    console.log(errors);
 
     console.log(formData);
     try {
@@ -303,7 +292,7 @@ console.log(errors);
           note: "",
           jdAddedDate: "",
           jdType: "All Members",
-          jdStatus: "Active", 
+          jdStatus: "Active",
           holdStatus: "Unhold",
           positionOverview: { overview: "", employeeId: "" },
           responsibilities: [{ employeeId: "", responsibilitiesMsg: "" }],
@@ -319,7 +308,7 @@ console.log(errors);
       setLoading(false);
     }
   };
-console.log(errors);
+  console.log(errors);
   return (
     <div>
       {loading ? (
@@ -343,30 +332,32 @@ console.log(errors);
                         <label>Company Name:</label>
                         {/* in this multiple fields updated by sahil karnekar date 3-12-2024 */}
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="companyName"
-                          value={formData.companyName}
-                          onChange={handleChange}
-                          placeholder="Enter Company Name"
-                        />
-                        {errors.companyName && <p className="setStarAsError">{errors.companyName}</p>}
-                      </div>
+                          <input
+                            style={{ width: errors.companyName === "*" ? "90%" : "100%", }}
+                            type="text"
+                            name="companyName"
+                            value={formData.companyName}
+                            onChange={handleChange}
+                            placeholder="Enter Company Name"
+                          />
+                          {errors.companyName === "*" && <span className="setStarAsError setStarPaddingJd">{errors.companyName}</span>}
+                          {errors.companyName !== "*" && <p className="setStarAsError">{errors.companyName}</p>}
+                        </div>
                       </div>
                       <div className="field">
                         <label>Designation:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="designation"
-                          value={formData.designation}
-                          onChange={handleChange}
-                          placeholder="Enter Designation"
-                        />
-                        {errors.designation && <div className="setStarAsError">{errors.designation}</div>}
-                      </div>
+                          <input
+                            style={{ width: errors.designation === "*" ? "90%" : "100%", }}
+                            type="text"
+                            name="designation"
+                            value={formData.designation}
+                            onChange={handleChange}
+                            placeholder="Enter Designation"
+                          />
+                          {errors.designation === "*" && <span className="setStarAsError setStarPaddingJd">{errors.designation}</span>}
+                          {errors.designation !== "*" && <div className="setStarAsError">{errors.designation}</div>}
+                        </div>
                       </div>
                     </div>
                     <div className="field-Row-white">
@@ -383,15 +374,15 @@ console.log(errors);
                       <div className="field">
                         <label>Qualification:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="qualification"
-                          value={formData.qualification}
-                          onChange={handleChange}
-                          placeholder="Enter Qualification"
-                        />
-                        {errors.qualification && <div className="setStarAsError">{errors.qualification}</div>}
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="qualification"
+                            value={formData.qualification}
+                            onChange={handleChange}
+                            placeholder="Enter Qualification"
+                          />
+                          {errors.qualification && <div className="setStarAsError">{errors.qualification}</div>}
                         </div>
                       </div>
                     </div>
@@ -399,295 +390,305 @@ console.log(errors);
                       <div className="field">
                         <label>Year of Passing:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="yearOfPassing"
-                          value={formData.yearOfPassing}
-                          onChange={handleChange}
-                          placeholder="Enter Year of Passing"
-                        />
-                        {errors.yearOfPassing && <div className="setStarAsError">{errors.yearOfPassing}</div>}
-                      </div>
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="yearOfPassing"
+                            value={formData.yearOfPassing}
+                            onChange={handleChange}
+                            placeholder="Enter Year of Passing"
+                          />
+                          {errors.yearOfPassing && <div className="setStarAsError">{errors.yearOfPassing}</div>}
+                        </div>
                       </div>
                       <div className="field">
                         <label>Field:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="field"
-                          value={formData.field}
-                          onChange={handleChange}
-                          placeholder="Enter Field"
-                        />
-                        {errors.field && <div className="setStarAsError">{errors.field}</div>}
-                      </div>
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="field"
+                            value={formData.field}
+                            onChange={handleChange}
+                            placeholder="Enter Field"
+                          />
+                          {errors.field && <div className="setStarAsError">{errors.field}</div>}
+                        </div>
                       </div>
                     </div>
                     <div className="field-Row-white">
                       <div className="field">
                         <label>Stream:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="stream"
-                          value={formData.stream}
-                          onChange={handleChange}
-                          placeholder="Enter Stream"
-                        />
-                        {errors.stream && <div className="setStarAsError">{errors.stream}</div>}
-                      </div>
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="stream"
+                            value={formData.stream}
+                            onChange={handleChange}
+                            placeholder="Enter Stream"
+                          />
+                          {errors.stream && <div className="setStarAsError">{errors.stream}</div>}
+                        </div>
                       </div>
                       <div className="field">
                         <label>Location:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="location"
-                          value={formData.location}
-                          onChange={handleChange}
-                          placeholder="Enter Location"
-                         
-                        />
-                        {errors.location && <div className="setStarAsError">{errors.location}</div>}
-                      </div>
+                          <input
+                            style={{ width: errors.location === "*" ? "90%" : "100%", }}
+                            type="text"
+                            name="location"
+                            value={formData.location}
+                            onChange={handleChange}
+                            placeholder="Enter Location"
+
+                          />
+                          {errors.location === "*" && <span className="setStarAsError setStarPaddingJd">{errors.location}</span>}
+                          {errors.location !== "*" && <div className="setStarAsError">{errors.location}</div>}
+                        </div>
                       </div>
                     </div>
                     <div className="field-Row-Gray">
                       <div className="field">
                         <label>Salary:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="salary"
-                          value={formData.salary}
-                          onChange={handleChange}
-                          placeholder="Enter Salary"
-                        
-                        />
-                        {errors.salary && <div className="setStarAsError">{errors.salary}</div>}
-                      </div>
+                          <input
+                            style={{ width: errors.salary === "*" ? "90%" : "100%", }}
+                            type="text"
+                            name="salary"
+                            value={formData.salary}
+                            onChange={handleChange}
+                            placeholder="Enter Salary"
+
+                          />
+                          {errors.salary === "*" && <span className="setStarAsError setStarPaddingJd">{errors.salary}</span>}
+                          {errors.salary !== "*" && <div className="setStarAsError">{errors.salary}</div>}
+                        </div>
                       </div>
                       <div className="field">
                         <label>Job Type:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <select
-                        style={{ width: "100%" }}
-                        
-                          name="jobType"
-                          value={formData.jobType}
-                          onChange={handleChange}
-                        >
-                          <option value="">Select Job Type</option>
-                          <option value="Full-Time">Full-Time</option>
-                          <option value="Part-Time">Part-Time</option>
-                          <option value="Contract">Contract</option>
-                          <option value="Internship">Internship</option>
-                        </select>
-                        {errors.jobType && <div className="setStarAsError">{errors.jobType}</div>}
+                          <select
+                            style={{ width: "100%" }}
+
+                            name="jobType"
+                            value={formData.jobType}
+                            onChange={handleChange}
+                          >
+                            <option value="">Select Job Type</option>
+                            <option value="Full-Time">Full-Time</option>
+                            <option value="Part-Time">Part-Time</option>
+                            <option value="Contract">Contract</option>
+                            <option value="Internship">Internship</option>
+                          </select>
+                          {errors.jobType && <div className="setStarAsError">{errors.jobType}</div>}
+                        </div>
                       </div>
-                    </div>
                     </div>
                     <div className="field-Row-white">
                       <div className="field">
                         <label>Experience:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="experience"
-                          value={formData.experience}
-                          onChange={handleChange}
-                          placeholder="Enter Experience"
-                        
-                        />
-                        {errors.experience && <div className="setStarAsError">{errors.experience}</div>}
-                      </div>
+                          <input
+                            style={{ width: errors.experience === "*" ? "90%" : "100%", }}
+                            type="text"
+                            name="experience"
+                            value={formData.experience}
+                            onChange={handleChange}
+                            placeholder="Enter Experience"
+
+                          />
+                          {errors.experience === "*" && <span className="setStarAsError setStarPaddingJd">{errors.experience}</span>}
+                          {errors.experience !== "*" && <div className="setStarAsError">{errors.experience}</div>}
+                        </div>
                       </div>
                       <div className="field">
                         <label>Bond:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="bond"
-                          value={formData.bond}
-                          onChange={handleChange}
-                          placeholder="Ex. 2 Years or 3 Years"
-                        />
-                        {errors.bond && <div className="setStarAsError">{errors.bond}</div>}
-                      </div>
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="bond"
+                            value={formData.bond}
+                            onChange={handleChange}
+                            placeholder="Ex. 2 Years or 3 Years"
+                          />
+                          {errors.bond && <div className="setStarAsError">{errors.bond}</div>}
+                        </div>
                       </div>
                     </div>
                     <div className="field-Row-Gray">
                       <div className="field">
                         <label>Percentage:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="percentage"
-                          value={formData.percentage}
-                          onChange={handleChange}
-                          placeholder="Enter Percentage"
-                        />
-                        {errors.percentage && <div className="setStarAsError">{errors.percentage}</div>}
-                      </div>
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="percentage"
+                            value={formData.percentage}
+                            onChange={handleChange}
+                            placeholder="Enter Percentage"
+                          />
+                          {errors.percentage && <div className="setStarAsError">{errors.percentage}</div>}
+                        </div>
                       </div>
                       <div className="field">
                         <label>Skills:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="skills"
-                          value={formData.skills}
-                          onChange={handleChange}
-                          placeholder="Enter Skills"
-                       
-                        />
-                         {errors.skills && <div className="setStarAsError">{errors.skills}</div>}
-                      </div>
+                          <input
+                            style={{
+                              width: errors.skills === "*" ? "90%" : "100%",
+                            }}
+                            type="text"
+                            name="skills"
+                            value={formData.skills}
+                            onChange={handleChange}
+                            placeholder="Enter Skills"
+                          />
+                          {errors.skills === "*" && (
+                            <span className="setStarAsError setStarPaddingJd">
+                              {errors.skills}
+                            </span>
+                          )}
+                          {errors.skills !== "*" && <div className="setStarAsError">{errors.skills}</div>}
+                        </div>
+
                       </div>
                     </div>
                     <div className="field-Row-white">
                       <div className="field">
                         <label>Company Link:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="companyLink"
-                          value={formData.companyLink}
-                          onChange={handleChange}
-                          placeholder="Enter Company Link"
-                        />
-                        {errors.companyLink && <div className="setStarAsError">{errors.companyLink}</div>}
-                      </div>
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="companyLink"
+                            value={formData.companyLink}
+                            onChange={handleChange}
+                            placeholder="Enter Company Link"
+                          />
+                          {errors.companyLink && <div className="setStarAsError">{errors.companyLink}</div>}
+                        </div>
                       </div>
                       <div className="field">
                         <label>Detailed Address:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="detailAddress"
-                          value={formData.detailAddress}
-                          onChange={handleChange}
-                          placeholder="Enter Detailed Address"
-                        />
-                        {errors.detailAddress && <div className="setStarAsError">{errors.detailAddress}</div>}
-                      </div>
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="detailAddress"
+                            value={formData.detailAddress}
+                            onChange={handleChange}
+                            placeholder="Enter Detailed Address"
+                          />
+                          {errors.detailAddress && <div className="setStarAsError">{errors.detailAddress}</div>}
+                        </div>
                       </div>
                     </div>
                     <div className="field-Row-Gray">
                       <div className="field">
                         <label>Shift:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="shift"
-                          value={formData.shift}
-                          onChange={handleChange}
-                          placeholder="Enter Shift"
-                        />
-                        {errors.shift && <div className="setStarAsError">{errors.shift}</div>}
-                      </div>
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="shift"
+                            value={formData.shift}
+                            onChange={handleChange}
+                            placeholder="Enter Shift"
+                          />
+                          {errors.shift && <div className="setStarAsError">{errors.shift}</div>}
+                        </div>
                       </div>
                       <div className="field">
                         <label>Week Off:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="weekOff"
-                          value={formData.weekOff}
-                          onChange={handleChange}
-                          placeholder="Enter Week Off"
-                        />
-                        {errors.weekOff && <div className="setStarAsError">{errors.weekOff}</div>}
-                      </div>
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="weekOff"
+                            value={formData.weekOff}
+                            onChange={handleChange}
+                            placeholder="Enter Week Off"
+                          />
+                          {errors.weekOff && <div className="setStarAsError">{errors.weekOff}</div>}
+                        </div>
                       </div>
                     </div>
                     <div className="field-Row-white">
                       <div className="field">
                         <label>Notice Period:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="noticePeriod"
-                          value={formData.noticePeriod}
-                          onChange={handleChange}
-                          placeholder="Enter Notice Period"
-                        />
-                        {errors.noticePeriod && <div className="setStarAsError">{errors.noticePeriod}</div>}
-                      </div>
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="noticePeriod"
+                            value={formData.noticePeriod}
+                            onChange={handleChange}
+                            placeholder="Enter Notice Period"
+                          />
+                          {errors.noticePeriod && <div className="setStarAsError">{errors.noticePeriod}</div>}
+                        </div>
                       </div>
                       <div className="field">
                         <label>Job Role:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="jobRole"
-                          value={formData.jobRole}
-                          onChange={handleChange}
-                          placeholder="Enter Job Role"
-                        />
-                        {errors.jobRole && <div className="setStarAsError">{errors.jobRole}</div>}
-                      </div>
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="jobRole"
+                            value={formData.jobRole}
+                            onChange={handleChange}
+                            placeholder="Enter Job Role"
+                          />
+                          {errors.jobRole && <div className="setStarAsError">{errors.jobRole}</div>}
+                        </div>
                       </div>
                     </div>
                     <div className="field-Row-Gray">
                       <div className="field">
                         <label>Perks:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="perks"
-                          value={formData.perks}
-                          onChange={handleChange}
-                          placeholder="Enter Perks"
-                        />
-                        {errors.perks && <div className="setStarAsError">{errors.perks}</div>}
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="perks"
+                            value={formData.perks}
+                            onChange={handleChange}
+                            placeholder="Enter Perks"
+                          />
+                          {errors.perks && <div className="setStarAsError">{errors.perks}</div>}
                         </div>
                       </div>
                       <div className="field">
                         <label>Incentive:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="incentive"
-                          value={formData.incentive}
-                          onChange={handleChange}
-                          placeholder="Enter Incentive"
-                        />
-                        {errors.incentive && <div className="setStarAsError">{errors.incentive}</div>}
-                      </div>
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="incentive"
+                            value={formData.incentive}
+                            onChange={handleChange}
+                            placeholder="Enter Incentive"
+                          />
+                          {errors.incentive && <div className="setStarAsError">{errors.incentive}</div>}
+                        </div>
                       </div>
                     </div>
                     <div className="field-Row-white">
                       <div className="field">
                         <label>Reporting Hierarchy:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="reportingHierarchy"
-                          value={formData.reportingHierarchy}
-                          onChange={handleChange}
-                          placeholder="Enter Reporting Hierarchy"
-                        />
-                        {errors.reportingHierarchy && <div className="setStarAsError">{errors.reportingHierarchy}</div>}
-                      </div>
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="reportingHierarchy"
+                            value={formData.reportingHierarchy}
+                            onChange={handleChange}
+                            placeholder="Enter Reporting Hierarchy"
+                          />
+                          {errors.reportingHierarchy && <div className="setStarAsError">{errors.reportingHierarchy}</div>}
+                        </div>
                       </div>
                       <div className="field">
                         <label>Gender:</label>
@@ -709,30 +710,30 @@ console.log(errors);
                       <div className="field">
                         <label>Documentation:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="documentation"
-                          value={formData.documentation}
-                          onChange={handleChange}
-                          placeholder="Enter Documentation"
-                        />
-                        {errors.documentation && <div className="setStarAsError">{errors.documentation}</div>}
-                      </div>
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="documentation"
+                            value={formData.documentation}
+                            onChange={handleChange}
+                            placeholder="Enter Documentation"
+                          />
+                          {errors.documentation && <div className="setStarAsError">{errors.documentation}</div>}
+                        </div>
                       </div>
                       <div className="field">
                         <label>Age Criteria:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="ageCriteria"
-                          value={formData.ageCriteria}
-                          onChange={handleChange}
-                          placeholder="Enter Age Criteria"
-                        />
-                        {errors.ageCriteria && <div className="setStarAsError">{errors.ageCriteria}</div>}
-                      </div>
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="ageCriteria"
+                            value={formData.ageCriteria}
+                            onChange={handleChange}
+                            placeholder="Enter Age Criteria"
+                          />
+                          {errors.ageCriteria && <div className="setStarAsError">{errors.ageCriteria}</div>}
+                        </div>
                       </div>
                     </div>
 
@@ -758,10 +759,10 @@ console.log(errors);
                           value={formData.jdStatus}
                           onChange={handleChange}
                         >
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                         
-                        
+                          <option value="Active">Active</option>
+                          <option value="Inactive">Inactive</option>
+
+
                         </select>
                       </div>
                     </div>
@@ -771,38 +772,38 @@ console.log(errors);
                       <div className="field">
                         <label>Note:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <input
-                        style={{ width: "100%" }}
-                          type="text"
-                          name="note"
-                          value={formData.note}
-                          onChange={handleChange}
-                          placeholder="Enter Note"
-                        />
-                        {errors.note && <div className="setStarAsError">{errors.note}</div>}
+                          <input
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="note"
+                            value={formData.note}
+                            onChange={handleChange}
+                            placeholder="Enter Note"
+                          />
+                          {errors.note && <div className="setStarAsError">{errors.note}</div>}
                         </div>
                       </div>
                       <div className="field">
                         <label>Position Overview:</label>
                         <div className="setDivDisplayBlockForJDValidation">
-                        <textarea
-                          name="overview"
-                          className="textarea"
-                          value={formData.positionOverview.overview}
-                          onChange={(e) => {
-                            handlePositionOverviewChange(e);
-                            e.target.style.height = "auto";
-                            e.target.style.height = `${e.target.scrollHeight}px`;
-                          }}
-                          placeholder="Describe Position Overview"
-                          style={{
-                            resize: "none",
-                            overflow: "hidden",
-                            width: "100%",
-                          }}
-                        />
-                        {errorForOverView && <div className="setStarAsError">{errorForOverView}</div>}
-                      </div>
+                          <textarea
+                            name="overview"
+                            className="textarea"
+                            value={formData.positionOverview.overview}
+                            onChange={(e) => {
+                              handlePositionOverviewChange(e);
+                              e.target.style.height = "auto";
+                              e.target.style.height = `${e.target.scrollHeight}px`;
+                            }}
+                            placeholder="Describe Position Overview"
+                            style={{
+                              resize: "none",
+                              overflow: "hidden",
+                              width: "100%",
+                            }}
+                          />
+                          {errorForOverView && <div className="setStarAsError">{errorForOverView}</div>}
+                        </div>
                       </div>
                     </div>
 
@@ -824,28 +825,28 @@ console.log(errors);
                           <div className="field">
                             <label>Responsibility Message:</label>
 
-<div className="setDivWidth100ForResponsiveness">
-                            <textarea
-                              className="textarea"
-                              name="responsibilitiesMsg"
-                              value={item.responsibilitiesMsg}
-                              onChange={(e) => {
-                                handleInputChange(e, "responsibilities", index);
-                                e.target.style.height = "auto"; // Reset the height
-                                e.target.style.height = `${e.target.scrollHeight}px`; // Adjust the height based on content
-                              }}
-                              placeholder="Enter Responsibility Message"
-                              style={{
-                                resize: "none", // Prevent manual resizing
-                                overflow: "hidden", // Hide scrollbars
-                              }}
-                            />
-                            {errors.responsibilities?.[index]?.responsibilitiesMsg && (
-          <p className="error-message">
-            {errors.responsibilities[index].responsibilitiesMsg}
-          </p>
-        )}
-</div>
+                            <div className="setDivWidth100ForResponsiveness">
+                              <textarea
+                                className="textarea"
+                                name="responsibilitiesMsg"
+                                value={item.responsibilitiesMsg}
+                                onChange={(e) => {
+                                  handleInputChange(e, "responsibilities", index);
+                                  e.target.style.height = "auto"; // Reset the height
+                                  e.target.style.height = `${e.target.scrollHeight}px`; // Adjust the height based on content
+                                }}
+                                placeholder="Enter Responsibility Message"
+                                style={{
+                                  resize: "none", // Prevent manual resizing
+                                  overflow: "hidden", // Hide scrollbars
+                                }}
+                              />
+                              {errors.responsibilities?.[index]?.responsibilitiesMsg && (
+                                <p className="error-message">
+                                  {errors.responsibilities[index].responsibilitiesMsg}
+                                </p>
+                              )}
+                            </div>
                             <button
                               type="button"
                               className="job-remove-button"
@@ -887,27 +888,27 @@ console.log(errors);
                           <div className="field">
                             <label>Job Requirement Message:</label>
                             <div className="setDivWidth100ForResponsiveness">
-                            <textarea
-                              className="textarea"
-                              name="jobRequirementMsg"
-                              value={item.jobRequirementMsg}
-                              onChange={(e) => {
-                                handleInputChange(e, "jobRequirements", index);
-                                e.target.style.height = "auto";
-                                e.target.style.height = `${e.target.scrollHeight}px`;
-                              }}
-                              placeholder="Enter Job Requirement Message"
-                              style={{
-                                resize: "none", // Prevent manual resizing
-                                overflow: "hidden", // Hide scrollbars
-                              }}
-                            />
-                            {errors.jobRequirements?.[index]?.jobRequirementMsg && (
-          <p className="error-message">
-            {errors.jobRequirements[index].jobRequirementMsg}
-          </p>
-        )}
-        </div>
+                              <textarea
+                                className="textarea"
+                                name="jobRequirementMsg"
+                                value={item.jobRequirementMsg}
+                                onChange={(e) => {
+                                  handleInputChange(e, "jobRequirements", index);
+                                  e.target.style.height = "auto";
+                                  e.target.style.height = `${e.target.scrollHeight}px`;
+                                }}
+                                placeholder="Enter Job Requirement Message"
+                                style={{
+                                  resize: "none", // Prevent manual resizing
+                                  overflow: "hidden", // Hide scrollbars
+                                }}
+                              />
+                              {errors.jobRequirements?.[index]?.jobRequirementMsg && (
+                                <p className="error-message">
+                                  {errors.jobRequirements[index].jobRequirementMsg}
+                                </p>
+                              )}
+                            </div>
                             <button
                               type="button"
                               className="job-remove-button"
@@ -954,31 +955,31 @@ console.log(errors);
                           <div className="field">
                             <label>Preferred Qualification Message:</label>
                             <div className="setDivWidth100ForResponsiveness">
-                            <textarea
-                              className="textarea"
-                              name="preferredQualificationMsg"
-                              value={item.preferredQualificationMsg}
-                              onChange={(e) => {
-                                handleInputChange(
-                                  e,
-                                  "preferredQualifications",
-                                  index
-                                );
-                                e.target.style.height = "auto";
-                                e.target.style.height = `${e.target.scrollHeight}px`;
-                              }}
-                              placeholder="Enter Preferred Qualification Message"
-                              style={{
-                                resize: "none", // Prevent manual resizing
-                                overflow: "hidden", // Hide scrollbars
-                              }}
-                            />
-                            {errors.preferredQualifications?.[index]?.preferredQualificationMsg && (
-          <p className="error-message">
-            {errors.preferredQualifications[index].preferredQualificationMsg}
-          </p>
-        )}
-        </div>
+                              <textarea
+                                className="textarea"
+                                name="preferredQualificationMsg"
+                                value={item.preferredQualificationMsg}
+                                onChange={(e) => {
+                                  handleInputChange(
+                                    e,
+                                    "preferredQualifications",
+                                    index
+                                  );
+                                  e.target.style.height = "auto";
+                                  e.target.style.height = `${e.target.scrollHeight}px`;
+                                }}
+                                placeholder="Enter Preferred Qualification Message"
+                                style={{
+                                  resize: "none", // Prevent manual resizing
+                                  overflow: "hidden", // Hide scrollbars
+                                }}
+                              />
+                              {errors.preferredQualifications?.[index]?.preferredQualificationMsg && (
+                                <p className="error-message">
+                                  {errors.preferredQualifications[index].preferredQualificationMsg}
+                                </p>
+                              )}
+                            </div>
                             <button
                               type="button"
                               className="job-remove-button"
