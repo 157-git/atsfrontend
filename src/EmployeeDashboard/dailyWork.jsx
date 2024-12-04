@@ -67,6 +67,13 @@ function DailyWork({
   const [profileImage, setProfileImage] = useState(null);
   const [showPauseModal, setShowPauseModal] = useState(false);
   const [allowCloseModal, setAllowCloseModal] = useState(false);
+  const [subScriptionReminder,setSubScriptionReminder]=useState();
+  const [expiryMessage, setExpiryMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [paymentMade, setPaymentMade] = useState(false);
+
+  const TIMER_DURATION = 15 * 60 * 1000; 
+  let timerId;
 
   const navigate = useNavigate();
   const { userType } = useParams();
@@ -111,6 +118,7 @@ function DailyWork({
   useEffect(() => {
     const now = new Date();
     const timeString = now.toLocaleTimeString("en-IN");
+    console.log("Current Time:", new Date().toLocaleTimeString());
     const dateString = `${now.getDate().toString().padStart(2, "0")}/${(
       now.getMonth() + 1
     )
@@ -495,6 +503,75 @@ function DailyWork({
     setShowAllDailyBtns(!showAllDailyBtns);
   };
 
+
+  const fetchSubscriptionDetails = async () => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/fetch-subscriptions-details/${employeeId}/${userType}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch subscription details");
+      }
+      const data = await response.json();
+
+      // Find the subscription that matches the employeeId
+      const subscription = data.find(
+        (item) => item.superUserId === parseInt(employeeId, 10)
+      );
+
+      if (subscription) {
+        console.log(subscription.paymentStatus + " Status 00999");
+
+        if (subscription.paymentStatus === "Payment Completed") {
+          setPaymentMade(true);
+          localStorage.setItem("paymentMade", JSON.stringify(true));
+        } else {
+          setPaymentMade(false);
+          localStorage.setItem("paymentMade", JSON.stringify(false));
+        }
+
+        if (subscription.remainingDays < 3) {
+          setExpiryMessage(
+            `Your subscription expires in ${subscription.remainingDays} days; please renew to maintain access.`
+          );
+          setShowModal(true); // Show modal if subscription is about to expire
+        } else {
+          setExpiryMessage("");
+          setShowModal(false); // Hide modal if subscription is valid
+        }
+      } else {
+        console.error("No subscription found for this employeeId");
+      }
+    } catch (error) {
+      console.error("Error fetching subscription details:", error);
+    }
+  };
+
+  const handleSkip = () => {
+    setShowModal(false); // Close the modal
+    resetTimer(); // Restart the timer
+  };
+
+  const resetTimer = () => {
+    clearInterval(timerId); // Clear existing timer
+    timerId = setInterval(() => {
+      fetchSubscriptionDetails(); // Fetch details and show modal if necessary
+    }, TIMER_DURATION); // Set a new timer for 2 minutes
+  };
+
+  useEffect(() => {
+    fetchSubscriptionDetails(); // Fetch details when the component mounts
+
+    // Start the timer
+    timerId = setInterval(() => {
+      fetchSubscriptionDetails();
+    }, TIMER_DURATION);
+
+    return () => {
+      clearInterval(timerId); // Cleanup timer on component unmount
+    };
+  }, [employeeId, userType]);
+
   return (
     <div className="daily-timeanddate">
       <a href="#">
@@ -623,21 +700,48 @@ function DailyWork({
               </div>
               <Modal.Footer className="dw-modal-footer">
                 <div className="dw-resume-div">
-                  <h3>Timer is paused. Click Resume to continue.</h3>
-                  <div className="profile-back-button">
+                  <h3>Timer is paused. Click Resume to continue...</h3>
                     <button
                       className="profile-back-button"
                       onClick={handleResume}
                     >
                       Resume
                     </button>
-                  </div>
                 </div>
               </Modal.Footer>
             </div>
           </Modal>
         </>
       ) : null}
+
+      <Modal show={showModal} onHide={handleSkip}>
+        <div className="dw-reminder-content">
+          <Modal.Header>
+            <Modal.Title className="dw-modal-title">
+              Reminder About Subscription !!!
+            </Modal.Title>
+          </Modal.Header>
+          {/* <div>{expiryMessage}</div> */}
+          <div  className="dw-reminder-div">
+              <p><b>Polite Reminder :- </b> Your subscription will expire in few days, restricting access to the login. Please contact your Super User to make the payment and renew your
+                 subscription to regain full access.</p><br />
+              <div >
+                <div className="dw-reminder-button-div">
+              <b>Thank you for your attention to this matter!</b>
+
+              <div style={{display:"flex",gap:"20px",paddingTop:"10px"}} >
+              <button  onClick={handleSkip} className="daily-tr-btn" >
+                  Ok
+                </button>
+                <button className="daily-tr-btn" onClick={handleSkip}>
+                  Skip
+                </button>
+              </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </Modal>
     </div>
   );
 }

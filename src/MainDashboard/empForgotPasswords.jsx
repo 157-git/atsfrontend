@@ -75,12 +75,8 @@ const ForgotPasswordForm = () => {
   
   return (
     <>
-
-
       <div className=" flex items-center justify-center align-center bg-white">
-
-        {
-          loading ? (
+        { loading ? (
             <ClipLoader
               color={"#1af7dd"}
               // loading={loading}
@@ -92,9 +88,6 @@ const ForgotPasswordForm = () => {
 
           ) : (
             <div className="w-full max-w-md p-2 bg-white rounded-md">
-
-
-
               <h1 className="text-xl font-bold text-[#ffc48d] text-center mb-2">
                 Forgot Password
               </h1>
@@ -124,8 +117,7 @@ const ForgotPasswordForm = () => {
                 </div>
               </div>
 
-              {
-                checkOtpSendAndChangeState && (
+              { checkOtpSendAndChangeState && (
                   <div className="space-y-4 mt-2">
                     <div>
                       <label className="block text-sm font-medium text-gray-500">
@@ -165,14 +157,10 @@ const ForgotPasswordForm = () => {
                   </div>
                 )
               }
-
             </div>
           )
         }
       </div>
-
-
-
     </>
   );
 };

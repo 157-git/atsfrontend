@@ -637,8 +637,8 @@ const PerformanceImprovement = ({ loginEmployeeName,onCloseIncentive }) => {
           {userType === "SuperUser" && <span>Super User</span>}
 
             <div className="PIE-Dropdown" onClick={toggleDropdown}>
-              {userType === "SuperUser" && <span>Select  Manage OR Team Leader</span>}
-              {userType === "Manager" && <span>Select TeamLeader OR Recruiter </span>}
+              {userType === "SuperUser" && <span>Select  Manage OR TL</span>}
+              {userType === "Manager" && <span>Select TL OR Recruiter </span>}
               {userType === "TeamLeader" && <span>Select Recruiter</span>}
               {userType === "Recruiters" && <span>{loginEmployeeName}</span>}
               <span className={`PIE-dropdown-icon`} />

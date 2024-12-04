@@ -438,7 +438,7 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                     <option value="Shortlisted For Hr Round">
                       Hr Round
                     </option>
-                    <option value="Shortlisted For Technical Round">
+                    <option value="Shortlisted Technical Round">
                       Technical Round
                     </option>
                     <option value="Shortlisted For L1 Round">
@@ -459,7 +459,6 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                   )}
                 </td>
                 )
-              
               }
                 { data.length > 0 && (
                 <td className="p-2">

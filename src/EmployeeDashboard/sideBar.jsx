@@ -8,6 +8,7 @@ import axios from "axios";
 import { Modal } from "react-bootstrap";
 import ColorPicker from "../HomePage/ColorPicker";
 import { API_BASE_URL } from "../api/api";
+import LogoutOnEvent from "./logoutOnEvent";
 
 // Swapnil_Sidebar_AddingEmployeeDetailsinto_ManagerSection_17/07
 
@@ -115,6 +116,7 @@ function Sidebar({
     // document.documentElement.style.setProperty("--filter-color", color);
   };
 
+  //Arshad Commente this code, dont remove 
   // const handleLogoutLocal = () => {
   //   const logoutTime = new Date().toLocaleTimeString("en-IN");
   //   onLogout(logoutTime);
@@ -128,6 +130,7 @@ function Sidebar({
     localStorage.removeItem(`dailyWorkData_${employeeId}`);
     localStorage.removeItem(`breaks_${employeeId}`);
     localStorage.removeItem(`user_${userType}${employeeId}`);
+    localStorage.removeItem("paymentMade")
 
       // Construct request body based on userType
       {
@@ -168,6 +171,65 @@ function Sidebar({
       console.error("Error during logout:", error);
     }
   };
+
+  // Arshad Attar ( Note :- Commented This we will work after some its taking to much time  )
+  // const LogoutOnEvent = () => {
+  //   useEffect(() => {
+  //     let lastActivityTime = Date.now();
+  
+  //     // Trigger logout on tab/window close
+  //     const handleBeforeUnload = (event) => {
+  //       event.preventDefault();
+  //       temproryLogout();
+  //       event.returnValue = '';
+  //     };
+  
+  //     // Trigger logout on page visibility change
+  //     const handleVisibilityChange = () => {
+  //       if (document.hidden) {
+  //         temproryLogout();
+  //       }
+  //     };
+  
+  //     // Trigger logout on network offline
+  //     const handleOffline = () => {
+  //       console.log("Internet disconnected, logging out...");
+  //       temproryLogout();
+  //     };
+  
+  //     // Detect machine sleep or hibernation
+  //     const detectSleep = () => {
+  //       const currentTime = Date.now();
+  //       if (currentTime - lastActivityTime > 10000) {
+  //         // If more than 30 seconds have passed unexpectedly, assume sleep or hibernation
+  //         console.log("Machine went to sleep or hibernation, logging out...");
+  //         temproryLogout();
+  //       }
+  //       lastActivityTime = currentTime;
+  //     };
+  
+  //     // Attach event listeners
+  //     window.addEventListener("beforeunload", handleBeforeUnload);
+  //     // document.addEventListener("visibilitychange", handleVisibilityChange);
+  //     window.addEventListener("offline", handleOffline);
+  
+  //     // Monitor for sleep with setInterval
+  //     const sleepInterval = setInterval(detectSleep, 10000); // Check every 10 seconds
+  
+  //     // Cleanup event listeners and interval on component unmount
+  //     return () => {
+  //       window.removeEventListener("beforeunload", handleBeforeUnload);
+  //       // document.removeEventListener("visibilitychange", handleVisibilityChange);
+  //       window.removeEventListener("offline", handleOffline);
+  //       clearInterval(sleepInterval);
+  //     };
+  //   }, []);
+  
+  //   return null; 
+  // };
+  // Arshad Attar ( Note :- Commented This we will work after some its taking to much time  )
+
+
 
   const handleColorClick = (color) => {
     applyColor(color);
@@ -237,18 +299,6 @@ function Sidebar({
     window.open("https://in.indeed.com/?from=gnav-homepage", "_blank");
   };
 
-  // //Dhanshree Code
-  // const handleButtonClick = (buttonKey, callback) => (e) => {
-  //   e.stopPropagation();
-  //   setActiveButton(buttonKey);
-  //   const parentSubMenu = getParentSubMenu(buttonKey);
-
-  //   if (parentSubMenu) {
-  //     setActiveSubMenu(parentSubMenu);
-  //   }
-  //   if (callback) callback(e);
-  // };
-
 
 //Arshad Attar Added New Cement button Logic as per, Fetch Subscription Status 
 //Subscription Status Logic Added - On 28-11-2024 Start Line- 255 to 271
@@ -281,12 +331,6 @@ function Sidebar({
     }
     if (callback) callback(e);
   };
-
-  // // Mock function to get parent submenu
-  // const getParentSubMenu = (buttonKey) => {
-  //   // Example logic, replace with your actual logic
-  //   return buttonKey === "subscription" ? "parentSubscriptionMenu" : null;
-  // };
 
   const isCandidateSectionActive = [
     "selfCalling",
@@ -378,6 +422,8 @@ function Sidebar({
   return (
     <>
       <div className={`sidebar ${isActive ? "active" : ""}`}>
+      <LogoutOnEvent/>
+
         {/* Swapnil_SideBar_responsiveAccordingToScreen_161to162_02/07 */}
         <div className="head-sidebar">
           <div className="sidebar-menu-btn" onClick={toggleSidebar}>

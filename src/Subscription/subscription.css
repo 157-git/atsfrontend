@@ -134,16 +134,12 @@
 
 
 .subscriptiontxt{
-  color: #0f0f0f;
+  color: gray;
   font-size: 35px;
   display:flex;
   justify-content: center;
-  border: 1px solid black;
-  background-color: #f39c12;
-  
-  
- 
-  
+  padding-top: 20px;
+  padding-bottom: 5px;
   }
 
 
