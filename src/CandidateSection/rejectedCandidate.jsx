@@ -8,6 +8,7 @@ import * as XLSX from "xlsx";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { toast } from "react-toastify";
+import { Pagination } from "antd";
 // SwapnilRokade_RejectedCandidate_ModifyFilters_11/07
 const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployeeName, }) => {
   const [showRejectedData, setShowRejectedData] = useState([]);
@@ -116,10 +117,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
   ["yearOfPassing", "Year Of Passing"]
   ]
   const { userType } = useParams();
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
 
   useEffect(() => {
-    fetchRejectedData();
-  }, []);
+    fetchRejectedData(currentPage, pageSize);
+  }, [employeeId,currentPage, pageSize]);
 
   useEffect(() => {
     const options = limitedOptions
@@ -132,14 +136,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
   
   
 
-  const fetchRejectedData = async () => {
+  const fetchRejectedData = async (page, size) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/rejected-candidate/${employeeId}/${userType}`
+        `${API_BASE_URL}/rejected-candidate/${employeeId}/${userType}?page=${page}&size=${size}`
       );
       const data = await response.json();
-      setCallingList(data);
-      setFilteredCallingList(data);
+      setCallingList(data.content);
+      setFilteredCallingList(data.content);
+      setTotalRecords(data.totalElements);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
@@ -740,6 +745,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
     return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
   };
 
+   // added by sahil karnekar date 4-12-2024
+   const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleSizeChange = (current, size) => {
+    setPageSize(size); // Update the page size
+    setCurrentPage(1); // Reset to the first page after page size changes
+  };
 
   return (
     <div className="calling-list-container">
@@ -1885,6 +1899,18 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
           <Loader size={50} color="#ffb281" />
         </div>
       )}
+        <Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper 
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: 'center',
+        }}
+      />
     </div>
   );
 };

@@ -12,6 +12,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
+import { Pagination } from "antd";
 
 // SwapnilRokade_SendClientEmail_ModifyFilters_11/07
 // SwapnilROkade_AddingErrorAndSuccessMessage_19/07
@@ -92,12 +93,17 @@ const SendClientEmail = ({ clientEmailSender }) => {
     ["yearOfPassing", "Year Of Passing"],
   ];
 
-  const fetchCallingList = () => {
-    fetch(`${API_BASE_URL}/calling-lineup/${employeeId}/${userType}`)
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+
+  const fetchCallingList = (page, size) => {
+    fetch(`${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?page=${page}&size=${size}`)
       .then((response) => response.json())
       .then((data) => {
-        setFilteredCallingList(data);
-        setCallingList(data);
+        setFilteredCallingList(data.content);
+        setCallingList(data.content);
+        setTotalRecords(data.totalElements);
         setLoading(false);
       })
       .catch((error) => {
@@ -107,8 +113,8 @@ const SendClientEmail = ({ clientEmailSender }) => {
   };
 
   useEffect(() => {
-    fetchCallingList();
-  }, [employeeId]);
+    fetchCallingList(currentPage, pageSize);
+  }, [employeeId,currentPage,pageSize]);
 
   useEffect(() => {
     const options = limitedOptions
@@ -553,6 +559,16 @@ const SendClientEmail = ({ clientEmailSender }) => {
     const increment = 10;
     const maxWidth = 600;
     return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
+  };
+
+  // added by sahil karnekar date 4-12-2024
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleSizeChange = (current, size) => {
+    setPageSize(size); // Update the page size
+    setCurrentPage(1); // Reset to the first page after page size changes
   };
 
   return (
@@ -1430,6 +1446,18 @@ const SendClientEmail = ({ clientEmailSender }) => {
               </Modal.Body>
             </Modal>
           </div>
+          <Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper 
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: 'center',
+        }}
+      />
         </>
       )}
     </div>

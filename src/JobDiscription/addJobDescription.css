@@ -235,3 +235,9 @@
 .setDivWidth100ForResponsiveness textarea{
   width: 100%;
 }
+/* added by sahil karnekar date 4-12-2024 */
+.setStarPaddingJd{
+  padding-left: 5%;
+  padding-right: 5%;
+  font-size: 20px;
+}

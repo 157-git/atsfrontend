@@ -184,7 +184,8 @@
 }
 
 .attendanceTableData {
-  height: 85vh;
+  /* reduce height by sahil karnekar date 4-12-2024 */
+  height: 70vh;
   width: 100%;
   overflow-y: auto;
   /* padding-top: 10px; */

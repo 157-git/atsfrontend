@@ -8,6 +8,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
+import { Pagination } from "antd";
 
 const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   const [data, setData] = useState([]);
@@ -196,11 +197,16 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
     newManagerId: "",
     newManagerJobRole: "",
   });
+
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_46
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(currentPage, pageSize);
+  }, [employeeId,currentPage, pageSize]);
 
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_54
   const fetchManager = async () => {
@@ -243,16 +249,17 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
     }
   }, []);
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_98
-  const fetchData = async () => {
+  const fetchData = async (page, size) => {
     try {
       const response = await fetch(
         // sahil karnekar line 244 set employeeId and usertType in Api at the time of deployement this url is just for testing
-        `${API_BASE_URL}/master-sheet/${employeeId}/${userType}`
+        `${API_BASE_URL}/master-sheet/${employeeId}/${userType}?page=${page}&size=${size}`
       );
       const data = await response.json();
-      setData(data);
+      setData(data.content);
       // sahil karnekar line 249
-      extractUniqueValues(data);
+      extractUniqueValues(data.content);
+      setTotalRecords(data.totalElements);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
@@ -589,6 +596,16 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
     const increment = 10;
     const maxWidth = 600;
     return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
+  };
+
+   // added by sahil karnekar date 4-12-2024
+   const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleSizeChange = (current, size) => {
+    setPageSize(size); // Update the page size
+    setCurrentPage(1); // Reset to the first page after page size changes
   };
 
   return (
@@ -2025,6 +2042,18 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
           )}
         </>
       )}
+       <Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper 
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: 'center',
+        }}
+      />
     </div>
   );
 };
