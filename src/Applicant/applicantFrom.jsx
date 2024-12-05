@@ -11,7 +11,8 @@ import {
   faGraduationCap,
   faMapMarkerAlt,
   faPhone,
-  faUser,faCheckCircle
+  faUser,
+  faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { toast } from "react-toastify";
@@ -28,7 +29,7 @@ import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { useParams } from "react-router-dom";
 
-const ApplicantForm = ({loginEmployeeName}) => {
+const ApplicantForm = ({ loginEmployeeName }) => {
   const { userType, employeeId } = useParams();
   const [loading, setLoading] = useState(false);
   const [resumeSelected, setResumeSelected] = useState(false);
@@ -97,50 +98,47 @@ const ApplicantForm = ({loginEmployeeName}) => {
 
   const [formData, setFormData] = useState(initialFormData);
 
-// Set recruiterName when loginEmployeeName is available
-useEffect(() => {
-  console.log("Checking loginEmployeeName:", loginEmployeeName); // Log to verify value
-  if (loginEmployeeName) {
-    setFormData((prevData) => ({
-      ...prevData,
-      recruiterName: loginEmployeeName,
-    }));
-  }
-}, [loginEmployeeName]);
+  // Set recruiterName when loginEmployeeName is available
+  useEffect(() => {
+    console.log("Checking loginEmployeeName:", loginEmployeeName); // Log to verify value
+    if (loginEmployeeName) {
+      setFormData((prevData) => ({
+        ...prevData,
+        recruiterName: loginEmployeeName,
+      }));
+    }
+  }, [loginEmployeeName]);
 
+  const handleChange = (e) => {
+    const { name, files } = e.target;
 
-const handleChange = (e) => {
-  const { name, files } = e.target;
+    if (name === "lineUp.resume" && files.length > 0) {
+      setResumeSelected(true);
+    }
+    if (name === "lineUp.photo" && files.length > 0) {
+      setPhotoSelected(true);
+    }
 
-  if (name === "lineUp.resume" && files.length > 0) {
-    setResumeSelected(true);
-  }
-  if (name === "lineUp.photo" && files.length > 0) {
-    setPhotoSelected(true);
-  }
+    // File handling logic
+    if (files && files.length > 0) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const arrayBuffer = reader.result;
+        const byteArray = new Uint8Array(arrayBuffer);
+        const chunkSize = 0x8000;
+        let base64String = "";
 
-  // File handling logic
-  if (files && files.length > 0) {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const arrayBuffer = reader.result;
-      const byteArray = new Uint8Array(arrayBuffer);
-      const chunkSize = 0x8000;
-      let base64String = "";
-
-      for (let i = 0; i < byteArray.length; i += chunkSize) {
-        base64String += String.fromCharCode.apply(
-          null,
-          byteArray.subarray(i, i + chunkSize)
-        );
-      }
-      base64String = btoa(base64String);
-      // Update form data here if needed
-    };
-    reader.readAsArrayBuffer(files[0]);
-  }
-
-    
+        for (let i = 0; i < byteArray.length; i += chunkSize) {
+          base64String += String.fromCharCode.apply(
+            null,
+            byteArray.subarray(i, i + chunkSize)
+          );
+        }
+        base64String = btoa(base64String);
+        // Update form data here if needed
+      };
+      reader.readAsArrayBuffer(files[0]);
+    }
 
     if (name.startsWith("questions[")) {
       const questionIndex = parseInt(name.split("[")[1].split("]")[0], 10);
@@ -150,7 +148,7 @@ const handleChange = (e) => {
         const updatedQuestions = [...prevData.questions];
         updatedQuestions[questionIndex] = {
           ...updatedQuestions[questionIndex],
-          [questionKey]: e.target.type === "file" ? files[0] :e.target.value,
+          [questionKey]: e.target.type === "file" ? files[0] : e.target.value,
         };
 
         return {
@@ -164,14 +162,13 @@ const handleChange = (e) => {
         ...prevData,
         lineUp: {
           ...prevData.lineUp,
-          [nestedField]: e.target.type === "file" ? files[0] :  e.target.value,
+          [nestedField]: e.target.type === "file" ? files[0] : e.target.value,
         },
       }));
     } else {
       setFormData((prevData) => ({
         ...prevData,
         [name]: e.target.type === "file" ? files[0] : e.target.value,
-
       }));
     }
   };
@@ -187,12 +184,11 @@ const handleChange = (e) => {
       reader.onerror = (error) => reject(error);
     });
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     const currentDate = new Date();
     const updatedFormData = {
       ...formData,
@@ -204,12 +200,14 @@ const handleChange = (e) => {
       lineUp: {
         ...formData.lineUp,
         // Convert resume and photo to base64 if they exist
-        resume: formData.lineUp.resume instanceof File
-          ? await convertToBase64(formData.lineUp.resume)
-          : formData.lineUp.resume,
-        photo: formData.lineUp.photo instanceof File
-          ? await convertToBase64(formData.lineUp.photo)
-          : formData.lineUp.photo,
+        resume:
+          formData.lineUp.resume instanceof File
+            ? await convertToBase64(formData.lineUp.resume)
+            : formData.lineUp.resume,
+        photo:
+          formData.lineUp.photo instanceof File
+            ? await convertToBase64(formData.lineUp.photo)
+            : formData.lineUp.photo,
       },
       ...(userType === "Recruiters"
         ? { employee: { employeeId, teamLeaderId: employeeId } }
@@ -219,7 +217,7 @@ const handleChange = (e) => {
         ? { manager: { managerId: employeeId } }
         : {}),
     };
-  
+
     console.log("FormData before submission:", updatedFormData);
     try {
       const response = await axios.post(
@@ -243,7 +241,7 @@ const handleChange = (e) => {
       setLoading(false);
     }
   };
-  
+
   const [lastScrollPos, setLastScrollPos] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollingUp, setScrollingUp] = useState(false);
@@ -806,7 +804,7 @@ const handleChange = (e) => {
                         <input
                           type="text"
                           name="lineUp.sslCertificates"
-                          placeholder="SSL Certificates"
+                          placeholder="Enter Certificate Details"
                           value={formData.lineUp.sslCertificates}
                           onChange={handleChange}
                         />
@@ -814,57 +812,62 @@ const handleChange = (e) => {
                     </div>
                   </div>
                   <div className="submit-form-row">
-      <div className="submit-file-area">
-        <div className="applicant-file-label">
-          <label htmlFor="resumeUpload">Upload Resume</label>
-          {resumeSelected && (
-            <FontAwesomeIcon
-              icon={faCheckCircle}
-              style={{ color: "green", marginLeft: "8px" }}
-            />
-          )}
-        </div>
-        <div className="applicant-file-div">
-          <input
-            type="file"
-            id="resumeUpload"
-            name="lineUp.resume"
-            onChange={handleChange}
-            accept=".pdf,.doc,.docx"
-            style={{ display: "none" }}
-          
-          />
-          <label htmlFor="resumeUpload" className="custom-file-upload">
-            Choose File
-          </label>
-        </div>
-      </div>
+                    <div className="submit-file-area">
+                      <div className="applicant-file-label">
+                        <label htmlFor="resumeUpload">Upload Resume</label>
+                        {resumeSelected && (
+                          <FontAwesomeIcon
+                            icon={faCheckCircle}
+                            style={{ color: "green", marginLeft: "8px" }}
+                          />
+                        )}
+                      </div>
+                      <div className="applicant-file-div">
+                        <input
+                          type="file"
+                          id="resumeUpload"
+                          name="lineUp.resume"
+                          onChange={handleChange}
+                          accept=".pdf,.doc,.docx"
+                          style={{ display: "none" }}
+                        />
+                        <label
+                          htmlFor="resumeUpload"
+                          className="custom-file-upload"
+                        >
+                          Choose File
+                        </label>
+                      </div>
+                    </div>
 
-      <div className="submit-file-area">
-        <div className="applicant-file-label">
-          <label htmlFor="photoUpload">Upload Photo</label>
-          {photoSelected && (
-            <FontAwesomeIcon
-              icon={faCheckCircle}
-              style={{ color: "green", marginLeft: "8px" }}
-            />
-          )}
-        </div>
-        <div className="applicant-file-div">
-          <input
-            type="file"
-            id="photoUpload"
-            name="lineUp.photo"
-            onChange={handleChange}
-            accept="image/*"
-            style={{ display: "none" }}
-          />
-          <label htmlFor="photoUpload" className="custom-file-upload">
-            Choose File
-          </label>
-        </div>
-      </div>
-    </div>
+                    <div className="submit-file-area">
+                      <div className="applicant-file-label">
+                        <label htmlFor="photoUpload">Upload Photo</label>
+                        {photoSelected && (
+                          <FontAwesomeIcon
+                            icon={faCheckCircle}
+                            style={{ color: "green", marginLeft: "8px" }}
+                          />
+                        )}
+                      </div>
+                      <div className="applicant-file-div">
+                        <input
+                          type="file"
+                          id="photoUpload"
+                          name="lineUp.photo"
+                          onChange={handleChange}
+                          accept="image/*"
+                          style={{ display: "none" }}
+                        />
+                        <label
+                          htmlFor="photoUpload"
+                          className="custom-file-upload"
+                        >
+                          Choose File
+                        </label>
+                      </div>
+                    </div>
+                  </div>
 
                   <div className="applicant-form-row">
                     <div className="inside-form-sub-div">
@@ -918,18 +921,18 @@ const handleChange = (e) => {
                     </div>
                   </div>
 
-<div className="setFormButtonsDiv">
-                  {/* <div className="submit-div">
+                  <div className="setFormButtonsDiv">
+                    {/* <div className="submit-div">
                     <button className="submit-button" type="hyperlink">
                       Aptitude Test
                     </button>
                   </div> */}
 
-                  <div className="submit-div">
-                    <button className="applicant-submit-button" type="submit">
-                      Submit
-                    </button>
-                  </div>
+                    <div className="submit-div">
+                      <button className="applicant-submit-button" type="submit">
+                        Submit
+                      </button>
+                    </div>
                   </div>
                 </form>
               </div>

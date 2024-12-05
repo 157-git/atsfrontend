@@ -184,7 +184,7 @@ const ShortListedCandidates = ({
   const fetchShortListedData = async () => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/shortListed-date/${newEmployeeId}/${userType}`
+        `${API_BASE_URL}/shortListed-data/${newEmployeeId}/${userType}?page=0&size=30`
       );
       const data = await response.json();
       setShortListedData(data);

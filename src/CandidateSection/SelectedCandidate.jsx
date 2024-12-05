@@ -779,7 +779,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
       
               </div>
                 <h5 style={{ color: "grey", textAlign: "center" }}>
-                  Selected Candidates{" "}
+                  Selected Candidates {" "}
                 </h5>
 
                 <div

@@ -25,7 +25,7 @@ const EmployeeDetails = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/employee-details/${employeeId}/${userType}`
+          `${API_BASE_URL}/fetch-Team-details/${employeeId}/${userType}`
         );
         setEmployeeData(response.data);
         setLoading(false);

@@ -145,7 +145,7 @@ const EmpDashboard = ({ userGroup }) => {
   const [successfulDataAdditions, setSuccessfulDataAdditions] = useState(false);
   const [successfulDataUpdation, setSuccessfulDataUpdation] = useState(false);
   const [logoutTimestamp, setLogoutTimestamp] = useState(null);
-  const [showSubscription, setShowSubscription] = useState(false);
+  const [showSubscription, setShowSubscription] = useState(true);
   const [showBilling, setShowBilling] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const [showCandidateHistory, setShowCandidateHistory] = useState(false);
@@ -157,6 +157,7 @@ const EmpDashboard = ({ userGroup }) => {
   const [callFunction, setCallFunction] = useState(false);
   const [showApplicantForm, setShowApplicantForm] = useState(false);
   const [showSharedProfile,setShowSharedProfile] = useState(false)
+
 
   // Arshad Attar Added this 30-10-2024
   const handleOpenEmployeeProfile = () => {
@@ -868,7 +869,7 @@ const EmpDashboard = ({ userGroup }) => {
         </div>
         <div>{assignColumns && <Team_Leader />}</div>
         <div>
-          {userType === 'SuperUser'&& (
+          {showSubscription && userType === 'SuperUser' && (
             <SubscriptionPlans togglePayment={togglePayment} />
           )}
         </div>

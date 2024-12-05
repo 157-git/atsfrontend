@@ -805,7 +805,7 @@ const LineUpList = ({
 
 
                 </div>
-                <h5 style={{ color: "gray" }}>Lineup Tracker</h5>
+                <h5 style={{ color: "gray" }}>Lineup  Tracker</h5>
 
                 <div
                   style={{
