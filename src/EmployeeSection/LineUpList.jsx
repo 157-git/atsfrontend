@@ -10,6 +10,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
+import { Pagination } from "antd";
 
 // SwapnilRokade_lineUpList_ModifyFilters_47to534_11/07
 const LineUpList = ({
@@ -122,12 +123,15 @@ const LineUpList = ({
   ];
 
   const { userType } = useParams();
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
 
   //akash_pawar_LineUpList_ShareFunctionality_16/07_128
-  const fetchCallingTrackerData = async () => {
+  const fetchCallingTrackerData = async (page, size) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`
+        `${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?page=${page}&size=${size}`
       );
 
       if (!response.ok) {
@@ -139,8 +143,9 @@ const LineUpList = ({
       const data = await response.json();
       console.log("Response data:", data); // Log the parsed JSON data
 
-      setCallingList(data);
-      setFilteredCallingList(data);
+      setCallingList(data.content);
+      setFilteredCallingList(data.content);
+      setTotalRecords(data.totalElements);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -149,8 +154,8 @@ const LineUpList = ({
   };
 
   useEffect(() => {
-    fetchCallingTrackerData();
-  }, [employeeIdnew]);
+    fetchCallingTrackerData(currentPage, pageSize);
+  }, [employeeIdnew,currentPage, pageSize]);
   //akash_pawar_selfCallingTracker_ShareFunctionality_17/07_171
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_144
@@ -761,6 +766,16 @@ const LineUpList = ({
     const maxWidth = 600;
     return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
   };
+
+    // added by sahil karnekar date 4-12-2024
+    const handlePageChange = (page) => {
+      setCurrentPage(page);
+    };
+  
+    const handleSizeChange = (current, size) => {
+      setPageSize(size); // Update the page size
+      setCurrentPage(1); // Reset to the first page after page size changes
+    };
 
   return (
     <div className="calling-list-container">
@@ -1933,6 +1948,18 @@ const LineUpList = ({
           )}
         </>
       )}
+      <Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper 
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: 'center',
+        }}
+      />
       {isDataSending && (
         <div className="ShareFunc_Loading_Animation">
           <Loader />

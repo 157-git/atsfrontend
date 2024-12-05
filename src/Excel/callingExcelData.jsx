@@ -9,6 +9,7 @@ import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import axios from "../api/api";
 import { toast } from "react-toastify";
+import { Pagination } from "antd";
 
 const CallingExcelList = ({
   updateState,
@@ -55,14 +56,19 @@ const CallingExcelList = ({
   const [showUpdateCallingTracker, setShowUpdateCallingTracker] =
     useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
 
-  const fetchUpdatedData = () => {
+  const fetchUpdatedData = (page, size) => {
     setLoading(true); // Set loading to true before fetching the updated data
-    fetch(`${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}`)
+    fetch(`${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?page=${page}&size=${size}`)
       .then((response) => response.json())
       .then((data) => {
-        setCallingList(data);
-        setFilteredCallingList(data);
+        console.log(data);
+        setCallingList(data.content);
+        setFilteredCallingList(data.content);
+        setTotalRecords(data.totalElements);
         setLoading(false); // Set loading to false when data is successfully fetched
       })
       .catch((error) => {
@@ -73,8 +79,8 @@ const CallingExcelList = ({
 
   useEffect(() => {
     // Fetch initial data on component mount
-    fetchUpdatedData();
-  }, [employeeId, userType]);
+    fetchUpdatedData(currentPage, pageSize);
+  }, [employeeId, userType,currentPage, pageSize]);
 
   useEffect(() => {
     const options = Object.keys(filteredCallingList[0] || {}).filter(
@@ -510,12 +516,13 @@ const CallingExcelList = ({
     }
   };
 
-  const handleUpdateSuccess = () => {
-    fetch(`${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}`)
+  const handleUpdateSuccess = (page, size) => {
+    fetch(`${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?page=${page}&size=${size}`)
       .then((response) => response.json())
       .then((data) => {
-        setCallingList(data);
-        setFilteredCallingList(data);
+        setCallingList(data.content);
+        setFilteredCallingList(data.content);
+        setTotalRecords(data.totalElements);
         setShowUpdateCallingTracker(false);
         setLoading(false);
       })
@@ -790,7 +797,7 @@ const CallingExcelList = ({
           <div dangerouslySetInnerHTML={{ __html: formattedMessage }} />
         );
 
-        fetchUpdatedData();
+        fetchUpdatedData(currentPage,pageSize);
       } else {
         toast.error("Error merging resumes: " + response.statusText);
       }
@@ -1071,7 +1078,15 @@ const [customEnd, setCustomEnd] = useState("");
   // };
   
 
+ // added by sahil karnekar date 4-12-2024
+ const handlePageChange = (page) => {
+  setCurrentPage(page);
+};
 
+const handleSizeChange = (current, size) => {
+  setPageSize(size); // Update the page size
+  setCurrentPage(1); // Reset to the first page after page size changes
+};
   
   return (
     <div className="App-after1">
@@ -1778,6 +1793,19 @@ const [customEnd, setCustomEnd] = useState("");
           )}
         </>
       )}
+
+<Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper 
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: 'center',
+        }}
+      />
     </div>
   );
 };

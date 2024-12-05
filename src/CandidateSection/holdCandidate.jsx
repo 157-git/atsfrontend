@@ -8,6 +8,7 @@ import * as XLSX from "xlsx";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { toast } from "react-toastify";
+import { Pagination } from "antd";
 // SwapnilRokade_HoldCandidate_ModifyFilters_47to534_11/07
 const HoldCandidate = ({
   updateState,
@@ -120,10 +121,14 @@ const HoldCandidate = ({
   ];
 
   const { userType } = useParams();
-  useEffect(() => {
-    fetchHoldCandidateData();
-  }, []);
 
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+
+  useEffect(() => {
+    fetchHoldCandidateData(currentPage, pageSize);
+  }, [employeeId,currentPage, pageSize]);
   //akash_pawar_HoldCandidate_ShareFunctionality_18/07_119
   const fetchManager = async () => {
     try {
@@ -176,14 +181,17 @@ const HoldCandidate = ({
     setFilterOptions(options);
   }, [filteredCallingList]);
 
-  const fetchHoldCandidateData = async () => {
+  const fetchHoldCandidateData = async (page, size) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/hold-candidate/${employeeId}/${userType}`
+        `${API_BASE_URL}/hold-candidate/${employeeId}/${userType}?page=${page}&size=${size}`
       );
+      console.log(response);
       const data = await response.json();
-      setCallingList(data);
-      setFilteredCallingList(data);
+      console.log(data);
+      setCallingList(data.content);
+      setFilteredCallingList(data.content);
+      setTotalRecords(data.totalElements);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching hold candidate data:", error);
@@ -735,6 +743,16 @@ const HoldCandidate = ({
     const maxWidth = 600;
     return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
   };
+
+    // added by sahil karnekar date 4-12-2024
+    const handlePageChange = (page) => {
+      setCurrentPage(page);
+    };
+  
+    const handleSizeChange = (current, size) => {
+      setPageSize(size); // Update the page size
+      setCurrentPage(1); // Reset to the first page after page size changes
+    };
 
   return (
     <div className="App-after">
@@ -1933,6 +1951,18 @@ const HoldCandidate = ({
           <Loader size={50} color="#ffb281" />
         </div>
       )}
+       <Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper 
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: 'center',
+        }}
+      />
     </div>
   );
 };

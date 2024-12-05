@@ -10,6 +10,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
+import { Pagination } from "antd";
 
 // SwapnilRokade_SelectedCandidate_ModifyFilters_47to534_11/07
 const SelectedCandidate = ({ loginEmployeeName }) => {
@@ -113,10 +114,13 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     ["yearOfPassing", "Year Of Passing"]
   ]
   const { userType } = useParams();
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
 
   useEffect(() => {
-    fetchSelectedCandidateData();
-  }, []);
+    fetchSelectedCandidateData(currentPage, pageSize);
+  }, [employeeId,currentPage, pageSize]);
 
   useEffect(() => {
     const options = limitedOptions
@@ -128,14 +132,15 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   }, [filteredCallingList]);
   
 
-  const fetchSelectedCandidateData = async () => {
+  const fetchSelectedCandidateData = async (page, size) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/selected-candidate/${employeeId}/${userType}`
+        `${API_BASE_URL}/selected-candidate/${employeeId}/${userType}?page=${page}&size=${size}`
       );
       const data = await response.json();
-      setCallingList(data);
-      setFilteredCallingList(data);
+      setCallingList(data.content);
+      setFilteredCallingList(data.content);
+      setTotalRecords(data.totalElements);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
@@ -734,6 +739,16 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     const maxWidth = 600;
     return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
   };
+
+ // added by sahil karnekar date 4-12-2024
+ const handlePageChange = (page) => {
+  setCurrentPage(page);
+};
+
+const handleSizeChange = (current, size) => {
+  setPageSize(size); // Update the page size
+  setCurrentPage(1); // Reset to the first page after page size changes
+};
 
   //Swapnil_Rokade_SelectedCandidate_columnsToInclude_columnsToExclude_17/07/2024//
   return (
@@ -1858,6 +1873,18 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
           <ClipLoader size={50} color="#ffb281" />
         </div>
       )}
+       <Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper 
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: 'center',
+        }}
+      />
     </div>
   );
 };

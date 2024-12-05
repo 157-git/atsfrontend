@@ -13,6 +13,7 @@ import Loader from "../EmployeeSection/loader";
 import { parse } from "date-fns";
 import axios from "../api/api";
 import { toast } from "react-toastify";
+import { Pagination } from "antd";
 {
   /* this line added by sahil date 22-10-2024 */
 }
@@ -46,21 +47,27 @@ const ResumeList = ({
   const [fetchTeamleader, setFetchTeamleader] = useState([]);
   const [recruiterUnderTeamLeader, setRecruiterUnderTeamLeader] = useState([]);
   const [isDataSending, setIsDataSending] = useState(false);
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
 
   useEffect(() => {
-    fetchData();
-  }, []);
-  const fetchData = async () => {
+    fetchData(currentPage,pageSize);
+  }, [employeeId,currentPage,pageSize]);
+
+  const fetchData = async (page, size) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/fetch-resumes-data/${employeeId}/${userType}`
+        `${API_BASE_URL}/fetch-resumes-data/${employeeId}/${userType}?page=${page}&size=${size}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const result = await response.json();
-      setData(result);
-      setFilteredData(result);
+      console.log(result);
+      setData(result.content);
+      setFilteredData(result.content);
+      setTotalRecords(result.totalElements);
       console.log(filteredData);
     } catch (error) {
       setError(error);
@@ -711,7 +718,7 @@ const ResumeList = ({
       }
 
       toast.success(responseData);
-      fetchData();
+      fetchData(currentPage,pageSize);
       setShowForwardPopup(false); // Close the modal
       setShowShareButton(true); // Optional: Handle additional UI state
       setSelectedRows([]); // Reset selected rows
@@ -884,6 +891,16 @@ const ResumeList = ({
   //   fetchCountData(selectedRange);
   // }, [selectedRange]);
 
+
+  // added by sahil karnekar date 4-12-2024
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleSizeChange = (current, size) => {
+    setPageSize(size); // Update the page size
+    setCurrentPage(1); // Reset to the first page after page size changes
+  };
   return (
     <div className="App-after1">
       {loading ? (
@@ -1503,6 +1520,18 @@ const ResumeList = ({
           </div>
         </>
       )}
+          <Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper 
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: 'center',
+        }}
+      />
     </div>
   );
 };
