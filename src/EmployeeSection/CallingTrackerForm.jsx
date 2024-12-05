@@ -410,6 +410,14 @@ const CallingTrackerForm = ({
     setShowConfirmation(false);
     e.preventDefault();
 
+    if (errorForYOP !== "") {
+      setErrorForYOP("Please select a valid year of passing.");
+      return;
+    }
+    if (errorForDOB !== "") {
+      setErrorForDOB("Please select a valid date of birth.");
+      return;
+    }
     // Validate fields
     let callingTrackerErrors = validateCallingTracker() || {};
     let lineUpDataErrors = validateLineUpData() || {};
