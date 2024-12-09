@@ -167,6 +167,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
       console.log("Link come here 002");
 
       setUploadSuccess(true);
+      setexcelJobDesignation("")
       toast.success("File Uploaded Successfully");
 
       const currentTime = getCurrentIndianTime();
@@ -236,6 +237,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
         handleTableChange("ResumeList");
         hideSuccessMessage();
         setSelectedFiles([]);
+        setResumeJobDesignation("")
         resetFileInput(resumeFileInputRef);
         setHasErrorResume(false);
       }
@@ -455,7 +457,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                 <div className="mb-3">
                   <input
                     type="text"
-                    placeholder="Enter Job Designation (Optional)"
+                    placeholder="Enter Designation (Optional)"
                     value={excelJobDesignation}
                     onChange={(e) => setexcelJobDesignation(e.target.value)}
                     className="form-control"
@@ -535,7 +537,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
                 <div className="mb-3">
                   <input
                     type="text"
-                    placeholder="Enter Job Designation (Optional)"
+                    placeholder="Enter Designation (Optional)"
                     value={resumeJobDesignation}
                     onChange={(e) => setResumeJobDesignation(e.target.value)}
                     className="form-control"

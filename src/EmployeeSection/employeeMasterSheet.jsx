@@ -786,7 +786,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       />
                     </th>
                   ) : null}
-
+  <th className="attendanceheading">Sr No.</th>
                   <th className="attendanceheading">Emp ID</th>
                   {(userType === "TeamLeader" || userType === "Manager") && (
                     <th className="attendanceheading">Team Leader Id</th>
@@ -903,6 +903,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                         />
                       </td>
                     ) : null}
+                     <td className="tabledata">{index + 1}</td>
 
                     <td
                       className="tabledata"
