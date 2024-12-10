@@ -21,13 +21,17 @@ const EmployeeDetails = () => {
   const [showEmployee, setShowEmployee] = useState(false);
   const { employeeId, userType } = useParams();
 
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (page,size) => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/employee-details/${employeeId}/${userType}`
+          `${API_BASE_URL}/fetch-Team-details/${employeeId}/${userType}?page=${page}&size=${size}`
         );
-        setEmployeeData(response.data);
+        setEmployeeData(response.data.content);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -35,8 +39,8 @@ const EmployeeDetails = () => {
       }
     };
 
-    fetchData();
-  }, []);
+    fetchData(currentPage,pageSize);
+  }, [currentPage,pageSize]);
 
   const handleBlock = (employeeId) => {
     console.log(`Blocking employee with ID: ${employeeId}`);

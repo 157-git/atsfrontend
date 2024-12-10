@@ -26,19 +26,24 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState({});
   const [showSearchBar, setShowSearchBar] = useState(false);
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
 
   useEffect(() => {
-    const fetchData = async () => {
+    
+    const fetchData = async (page,size) => {
       try {
         const response = await fetch(
-          `${API_BASE_URL}/share-profile-count-data`
+          `${API_BASE_URL}/share-profile-count-data?page=${page}&size=${size}`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const result = await response.json();
-        setData(result);
-        setFilteredData(result);
+        setData(result.content);
+        setFilteredData(result.content);
+        setTotalRecords(result.totalElements)
         console.log(filteredData);
       } catch (error) {
         setError(error);
@@ -46,8 +51,8 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
         setLoading(false);
       }
     };
-    fetchData();
-  }, []);
+    fetchData(currentPage,pageSize);
+  }, [currentPage,pageSize]);
 
   const handleMouseOver = (event) => {
     const tableData = event.currentTarget;

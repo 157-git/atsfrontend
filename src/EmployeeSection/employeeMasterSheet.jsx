@@ -10,7 +10,7 @@ import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { Pagination } from "antd";
 
-const EmployeeMasterSheet = ({loginEmployeeName}) => {
+const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   const [data, setData] = useState([]);
   // sahil karnekar line 14 to 111
   const [showFilterSection, setShowFilterSection] = useState(false);
@@ -108,7 +108,7 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
 
   const displayNameMap = {
     candidateId: "Candidate Id",
-   // line number 111 edited by sahil karnekar according to tester suggestion date 14-10-2024
+    // line number 111 edited by sahil karnekar according to tester suggestion date 14-10-2024
     alternateNumber: "WhatsApp Number",
     callingFeedback: "Calling Feedback",
     candidateEmail: "Candidate Email",
@@ -330,9 +330,9 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
   const handleShare = async () => {
     if (userType === "TeamLeader") {
       if (selectedRecruiters.recruiterId === "") {
-        setErrorForShare("Please Select A Recruiter ! ")
+        setErrorForShare("Please Select A Recruiter ! ");
         return;
-      }else{
+      } else {
         setErrorForShare("");
       }
     }
@@ -470,32 +470,33 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
   //Name:-Akash Pawar Component:-EmployeeMarksheet Subcategory:-ResumeViewButton(added) End LineNo:-167 Date:-02/07
 
   // sahil karnekar  line 451 to 471
-   {/* this extractUniqueValues method updated by sahil date 22-10-2024 */}
+  {
+    /* this extractUniqueValues method updated by sahil date 22-10-2024 */
+  }
   const extractUniqueValues = (data) => {
     const uniqueValuesMap = {};
-    
+
     Object.keys(fieldIndexMap).forEach((field) => {
       const values = data.map((item) => item[fieldIndexMap[field]]);
-      
+
       // Create a map to store unique lowercase values, but keep the original case for display
       const uniqueValues = new Map();
-      
+
       values.forEach((value) => {
         const lowerCaseValue = String(value).toLowerCase();
-        
+
         // Add only the first occurrence of each unique lowercase value
         if (!uniqueValues.has(lowerCaseValue)) {
-          uniqueValues.set(lowerCaseValue, value);  // Store original case for display
+          uniqueValues.set(lowerCaseValue, value); // Store original case for display
         }
       });
-      
+
       // Convert the map values back to an array and store in the uniqueValuesMap
       uniqueValuesMap[field] = Array.from(uniqueValues.values());
     });
-    
+
     setUniqueValues(uniqueValuesMap);
   };
-  
 
   const handleFilterChange = (field, value) => {
     setSelectedFilters((prevFilters) => {
@@ -515,10 +516,10 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
   const toggleFilter = (field) => {
     setExpandedFilters((prev) => {
       const newExpanded = {};
-      newExpanded[field] = !prev[field]; 
+      newExpanded[field] = !prev[field];
       Object.keys(prev).forEach((key) => {
         if (key !== field) {
-          newExpanded[key] = false; 
+          newExpanded[key] = false;
         }
       });
       return newExpanded;
@@ -531,11 +532,13 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
     // line 525 to 535 added by sahil karnekar date 30-10-2024
     if (searchTerm.trim()) {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
-      
+
       filtered = filtered.filter((item) => {
         return Object.keys(fieldIndexMap).some((field) => {
           const fieldIndex = fieldIndexMap[field];
-          return String(item[fieldIndex]).toLowerCase().includes(lowerCaseSearchTerm);
+          return String(item[fieldIndex])
+            .toLowerCase()
+            .includes(lowerCaseSearchTerm);
         });
       });
     }
@@ -544,10 +547,12 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
       const fieldValues = selectedFilters[field];
       if (fieldValues.length > 0) {
         const fieldIndex = fieldIndexMap[field];
-        
+
         filtered = filtered.filter((item) => {
           const dataValueLowerCase = String(item[fieldIndex]).toLowerCase();
-          const selectedValuesLowerCase = fieldValues.map((v) => String(v).toLowerCase()); 
+          const selectedValuesLowerCase = fieldValues.map((v) =>
+            String(v).toLowerCase()
+          );
           return selectedValuesLowerCase.includes(dataValueLowerCase);
         });
       }
@@ -612,37 +617,43 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
       ) : (
         <>
           <div className="search">
-{/* line 590 to 610 added by sahil karnekar date 30-10-2024 */}
-          <div style={{ display: "flex", alignItems: "center" }}>
-                  <i
-                    className="fa-solid fa-magnifying-glass"
-                   
-                    style={{ margin: "10px", width: "auto", fontSize: "15px" }}
-                  ></i>
-                  {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
-           
-                  <div
-                    className="search-input-div"
-                    style={{ width: `${calculateWidth()}px` }}
-                  >
-                    <div className="forxmarkdiv">
-                    <input
-                      type="text"
-                      className="search-input removeBorderForSearchInput"
-                      placeholder="Search here..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    { searchTerm && (
-                      <div className="svgimagesetinInput">
-                    <svg onClick={(()=>setSearchTerm(""))} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+            {/* line 590 to 610 added by sahil karnekar date 30-10-2024 */}
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <i
+                className="fa-solid fa-magnifying-glass"
+                style={{ margin: "10px", width: "auto", fontSize: "15px" }}
+              ></i>
+              {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
+
+              <div
+                className="search-input-div"
+                style={{ width: `${calculateWidth()}px` }}
+              >
+                <div className="forxmarkdiv">
+                  <input
+                    type="text"
+                    className="search-input removeBorderForSearchInput"
+                    placeholder="Search here..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  {searchTerm && (
+                    <div className="svgimagesetinInput">
+                      <svg
+                        onClick={() => setSearchTerm("")}
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#000000"
+                      >
+                        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                      </svg>
                     </div>
-                    )}
-                    
-                    </div>
-                  </div>
-        
+                  )}
                 </div>
+              </div>
+            </div>
 
             <div className="master-sheet-header">
               <h3 style={{ color: "gray", fontSize: "18px" }}>
@@ -689,13 +700,13 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
                   )}
                 </div>
               )}
-               {/* sahil karnekar line 531 to 536 */}
-               <button
-                                className="lineUp-Filter-btn"
-                                onClick={toggleFilterSection}
-                            >
-                                Filter <i className="fa-solid fa-filter"></i>
-                            </button>
+              {/* sahil karnekar line 531 to 536 */}
+              <button
+                className="lineUp-Filter-btn"
+                onClick={toggleFilterSection}
+              >
+                Filter <i className="fa-solid fa-filter"></i>
+              </button>
             </div>
           </div>
 
@@ -715,30 +726,42 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
                     </button>
                     {expandedFilters[field] && (
                       <div className="city-filter">
-                         {/* sahil karnekar filter edition line 552 to 567 date : 10-10-2024 */}
-                         {/* this complete optiondiv is updated by sahil karnekar date 22-10-2024 */}
-                         <div className="optionDiv">
-  {uniqueValues[field] && uniqueValues[field].map((value, index) => {
-    // Check if the field is "alternateNumber" and value is 0, or if value is falsy (null, undefined)
-    if ((field === "alternateNumber" && value === 0) || value === null || value === undefined || value === "") {
-      return null; // Skip rendering for this value
-    }
-    
-    return (
-      <label className="selfcalling-filter-value" key={index}>
-        <input
-          name="testName"
-          style={{ marginRight: "5px" }}
-          type="checkbox"
-          checked={selectedFilters[field].includes(value)}
-          onChange={() => handleFilterChange(field, value)}
-        />
-        {value}
-      </label>
-    );
-  })}
-</div>
+                        {/* sahil karnekar filter edition line 552 to 567 date : 10-10-2024 */}
+                        {/* this complete optiondiv is updated by sahil karnekar date 22-10-2024 */}
+                        <div className="optionDiv">
+                          {uniqueValues[field] &&
+                            uniqueValues[field].map((value, index) => {
+                              // Check if the field is "alternateNumber" and value is 0, or if value is falsy (null, undefined)
+                              if (
+                                (field === "alternateNumber" && value === 0) ||
+                                value === null ||
+                                value === undefined ||
+                                value === ""
+                              ) {
+                                return null; // Skip rendering for this value
+                              }
 
+                              return (
+                                <label
+                                  className="selfcalling-filter-value"
+                                  key={index}
+                                >
+                                  <input
+                                    name="testName"
+                                    style={{ marginRight: "5px" }}
+                                    type="checkbox"
+                                    checked={selectedFilters[field].includes(
+                                      value
+                                    )}
+                                    onChange={() =>
+                                      handleFilterChange(field, value)
+                                    }
+                                  />
+                                  {value}
+                                </label>
+                              );
+                            })}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -763,7 +786,7 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
                       />
                     </th>
                   ) : null}
-
+  <th className="attendanceheading">Sr No.</th>
                   <th className="attendanceheading">Emp ID</th>
                   {(userType === "TeamLeader" || userType === "Manager") && (
                     <th className="attendanceheading">Team Leader Id</th>
@@ -880,6 +903,7 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
                         />
                       </td>
                     ) : null}
+                     <td className="tabledata">{index + 1}</td>
 
                     <td
                       className="tabledata"
@@ -1928,7 +1952,7 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
                                     >
                                       <label htmlFor={recruiters.employeeId}>
                                         <input
-                                        style={{width:"auto"}}
+                                          style={{ width: "auto" }}
                                           type="radio"
                                           id={recruiters.employeeId}
                                           name="recruiter"
@@ -1958,11 +1982,11 @@ const EmployeeMasterSheet = ({loginEmployeeName}) => {
                       </div>
                       {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_1225 */}
                     </Modal.Body>
-                    {
-                         errorForShare && (
-                          <div style={{textAlign:"center", color:"red"}}>{errorForShare}</div>
-                         )
-                        }
+                    {errorForShare && (
+                      <div style={{ textAlign: "center", color: "red" }}>
+                        {errorForShare}
+                      </div>
+                    )}
                     <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
                       <button
                         onClick={handleShare}
