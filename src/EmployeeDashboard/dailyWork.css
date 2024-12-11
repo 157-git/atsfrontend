@@ -350,3 +350,80 @@
   border-radius: 5px; /* Rounded corners */
   cursor: pointer; /* Pointer cursor on hover */
 }
+
+
+/* line 354 to 429 added by sahil karnekar */
+/* Sliding in animation */
+@keyframes slideIn {
+  0% {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    max-height: 85vh; /* Adjust based on your content height */
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Sliding out animation */
+@keyframes slideOut {
+  0% {
+    max-height: 85vh;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+
+.notificationMainCont1 {
+  background-color: var(--Bg-color);
+  color: var(--text-color);
+  position: absolute;
+    translate: -99%;
+    box-shadow: 0 0 4px gray;
+    width: 350px;
+    margin-top: 24px;
+    overflow-y: auto;
+  transition: max-height 0.5s ease, opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Notification box animations */
+.notificationMainCont1.open {
+  animation: slideIn 0.5s forwards;
+}
+
+.notificationMainCont1.closed {
+  animation: slideOut 0.5s forwards;
+}
+.buttonsDivForNotifications{
+  display: flex;
+  justify-content: space-between;
+}
+.cleaarButtonOfNotifications:hover{
+cursor: pointer;
+}
+
+.motificationSubCont1 {
+  flex: 1; /* Makes the content area scrollable */
+  overflow-y: auto; /* Enables vertical scrolling for the content */
+  padding: 10px;
+}
+
+.buttonsDivForNotifications {
+  position: sticky; /* Sticks to the bottom */
+  bottom: 0;
+  display: flex;
+  justify-content: space-between; /* Align buttons to left and right */
+  background-color: white; /* Matches the background for a clean look */
+  padding: 10px;
+  border-top: 1px solid #ddd; /* Optional: add a border for separation */
+  z-index: 10; /* Ensures it stays above the content */
+}
+
