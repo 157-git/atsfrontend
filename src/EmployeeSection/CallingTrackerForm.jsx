@@ -558,7 +558,7 @@ const CallingTrackerForm = ({
         console.log(
           `Data with candidateId ${candidateId} deleted successfully.`
         );
-        toast.success("Candidate Data Transfered Succefully...");
+        // toast.success("Candidate Data Transfered Succefully...");
       } else {
         console.warn(`Unexpected response status: ${response.status}`);
         toast.warning("Unable to Transfered Candidate Data");
@@ -589,7 +589,7 @@ const CallingTrackerForm = ({
         console.log(
           `Data with candidateId ${candidateId} deleted successfully.`
         );
-        toast.success("Candidate Data Transfered Succefully...");
+        // toast.success("Candidate Data Transfered Succefully...");
       } else {
         console.warn(`Unexpected response status: ${response.status}`);
         toast.warning("Unable to Transfered Candidate Data");
