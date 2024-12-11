@@ -30,7 +30,28 @@ import Loader from "../EmployeeSection/loader";
 import { useParams } from "react-router-dom";
 
 const ApplicantForm = ({ loginEmployeeName }) => {
-  const { userType, employeeId } = useParams();
+  //Arshad Attar Added This Code On 10-12-2024 
+  //This Code to hide Employee Id and UserType In Every Time
+  const { encodedParams } = useParams();
+  // Decode the encodedParams
+  const decodeParams = (encoded) => {
+    try {
+      const decoded = atob(encoded);
+      const [employeeId, userType] = decoded.split(":");
+      return { employeeId, userType };
+    } catch (error) {
+      console.error("Failed to decode parameters:", error);
+      return { employeeId: null, userType: null };
+    }
+  };
+
+  const { employeeId, userType } = decodeParams(encodedParams);
+
+  // Use employeeId and userType in your form logic
+  console.log("Decoded Employee ID:", employeeId);
+  console.log("Decoded User Type:", userType);
+
+  // const 
   const [loading, setLoading] = useState(false);
   const [resumeSelected, setResumeSelected] = useState(false);
   const [photoSelected, setPhotoSelected] = useState(false);

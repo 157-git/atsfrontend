@@ -571,6 +571,10 @@ const SendClientEmail = ({ clientEmailSender }) => {
     setCurrentPage(1); // Reset to the first page after page size changes
   };
 
+  const calculateRowIndex = (index) => {
+    return (currentPage - 1) * pageSize + index + 1;
+  };
+  
   return (
     <div className="SCE-list-container">
       {loading ? (
@@ -794,7 +798,17 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         />
                       </td>
                     ) : null}
-                    <td className="tabledata">{index + 1}</td>
+
+                     <td
+                          className="tabledata "
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                         {calculateRowIndex(index)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{calculateRowIndex(index)}</span>
+                          </div>
+                        </td>
 
                     <td
                       className="tabledata"

@@ -608,6 +608,10 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
     setCurrentPage(1); // Reset to the first page after page size changes
   };
 
+  const calculateRowIndex = (index) => {
+    return (currentPage - 1) * pageSize + index + 1;
+  };
+
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -903,7 +907,16 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                         />
                       </td>
                     ) : null}
-                     <td className="tabledata">{index + 1}</td>
+                  <td
+                          className="tabledata "
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                         {calculateRowIndex(index)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{calculateRowIndex(index)}</span>
+                          </div>
+                        </td>
 
                     <td
                       className="tabledata"

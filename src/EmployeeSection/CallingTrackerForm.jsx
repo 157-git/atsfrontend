@@ -866,6 +866,8 @@ const CallingTrackerForm = ({
           );
         }
         base64String = btoa(base64String);
+        const base64Resume = `data:application/pdf;base64,${base64String}`;
+        setResumeUrl(base64Resume); // Set the base64 URL for the resume
         setLineUpData((prevState) => {
           if (prevState.resume !== base64String) {
             return {
@@ -880,8 +882,36 @@ const CallingTrackerForm = ({
     }
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [resumeUrl, setResumeUrl] = useState(null);
+
   return (
     <div className="calling-tracker-main">
+      {isModalOpen && (
+        <div className="view-resume-modal-overlay">
+          <div className="view-resume-modal-content">
+            {resumeUrl ? (
+              <iframe
+                src={resumeUrl}
+                title="Resume"
+                style={{ width: "100%", height: "500px" }}
+              ></iframe>
+            ) : (
+              <p>No resume to display</p>
+            )}
+            <br></br>
+            <center>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="calling-tracker-popup-open-btn"
+              >
+                Close
+              </button>
+            </center>
+          </div>
+        </div>
+      )}
+
       <section className="calling-tracker-submain">
         {loading && <Loader />}
         <form onSubmit={handleSubmit}>
@@ -915,7 +945,7 @@ const CallingTrackerForm = ({
                 <label>Upload Resume</label>
                 <div
                   className="calling-tracker-field-sub-div"
-                  style={{ display: "block" }}
+                  style={{ display: "flex",flexDirection:"row"}}
                 >
                   {/* <input
                     style={{ width: "-webkit-fill-available" }}
@@ -947,6 +977,18 @@ const CallingTrackerForm = ({
                   {errors.resume && (
                     <div className="error-message">{errors.resume}</div>
                   )}
+                  <button className="calling-tracker-popup-open-btn">
+                    <i
+                      className="fas fa-eye"
+                      onClick={() => {
+                        if (resumeUrl) {
+                          setIsModalOpen(true);
+                        } else {
+                          alert("No resume uploaded to view.");
+                        }
+                      }}
+                    ></i>
+                  </button>
                 </div>
               </div>
             </div>
@@ -974,7 +1016,7 @@ const CallingTrackerForm = ({
                 </div>
               </div>
               <div className="calling-tracker-field">
-                <label>Recruiter </label>
+                <label>Recruiter Name</label>
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
                     <input
@@ -1136,20 +1178,23 @@ const CallingTrackerForm = ({
                   <div className="calling-tracker-two-input">
                     {/* this line added by sahil date 22-10-2024 */}
                     <div className="setRequiredStarDiv">
-                    <select
-                      id="requirementId"
-                      name="requirementId"
-                      value={callingTracker.requirementId}
-                      onChange={handleRequirementChange}
-                      style={{ width: "inherit" }}
-                    >
-                      <option value="">Select Job Id</option>
-                      {requirementOptions.map((option) => (
-                        <option key={option.requirementId} value={option.requirementId}>
-                          {option.requirementId} - {option.designation}
-                        </option>
-                      ))}
-                    </select>
+                      <select
+                        id="requirementId"
+                        name="requirementId"
+                        value={callingTracker.requirementId}
+                        onChange={handleRequirementChange}
+                        style={{ width: "inherit" }}
+                      >
+                        <option value="">Select Job Id</option>
+                        {requirementOptions.map((option) => (
+                          <option
+                            key={option.requirementId}
+                            value={option.requirementId}
+                          >
+                            {option.requirementId} - {option.designation}
+                          </option>
+                        ))}
+                      </select>
 
                       {/* this line added by sahil date 22-10-2024 */}
                       {callingTracker.selectYesOrNo === "Interested" &&
@@ -1845,11 +1890,14 @@ const CallingTrackerForm = ({
 
                       // Check if the input is empty and clear the error
                       const dateforYearOfPassout = new Date();
-                      let yearOfPassout = dateforYearOfPassout.getFullYear()+2;
+                      let yearOfPassout =
+                        dateforYearOfPassout.getFullYear() + 2;
                       if (value === "") {
                         setErrorForYOP("");
                       } else if (value < 1947 || value > yearOfPassout) {
-                        setErrorForYOP("YOP Should be between 1947 and "+yearOfPassout);
+                        setErrorForYOP(
+                          "YOP Should be between 1947 and " + yearOfPassout
+                        );
                       } else {
                         setErrorForYOP("");
                       }
@@ -1861,7 +1909,7 @@ const CallingTrackerForm = ({
                         if (value.length === 4) {
                           // Trigger validation after 4 digits are entered
                           if (year > yearOfPassout) {
-                            alert("Cannot enter year above "+yearOfPassout);
+                            alert("Cannot enter year above " + yearOfPassout);
                           } else if (year < 1947) {
                             alert("Cannot enter year below 1947");
                           } else {

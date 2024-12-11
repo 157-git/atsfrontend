@@ -241,3 +241,34 @@
   
   /* margin-top: 150px; */
 }
+
+/* arshad added css on 09-12-2024 */
+
+.shared-count-ids{
+  border: 1px solid black;
+  width: 500px;
+}
+
+.count-div-resumlist{
+  height: 25px;
+  /* border: 1px solid black; */
+  display: flex;
+}
+
+.count-div-resumlist-sub{
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  /* border: 1px solid red; */
+  width: 50%;
+  height: 25px;
+}
+
+.search-count-last-div{
+  /* border: 1px solid gray; */
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  background-color: #f2f2f2;
+
+}

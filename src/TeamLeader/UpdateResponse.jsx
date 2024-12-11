@@ -59,8 +59,6 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     setFilterOptions(options);
   }, [filteredCallingList]);
 
-
-
   const { userType } = useParams();
   const { employeeId } = useParams();
   console.log(date);

@@ -223,13 +223,40 @@ const LineUpList = ({
     setShowUpdateCallingTracker(true);
   };
 
-  const handleUpdateSuccess = () => {
-    setShowUpdateCallingTracker(false);
-    fetch(`${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`)
-      .then((response) => response.json())
-      .then((data) => setCallingList(data))
+  // const handleUpdateSuccess = () => {
+  //   setShowUpdateCallingTracker(false);
+  //   fetch(`${API_BASE_URL}/calling-lineup/${employeeIdnew}/${userType}`)
+  //     .then((response) => response.json())
+  //     .then((data) => setCallingList(data))
 
-      .catch((error) => console.error("Error fetching data:", error));
+  //     .catch((error) => console.error("Error fetching data:", error));
+  // };
+
+  const handleUpdateSuccess = async (page, size) => {
+    setLoading(true)
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?page=${page}&size=${size}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      console.log("Full response object:", response); // Log full response
+
+      const data = await response.json();
+      console.log("Response data:", data); // Log the parsed JSON data
+
+
+      setCallingList(data.content);
+      setFilteredCallingList(data.content);
+      setTotalRecords(data.totalElements);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+    }
   };
 
   const handleMouseOver = (event) => {
@@ -777,6 +804,10 @@ const LineUpList = ({
       setCurrentPage(1); // Reset to the first page after page size changes
     };
 
+    const calculateRowIndex = (index) => {
+      return (currentPage - 1) * pageSize + index + 1;
+    };
+
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -1100,7 +1131,16 @@ const LineUpList = ({
                           </td>
                         ) : null}
 
-                        <td className="tabledata">{index + 1}</td>
+                        <td
+                          className="tabledata "
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                         {calculateRowIndex(index)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{calculateRowIndex(index)}</span>
+                          </div>
+                        </td>
 
                         <td
                           className="tabledata"

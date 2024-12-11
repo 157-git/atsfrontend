@@ -52,8 +52,8 @@ const ResumeList = ({
   const [totalRecords, setTotalRecords] = useState(0);
 
   useEffect(() => {
-    fetchData(currentPage,pageSize);
-  }, [employeeId,currentPage,pageSize]);
+    fetchData(currentPage, pageSize);
+  }, [employeeId, currentPage, pageSize]);
 
   const fetchData = async (page, size) => {
     try {
@@ -68,6 +68,7 @@ const ResumeList = ({
       setData(result.content);
       setFilteredData(result.content);
       setTotalRecords(result.totalElements);
+      setSearchCount(result.length);
       console.log(filteredData);
     } catch (error) {
       setError(error);
@@ -114,25 +115,35 @@ const ResumeList = ({
   const handleExportToExcel = () => {
     const columnsToInclude = [
       "No.",
+      "Uploaded Date",
       "Candidate's Name",
-      "Contact Number",
-      "Alternate Number",
       "Candidate Email",
+      "Contact Number",
+      "Gender",
+      "Date Of Birth",
+      "job designation",
+      "Last Company",
       "Education",
-      "Experience",
+      "Relevant Experience",
       "Current Location",
+      "Extra Certification",
     ];
 
     const dataToExport = data.map((item, index) => {
       const filteredItem = {
         "No.": index + 1,
+        "Uploaded Date": item.resumeUploadDate || "-",
         "Candidate's Name": item.candidateName || "-",
-        "Contact Number": item.phone || "-",
-        "Alternate Number": item.phone || "-",
-        "Candidate Email": item.email || "-",
-        Education: item.education || "-",
-        Experience: item.experience || "-",
-        "Current Location": item.location || "-",
+        "Candidate Email": item.candidateEmail || "-",
+        "Contact Number": item.contactNumber || "-",
+        Gender: item.gender || "-",
+        "Date Of Birth": item.dateOfBirth || "-",
+        "job designation": item.jobDesignation || "-",
+        "Last Company": item.companyName || "-",
+        Education: item.qualification || "-",
+        "Relevant Experience": item.relevantExperience || "-",
+        "Current Location": item.currentLocation || "-",
+        "Extra Certification": item.extraCertification || "-",
       };
       return filteredItem;
     });
@@ -247,26 +258,19 @@ const ResumeList = ({
   };
 
   const limitedOptions = [
-    ["candidateEmail", "Candidate Email"],
+    ["resumeUploadDate", "Date"],
     ["candidateName", "Candidate Name"],
+    ["candidateEmail", "Candidate Email"],
     ["contactNumber", "Contact Number"],
-    ["currentLocation", "Current Location"],
-    ["date", "Date"],
-    ["fullAddress", "Full Address"],
-    ["jobDesignation", "Job Designation"],
-    ["requirementCompany", "Requirement Company"],
-    ["empId", "Employee Id"],
-    ["companyName", "Company Name"],
-    ["currentCTCLakh", "Current CTC (Lakh)"],
-    ["currentCTCThousand", "Current CTC (Thousand)"],
+    ["gender", "Gender"],
     ["dateOfBirth", "Date Of Birth"],
-    ["expectedCTCLakh", "Expected CTC (Lakh)"],
-    ["expectedCTCThousand", "Expected CTC (Thousand)"],
-    ["experienceMonth", "Experience (Months)"],
-    ["experienceYear", "Experience (Years)"],
-    ["finalStatus", "Final Status"],
-    ["holdingAnyOffer", "Holding Any Offer"],
-    ["noticePeriod", "Notice Period"],
+    ["currentLocation", "Current Location"],
+    ["jobDesignation", "Job Designation"],
+    ["companyName", "Last Company Name"],
+    ["relevantExperience", "Relevant Experience"],
+    ["qualification", "Qualification"],
+    ["employeeId", "Employee Id"],
+    ["employeeName", "Employee Name"],
   ];
   const handleFilterOptionClick = (key) => {
     if (activeFilterOption === key) {
@@ -313,7 +317,7 @@ const ResumeList = ({
         item.jobRole?.toLowerCase().includes(lowerSearchTerm) ||
         item.qualification?.toLowerCase().includes(lowerSearchTerm) ||
         item.relevantExperience?.toLowerCase().includes(lowerSearchTerm) ||
-        item.resumeUploadDate?.toLowerCase().includes(lowerSearchTerm)
+        item.resumeUploadDate?.toLowerCase().includes(viewsSearchTerm)
       );
     });
 
@@ -332,6 +336,24 @@ const ResumeList = ({
     });
 
     setFilteredData(filteredResults);
+    setSearchCount(filteredResults.length);
+  };
+
+  const highlightText = (text, term) => {
+    if (!term) return text;
+
+    const textString = text?.toString() || ""; // Ensure text is a string or default to an empty string
+    const parts = textString.split(new RegExp(`(${term})`, "gi")); // Split by the term, preserving matches
+
+    return parts.map((part, index) =>
+      part.toLowerCase() === term.toLowerCase() ? (
+        <span key={index} style={{ backgroundColor: "yellow" }}>
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
   };
 
   useEffect(() => {
@@ -386,6 +408,7 @@ const ResumeList = ({
   const [customStart, setCustomStart] = useState("");
   const [customEnd, setCustomEnd] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
+  const [searchCount, setSearchCount] = useState(0);
 
   useEffect(() => {
     const fetchManagerNames = async () => {
@@ -718,11 +741,11 @@ const ResumeList = ({
       }
 
       toast.success(responseData);
-      fetchData(currentPage,pageSize);
+      fetchData(currentPage, pageSize);
       setShowForwardPopup(false); // Close the modal
       setShowShareButton(true); // Optional: Handle additional UI state
       setSelectedRows([]); // Reset selected rows
-      setSelectedRecruiters({ employeeId: null, jobRole: "" });
+      setSelectedRecruiters({ employeeId: null, jobRole: "" });cal
       console.log("Data Shared Successfully.......");
     } catch (error) {
       console.error("Error while forwarding candidates:", error);
@@ -797,102 +820,78 @@ const ResumeList = ({
     }
   };
 
-  // const [countData, setCountData] = useState({ totalCount: 0, candidateIds: [] });
-  // const [selectedRange, setSelectedRange] = useState("today");
-  // // const { employeeId, userType } = useParams(); // Getting parameters dynamically
+  const [uploadCountData, setUploadCountData] = useState({
+    totalCount: 0,
+    candidateIds: [],
+  });
+  const [sharedCountData, setSharedCountData] = useState({
+    totalCount: 0,
+    candidateIds: [],
+  });
+  
+  const [uploadSelectedRange, setUploadSelectedRange] = useState("0 DAY"); // Default for upload
+  const [sharedSelectedRange, setSharedSelectedRange] = useState("0 DAY"); // Default for shared
+  
+  const dateRanges = [
+    { label: "Today", value: "0 DAY" },
+    { label: "1 Week", value: "7 DAY" },
+    { label: "15 Days", value: "15 DAY" },
+    { label: "1 Month", value: "1 MONTH" },
+    { label: "3 Months", value: "3 MONTH" },
+    { label: "6 Months", value: "6 MONTH" },
+  ];
 
-  // const dateRanges = [
-  //   { label: "Today", value: "today" },
-  //   { label: "1 Week", value: "1week" },
-  //   { label: "1 Month", value: "1month" },
-  //   { label: "3 Months", value: "3months" },
-  //   { label: "6 Months", value: "6months" },
-  // ];
+  const fetchUploadCountData = async (range) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/uploaded-resume-count`, {
+        params: {
+          employeeId: employeeId,
+          jobRole: userType,
+          dateRange: range,
+        },
+      });
+      setUploadCountData(response.data);
+    } catch (error) {
+      console.error("Error fetching upload count data:", error);
+    }
+  };
+  
+  // Fetch Shared Count Data
+  const fetchSharedCountData = async (range) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/resume-shared-count`, {
+        params: {
+          oldEmployeeId: employeeId,
+          oldJobRole: userType,
+          dateRange: range,
+        },
+      });
+      setSharedCountData(response.data);
+    } catch (error) {
+      console.error("Error fetching shared count data:", error);
+    }
+  };
+  
 
-  // // Helper function to format the date
-  // const formatDate = (date) => {
-  //   return date
-  //     .toLocaleString("en-IN", {
-  //       day: "2-digit",
-  //       month: "2-digit",
-  //       year: "numeric",
-  //       hour: "2-digit",
-  //       minute: "2-digit",
-  //       hour12: true,
-  //     })
-  //     .replace(/\//g, "-");
-  // };
+// Effect for Upload Count
+useEffect(() => {
+  fetchUploadCountData(uploadSelectedRange);
+}, [uploadSelectedRange]);
 
-  // // Helper function to calculate date ranges
-  // const calculateDateRange = (range) => {
-  //   const now = new Date();
-  //   let startDate;
+// Effect for Shared Count
+useEffect(() => {
+  fetchSharedCountData(sharedSelectedRange);
+}, [sharedSelectedRange]);
 
-  //   switch (range) {
-  //     case "1week":
-  //       startDate = new Date(now);
-  //       startDate.setDate(now.getDate() - 7);
-  //       break;
-  //     case "1month":
-  //       startDate = new Date(now);
-  //       startDate.setMonth(now.getMonth() - 1);
-  //       break;
-  //     case "3months":
-  //       startDate = new Date(now);
-  //       startDate.setMonth(now.getMonth() - 3);
-  //       break;
-  //     case "6months":
-  //       startDate = new Date(now);
-  //       startDate.setMonth(now.getMonth() - 6);
-  //       break;
-  //     case "today":
-  //     default:
-  //       startDate = new Date(now);
-  //       break;
-  //   }
+// Handlers for Dropdown Changes
+const handleUploadRangeChange = (event) => {
+  setUploadSelectedRange(event.target.value);
+};
 
-  //   return {
-  //     startDate: `${formatDate(startDate).split(" ")[0]} 12:00 am`,
-  //     endDate: `${formatDate(now)}`,
-  //   };
-  // };
+const handleSharedRangeChange = (event) => {
+  setSharedSelectedRange(event.target.value);
+};
 
-  // // Fetch data based on selected range
-  // const fetchCountData = async (range) => {
-  //   const { startDate, endDate } = calculateDateRange(range);
-
-  //   // Logging values before making the API call
-  //   console.log("Start Date:", startDate);
-  //   console.log("End Date:", endDate);
-  //   console.log("Old Employee ID:", employeeId);
-  //   console.log("Old Job Role:", userType);
-
-  //   try {
-  //     const response = await axios.get(
-  //       `${API_BASE_URL}/resume-shared-count`,
-  //       {
-  //         params: {
-  //           oldEmployeeId: employeeId, // Assigning employeeId to oldEmployeeId
-  //           oldJobRole: userType, // Assigning userType to oldJobRole
-  //           startDate,
-  //           endDate,
-  //         },
-  //       }
-  //     );
-
-  //     setCountData(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  // // Use effect to fetch data on range change
-  // useEffect(() => {
-  //   fetchCountData(selectedRange);
-  // }, [selectedRange]);
-
-
-  // added by sahil karnekar date 4-12-2024
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -901,6 +900,11 @@ const ResumeList = ({
     setPageSize(size); // Update the page size
     setCurrentPage(1); // Reset to the first page after page size changes
   };
+
+  const calculateRowIndex = (index) => {
+    return (currentPage - 1) * pageSize + index + 1;
+  };
+
   return (
     <div className="App-after1">
       {loading ? (
@@ -926,7 +930,6 @@ const ResumeList = ({
                         fontSize: "15px",
                       }}
                     ></i>
-
                     <div
                       className="search-input-div"
                       style={{ width: `${calculateWidth()}px` }}
@@ -936,7 +939,10 @@ const ResumeList = ({
                         className="search-input"
                         placeholder="Search here..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {
+                          setSearchTerm(e.target.value);
+                          applyFilters(); // Pass the search term
+                        }}
                       />
                     </div>
                   </div>
@@ -1023,47 +1029,41 @@ const ResumeList = ({
                 {/* Swapnil_Rokade_ResumeList_CreateExcel_18/07/2024 */}
                 <div>
                   {showFilterSection && (
-                    <div className="filter-section">
-                      {limitedOptions.map(([optionKey, optionLabel]) => {
-                        const uniqueValues = Array.from(
-                          new Set(
-                            data
-                              .map((item) => {
-                                const value = item[optionKey];
-                                // Ensure the value is a string before converting to lowercase
-                                return typeof value === "string"
-                                  ? value.toLowerCase()
-                                  : value;
-                              })
-                              .filter(
-                                (value) => value !== undefined && value !== null
-                              ) // Remove null or undefined values
-                          )
-                        );
+                    <>
+                      <div className="filter-section">
+                        {limitedOptions.map(([optionKey, optionLabel]) => {
+                          const uniqueValues = Array.from(
+                            new Set(
+                              data
+                                .map((item) => {
+                                  const value = item[optionKey];
+                                  // Ensure the value is a string before converting to lowercase
+                                  return typeof value === "string"
+                                    ? value.toLowerCase()
+                                    : value;
+                                })
+                                .filter(
+                                  (value) =>
+                                    value !== undefined && value !== null
+                                ) // Remove null or undefined values
+                            )
+                          );
 
-                        return (
-                          <div key={optionKey} className="filter-option">
-                            <button
-                              className="white-Btn"
-                              onClick={() => handleFilterOptionClick(optionKey)}
-                            >
-                              {optionLabel}
-                              <span className="filter-icon">&#x25bc;</span>
-                            </button>
-                            {activeFilterOption === optionKey && (
-                              <div className="city-filter">
-                                <div className="optionDiv">
-                                  {uniqueValues.filter(
-                                    (value) =>
-                                      value !== "" &&
-                                      value !== "-" &&
-                                      value !== undefined &&
-                                      !(
-                                        optionKey === "alternateNumber" &&
-                                        value === 0
-                                      )
-                                  ).length > 0 ? (
-                                    uniqueValues.map(
+                          return (
+                            <div key={optionKey} className="filter-option">
+                              <button
+                                className="white-Btn"
+                                onClick={() =>
+                                  handleFilterOptionClick(optionKey)
+                                }
+                              >
+                                {optionLabel}
+                                <span className="filter-icon">&#x25bc;</span>
+                              </button>
+                              {activeFilterOption === optionKey && (
+                                <div className="city-filter">
+                                  <div className="optionDiv">
+                                    {uniqueValues.filter(
                                       (value) =>
                                         value !== "" &&
                                         value !== "-" &&
@@ -1071,52 +1071,78 @@ const ResumeList = ({
                                         !(
                                           optionKey === "alternateNumber" &&
                                           value === 0
-                                        ) && (
-                                          <label
-                                            key={value}
-                                            className="selfcalling-filter-value"
-                                          >
-                                            <input
-                                              type="checkbox"
-                                              checked={
-                                                selectedFilters[
-                                                  optionKey
-                                                ]?.includes(value) || false
-                                              }
-                                              onChange={() =>
-                                                handleFilterSelect(
-                                                  optionKey,
-                                                  value
-                                                )
-                                              }
-                                              style={{ marginRight: "5px" }}
-                                            />
-                                            {value}
-                                          </label>
                                         )
-                                    )
-                                  ) : (
-                                    <div>No values</div>
-                                  )}
+                                    ).length > 0 ? (
+                                      uniqueValues.map(
+                                        (value) =>
+                                          value !== "" &&
+                                          value !== "-" &&
+                                          value !== undefined &&
+                                          !(
+                                            optionKey === "alternateNumber" &&
+                                            value === 0
+                                          ) && (
+                                            <label
+                                              key={value}
+                                              className="selfcalling-filter-value"
+                                            >
+                                              <input
+                                                type="checkbox"
+                                                checked={
+                                                  selectedFilters[
+                                                    optionKey
+                                                  ]?.includes(value) || false
+                                                }
+                                                onChange={() =>
+                                                  handleFilterSelect(
+                                                    optionKey,
+                                                    value
+                                                  )
+                                                }
+                                                style={{ marginRight: "5px" }}
+                                              />
+                                              {value}
+                                            </label>
+                                          )
+                                      )
+                                    ) : (
+                                      <div>No values</div>
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
+                              )}
+                            </div>
+                          );
                   {/* this modal added by sahil date 22-10-2024 */}
-                </div>
-              </div>
+                        })}
+                      </div>
+                      <hr style={{ padding: "2px" }} />
+                      <div className="count-div-resumlist">
+    {/* Upload Date Options */}
+    <div className="count-div-resumlist-sub">
+      <label htmlFor="uploadDateRange">Upload Date Options:</label>
+      <select
+        id="uploadDateRange"
+        value={uploadSelectedRange}
+        onChange={handleUploadRangeChange}
+      >
+        {dateRanges.map((range) => (
+          <option key={range.value} value={range.value}>
+            {range.label}
+          </option>
+        ))}
+      </select>
+      <p>Total Upload Count: {uploadCountData.totalCount}</p>
+    </div>
 
-              {/* <div style={{ border: "1px solid black", height: "200px", padding: "10px" }}>
-      <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-        <label htmlFor="dateRange">Select Date Range:</label>
+    {/* Share Date Options */}
+    {(userType === "Manager" || userType === "TeamLeader") && (
+      <div className="count-div-resumlist-sub">
+        <label htmlFor="shareDateRange">Share Date Options:</label>
         <select
-          id="dateRange"
-          value={selectedRange}
-          onChange={(e) => setSelectedRange(e.target.value)}
+          id="shareDateRange"
+          value={sharedSelectedRange}
+          onChange={handleSharedRangeChange}
         >
           {dateRanges.map((range) => (
             <option key={range.value} value={range.value}>
@@ -1124,19 +1150,14 @@ const ResumeList = ({
             </option>
           ))}
         </select>
+        <p>Shared Total Count: {sharedCountData.totalCount}</p>
       </div>
-
-      <div style={{ display: "flex", gap: "40px", marginTop: "20px" }}>
-        <div>
-          <h3>Total Count</h3>
-          <p>{countData.totalCount}</p>
-        </div>
-        <div>
-          <h3>Candidate IDs</h3>
-          <p>{countData.candidateIds.join(", ") || "No IDs Found"}</p>
-        </div>
-      </div>
-    </div> */}
+    )}
+  </div>
+                    </>
+                  )}
+                </div>
+              </div>
 
               <div className="attendanceTableData">
                 <table className="selfcalling-table attendance-table">
@@ -1198,9 +1219,11 @@ const ResumeList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {index + 1}{" "}
+                          {calculateRowIndex(index)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{index + 1}</span>
+                            <span className="tooltiptext">
+                              {calculateRowIndex(index)}
+                            </span>
                           </div>
                         </td>
 
@@ -1236,10 +1259,13 @@ const ResumeList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.candidateName}{" "}
+                          {highlightText(item.candidateName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.candidateName}
+                              {highlightText(
+                                item.candidateName || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1249,10 +1275,13 @@ const ResumeList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.candidateEmail}
+                          {highlightText(item.candidateEmail || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.candidateEmail}
+                              {highlightText(
+                                item.candidateEmail || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1262,21 +1291,10 @@ const ResumeList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.gender}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.gender}</span>
-                          </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.dateOfBirth}
+                          {highlightText(item.gender || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.dateOfBirth}
+                              {highlightText(item.gender || "", searchTerm)}
                             </span>
                           </div>
                         </td>
@@ -1286,10 +1304,13 @@ const ResumeList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.contactNumber}
+                          {highlightText(item.dateOfBirth || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.contactNumber}
+                              {highlightText(
+                                item.dateOfBirth || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1299,10 +1320,13 @@ const ResumeList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.jobDesignation}
+                          {highlightText(item.contactNumber || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.jobDesignation}
+                              {highlightText(
+                                item.contactNumber || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1312,10 +1336,13 @@ const ResumeList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.companyName}
+                          {highlightText(item.jobDesignation || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.companyName}
+                              {highlightText(
+                                item.jobDesignation || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1325,10 +1352,13 @@ const ResumeList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.relevantExperience}
+                          {highlightText(item.companyName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.relevantExperience}
+                              {highlightText(
+                                item.companyName || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1338,10 +1368,17 @@ const ResumeList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.qualification}
+                          {highlightText(
+                            item.relevantExperience || "",
+                            searchTerm
+                          )}
+
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.qualification}
+                              {highlightText(
+                                item.relevantExperience || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1351,10 +1388,14 @@ const ResumeList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.extraCertification}
+                          {highlightText(item.qualification || "", searchTerm)}
+
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.extraCertification}
+                              {highlightText(
+                                item.qualification || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1364,10 +1405,36 @@ const ResumeList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.currentLocation}
+                          {highlightText(
+                            item.extraCertification || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.currentLocation}
+                              {highlightText(
+                                item.extraCertification || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(
+                            item.currentLocation || "",
+                            searchTerm
+                          )}
+
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.currentLocation || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1520,18 +1587,22 @@ const ResumeList = ({
           </div>
         </>
       )}
-          <Pagination
+        <div className="search-count-last-div">
+        Search Results : {searchCount}
+        </div>
+      <Pagination
         current={currentPage}
         total={totalRecords}
         pageSize={pageSize}
         showSizeChanger
-        showQuickJumper 
+        showQuickJumper
         onShowSizeChange={handleSizeChange}
         onChange={handlePageChange}
         style={{
-          justifyContent: 'center',
+          justifyContent: "center",
         }}
       />
+      
     </div>
   );
 };
