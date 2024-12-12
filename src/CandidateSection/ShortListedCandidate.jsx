@@ -43,6 +43,7 @@ const ShortListedCandidates = ({
   const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [isDataSending, setIsDataSending] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [searchCount, setSearchCount] = useState(0);
 
   const { employeeId } = useParams();
   const newEmployeeId = parseInt(employeeId, 10);
@@ -194,6 +195,7 @@ const ShortListedCandidates = ({
       setShortListedData(data.content);
       setFilteredShortListed(data.content);
       setTotalRecords(data.totalElements);
+      setSearchCount(data.length);
       console.log(data);
       setLoading(false);
     } catch (error) {
@@ -445,12 +447,17 @@ const ShortListedCandidates = ({
                                               item.interviewTime.toString().toLowerCase().includes(searchTermLower)) ||
                                               (item.finalStatus &&
                                                 item.finalStatus.toString().toLowerCase().includes(searchTermLower)) ||
+                                                (item.incentive &&
+                                                  item.incentive.toString().toLowerCase().includes(searchTermLower)) ||
+                                                  (item.candidateId &&
+                                                    item.candidateId.toString().toLowerCase().includes(searchTermLower)) ||
                               
         (item.companyName &&
           item.companyName.toLowerCase().includes(searchTermLower))
       );
     });
     setFilteredShortListed(filtered);
+    setSearchCount(filtered.length);
   }, [searchTerm, shortListedData]);
 
   //  filter problem solved updated by sahil karnekar date 23-10-2024 complete  handleFilterOptionClick method
@@ -605,6 +612,29 @@ const handleFilterSelect = (key, value) => {
     setPageSize(size); // Update the page size
     setCurrentPage(1); // Reset to the first page after page size changes
   };
+
+  const calculateRowIndex = (index) => {
+    return (currentPage - 1) * pageSize + index + 1;
+  };
+
+
+  const highlightText = (text, term) => {
+    if (!term) return text;
+
+    const textString = text?.toString() || ""; // Ensure text is a string or default to an empty string
+    const parts = textString.split(new RegExp(`(${term})`, "gi")); // Split by the term, preserving matches
+
+    return parts.map((part, index) =>
+      part.toLowerCase() === term.toLowerCase() ? (
+        <span key={index} style={{ backgroundColor: "yellow" }}>
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
+  };
+
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -847,37 +877,14 @@ const handleFilterSelect = (key, value) => {
                             />
                           </td>
                         ) : null}
-                        <td className="tabledata">{index + 1}</td>
-                        <td
-                          className="tabledata"
+                         <td
+                          className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.candidateId}
+                         {calculateRowIndex(index)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.candidateId}</span>
-                          </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.date} -  {" "}  {item.candidateAddedTime}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.date}  - {" "}  {item.candidateAddedTime}</span>
-                          </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.recruiterName}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.recruiterName}</span>
+                            <span className="tooltiptext">{calculateRowIndex(index)}</span>
                           </div>
                         </td>
                         <td
@@ -885,106 +892,13 @@ const handleFilterSelect = (key, value) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.candidateName}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.candidateName}</span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.candidateEmail}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.candidateEmail}</span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.contactNumber}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.contactNumber}</span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.alternateNumber}
+                          {highlightText(item.candidateId.toString().toLowerCase() || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.alternateNumber}
-                            </span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.sourceName}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.sourceName}</span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.jobDesignation}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.jobDesignation}</span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.requirementId}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.requirementId}</span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.requirementCompany}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.requirementCompany}
-                            </span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.communicationRating}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.communicationRating}
-                            </span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.currentLocation}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.currentLocation}
+                              {highlightText(
+                                item.candidateId.toString().toLowerCase() || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -994,45 +908,250 @@ const handleFilterSelect = (key, value) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.fullAddress}
+                          { highlightText(item.date || "", searchTerm)  } -  {" "}  {item.candidateAddedTime}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.fullAddress}</span>
+                            <span className="tooltiptext">{highlightText(
+                                item.date.toString().toLowerCase() || "",
+                                searchTerm
+                              )}  - {" "}  {item.candidateAddedTime}</span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                         {highlightText(item.recruiterName || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.recruiterName || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                         {highlightText(item.candidateName || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.candidateName || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                         {highlightText(item.candidateEmail || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.candidateEmail || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(item.contactNumber || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.contactNumber || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(item.alternateNumber || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.alternateNumber || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(item.sourceName || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.sourceName || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(item.jobDesignation || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.jobDesignation || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(item.requirementId || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.requirementId || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(item.requirementCompany || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.requirementCompany || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                         {highlightText(item.communicationRating || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.communicationRating || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                         {highlightText(item.currentLocation || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.currentLocation || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                         {highlightText(item.fullAddress || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.fullAddress || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
                         <td className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.callingFeedback}
+                         {highlightText(item.callingFeedback || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.callingFeedback}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.callingFeedback || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
 
                         <td className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
-                          {item.incentive}
+                          {highlightText(item.incentive.toString().toLowerCase() || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.incentive}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.incentive.toString().toLowerCase() || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
 
                         <td className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
-                          {item.selectYesOrNo}
+                          {highlightText(item.selectYesOrNo || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.selectYesOrNo}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.selectYesOrNo || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
 
                         <td className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
-                          {item.companyName}
+                          {highlightText(item.companyName || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.companyName}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.companyName || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
 
@@ -1049,9 +1168,14 @@ const handleFilterSelect = (key, value) => {
                         <td className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
-                          {item.relevantExperience}
+                          {highlightText(item.relevantExperience || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.companyName}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.relevantExperience || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
 
@@ -1077,50 +1201,81 @@ const handleFilterSelect = (key, value) => {
 
                         <td className="tabledata" onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
-                          {item.dateOfBirth}
+                          {highlightText(item.dateOfBirth || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.dateOfBirth}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.dateOfBirth || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
 
                         <td className="tabledata" onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
-                          {item.gender}
+                          {highlightText(item.gender || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.gender}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.gender || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
 
                         <td className="tabledata" onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
-                          {item.qualification}
+                          {highlightText(item.qualification || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.qualification}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.qualification || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
 
                         <td className="tabledata" onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
-                          {item.yearOfPassing}
+                         {highlightText(item.yearOfPassing || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.yearOfPassing}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.yearOfPassing || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
 
                         <td className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
-                          {item.extraCertification}
+                          {highlightText(item.extraCertification || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext"> {item.extraCertification}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.extraCertification || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
                         {/* <td className="tabledata">{item.feedback}</td> */}
                         <td className="tabledata"
                           onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}>{item.holdingAnyOffer}
+                          onMouseOut={handleMouseOut}>
+                           {highlightText(item.holdingAnyOffer || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.holdingAnyOffer}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.holdingAnyOffer || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
 
@@ -1128,9 +1283,14 @@ const handleFilterSelect = (key, value) => {
                         <td className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
-                          {item.offerLetterMsg}
+                           {highlightText(item.offerLetterMsg || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.offerLetterMsg}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.offerLetterMsg || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
                         {/* <td className="tabledata">{item.lineUp.resume}</td> */}
@@ -1156,9 +1316,14 @@ const handleFilterSelect = (key, value) => {
                         <td className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
-                          {item.noticePeriod}
+                           {highlightText(item.noticePeriod || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.noticePeriod}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.noticePeriod || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
 
@@ -1169,10 +1334,15 @@ const handleFilterSelect = (key, value) => {
                           <td className="tabledata"
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}>
-                            {item.msgForTeamLeader}
-                            <div className="tooltip">
-                              <span className="tooltiptext">{item.msgForTeamLeader}</span>
-                            </div>
+                             {highlightText(item.msgForTeamLeader || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.msgForTeamLeader || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
 
                         }
@@ -1182,10 +1352,15 @@ const handleFilterSelect = (key, value) => {
                           <td className="tabledata"
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}>
-                            {item.msgForTeamLeader}
-                            <div className="tooltip">
-                              <span className="tooltiptext">{item.msgForTeamLeader}</span>
-                            </div>
+                             {highlightText(item.msgForTeamLeader || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.msgForTeamLeader || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
 
                         }
@@ -1195,18 +1370,28 @@ const handleFilterSelect = (key, value) => {
                         <td className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
-                          {item.availabilityForInterview}
+                          {highlightText(item.availabilityForInterview || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.availabilityForInterview}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.availabilityForInterview || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
 
                         <td className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}>
-                          {item.interviewTime}
+                            {highlightText(item.interviewTime || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.interviewTime}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.interviewTime || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
                         {/* <td className="tabledata">{item.finalStatus}</td> */}
@@ -1216,9 +1401,14 @@ const handleFilterSelect = (key, value) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.finalStatus}
+                           {highlightText(item.finalStatus || "", searchTerm)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{item.finalStatus}</span>
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.finalStatus || "",
+                                searchTerm
+                              )}
+                            </span>
                           </div>
                         </td>
                         <td className="tabledata" >
@@ -1234,6 +1424,23 @@ const handleFilterSelect = (key, value) => {
                   </tbody>
                 </table>
               </div>
+
+              <div className="search-count-last-div">
+        Search Results : {searchCount}
+        </div>
+
+        <Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper 
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: 'center',
+        }}
+      />
 
               {showForwardPopup ? (
                 <>
@@ -1552,18 +1759,7 @@ const handleFilterSelect = (key, value) => {
         </>
       )}
 
-<Pagination
-        current={currentPage}
-        total={totalRecords}
-        pageSize={pageSize}
-        showSizeChanger
-        showQuickJumper 
-        onShowSizeChange={handleSizeChange}
-        onChange={handlePageChange}
-        style={{
-          justifyContent: 'center',
-        }}
-      />
+
 
       {isDataSending && (
         <div className="ShareFunc_Loading_Animation">

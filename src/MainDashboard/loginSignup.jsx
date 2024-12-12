@@ -34,20 +34,6 @@ const LoginSignup = ({ onLogin }) => {
   // only functionality javascript code added by sahil karnekar dont use html code , html code is not styled or not applied any css
   // please check the logic once
 
-  // here is getting employeeId from localstorage and initially removing the id if present in localstorage
-
-  // const localStrId = localStorage.getItem("employeeId");
-
-  // if (localStrId) {
-  //   localStorage.removeItem("employeeId");
-  // }
-
-  // const storedData = JSON.parse(localStorage.getItem(`user_${userType}`));
-
-  // if (storedData) {
-  //   localStorage.removeItem(`user_${userType}`);
-  // }
-
   useEffect(() => {
     AOS.init({ duration: 3000 });
   }, []);
@@ -152,14 +138,14 @@ const LoginSignup = ({ onLogin }) => {
 
           setEmployeeId(loginResponse.data.employeeId);
           // Navigate to the dashboard
-         navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
-  }else if (loginResponse.data.statusCode === "401 Unauthorized") {
-    setError(loginResponse.data.status);
-  }else if (loginResponse.data.statusCode === "402 Payment Required") {
-    setError(loginResponse.data.status);
-    // this line  151 to 170 added by sahil karnekar on date 29-11-2024
-    console.log(loginResponse.data.status);
-    // Create a unique key for each user based on their userType and employeeId
+          navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
+        } else if (loginResponse.data.statusCode === "401 Unauthorized") {
+          setError(loginResponse.data.status);
+        } else if (loginResponse.data.statusCode === "402 Payment Required") {
+          setError(loginResponse.data.status);
+          // this line  151 to 170 added by sahil karnekar on date 29-11-2024
+          console.log(loginResponse.data.status);
+          // Create a unique key for each user based on their userType and employeeId
 
           if (userType === "SuperUser") {
             setError("Payment Pending Please Make Payment ASAP");
@@ -338,8 +324,8 @@ const LoginSignup = ({ onLogin }) => {
                     }}
                   />
                 </div>
-      
-           <div className="loginpage-error">{error}</div>
+
+                <div className="loginpage-error">{error}</div>
 
                 {displayPaymentLink && (
                   <div className="acc-create-div">

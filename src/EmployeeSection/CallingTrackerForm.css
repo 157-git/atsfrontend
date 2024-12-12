@@ -777,3 +777,25 @@ padding-right: 8px;
   padding: 2px;
   gap: 20px;
 }
+
+/* Arshad Attar Added CSS 11-12-2024 */
+.view-resume-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.view-resume-modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 1000px;
+  width: 100%;
+}

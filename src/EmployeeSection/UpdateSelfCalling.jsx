@@ -716,7 +716,7 @@ const UpdateSelfCalling = ({
               </div>
             </div>
             <div className="update-calling-tracker-field">
-              <label>Recruiter </label>
+              <label>Recruiter Name</label>
               <div className="update-calling-tracker-field-sub-div">
                 <input
                   type="text"
@@ -1971,14 +1971,15 @@ const ModalComponent = ({
             >
               Salary Calculation
             </p>
-            <p
+            {/* Arshad Attar Commented this on 09-12-2024 */}
+            {/* <p
               className={`sidebar-item ${
                 activeField === "historyTracker" ? "active" : ""
               }`}
               onClick={() => setActiveField("historyTracker")}
             >
               History Tracker
-            </p>
+            </p> */}
             <p
               className={`sidebar-item ${
                 activeField === "previousQuestion" ? "active" : ""

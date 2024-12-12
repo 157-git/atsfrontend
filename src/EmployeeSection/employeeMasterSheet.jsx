@@ -9,12 +9,14 @@ import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { Pagination } from "antd";
+import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 
 const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   const [data, setData] = useState([]);
   // sahil karnekar line 14 to 111
   const [showFilterSection, setShowFilterSection] = useState(false);
   const [uniqueValues, setUniqueValues] = useState({});
+  const [searchCount, setSearchCount] = useState(0);
   const [selectedFilters, setSelectedFilters] = useState({
     candidateId: [],
     alternateNumber: [],
@@ -260,6 +262,8 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
       // sahil karnekar line 249
       extractUniqueValues(data.content);
       setTotalRecords(data.totalElements);
+      setSearchCount(Object.keys(data.content).length);
+      console.log(data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
@@ -608,6 +612,21 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
     setCurrentPage(1); // Reset to the first page after page size changes
   };
 
+  const calculateRowIndex = (index) => {
+    return (currentPage - 1) * pageSize + index + 1;
+  };
+
+  console.log(Object.keys(data).length);
+  console.log(typeof(data));
+
+  console.log(applyFilters(data).length);
+useEffect(()=>{
+  if (applyFilters) {
+    setSearchCount(applyFilters(data).length);
+  }
+},[applyFilters]);
+  
+
   return (
     <div className="calling-list-container">
       {loading ? (
@@ -903,21 +922,30 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                         />
                       </td>
                     ) : null}
-                     <td className="tabledata">{index + 1}</td>
+                  <td
+                          className="tabledata "
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                         {calculateRowIndex(index)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{calculateRowIndex(index)}</span>
+                          </div>
+                        </td>
 
                     <td
                       className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[15]}
+                     {highlightText(entry[15], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[15]}</span>
+                        <span className="tooltiptext">{highlightText(entry[15], searchTerm)}</span>
                       </div>
                     </td>
 
                     {(userType === "TeamLeader" || userType === "Manager") && (
-                      <td className="tabledata">{entry[73]}</td>
+                      <td className="tabledata">{highlightText(entry[73], searchTerm)}</td>
                     )}
 
                     <td
@@ -925,9 +953,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[0]}
+                       {highlightText(entry[0], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[0]}</span>
+                        <span className="tooltiptext">{highlightText(entry[0], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -936,9 +964,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[4]}
+                       {highlightText(entry[4], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[4]}</span>
+                        <span className="tooltiptext">{highlightText(entry[4], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -947,9 +975,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[3]}
+                      {highlightText(entry[3], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[3]}</span>
+                        <span className="tooltiptext">{highlightText(entry[3], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -958,9 +986,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[6]}
+                      {highlightText(entry[6], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[6]}</span>
+                        <span className="tooltiptext">{highlightText(entry[6], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -969,9 +997,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[1]}
+                      {highlightText(entry[1], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[1]}</span>
+                        <span className="tooltiptext">{highlightText(entry[1], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -980,9 +1008,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[2]}
+                       {highlightText(entry[2], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[2]}</span>
+                        <span className="tooltiptext">{highlightText(entry[2], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -991,9 +1019,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[5]}
+                      {highlightText(entry[5], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[5]}</span>
+                        <span className="tooltiptext">{highlightText(entry[5], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1002,9 +1030,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[7]}
+                      {highlightText(entry[7], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[7]}</span>
+                        <span className="tooltiptext">{highlightText(entry[7], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1013,9 +1041,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[8]}
+                      {highlightText(entry[8], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[8]}</span>
+                        <span className="tooltiptext">{highlightText(entry[8], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1024,9 +1052,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[9]}
+                      {highlightText(entry[9], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[9]}</span>
+                        <span className="tooltiptext">{highlightText(entry[9], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1035,9 +1063,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[10]}
+                      {highlightText(entry[10], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[10]}</span>
+                        <span className="tooltiptext">{highlightText(entry[10], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1046,9 +1074,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[11]}
+                       {highlightText(entry[11], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[11]}</span>
+                        <span className="tooltiptext">{highlightText(entry[11], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1057,9 +1085,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[12]}
+                     {highlightText(entry[12], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[12]}</span>
+                        <span className="tooltiptext">{highlightText(entry[12], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1068,9 +1096,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[13]}
+                   {highlightText(entry[13], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[13]}</span>
+                        <span className="tooltiptext">{highlightText(entry[13], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1079,9 +1107,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[14]}
+                      {highlightText(entry[14], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[14]}</span>
+                        <span className="tooltiptext">{highlightText(entry[14], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1090,9 +1118,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[16]}
+                      {highlightText(entry[16], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[16]}</span>
+                        <span className="tooltiptext">{highlightText(entry[16], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1101,9 +1129,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[17]}
+                      {highlightText(entry[17], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[17]}</span>
+                        <span className="tooltiptext">{highlightText(entry[17], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1112,9 +1140,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[18]}
+                      {highlightText(entry[18], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[18]}</span>
+                        <span className="tooltiptext">{highlightText(entry[18], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1123,9 +1151,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[19]}
+                     {highlightText(entry[19], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[19]}</span>
+                        <span className="tooltiptext">{highlightText(entry[19], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1134,9 +1162,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[20]}
+                      {highlightText(entry[20], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[20]}</span>
+                        <span className="tooltiptext">{highlightText(entry[20], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1145,9 +1173,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[21]}
+                      {highlightText(entry[21], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[21]}</span>
+                        <span className="tooltiptext">{highlightText(entry[21], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1156,9 +1184,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[22]}
+                      {highlightText(entry[22], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[22]}</span>
+                        <span className="tooltiptext">{highlightText(entry[22], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1167,9 +1195,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[23]}
+                       {highlightText(entry[23], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[23]}</span>
+                        <span className="tooltiptext">{highlightText(entry[23], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1178,9 +1206,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[24]}
+                      {highlightText(entry[24], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[24]}</span>
+                        <span className="tooltiptext">{highlightText(entry[24], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1189,9 +1217,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[25]}
+                      {highlightText(entry[25], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[25]}</span>
+                        <span className="tooltiptext">{highlightText(entry[25], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1200,9 +1228,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[26]}
+                     {highlightText(entry[26], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[26]}</span>
+                        <span className="tooltiptext">{highlightText(entry[26], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1211,9 +1239,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[27]}
+                    {highlightText(entry[27], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[27]}</span>
+                        <span className="tooltiptext">{highlightText(entry[27], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1222,9 +1250,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[28]}
+                     {highlightText(entry[28], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[28]}</span>
+                        <span className="tooltiptext">{highlightText(entry[28], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1233,9 +1261,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[29]}
+                      {highlightText(entry[29], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[29]}</span>
+                        <span className="tooltiptext">{highlightText(entry[29], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1244,9 +1272,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[30]}
+                      {highlightText(entry[30], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[30]}</span>
+                        <span className="tooltiptext">{highlightText(entry[30], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1255,9 +1283,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[31]}
+                      {highlightText(entry[31], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[31]}</span>
+                        <span className="tooltiptext">{highlightText(entry[31], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1266,9 +1294,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[32]}
+                     {highlightText(entry[32], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[32]}</span>
+                        <span className="tooltiptext">{highlightText(entry[32], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1277,9 +1305,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[33]}
+                      {highlightText(entry[33], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[33]}</span>
+                        <span className="tooltiptext">{highlightText(entry[33], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1287,20 +1315,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[34]}
+                      {highlightText(entry[34], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[34]}</span>
-                      </div>
-                    </td>
-
-                    <td
-                      className="tabledata"
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {entry[35]}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{entry[35]}</span>
+                        <span className="tooltiptext">{highlightText(entry[34], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1309,9 +1326,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[36]}
+                     {highlightText(entry[35], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[36]}</span>
+                        <span className="tooltiptext">{highlightText(entry[35], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1320,39 +1337,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[37]}
+                      {highlightText(entry[36], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[37]}</span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata"
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {entry[38]}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{entry[38]}</span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata"
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {entry[39]}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{entry[39]}</span>
-                      </div>
-                    </td>
-                    <td
-                      className="tabledata"
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {entry[40]}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{entry[40]}</span>
+                        <span className="tooltiptext">{highlightText(entry[36], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1361,9 +1348,39 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[41]}
+                      {highlightText(entry[37], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[41]}</span>
+                        <span className="tooltiptext">{highlightText(entry[37], searchTerm)}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                    {highlightText(entry[38], searchTerm)}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{highlightText(entry[38], searchTerm)}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {highlightText(entry[39], searchTerm)}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{highlightText(entry[39], searchTerm)}</span>
+                      </div>
+                    </td>
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {highlightText(entry[40], searchTerm)}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{highlightText(entry[40], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1372,9 +1389,20 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[42]}
+                      {highlightText(entry[41], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[42]}</span>
+                        <span className="tooltiptext">{highlightText(entry[41], searchTerm)}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                       {highlightText(entry[42], searchTerm)}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{highlightText(entry[42], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1382,9 +1410,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[43]}
+                      {highlightText(entry[43], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[43]}</span>
+                        <span className="tooltiptext">{highlightText(entry[43], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1392,9 +1420,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[44]}
+                      {highlightText(entry[44], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[44]}</span>
+                        <span className="tooltiptext">{highlightText(entry[44], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1402,9 +1430,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[45]}
+                     {highlightText(entry[45], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[45]}</span>
+                        <span className="tooltiptext">{highlightText(entry[45], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1412,9 +1440,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[46]}
+                     {highlightText(entry[46], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[46]}</span>
+                        <span className="tooltiptext">{highlightText(entry[46], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1422,9 +1450,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[47]}
+                      {highlightText(entry[47], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[47]}</span>
+                        <span className="tooltiptext">{highlightText(entry[47], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1432,9 +1460,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[48]}
+                     {highlightText(entry[48], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[48]}</span>
+                        <span className="tooltiptext">{highlightText(entry[48], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1442,9 +1470,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[49]}
+                      {highlightText(entry[49], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[49]}</span>
+                        <span className="tooltiptext">{highlightText(entry[49], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1452,9 +1480,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[50]}
+                       {highlightText(entry[50], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[50]}</span>
+                        <span className="tooltiptext">{highlightText(entry[50], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1462,9 +1490,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[51]}
+                       {highlightText(entry[51], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[51]}</span>
+                        <span className="tooltiptext">{highlightText(entry[51], searchTerm)}</span>
                       </div>
                     </td>
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
@@ -1576,9 +1604,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[59]}
+                      {highlightText(entry[59], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[59]}</span>
+                        <span className="tooltiptext">{highlightText(entry[59], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1586,20 +1614,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[60]}
+                       {highlightText(entry[60], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[60]}</span>
-                      </div>
-                    </td>
-
-                    <td
-                      className="tabledata"
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {entry[61]}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{entry[61]}</span>
+                        <span className="tooltiptext">{highlightText(entry[60], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -1608,9 +1625,20 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[62]}
+                      {highlightText(entry[61], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[62]}</span>
+                        <span className="tooltiptext">{highlightText(entry[61], searchTerm)}</span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                     {highlightText(entry[62], searchTerm)}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{highlightText(entry[62], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1618,9 +1646,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[63]}
+                      {highlightText(entry[63], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[63]}</span>
+                        <span className="tooltiptext">{highlightText(entry[63], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1628,9 +1656,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[64]}
+                     {highlightText(entry[64], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[64]}</span>
+                        <span className="tooltiptext">{highlightText(entry[64], searchTerm)}</span>
                       </div>
                     </td>
                     {/* <td className="tabledata">
@@ -1641,9 +1669,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[65]}
+                      {highlightText(entry[65], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[65]}</span>
+                        <span className="tooltiptext">{highlightText(entry[65], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1651,9 +1679,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[66]}
+                      {highlightText(entry[66], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[66]}</span>
+                        <span className="tooltiptext">{highlightText(entry[66], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1661,9 +1689,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[67]}
+                     {highlightText(entry[67], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[67]}</span>
+                        <span className="tooltiptext">{highlightText(entry[67], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1671,9 +1699,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[68]}
+                     {highlightText(entry[68], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[68]}</span>
+                        <span className="tooltiptext">{highlightText(entry[68], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1681,9 +1709,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[69]}
+                      {highlightText(entry[69], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[69]}</span>
+                        <span className="tooltiptext">{highlightText(entry[69], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1691,9 +1719,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[70]}
+                      {highlightText(entry[70], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[70]}</span>
+                        <span className="tooltiptext">{highlightText(entry[70], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1701,9 +1729,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[71]}
+                      {highlightText(entry[71], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[71]}</span>
+                        <span className="tooltiptext">{highlightText(entry[71], searchTerm)}</span>
                       </div>
                     </td>
                     <td
@@ -1711,9 +1739,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[72]}
+                      {highlightText(entry[72], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[72]}</span>
+                        <span className="tooltiptext">{highlightText(entry[72], searchTerm)}</span>
                       </div>
                     </td>
 
@@ -2007,6 +2035,22 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
             ) : null}
           </div>
 
+          <div className="search-count-last-div">
+        Search Results : {searchCount}
+        </div>
+
+        <Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper 
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: 'center',
+        }}
+      />
           {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
           Subcategory:-ResumeModel(added) End LineNo:-567 Date:-02/07 */}
           <Modal show={showDocumentModal} onHide={closeDocumentModal} size="md">
@@ -2043,18 +2087,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
           )}
         </>
       )}
-       <Pagination
-        current={currentPage}
-        total={totalRecords}
-        pageSize={pageSize}
-        showSizeChanger
-        showQuickJumper 
-        onShowSizeChange={handleSizeChange}
-        onChange={handlePageChange}
-        style={{
-          justifyContent: 'center',
-        }}
-      />
+     
     </div>
   );
 };

@@ -10,6 +10,7 @@ import { Button } from "react-bootstrap";
 import axios from "../api/api";
 import { toast } from "react-toastify";
 import { Pagination } from "antd";
+import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 
 const CallingExcelList = ({
   updateState,
@@ -17,7 +18,7 @@ const CallingExcelList = ({
   onCloseTable,
   loginEmployeeName,
   // updated by sahil karnekar
-   toggleSection,
+  toggleSection,
   onsuccessfulDataAdditions,
   // toggleSection,
   viewsSearchTerm,
@@ -42,6 +43,7 @@ const CallingExcelList = ({
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [selectedCandidateResume, setSelectedCandidateResume] = useState("");
+  const [searchCount, setSearchCount] = useState(0);
   // Arshad Attar Added This Code On 18-11-2024
   // Added New Share Data Frontend Logic line 44 to 50
   const [showShareButton, setShowShareButton] = useState(true);
@@ -62,13 +64,16 @@ const CallingExcelList = ({
 
   const fetchUpdatedData = (page, size) => {
     setLoading(true); // Set loading to true before fetching the updated data
-    fetch(`${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?page=${page}&size=${size}`)
+    fetch(
+      `${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?page=${page}&size=${size}`
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
         setCallingList(data.content);
         setFilteredCallingList(data.content);
         setTotalRecords(data.totalElements);
+        setSearchCount(data.length);
         setLoading(false); // Set loading to false when data is successfully fetched
       })
       .catch((error) => {
@@ -80,7 +85,7 @@ const CallingExcelList = ({
   useEffect(() => {
     // Fetch initial data on component mount
     fetchUpdatedData(currentPage, pageSize);
-  }, [employeeId, userType,currentPage, pageSize]);
+  }, [employeeId, userType, currentPage, pageSize]);
 
   useEffect(() => {
     const options = Object.keys(filteredCallingList[0] || {}).filter(
@@ -145,11 +150,10 @@ const CallingExcelList = ({
 
   useEffect(() => {
     if (viewsSearchTerm) {
-        setSearchTerm(viewsSearchTerm); // Sync viewsSearchTerm to local searchTerm
-        filterData(); // Re-trigger data filtering
+      setSearchTerm(viewsSearchTerm); // Sync viewsSearchTerm to local searchTerm
+      filterData(); // Re-trigger data filtering
     }
-}, [viewsSearchTerm]);
-
+  }, [viewsSearchTerm]);
 
   useEffect(() => {
     filterData();
@@ -168,7 +172,8 @@ const CallingExcelList = ({
         (item.extra7 && item.extra7.toLowerCase().includes(searchTermLower)) ||
         (item.extra8 && item.extra8.toLowerCase().includes(searchTermLower)) ||
         (item.extra9 && item.extra9.toLowerCase().includes(searchTermLower)) ||
-        (item.excelFileUploadDate && item.excelFileUploadDate.toLowerCase().includes(searchTermLower)) ||
+        (item.excelFileUploadDate &&
+          item.excelFileUploadDate.toLowerCase().includes(searchTermLower)) ||
         (item.extra10 &&
           item.extra10.toLowerCase().includes(searchTermLower)) ||
         (item.date && item.date.toLowerCase().includes(searchTermLower)) ||
@@ -293,6 +298,7 @@ const CallingExcelList = ({
       );
     });
     setFilteredCallingList(filtered);
+    setSearchCount(filtered.length);
   }, [searchTerm, callingList]);
 
   useEffect(() => {
@@ -517,7 +523,9 @@ const CallingExcelList = ({
   };
 
   const handleUpdateSuccess = (page, size) => {
-    fetch(`${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?page=${page}&size=${size}`)
+    fetch(
+      `${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?page=${page}&size=${size}`
+    )
       .then((response) => response.json())
       .then((data) => {
         setCallingList(data.content);
@@ -727,7 +735,7 @@ const CallingExcelList = ({
     console.log("Link Come here....");
     setSelectedCandidate(candidateData);
     // updated by sahil karnekar
-     toggleSection(false);
+    toggleSection(false);
   };
 
   const openModal = (candidate) => {
@@ -797,7 +805,7 @@ const CallingExcelList = ({
           <div dangerouslySetInnerHTML={{ __html: formattedMessage }} />
         );
 
-        fetchUpdatedData(currentPage,pageSize);
+        fetchUpdatedData(currentPage, pageSize);
       } else {
         toast.error("Error merging resumes: " + response.statusText);
       }
@@ -828,9 +836,9 @@ const CallingExcelList = ({
   const [expandedTeamLeaderId, setExpandedTeamLeaderId] = useState(null);
   const [customRange, setCustomRange] = useState({ start: null, end: null });
   const [customStart, setCustomStart] = useState("");
-const [customEnd, setCustomEnd] = useState("");
+  const [customEnd, setCustomEnd] = useState("");
 
-// Ensure validation for custom inputs
+  // Ensure validation for custom inputs
 
   // useEffect(() => {
   //   if (userType) {
@@ -1057,7 +1065,6 @@ const [customEnd, setCustomEnd] = useState("");
   //   } catch (error) {}
   // };
 
-
   // displya range For Select Candidates , Comment by Arshad On 19-11-2024
   // const handleRangeSelection = (startIndex, endIndex) => {
   //   if (filteredCallingList.length === 0) {
@@ -1068,26 +1075,29 @@ const [customEnd, setCustomEnd] = useState("");
   //   const sortedList = [...filteredCallingList].sort(
   //     (a, b) => a.candidateId - b.candidateId
   //   );
-  
+
   //   // Get the range of candidate IDs
   //   const selectedIds = sortedList
   //     .slice(startIndex - 1, endIndex) // Adjust to zero-based indexing
   //     .map((item) => item.candidateId);
-  
+
   //   setSelectedRows(selectedIds); // Update the selected rows with candidate IDs
   // };
-  
 
- // added by sahil karnekar date 4-12-2024
- const handlePageChange = (page) => {
-  setCurrentPage(page);
-};
+  // added by sahil karnekar date 4-12-2024
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
-const handleSizeChange = (current, size) => {
-  setPageSize(size); // Update the page size
-  setCurrentPage(1); // Reset to the first page after page size changes
-};
-  
+  const handleSizeChange = (current, size) => {
+    setPageSize(size); // Update the page size
+    setCurrentPage(1); // Reset to the first page after page size changes
+  };
+
+  const calculateRowIndex = (index) => {
+    return (currentPage - 1) * pageSize + index + 1;
+  };
+
   return (
     <div className="App-after1">
       {loading ? (
@@ -1127,7 +1137,7 @@ const handleSizeChange = (current, size) => {
                   {/* )} */}
                 </div>
                 <h1 className="excel-calling-data-heading">Excel Data</h1>
-                
+
                 <div style={{ display: "flex", gap: "5px" }}>
                   {/* // Arshad Attar Added This Code On 18-11-2024
                     // Added New Share Data Frontend Logic line 1104 to 1144 */}
@@ -1210,7 +1220,6 @@ const handleSizeChange = (current, size) => {
     </div>
   </div>
 )} */}
-
 
               {showFilterSection && (
                 <div className="filter-section">
@@ -1357,17 +1366,15 @@ const handleSizeChange = (current, size) => {
                             />
                           </td>
                         ) : null}
-
-                        <td className="tabledata">{index + 1}</td>
                         <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.date} {item.candidateAddedTime}
+                          {calculateRowIndex(index)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.date} {item.candidateAddedTime}
+                              {calculateRowIndex(index)}
                             </span>
                           </div>
                         </td>
@@ -1376,10 +1383,26 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.candidateName}
+                              { highlightText(item.date || "", searchTerm)  } -  {" "}  {item.candidateAddedTime}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{highlightText(
+                                item.date.toString().toLowerCase() || "",
+                                searchTerm
+                              )}  - {" "}  {item.candidateAddedTime}</span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata "
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                           {highlightText(item.candidateName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.candidateName}
+                              {highlightText(
+                                item.candidateName || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1388,10 +1411,13 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.candidateEmail}
+                            {highlightText(item.candidateEmail || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.candidateEmail}
+                              {highlightText(
+                                item.candidateEmail || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1400,10 +1426,13 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.contactNumber}
+                            {highlightText(item.contactNumber || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.contactNumber}
+                              {highlightText(
+                                item.contactNumber || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1412,10 +1441,13 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.jobDesignation}
+                           {highlightText(item.jobDesignation || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.jobDesignation}
+                              {highlightText(
+                                item.jobDesignation || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1439,10 +1471,13 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.companyName}
+                          {highlightText(item.companyName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.companyName}
+                              {highlightText(
+                                item.companyName || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1452,10 +1487,13 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.noticePeriod}
+                          {highlightText(item.noticePeriod || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.noticePeriod}
+                              {highlightText(
+                                item.noticePeriod || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1495,6 +1533,10 @@ const handleSizeChange = (current, size) => {
                   </tbody>
                 </table>
               </div>
+
+              <div className="search-count-last-div">
+        Search Results : {searchCount}
+        </div>
 
               {/*Arshad Attar Added This Code On 18-11-2024
                Added New Share Data Frontend Logic line 1444 to 1572 */}
@@ -1718,7 +1760,7 @@ const handleSizeChange = (current, size) => {
                   </div>
 
                   <div className="popup-section">
-                  <p>
+                    <p>
                       <strong>Excel Upload Date: </strong>
                       {showModal?.excelFileUploadDate || "-"}
                     </p>
@@ -1784,7 +1826,10 @@ const handleSizeChange = (current, size) => {
           )}
           {selectedCandidate && (
             <CallingTrackerForm
-            initialData={{ ...selectedCandidate, sourceComponent: "CallingExcelList" }}
+              initialData={{
+                ...selectedCandidate,
+                sourceComponent: "CallingExcelList",
+              }}
               loginEmployeeName={loginEmployeeName}
               onClose={() => setSelectedCandidate(null)}
               onSuccess={handleUpdateSuccess}
@@ -1794,16 +1839,16 @@ const handleSizeChange = (current, size) => {
         </>
       )}
 
-<Pagination
+      <Pagination
         current={currentPage}
         total={totalRecords}
         pageSize={pageSize}
         showSizeChanger
-        showQuickJumper 
+        showQuickJumper
         onShowSizeChange={handleSizeChange}
         onChange={handlePageChange}
         style={{
-          justifyContent: 'center',
+          justifyContent: "center",
         }}
       />
     </div>
