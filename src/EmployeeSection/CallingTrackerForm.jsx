@@ -498,7 +498,7 @@ const CallingTrackerForm = ({
       }
 
       const response = await axios.post(
-        `${API_BASE_URL}/calling-tracker`,
+        `${API_BASE_URL}/calling-tracker/${employeeId}/${userType}`,
         dataToUpdate,
         {
           headers: {
@@ -953,7 +953,7 @@ const CallingTrackerForm = ({
                 <label>Upload Resume</label>
                 <div
                   className="calling-tracker-field-sub-div"
-                  style={{ display: "flex",flexDirection:"row"}}
+                  style={{ display: "flex", flexDirection: "row" }}
                 >
                   {/* <input
                     style={{ width: "-webkit-fill-available" }}
@@ -985,23 +985,22 @@ const CallingTrackerForm = ({
                   {errors.resume && (
                     <div className="error-message">{errors.resume}</div>
                   )}
-                 <button className="calling-tracker-popup-open-btn">
-  <i
-    className="fas fa-eye"
-    onClick={() => {
-      if (resumeUrl) {
-        setIsModalOpen(true);
-      } else if (!resumeUrl && initialData.resume) {
-        const base64Resume = `data:application/pdf;base64,${initialData.resume}`;
-        setResumeUrl(base64Resume); // Set the Base64 URL for the resume
-        setIsModalOpen(true); // Open the modal immediately after setting the URL
-      } else {
-        alert("Please upload a resume first.");
-      }
-    }}
-  ></i>
-</button>
-
+                  <button className="calling-tracker-popup-open-btn">
+                    <i
+                      className="fas fa-eye"
+                      onClick={() => {
+                        if (resumeUrl) {
+                          setIsModalOpen(true);
+                        } else if (!resumeUrl && initialData.resume) {
+                          const base64Resume = `data:application/pdf;base64,${initialData.resume}`;
+                          setResumeUrl(base64Resume); // Set the Base64 URL for the resume
+                          setIsModalOpen(true); // Open the modal immediately after setting the URL
+                        } else {
+                          alert("Please upload a resume first.");
+                        }
+                      }}
+                    ></i>
+                  </button>
                 </div>
               </div>
             </div>

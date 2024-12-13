@@ -234,7 +234,7 @@ const CandidateHistoryTracker = () => {
     setSelectAll(!selectAll);
   };
 
-// conditional case created by sahil karnekar date 18-11-2024
+  // conditional case created by sahil karnekar date 18-11-2024
 
   const getDisplayName = (filter) => {
     switch (filter) {
@@ -282,18 +282,22 @@ const CandidateHistoryTracker = () => {
         return filter; // if no match, return the filter name itself
     }
   };
-  
 
   const fetchData = async () => {
     if (startDate && endDate && openDropdown !== null) {
+      console.log(" openDropdown --  " + openDropdown);
+
       try {
-        const response = await axios.get(`${API_BASE_URL}/candidate-history-tracker`, {
-          params: {
-            startDate: startDate,
-            endDate: endDate,
-            status: openDropdown,
-          },
-        });
+        const response = await axios.get(
+          `${API_BASE_URL}/candidate-history-tracker`,
+          {
+            params: {
+              startDate: startDate,
+              endDate: endDate,
+              status: openDropdown,
+            },
+          }
+        );
         console.log("API response:", response.data);
         setData(response.data);
         console.log(data);
@@ -304,156 +308,149 @@ const CandidateHistoryTracker = () => {
       console.warn("Missing parameters: startDate, endDate, or openDropdown");
     }
   };
-  
 
   return (
     <div>
       <div className="HeadingHistory">Candidate History</div>
       {/* here are some fields updated by sahil karnekar date 19-11-2024 */}
       <div className="setborderdiv">
-      <div className="tracker-date-report-option">
-        <label
-        className="PI-radio-label"
-        >
-          <input
-            type="radio"
-            value="Current Month"
-            id="CurrentMonth"
-            name="reportOption"
-            onClick={handleDateRangeChange}
-          />
-          Current Month
-        </label>
-        <label
-        className="PI-radio-label"
-        >
-          <input
-            type="radio"
-            value="Last Month"
-            id="LastMonth"
-            name="reportOption"
-            onClick={handleDateRangeChange}
-          />
-          Last Month
-        </label>
-        <label
-        className="PI-radio-label"
-        >
-          <input
-            type="radio"
-            value="Last 3 Months"
-            id="Last3Months"
-            name="reportOption"
-            onClick={handleDateRangeChange}
-          />
-          Last 3 Months
-        </label>
-        <label
-        className="PI-radio-label"
-        >
-          <input
-            type="radio"
-            value="Last 6 Months"
-            name="reportOption"
-            id="Last6Months"
-            onClick={handleDateRangeChange}
-          />
-          Last 6 Months
-        </label>
-        <label
-        className="PI-radio-label"
-        >
-          <input
-            type="radio"
-            value="Last 1 Year"
-            name="reportOption"
-            id="Last1Year"
-            onClick={handleDateRangeChange}
-          />
-          Last 1 Year
-        </label>
-        <label
-        className="PI-radio-label"
-        >
-          <input
-            type="radio"
-            value="custom"
-            checked={dateRange === "custom"}
-            name="reportOption"
-            id="CustomDate"
-            onClick={handleDateRangeChange}
-          />
-          Custom Date
-        </label>
-        <div>
-          {showCustomDiv && (
-            <div>
-              <div className="date-inputs">
-                <label>
-                  Start Date:
-                  <input
-                    type="date"
-                    value={customStartDate}
-                    onChange={handleCustomStartDateChange}
-                  />
-                </label>
-                <label>
-                  End Date:
-                  <input
-                    type="date"
-                    value={customEndDate}
-                    onChange={handleCustomEndDateChange}
-                  />
-                </label>
-
-                <div className="filterDataButton">
-                  <button className="Candi-History-tracker-button">
-                    Filter Data
-                  </button>
+        <div className="tracker-date-report-option">
+          <div className="histry-date-div">
+          <label className="PI-radio-label">
+            <input
+              type="radio"
+              value="Current Month"
+              id="CurrentMonth"
+              name="reportOption"
+              onClick={handleDateRangeChange}
+            />
+            Current Month
+          </label>
+          <label className="PI-radio-label">
+            <input
+              type="radio"
+              value="Last Month"
+              id="LastMonth"
+              name="reportOption"
+              onClick={handleDateRangeChange}
+            />
+            Last Month
+          </label>
+          <label className="PI-radio-label">
+            <input
+              type="radio"
+              value="Last 3 Months"
+              id="Last3Months"
+              name="reportOption"
+              onClick={handleDateRangeChange}
+            />
+            Last 3 Months
+          </label>
+          <label className="PI-radio-label">
+            <input
+              type="radio"
+              value="Last 6 Months"
+              name="reportOption"
+              id="Last6Months"
+              onClick={handleDateRangeChange}
+            />
+            Last 6 Months
+          </label>
+          <label className="PI-radio-label">
+            <input
+              type="radio"
+              value="Last 1 Year"
+              name="reportOption"
+              id="Last1Year"
+              onClick={handleDateRangeChange}
+            />
+            Last 1 Year
+          </label>
+          <label className="PI-radio-label">
+            <input
+              type="radio"
+              value="custom"
+              checked={dateRange === "custom"}
+              name="reportOption"
+              id="CustomDate"
+              onClick={handleDateRangeChange}
+            />
+            Custom Date
+          </label>
+          </div>
+          <center>
+          <div className="history-tracker-custom-dates">
+            {showCustomDiv && (
+                <div className="date-inputs">
+                  <label>
+                    Start Date:
+                    </label>
+                    <input
+                      type="date"
+                      value={customStartDate}
+                      onChange={handleCustomStartDateChange}
+                    />
+                 
+                  <label>
+                    End Date:
+                    </label>
+                    <input
+                      type="date"
+                      value={customEndDate}
+                      onChange={handleCustomEndDateChange}
+                    />
+                
+                  {/* <div className="filterDataButton">
+                    <button className="Candi-History-tracker-button">
+                      Filter Data
+                    </button>
+                  </div> */}
                 </div>
+              
+            )}
+          </div>
+          </center>
+        </div>
+        {/* LINE 356 to 403 updated by sahil karnekar dat 18-11-2024 */}
+
+        <div className="history-button-main-div" >
+          <div className={`history-button-container`}>
+            {[
+              "Yet To Confirm", //1
+              "Interview Schedule", //2
+              "Attending After Some time", //3
+              "Shortlisted For Hr Round", //4
+              "Shortlisted For Technical Round",//5
+              "Shortlisted For L1 Round",//6
+              "Shortlisted For L2 Round",//7
+              "Shortlisted For L3 Round",//8
+              "Selected", //9
+              "Rejected", //10
+              "Hold", //11
+              "Joining", //12
+              "Drop Out", //13
+              "To Join", //14
+              "Joined", //15
+              "Not Joined", //16
+              "No Show", //17
+              "Active", //18
+              "Inactive", //19
+            ].map((label) => (
+              <div key={label} className="bha-dropdown">
+                <button
+                  className={`bhafilter-button ${
+                    openDropdown === label ? "active" : ""
+                  }`}
+                  onClick={() => handleDropdownToggle(label)}
+                >
+                  {label}
+                </button>
               </div>
-            </div>
-          )}
+            ))}
+          </div>
         </div>
       </div>
-      {/* LINE 356 to 403 updated by sahil karnekar dat 18-11-2024 */}
 
-
-      <div className="setNewButtonsClass">
-      <div className={`bhabutton-container`}>
-        {[
-          "Yet To Confirm",
-          "Interview Schedule",
-          "Attending After Some time",
-          "Shortlisted",
-          "Selected",
-          "Rejected",
-          "Hold",
-          // "Joining",
-          "Drop Out",
-          "To Join",
-          "Joined",
-          "Not Joined",
-          "No Show",
-          "Active",
-          "Inactive",
-        ].map((label) => (
-          <div key={label} className="bha-dropdown">
-            <button
-              className={`bhafilter-button ${
-                openDropdown === label ? "active" : ""
-              }`}
-              onClick={() => handleDropdownToggle(label)}
-            >
-              {label}
-            </button>
-          </div>
-        ))}
-      </div>
-      </div>
-      </div>
-
-      
       {openDropdown && (
         <div className="Candi-History-tracker-div">
           <div className="history-filtter-data-div">
@@ -512,7 +509,9 @@ const CandidateHistoryTracker = () => {
                   <input
                     type="checkbox"
                     value="extraCertificationCounts"
-                    checked={selectedFilters.includes("extraCertificationCounts")}
+                    checked={selectedFilters.includes(
+                      "extraCertificationCounts"
+                    )}
                     onChange={handleFilterChange}
                   />{" "}
                   Extra Certification
@@ -579,7 +578,9 @@ const CandidateHistoryTracker = () => {
                   <input
                     type="checkbox"
                     value="communicationRatingCounts"
-                    checked={selectedFilters.includes("communicationRatingCounts")}
+                    checked={selectedFilters.includes(
+                      "communicationRatingCounts"
+                    )}
                     onChange={handleFilterChange}
                   />{" "}
                   Communication Rating
@@ -605,7 +606,7 @@ const CandidateHistoryTracker = () => {
               </div>
 
               <div className="inner-Candi-History-tracker-div">
-              <label className="checkbox-label">
+                <label className="checkbox-label">
                   <input
                     type="checkbox"
                     value="sourceNameCounts"
@@ -665,7 +666,9 @@ const CandidateHistoryTracker = () => {
                   <input
                     type="checkbox"
                     value="requirementCompanyCounts"
-                    checked={selectedFilters.includes("requirementCompanyCounts")}
+                    checked={selectedFilters.includes(
+                      "requirementCompanyCounts"
+                    )}
                     onChange={handleFilterChange}
                   />{" "}
                   Requirement Company
@@ -731,11 +734,21 @@ const CandidateHistoryTracker = () => {
           return (
             <div className="can-history-filter-data" key={filter}>
               <div className="history-tracker-table-header">
-               <p> <strong>Company Name :</strong> {companyName}</p>
-               <p> <strong>Position :</strong> {position}</p>
-               <p><strong>Category :</strong> {openDropdown}</p>
-               <p><strong>Filtered Data by :</strong> {displayName}</p>
-               {/* <p> <strong>Data for : - </strong> {monthSelector}</p> */}
+                {/* <p>
+                  {" "}
+                  <strong>Company Name :</strong> {companyName}
+                </p>
+                <p>
+                  {" "}
+                  <strong>Position :</strong> {position}
+                </p> */}
+                <p>
+                  <strong>Category :</strong> {openDropdown}
+                </p>
+                <p>
+                  <strong>Filtered Data by :</strong> {displayName}
+                </p>
+                {/* <p> <strong>Data for : - </strong> {monthSelector}</p> */}
               </div>
               <div className="can-history-filter-data-content">
                 <div className="can-history-data-table-container">
@@ -743,153 +756,156 @@ const CandidateHistoryTracker = () => {
                     <thead>
                       <tr>
                         <th>{displayName}</th>
-                        <th>{openDropdown +" "+ "Count"}</th>
+                        <th>{openDropdown + " " + "Count"}</th>
                         <th>Total Count</th>
                         <th>Percentage</th>
                       </tr>
                     </thead>
                     <tbody>
                       {/* updated by sahil karnekar date 18-11-2024 */}
-                      {calculatePercentages(sortedData).map((item,index) => (
-                       (((item.gender !== '' && item.gender !== null) 
-                       && (item.communicationRating !== '' && item.communicationRating !== null) 
-                       && (item.companyType !== '' && item.companyType !== null) 
-                       && (item.distanceRange !== '' && item.distanceRange !== null) 
-                       && (item.extraCertification !== '' && item.extraCertification !== null) 
-                       && (item.holdingAnyOffer !== '' && item.holdingAnyOffer !== null) 
-                       && (item.incentiveRange !== '' && item.incentiveRange !== null) 
-                       && (item.jobDesignation !== '' && item.jobDesignation !== null) 
-                       && (item.lastCompany !== '' && item.lastCompany !== null) 
-                       && (item.maritalStatus !== '' && item.maritalStatus !== null) 
-                       && (item.onRole !== '' && item.onRole !== null) 
-                       && (item.pickUpAndDrop !== '' && item.pickUpAndDrop !== null) 
-                       && (item.qualification !== '' && item.qualification !== null) 
-                       && (item.requirementCompany !== '' && item.requirementCompany !== null) 
-                       && (item.salaryRange !== '' && item.salaryRange !== null) 
-                       && (item.sourceName !== '' && item.sourceName !== null) 
-                       && (item.tatReports !== '' && item.tatReports !== null) 
-          
-                      ) && (
-                       <tr
-                       key={index}
-                          // key={
-                          //   item.companyName ||
-                          //   item.ageRange ||
-                          //   item.sourceName ||
-                          //   item.certification ||
-                          //   item.reportName ||
-                          //   item.option ||
-                          //   item.rating ||
-                          //   item.maritalStatuses ||
-                          //   item.gender ||
-                          //   item.degree ||
-                          //   item.requirement ||
-                          //   item.recruiter ||
-                          //   item.period ||
-                          //   item.type ||
-                          //   item.role ||
-                          //   item.experience ||
-                          //   item.skill ||
-                          //   item.designation ||
-                          //   item.salaryRange ||
-                          //   item.distance ||
-                          //   item.department ||
-                          //   item.extraCertification
-                          // }
-                        >
-                          <td>
-                            {item.companyName ||
-                              item.ageRange ||
-                              item.sourceName ||
-                              item.reportName ||
-                              item.option ||
-                              item.communicationRating ||
-                              item.maritalStatus ||
-                              item.gender ||
-                              item.qualification ||
-                              item.requirementCompany ||
-                              item.recruiter ||
-                              item.noticePeriod ||
-                              item.type ||
-                              item.onRole ||
-                              item.experienceGroup ||
-                              item.skill ||
-                              item.jobDesignation ||
-                              item.salaryRange ||
-                              item.distanceRange ||
-                              item.department ||
-                              item.tat ||
-                              item.holdingAnyOffer ||
-                              item.position ||
-                              item.pickUpAndDrop ||
-                              item.joiningType ||
-                              item.lastCompany ||
-                              item.companyType ||
-                              item.experienceRange ||
-                              item.extraCertification ||
-                              item.tatReports ||
-                              item.incentiveRange
-                              }
-                          </td>
-                          <td>
-                            {/* updated by sahil karnekar date 18-11-2024 */}
-  {item.SelectedCount ??
-    item.YetToConfirmCount ??
-    item.InterviewScheduleCount ??
-    item.AttendingAfterSometimeCount ??
-    item.RejectedCount ??
-    item.HoldCount ??
-    item.DropOutCount ??
-    item.ToJoinCount ??
-    item.JoinedCount ??
-    item.NotJoinedCount ??
-    item.NoShowCount ??
-    item.ActiveCount ??
-    item.InactiveCount ??
-    item.ShortlistedCount
-    }
-</td>
+                      {calculatePercentages(sortedData).map(
+                        (item, index) =>
+                          item.gender !== "" &&
+                          item.gender !== null &&
+                          item.communicationRating !== "" &&
+                          item.communicationRating !== null &&
+                          item.companyType !== "" &&
+                          item.companyType !== null &&
+                          item.distanceRange !== "" &&
+                          item.distanceRange !== null &&
+                          item.extraCertification !== "" &&
+                          item.extraCertification !== null &&
+                          item.holdingAnyOffer !== "" &&
+                          item.holdingAnyOffer !== null &&
+                          item.incentiveRange !== "" &&
+                          item.incentiveRange !== null &&
+                          item.jobDesignation !== "" &&
+                          item.jobDesignation !== null &&
+                          item.lastCompany !== "" &&
+                          item.lastCompany !== null &&
+                          item.maritalStatus !== "" &&
+                          item.maritalStatus !== null &&
+                          item.onRole !== "" &&
+                          item.onRole !== null &&
+                          item.pickUpAndDrop !== "" &&
+                          item.pickUpAndDrop !== null &&
+                          item.qualification !== "" &&
+                          item.qualification !== null &&
+                          item.requirementCompany !== "" &&
+                          item.requirementCompany !== null &&
+                          item.salaryRange !== "" &&
+                          item.salaryRange !== null &&
+                          item.sourceName !== "" &&
+                          item.sourceName !== null &&
+                          item.tatReports !== "" &&
+                          item.tatReports !== null && (
+                            <tr
+                              key={index}
+                              
+                            >
+                              <td>
+                                {item.companyName ||
+                                  item.ageRange ||
+                                  item.sourceName ||
+                                  item.reportName ||
+                                  item.option ||
+                                  item.communicationRating ||
+                                  item.maritalStatus ||
+                                  item.gender ||
+                                  item.qualification ||
+                                  item.requirementCompany ||
+                                  item.recruiter ||
+                                  item.noticePeriod ||
+                                  item.type ||
+                                  item.onRole ||
+                                  item.experienceGroup ||
+                                  item.skill ||
+                                  item.jobDesignation ||
+                                  item.salaryRange ||
+                                  item.distanceRange ||
+                                  item.department ||
+                                  item.tat ||
+                                  item.holdingAnyOffer ||
+                                  item.position ||
+                                  item.pickUpAndDrop ||
+                                  item.joiningType ||
+                                  item.lastCompany ||
+                                  item.companyType ||
+                                  item.experienceRange ||
+                                  item.extraCertification ||
+                                  item.tatReports ||
+                                  item.incentiveRange}
+                              </td>
+                              <td>
+                                {/* updated by sahil karnekar date 18-11-2024 */}
+                                {item.SelectedCount ??
+                                  item.YetToConfirmCount ??
+                                  item.InterviewScheduleCount ??
+                                  item.AttendingAfterSometimeCount ??
+                                  item.RejectedCount ??
+                                  item.HoldCount ??
+                                  item.DropOutCount ??
+                                  item.ToJoinCount ??
+                                  item.JoinedCount ??
+                                  item.NotJoinedCount ??
+                                  item.NoShowCount ??
+                                  item.ActiveCount ??
+                                  item.InactiveCount ??
+                                  item.ShortlistedCount ??
+                                  item.Joining ??
+                                  item.hrRoundCount ??
+                                  item.technicalRoundCount ??
+                                  item.l1RoundCount ??
+                                  item.l2RoundCount ??
+                                  item.l3RoundCount}
+                              </td>
 
+                              <td>
+                                {item.totalCount ||
+                                  item.COUNT ||
+                                  item.countCallingTracker ||
+                                  item.candidateCount}
+                              </td>
+                              <td>
+                                {/* updated by sahil karnekar date 18-11-2024 */}
+                                {(() => {
+                                  // Array of all possible fields
+                                  const fields = [
+                                    item.SelectedCount,
+                                    item.YetToConfirmCount,
+                                    item.InterviewScheduleCount,
+                                    item.AttendingAfterSometimeCount,
+                                    item.RejectedCount,
+                                    item.HoldCount,
+                                    item.DropOutCount,
+                                    item.ToJoinCount,
+                                    item.JoinedCount,
+                                    item.NotJoinedCount,
+                                    item.NoShowCount,
+                                    item.ActiveCount,
+                                    item.InactiveCount,
+                                  ];
 
-                          <td>
-                            {item.totalCount ||
-                              item.COUNT ||
-                              item.countCallingTracker ||
-                              item.candidateCount}
-                          </td>
-                          <td>
-                            {/* updated by sahil karnekar date 18-11-2024 */}
-  {(() => {
-    // Array of all possible fields
-    const fields = [
-      item.SelectedCount,
-      item.YetToConfirmCount,
-      item.InterviewScheduleCount,
-      item.AttendingAfterSometimeCount,
-      item.RejectedCount,
-      item.HoldCount,
-      item.DropOutCount,
-      item.ToJoinCount,
-      item.JoinedCount,
-      item.NotJoinedCount,
-      item.NoShowCount,
-      item.ActiveCount,
-      item.InactiveCount,
-    ];
+                                  // Find the first non-null or non-undefined value
+                                  const firstNonNullValue =
+                                    fields.find((value) => value != null) ?? 0;
 
-    // Find the first non-null or non-undefined value
-    const firstNonNullValue = fields.find((value) => value != null) ?? 0;
+                                  // Calculate percentage
+                                  const percentage = (
+                                    (firstNonNullValue /
+                                      (item.totalCount ?? 1)) *
+                                    100
+                                  ).toFixed(2);
 
-    // Calculate percentage
-    const percentage = ((firstNonNullValue / (item.totalCount ?? 1)) * 100).toFixed(2);
-
-    // Return percentage with a fallback for empty data
-    return item.totalCount ? `${percentage} %` : "N/A";
-  })()}
-</td>
-
-                        </tr>))
-                      ))}
+                                  // Return percentage with a fallback for empty data
+                                  return item.totalCount
+                                    ? `${percentage} %`
+                                    : "N/A";
+                                })()}
+                              </td>
+                            </tr>
+                          )
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -907,7 +923,6 @@ const CandidateHistoryTracker = () => {
         })}
       </div>
       {popupData && (
-        
         <div className="can-history-popup">
           <div className="can-history-popup-content" ref={popupRef}>
             <button
@@ -923,147 +938,144 @@ const CandidateHistoryTracker = () => {
               <thead>
                 <tr>
                   <th>{getDisplayName(popupData.filter)}</th>
-                  <th>{openDropdown +" "+ "Count"}</th>
+                  <th>{openDropdown + " " + "Count"}</th>
                   <th>Total Count</th>
                   <th> Percentage</th>
                 </tr>
               </thead>
               <tbody>
                 {/* updated by sahil karnekar date 18-11-2024 */}
-                {popupData.data.map((item,index) => (
-                   (((item.gender !== '' && item.gender !== null) 
-                   && (item.communicationRating !== '' && item.communicationRating !== null) 
-                   && (item.companyType !== '' && item.companyType !== null) 
-                   && (item.distanceRange !== '' && item.distanceRange !== null) 
-                   && (item.extraCertification !== '' && item.extraCertification !== null) 
-                   && (item.holdingAnyOffer !== '' && item.holdingAnyOffer !== null) 
-                   && (item.incentiveRange !== '' && item.incentiveRange !== null) 
-                   && (item.jobDesignation !== '' && item.jobDesignation !== null) 
-                   && (item.lastCompany !== '' && item.lastCompany !== null) 
-                   && (item.maritalStatus !== '' && item.maritalStatus !== null) 
-                   && (item.onRole !== '' && item.onRole !== null) 
-                   && (item.pickUpAndDrop !== '' && item.pickUpAndDrop !== null) 
-                   && (item.qualification !== '' && item.qualification !== null) 
-                   && (item.requirementCompany !== '' && item.requirementCompany !== null) 
-                   && (item.salaryRange !== '' && item.salaryRange !== null) 
-                   && (item.sourceName !== '' && item.sourceName !== null) 
-                   && (item.tatReports !== '' && item.tatReports !== null) 
-      
-                  ) && (
-                  <tr
-                  key={index}
-                  // key={
-                  //   item.companyName ||
-                  //   item.ageRange ||
-                  //   item.sourceName ||
-                  //   item.certification ||
-                  //   item.reportName ||
-                  //   item.option ||
-                  //   item.rating ||
-                  //   item.maritalStatuses ||
-                  //   item.gender ||
-                  //   item.degree ||
-                  //   item.requirement ||
-                  //   item.recruiter ||
-                  //   item.period ||
-                  //   item.type ||
-                  //   item.role ||
-                  //   item.experience ||
-                  //   item.skill ||
-                  //   item.designation ||
-                  //   item.salaryRange ||
-                  //   item.distance ||
-                  //   item.department ||
-                  //   item.extraCertification
-                  // }
-                >
-                  <td>
-                    {item.companyName ||
-                              item.ageRange ||
-                              item.sourceName ||
-                              item.reportName ||
-                              item.option ||
-                              item.communicationRating ||
-                              item.maritalStatus ||
-                              item.gender ||
-                              item.qualification ||
-                              item.requirementCompany ||
-                              item.recruiter ||
-                              item.noticePeriod ||
-                              item.type ||
-                              item.onRole ||
-                              item.experienceGroup ||
-                              item.skill ||
-                              item.jobDesignation ||
-                              item.salaryRange ||
-                              item.distanceRange ||
-                              item.department ||
-                              item.tat ||
-                              item.holdingAnyOffer ||
-                              item.position ||
-                              item.pickUpAndDrop ||
-                              item.joiningType ||
-                              item.lastCompany ||
-                              item.companyType ||
-                              item.experienceRange ||
-                              item.extraCertification ||
-                              item.tatReports ||
-                              item.incentiveRange}
-                  </td>
-                  <td>
-  {item.SelectedCount ??
-    item.YetToConfirmCount ??
-    item.InterviewScheduleCount ??
-    item.AttendingAfterSometimeCount ??
-    item.RejectedCount ??
-    item.HoldCount ??
-    item.DropOutCount ??
-    item.ToJoinCount ??
-    item.JoinedCount ??
-    item.NotJoinedCount ??
-    item.NoShowCount ??
-    item.ActiveCount ??
-    item.InactiveCount ??
-    item.ShortlistedCount
-    }
-</td>
-                  <td>
-                    {item.totalCount ||
-                      item.COUNT ||
-                      item.countCallingTracker ||
-                      item.candidateCount}
-                  </td>
-                  <td>
-  {(() => {
-    // Array of all possible fields
-    const fields = [
-      item.SelectedCount,
-      item.YetToConfirmCount,
-      item.InterviewScheduleCount,
-      item.AttendingAfterSometimeCount,
-      item.RejectedCount,
-      item.HoldCount,
-      item.DropOutCount,
-      item.ToJoinCount,
-      item.JoinedCount,
-      item.NotJoinedCount,
-      item.NoShowCount,
-      item.ActiveCount,
-      item.InactiveCount,
-    ];
+                {popupData.data.map(
+                  (item, index) =>
+                    item.gender !== "" &&
+                    item.gender !== null &&
+                    item.communicationRating !== "" &&
+                    item.communicationRating !== null &&
+                    item.companyType !== "" &&
+                    item.companyType !== null &&
+                    item.distanceRange !== "" &&
+                    item.distanceRange !== null &&
+                    item.extraCertification !== "" &&
+                    item.extraCertification !== null &&
+                    item.holdingAnyOffer !== "" &&
+                    item.holdingAnyOffer !== null &&
+                    item.incentiveRange !== "" &&
+                    item.incentiveRange !== null &&
+                    item.jobDesignation !== "" &&
+                    item.jobDesignation !== null &&
+                    item.lastCompany !== "" &&
+                    item.lastCompany !== null &&
+                    item.maritalStatus !== "" &&
+                    item.maritalStatus !== null &&
+                    item.onRole !== "" &&
+                    item.onRole !== null &&
+                    item.pickUpAndDrop !== "" &&
+                    item.pickUpAndDrop !== null &&
+                    item.qualification !== "" &&
+                    item.qualification !== null &&
+                    item.requirementCompany !== "" &&
+                    item.requirementCompany !== null &&
+                    item.salaryRange !== "" &&
+                    item.salaryRange !== null &&
+                    item.sourceName !== "" &&
+                    item.sourceName !== null &&
+                    item.tatReports !== "" &&
+                    item.tatReports !== null && (
+                      <tr
+                        key={index}
+                      >
+                        <td>
+                          {item.companyName ||
+                            item.ageRange ||
+                            item.sourceName ||
+                            item.reportName ||
+                            item.option ||
+                            item.communicationRating ||
+                            item.maritalStatus ||
+                            item.gender ||
+                            item.qualification ||
+                            item.requirementCompany ||
+                            item.recruiter ||
+                            item.noticePeriod ||
+                            item.type ||
+                            item.onRole ||
+                            item.experienceGroup ||
+                            item.skill ||
+                            item.jobDesignation ||
+                            item.salaryRange ||
+                            item.distanceRange ||
+                            item.department ||
+                            item.tat ||
+                            item.holdingAnyOffer ||
+                            item.position ||
+                            item.pickUpAndDrop ||
+                            item.joiningType ||
+                            item.lastCompany ||
+                            item.companyType ||
+                            item.experienceRange ||
+                            item.extraCertification ||
+                            item.tatReports ||
+                            item.incentiveRange}
+                        </td>
+                        <td>
+                          {item.SelectedCount ??
+                            item.YetToConfirmCount ??
+                            item.InterviewScheduleCount ??
+                            item.AttendingAfterSometimeCount ??
+                            item.RejectedCount ??
+                            item.HoldCount ??
+                            item.DropOutCount ??
+                            item.ToJoinCount ??
+                            item.JoinedCount ??
+                            item.NotJoinedCount ??
+                            item.NoShowCount ??
+                            item.ActiveCount ??
+                            item.InactiveCount ??
+                            item.ShortlistedCount ??
+                            item.Joining}
+                        </td>
+                        <td>
+                          {item.totalCount ||
+                            item.COUNT ||
+                            item.countCallingTracker ||
+                            item.candidateCount}
+                        </td>
+                        <td>
+                          {(() => {
+                            // Array of all possible fields
+                            const fields = [
+                              item.SelectedCount,
+                              item.YetToConfirmCount,
+                              item.InterviewScheduleCount,
+                              item.AttendingAfterSometimeCount,
+                              item.RejectedCount,
+                              item.HoldCount,
+                              item.DropOutCount,
+                              item.ToJoinCount,
+                              item.JoinedCount,
+                              item.NotJoinedCount,
+                              item.NoShowCount,
+                              item.ActiveCount,
+                              item.InactiveCount,
+                            ];
 
-    // Find the first non-null or non-undefined value
-    const firstNonNullValue = fields.find((value) => value != null) ?? 0;
+                            // Find the first non-null or non-undefined value
+                            const firstNonNullValue =
+                              fields.find((value) => value != null) ?? 0;
 
-    // Calculate percentage
-    const percentage = ((firstNonNullValue / (item.totalCount ?? 1)) * 100).toFixed(2);
+                            // Calculate percentage
+                            const percentage = (
+                              (firstNonNullValue / (item.totalCount ?? 1)) *
+                              100
+                            ).toFixed(2);
 
-    // Return percentage with a fallback for empty data
-    return item.totalCount ? `${percentage} %` : "N/A";
-  })()}
-</td>
-                </tr>))
-                ))}
+                            // Return percentage with a fallback for empty data
+                            return item.totalCount ? `${percentage} %` : "N/A";
+                          })()}
+                        </td>
+                      </tr>
+                    )
+                )}
               </tbody>
             </table>
           </div>

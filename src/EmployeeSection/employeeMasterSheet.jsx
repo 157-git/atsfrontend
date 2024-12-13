@@ -208,7 +208,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
 
   useEffect(() => {
     fetchData(currentPage, pageSize);
-  }, [employeeId,currentPage, pageSize]);
+  }, [employeeId, currentPage, pageSize]);
 
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_54
   const fetchManager = async () => {
@@ -602,8 +602,8 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
     return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
   };
 
-   // added by sahil karnekar date 4-12-2024
-   const handlePageChange = (page) => {
+  // added by sahil karnekar date 4-12-2024
+  const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
@@ -617,15 +617,14 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   };
 
   console.log(Object.keys(data).length);
-  console.log(typeof(data));
+  console.log(typeof data);
 
   console.log(applyFilters(data).length);
-useEffect(()=>{
-  if (applyFilters) {
-    setSearchCount(applyFilters(data).length);
-  }
-},[applyFilters]);
-  
+  useEffect(() => {
+    if (applyFilters) {
+      setSearchCount(applyFilters(data).length);
+    }
+  }, [applyFilters]);
 
   return (
     <div className="calling-list-container">
@@ -805,11 +804,8 @@ useEffect(()=>{
                       />
                     </th>
                   ) : null}
-  <th className="attendanceheading">Sr No.</th>
-                  <th className="attendanceheading">Emp ID</th>
-                  {(userType === "TeamLeader" || userType === "Manager") && (
-                    <th className="attendanceheading">Team Leader Id</th>
-                  )}
+                  <th className="attendanceheading">Sr No.</th>
+
                   <th className="attendanceheading">Candidate ID</th>
                   <th className="attendanceheading">Candidate Name</th>
                   <th className="attendanceheading">Candidate Email</th>
@@ -818,15 +814,19 @@ useEffect(()=>{
                   <th className="attendanceheading">Calling Feedback</th>
                   <th className="attendanceheading">Communication Rating</th>
                   <th className="attendanceheading">Current Location</th>
-                  <th className="attendanceheading">Date</th>
+                  <th className="attendanceheading">Added Date & time </th>
                   <th className="attendanceheading">Job Designation</th>
+                  {(userType === "TeamLeader" || userType === "Manager") && (
+                    <th className="attendanceheading">Team Leader Id</th>
+                  )}
+                  <th className="attendanceheading">Emp ID</th>
                   <th className="attendanceheading">Recruiter Name</th>
                   <th className="attendanceheading">Applying Company</th>
                   <th className="attendanceheading">Job Id</th>
                   <th className="attendanceheading">Interested Or Not</th>
                   <th className="attendanceheading">Source Name</th>
                   <th className="attendanceheading">Line Up ID</th>
-                  <th className="attendanceheading">Added Time</th>
+
                   <th className="attendanceheading">Full Address</th>
                   <th className="attendanceheading">Incentive</th>
                   <th className="attendanceheading">Old Employee Id</th>
@@ -922,40 +922,28 @@ useEffect(()=>{
                         />
                       </td>
                     ) : null}
-                  <td
-                          className="tabledata "
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                         {calculateRowIndex(index)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{calculateRowIndex(index)}</span>
-                          </div>
-                        </td>
-
                     <td
-                      className="tabledata"
+                      className="tabledata "
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(entry[15], searchTerm)}
+                      {calculateRowIndex(index)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[15], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {calculateRowIndex(index)}
+                        </span>
                       </div>
                     </td>
-
-                    {(userType === "TeamLeader" || userType === "Manager") && (
-                      <td className="tabledata">{highlightText(entry[73], searchTerm)}</td>
-                    )}
-
                     <td
                       className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                       {highlightText(entry[0], searchTerm)}
+                      {highlightText(entry[0], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[0], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[0], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -964,9 +952,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                       {highlightText(entry[4], searchTerm)}
+                      {highlightText(entry[4], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[4], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[4], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -977,7 +967,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[3], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[3], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[3], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -988,7 +980,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[6], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[6], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[6], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -999,7 +993,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[1], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[1], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[1], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1008,9 +1004,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                       {highlightText(entry[2], searchTerm)}
+                      {highlightText(entry[2], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[2], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[2], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1021,7 +1019,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[5], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[5], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[5], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1032,7 +1032,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[7], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[7], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[7], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1041,9 +1043,14 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {highlightText(entry[8], searchTerm)}
+                      {highlightText(entry[8], searchTerm)}{" "}
+                      {highlightText(entry[17], searchTerm)}
+                      {/* {entry[8]} {""} {entry[17]} */}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[8], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[8], searchTerm)}{" "}
+                          {highlightText(entry[17], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1054,7 +1061,23 @@ useEffect(()=>{
                     >
                       {highlightText(entry[9], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[9], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[9], searchTerm)}
+                        </span>
+                      </div>
+                    </td>
+                    {(userType === "TeamLeader" || userType === "Manager") && (
+                      <td className="tabledata">{entry[73]}</td>
+                    )}
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[15]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[15]}</span>
                       </div>
                     </td>
 
@@ -1065,7 +1088,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[10], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[10], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[10], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1074,9 +1099,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                       {highlightText(entry[11], searchTerm)}
+                      {highlightText(entry[11], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[11], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[11], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1085,9 +1112,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(entry[12], searchTerm)}
+                      {highlightText(entry[12], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[12], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[12], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1096,9 +1125,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                   {highlightText(entry[13], searchTerm)}
+                      {highlightText(entry[13], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[13], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[13], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1109,7 +1140,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[14], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[14], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[14], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1120,18 +1153,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[16], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[16], searchTerm)}</span>
-                      </div>
-                    </td>
-
-                    <td
-                      className="tabledata"
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {highlightText(entry[17], searchTerm)}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[17], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[16], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1142,7 +1166,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[18], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[18], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[18], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1151,9 +1177,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(entry[19], searchTerm)}
+                      {highlightText(entry[19], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[19], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[19], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1164,7 +1192,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[20], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[20], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[20], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1175,7 +1205,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[21], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[21], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[21], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1186,7 +1218,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[22], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[22], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[22], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1195,9 +1229,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                       {highlightText(entry[23], searchTerm)}
+                      {highlightText(entry[23], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[23], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[23], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1208,7 +1244,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[24], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[24], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[24], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1219,7 +1257,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[25], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[25], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[25], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1228,9 +1268,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(entry[26], searchTerm)}
+                      {highlightText(entry[26], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[26], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[26], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1239,9 +1281,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                    {highlightText(entry[27], searchTerm)}
+                      {highlightText(entry[27], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[27], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[27], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1250,9 +1294,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(entry[28], searchTerm)}
+                      {highlightText(entry[28], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[28], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[28], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1263,7 +1309,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[29], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[29], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[29], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1274,7 +1322,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[30], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[30], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[30], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1285,7 +1335,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[31], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[31], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[31], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1294,9 +1346,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(entry[32], searchTerm)}
+                      {highlightText(entry[32], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[32], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[32], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1307,7 +1361,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[33], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[33], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[33], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1317,7 +1373,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[34], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[34], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[34], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1326,9 +1384,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(entry[35], searchTerm)}
+                      {highlightText(entry[35], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[35], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[35], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1339,7 +1399,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[36], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[36], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[36], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1350,7 +1412,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[37], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[37], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[37], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1358,9 +1422,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                    {highlightText(entry[38], searchTerm)}
+                      {highlightText(entry[38], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[38], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[38], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1370,7 +1436,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[39], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[39], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[39], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1380,7 +1448,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[40], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[40], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[40], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1391,7 +1461,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[41], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[41], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[41], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1400,9 +1472,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                       {highlightText(entry[42], searchTerm)}
+                      {highlightText(entry[42], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[42], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[42], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1412,7 +1486,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[43], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[43], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[43], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1422,7 +1498,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[44], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[44], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[44], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1430,9 +1508,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(entry[45], searchTerm)}
+                      {highlightText(entry[45], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[45], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[45], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1440,9 +1520,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(entry[46], searchTerm)}
+                      {highlightText(entry[46], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[46], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[46], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1452,7 +1534,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[47], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[47], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[47], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1460,9 +1544,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(entry[48], searchTerm)}
+                      {highlightText(entry[48], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[48], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[48], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1472,7 +1558,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[49], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[49], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[49], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1480,9 +1568,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                       {highlightText(entry[50], searchTerm)}
+                      {highlightText(entry[50], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[50], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[50], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1490,15 +1580,22 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                       {highlightText(entry[51], searchTerm)}
+                      {highlightText(entry[51], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[51], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[51], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                   Subcategory:-ResumeViewButton(added) start LineNo:-340
                   Date:-02/07 */}
-                    <td className="tabledata">
+                    <td
+                      className="tabledata"
+                      style={{
+                        backgroundColor: entry[52] ? "#80ff80" : "transparent",
+                      }}
+                    >
                       <button
                         className="text-secondary"
                         onClick={() => openDocumentModal(entry[52])}
@@ -1512,7 +1609,12 @@ useEffect(()=>{
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                   Subcategory:-ResumeViewButton(added) start LineNo:-378
                   Date:-02/07 */}
-                    <td className="tabledata">
+                    <td
+                      className="tabledata"
+                      style={{
+                        backgroundColor: entry[53] ? "#80ff80" : "transparent",
+                      }}
+                    >
                       <button
                         className="text-secondary"
                         onClick={() => openDocumentModal(entry[53])}
@@ -1527,7 +1629,12 @@ useEffect(()=>{
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                   Subcategory:-ResumeViewButton(added) start LineNo:-391
                   Date:-02/07 */}
-                    <td className="tabledata">
+                    <td
+                      className="tabledata"
+                      style={{
+                        backgroundColor: entry[54] ? "#80ff80" : "transparent",
+                      }}
+                    >
                       <button
                         className="text-secondary"
                         onClick={() => openDocumentModal(entry[54])}
@@ -1542,7 +1649,12 @@ useEffect(()=>{
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                   Subcategory:-ResumeViewButton(added) start LineNo:-407
                   Date:-02/07 */}
-                    <td className="tabledata">
+                    <td
+                      className="tabledata"
+                      style={{
+                        backgroundColor: entry[55] ? "#80ff80" : "transparent",
+                      }}
+                    >
                       <button
                         className="text-secondary"
                         onClick={() => openDocumentModal(entry[55])}
@@ -1557,7 +1669,12 @@ useEffect(()=>{
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                   Subcategory:-ResumeViewButton(added) start LineNo:-422
                   Date:-02/07 */}
-                    <td className="tabledata">
+                    <td
+                      className="tabledata"
+                      style={{
+                        backgroundColor: entry[56] ? "#80ff80" : "transparent",
+                      }}
+                    >
                       <button
                         className="text-secondary"
                         onClick={() => openDocumentModal(entry[56])}
@@ -1572,7 +1689,12 @@ useEffect(()=>{
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                   Subcategory:-ResumeViewButton(added) start LineNo:-437
                   Date:-02/07 */}
-                    <td className="tabledata">
+                    <td
+                      className="tabledata"
+                      style={{
+                        backgroundColor: entry[57] ? "#80ff80" : "transparent",
+                      }}
+                    >
                       <button
                         className="text-secondary"
                         onClick={() => openDocumentModal(entry[57])}
@@ -1587,7 +1709,12 @@ useEffect(()=>{
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                   Subcategory:-ResumeViewButton(added) start LineNo:-451
                   Date:-02/07 */}
-                    <td className="tabledata">
+                    <td
+                      className="tabledata"
+                      style={{
+                        backgroundColor: entry[58] ? "#80ff80" : "transparent",
+                      }}
+                    >
                       <button
                         className="text-secondary"
                         onClick={() => openDocumentModal(entry[58])}
@@ -1606,7 +1733,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[59], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[59], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[59], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1614,9 +1743,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                       {highlightText(entry[60], searchTerm)}
+                      {highlightText(entry[60], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[60], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[60], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1627,7 +1758,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[61], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[61], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[61], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -1636,9 +1769,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(entry[62], searchTerm)}
+                      {highlightText(entry[62], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[62], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[62], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1648,7 +1783,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[63], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[63], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[63], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1656,9 +1793,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(entry[64], searchTerm)}
+                      {highlightText(entry[64], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[64], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[64], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     {/* <td className="tabledata">
@@ -1671,7 +1810,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[65], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[65], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[65], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1681,7 +1822,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[66], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[66], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[66], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1689,9 +1832,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(entry[67], searchTerm)}
+                      {highlightText(entry[67], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[67], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[67], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1699,9 +1844,11 @@ useEffect(()=>{
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(entry[68], searchTerm)}
+                      {highlightText(entry[68], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[68], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[68], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1711,7 +1858,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[69], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[69], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[69], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1721,7 +1870,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[70], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[70], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[70], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1731,7 +1882,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[71], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[71], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[71], searchTerm)}
+                        </span>
                       </div>
                     </td>
                     <td
@@ -1741,7 +1894,9 @@ useEffect(()=>{
                     >
                       {highlightText(entry[72], searchTerm)}
                       <div className="tooltip">
-                        <span className="tooltiptext">{highlightText(entry[72], searchTerm)}</span>
+                        <span className="tooltiptext">
+                          {highlightText(entry[72], searchTerm)}
+                        </span>
                       </div>
                     </td>
 
@@ -2036,21 +2191,21 @@ useEffect(()=>{
           </div>
 
           <div className="search-count-last-div">
-        Search Results : {searchCount}
-        </div>
+            Search Results : {searchCount}
+          </div>
 
-        <Pagination
-        current={currentPage}
-        total={totalRecords}
-        pageSize={pageSize}
-        showSizeChanger
-        showQuickJumper 
-        onShowSizeChange={handleSizeChange}
-        onChange={handlePageChange}
-        style={{
-          justifyContent: 'center',
-        }}
-      />
+          <Pagination
+            current={currentPage}
+            total={totalRecords}
+            pageSize={pageSize}
+            showSizeChanger
+            showQuickJumper
+            onShowSizeChange={handleSizeChange}
+            onChange={handlePageChange}
+            style={{
+              justifyContent: "center",
+            }}
+          />
           {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
           Subcategory:-ResumeModel(added) End LineNo:-567 Date:-02/07 */}
           <Modal show={showDocumentModal} onHide={closeDocumentModal} size="md">
@@ -2087,7 +2242,6 @@ useEffect(()=>{
           )}
         </>
       )}
-     
     </div>
   );
 };

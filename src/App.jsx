@@ -22,24 +22,34 @@ import EmpDashboard from "./EmployeeDashboard/empDashboard";
 import ProtectedRoute from "./MainDashboard/ProtectedRoute.jsx";
 import ApplicantForm from "./Applicant/applicantFrom.jsx";
 import ApplicationForm1 from "./Applicant/ApplicationForm1.jsx";
-import SubscriptionForm from "./Subscription/SubscriptionForm.jsx";
-
+import ApplicantForm2 from "./Applicant/applicantForm2.jsx";
+import ThankYouPage from "./Applicant/applicantThankYou.jsx";
 
 const applySavedColors = () => {
   const bgColor = localStorage.getItem("bgColor");
   const buttonColor = localStorage.getItem("buttonColor");
   const hoverColor = localStorage.getItem("hover-effect");
 
-  if (bgColor) document.documentElement.style.setProperty("--Bg-color", bgColor);
-  if (buttonColor) document.documentElement.style.setProperty("--button-color", buttonColor);
-  if (hoverColor) document.documentElement.style.setProperty("--hover-effect", hoverColor);
-  if (buttonColor) document.documentElement.style.setProperty("--button-hover-color", "white");
-  if (bgColor) document.documentElement.style.setProperty("--text-hover-color", bgColor);
-  if (bgColor) document.documentElement.style.setProperty("--button-text-color", "white");
-  if (bgColor) document.documentElement.style.setProperty("--button-border-color", "gray");
-  if (bgColor) document.documentElement.style.setProperty("--button-bg-hover-color", "white");
+  if (bgColor)
+    document.documentElement.style.setProperty("--Bg-color", bgColor);
+  if (buttonColor)
+    document.documentElement.style.setProperty("--button-color", buttonColor);
+  if (hoverColor)
+    document.documentElement.style.setProperty("--hover-effect", hoverColor);
+  if (buttonColor)
+    document.documentElement.style.setProperty("--button-hover-color", "white");
+  if (bgColor)
+    document.documentElement.style.setProperty("--text-hover-color", bgColor);
+  if (bgColor)
+    document.documentElement.style.setProperty("--button-text-color", "white");
+  if (bgColor)
+    document.documentElement.style.setProperty("--button-border-color", "gray");
+  if (bgColor)
+    document.documentElement.style.setProperty(
+      "--button-bg-hover-color",
+      "white"
+    );
 };
-
 
 const App = () => {
   const [loginEmployeeName, setLoginEmployeeName] = useState("");
@@ -47,7 +57,6 @@ const App = () => {
   useEffect(() => {
     applySavedColors();
   }, []);
-
 
   return (
     <div>
@@ -66,7 +75,7 @@ const App = () => {
               <ProtectedRoute>
                 <EmpDashboard
                   loginEmployeeName={loginEmployeeName}
-                  setLoginEmployeeName={setLoginEmployeeName} 
+                  setLoginEmployeeName={setLoginEmployeeName}
                 />
               </ProtectedRoute>
             }
@@ -101,20 +110,25 @@ const App = () => {
             path="/create-account/:userType"
             element={<AddEmployee />}
           ></Route>
+
           <Route
             path="/157industries/:encodedParams/candidate-form"
-            element={<ApplicantForm loginEmployeeName={loginEmployeeName}  />}
+            element={<ApplicantForm2 loginEmployeeName={loginEmployeeName} />}
           ></Route>
+          <Route path="/thank-you" element={<ThankYouPage></ThankYouPage>}>
+          </Route>
+
+
+          {/* <Route
+            path="/157industries/:encodedParams/candidate-form"
+            element={<ApplicantForm loginEmployeeName={loginEmployeeName} />}
+          ></Route> */}
+
           {/* temporary route for the applicant registration sahil karnekar date 18-11-2024 */}
           {/* <Route
             path="/157industries/:employeeId/:userType/candidate-form"
             element={<ApplicationForm1 loginEmployeeName={loginEmployeeName}  />}
           ></Route> */}
-
-<Route
-            path="/157industries/testing/form"
-            element={<SubscriptionForm   />}
-          ></Route>
 
         </Routes>
       </BrowserRouter>

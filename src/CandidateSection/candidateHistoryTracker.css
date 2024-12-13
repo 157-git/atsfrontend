@@ -135,13 +135,6 @@
   color: var(--text-hover-color);
 
 }
-.bhabutton-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  padding: 5px;
-}
 
 .bha-dropdown {
   display: flex;
@@ -178,13 +171,13 @@
 }
 /* added by sahil karnekar date 19-11-2024 */
 .setborderdiv{
-  margin-left: 10%;
-  margin-right: 10%;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
+  /* border: 1px solid green; */
+  width: 100%;
 }
 
 @media (max-width: 768px) {
-  .bhabutton-container {
+  .history-button-container {
     flex-direction: column;
     align-items: center;
   }
@@ -198,9 +191,11 @@
 .tracker-date-report-option {
   display: flex;
   justify-content: center;
+  flex-direction: column;
   gap: 15px;
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  /* border: 1px solid green; */
 }
 
 .tracker-date-report-optionlabel {
@@ -258,17 +253,21 @@
   text-align: center;
   color: grey;
   font-weight: bold;
+  height: 40px;
+  background-color: #f2f2f2;
 }
 
 .date-inputs {
   display: flex;
   align-items: center;
+  justify-content: center;
   margin-right: 20px;
-  margin-top: -10px;
 }
 
 .date-inputs label {
   margin-right: 10px;
+  display: flex;
+  width: 400px;
 }
 
 .date-inputs input[type="date"] {
@@ -299,4 +298,32 @@
 .history-tracker-table-header p, strong{
   /* color: red; */
   font-size: 16px;
+}
+
+/* Arshad Attar Added CSS On 12-12-2024 */
+
+.history-button-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding: 5px;
+  /* border: 1px solid red; */
+}
+
+.histry-date-div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+.history-tracker-custom-dates{
+  width: 60%;
+  align-items: center;
+  display: flex;
+}
+
+.history-tracker-hr{
+  width: 90%;
 }

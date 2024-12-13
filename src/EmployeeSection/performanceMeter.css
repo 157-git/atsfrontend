@@ -1,0 +1,116 @@
+.speedo-meter-main-div {
+    /* border: 1px solid red; */
+    width: 60%; /* Adjust width for better layout */
+    display: flex;
+    justify-content: flex-end; /* Align the speedometers to the right */
+    flex-direction: column; /* Arrange items vertically */
+    gap: 30px; /* Adds space between child elements */
+  }
+  
+  .speedometer {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column; /* Arrange the elements vertically */
+    width: 100%;
+    max-width: 300px; /* Limit width of each speedometer */
+    margin-bottom: 20px; /* Space between speedometers */
+    /* border: 1px solid red; */
+  }
+  
+  .input-heading {
+    display: flex;
+    flex-direction: row; /* Stack input fields vertically */
+    align-items: center; /* Center align inputs */
+    justify-content: flex-start;
+    /* margin-top: 10px; */
+    width: 1000px;
+    border: 1px solid black;
+  }
+  
+  .speed-input {
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+    width: 100px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .division-input {
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 16px;
+    width: 100px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .chart-container {
+    position: relative;
+    /* width: 200px; */
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    margin: 0 auto;
+    border: 1px solid pink; 
+  }
+
+  .main-chart-container{
+    border: 1px solid black;
+
+  }
+
+  .charts-container{
+    /* border: 2px solid red; */
+  }
+  
+  .pointer {
+    position: absolute;
+    top: 28%;
+    left: 50%;
+    width: 5px;
+    height: 140px;
+    background: linear-gradient(to bottom, #ff5722, #ff9800);
+    border-radius: 2px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    transform-origin: bottom center;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .pointer::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 10px solid #ff5722;
+  }
+  
+  .performance-display {
+    font-family: "Roboto", sans-serif;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    height: 30px;
+    font-size: 18px;
+    color: black;
+    background-color: #f0f0f0;
+  }
+  
+  .error-message {
+    /* color: red; */
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .speedometer-div{
+    border: 2px solid red;
+  }
+  
