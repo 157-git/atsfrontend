@@ -22,8 +22,9 @@ import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 // this loader is imported by sahil karnekar date 24-10-2024
 import Loader from "./loader";
+import PerformanceMeter from "./performanceMeter";
 
-const PerformanceImprovement = ({ loginEmployeeName,onCloseIncentive }) => {
+const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   const { employeeId, userType } = useParams();
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -47,7 +48,6 @@ const PerformanceImprovement = ({ loginEmployeeName,onCloseIncentive }) => {
   const transformedDataRef = useRef(false);
   // this state is added by sahil karnekar date 24-10-2024
   const [isLoading, setIsLoading] = useState(false);
-
 
   useEffect(() => {
     if (data.length > 0 && !transformedDataRef.current) {
@@ -290,19 +290,19 @@ const PerformanceImprovement = ({ loginEmployeeName,onCloseIncentive }) => {
     let ids;
     let role;
     if (selectedManagers.length > 0 && startDate && endDate) {
-      ids = selectedManagers.map((manager) => manager.managerId).join(","); 
+      ids = selectedManagers.map((manager) => manager.managerId).join(",");
       role = selectedManagers[0].managerJobRole;
       fetchJobIds(ids, startDate, endDate, role);
     } else if (selectedTeamLeaders.length > 0 && startDate && endDate) {
       ids = selectedTeamLeaders
         .map((teamLeader) => teamLeader.teamLeaderId)
-        .join(","); 
+        .join(",");
       role = selectedTeamLeaders[0].teamLeaderJobRole;
       fetchJobIds(ids, startDate, endDate, role);
     } else if (selectedRecruiters.length > 0 && startDate && endDate) {
       ids = selectedRecruiters
         .map((recruiter) => recruiter.recruiterId)
-        .join(","); 
+        .join(",");
       role = selectedRecruiters[0].recruiterJobRole;
     } else if (userType === "Recruiters") {
       ids = employeeId;
@@ -447,7 +447,7 @@ const PerformanceImprovement = ({ loginEmployeeName,onCloseIncentive }) => {
     ) {
       toast.error("Please Select At Least One Manager/TeamLeader/Recruiter");
       // this line is added by sahil karnekar date 24-10-2024
-      return;  
+      return;
     }
     if (
       userType === "Manager" &&
@@ -460,7 +460,7 @@ const PerformanceImprovement = ({ loginEmployeeName,onCloseIncentive }) => {
     if (userType === "TeamLeader" && selectedRecruiters.length === 0) {
       toast.error("Please Select At Least 1 Recruiter");
       return;
-    } 
+    }
     if (dateRange === "") {
       toast.error("Please Select Date");
       return;
@@ -471,8 +471,8 @@ const PerformanceImprovement = ({ loginEmployeeName,onCloseIncentive }) => {
       return;
     }
     // this line is added by sahil karnekar date 24-10-2024
-    setIsLoading(true);  // Start the loader
-  
+    setIsLoading(true); // Start the loader
+
     // Prepare parameters for the API call
     let ids;
     let role;
@@ -483,27 +483,34 @@ const PerformanceImprovement = ({ loginEmployeeName,onCloseIncentive }) => {
       role = selectedManagers[0].managerJobRole;
     } else if (selectedTeamLeaders.length > 0) {
       // here multiple line updated by sahil karnekar date 24-10-2024
-      ids = selectedTeamLeaders.map((teamLeader) => teamLeader.teamLeaderId).join(",");
+      ids = selectedTeamLeaders
+        .map((teamLeader) => teamLeader.teamLeaderId)
+        .join(",");
       role = selectedTeamLeaders[0].teamLeaderJobRole;
     } else if (selectedRecruiters.length > 0) {
-      ids = selectedRecruiters.map((recruiter) => recruiter.recruiterId).join(",");
+      ids = selectedRecruiters
+        .map((recruiter) => recruiter.recruiterId)
+        .join(",");
       role = selectedRecruiters[0].recruiterJobRole;
     } else if (userType === "Recruiters") {
       ids = employeeId;
       role = userType;
     }
-  
+
     try {
-      const response = await axios.get(`${API_BASE_URL}/fetch-process-timings`, {
-        params: {
-          employeeIds: ids,
-          jobRole: role,
-          startDate: startDate,
-          endDate: endDate,
-          jobId: jobId,
-        },
-      });
-  
+      const response = await axios.get(
+        `${API_BASE_URL}/fetch-process-timings`,
+        {
+          params: {
+            employeeIds: ids,
+            jobRole: role,
+            startDate: startDate,
+            endDate: endDate,
+            jobId: jobId,
+          },
+        }
+      );
+
       const jsonData = response.data;
       setData(jsonData);
       calculateFormFillingTotal(jsonData);
@@ -511,10 +518,9 @@ const PerformanceImprovement = ({ loginEmployeeName,onCloseIncentive }) => {
       console.error(error); // Log error for debugging
       toast.error("Something Went Wrong");
     } finally {
-      setIsLoading(false);  // Stop the loader after the process is done
+      setIsLoading(false); // Stop the loader after the process is done
     }
   };
-
 
   const uniqueClientDetails = clientDetails.reduce((acc, current) => {
     const x = acc.find((item) => item.requirementId === current.requirementId);
@@ -630,14 +636,13 @@ const PerformanceImprovement = ({ loginEmployeeName,onCloseIncentive }) => {
       <div className="PIE-Header-Section">
         <div className="PIE-grid-dropdown">
           <div className="PIE-dropdown-container">
-
-          {userType === "Recruiters" && <span>Recruiter</span>}
-          {userType === "TeamLeader" && <span>Team Leader</span>}
-          {userType === "Manager" && <span>Manager</span>}
-          {userType === "SuperUser" && <span>Super User</span>}
+            {userType === "Recruiters" && <span>Recruiter</span>}
+            {userType === "TeamLeader" && <span>Team Leader</span>}
+            {userType === "Manager" && <span>Manager</span>}
+            {userType === "SuperUser" && <span>Super User</span>}
 
             <div className="PIE-Dropdown" onClick={toggleDropdown}>
-              {userType === "SuperUser" && <span>Select  Manage OR TL</span>}
+              {userType === "SuperUser" && <span>Select Manage OR TL</span>}
               {userType === "Manager" && <span>Select TL OR Recruiter </span>}
               {userType === "TeamLeader" && <span>Select Recruiter</span>}
               {userType === "Recruiters" && <span>{loginEmployeeName}</span>}
@@ -860,11 +865,17 @@ const PerformanceImprovement = ({ loginEmployeeName,onCloseIncentive }) => {
           </div>
           {/* this code is updated by sahil karnekar date 24-10-2024 */}
           <div className="PIE-Apply-Filter-Btn">
-          <button onClick={handleGetFilteredData} className="PIE-filter-Btn" disabled={isLoading}>
-  {isLoading ? <Loader /> : "Get Data"}
-</button>
-<button className="PIE-filter-Btn" onClick={onCloseIncentive}> Back</button>
-
+            <button
+              onClick={handleGetFilteredData}
+              className="PIE-filter-Btn"
+              disabled={isLoading}
+            >
+              {isLoading ? <Loader /> : "Get Data"}
+            </button>
+            <button className="PIE-filter-Btn" onClick={onCloseIncentive}>
+              {" "}
+              Back
+            </button>
           </div>
         </div>
       </div>
@@ -1020,27 +1031,39 @@ const PerformanceImprovement = ({ loginEmployeeName,onCloseIncentive }) => {
           </tbody>
         </table>
       </div>
-      <h5 className="text-secondary">Process Time Table</h5>
-            <table className="PIE-timetrackertable">
-                <thead>
-                    <th className="PIE-timetrackertablehead">Sr No</th>
-                    <th className="PIE-timetrackertablehead">Process Name</th>
-                    <th className="PIE-timetrackertablehead">Required Time (Hours)</th>
-                    <th className="PIE-timetrackertablehead">Spent Time</th>
-                    <th className="PIE-timetrackertablehead">Time Difference</th>
-                </thead>
-                <tbody>
-                    {processes.map((process, index) => (
-                        <tr key={index}>
-                            <td className="PIE-timetrackertabledata">{index + 1}</td>
-                            <td className="PIE-timetrackertabledata">{process}</td>
-                            <td className="PIE-timetrackertabledata">8 Hours</td>
-                            <td className="PIE-timetrackertabledata">{formFillingTotal}</td>
-                            <td className="PIE-timetrackertabledata">{formFillingTotal}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+
+      <div className="procees-time-table">
+        <div>
+          <h5 className="text-secondary">Process Time Table</h5>
+          <table className="PIE-timetrackertable">
+            <thead>
+              <th className="PIE-timetrackertablehead">Sr No</th>
+              <th className="PIE-timetrackertablehead">Process Name</th>
+              <th className="PIE-timetrackertablehead">Required Time</th>
+              <th className="PIE-timetrackertablehead">Spent Time</th>
+              <th className="PIE-timetrackertablehead">Time Difference</th>
+            </thead>
+            <tbody>
+              {processes.map((process, index) => (
+                <tr key={index}>
+                  <td className="PIE-timetrackertabledata">{index + 1}</td>
+                  <td className="PIE-timetrackertabledata">{process}</td>
+                  <td className="PIE-timetrackertabledata"></td>
+                  <td className="PIE-timetrackertabledata">
+                    {formFillingTotal}
+                  </td>
+                  <td className="PIE-timetrackertabledata">
+                    {formFillingTotal}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {/* <div>
+          <PerformanceMeter></PerformanceMeter>
+        </div> */}
+      </div>
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>

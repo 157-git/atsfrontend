@@ -791,10 +791,8 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                     </th>
                   ) : null}
   <th className="attendanceheading">Sr No.</th>
-                  <th className="attendanceheading">Emp ID</th>
-                  {(userType === "TeamLeader" || userType === "Manager") && (
-                    <th className="attendanceheading">Team Leader Id</th>
-                  )}
+                  
+                
                   <th className="attendanceheading">Candidate ID</th>
                   <th className="attendanceheading">Candidate Name</th>
                   <th className="attendanceheading">Candidate Email</th>
@@ -803,15 +801,19 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                   <th className="attendanceheading">Calling Feedback</th>
                   <th className="attendanceheading">Communication Rating</th>
                   <th className="attendanceheading">Current Location</th>
-                  <th className="attendanceheading">Date</th>
+                  <th className="attendanceheading">Added Date & time </th>
                   <th className="attendanceheading">Job Designation</th>
+                  {(userType === "TeamLeader" || userType === "Manager") && (
+                    <th className="attendanceheading">Team Leader Id</th>
+                  )}
+                  <th className="attendanceheading">Emp ID</th>
                   <th className="attendanceheading">Recruiter Name</th>
                   <th className="attendanceheading">Applying Company</th>
                   <th className="attendanceheading">Job Id</th>
                   <th className="attendanceheading">Interested Or Not</th>
                   <th className="attendanceheading">Source Name</th>
                   <th className="attendanceheading">Line Up ID</th>
-                  <th className="attendanceheading">Added Time</th>
+                
                   <th className="attendanceheading">Full Address</th>
                   <th className="attendanceheading">Incentive</th>
                   <th className="attendanceheading">Old Employee Id</th>
@@ -918,20 +920,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                           </div>
                         </td>
 
-                    <td
-                      className="tabledata"
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {entry[15]}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{entry[15]}</span>
-                      </div>
-                    </td>
+                   
 
-                    {(userType === "TeamLeader" || userType === "Manager") && (
-                      <td className="tabledata">{entry[73]}</td>
-                    )}
+                
 
                     <td
                       className="tabledata"
@@ -976,6 +967,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                         <span className="tooltiptext">{entry[6]}</span>
                       </div>
                     </td>
+
 
                     <td
                       className="tabledata"
@@ -1026,11 +1018,13 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {entry[8]}
+                      {entry[8]} {""}  {entry[17]}
                       <div className="tooltip">
-                        <span className="tooltiptext">{entry[8]}</span>
+                        <span className="tooltiptext">{entry[8]} {"-"}  {entry[17]}</span>
                       </div>
                     </td>
+
+                 
 
                     <td
                       className="tabledata"
@@ -1040,6 +1034,20 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       {entry[9]}
                       <div className="tooltip">
                         <span className="tooltiptext">{entry[9]}</span>
+                      </div>
+                    </td>
+                    {(userType === "TeamLeader" || userType === "Manager") && (
+                      <td className="tabledata">{entry[73]}</td>
+                    )}
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {entry[15]}
+                      <div className="tooltip">
+                        <span className="tooltiptext">{entry[15]}</span>
                       </div>
                     </td>
 
@@ -1109,16 +1117,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       </div>
                     </td>
 
-                    <td
-                      className="tabledata"
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      {entry[17]}
-                      <div className="tooltip">
-                        <span className="tooltiptext">{entry[17]}</span>
-                      </div>
-                    </td>
+                  
 
                     <td
                       className="tabledata"
@@ -1483,10 +1482,16 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                   Subcategory:-ResumeViewButton(added) start LineNo:-340
                   Date:-02/07 */}
-                    <td className="tabledata">
+                    <td className="tabledata"
+                    
+                    style={{
+                      backgroundColor: entry[52] ? "#80ff80" : "transparent",
+                    }}
+                    >
                       <button
                         className="text-secondary"
                         onClick={() => openDocumentModal(entry[52])}
+                        
                       >
                         <i className="fas fa-eye"></i>
                       </button>
@@ -1497,7 +1502,11 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                   Subcategory:-ResumeViewButton(added) start LineNo:-378
                   Date:-02/07 */}
-                    <td className="tabledata">
+                    <td className="tabledata"
+                       
+                       style={{
+                        backgroundColor: entry[53] ? "#80ff80" : "transparent",
+                      }}>
                       <button
                         className="text-secondary"
                         onClick={() => openDocumentModal(entry[53])}
@@ -1512,7 +1521,11 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                   Subcategory:-ResumeViewButton(added) start LineNo:-391
                   Date:-02/07 */}
-                    <td className="tabledata">
+                    <td className="tabledata" 
+                       
+                       style={{
+                        backgroundColor: entry[54] ? "#80ff80" : "transparent",
+                      }}>
                       <button
                         className="text-secondary"
                         onClick={() => openDocumentModal(entry[54])}
@@ -1527,7 +1540,10 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                   Subcategory:-ResumeViewButton(added) start LineNo:-407
                   Date:-02/07 */}
-                    <td className="tabledata">
+                    <td className="tabledata"    
+                    style={{
+                      backgroundColor: entry[55] ? "#80ff80" : "transparent",
+                    }}>
                       <button
                         className="text-secondary"
                         onClick={() => openDocumentModal(entry[55])}
@@ -1542,7 +1558,11 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                   Subcategory:-ResumeViewButton(added) start LineNo:-422
                   Date:-02/07 */}
-                    <td className="tabledata">
+                    <td className="tabledata" 
+                       
+                       style={{
+                        backgroundColor: entry[56] ? "#80ff80" : "transparent",
+                      }}>
                       <button
                         className="text-secondary"
                         onClick={() => openDocumentModal(entry[56])}
@@ -1557,7 +1577,11 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                   Subcategory:-ResumeViewButton(added) start LineNo:-437
                   Date:-02/07 */}
-                    <td className="tabledata">
+                    <td className="tabledata" 
+                       
+                       style={{
+                        backgroundColor: entry[57] ? "#80ff80" : "transparent",
+                      }}>
                       <button
                         className="text-secondary"
                         onClick={() => openDocumentModal(entry[57])}
@@ -1572,7 +1596,10 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                     {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                   Subcategory:-ResumeViewButton(added) start LineNo:-451
                   Date:-02/07 */}
-                    <td className="tabledata">
+                    <td className="tabledata"    
+                    style={{
+                      backgroundColor: entry[58] ? "#80ff80" : "transparent",
+                    }}>
                       <button
                         className="text-secondary"
                         onClick={() => openDocumentModal(entry[58])}

@@ -490,7 +490,7 @@ const CallingTrackerForm = ({
       }
 
       const response = await axios.post(
-        `${API_BASE_URL}/calling-tracker`,
+        `${API_BASE_URL}/calling-tracker/${employeeId}/${userType}`,
         dataToUpdate,
         {
           headers: {

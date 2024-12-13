@@ -287,3 +287,19 @@
     color:var(--text-color);
     font-size: 16px;
   }
+
+  .procees-time-table-div {
+    border: 1px solid black;
+    padding: 5px;
+    display: flex;
+  }
+
+  .procees-time-table{
+    /* border: 1px solid red; */
+    padding: 5px;
+  }
+
+  .speedo-meter-charts{
+    /* border: 1px solid green; */
+    padding: 5px;
+  }

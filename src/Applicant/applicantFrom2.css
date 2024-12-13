@@ -1,0 +1,130 @@
+/* This is done by vaibhavi kawarkhe Date: 10-12-2024
+   Task: Applicant Form */
+
+/* Main container styling */
+.form-container-December {
+  background-color: #ffe5b5;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  padding-top: 10px;
+}
+
+/* Heading styling */
+#applicant-form-heading {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 10px;
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+}
+
+.applicant-form-hr {
+  width: 90%;
+}
+
+/* Form styling */
+.applicant-form-December {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Form grid styling */
+.form-grid-December {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 10px;
+}
+
+/* Column styling */
+.form-column-December {
+  flex: 1;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Form group styling */
+.form-group-December {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Label styling */
+.form-group-December label {
+  font-weight: bold;
+  color: #333;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Input with icon container */
+.input-with-icon-December {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Input styling */
+.input-with-icon-December input {
+  width: 100%;
+  padding: 10px 10px 10px 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  background-color: #fff;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Roboto", sans-serif;
+}
+
+/* Input icon styling */
+.input-icon-December {
+  position: absolute;
+  left: 10px;
+  font-size: 16px;
+  color: #666;
+}
+input[type="file"] {
+  flex-grow: 1; /* Make the input field take up the remaining space */
+}
+
+.success-December {
+  color: green;
+  margin-left: 8px; /* Space between input and the tick */
+}
+
+/* Submit button styling */
+.click-December {
+  display: flex;
+  justify-content: center;
+  /* margin-top: 20px; */
+}
+
+.click-December button {
+  padding: 10px 20px;
+  background-color: #ffcb9b;
+  color: #fff;
+  border: 1px solid gray;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  width: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.click-December button:hover {
+  background-color: white;
+  color: gray;
+}
+
+#resumeUpload,
+#photoUpload {
+  padding-left: 35px;
+}

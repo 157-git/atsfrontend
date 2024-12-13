@@ -57,8 +57,7 @@ const AfterSelection = ({
   const [loading, setLoading] = useState(false);
   const [joiningDate, setJoiningDate] = useState();
   const [dateAfter90days, setDateAfter90days] = useState(null);
-const [remainingDays, setRemainingDays] = useState(null);
-
+  const [remainingDays, setRemainingDays] = useState(null);
 
   const { userType } = useParams();
 
@@ -73,56 +72,57 @@ const [remainingDays, setRemainingDays] = useState(null);
     fetchPerformaceId();
   }, [candidateId]);
 
-
   const fetchJoinDate = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/fetch-join-date/${candidateId}`);
+      const response = await fetch(
+        `${API_BASE_URL}/fetch-join-date/${candidateId}`
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const joinDate = await response.text();
       setJoiningDate(joinDate);
-  
+
       // Calculate the formatted dates and remaining days
-      const { formattedJoinDate, formattedDateAfter90Days, remainingDays } = calculateDateDetails(joinDate);
-  
+      const { formattedJoinDate, formattedDateAfter90Days, remainingDays } =
+        calculateDateDetails(joinDate);
+
       // Update state with the formatted values
       setDateAfter90days(formattedDateAfter90Days); // Formatted as "20 January 2025"
       setRemainingDays(remainingDays);
       setJoiningDate(formattedJoinDate); // Formatted as "10 October 2024"
-  
     } catch (error) {
       console.error("Failed to fetch join date:", error);
     }
   };
-  
-  
 
   const calculateDateDetails = (joinDateString) => {
     // Convert the fetched joiningDate string to a Date object
     const joinDate = new Date(joinDateString);
-  
+
     // Calculate the date after 90 days
     const dateAfter90days = new Date(joinDate);
     dateAfter90days.setDate(joinDate.getDate() + 90);
-  
+
     // Format the dates as "10 October 2024" and "20 January 2025"
-    const options = { day: 'numeric', month: 'long', year: 'numeric' };
-    const formattedJoinDate = joinDate.toLocaleDateString('en-GB', options); // "10 October 2024"
-    const formattedDateAfter90Days = dateAfter90days.toLocaleDateString('en-GB', options); // "20 January 2025"
-  
+    const options = { day: "numeric", month: "long", year: "numeric" };
+    const formattedJoinDate = joinDate.toLocaleDateString("en-GB", options); // "10 October 2024"
+    const formattedDateAfter90Days = dateAfter90days.toLocaleDateString(
+      "en-GB",
+      options
+    ); // "20 January 2025"
+
     // Get today's date
     const today = new Date();
-  
+
     // Calculate remaining days (difference in milliseconds divided by one day)
-    const remainingDays = Math.ceil((dateAfter90days - today) / (1000 * 60 * 60 * 24));
-  
+    const remainingDays = Math.ceil(
+      (dateAfter90days - today) / (1000 * 60 * 60 * 24)
+    );
+
     // Return both the formatted dates and the remaining days
     return { formattedJoinDate, formattedDateAfter90Days, remainingDays };
   };
-  
-  
-  
 
   const fetchCandidateData = async () => {
     try {
@@ -443,9 +443,12 @@ const [remainingDays, setRemainingDays] = useState(null);
               </button>
             </div>
 
-{/* this small code updated by sahil karnekar date 24-10-2024 */}
+            {/* this small code updated by sahil karnekar date 24-10-2024 */}
             {!isActiveInquiry ? (
-              <div className="after-main-div" style={{ width: "-webkit-fill-available" }}>
+              <div
+                className="after-main-div"
+                style={{ width: "-webkit-fill-available" }}
+              >
                 <form className="Join-form-data" onSubmit={JoininghandleSubmit}>
                   <div className="after-h3">
                     <h3>Joining Process </h3>
@@ -478,7 +481,10 @@ const [remainingDays, setRemainingDays] = useState(null);
                     <div className="after-documnet-sub">
                       <hr />
                       {/* this line is updated by sahil karnekar date 24-10-2024 */}
-                      <div className="after-document-fisrt" style={{height:"auto"}}>
+                      <div
+                        className="after-document-fisrt"
+                        style={{ height: "auto" }}
+                      >
                         <div className="after-document-files">
                           <label htmlFor="adharCard" className="after-label">
                             Aadhar Card:
@@ -675,7 +681,7 @@ const [remainingDays, setRemainingDays] = useState(null);
                           >
                             <option value="">Select Option</option>
                             <option value="Joining">Joining</option>
-                            <option value="Not Joining">Not Joining</option>
+                            <option value="Not Joined">Not Joined</option>
                             <option value="Joined">Joined</option>
                             <option value="Drop Out">Drop Out</option>
                             <option value="Hold">Hold</option>
@@ -833,31 +839,33 @@ const [remainingDays, setRemainingDays] = useState(null);
                           </tr>
 
                           <tr id="table-row">
-  <th style={{ color: "green", fontWeight: "bold" }}>Join Date:</th>
-  <td className="inquiry-table-td">
-    {joiningDate ? joiningDate : "Fetching..."}
-  </td>
+                            <th style={{ color: "green", fontWeight: "bold" }}>
+                              Join Date:
+                            </th>
+                            <td className="inquiry-table-td">
+                              {joiningDate ? joiningDate : "Fetching..."}
+                            </td>
 
-  <th scope="col">Date After 90 Days :</th>
-  <td className="inquiry-table-td">
-    {dateAfter90days ? dateAfter90days : "Calculating..."}
-  </td>
+                            <th scope="col">Date After 90 Days :</th>
+                            <td className="inquiry-table-td">
+                              {dateAfter90days
+                                ? dateAfter90days
+                                : "Calculating..."}
+                            </td>
 
-  <th scope="col">Days Remaining :</th>
-  <td
-  className="inquiry-table-td"
-  style={{ color: remainingDays <= 0 ? "green" : "red", fontWeight: "bold" }}
->
-  {remainingDays > 0
-    ? `${remainingDays} Days`
-    : "90 Days Completed"}
-</td>
-
-</tr>
-
-
-
-
+                            <th scope="col">Days Remaining :</th>
+                            <td
+                              className="inquiry-table-td"
+                              style={{
+                                color: remainingDays <= 0 ? "green" : "red",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {remainingDays > 0
+                                ? `${remainingDays} Days`
+                                : "90 Days Completed"}
+                            </td>
+                          </tr>
                         </tbody>
                       </table>
                     </div>
