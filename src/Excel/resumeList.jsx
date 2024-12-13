@@ -1481,6 +1481,23 @@ const handleSharedRangeChange = (event) => {
                 </table>
               </div>
 
+              <div className="search-count-last-div">
+        Search Results : {searchCount}
+        </div>
+
+              <Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: "center",
+        }}
+      />
+
               {/*Arshad Attar Added This Code On 03-12-2024
                Added New Share Data Frontend Logic line 1444 to 1572 */}
               {showForwardPopup && (
@@ -1587,21 +1604,8 @@ const handleSharedRangeChange = (event) => {
           </div>
         </>
       )}
-        <div className="search-count-last-div">
-        Search Results : {searchCount}
-        </div>
-      <Pagination
-        current={currentPage}
-        total={totalRecords}
-        pageSize={pageSize}
-        showSizeChanger
-        showQuickJumper
-        onShowSizeChange={handleSizeChange}
-        onChange={handlePageChange}
-        style={{
-          justifyContent: "center",
-        }}
-      />
+      
+  
       
     </div>
   );

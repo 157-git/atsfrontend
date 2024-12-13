@@ -410,6 +410,14 @@ const CallingTrackerForm = ({
     setShowConfirmation(false);
     e.preventDefault();
 
+    if (errorForYOP !== "") {
+      setErrorForYOP("Please select a valid year of passing.");
+      return;
+    }
+    if (errorForDOB !== "") {
+      setErrorForDOB("Please select a valid date of birth.");
+      return;
+    }
     // Validate fields
     let callingTrackerErrors = validateCallingTracker() || {};
     let lineUpDataErrors = validateLineUpData() || {};
@@ -945,7 +953,7 @@ const CallingTrackerForm = ({
                 <label>Upload Resume</label>
                 <div
                   className="calling-tracker-field-sub-div"
-                  style={{ display: "flex",flexDirection:"row"}}
+                  style={{ display: "flex", flexDirection: "row" }}
                 >
                   {/* <input
                     style={{ width: "-webkit-fill-available" }}
@@ -983,8 +991,12 @@ const CallingTrackerForm = ({
                       onClick={() => {
                         if (resumeUrl) {
                           setIsModalOpen(true);
+                        } else if (!resumeUrl && initialData.resume) {
+                          const base64Resume = `data:application/pdf;base64,${initialData.resume}`;
+                          setResumeUrl(base64Resume); // Set the Base64 URL for the resume
+                          setIsModalOpen(true); // Open the modal immediately after setting the URL
                         } else {
-                          alert("No resume uploaded to view.");
+                          alert("Please upload a resume first.");
                         }
                       }}
                     ></i>

@@ -9,6 +9,9 @@ import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import Loader from "../EmployeeSection/loader";
 import { parse } from "date-fns";
+import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
+
+
 {/* this line added by sahil date 22-10-2024 */}
 const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   const [data, setData] = useState([]);
@@ -29,6 +32,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [searchCount, setSearchCount] = useState(0);
 
   useEffect(() => {
     
@@ -44,6 +48,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
         setData(result.content);
         setFilteredData(result.content);
         setTotalRecords(result.totalElements)
+        setSearchCount(result.length);
         console.log(filteredData);
       } catch (error) {
         setError(error);
@@ -173,6 +178,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
     });
 
     setFilteredData(filteredResults);
+    setSearchCount(filteredResults.length);
   };
 
   useEffect(() => {
@@ -406,10 +412,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.companyName}{" "}
+                          {highlightText(item.companyName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.companyName}
+                              {highlightText(
+                                item.companyName || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -419,10 +428,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.requirementId}{" "}
+                          {highlightText(item.requirementId || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.requirementId}
+                              {highlightText(
+                                item.requirementId || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -432,10 +444,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.designation}
+                           {highlightText(item.designation || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.designation}
+                              {highlightText(
+                                item.designation || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -445,21 +460,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.receiverCompanyMail}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{item.receiverCompanyMail}</span>
-                          </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.senderEmailId}
+                         {highlightText(item.receiverCompanyMail || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.senderEmailId}
+                              {highlightText(
+                                item.receiverCompanyMail || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -469,10 +476,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.mailSendDate}
+                          {highlightText(item.senderEmailId || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.mailSendDate}
+                              {highlightText(
+                                item.senderEmailId || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -482,10 +492,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.profileSentCount}
+                          {highlightText(item.mailSendDate || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.profileSentCount}
+                              {highlightText(
+                                item.mailSendDate || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -495,10 +508,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.profileSelected}
+                         {highlightText(item.profileSentCount || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.profileSelected}
+                              {highlightText(
+                                item.profileSentCount || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -508,10 +524,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.profileRejected}
+                         {highlightText(item.profileSelected || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.profileRejected}
+                              {highlightText(
+                                item.profileSelected || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -521,10 +540,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.profilePending}
+                          {highlightText(item.profileRejected || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.profilePending}
+                              {highlightText(
+                                item.profileRejected || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -534,10 +556,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.profileOnHold}
+                          {highlightText(item.profilePending || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.profileOnHold}
+                              {highlightText(
+                                item.profilePending || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -547,10 +572,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.noResponse}
+                          {highlightText(item.profileOnHold || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.noResponse}
+                              {highlightText(
+                                item.profileOnHold || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -560,10 +588,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.inProcessCount}
+                         {highlightText(item.noResponse || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.inProcessCount}
+                              {highlightText(
+                                item.noResponse || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -573,10 +604,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.selectedCount}
+                       {highlightText(item.inProcessCount || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.selectedCount}
+                              {highlightText(
+                                item.inProcessCount || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -586,10 +620,13 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.rejectedCount}
+                         {highlightText(item.selectedCount || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.rejectedCount}
+                              {highlightText(
+                                item.selectedCount || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -599,10 +636,29 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.holdCount}
+                          {highlightText(item.rejectedCount || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.holdCount}
+                              {highlightText(
+                                item.rejectedCount || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(item.holdCount || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.holdCount || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -611,6 +667,10 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                   </tbody>
                 </table>
               </div>
+
+              <div className="search-count-last-div">
+        Search Results : {searchCount}
+        </div>
             </>
           )}
         </>

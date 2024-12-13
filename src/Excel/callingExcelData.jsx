@@ -10,6 +10,7 @@ import { Button } from "react-bootstrap";
 import axios from "../api/api";
 import { toast } from "react-toastify";
 import { Pagination } from "antd";
+import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 
 const CallingExcelList = ({
   updateState,
@@ -42,6 +43,7 @@ const CallingExcelList = ({
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [selectedCandidateResume, setSelectedCandidateResume] = useState("");
+  const [searchCount, setSearchCount] = useState(0);
   // Arshad Attar Added This Code On 18-11-2024
   // Added New Share Data Frontend Logic line 44 to 50
   const [showShareButton, setShowShareButton] = useState(true);
@@ -71,6 +73,7 @@ const CallingExcelList = ({
         setCallingList(data.content);
         setFilteredCallingList(data.content);
         setTotalRecords(data.totalElements);
+        setSearchCount(data.length);
         setLoading(false); // Set loading to false when data is successfully fetched
       })
       .catch((error) => {
@@ -295,6 +298,7 @@ const CallingExcelList = ({
       );
     });
     setFilteredCallingList(filtered);
+    setSearchCount(filtered.length);
   }, [searchTerm, callingList]);
 
   useEffect(() => {
@@ -1379,10 +1383,26 @@ const CallingExcelList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.date} {item.candidateAddedTime}
+                              { highlightText(item.date || "", searchTerm)  } -  {" "}  {item.candidateAddedTime}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{highlightText(
+                                item.date.toString().toLowerCase() || "",
+                                searchTerm
+                              )}  - {" "}  {item.candidateAddedTime}</span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata "
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                           {highlightText(item.candidateName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.date} {item.candidateAddedTime}
+                              {highlightText(
+                                item.candidateName || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1391,10 +1411,13 @@ const CallingExcelList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.candidateName}
+                            {highlightText(item.candidateEmail || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.candidateName}
+                              {highlightText(
+                                item.candidateEmail || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1403,10 +1426,13 @@ const CallingExcelList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.candidateEmail}
+                            {highlightText(item.contactNumber || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.candidateEmail}
+                              {highlightText(
+                                item.contactNumber || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1415,22 +1441,13 @@ const CallingExcelList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.contactNumber}
+                           {highlightText(item.jobDesignation || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.contactNumber}
-                            </span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata "
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.jobDesignation}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.jobDesignation}
+                              {highlightText(
+                                item.jobDesignation || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1454,10 +1471,13 @@ const CallingExcelList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.companyName}
+                          {highlightText(item.companyName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.companyName}
+                              {highlightText(
+                                item.companyName || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1467,10 +1487,13 @@ const CallingExcelList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.noticePeriod}
+                          {highlightText(item.noticePeriod || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.noticePeriod}
+                              {highlightText(
+                                item.noticePeriod || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1510,6 +1533,10 @@ const CallingExcelList = ({
                   </tbody>
                 </table>
               </div>
+
+              <div className="search-count-last-div">
+        Search Results : {searchCount}
+        </div>
 
               {/*Arshad Attar Added This Code On 18-11-2024
                Added New Share Data Frontend Logic line 1444 to 1572 */}

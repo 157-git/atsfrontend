@@ -8,6 +8,12 @@ import { Modal, Button } from "react-bootstrap";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
 import { API_BASE_URL } from "../api/api";
 import watingImg from "../photos/fire-relax.gif";
+
+// added by sahil karnekar and commented because it was implemented just for testing purpose but dont remove this
+// import { Avatar, Badge } from "antd";
+// import {BellOutlined, CloseOutlined, ClearOutlined} from  '@ant-design/icons';
+// import { io } from "socket.io-client";
+
 // SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
 
 function DailyWork({
@@ -572,6 +578,86 @@ function DailyWork({
     };
   }, [employeeId, userType]);
 
+// this is commented by sahil karnekar dont remove this comment
+//   const [isOpen, setIsOpen] = useState(false);
+
+//   const toggleNotificationBox = () => {
+//     setIsOpen((prev) => !prev);
+//   };
+
+//   const handleClearNotifications = () => {
+//     localStorage.removeItem(`${userType}${employeeId}messages`);
+//     setMessages([]);
+//   };
+//   const [messages, setMessages] = useState([]);
+//   const [socket , setSocket] = useState(null);
+
+//   useEffect(() => {
+//     const storedMessages = localStorage.getItem(`${userType}${employeeId}messages`);
+//     if (storedMessages) {
+//       setMessages(JSON.parse(storedMessages));
+//     }
+//   }, []);
+
+//   useEffect(() => {
+//     if (socket) {
+//       socket.on('receive_message', (message) => {
+//         if (message.senderId !== employeeId) {
+//           setMessages((prevMessages) => {
+//             const updatedMessages = [...prevMessages, message];
+//             localStorage.setItem(`${userType}${employeeId}messages`, JSON.stringify(updatedMessages));
+//             return updatedMessages;
+//           })
+//         }
+//       });
+
+//       socket.on('connect_error', () => {
+//         alert('Connection failed. Ensure your details are correct.');
+//       });
+
+//       return () => {
+//         socket.disconnect();
+//       };
+//     }
+//   }, [socket, employeeId]);
+
+
+
+// useEffect(()=>{
+
+//   const query = { userId: employeeId, role: userType };
+//   if (userType === 'Recruiters') {
+//     query.teamLeaderId = '977';
+//     query.managerId = '1342';
+//     query.superUserId = '391';
+//   } else if (userType === 'TeamLeader') {
+//     query.allRecruiters = '1,2,3,4,5';
+//     query.managerId = '1342';
+//     query.superUserId = '391';
+//   } else if (userType === 'Manager') {
+//     query.allRecruiters = '1,2,3,4,5';
+//     query.allTeams = '10,977';
+//     query.superUserId = '391';
+//   } else if (userType === 'SuperUser') {
+//     query.allRecruiters = '1,2,3,4,5';
+//     query.allTeams = '10,977';
+//     query.allManagers = '20,21,1342';
+//   }
+
+//   const newSocket = io('http://localhost:8080', { query });
+//   console.log(query);
+//   setSocket(newSocket);
+// },[])
+
+
+//   const sendMessage = () => {
+//     if (socket) {
+
+//       const candidateData = { name:"sahil k", email:"sahilk@gmail.com", number:"78798798", senderId: employeeId };
+//       socket.emit('send_message', candidateData);
+//     }
+//   };
+
   return (
     <div className="daily-timeanddate">
       <a href="#">
@@ -667,6 +753,52 @@ function DailyWork({
             >
               {running ? "Pause" : "Resume"}
             </button>
+
+
+          {/* commented by sahil karnekar */}
+{/* 
+<button onClick={sendMessage}>Send</button> */}
+
+            {/* <div> */}
+      {/* Bell Icon */}
+      {/* <div style={{ marginRight: "10px" }} onClick={toggleNotificationBox}>
+        <Badge count={messages.length}>
+          <Avatar shape="square" icon={ <BellOutlined />} />
+        </Badge>
+      </div> */}
+
+      {/* Notification Box */}
+      {/* <div className={`notificationMainCont1 ${isOpen ? "open" : "closed"}`}>
+  <div className="motificationSubCont1">
+    {
+      messages.length > 0 ? (
+        messages.map(((message, index) => (
+          <>
+          <p>{message.name}</p>
+          <p>{message.email}</p>
+          <p>{message.number}</p>
+          </>
+        )
+      ))) :(
+        <p>No Notifications</p>
+      )
+    }
+  </div>
+
+  <div className="buttonsDivForNotifications">
+    <CloseOutlined 
+    style={{
+      color: "red",
+    }}
+    onClick={toggleNotificationBox} />
+    <button className="cleaarButtonOfNotifications daily-tr-btn"
+    onClick={handleClearNotifications}
+    >Clear  <ClearOutlined /></button>
+  </div>
+</div> */}
+
+    {/* </div> */}
+
           </div>
 
           <button
@@ -712,7 +844,54 @@ function DailyWork({
             </div>
           </Modal>
         </>
-      ) : null}
+      ) : (null
+
+      //  commented by sahil karnekar dont remove
+//         <>
+//         <button onClick={sendMessage}>Send</button>
+
+//             <div>
+//       {/* Bell Icon */}
+//       <div style={{ marginRight: "10px" }} onClick={toggleNotificationBox}>
+//         <Badge count={messages.length}>
+//           <Avatar shape="square" icon={ <BellOutlined />} />
+//         </Badge>
+//       </div>
+
+//       {/* Notification Box */}
+//       <div className={`notificationMainCont1 ${isOpen ? "open" : "closed"}`}>
+//   <div className="motificationSubCont1">
+//     {
+//       messages.length > 0 ?(
+//         messages.map(((message, index) => (
+//           <>
+//           <p>{message.name}</p>
+//           <p>{message.email}</p>
+//           <p>{message.number}</p>
+//           </>
+//         )
+//       ))):(
+//         <p>No Notifications</p>
+//       )
+//     }
+//   </div>
+
+//   <div className="buttonsDivForNotifications">
+//     <CloseOutlined 
+//     style={{
+//       color: "red",
+//     }}
+//     onClick={toggleNotificationBox} />
+//     <div className="cleaarButtonOfNotifications"
+//     onClick={handleClearNotifications}
+//     >Clear <ClearOutlined /></div>
+//   </div>
+// </div>
+
+//     </div>
+//     </>
+      )
+      }
 
       <Modal show={showModal} onHide={handleSkip}>
         <div className="dw-reminder-content">

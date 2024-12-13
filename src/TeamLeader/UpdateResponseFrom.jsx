@@ -92,6 +92,7 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
       return;
     }
     try {
+      // Save new interview response
       // added by sahil karnekar date 4-12-2024
       console.log(formData);
       if (formData.interviewResponse === "") {
@@ -245,7 +246,7 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                   Interview Response
                 </th>
                 )}
-                
+
                 <th className="p-2 font-semibold text-xs sm:text-base">
                   Comment for TL
                 </th>
@@ -438,7 +439,7 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
                     <option value="Shortlisted For Hr Round">
                       Hr Round
                     </option>
-                    <option value="Shortlisted Technical Round">
+                    <option value="Shortlisted For Technical Round">
                       Technical Round
                     </option>
                     <option value="Shortlisted For L1 Round">

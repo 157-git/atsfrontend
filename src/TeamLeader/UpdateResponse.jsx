@@ -6,6 +6,8 @@ import HashLoader from "react-spinners/HashLoader";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
+import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
+
 
 const UpdateResponse = ({ onSuccessAdd, date }) => {
   const [updateResponseList, setUpdateResponseList] = useState([]);
@@ -25,6 +27,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
   const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [filterOptions, setFilterOptions] = useState([]);
   const [formClosed, setFormClosed] = useState(false);
+  const [searchCount, setSearchCount] = useState(0);
 
   const limitedOptions = [
     ["candidateId", "Candidate Id"],
@@ -86,6 +89,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
         setCallingList(data);
         setFilteredCallingList(data);
         setUpdateResponseList(data);
+        setSearchCount(data.length);
         setFormClosed(false);
       } else {
         console.error("Expected array but received:", data);
@@ -170,6 +174,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     });
 
     setFilteredCallingList(filteredResults);
+    setSearchCount(filteredResults.length);
   };
 
   const handleFilterTypeChange = (e) => {
@@ -555,16 +560,21 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                     {filteredCallingList.map((data, index) => (
                       <tr key={index} className="attendancerows">
                         <td className="tabledata">{index + 1}</td>
-                        <td className="tabledata">{data.candidateId}</td>
+                        <td className="tabledata">
+                          {highlightText(data.candidateId.toString().toLowerCase() || "", filterValue)}
+                          </td>
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {data.candidateName || "-"}
+                          {highlightText(data.candidateName || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {data.candidateName}
+                              {highlightText(
+                                data.candidateName || "",
+                                filterValue
+                              )}
                             </span>
                           </div>
                         </td>
@@ -574,10 +584,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {data.candidateEmail || "-"}
+                           {highlightText(data.candidateEmail || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {data.candidateEmail}
+                              {highlightText(
+                                data.candidateEmail || "",
+                                filterValue
+                              )}
                             </span>
                           </div>
                         </td>
@@ -587,10 +600,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {data.contactNumber || "-"}
+                          {highlightText(data.contactNumber || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {data.contactNumber}
+                              {highlightText(
+                                data.contactNumber || "",
+                                filterValue
+                              )}
                             </span>
                           </div>
                         </td>
@@ -601,24 +617,30 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {data.sourceName || "-"}
+                          {highlightText(data.sourceName || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {data.sourceName}
+                              {highlightText(
+                                data.sourceName || "",
+                                filterValue
+                              )}
                             </span>
                           </div>
                         </td>
                      
-                        <td className="tabledata">{data.requirementId}</td>
+                        <td className="tabledata">{highlightText(data.requirementId.toString().toLowerCase() || "", filterValue)}</td>
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {data.requirementCompany || "-"}
+                           {highlightText(data.requirementCompany || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {data.requirementCompany}
+                              {highlightText(
+                                data.requirementCompany || "",
+                                filterValue
+                              )}
                             </span>
                           </div>
                         </td>
@@ -627,10 +649,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {data.jobDesignation || "-"}
+                           {highlightText(data.jobDesignation || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {data.jobDesignation}
+                              {highlightText(
+                                data.jobDesignation || "",
+                                filterValue
+                              )}
                             </span>
                           </div>
                         </td>
@@ -639,10 +664,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                          >
-                          {data.commentForTL || "-"}
+                           {highlightText(data.commentForTL || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {data.commentForTL}
+                              {highlightText(
+                                data.commentForTL || "",
+                                filterValue
+                              )}
                             </span>
                           </div>
                         </td>
@@ -651,10 +679,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {data.finalStatus || "-"}
+                           {highlightText(data.finalStatus || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {data.finalStatus}
+                              {highlightText(
+                                data.finalStatus || "",
+                                filterValue
+                              )}
                             </span>
                           </div>
                         </td>
@@ -663,10 +694,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {data.interviewRound || "-"}
+                           {highlightText(data.interviewRound || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {data.interviewRound}
+                              {highlightText(
+                                data.interviewRound || "",
+                                filterValue
+                              )}
                             </span>
                           </div>
                         </td>
@@ -675,10 +709,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {data.interviewResponse || "-"}
+                           {highlightText(data.interviewResponse || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {data.interviewResponse}
+                              {highlightText(
+                                data.interviewResponse || "",
+                                filterValue
+                              )}
                             </span>
                           </div>
                         </td>
@@ -687,28 +724,34 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {data.responseUpdatedDate || "-"}
+                          {highlightText(data.responseUpdatedDate || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {data.responseUpdatedDate}
+                              {highlightText(
+                                data.responseUpdatedDate || "",
+                                filterValue
+                              )}
                             </span>
                           </div>
                         </td>
-                        <td className="tabledata">{data.nextInterviewDate}</td>
+                        <td className="tabledata">{highlightText(data.nextInterviewDate.toString().toLowerCase() || "", filterValue)}</td>
                         <td className="tabledata">
-                          {data.nextInterviewTiming}
+                        {highlightText(data.nextInterviewTiming.toString().toLowerCase() || "", filterValue)}
                         </td>
-                        <td className="tabledata">{data.employeeId}</td>
+                        <td className="tabledata">{highlightText(data.employeeId.toString().toLowerCase() || "", filterValue)}</td>
 
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {data.employeeName || "-"}
+                          {highlightText(data.employeeName || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {data.employeeName}
+                              {highlightText(
+                                data.employeeName || "",
+                                filterValue
+                              )}
                             </span>
                           </div>
                         </td>
@@ -719,10 +762,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {data.officialMail || "-"}
+                          {highlightText(data.officialMail || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {data.officialMail}
+                              {highlightText(
+                                data.officialMail || "",
+                                filterValue
+                              )}
                             </span>
                           </div>
                         </td>
@@ -732,10 +778,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {data.jobRole || "-"}
+                          {highlightText(data.jobRole || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {data.jobRole}
+                              {highlightText(
+                                data.jobRole || "",
+                                filterValue
+                              )}
                             </span>
                           </div>
                         </td>
@@ -759,10 +808,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {data.reportingManagerName || "-"}
+                          {highlightText(data.reportingManagerName || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {data.reportingManagerName}
+                              {highlightText(
+                                data.reportingManagerName || "",
+                                filterValue
+                              )}
                             </span>
                           </div>
                         </td>
@@ -786,6 +838,12 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                   </tbody>
                 </table>
               </div>
+
+              <div className="search-count-last-div">
+        Search Results : {searchCount}
+        </div>
+
+
               <Modal show={showResumeModal} onHide={closeResumeModal} size="md">
                 <Modal.Header closeButton>
                   <Modal.Title>Resume</Modal.Title>

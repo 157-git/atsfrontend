@@ -9,6 +9,7 @@ import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { toast } from "react-toastify";
 import { Pagination } from "antd";
+import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 // SwapnilRokade_RejectedCandidate_ModifyFilters_11/07
 const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployeeName, }) => {
   const [showRejectedData, setShowRejectedData] = useState([]);
@@ -41,6 +42,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
   let [color, setColor] = useState("#ffcb9b");
   const [isDataSending, setIsDataSending] = useState(false);
   const [errorForShare, setErrorForShare] = useState("");
+  const [searchCount, setSearchCount] = useState(0);
 
   const { employeeId } = useParams();
   const newEmployeeId = parseInt(employeeId, 10);
@@ -145,6 +147,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
       setCallingList(data.content);
       setFilteredCallingList(data.content);
       setTotalRecords(data.totalElements);
+      setSearchCount(data.length);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
@@ -420,11 +423,20 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                                                     item.gender.toString().toLowerCase().includes(searchTermLower)) ||
                                                     (item.qualification &&
                                                       item.qualification.toString().toLowerCase().includes(searchTermLower)) ||
+                                                      (item.incentive &&
+                                                        item.incentive.toString().toLowerCase().includes(searchTermLower)) ||
+                                                        (item.candidateId &&
+                                                          item.candidateId.toString().toLowerCase().includes(searchTermLower)) ||
+                                                          (item.empId &&
+                                                            item.empId.toString().toLowerCase().includes(searchTermLower)) ||
+                                                            (item.teamLeaderId &&
+                                                              item.teamLeaderId.toString().toLowerCase().includes(searchTermLower)) ||
         (item.selectYesOrNo &&
           item.selectYesOrNo.toLowerCase().includes(searchTermLower))
       );
     });
     setFilteredCallingList(filtered);
+    setSearchCount(filtered.length);
   }, [searchTerm, callingList]);
 
   useEffect(() => {
@@ -1067,12 +1079,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
   onMouseOver={handleMouseOver}
   onMouseOut={handleMouseOut}
 >
-  {item.candidateId}
-  <div className="tooltip">
-    <span className="tooltiptext">
-      {item.candidateId}
-    </span>
-  </div>
+{highlightText(item.candidateId.toString().toLowerCase() || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.candidateId.toString().toLowerCase() || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
 </td>
 
 <td
@@ -1080,12 +1095,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
   onMouseOver={handleMouseOver}
   onMouseOut={handleMouseOut}
 >
-  {item.date} - {item.candidateAddedTime || "-"}
-  <div className="tooltip">
-    <span className="tooltiptext">
-      {item.date} - {item.candidateAddedTime}
-    </span>
-  </div>
+{ highlightText(item.date || "", searchTerm)  } - {item.candidateAddedTime || "-"}
+                          <div className="tooltip">
+                            <span className="tooltiptext">{highlightText(
+                                item.date.toString().toLowerCase() || "",
+                                searchTerm
+                              )}  - {" "}  {item.candidateAddedTime}</span>
+                          </div>
 </td>
 
 
@@ -1095,12 +1111,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
   onMouseOver={handleMouseOver}
   onMouseOut={handleMouseOut}
 >
-  {item.recruiterName}
-  <div className="tooltip">
-    <span className="tooltiptext">
-      {item.recruiterName}
-    </span>
-  </div>
+{highlightText(item.recruiterName || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.recruiterName || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
 </td>
 
                         <td
@@ -1108,10 +1127,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.candidateName}
+                            {highlightText(item.candidateName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.candidateName}
+                              {highlightText(
+                                item.candidateName || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1121,10 +1143,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.candidateEmail || "-"}
+                         {highlightText(item.candidateEmail || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.candidateEmail}
+                              {highlightText(
+                                item.candidateEmail || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1134,10 +1159,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.contactNumber || "-"}
+                           {highlightText(item.contactNumber || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.contactNumber}
+                              {highlightText(
+                                item.contactNumber || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1147,10 +1175,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.alternateNumber || 0}
+                            {highlightText(item.alternateNumber || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.alternateNumber}
+                              {highlightText(
+                                item.alternateNumber || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1160,10 +1191,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.sourceName || 0}
+                           {highlightText(item.sourceName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.sourceName}
+                              {highlightText(
+                                item.sourceName || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1173,10 +1207,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.jobDesignation || "-"}
+                         {highlightText(item.jobDesignation || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.jobDesignation}
+                              {highlightText(
+                                item.jobDesignation || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1186,10 +1223,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.requirementId || "-"}
+                            {highlightText(item.requirementId || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.requirementId}
+                              {highlightText(
+                                item.requirementId || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1199,10 +1239,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.requirementCompany || "-"}
+                            {highlightText(item.requirementCompany || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.requirementCompany}
+                              {highlightText(
+                                item.requirementCompany || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1212,10 +1255,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.communicationRating || "-"}
+                          {highlightText(item.communicationRating || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.communicationRating}
+                              {highlightText(
+                                item.communicationRating || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1225,10 +1271,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.currentLocation || "-"}
+                           {highlightText(item.currentLocation || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.currentLocation}
+                              {highlightText(
+                                item.currentLocation || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1238,10 +1287,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.fullAddress || "-"}
+                         {highlightText(item.fullAddress || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.fullAddress}{" "}
+                              {highlightText(
+                                item.fullAddress || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1251,10 +1303,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.callingFeedback || "-"}
+                          {highlightText(item.callingFeedback || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.callingFeedback}
+                              {highlightText(
+                                item.callingFeedback || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1263,12 +1318,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      {item.feedBack}{" "}
-                      <div className="tooltip">
-                        <span className="tooltiptext">
-                          {item.feedBack}{" "}
-                        </span>
-                      </div>
+                       {highlightText(item.feedBack || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.feedBack || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                     </td>
 
                         <td
@@ -1276,10 +1334,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.incentive || "-"}
+                          {highlightText(item.incentive.toString().toLowerCase() || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.incentive}
+                              {highlightText(
+                                item.incentive.toString().toLowerCase() || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1289,10 +1350,13 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.selectYesOrNo || "-"}
+                         {highlightText(item.selectYesOrNo || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.selectYesOrNo}
+                              {highlightText(
+                                item.selectYesOrNo || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1303,12 +1367,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {item.companyName || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.companyName}
-                              </span>
-                            </div>
+                            {highlightText(item.companyName || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.companyName || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
 
                          
@@ -1327,12 +1394,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {item.relevantExperience || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.relevantExperience}
-                              </span>
-                            </div>
+                              {highlightText(item.relevantExperience || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.relevantExperience || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
 
                           <td className="tabledata"
@@ -1359,12 +1429,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {item.dateOfBirth || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.dateOfBirth}
-                              </span>
-                            </div>
+                             {highlightText(item.dateOfBirth || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.dateOfBirth || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
 
                           <td
@@ -1372,10 +1445,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {item.gender || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">{item.gender}</span>
-                            </div>
+                             {highlightText(item.gender || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.gender || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
 
                           <td
@@ -1383,12 +1461,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {item.qualification || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.qualification}
-                              </span>
-                            </div>
+                             {highlightText(item.qualification || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.qualification || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
 
                           <td
@@ -1396,12 +1477,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {item.yearOfPassing || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.yearOfPassing}
-                              </span>
-                            </div>
+                              {highlightText(item.yearOfPassing || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.yearOfPassing || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
 
                           <td
@@ -1409,24 +1493,30 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {item.extraCertification || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.extraCertification}
-                              </span>
-                            </div>
+                              {highlightText(item.extraCertification || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.extraCertification || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
                           <td
                             className="tabledata"
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {item.holdingAnyOffer || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.holdingAnyOffer}
-                              </span>
-                            </div>
+                             {highlightText(item.holdingAnyOffer || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.holdingAnyOffer || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
 
                           <td
@@ -1434,12 +1524,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {item.offerLetterMsg || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.offerLetterMsg}
-                              </span>
-                            </div>
+                           {highlightText(item.offerLetterMsg || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.offerLetterMsg || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
 
                           {/* <td
@@ -1477,12 +1570,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {item.noticePeriod || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.noticePeriod}
-                              </span>
-                            </div>
+                            {highlightText(item.noticePeriod || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.noticePeriod || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
 
                           <td
@@ -1490,12 +1586,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {item.msgForTeamLeader || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.msgForTeamLeader}
-                              </span>
-                            </div>
+                               {highlightText(item.msgForTeamLeader || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.msgForTeamLeader || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
 
                           <td
@@ -1503,12 +1602,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {item.availabilityForInterview || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.availabilityForInterview}
-                              </span>
-                            </div>
+                             {highlightText(item.availabilityForInterview || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.availabilityForInterview || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
 
                           <td
@@ -1516,34 +1618,43 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {item.interviewTime || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.interviewTime}
-                              </span>
-                            </div>
+                             {highlightText(item.interviewTime || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.interviewTime || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
                           <td
                             className="tabledata"
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {item.finalStatus || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {item.finalStatus}
-                              </span>
-                            </div>
+                               {highlightText(item.finalStatus || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.finalStatus || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                           </td>
                           <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.empId}{" "}
+                          {highlightText(item.empId.toString().toLowerCase() || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {item.empId}
+                              {highlightText(
+                                item.empId.toString().toLowerCase() || "",
+                                searchTerm
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1554,12 +1665,15 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                               onMouseOver={handleMouseOver}
                               onMouseOut={handleMouseOut}
                             >
-                              {item.teamLeaderId}
-                              <div className="tooltip">
-                                <span className="tooltiptext">
-                                  {item.teamLeaderId}
-                                </span>
-                              </div>
+                              {highlightText(item.teamLeaderId.toString().toLowerCase() || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.teamLeaderId.toString().toLowerCase() || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
                             </td>
                           )}
 
@@ -1895,6 +2009,23 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
                 {/* Name:-Akash Pawar Component:-RejectedCandidate
           Subcategory:-ResumeModel(added) End LineNo:-1203 Date:-02/07 */}
               </div>
+
+              <div className="search-count-last-div">
+        Search Results : {searchCount}
+        </div>
+
+        <Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper 
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: 'center',
+        }}
+      />
             </>
           ) : (
             <UpdateCallingTracker
@@ -1912,18 +2043,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
           <Loader size={50} color="#ffb281" />
         </div>
       )}
-        <Pagination
-        current={currentPage}
-        total={totalRecords}
-        pageSize={pageSize}
-        showSizeChanger
-        showQuickJumper 
-        onShowSizeChange={handleSizeChange}
-        onChange={handlePageChange}
-        style={{
-          justifyContent: 'center',
-        }}
-      />
+       
     </div>
   );
 };
