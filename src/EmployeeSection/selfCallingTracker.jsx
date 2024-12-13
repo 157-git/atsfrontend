@@ -131,6 +131,7 @@ const CallingList = ({
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [triggerFetch, setTriggerFetch] = useState(false);
 
   //akash_pawar_LineUpList_ShareFunctionality_16/07_128
   // const fetchCallingTrackerData = async (page) => {
@@ -180,8 +181,11 @@ const CallingList = ({
 
   useEffect(() => {
     fetchCallingTrackerData(currentPage, pageSize);
-  }, [employeeIdnew,currentPage, pageSize]);
+  }, [employeeIdnew,currentPage, pageSize, triggerFetch]);
 
+  const handleTriggerFetch = () => {
+    setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
+  };
   //akash_pawar_selfCallingTracker_ShareFunctionality_17/07_171
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_144
@@ -2157,6 +2161,7 @@ const CallingList = ({
               onCancel={() => setShowUpdateCallingTracker(false)}
               onsuccessfulDataUpdation={onsuccessfulDataUpdation}
               loginEmployeeName={loginEmployeeName}
+              triggerFetch={handleTriggerFetch}
             />
           )}
         </>

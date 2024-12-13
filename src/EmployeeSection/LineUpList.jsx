@@ -22,7 +22,8 @@ const LineUpList = ({
   const [callingList, setCallingList] = useState([]);
   const { employeeId } = useParams();
   const employeeIdnew = parseInt(employeeId);
-
+// added by sahil
+  const [triggerFetch, setTriggerFetch] = useState(false);
   const [showUpdateCallingTracker, setShowUpdateCallingTracker] =
     useState(false);
   const [selectedCandidateId, setSelectedCandidateId] = useState(null);
@@ -158,8 +159,12 @@ const LineUpList = ({
 
   useEffect(() => {
     fetchCallingTrackerData(currentPage, pageSize);
-  }, [employeeIdnew,currentPage, pageSize]);
+  }, [employeeIdnew,currentPage, pageSize, triggerFetch]);
   //akash_pawar_selfCallingTracker_ShareFunctionality_17/07_171
+
+  const handleTriggerFetch = () => {
+    setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
+  };
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_144
   const fetchManager = async () => {
@@ -2118,6 +2123,7 @@ const LineUpList = ({
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
               loginEmployeeName={loginEmployeeName}
+              triggerFetch={handleTriggerFetch}
             />
           )}
         </>

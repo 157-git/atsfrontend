@@ -21,7 +21,8 @@ const UpdateSelfCalling = ({
   onsuccessfulDataUpdation,
   onSuccess,
   fromCallingList,
-  loginEmployeeName
+  loginEmployeeName,
+  triggerFetch,
 }) => {
   const [isOtherEducationSelected, setIsOtherEducationSelected] =
     useState(false);
@@ -222,7 +223,21 @@ const UpdateSelfCalling = ({
       const data = await response.json();
       console.log(data);
       setCallingTracker(data);
+      if (data.lineUp.resume !== "") {
+        console.log(data.lineUp.resume);
+        setResumeUploaded(true);
+      }
+      if (data.lineUp.resume === undefined) {
+        console.log(data.lineUp.resume);
+        setResumeUploaded(false);
+      }
+      if (data.lineUp.resume === "") {
+        console.log(data.lineUp.resume);
+        setResumeUploaded(false);
+      }
       setCandidateFetched(true);
+   
+
     } catch (error) {
       console.error("Error fetching candidate data:", error);
     }
@@ -572,9 +587,11 @@ const UpdateSelfCalling = ({
         candidateAddedTime: callingTracker.candidateAddedTime,
         lineUp: {
           ...callingTracker.lineUp,
-          resume: "",
+
         },
       };
+
+      console.log(dataToUpdate);
       const response = await fetch(
         `${API_BASE_URL}/update-calling-data/${candidateId}`,
         {
@@ -594,9 +611,21 @@ const UpdateSelfCalling = ({
             );
           } else {
             toast.success("Data updated successfully");
+            const isUpdated = true; // Assume the update was successful
+
+    if (isUpdated) {
+      // Call the parent's triggerFetch function to refresh data
+      triggerFetch();
+    }
           }
         } else {
           toast.success("Data updated successfully");
+          const isUpdated = true; // Assume the update was successful
+
+          if (isUpdated) {
+            // Call the parent's triggerFetch function to refresh data
+            triggerFetch();
+          }
         }
         setFormSubmitted(true);
         onSuccess();
@@ -685,13 +714,119 @@ const UpdateSelfCalling = ({
   const handleUpdateExpectedCTCThousand = (value) => {
     setLineUpData({ ...lineUpData, expectedCTCThousand: value });
   };
+  const [resumeUrl, setResumeUrl] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  // this fucntion is made by sahil karnekar on date 25-11-2024
+  const handleResumeUploadBoth = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file) {
+      setResumeUploaded(true);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const arrayBuffer = reader.result;
+        const byteArray = new Uint8Array(arrayBuffer);
+        const chunkSize = 0x8000;
+        let base64String = "";
+
+        for (let i = 0; i < byteArray.length; i += chunkSize) {
+          base64String += String.fromCharCode.apply(
+            null,
+            byteArray.subarray(i, i + chunkSize)
+          );
+        }
+        base64String = btoa(base64String);
+        const base64Resume = `data:application/pdf;base64,${base64String}`;
+        setResumeUrl(base64Resume); // Set the base64 URL for the resume
+       callingTracker.lineUp.resume = base64String;
+       toast.success("Resume uploaded successfully");
+      };
+      reader.readAsArrayBuffer(file);
+    }
+  };
 
   
   return (
     <div className="update-main-div">
+
+
+{isModalOpen && (
+        <div className="view-resume-modal-overlay">
+          <div className="view-resume-modal-content">
+            {resumeUrl ? (
+              <iframe
+                src={resumeUrl}
+                title="Resume"
+                style={{ width: "100%", height: "500px" }}
+              ></iframe>
+            ) : (
+              <p>No resume to display</p>
+            )}
+            <br></br>
+            <center>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="calling-tracker-popup-open-btn"
+              >
+                Close
+              </button>
+            </center>
+          </div>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="setFormAdjustmentTag">
         <div className="update-calling-tracker-form">
-          <div className="update-calling-tracker-row-gray">
+
+        <div className="update-calling-tracker-row-gray">
+            <div className="update-calling-tracker-field"
+            style={{justifyContent:"center"}}
+            >
+              Please verify before submitting 👉
+            </div>
+            <div className="update-calling-tracker-field">
+              <label>
+                Upload Resume
+                {resumeUploaded && (
+                  <FaCheckCircle className="upload-success-icon" />
+                )}
+              </label>
+              <div className="update-calling-tracker-field-sub-div">
+                <input
+                  type="file"
+                  name="resume"
+                  onChange={handleResumeUploadBoth}
+                  accept=".pdf,.doc,.docx"
+                  className="plain-input"
+                />
+                {resumeUploaded && (
+                 <div className="calling-tracker-popup-open-btn">
+                 <i
+                   className="fas fa-eye"
+                   onClick={() => {
+                    if (resumeUrl) {
+                      setIsModalOpen(true);
+                    }
+                     else if (!resumeUrl && callingTracker.lineUp.resume) {
+                      const base64Resume = `data:application/pdf;base64,${callingTracker.lineUp.resume}`;
+                      setResumeUrl(base64Resume); // Set the Base64 URL for the resume
+                      setIsModalOpen(true); // Open the modal immediately after setting the URL
+                    }
+                     else {
+                      alert("Please upload a resume first.");
+                    }
+                  }}
+                  ></i>
+</div>
+
+
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
               <label>Date & Time:</label>
               <div className="update-calling-tracker-two-input-container">
@@ -743,7 +878,7 @@ const UpdateSelfCalling = ({
             <input type="text" name="employeeId" value={employeeId} readOnly />
           </div>
 
-          <div className="update-calling-tracker-row-white">
+          <div className="update-calling-tracker-row-gray">
             <div className="update-calling-tracker-field">
               <label>Candidate's Full Name</label>
               {/* line 738 to 1844 added and updated by sahil karnekar date 18-10-2024 */}
@@ -779,7 +914,7 @@ const UpdateSelfCalling = ({
             </div>
           </div>
 
-          <div className="update-calling-tracker-row-gray">
+          <div className="update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
               <label>Contact Number</label>
               <div className="update-calling-tracker-field-sub-div setInputBlock">
@@ -812,7 +947,7 @@ const UpdateSelfCalling = ({
             </div>
           </div>
 
-          <div className="update-calling-tracker-row-white">
+          <div className="update-calling-tracker-row-gray">
             <div className="update-calling-tracker-field">
               <label>Source Name</label>
               {/* line 761 to 770 added by sahil karnekar date 17-10-2024 */}
@@ -881,7 +1016,7 @@ const UpdateSelfCalling = ({
               </div>
             </div>
           </div>
-          <div className="update-calling-tracker-row-gray">
+          <div className="update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
               <label>Applying For Position</label>
               <div className="update-calling-tracker-field-sub-div">
@@ -938,7 +1073,7 @@ const UpdateSelfCalling = ({
             </div>
           </div>
 
-          <div className="update-calling-tracker-row-white">
+          <div className="update-calling-tracker-row-gray">
             <div className="update-calling-tracker-field">
               <label>Calling Remark</label>
               <div className="update-calling-tracker-field-sub-div setInputBlock">
@@ -1015,7 +1150,7 @@ const UpdateSelfCalling = ({
             </div>
           </div>
 
-          <div className="update-calling-tracker-row-gray">
+          <div className="update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
               <label>Call Summary</label>
               <div className="update-calling-tracker-field-sub-div">
@@ -1478,24 +1613,31 @@ const UpdateSelfCalling = ({
             </div>
           </div>
 
-          <div className="update-calling-tracker-row-white">
-            <div className="update-calling-tracker-field">
-              <label>
-                Upload Resume
-                {resumeUploaded && (
-                  <FaCheckCircle className="upload-success-icon" />
-                )}
-              </label>
-              <div className="update-calling-tracker-field-sub-div">
-                <input
-                  type="file"
-                  name="resume"
-                  // onChange={handleResumeFileChange}
-                  accept=".pdf,.doc,.docx"
-                  className="plain-input"
-                />
+          <div className="update-calling-tracker-row-gray">
+
+ <div className="update-calling-tracker-field">
+              <label>    Notice Period</label>
+              {/* line 738 to 1844 added and updated by sahil karnekar date 18-10-2024 */}
+              <div className="update-calling-tracker-field-sub-div setInputBlock">
+              <input
+                    type="text"
+                    name="lineUp.noticePeriod"
+                    placeholder="Notice Period"
+                    value={callingTracker?.lineUp.noticePeriod || ""}
+                    onChange={handleChange}
+                    min="0"
+                    max="90"
+                    className="plain-input"
+                    //  required={callingTracker.selectYesOrNo === "Interested"}
+                  />
+                  {errors.noticePeriod && (
+                    <div className="error-message">{errors.noticePeriod}</div>
+                  )}
               </div>
             </div>
+
+
+
             <div className="update-calling-tracker-field">
               <label>Any Extra Certification</label>
               <div className="update-calling-tracker-field-sub-div">
@@ -1511,7 +1653,7 @@ const UpdateSelfCalling = ({
             </div>
           </div>
 
-          <div className=" update-calling-tracker-row-gray">
+          <div className=" update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
               <label>Current Company</label>
               <div className="update-calling-tracker-field-sub-div">
@@ -1532,7 +1674,7 @@ const UpdateSelfCalling = ({
               <div className="update-calling-tracker-two-input-container">
                 <div>
                   <input
-                    style={{ width: "69%" }}
+                    style={{ width: "95%" }}
                     type="text"
                     name="lineUp.experienceYear"
                     value={callingTracker?.lineUp.experienceYear || ""}
@@ -1549,6 +1691,7 @@ const UpdateSelfCalling = ({
 
                 <div className="calling-tracker-two-input">
                   <input
+                   style={{ width: "95%" }}
                     type="text"
                     name="lineUp.experienceMonth"
                     onChange={handleChange}
@@ -1568,41 +1711,30 @@ const UpdateSelfCalling = ({
             </div>
           </div>
 
-          <div className="update-calling-tracker-row-white">
+          <div className="update-calling-tracker-row-gray">
+
+
             <div className="update-calling-tracker-field">
-              <label>Relevant Experience</label>
-              <div className="update-calling-tracker-two-input-container">
-                <div className="update-calling-tracker-two-input">
-                  <input
+              <label>   Relevant Experience</label>
+              {/* line 738 to 1844 added and updated by sahil karnekar date 18-10-2024 */}
+              <div className="update-calling-tracker-field-sub-div setInputBlock">
+              <input
                     type="text"
                     name="lineUp.relevantExperience"
                     value={callingTracker?.lineUp.relevantExperience || ""}
                     onChange={handleChange}
                     placeholder="Enter Relevant Experience"
+                    className="plain-input"
                   />
                   {errors.relevantExperience && (
                     <div className="error-message">
                       {errors.relevantExperience}
                     </div>
                   )}
-                </div>
-                <div className="update-calling-tracker-two-input">
-                  <input
-                    type="text"
-                    name="lineUp.noticePeriod"
-                    placeholder="Notice Period"
-                    value={callingTracker?.lineUp.noticePeriod || ""}
-                    onChange={handleChange}
-                    min="0"
-                    max="90"
-                    //  required={callingTracker.selectYesOrNo === "Interested"}
-                  />
-                  {errors.noticePeriod && (
-                    <div className="error-message">{errors.noticePeriod}</div>
-                  )}
-                </div>
               </div>
             </div>
+
+
             <div className="update-calling-tracker-field">
               <label>Communication Rating </label>
               <div className="update-calling-tracker-field-sub-div setInputBlock">
@@ -1623,7 +1755,7 @@ const UpdateSelfCalling = ({
               </div>
             </div>
           </div>
-          <div className="update-calling-tracker-row-gray">
+          <div className="update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
               <label>Current CTC(LPA)</label>
               <div className="update-calling-tracker-two-input-container">
@@ -1663,9 +1795,9 @@ const UpdateSelfCalling = ({
             <div className="update-calling-tracker-field">
               <label>Expected CTC (LPA)</label>
               <div className="update-calling-tracker-two-input-container">
-                <div style={{ marginLeft: "10%" }}>
+                <div >
                   <input
-                    style={{ width: "75%" }}
+                    style={{ width: "100%" }}
                     type="text"
                     name="lineUp.expectedCTCLakh"
                     value={callingTracker?.lineUp.expectedCTCLakh || ""}
@@ -1682,9 +1814,9 @@ const UpdateSelfCalling = ({
                     </div>
                   )}
                 </div>
-                <div style={{ marginLeft: "10%" }}>
+                <div >
                   <input
-                    style={{ width: "75%" }}
+                    style={{ width: "95%" }}
                     type="text"
                     name="lineUp.expectedCTCThousand"
                     value={callingTracker?.lineUp.expectedCTCThousand || ""}
@@ -1699,7 +1831,7 @@ const UpdateSelfCalling = ({
               </div>
             </div>
           </div>
-          <div className="update-calling-tracker-row-white">
+          <div className="update-calling-tracker-row-gray">
             <div className="update-calling-tracker-field">
               <label>Holding Offer Letter</label>
               <div className="update-calling-tracker-two-input-container">
@@ -1747,7 +1879,7 @@ const UpdateSelfCalling = ({
             </div>
           </div>
 
-          <div className="update-calling-tracker-row-gray">
+          <div className="update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
               <label>Status Type</label>
               <div className="update-calling-tracker-two-input-container">
