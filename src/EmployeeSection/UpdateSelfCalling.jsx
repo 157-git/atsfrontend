@@ -511,17 +511,6 @@ if (isNotInterested === false) {
           delete newErrors.callingFeedbackStar;
         }
       }
-      // Add yearOfPassing validation directly in errors
-      if (name === "lineUp.yearOfPassing") {
-        if (callingTracker.selectYesOrNo === "Interested" && value === "") {
-          newErrors.yearOfPassing =
-            "Year of Passing is required when Interested.";
-            newErrors.yearOfPassingStar = "*";
-        } else {
-          delete newErrors.yearOfPassing; // Clear the error if valid
-          delete newErrors.yearOfPassingStar;
-        }
-      }
       if (callingTracker.selectYesOrNo === "Interested") {
         setErrors((prevErrors) => {
           let newErrors = { ...prevErrors }; // Copy the previous errors
@@ -687,20 +676,14 @@ if (isNotInterested === false) {
     // Validate the form data before submitting
     const validationErrors = validateCallingTracker();
     const validationErrorsForLineup = validateLineUpData();
-
-    // Check yearOfPassing errors directly
-    if (callingTracker.selectYesOrNo === "Interested") {
-      if (!callingTracker.lineUp.yearOfPassing) {
-        validationErrors.yearOfPassing =
-          "Year of Passing is required when Interested.";
-      } else {
+// updated by sahil karnekar date 17-12-2024
+      if (callingTracker.lineUp.yearOfPassing) {
         const year = parseInt(callingTracker.lineUp.yearOfPassing, 10);
         if (year < 1947 || year > 2025) {
           validationErrors.yearOfPassing =
             "Year of Passing must be between 1947 and 2025.";
         }
       }
-    }
 
     // Combine all errors
     const combinedErrors = {

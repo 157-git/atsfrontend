@@ -134,7 +134,7 @@ const LineUpList = ({
   const fetchCallingTrackerData = async (page, size) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?page=${page}&size=${size}`
+        `${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
       );
 
       if (!response.ok) {
@@ -159,7 +159,7 @@ const LineUpList = ({
 
   useEffect(() => {
     fetchCallingTrackerData(currentPage, pageSize);
-  }, [employeeIdnew,currentPage, pageSize, triggerFetch]);
+  }, [employeeIdnew,currentPage, pageSize, triggerFetch,searchTerm]);
   //akash_pawar_selfCallingTracker_ShareFunctionality_17/07_171
 
   const handleTriggerFetch = () => {
@@ -827,15 +827,11 @@ const LineUpList = ({
 
   return (
     <div className="calling-list-container">
-      {loading ? (
-        <div className="register">
-          <Loader></Loader>
-        </div>
-      ) : (
-        <>
-          {!showUpdateCallingTracker ? (
-            <>
-              <div className="search">
+      {/* line 830 to 1039 updated by sahil karnekar on date 17-12-2024 */}
+      {
+        !showUpdateCallingTracker && (
+          <>
+            <div className="search">
                 {/* this line is added by sahil karnekar date 24-10-2024 */}
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <i
@@ -1030,6 +1026,17 @@ const LineUpList = ({
                   </div>
                 )}
               </div>
+          </>
+        )
+      }
+      {loading ? (
+        <div className="register">
+          <Loader></Loader>
+        </div>
+      ) : (
+        <>
+          {!showUpdateCallingTracker ? (
+            <>
 
               <div className="attendanceTableData">
                 <table className="attendance-table">

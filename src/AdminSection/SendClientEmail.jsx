@@ -665,10 +665,6 @@ const SendClientEmail = ({ clientEmailSender }) => {
               </button>
             </div>
           </div>
-
-          
-
-
           <div className="filter-dropdowns">
             {showFilterSection && (
               <div className="filter-section">

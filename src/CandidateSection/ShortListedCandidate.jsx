@@ -120,14 +120,19 @@ const ShortListedCandidates = ({
     ["yearOfPassing", "Year Of Passing"]
   ];
 
+  
   const { userType } = useParams();
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
-
+  // updated by sahil karnekar date 17-12-2024
+   const [triggerFetch, setTriggerFetch] = useState(false);
+  const handleTriggerFetch = () => {
+    setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
+  };
   useEffect(() => {
     fetchShortListedData(currentPage,pageSize);
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize,triggerFetch,searchTerm]);
 
   //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_116
   const fetchManager = async () => {
@@ -189,7 +194,7 @@ const ShortListedCandidates = ({
   const fetchShortListedData = async (page, size) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/shortListed-data/${employeeId}/${userType}?page=${page}&size=${size}`
+        `${API_BASE_URL}/shortListed-data/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
       );
       const data = await response.json();
       setShortListedData(data.content);
@@ -636,124 +641,125 @@ const handleFilterSelect = (key, value) => {
   };
 
   return (
+    <>
     <div className="calling-list-container">
       {loading ? (
         <div className="register">
           <Loader></Loader>
         </div>
       ) : (
+      // line 651 to 1777 updated by sahil karnekar date 17-12-2024
         <>
-          <div className="search">
-            <div
-              style={{
-                display: "flex",
-                gap: "5px",
-                justifyContent: "center",
-                alignItems: "center",
-                paddingTop: "3px",
-              }}
-            >
-              {/* line 565 to 571 added by sahil karnekar date 24-10-2024 */}
-              <i
-                style={{ fontSize: "22px" }}
-                onClick={
-                  toggleShortListed
-                } /*Akash_Pawar_ShortlistedCandidate_toggleShortListed(show interview candidate)_23/07_LineNo_591*/
-                className="fa-regular fa-calendar"
-              ></i>
-              <i
-                className="fa-solid fa-magnifying-glass"
-               
-                style={{ margin: "10px", width: "auto", fontSize: "15px" }}
-              ></i>
-              {/* line 581 to 590 updated by sahil karnekar date 24-10-2024 */}
+        {
 
-              <div
-                    className="search-input-div"
-                    style={{ width: `${calculateWidth()}px` }}
-                  >
-                    <div className="forxmarkdiv">
-                    <input
-                      type="text"
-                      className="search-input removeBorderForSearchInput"
-                      placeholder="Search here..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    { searchTerm && (
-                      <div className="svgimagesetinInput">
-                    <svg onClick={(()=>setSearchTerm(""))} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
-                    </div>
-                    )}
-                    
-                    </div>
-                  </div>
+!showUpdateCallingTracker && (
+  <>
+  <div className="search">
+  <div
+    style={{
+      display: "flex",
+      gap: "5px",
+      justifyContent: "center",
+      alignItems: "center",
+      paddingTop: "3px",
+    }}
+  >
+    {/* line 565 to 571 added by sahil karnekar date 24-10-2024 */}
+    <i
+      style={{ fontSize: "22px" }}
+      onClick={
+        toggleShortListed
+      } /*Akash_Pawar_ShortlistedCandidate_toggleShortListed(show interview candidate)_23/07_LineNo_591*/
+      className="fa-regular fa-calendar"
+    ></i>
+    <i
+      className="fa-solid fa-magnifying-glass"
+     
+      style={{ margin: "10px", width: "auto", fontSize: "15px" }}
+    ></i>
+    {/* line 581 to 590 updated by sahil karnekar date 24-10-2024 */}
 
-            </div>
-            <h5 style={{ color: "gray", paddingTop: "5px" }}>
-              Shortlisted Candidate 
-            </h5>
-
-            <div
-              style={{
-                display: "flex",
-                gap: "5px",
-                justifyContent: "center",
-                alignItems: "center",
-                paddingTop: "3px",
-              }}
-            >
-              {userType !== "Recruiters" && (
-                <div>
-                  {showShareButton ? (
-                    <button
-                      className="lineUp-share-btn"
-                      onClick={() => setShowShareButton(false)}
-                    >
-                      Share
-                    </button>
-                  ) : (
-                    <div style={{ display: "flex", gap: "5px" }}>
-                      <button
-                        className="lineUp-share-btn"
-                        onClick={() => {
-                          setShowShareButton(true);
-                          setSelectedRows([]);
-                        }}
-                      >
-                        Close
-                      </button>
-                      {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_602 */}
-                      {userType === "TeamLeader" && (
-                        <button
-                          className="lineUp-share-btn"
-                          onClick={handleSelectAll}
-                        >
-                          {allSelected ? "Deselect All" : "Select All"}
-                        </button>
-                      )}
-                      {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_609 */}
-                      <button
-                        className="lineUp-share-btn"
-                        onClick={forwardSelectedCandidate}
-                      >
-                        Forward
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-              <button className="lineUp-share-btn" onClick={toggleFilterSection}>
-                Filter <i className="fa-solid fa-filter"></i>
-              </button>
-            </div>
+    <div
+          className="search-input-div"
+          style={{ width: `${calculateWidth()}px` }}
+        >
+          <div className="forxmarkdiv">
+          <input
+            type="text"
+            className="search-input removeBorderForSearchInput"
+            placeholder="Search here..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          { searchTerm && (
+            <div className="svgimagesetinInput">
+          <svg onClick={(()=>setSearchTerm(""))} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
           </div>
-          {!showUpdateCallingTracker ? (
-            <div>
-                        
+          )}
+          
+          </div>
+        </div>
 
-               {/* updated this filter section by sahil karnekar date 22-10-2024 */}
-               {showFilterSection && (
+  </div>
+  <h5 style={{ color: "gray", paddingTop: "5px" }}>
+    Shortlisted Candidate 
+  </h5>
+
+  <div
+    style={{
+      display: "flex",
+      gap: "5px",
+      justifyContent: "center",
+      alignItems: "center",
+      paddingTop: "3px",
+    }}
+  >
+    {userType !== "Recruiters" && (
+      <div>
+        {showShareButton ? (
+          <button
+            className="lineUp-share-btn"
+            onClick={() => setShowShareButton(false)}
+          >
+            Share
+          </button>
+        ) : (
+          <div style={{ display: "flex", gap: "5px" }}>
+            <button
+              className="lineUp-share-btn"
+              onClick={() => {
+                setShowShareButton(true);
+                setSelectedRows([]);
+              }}
+            >
+              Close
+            </button>
+            {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_602 */}
+            {userType === "TeamLeader" && (
+              <button
+                className="lineUp-share-btn"
+                onClick={handleSelectAll}
+              >
+                {allSelected ? "Deselect All" : "Select All"}
+              </button>
+            )}
+            {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_609 */}
+            <button
+              className="lineUp-share-btn"
+              onClick={forwardSelectedCandidate}
+            >
+              Forward
+            </button>
+          </div>
+        )}
+      </div>
+    )}
+    <button className="lineUp-share-btn" onClick={toggleFilterSection}>
+      Filter <i className="fa-solid fa-filter"></i>
+    </button>
+  </div>
+</div>
+{showFilterSection && (
   <div className="filter-section">
     {limitedOptions.map(([optionKey, optionLabel]) => {
       const uniqueValues = Array.from(
@@ -800,6 +806,17 @@ const handleFilterSelect = (key, value) => {
     })}
   </div>
 )}
+</>
+)
+
+        }
+       
+          {!showUpdateCallingTracker ? (
+            <div>
+                        
+
+               {/* updated this filter section by sahil karnekar date 22-10-2024 */}
+         
               <div className="attendanceTableData">
                 <table id="shortlisted-table-id" className="attendance-table">
                   <thead>
@@ -1751,6 +1768,7 @@ const handleFilterSelect = (key, value) => {
               onCancel={() => setShowUpdateCallingTracker(false)}
               loginEmployeeName={loginEmployeeName}
               onSuccess={handleUpdateSuccess}
+              triggerFetch={handleTriggerFetch}
               // updateSuccess={handleUpdateSuccess}
               // onCancel={() => setShowUpdateCallingTracker(false)}
 
@@ -1768,6 +1786,7 @@ const handleFilterSelect = (key, value) => {
       )}
 
     </div>
+    </>
   );
 };
 

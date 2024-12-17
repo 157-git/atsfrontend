@@ -227,8 +227,11 @@ html::-webkit-scrollbar {
   align-items: center;
 flex-direction: row;
 display: flex;
+/* this css updated by sahil karnekar on date 17-12-2024 */
+justify-content: center;
+width: 100%;
 text-align: center;
-padding-right: 8px;
+
 }
 .lineUp-share-btn{
   color: var(--button-text-color);

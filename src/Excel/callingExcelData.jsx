@@ -1319,7 +1319,7 @@ const CallingExcelList = ({
                 </div>
               )}
               <div className="attendanceTableData">
-                <table className="selfcalling-table attendance-table">
+                <table className="attendance-table">
                   <thead>
                     <tr className="attendancerows-head">
                       {/* // Arshad Attar Added This Code On 18-11-2024
@@ -1367,7 +1367,7 @@ const CallingExcelList = ({
                           </td>
                         ) : null}
                         <td
-                          className="tabledata "
+                          className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
@@ -1379,7 +1379,7 @@ const CallingExcelList = ({
                           </div>
                         </td>
                         <td
-                          className="tabledata "
+                          className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
@@ -1392,7 +1392,7 @@ const CallingExcelList = ({
                           </div>
                         </td>
                         <td
-                          className="tabledata "
+                          className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
@@ -1407,7 +1407,7 @@ const CallingExcelList = ({
                           </div>
                         </td>
                         <td
-                          className="tabledata "
+                          className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
@@ -1422,7 +1422,7 @@ const CallingExcelList = ({
                           </div>
                         </td>
                         <td
-                          className="tabledata "
+                          className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
@@ -1437,7 +1437,7 @@ const CallingExcelList = ({
                           </div>
                         </td>
                         <td
-                          className="tabledata "
+                          className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
@@ -1534,9 +1534,24 @@ const CallingExcelList = ({
                 </table>
               </div>
 
+
+
               <div className="search-count-last-div">
         Search Results : {searchCount}
         </div>
+
+        <Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: "center",
+        }}
+      />
 
               {/*Arshad Attar Added This Code On 18-11-2024
                Added New Share Data Frontend Logic line 1444 to 1572 */}
@@ -1839,18 +1854,7 @@ const CallingExcelList = ({
         </>
       )}
 
-      <Pagination
-        current={currentPage}
-        total={totalRecords}
-        pageSize={pageSize}
-        showSizeChanger
-        showQuickJumper
-        onShowSizeChange={handleSizeChange}
-        onChange={handlePageChange}
-        style={{
-          justifyContent: "center",
-        }}
-      />
+ 
     </div>
   );
 };
