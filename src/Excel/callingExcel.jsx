@@ -167,7 +167,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
       console.log("Link come here 002");
 
       setUploadSuccess(true);
-      setexcelJobDesignation("")
+      setexcelJobDesignation("");
       toast.success("File Uploaded Successfully");
 
       const currentTime = getCurrentIndianTime();
@@ -223,21 +223,24 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
 
       if (response.status === 200) {
         const responseData = response.data;
-        const uploadedCount = responseData["Uploaded Resumes"] || 0;
-        const existingCount = responseData["Existing Resumes"] || 0;
 
-        // Show success message with counts
+        const uploadedCount = responseData["Uploaded Resume Count"] || 0;
+        const replacedCount = responseData["Replaced Resume Count"] || 0;
+        const problematicCount = responseData["Problematic Resume Count"] || 0;
+        const totalProcessed = responseData["Total Files Processed"] || 0;
+
         toast.success(
-          `Resume uploaded Successfully\n` +
-            `Already Exists Resume  :  ${existingCount}\n` +
-            `Uploaded Resumes Count :  ${uploadedCount}`
+          ` Total Files Processed  :  ${totalProcessed}\n` +
+            ` Uploaded Resumes Count :  ${uploadedCount}\n` +
+            ` Replaced Resumes Count :  ${replacedCount}\n` +
+            ` Problematic Resumes    :  ${problematicCount}`
         );
 
         setUploadSuccessResume(true);
         handleTableChange("ResumeList");
         hideSuccessMessage();
         setSelectedFiles([]);
-        setResumeJobDesignation("")
+        setResumeJobDesignation("");
         resetFileInput(resumeFileInputRef);
         setHasErrorResume(false);
       }

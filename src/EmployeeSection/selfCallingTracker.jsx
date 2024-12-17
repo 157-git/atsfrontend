@@ -127,42 +127,18 @@ const CallingList = ({
     ["yearOfPassing", "Year Of Passing"],
   ];
   const { userType } = useParams();
-// added by sahil karnekar date 4-12-2024
+  // added by sahil karnekar date 4-12-2024
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
-
-  //akash_pawar_LineUpList_ShareFunctionality_16/07_128
-  // const fetchCallingTrackerData = async (page) => {
-  //   try {
-  //     const response = await fetch(
-  //       `${API_BASE_URL}/callingData/${employeeId}/${userType}?page=${page}&size=${pageSize}`,
-  //     );
-  //     if (!response.ok) {
-  //       console.log(response);
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
-  //     const data = await response.json();
-  //     console.log(data);
-  //     setCallingList(data.content);
-  //     setFilteredCallingList(data.content);
-  //     setTotalRecords(data.totalElements);
-  //     console.log(totalRecords);
-  //     setLoading(false);
-  //     console.log(data.content);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     setLoading(false);
-  //   }
-  // };
 
   // updated by sahil karnekar date 4-12-2024
   const fetchCallingTrackerData = async (page, size) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${API_BASE_URL}/callingData/${employeeId}/${userType}?page=${page}&size=${size}`
-      );
+        `${API_BASE_URL}/callingData/${employeeId}/${userType}?page=${page}&size=${size}&searchTerm=${encodeURIComponent(searchTerm)}`
+      );  
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -180,7 +156,7 @@ const CallingList = ({
 
   useEffect(() => {
     fetchCallingTrackerData(currentPage, pageSize);
-  }, [employeeIdnew,currentPage, pageSize]);
+  }, [employeeIdnew, currentPage, pageSize]);
 
   //akash_pawar_selfCallingTracker_ShareFunctionality_17/07_171
 
@@ -269,13 +245,6 @@ const CallingList = ({
     }
   };
 
-  // const handleUpdateSuccess = () => {
-  //   setShowUpdateCallingTracker(false);
-  //   fetch(`${API_BASE_URL}/callingData/${employeeIdnew}/${userType}`)
-  //     .then((response) => response.json())
-  //     .then((data) => setCallingList(data))
-  //     .catch((error) => console.error("Error fetching data:", error));
-  // };
 
   const handleMouseOver = (event) => {
     const tableData = event.currentTarget;
@@ -336,56 +305,122 @@ const CallingList = ({
           item.personalFeedback.toLowerCase().includes(searchTermLower)) ||
         (item.callingFeedback &&
           item.callingFeedback.toLowerCase().includes(searchTermLower)) ||
-          (item.jobDesignation &&
-            item.jobDesignation.toString().toLowerCase().includes(searchTermLower)) ||
-            (item.requirementId &&
-              item.requirementId.toString().toLowerCase().includes(searchTermLower)) ||
-              (item.fullAddress &&
-                item.fullAddress.toString().toLowerCase().includes(searchTermLower)) ||
-                (item.experienceYear &&
-                  item.experienceYear.toString().toLowerCase().includes(searchTermLower)) ||
-                  (item.experienceMonth &&
-                    item.experienceMonth.toString().toLowerCase().includes(searchTermLower)) ||
-                    (item.relevantExperience &&
-                      item.relevantExperience.toString().toLowerCase().includes(searchTermLower)) ||
-                      (item.currentCTCLakh &&
-                        item.currentCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
-                        (item.currentCTCThousand &&
-                          item.currentCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
-                          (item.expectedCTCLakh &&
-                            item.expectedCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
-                            (item.expectedCTCThousand &&
-                              item.expectedCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
-                              (item.yearOfPassing &&
-                                item.yearOfPassing.toString().toLowerCase().includes(searchTermLower)) ||
-                                (item.extraCertification &&
-                                  item.extraCertification.toString().toLowerCase().includes(searchTermLower)) ||
-                                  (item.holdingAnyOffer &&
-                                    item.holdingAnyOffer.toString().toLowerCase().includes(searchTermLower)) ||
-                                    (item.offerLetterMsg &&
-                                      item.offerLetterMsg.toString().toLowerCase().includes(searchTermLower)) ||
-                                      (item.noticePeriod &&
-                                        item.noticePeriod.toString().toLowerCase().includes(searchTermLower)) ||
-                                        (item.msgForTeamLeader &&
-                                          item.msgForTeamLeader.toString().toLowerCase().includes(searchTermLower)) ||
-                                          (item.availabilityForInterview &&
-                                            item.availabilityForInterview.toString().toLowerCase().includes(searchTermLower)) ||
-                                            (item.interviewTime &&
-                                              item.interviewTime.toString().toLowerCase().includes(searchTermLower)) ||
-                                              (item.finalStatus &&
-                                                item.finalStatus.toString().toLowerCase().includes(searchTermLower)) ||
-                                                (item.dateOfBirth &&
-                                                  item.dateOfBirth.toString().toLowerCase().includes(searchTermLower)) ||
-                                                  (item.gender &&
-                                                    item.gender.toString().toLowerCase().includes(searchTermLower)) ||
-                                                    (item.qualification &&
-                                                      item.qualification.toString().toLowerCase().includes(searchTermLower)) ||
-                                                      (item.incentive &&
-                                                        item.incentive.toString().toLowerCase().includes(searchTermLower)) ||
-                                                        (item.candidateId &&
-                                                          item.candidateId.toString().toLowerCase().includes(searchTermLower)) ||
-                                                          (item.empId &&
-                                                            item.empId.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.jobDesignation &&
+          item.jobDesignation
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.requirementId &&
+          item.requirementId
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.fullAddress &&
+          item.fullAddress
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.experienceYear &&
+          item.experienceYear
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.experienceMonth &&
+          item.experienceMonth
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.relevantExperience &&
+          item.relevantExperience
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.currentCTCLakh &&
+          item.currentCTCLakh
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.currentCTCThousand &&
+          item.currentCTCThousand
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.expectedCTCLakh &&
+          item.expectedCTCLakh
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.expectedCTCThousand &&
+          item.expectedCTCThousand
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.yearOfPassing &&
+          item.yearOfPassing
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.extraCertification &&
+          item.extraCertification
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.holdingAnyOffer &&
+          item.holdingAnyOffer
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.offerLetterMsg &&
+          item.offerLetterMsg
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.noticePeriod &&
+          item.noticePeriod
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.msgForTeamLeader &&
+          item.msgForTeamLeader
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.availabilityForInterview &&
+          item.availabilityForInterview
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.interviewTime &&
+          item.interviewTime
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.finalStatus &&
+          item.finalStatus
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.dateOfBirth &&
+          item.dateOfBirth
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.gender &&
+          item.gender.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.qualification &&
+          item.qualification
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.incentive &&
+          item.incentive.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.candidateId &&
+          item.candidateId
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.empId &&
+          item.empId.toString().toLowerCase().includes(searchTermLower)) ||
         (item.selectYesOrNo &&
           item.selectYesOrNo.toLowerCase().includes(searchTermLower))
       );
@@ -563,7 +598,7 @@ const CallingList = ({
         body: JSON.stringify(requestData),
       };
       const response = await fetch(url, requestOptions);
-  
+
       if (!response.ok) {
         setIsDataSending(false);
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -848,34 +883,38 @@ const CallingList = ({
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <i
                     className="fa-solid fa-magnifying-glass"
-
                     style={{ margin: "10px", width: "auto", fontSize: "15px" }}
                   ></i>
                   {/* this line 731 to 741 added by sahil karnekar date 24-10-2024 */}
-
 
                   <div
                     className="search-input-div"
                     style={{ width: `${calculateWidth()}px` }}
                   >
                     <div className="forxmarkdiv">
-                    <input
-                      type="text"
-                      className="search-input removeBorderForSearchInput"
-                      placeholder="Search here..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    { searchTerm && (
-                      <div className="svgimagesetinInput">
-                    <svg onClick={(()=>setSearchTerm(""))} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
-                    </div>
-                    )}
-                    
+                      <input
+                        type="text"
+                        className="search-input removeBorderForSearchInput"
+                        placeholder="Search here..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                      {searchTerm && (
+                        <div className="svgimagesetinInput">
+                          <svg
+                            onClick={() => setSearchTerm("")}
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="24px"
+                            viewBox="0 -960 960 960"
+                            width="24px"
+                            fill="#000000"
+                          >
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                          </svg>
+                        </div>
+                      )}
                     </div>
                   </div>
-
-
                 </div>
                 <h3 style={{ color: "gray" }}>Calling Tracker</h3>
 
@@ -1152,14 +1191,16 @@ const CallingList = ({
                           </td>
                         ) : null}
 
-<td
+                        <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {calculateRowIndex(index)}
+                          {calculateRowIndex(index)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{calculateRowIndex(index)}</span>
+                            <span className="tooltiptext">
+                              {calculateRowIndex(index)}
+                            </span>
                           </div>
                         </td>
 
@@ -1168,7 +1209,10 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {highlightText(item.candidateId.toString().toLowerCase() || "", searchTerm)}
+                          {highlightText(
+                            item.candidateId.toString().toLowerCase() || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1184,12 +1228,16 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           { highlightText(item.date || "", searchTerm)  } -  {" "}  {item.candidateAddedTime}
+                          {highlightText(item.date || "", searchTerm)} -{" "}
+                          {item.candidateAddedTime}
                           <div className="tooltip">
-                            <span className="tooltiptext">{highlightText(
+                            <span className="tooltiptext">
+                              {highlightText(
                                 item.date.toString().toLowerCase() || "",
                                 searchTerm
-                              )}  - {" "}  {item.candidateAddedTime}</span>
+                              )}{" "}
+                              - {item.candidateAddedTime}
+                            </span>
                           </div>
                         </td>
 
@@ -1262,7 +1310,10 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.alternateNumber || "", searchTerm)}
+                          {highlightText(
+                            item.alternateNumber || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1278,13 +1329,10 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.sourceName || "", searchTerm)}
+                          {highlightText(item.sourceName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {highlightText(
-                                item.sourceName || "",
-                                searchTerm
-                              )}
+                              {highlightText(item.sourceName || "", searchTerm)}
                             </span>
                           </div>
                         </td>
@@ -1294,7 +1342,7 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.jobDesignation || "", searchTerm)}
+                          {highlightText(item.jobDesignation || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1326,7 +1374,10 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.requirementCompany || "", searchTerm)}
+                          {highlightText(
+                            item.requirementCompany || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1342,7 +1393,10 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {highlightText(item.communicationRating || "", searchTerm)}
+                          {highlightText(
+                            item.communicationRating || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1358,7 +1412,10 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {highlightText(item.currentLocation || "", searchTerm)}
+                          {highlightText(
+                            item.currentLocation || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1374,7 +1431,7 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.fullAddress || "", searchTerm)}
+                          {highlightText(item.fullAddress || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1390,7 +1447,10 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {highlightText(item.callingFeedback || "", searchTerm)}
+                          {highlightText(
+                            item.callingFeedback || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1409,10 +1469,7 @@ const CallingList = ({
                           {highlightText(item.feedBack || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {highlightText(
-                                item.feedBack || "",
-                                searchTerm
-                              )}
+                              {highlightText(item.feedBack || "", searchTerm)}
                             </span>
                           </div>
                         </td>
@@ -1422,7 +1479,10 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.incentive.toString().toLowerCase() || "", searchTerm)}
+                          {highlightText(
+                            item.incentive.toString().toLowerCase() || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1438,7 +1498,7 @@ const CallingList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.selectYesOrNo || "", searchTerm)}
+                          {highlightText(item.selectYesOrNo || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1455,15 +1515,15 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                           {highlightText(item.companyName || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.companyName || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                            {highlightText(item.companyName || "", searchTerm)}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.companyName || "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
                           </td>
 
                           <td
@@ -1486,15 +1546,18 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                             {highlightText(item.relevantExperience || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.relevantExperience || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                            {highlightText(
+                              item.relevantExperience || "",
+                              searchTerm
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.relevantExperience || "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
                           </td>
 
                           <td
@@ -1532,15 +1595,15 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                           {highlightText(item.dateOfBirth || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.dateOfBirth || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                            {highlightText(item.dateOfBirth || "", searchTerm)}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.dateOfBirth || "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
                           </td>
 
                           <td
@@ -1548,15 +1611,12 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                             {highlightText(item.gender || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.gender || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                            {highlightText(item.gender || "", searchTerm)}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(item.gender || "", searchTerm)}
+                              </span>
+                            </div>
                           </td>
 
                           <td
@@ -1564,15 +1624,18 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                           {highlightText(item.qualification || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.qualification || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                            {highlightText(
+                              item.qualification || "",
+                              searchTerm
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.qualification || "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
                           </td>
 
                           <td
@@ -1580,15 +1643,18 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                           {highlightText(item.yearOfPassing || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.yearOfPassing || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                            {highlightText(
+                              item.yearOfPassing || "",
+                              searchTerm
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.yearOfPassing || "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
                           </td>
 
                           <td
@@ -1596,15 +1662,18 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                          {highlightText(item.extraCertification || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.extraCertification || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                            {highlightText(
+                              item.extraCertification || "",
+                              searchTerm
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.extraCertification || "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
                           </td>
 
                           {/* <td
@@ -1625,15 +1694,18 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {highlightText(item.holdingAnyOffer || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.holdingAnyOffer || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                            {highlightText(
+                              item.holdingAnyOffer || "",
+                              searchTerm
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.holdingAnyOffer || "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
                           </td>
 
                           <td
@@ -1641,15 +1713,18 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                           {highlightText(item.offerLetterMsg || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.offerLetterMsg || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                            {highlightText(
+                              item.offerLetterMsg || "",
+                              searchTerm
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.offerLetterMsg || "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
                           </td>
 
                           {/* <td
@@ -1665,19 +1740,19 @@ const CallingList = ({
                           {/* Name:-Akash Pawar Component:-LineUpList
                   Subcategory:-ResumeViewButton(added) start LineNo:-993
                   Date:-02/07 */}
-                           <td className="tabledata">
-                          <button
-                            onClick={() => openResumeModal(item.resume)}
-                            style={{ background: "none", border: "none" }}
-                          >
-                            <i
-                              className="fas fa-eye"
-                              style={{
-                                color: item.resume ? "green" : "inherit",
-                              }}
-                            ></i>
-                          </button>
-                        </td>
+                          <td className="tabledata">
+                            <button
+                              onClick={() => openResumeModal(item.resume)}
+                              style={{ background: "none", border: "none" }}
+                            >
+                              <i
+                                className="fas fa-eye"
+                                style={{
+                                  color: item.resume ? "green" : "inherit",
+                                }}
+                              ></i>
+                            </button>
+                          </td>
                           {/* Name:-Akash Pawar Component:-LineUpList
                   Subcategory:-ResumeViewButton(added) End LineNo:-1005
                   Date:-02/07 */}
@@ -1688,14 +1763,14 @@ const CallingList = ({
                             onMouseOut={handleMouseOut}
                           >
                             {highlightText(item.noticePeriod || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.noticePeriod || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.noticePeriod || "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
                           </td>
 
                           <td
@@ -1703,15 +1778,18 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                            {highlightText(item.msgForTeamLeader || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.msgForTeamLeader || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                            {highlightText(
+                              item.msgForTeamLeader || "",
+                              searchTerm
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.msgForTeamLeader || "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
                           </td>
 
                           <td
@@ -1719,15 +1797,18 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                             {highlightText(item.availabilityForInterview || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.availabilityForInterview || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                            {highlightText(
+                              item.availabilityForInterview || "",
+                              searchTerm
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.availabilityForInterview || "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
                           </td>
 
                           <td
@@ -1735,15 +1816,18 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                             {highlightText(item.interviewTime || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.interviewTime || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                            {highlightText(
+                              item.interviewTime || "",
+                              searchTerm
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.interviewTime || "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
                           </td>
 
                           <td
@@ -1751,15 +1835,15 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                           {highlightText(item.finalStatus || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.finalStatus || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                            {highlightText(item.finalStatus || "", searchTerm)}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.finalStatus || "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
                           </td>
 
                           <td
@@ -1767,15 +1851,18 @@ const CallingList = ({
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
-                              {highlightText(item.empId.toString().toLowerCase() || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.empId.toString().toLowerCase() || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                            {highlightText(
+                              item.empId.toString().toLowerCase() || "",
+                              searchTerm
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.empId.toString().toLowerCase() || "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
                           </td>
 
                           {(userType === "TeamLeader" ||
@@ -1785,15 +1872,18 @@ const CallingList = ({
                               onMouseOver={handleMouseOver}
                               onMouseOut={handleMouseOut}
                             >
-                               {highlightText(item.teamLeaderId || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
                               {highlightText(
                                 item.teamLeaderId || "",
                                 searchTerm
                               )}
-                            </span>
-                          </div>
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    item.teamLeaderId || "",
+                                    searchTerm
+                                  )}
+                                </span>
+                              </div>
                             </td>
                           )}
 
@@ -2131,22 +2221,21 @@ const CallingList = ({
               </div>
 
               <div className="search-count-last-div">
-        Search Results : {searchCount}
-        </div>
+                Search Results : {searchCount}
+              </div>
 
-        <Pagination
-        current={currentPage}
-        total={totalRecords}
-        pageSize={pageSize}
-        showSizeChanger
-        showQuickJumper 
-        onShowSizeChange={handleSizeChange}
-        onChange={handlePageChange}
-        style={{
-          justifyContent: 'center',
-        }}
-      />
-
+              <Pagination
+                current={currentPage}
+                total={totalRecords}
+                pageSize={pageSize}
+                showSizeChanger
+                showQuickJumper
+                onShowSizeChange={handleSizeChange}
+                onChange={handlePageChange}
+                style={{
+                  justifyContent: "center",
+                }}
+              />
             </>
           ) : (
             <UpdateCallingTracker
@@ -2161,16 +2250,14 @@ const CallingList = ({
           )}
         </>
       )}
-{/* added by sahil karnekar date 4-12-2024 */}
-
-
+      {/* added by sahil karnekar date 4-12-2024 */}
 
       {isDataSending && (
         <div className="ShareFunc_Loading_Animation">
           <Loader />
         </div>
       )}
-   {/* <Pagination
+      {/* <Pagination
         current={currentPage}
         total={totalRecords}
         pageSize={pageSize}
@@ -2178,9 +2265,6 @@ const CallingList = ({
         onShowSizeChange={handleSizeChange}
         onChange={handlePageChange}
       /> */}
-
-
-      
     </div>
   );
 };
