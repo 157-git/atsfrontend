@@ -107,7 +107,6 @@ if (data.length > 0 && formData.interviewResponse === "") {
   if (formData.interviewResponse === "") {
         formData.interviewResponse = formData.interviewRound;
       }
-        
       }
     
       const response = await axios.post(
