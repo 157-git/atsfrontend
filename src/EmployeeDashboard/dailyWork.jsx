@@ -645,8 +645,8 @@ function DailyWork({
       query.allManagers = "869,870,871,1340,1341,1342";
     }
 
-    const newSocket = io("http://localhost:8080", { query });
-    // const newSocket = io(' http://rg.157careers.in', { query });
+    // const newSocket = io("http://localhost:8080", { query });
+    const newSocket = io(' http://rg.157careers.in', { query });
     console.log(query);
     setSocket(newSocket);
   }, []);
