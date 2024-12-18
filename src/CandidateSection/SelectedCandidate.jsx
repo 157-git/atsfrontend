@@ -122,7 +122,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
 
   useEffect(() => {
     fetchSelectedCandidateData(currentPage, pageSize);
-  }, [employeeId,currentPage, pageSize]);
+  }, [employeeId,currentPage, pageSize,searchTerm]);
 
   useEffect(() => {
     const options = limitedOptions
@@ -137,7 +137,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   const fetchSelectedCandidateData = async (page, size) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/selected-candidate/${employeeId}/${userType}?page=${page}&size=${size}`
+        `${API_BASE_URL}/selected-candidate/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
       );
       const data = await response.json();
       setCallingList(data.content);
@@ -767,15 +767,12 @@ const handleSizeChange = (current, size) => {
   };
   return (
     <div className="App-after">
-      {loading ? (
-        <div className="register">
-          <Loader></Loader>
-        </div>
-      ) : (
-        <>
-          {!selectedCandidateId ? (
-            <>
-              <div className="search">
+{/* updated by sahil karnekar date 17-12-2024 */}
+{
+  !selectedCandidateId && (
+
+    <>
+       <div className="search">
                 {/* line 689 added by sahil karnekar date 24-10-2024 */}
               <div style={{ display: "flex", alignItems: "center" }}>
                 <i
@@ -947,6 +944,20 @@ const handleSizeChange = (current, size) => {
   </div>
 )}
 </div>
+{/* updated by sahil karnekar date 17-12-2024 */}
+    </>
+
+  )
+}
+
+      {loading ? (
+        <div className="register">
+          <Loader></Loader>
+        </div>
+      ) : (
+        <>
+          {!selectedCandidateId ? (
+            <>
 
               <div className="attendanceTableData">
                 <table className="attendance-table">
@@ -1974,8 +1985,8 @@ const handleSizeChange = (current, size) => {
           Subcategory:-ResumeModel(added) End LineNo:-1184 Date:-02/07 */}
               </div>
               <div className="search-count-last-div">
-        Search Results : {searchCount}
-        </div>
+            Total Results : {totalRecords}
+          </div>
         <Pagination
         current={currentPage}
         total={totalRecords}

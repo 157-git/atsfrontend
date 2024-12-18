@@ -4,15 +4,17 @@ import "../Excel/resumeList.css";
 import { useParams } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { API_BASE_URL } from "../api/api";
-{/* this line added by sahil date 22-10-2024 */}
+{
+  /* this line added by sahil date 22-10-2024 */
+}
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import Loader from "../EmployeeSection/loader";
 import { parse } from "date-fns";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
-
-
-{/* this line added by sahil date 22-10-2024 */}
+{
+  /* this line added by sahil date 22-10-2024 */
+}
 const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,8 +37,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   const [searchCount, setSearchCount] = useState(0);
 
   useEffect(() => {
-    
-    const fetchData = async (page,size) => {
+    const fetchData = async (page, size) => {
       try {
         const response = await fetch(
           `${API_BASE_URL}/share-profile-count-data?page=${page}&size=${size}`
@@ -47,7 +48,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
         const result = await response.json();
         setData(result.content);
         setFilteredData(result.content);
-        setTotalRecords(result.totalElements)
+        setTotalRecords(result.totalElements);
         setSearchCount(result.length);
         console.log(filteredData);
       } catch (error) {
@@ -56,8 +57,8 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
         setLoading(false);
       }
     };
-    fetchData(currentPage,pageSize);
-  }, [currentPage,pageSize]);
+    fetchData(currentPage, pageSize);
+  }, [currentPage, pageSize]);
 
   const handleMouseOver = (event) => {
     const tableData = event.currentTarget;
@@ -114,7 +115,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
     ["designation", "Designation"],
     ["receiverCompanyMail", "Receiver E-Mail"],
     ["senderEmailId", "Sender E-Mail"],
-    ["mailSendDate", "E-Mail Send Date"]
+    ["mailSendDate", "E-Mail Send Date"],
   ];
   const handleFilterOptionClick = (key) => {
     if (activeFilterOption === key) {
@@ -151,15 +152,33 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
         item.receiverCompanyMail?.toLowerCase().includes(lowerSearchTerm) ||
         item.senderEmailId?.toLowerCase().includes(lowerSearchTerm) ||
         item.mailSendDate?.toLowerCase().includes(lowerSearchTerm) ||
-        item.profileSentCount ?.toString().toLowerCase().includes(lowerSearchTerm) ||
-        item.selectedCount?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.profileSentCount
+          ?.toString()
+          .toLowerCase()
+          .includes(lowerSearchTerm) ||
+        item.selectedCount
+          ?.toString()
+          .toLowerCase()
+          .includes(lowerSearchTerm) ||
         item.holdCount?.toString().toLowerCase().includes(lowerSearchTerm) ||
-        item.inProcessCount?.toString().toLowerCase().includes(lowerSearchTerm) ||
-        item.rejectedCount?.toString().toLowerCase().includes(lowerSearchTerm) ||
-        item.profileSelected?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.inProcessCount
+          ?.toString()
+          .toLowerCase()
+          .includes(lowerSearchTerm) ||
+        item.rejectedCount
+          ?.toString()
+          .toLowerCase()
+          .includes(lowerSearchTerm) ||
+        item.profileSelected
+          ?.toString()
+          .toLowerCase()
+          .includes(lowerSearchTerm) ||
         item.noResponse?.toString().toLowerCase().includes(lowerSearchTerm) ||
-        item.profileOnHold?.toString().toLowerCase().includes(lowerSearchTerm) ||
-        item.requirementId?.toString().toLowerCase().includes(lowerSearchTerm) 
+        item.profileOnHold
+          ?.toString()
+          .toLowerCase()
+          .includes(lowerSearchTerm) ||
+        item.requirementId?.toString().toLowerCase().includes(lowerSearchTerm)
       );
     });
 
@@ -184,7 +203,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   useEffect(() => {
     applyFilters(); // Reapply filters whenever the data or selected filters change
   }, [searchTerm, data, selectedFilters]);
-  
+
   const calculateWidth = () => {
     const baseWidth = 250;
     const increment = 10;
@@ -206,7 +225,6 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <i
                       className="fa-solid fa-magnifying-glass"
-                     
                       style={{
                         margin: "10px",
                         width: "auto",
@@ -214,27 +232,34 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                       }}
                     ></i>
 
-<div
-                    className="search-input-div"
-                    style={{ width: `${calculateWidth()}px` }}
-                  >
-                    <div className="forxmarkdiv">
-                    <input
-                      type="text"
-                      className="search-input removeBorderForSearchInput"
-                      placeholder="Search here..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    { searchTerm && (
-                      <div className="svgimagesetinInput">
-                    <svg onClick={(()=>setSearchTerm(""))} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                    <div
+                      className="search-input-div"
+                      style={{ width: `${calculateWidth()}px` }}
+                    >
+                      <div className="forxmarkdiv">
+                        <input
+                          type="text"
+                          className="search-input removeBorderForSearchInput"
+                          placeholder="Search here..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        {searchTerm && (
+                          <div className="svgimagesetinInput">
+                            <svg
+                              onClick={() => setSearchTerm("")}
+                              xmlns="http://www.w3.org/2000/svg"
+                              height="24px"
+                              viewBox="0 -960 960 960"
+                              width="24px"
+                              fill="#000000"
+                            >
+                              <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    )}
-                    
-                    </div>
-                  </div>
-
                   </div>
                   <h1 className="resume-data-heading">Shared Profile Data</h1>
                   <div className="rl-btn-div">
@@ -444,7 +469,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.designation || "", searchTerm)}
+                          {highlightText(item.designation || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -460,7 +485,10 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.receiverCompanyMail || "", searchTerm)}
+                          {highlightText(
+                            item.receiverCompanyMail || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -508,7 +536,10 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.profileSentCount || "", searchTerm)}
+                          {highlightText(
+                            item.profileSentCount || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -524,7 +555,10 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.profileSelected || "", searchTerm)}
+                          {highlightText(
+                            item.profileSelected || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -540,7 +574,10 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {highlightText(item.profileRejected || "", searchTerm)}
+                          {highlightText(
+                            item.profileRejected || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -588,13 +625,10 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.noResponse || "", searchTerm)}
+                          {highlightText(item.noResponse || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {highlightText(
-                                item.noResponse || "",
-                                searchTerm
-                              )}
+                              {highlightText(item.noResponse || "", searchTerm)}
                             </span>
                           </div>
                         </td>
@@ -604,7 +638,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                       {highlightText(item.inProcessCount || "", searchTerm)}
+                          {highlightText(item.inProcessCount || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -620,7 +654,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.selectedCount || "", searchTerm)}
+                          {highlightText(item.selectedCount || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -655,10 +689,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                           {highlightText(item.holdCount || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {highlightText(
-                                item.holdCount || "",
-                                searchTerm
-                              )}
+                              {highlightText(item.holdCount || "", searchTerm)}
                             </span>
                           </div>
                         </td>
@@ -669,8 +700,8 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
               </div>
 
               <div className="search-count-last-div">
-        Search Results : {searchCount}
-        </div>
+                Total Results : {searchCount}
+              </div>
             </>
           )}
         </>

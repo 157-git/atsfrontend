@@ -43,6 +43,8 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
   const [isDataSending, setIsDataSending] = useState(false);
   const [errorForShare, setErrorForShare] = useState("");
   const [searchCount, setSearchCount] = useState(0);
+  // added by sahil karnekar to refresh the useeffect on date 17-12-2024
+    const [triggerFetch, setTriggerFetch] = useState(false);
 
   const { employeeId } = useParams();
   const newEmployeeId = parseInt(employeeId, 10);
@@ -125,7 +127,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
 
   useEffect(() => {
     fetchRejectedData(currentPage, pageSize);
-  }, [employeeId,currentPage, pageSize]);
+  }, [employeeId,currentPage, pageSize,triggerFetch,searchTerm]);
 
   useEffect(() => {
     const options = limitedOptions
@@ -141,7 +143,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
   const fetchRejectedData = async (page, size) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/rejected-candidate/${employeeId}/${userType}?page=${page}&size=${size}`
+        `${API_BASE_URL}/rejected-candidate/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
       );
       const data = await response.json();
       setCallingList(data.content);
@@ -475,7 +477,10 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
     });
     setFilteredCallingList(filteredData);
   };
-
+// this function added by sahil karnekar on date 17-12-2024
+  const handleTriggerFetch = () => {
+    setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
+  };
   // updated this function sahil karnekar date : 22-10-2024
   const handleFilterSelect = (key, value) => {
     setSelectedFilters((prev) => ({
@@ -773,15 +778,12 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
   
   return (
     <div className="calling-list-container">
-      {loading ? (
-        <div className="register">
-          <Loader></Loader>
-        </div>
-      ) : (
-        <>
-          {!showUpdateCallingTracker ? (
-            <>
-              <div className="search">
+{/* updated by sahil karnekar date 17-12-2024 */}
+{
+  !showUpdateCallingTracker && (
+    <>
+
+<div className="search">
                 {/* this line is added by sahil karnekar date 24-10-2024 */}
               <div style={{ display: "flex", alignItems: "center" }}>
                 <i
@@ -953,6 +955,20 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
   </div>
 )}
 </div>
+{/* added by sahil karnekar on date 17-12-2024 */}
+    </>
+  )
+}
+
+      {loading ? (
+        <div className="register">
+          <Loader></Loader>
+        </div>
+      ) : (
+        <>
+          {!showUpdateCallingTracker ? (
+            <>
+          
               <div className="attendanceTableData">
                 <table className="attendance-table">
                   <thead>
@@ -2011,8 +2027,8 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
               </div>
 
               <div className="search-count-last-div">
-        Search Results : {searchCount}
-        </div>
+            Total Results : {totalRecords}
+          </div>
 
         <Pagination
         current={currentPage}
@@ -2033,7 +2049,7 @@ const RejectedCandidate = ({ updateState, funForGettingCandidateId,loginEmployee
               employeeId={employeeId}
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
-             
+              triggerFetch={handleTriggerFetch}
             />
           )}
         </>

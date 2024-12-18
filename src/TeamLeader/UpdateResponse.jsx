@@ -8,7 +8,6 @@ import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 
-
 const UpdateResponse = ({ onSuccessAdd, date }) => {
   const [updateResponseList, setUpdateResponseList] = useState([]);
   const [showUpdateResponseForm, setShowUpdateResponseForm] = useState(false);
@@ -50,7 +49,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     ["responseUpdatedDate", "Response Updated Date"],
     ["sourceName", "Source Name"],
 
-    ["employeeName", "Employee Name"]
+    ["employeeName", "Employee Name"],
   ];
   useEffect(() => {
     const options = limitedOptions
@@ -58,7 +57,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
         Object.keys(filteredCallingList[0] || {}).includes(key)
       )
       .map(([key]) => key);
-      
+
     setFilterOptions(options);
   }, [filteredCallingList]);
 
@@ -84,7 +83,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
       const res = await fetch(
         `${API_BASE_URL}/update-candidate-data/${employeeId}/${userType}`
       );
-      const data = await res.json(); 
+      const data = await res.json();
       if (Array.isArray(data)) {
         setCallingList(data);
         setFilteredCallingList(data);
@@ -98,7 +97,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
         setUpdateResponseList([]);
       }
       // setLoading(false);
-      setLoading(false)
+      setLoading(false);
     } catch (err) {
       console.log("Error fetching shortlisted data:", err);
       setLoading(false);
@@ -144,13 +143,31 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
         item.candidateId?.toString().toLowerCase().includes(lowerSearchTerm) ||
         item.commentForTL?.toLowerCase().includes(lowerSearchTerm) ||
         item.sourceName?.toLowerCase().includes(lowerSearchTerm) ||
-        item.requirementId?.toString().toLowerCase().includes(lowerSearchTerm) ||
-        item.requirementCompany?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.requirementId
+          ?.toString()
+          .toLowerCase()
+          .includes(lowerSearchTerm) ||
+        item.requirementCompany
+          ?.toString()
+          .toLowerCase()
+          .includes(lowerSearchTerm) ||
         item.finalStatus?.toString().toLowerCase().includes(lowerSearchTerm) ||
-        item.interviewRound?.toString().toLowerCase().includes(lowerSearchTerm) ||
-        item.interviewResponse?.toString().toLowerCase().includes(lowerSearchTerm) ||
-        item.nextInterviewDate?.toString().toLowerCase().includes(lowerSearchTerm) ||
-        item.nextInterviewTiming?.toString().toLowerCase().includes(lowerSearchTerm) ||
+        item.interviewRound
+          ?.toString()
+          .toLowerCase()
+          .includes(lowerSearchTerm) ||
+        item.interviewResponse
+          ?.toString()
+          .toLowerCase()
+          .includes(lowerSearchTerm) ||
+        item.nextInterviewDate
+          ?.toString()
+          .toLowerCase()
+          .includes(lowerSearchTerm) ||
+        item.nextInterviewTiming
+          ?.toString()
+          .toLowerCase()
+          .includes(lowerSearchTerm) ||
         item.employeeId?.toString().toLowerCase().includes(lowerSearchTerm) ||
         item.employeeName?.toString().toLowerCase().includes(lowerSearchTerm) ||
         item.officialMail?.toString().toLowerCase().includes(lowerSearchTerm) ||
@@ -318,7 +335,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
       }
     });
     setFilteredCallingList(filteredData);
-  }; 
+  };
 
   const handleFilterOptionClick = (key) => {
     if (activeFilterOption === key) {
@@ -367,40 +384,45 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
             <>
               <div className="TeamLead-main-filter-section">
                 <div className="TeamLead-main-filter-section-header">
-                  <div
-                  style={{display:"flex"}}
-                  >
-                  <div
-                    className="search"
-                  >
-                    <i className="fa-solid fa-magnifying-glass"></i>
-                  </div>
-
-                  <div className="TeamLead-main-filter-section-container"
-                  style={{width:"100%"}}
-                  >
-                  <div
-                    className="search-input-div"
-                    style={{ width: `${calculateWidth()}px` }}
-                  >
-                    <div className="forxmarkdiv">
-                    <input
-                      type="text"
-                      className="search-input removeBorderForSearchInput"
-                      placeholder="Search here..."
-                      value={filterValue}
-                      onChange={(e) => setFilterValue(e.target.value)}
-                    />
-                    { filterValue && (
-                      <div className="svgimagesetinInput">
-                    <svg onClick={(()=>setFilterValue(""))} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                  <div style={{ display: "flex" }}>
+                    <div className="search">
+                      <i className="fa-solid fa-magnifying-glass"></i>
                     </div>
-                    )}
-                    
-                    </div>
-                  </div>
 
-                    {/* <select
+                    <div
+                      className="TeamLead-main-filter-section-container"
+                      style={{ width: "100%" }}
+                    >
+                      <div
+                        className="search-input-div"
+                        style={{ width: `${calculateWidth()}px` }}
+                      >
+                        <div className="forxmarkdiv">
+                          <input
+                            type="text"
+                            className="search-input removeBorderForSearchInput"
+                            placeholder="Search here..."
+                            value={filterValue}
+                            onChange={(e) => setFilterValue(e.target.value)}
+                          />
+                          {filterValue && (
+                            <div className="svgimagesetinInput">
+                              <svg
+                                onClick={() => setFilterValue("")}
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="24px"
+                                viewBox="0 -960 960 960"
+                                width="24px"
+                                fill="#000000"
+                              >
+                                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* <select
                       className="white-Btn"
                       value={filterType}
                       onChange={handleFilterTypeChange}
@@ -416,10 +438,10 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                       <option value="employeeName">Employee Name</option>
                       <option value="employeeId">Employee ID</option>
                     </select> */}
-                  </div>
+                    </div>
                   </div>
                   <div>
-                  <h1 style={{ color: "gray" }}>Update Response</h1>
+                    <h1 style={{ color: "gray" }}>Update Response</h1>
                   </div>
                   <div>
                     <button
@@ -433,92 +455,92 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                     </button>
                   </div>
                 </div>
-               
-                <div className="filter-dropdowns">
-                {showFilterOptions && (
-                   <div className="filter-section">
-                   {limitedOptions.map(([optionKey, optionLabel]) => {
-                     const uniqueValues = Array.from(
-                       new Set(
-                        callingList
-                           .map((item) => {
-                             const value = item[optionKey];
-                             // Ensure the value is a string before converting to lowercase
-                             return typeof value === "string"
-                               ? value.toLowerCase()
-                               : value;
-                           })
-                           .filter(
-                             (value) => value !== undefined && value !== null
-                           ) // Remove null or undefined values
-                       )
-                     );
 
-                     return (
-                       <div key={optionKey} className="filter-option">
-                         <button
-                           className="white-Btn"
-                           onClick={() => handleFilterOptionClick(optionKey)}
-                         >
-                           {optionLabel}
-                           <span className="filter-icon">&#x25bc;</span>
-                         </button>
-                         {activeFilterOption === optionKey && (
-                           <div className="city-filter">
-                             <div className="optionDiv">
-                               {uniqueValues.filter(
-                                 (value) =>
-                                   value !== "" &&
-                                   value !== "-" &&
-                                   value !== undefined &&
-                                   !(
-                                     optionKey === "alternateNumber" &&
-                                     value === 0
-                                   )
-                               ).length > 0 ? (
-                                 uniqueValues.map(
-                                   (value) =>
-                                     value !== "" &&
-                                     value !== "-" &&
-                                     value !== undefined &&
-                                     !(
-                                       optionKey === "alternateNumber" &&
-                                       value === 0
-                                     ) && (
-                                       <label
-                                         key={value}
-                                         className="selfcalling-filter-value"
-                                       >
-                                         <input
-                                           type="checkbox"
-                                           checked={
-                                             selectedFilters[
-                                               optionKey
-                                             ]?.includes(value) || false
-                                           }
-                                           onChange={() =>
-                                             handleFilterSelect(
-                                               optionKey,
-                                               value
-                                             )
-                                           }
-                                           style={{ marginRight: "5px" }}
-                                         />
-                                         {value}
-                                       </label>
-                                     )
-                                 )
-                               ) : (
-                                 <div>No values</div>
-                               )}
-                             </div>
-                           </div>
-                         )}
-                       </div>
-                     );
-                   })}
-                 </div>
-                )}
+                <div className="filter-dropdowns">
+                  {showFilterOptions && (
+                    <div className="filter-section">
+                      {limitedOptions.map(([optionKey, optionLabel]) => {
+                        const uniqueValues = Array.from(
+                          new Set(
+                            callingList
+                              .map((item) => {
+                                const value = item[optionKey];
+                                // Ensure the value is a string before converting to lowercase
+                                return typeof value === "string"
+                                  ? value.toLowerCase()
+                                  : value;
+                              })
+                              .filter(
+                                (value) => value !== undefined && value !== null
+                              ) // Remove null or undefined values
+                          )
+                        );
+
+                        return (
+                          <div key={optionKey} className="filter-option">
+                            <button
+                              className="white-Btn"
+                              onClick={() => handleFilterOptionClick(optionKey)}
+                            >
+                              {optionLabel}
+                              <span className="filter-icon">&#x25bc;</span>
+                            </button>
+                            {activeFilterOption === optionKey && (
+                              <div className="city-filter">
+                                <div className="optionDiv">
+                                  {uniqueValues.filter(
+                                    (value) =>
+                                      value !== "" &&
+                                      value !== "-" &&
+                                      value !== undefined &&
+                                      !(
+                                        optionKey === "alternateNumber" &&
+                                        value === 0
+                                      )
+                                  ).length > 0 ? (
+                                    uniqueValues.map(
+                                      (value) =>
+                                        value !== "" &&
+                                        value !== "-" &&
+                                        value !== undefined &&
+                                        !(
+                                          optionKey === "alternateNumber" &&
+                                          value === 0
+                                        ) && (
+                                          <label
+                                            key={value}
+                                            className="selfcalling-filter-value"
+                                          >
+                                            <input
+                                              type="checkbox"
+                                              checked={
+                                                selectedFilters[
+                                                  optionKey
+                                                ]?.includes(value) || false
+                                              }
+                                              onChange={() =>
+                                                handleFilterSelect(
+                                                  optionKey,
+                                                  value
+                                                )
+                                              }
+                                              style={{ marginRight: "5px" }}
+                                            />
+                                            {value}
+                                          </label>
+                                        )
+                                    )
+                                  ) : (
+                                    <div>No values</div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="attendanceTableData">
@@ -550,9 +572,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                       <th className="attendanceheading">Employee Mail Id</th>
                       <th className="attendanceheading">Employee Role</th>
                       <th className="attendanceheading">Resume</th>
-                      <th className="attendanceheading">
-                         Manager Name
-                      </th>
+                      <th className="attendanceheading">Manager Name</th>
                       <th className="attendanceheading">Action</th>
                     </tr>
                   </thead>
@@ -561,8 +581,11 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                       <tr key={index} className="attendancerows">
                         <td className="tabledata">{index + 1}</td>
                         <td className="tabledata">
-                          {highlightText(data.candidateId.toString().toLowerCase() || "", filterValue)}
-                          </td>
+                          {highlightText(
+                            data.candidateId.toString().toLowerCase() || "",
+                            filterValue
+                          )}
+                        </td>
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
@@ -584,7 +607,10 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(data.candidateEmail || "", filterValue)}
+                          {highlightText(
+                            data.candidateEmail || "",
+                            filterValue
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -611,7 +637,6 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           </div>
                         </td>
 
-
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
@@ -627,14 +652,22 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                             </span>
                           </div>
                         </td>
-                     
-                        <td className="tabledata">{highlightText(data.requirementId.toString().toLowerCase() || "", filterValue)}</td>
+
+                        <td className="tabledata">
+                          {highlightText(
+                            data.requirementId.toString().toLowerCase() || "",
+                            filterValue
+                          )}
+                        </td>
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(data.requirementCompany || "", filterValue)}
+                          {highlightText(
+                            data.requirementCompany || "",
+                            filterValue
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -649,7 +682,10 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(data.jobDesignation || "", filterValue)}
+                          {highlightText(
+                            data.jobDesignation || "",
+                            filterValue
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -660,11 +696,12 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           </div>
                         </td>
 
-                        <td className="tabledata"
+                        <td
+                          className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
-                         >
-                           {highlightText(data.commentForTL || "", filterValue)}
+                        >
+                          {highlightText(data.commentForTL || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -679,7 +716,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(data.finalStatus || "", filterValue)}
+                          {highlightText(data.finalStatus || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -694,7 +731,10 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(data.interviewRound || "", filterValue)}
+                          {highlightText(
+                            data.interviewRound || "",
+                            filterValue
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -709,7 +749,10 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(data.interviewResponse || "", filterValue)}
+                          {highlightText(
+                            data.interviewResponse || "",
+                            filterValue
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -724,7 +767,10 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {highlightText(data.responseUpdatedDate || "", filterValue)}
+                          {highlightText(
+                            data.responseUpdatedDate || "",
+                            filterValue
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -734,11 +780,26 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                             </span>
                           </div>
                         </td>
-                        <td className="tabledata">{highlightText(data.nextInterviewDate.toString().toLowerCase() || "", filterValue)}</td>
                         <td className="tabledata">
-                        {highlightText(data.nextInterviewTiming.toString().toLowerCase() || "", filterValue)}
+                          {highlightText(
+                            data.nextInterviewDate.toString().toLowerCase() ||
+                              "",
+                            filterValue
+                          )}
                         </td>
-                        <td className="tabledata">{highlightText(data.employeeId.toString().toLowerCase() || "", filterValue)}</td>
+                        <td className="tabledata">
+                          {highlightText(
+                            data.nextInterviewTiming.toString().toLowerCase() ||
+                              "",
+                            filterValue
+                          )}
+                        </td>
+                        <td className="tabledata">
+                          {highlightText(
+                            data.employeeId.toString().toLowerCase() || "",
+                            filterValue
+                          )}
+                        </td>
 
                         <td
                           className="tabledata"
@@ -756,7 +817,6 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           </div>
                         </td>
 
-                       
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}
@@ -781,10 +841,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           {highlightText(data.jobRole || "", filterValue)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {highlightText(
-                                data.jobRole || "",
-                                filterValue
-                              )}
+                              {highlightText(data.jobRole || "", filterValue)}
                             </span>
                           </div>
                         </td>
@@ -808,7 +865,10 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {highlightText(data.reportingManagerName || "", filterValue)}
+                          {highlightText(
+                            data.reportingManagerName || "",
+                            filterValue
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -840,9 +900,8 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
               </div>
 
               <div className="search-count-last-div">
-        Search Results : {searchCount}
-        </div>
-
+                Total Results : {searchCount}
+              </div>
 
               <Modal show={showResumeModal} onHide={closeResumeModal} size="md">
                 <Modal.Header closeButton>

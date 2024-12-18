@@ -48,6 +48,8 @@ const HoldCandidate = ({
   const [isDataSending, setIsDataSending] = useState(false);
   const [errorForShare, setErrorForShare] = useState("");
   const [searchCount, setSearchCount] = useState(0);
+  // added by sahil karnekar to refresh useeffect added on date 17-12-2024
+  const [triggerFetch, setTriggerFetch] = useState(false);
 
   //akash_pawar_HoldCandidate_ShareFunctionality_18/07_43
   const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
@@ -130,7 +132,7 @@ const HoldCandidate = ({
 
   useEffect(() => {
     fetchHoldCandidateData(currentPage, pageSize);
-  }, [employeeId,currentPage, pageSize]);
+  }, [employeeId,currentPage, pageSize,triggerFetch,searchTerm]);
   //akash_pawar_HoldCandidate_ShareFunctionality_18/07_119
   const fetchManager = async () => {
     try {
@@ -186,7 +188,7 @@ const HoldCandidate = ({
   const fetchHoldCandidateData = async (page, size) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/hold-candidate/${employeeId}/${userType}?page=${page}&size=${size}`
+        `${API_BASE_URL}/hold-candidate/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
       );
       console.log(response);
       const data = await response.json();
@@ -205,7 +207,10 @@ const HoldCandidate = ({
   useEffect(() => {
     filterData();
   }, [selectedFilters, callingList]);
-
+  // updated by sahil karnekar date 17-12-2024
+  const handleTriggerFetch = () => {
+    setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
+  };
   useEffect(() => {
     const filtered = callingList.filter((item) => {
       const searchTermLower = searchTerm.toLowerCase();
@@ -771,20 +776,11 @@ const HoldCandidate = ({
 
   return (
     <div className="App-after">
-      {loading ? (
-        <div className="register">
-          {/* <HashLoader
-             color={`${localStorage.getItem("selectedColor")}`}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          /> */}
-          <Loader></Loader>
-        </div>
-      ) : (
-        <>
-          {!showUpdateCallingTracker ? (
-            <>
-              <div className="search">
+{/* added by sahil karnekar date 17-12-2024 */}
+{
+  !showUpdateCallingTracker && (
+    <>
+                <div className="search">
                 {/* this line is added by sahil karnekar date 24-10-2024 */}
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <i
@@ -969,6 +965,25 @@ const HoldCandidate = ({
                   })}
                 </div>
               )}
+              {/* line 968 to 986 added by sahil karnekar date 17-12-2024 */}
+    </>
+  )
+}
+
+      {loading ? (
+        <div className="register">
+          {/* <HashLoader
+             color={`${localStorage.getItem("selectedColor")}`}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          /> */}
+          <Loader></Loader>
+        </div>
+      ) : (
+        <>
+          {!showUpdateCallingTracker ? (
+            <>
+  
 
               <div className="attendanceTableData">
                 <table className="attendance-table">
@@ -2064,8 +2079,8 @@ const HoldCandidate = ({
               </div>
 
               <div className="search-count-last-div">
-        Search Results : {searchCount}
-        </div>
+            Total Results : {totalRecords}
+          </div>
 
         <Pagination
         current={currentPage}
@@ -2088,6 +2103,7 @@ const HoldCandidate = ({
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
               loginEmployeeName={loginEmployeeName}
+              triggerFetch={handleTriggerFetch}
             />
           )}
         </>

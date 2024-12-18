@@ -89,15 +89,26 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
     console.log(validationErrors);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      setSubmited(false);
       return;
     }
+
+if (data.length > 0 && formData.interviewResponse === "") {
+  setSubmited(false);
+  toast.error("Please select an interview response.");
+  return;
+}
+
     try {
       // Save new interview response
       // added by sahil karnekar date 4-12-2024
       console.log(formData);
-      if (formData.interviewResponse === "") {
+      if (data.length === 0) {
+  if (formData.interviewResponse === "") {
         formData.interviewResponse = formData.interviewRound;
       }
+      }
+    
       const response = await axios.post(
         `${API_BASE_URL}/save-interview-response`,
         formData,
@@ -195,6 +206,8 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
     } catch (err) {
       setSubmited(false);
       toast.error("Failed to Update Response line 176" + err);
+    }finally{
+      setSubmited(false);
     }
   };
 

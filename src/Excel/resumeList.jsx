@@ -58,7 +58,7 @@ const ResumeList = ({
   const fetchData = async (page, size) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/fetch-resumes-data/${employeeId}/${userType}?page=${page}&size=${size}`
+        `${API_BASE_URL}/fetch-resumes-data/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -1482,8 +1482,8 @@ const handleSharedRangeChange = (event) => {
               </div>
 
               <div className="search-count-last-div">
-        Search Results : {searchCount}
-        </div>
+            Total Results : {totalRecords}
+          </div>
 
               <Pagination
         current={currentPage}

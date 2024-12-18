@@ -22,7 +22,8 @@ const LineUpList = ({
   const [callingList, setCallingList] = useState([]);
   const { employeeId } = useParams();
   const employeeIdnew = parseInt(employeeId);
-
+// added by sahil
+  const [triggerFetch, setTriggerFetch] = useState(false);
   const [showUpdateCallingTracker, setShowUpdateCallingTracker] =
     useState(false);
   const [selectedCandidateId, setSelectedCandidateId] = useState(null);
@@ -133,7 +134,7 @@ const LineUpList = ({
   const fetchCallingTrackerData = async (page, size) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?page=${page}&size=${size}`
+        `${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
       );
 
       if (!response.ok) {
@@ -158,8 +159,12 @@ const LineUpList = ({
 
   useEffect(() => {
     fetchCallingTrackerData(currentPage, pageSize);
-  }, [employeeIdnew,currentPage, pageSize]);
+  }, [employeeIdnew,currentPage, pageSize, triggerFetch,searchTerm]);
   //akash_pawar_selfCallingTracker_ShareFunctionality_17/07_171
+
+  const handleTriggerFetch = () => {
+    setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
+  };
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_144
   const fetchManager = async () => {
@@ -822,15 +827,11 @@ const LineUpList = ({
 
   return (
     <div className="calling-list-container">
-      {loading ? (
-        <div className="register">
-          <Loader></Loader>
-        </div>
-      ) : (
-        <>
-          {!showUpdateCallingTracker ? (
-            <>
-              <div className="search">
+      {/* line 830 to 1039 updated by sahil karnekar on date 17-12-2024 */}
+      {
+        !showUpdateCallingTracker && (
+          <>
+            <div className="search">
                 {/* this line is added by sahil karnekar date 24-10-2024 */}
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <i
@@ -1025,6 +1026,17 @@ const LineUpList = ({
                   </div>
                 )}
               </div>
+          </>
+        )
+      }
+      {loading ? (
+        <div className="register">
+          <Loader></Loader>
+        </div>
+      ) : (
+        <>
+          {!showUpdateCallingTracker ? (
+            <>
 
               <div className="attendanceTableData">
                 <table className="attendance-table">
@@ -2095,8 +2107,8 @@ const LineUpList = ({
                      Subcategory:-ResumeModel(added) End LineNo:-1184 Date:-02/07 */}
               </div>
               <div className="search-count-last-div">
-        Search Results : {searchCount}
-        </div>
+            Total Results : {totalRecords}
+          </div>
 
         <Pagination
         current={currentPage}
@@ -2118,6 +2130,7 @@ const LineUpList = ({
               onSuccess={handleUpdateSuccess}
               onCancel={() => setShowUpdateCallingTracker(false)}
               loginEmployeeName={loginEmployeeName}
+              triggerFetch={handleTriggerFetch}
             />
           )}
         </>

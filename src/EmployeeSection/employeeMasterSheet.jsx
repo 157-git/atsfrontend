@@ -208,7 +208,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
 
   useEffect(() => {
     fetchData(currentPage, pageSize);
-  }, [employeeId, currentPage, pageSize]);
+  }, [employeeId, currentPage, pageSize,searchTerm]);
 
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_54
   const fetchManager = async () => {
@@ -255,7 +255,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
     try {
       const response = await fetch(
         // sahil karnekar line 244 set employeeId and usertType in Api at the time of deployement this url is just for testing
-        `${API_BASE_URL}/master-sheet/${employeeId}/${userType}?page=${page}&size=${size}`
+        `${API_BASE_URL}/master-sheet/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
       );
       const data = await response.json();
       setData(data.content);
@@ -2191,7 +2191,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
           </div>
 
           <div className="search-count-last-div">
-            Search Results : {searchCount}
+            Total Results : {totalRecords}
           </div>
 
           <Pagination

@@ -92,7 +92,7 @@
   padding-right: 5px;
   padding-left: 5px;
   text-align: center;
-  border: 1px solid gray;
+  border: 1px solid #ddd;
   color:var(--text-color);
   white-space: nowrap;
 }

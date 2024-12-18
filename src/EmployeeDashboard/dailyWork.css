@@ -392,6 +392,8 @@
     margin-top: 24px;
     overflow-y: auto;
   transition: max-height 0.5s ease, opacity 0.5s ease, transform 0.5s ease;
+  margin-top: 230px;
+  margin-left: 1100px;
 }
 
 /* Notification box animations */

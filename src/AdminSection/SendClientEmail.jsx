@@ -626,7 +626,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                     </div>
                   </div>
             </div>
-            <h5 style={{ color: "gray", fontSize: "18px" }}>Candidate Data </h5>
+            <h5 style={{ color: "gray", fontSize: "18px" }}>Candidate Data</h5>
 
             <div
               style={{
@@ -665,10 +665,6 @@ const SendClientEmail = ({ clientEmailSender }) => {
               </button>
             </div>
           </div>
-
-          
-
-
           <div className="filter-dropdowns">
             {showFilterSection && (
               <div className="filter-section">

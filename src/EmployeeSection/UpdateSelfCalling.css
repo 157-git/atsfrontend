@@ -282,3 +282,11 @@ strong {
   justify-content: center;
   gap: 10px;
 }
+.error-message{
+  color: red;
+  align-content: center;
+  margin-left: 10px;
+}
+.setDisplayFlexForUpdateForm{
+  display: flex;
+}
