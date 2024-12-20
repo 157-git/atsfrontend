@@ -917,7 +917,16 @@ if (isNotInterested === false) {
                   <FaCheckCircle className="upload-success-icon" />
                 )}
               </label>
-              <div className="update-calling-tracker-field-sub-div">
+              <div className="update-calling-tracker-field-sub-div"
+              style={{
+                display:"block"
+              }}
+              >
+                <div
+                style={{
+                  display:"flex"
+                }}
+                >
                 <input
                   type="file"
                   name="resume"
@@ -947,7 +956,19 @@ if (isNotInterested === false) {
 
 
                 )}
+                </div>
+                {
+                resumeUploaded && (
+                  <div
+                  style={{
+                    fontSize:"10px",
+                    color:"green",
+                  }}
+                  >Please Click on the eye icon to view the resume</div>
+                )
+              }
               </div>
+             
             </div>
           </div>
 

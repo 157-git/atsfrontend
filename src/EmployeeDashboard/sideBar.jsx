@@ -662,7 +662,17 @@ function Sidebar({
                             {/* ---------Arshad Comment this changes dont uncomment-------------- */}
 
                             <li
-                              onClick={toggleEmployeeMasterSheet}
+                             className={
+                              activeButton === "employeeMasterSheet"
+                                ? "active"
+                                : ""
+                            }
+                              onClick={
+                                handleButtonClick(
+                                  "employeeMasterSheet",
+                                  toggleEmployeeMasterSheet
+                                )
+                              }
                               style={{ marginLeft: "10px" }}
                             >
                               <a href="#">
@@ -959,8 +969,11 @@ function Sidebar({
                           </li>
 
                           <li
-                            onClick={toggleEmployeeDetails}
+                            onClick={
+                              handleButtonClick("employeeDetails",toggleEmployeeDetails)
+                            }
                             style={{ marginLeft: "10px" }}
+                            className={activeButton === "employeeDetails" ? "active" : ""}
                           >
                             <a href="#">
                               {/* <img src={Circle} style={{ width: "10px" }} alt="" /> */}
@@ -1124,28 +1137,31 @@ function Sidebar({
                         </li>  */}
 
                         <li
-                          onClick={handleButtonClick(
-                            "assignColumns",
-                            toggleAssigncolumns
-                          )}
+                       
                           style={{ marginLeft: "10px" }}
                           className={
-                            activeButton === "assignColumns" ? "active" : ""
+                            activeButton === "assignC" ? "active" : ""
                           }
                         >
                           <a href="#">
                             {/* <img src={Circle} style={{ width: "10px" }} alt="" /> */}
-                            <span className="sidebar-text">Assign Columns</span>
+                            <span className="sidebar-text"
+                            onClick={handleButtonClick("assignC", toggleAssigncolumns)}
+                            >Assign Columns</span>
                           </a>
                         </li>
                       </>
                       <li
-                        onClick={toggleEmployeeDetails}
                         style={{ marginLeft: "10px" }}
+                        className={
+                          activeButton === "managerTeamD" ? "active" : ""
+                        }
                       >
                         <a href="#">
                           {/* <img src={Circle} style={{ width: "10px" }} alt="" /> */}
-                          <span className="sidebar-text">Team Details</span>
+                          <span className="sidebar-text"
+                          onClick={handleButtonClick("managerTeamD", toggleEmployeeDetails)}
+                          >Team Details</span>
                         </a>
                       </li>
 
@@ -1342,12 +1358,19 @@ function Sidebar({
                         </a>
                       </li>
                       <li
-                        onClick={toggleEmployeeDetails}
+                      className={
+                        activeButton === "superTeamD" ? "active" : ""
+                      }
                         style={{ marginLeft: "10px" }}
                       >
                         <a href="#">
                           {/* <img src={Circle} style={{ width: "10px" }} alt="" /> */}
-                          <span className="sidebar-text">Team Details</span>
+                          <span className="sidebar-text"
+                            onClick={handleButtonClick(
+                              "superTeamD",
+                              toggleEmployeeDetails
+                            )}
+                          >Team Details</span>
                         </a>
                       </li>
                       <li
@@ -1460,19 +1483,19 @@ function Sidebar({
                     </ul>
                   </li>
                 ) : null}
-                {userType != "Vendor" && userType != "SuperUser" ? (
+                {/* {userType != "Vendor" && userType != "SuperUser" ? (
                   <li
                     onClick={handleButtonClick("chatroom", toggleChatRoom)}
                     className={activeButton === "chatroom" ? "active" : ""}
                   >
-                    <a href="#">
+                    <a href="#"> */}
                       {/* <i className="icon ph-bold ph-gear"></i> */}
-                      <i className="fa-brands fa-rocketchat"></i>
+                      {/* <i className="fa-brands fa-rocketchat"></i>
 
                       <span className="sidebar-text">Chat Section</span>
-                    </a>
-                  </li>
-                ) : null}
+                    </a> */}
+                  {/* </li> */}
+               {/* // ) : null} */}
 
                 {userType != "SuperUser" && userType != "Vendor" ? (
                   <>
@@ -1519,41 +1542,65 @@ function Sidebar({
                         activeSubMenu === "portal" ? "active" : ""
                       }`}
                     >
-                      <li style={{ marginLeft: "10px" }}>
+                      <li style={{ marginLeft: "10px" }}
+                        className={
+                          activeButton === "naukri" ? "active" : ""
+                        }
+                      >
                         <a href="#">
                           <span
                             className="sidebar-text"
-                            onClick={openNaukriPlatform}
+                            onClick={
+                              handleButtonClick("naukri", openNaukriPlatform)
+                            }
                           >
                             Naukri
                           </span>
                         </a>
                       </li>
-                      <li style={{ marginLeft: "10px" }}>
+                      <li style={{ marginLeft: "10px" }}
+                       className={
+                        activeButton === "linkedin" ? "active" : ""
+                      }
+                      >
                         <a href="#">
                           <span
                             className="sidebar-text"
-                            onClick={openLinkedinPlatform}
+                            onClick={
+                              handleButtonClick("linkedin", openLinkedinPlatform)
+                            }
                           >
                             LinkedIn
                           </span>
                         </a>
                       </li>
-                      <li style={{ marginLeft: "10px" }}>
+                      <li style={{ marginLeft: "10px" }}
+                       className={
+                        activeButton === "timesJob" ? "active" : ""
+                      }
+                      >
                         <a href="#">
                           <span
                             className="sidebar-text"
-                            onClick={openTimesPlatform}
+                            onClick={
+                              handleButtonClick("timesJob", openTimesPlatform)
+                            }
                           >
                             Times Jobs
                           </span>
                         </a>
                       </li>
-                      <li style={{ marginLeft: "10px" }}>
+                      <li style={{ marginLeft: "10px" }}
+                      className={
+                        activeButton === "indeed" ? "active" : ""
+                      }
+                      >
                         <a href="#">
                           <span
                             className="sidebar-text"
-                            onClick={openIndeedPlatform}
+                            onClick={
+                              handleButtonClick("indeed", openIndeedPlatform)
+                            }
                           >
                             Indeed
                           </span>
@@ -1577,41 +1624,65 @@ function Sidebar({
                         activeSubMenu === "aboutus" ? "active" : ""
                       }`}
                     >
-                      <li style={{ marginLeft: "10px" }}>
-                        <a href="">
+                      <li style={{ marginLeft: "10px" }}
+                         className={
+                          activeButton === "rights" ? "active" : ""
+                        }
+                      >
+                        <a href="#">
                           <span
                             className="sidebar-text"
-                            onClick={toggeleRightsInstructions}
+                            onClick={
+                              handleButtonClick("rights", toggeleRightsInstructions)
+                            }
                           >
                             Rights & Instructions
                           </span>
                         </a>
                       </li>
-                      <li style={{ marginLeft: "10px" }}>
-                        <a href="">
+                      <li style={{ marginLeft: "10px" }}
+                       className={
+                        activeButton === "privacy" ? "active" : ""
+                      }
+                      >
+                        <a href="#">
                           <span
                             className="sidebar-text"
-                            onClick={toggeleCompanyPolicy}
+                            onClick={
+                              handleButtonClick("privacy", toggeleCompanyPolicy)
+                            }
                           >
                             Company Policy
                           </span>
                         </a>
                       </li>
-                      <li style={{ marginLeft: "10px" }}>
-                        <a href="">
+                      <li style={{ marginLeft: "10px" }}
+                       className={
+                        activeButton === "issue" ? "active" : ""
+                      }
+                      >
+                        <a href="#">
                           <span
                             className="sidebar-text"
-                            onClick={toggeleIssueSolving}
+                            onClick={
+                              handleButtonClick("issue", toggeleIssueSolving)
+                            }
                           >
                             Issues Solving
                           </span>
                         </a>
                       </li>
-                      <li style={{ marginLeft: "10px" }}>
-                        <a href="">
+                      <li style={{ marginLeft: "10px" }}
+                      className={
+                        activeButton === "rarea" ? "active" : ""
+                      }
+                      >
+                        <a href="#">
                           <span
                             className="sidebar-text"
-                            onClick={toggelePainArea}
+                            onClick={
+                              handleButtonClick("rarea", toggelePainArea)
+                            }
                           >
                             Recruites Pain Area
                           </span>
@@ -1636,11 +1707,17 @@ function Sidebar({
                         activeSubMenu === "help" ? "active" : ""
                       }`}
                     >
-                      <li style={{ marginLeft: "10px" }}>
-                        <a href="">
+                      <li style={{ marginLeft: "10px" }}
+                      className={
+                        activeButton === "interviewQ" ? "active" : ""
+                      }
+                      >
+                        <a href="#">
                           <span
                             className="sidebar-text"
-                            onClick={toggeleInterviewForm}
+                            onClick={
+                              handleButtonClick("interviewQ", toggeleInterviewForm)
+                            }
                           >
                             Interview Questions
                           </span>
@@ -1648,7 +1725,12 @@ function Sidebar({
                       </li>
                       <li
                         style={{ marginLeft: "10px" }}
-                        onClick={toggelCandidateHistory}
+                        className={
+                          activeButton === "hostory" ? "active" : ""
+                        }
+                        onClick={
+                          handleButtonClick("hostory", toggelCandidateHistory)
+                        }
                       >
                         <a href="#">
                           <span className="sidebar-text">History Tracker</span>

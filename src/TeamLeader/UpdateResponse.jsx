@@ -908,7 +908,8 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
               </div>
 
               <div className="search-count-last-div">
-                Total Results : {totalRecords}
+                Total Results : {totalRecords
+                }
               </div>
 
 

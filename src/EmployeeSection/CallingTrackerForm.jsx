@@ -111,6 +111,7 @@ const CallingTrackerForm = ({
   const [errorForDOB, setErrorForDOB] = useState("");
   const [errorInterviewSlot, seterrorInterviewSlot] = useState("");
   const [resumeSelected, setResumeSelected] = useState(false);
+  const [errorForResumeUrl, setErrorForResumeUrl] = useState("");
 
   useEffect(() => {
     fetchRequirementOptions();
@@ -860,6 +861,9 @@ const CallingTrackerForm = ({
       await handleUploadAndSetData(e);
 
       setResumeUploaded(true);
+  
+        setErrorForResumeUrl("");
+
       const reader = new FileReader();
       reader.onloadend = () => {
         const arrayBuffer = reader.result;
@@ -892,6 +896,15 @@ const CallingTrackerForm = ({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resumeUrl, setResumeUrl] = useState(null);
+
+  useEffect(()=>{
+if (lineUpData.resume.length !== 0) {
+  setErrorForResumeUrl("Please Click on EYE Button to View Resume");
+}
+if (initialData !== null && initialData.resume !== "") {
+  setErrorForResumeUrl("Please Click on EYE Button to View Resume");
+}
+  },[])
 
   return (
     <div className="calling-tracker-main">
@@ -953,7 +966,7 @@ const CallingTrackerForm = ({
                 <label>Upload Resume</label>
                 <div
                   className="calling-tracker-field-sub-div"
-                  style={{ display: "flex", flexDirection: "row" }}
+                  style={{ display: "block", flexDirection: "row" }}
                 >
                   {/* <input
                     style={{ width: "-webkit-fill-available" }}
@@ -963,7 +976,11 @@ const CallingTrackerForm = ({
                     className="plain-input"
                     placeholder="Upload Resume"
                   /> */}
-
+<div
+style={{
+  display: "flex",
+}}
+>
                   <input
                     type="file"
                     name="resume"
@@ -985,10 +1002,13 @@ const CallingTrackerForm = ({
                   {errors.resume && (
                     <div className="error-message">{errors.resume}</div>
                   )}
-                  <button className="calling-tracker-popup-open-btn">
+                  <p className="calling-tracker-popup-open-btn">
                     <i
                       className="fas fa-eye"
                       onClick={() => {
+                        if (!resumeUploaded) {
+                         setErrorForResumeUrl("Please upload a resume first.");
+                        }
                         if (resumeUrl) {
                           setIsModalOpen(true);
                         } else if (!resumeUrl && initialData.resume) {
@@ -1000,8 +1020,17 @@ const CallingTrackerForm = ({
                         }
                       }}
                     ></i>
-                  </button>
+                  </p>
+                  </div>
+                  {errorForResumeUrl&& (
+                    <div 
+                    style={{
+                      color:"green",
+                    }}
+                    className="error-message">{errorForResumeUrl}</div>
+                  )}
                 </div>
+            
               </div>
             </div>
             <div className="calling-tracker-row-gray">
