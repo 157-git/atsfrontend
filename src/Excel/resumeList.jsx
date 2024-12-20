@@ -53,7 +53,7 @@ const ResumeList = ({
 
   useEffect(() => {
     fetchData(currentPage, pageSize);
-  }, [employeeId, currentPage, pageSize]);
+  }, [employeeId, currentPage, pageSize,searchTerm]);
 
   const fetchData = async (page, size) => {
     try {

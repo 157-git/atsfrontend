@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
+import { Pagination } from "antd";
 
 const UpdateResponse = ({ onSuccessAdd, date }) => {
   const [updateResponseList, setUpdateResponseList] = useState([]);
@@ -64,11 +65,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
   const { userType } = useParams();
   const { employeeId } = useParams();
   console.log(date);
-
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
   useEffect(() => {
-    fetchUpdateResponseList();
+    fetchUpdateResponseList(currentPage, pageSize);
     setFormClosed(false);
-  }, [formClosed]);
+  }, [formClosed,currentPage,pageSize,filterValue]);
 
   useEffect(() => {
     applyFilters();
@@ -78,24 +81,20 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     filterData();
   }, [selectedFilters, callingList]);
 
-  const fetchUpdateResponseList = async () => {
+  const fetchUpdateResponseList = async (page, size) => {
     try {
       const res = await fetch(
-        `${API_BASE_URL}/update-candidate-data/${employeeId}/${userType}`
+        `${API_BASE_URL}/update-candidate-data/${employeeId}/${userType}?searchTerm=${filterValue}&page=${page}&size=${size}`
       );
       const data = await res.json();
-      if (Array.isArray(data)) {
-        setCallingList(data);
-        setFilteredCallingList(data);
-        setUpdateResponseList(data);
+
+        setCallingList(data.content);
+        setFilteredCallingList(data.content);
+        setUpdateResponseList(data.content);
         setSearchCount(data.length);
+        setTotalRecords(data.totalElements);
         setFormClosed(false);
-      } else {
-        console.error("Expected array but received:", data);
-        setCallingList([]);
-        setFilteredCallingList([]);
-        setUpdateResponseList([]);
-      }
+
       // setLoading(false);
       setLoading(false);
     } catch (err) {
@@ -369,6 +368,15 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     const increment = 10;
     const maxWidth = 600;
     return Math.min(baseWidth + filterValue.length * increment, maxWidth);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleSizeChange = (current, size) => {
+    setPageSize(size); // Update the page size
+    setCurrentPage(1); // Reset to the first page after page size changes
   };
 
   return (
@@ -900,8 +908,67 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
               </div>
 
               <div className="search-count-last-div">
-                Total Results : {searchCount}
+                Total Results : {totalRecords}
               </div>
+
+
+              <Pagination
+  current={currentPage}
+  total={totalRecords}
+  pageSize={pageSize}
+  onChange={handlePageChange}
+  showSizeChanger={false} // Hides the page size changer
+  showQuickJumper={false} // Hides the quick jump input
+  itemRender={(page, type) => {
+    if (type === 'prev') {
+      return (
+        <button
+          style={{
+            color: currentPage === 1 ? 'gray' : 'black', // Gray when disabled
+            cursor: currentPage === 1 ? 'not-allowed' : 'pointer', // Cursor for disabled state
+          }}
+          disabled={currentPage === 1}
+          onClick={() => {
+            if (currentPage !== 1) handlePageChange(currentPage - 1);
+          }}
+        >
+          Previous
+        </button>
+      );
+    }
+    if (type === 'next') {
+      return (
+        <button
+          style={{
+            color: filteredCallingList.length === 0 ? 'gray' : 'black', // Gray when no records
+            cursor: filteredCallingList.length === 0 ? 'not-allowed' : 'pointer', // Cursor for disabled state
+          }}
+          disabled={totalRecords === 0}
+          onClick={() => {
+            if (filteredCallingList.length > 0){
+              handlePageChange(currentPage + 1);
+            }else{
+              return;
+            }
+          }}
+        >
+          Next
+        </button>
+      );
+    }
+    return null; // Hides page numbers and other elements
+  }}
+  style={{
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '20px',
+  }}
+/>
+
+
+
+
+
 
               <Modal show={showResumeModal} onHide={closeResumeModal} size="md">
                 <Modal.Header closeButton>
