@@ -100,7 +100,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const [totalRecords, setTotalRecords] = useState(0);
 
   const fetchCallingList = (page, size) => {
-    fetch(`${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?page=${page}&size=${size}`)
+    fetch(`${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`)
       .then((response) => response.json())
       .then((data) => {
         setFilteredCallingList(data.content);
@@ -117,7 +117,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
 
   useEffect(() => {
     fetchCallingList(currentPage, pageSize);
-  }, [employeeId,currentPage,pageSize]);
+  }, [employeeId,currentPage,pageSize,searchTerm]);
 
   useEffect(() => {
     const options = limitedOptions
@@ -1568,7 +1568,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
           </div>
 
           <div className="search-count-last-div">
-        Search Results : {searchCount}
+        Search Results : {totalRecords}
         </div>
 
           <Pagination

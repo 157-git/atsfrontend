@@ -313,7 +313,7 @@
     color: var(--button-text-color);
     /* border: 1px solid gray; */
   }
-  
+
   /* .profile-back-button:hover {
     background-color: var(--button-bg-hover-color);
     color: var(--text-hover-color);
@@ -350,8 +350,6 @@
   border-radius: 5px; /* Rounded corners */
   cursor: pointer; /* Pointer cursor on hover */
 }
-
-
 /* line 354 to 429 added by sahil karnekar */
 /* Sliding in animation */
 @keyframes slideIn {
@@ -366,7 +364,6 @@
     transform: translateY(0);
   }
 }
-
 /* Sliding out animation */
 @keyframes slideOut {
   0% {
@@ -380,8 +377,6 @@
     transform: translateY(-20px);
   }
 }
-
-
 .notificationMainCont1 {
   background-color: var(--Bg-color); /* Keeps background consistent with theme */
   color: var(--text-color); /* Matches text color to theme */
@@ -399,21 +394,19 @@
   margin-top: 80px; /* Adjusts spacing from top */
 }
 
+
 .notificationMainCont1.open {
   transform: translateY(0); /* Fully visible when open */
   opacity: 1; /* Makes it fully visible */
 }
-
 .notificationMainCont1.closed {
   transform: translateY(-10px); /* Moves slightly up when closed */
   opacity: 0; /* Fades out */
   pointer-events: none; /* Disables interaction when closed */
 }
-
 .motificationSubCont1 {
   padding: 16px; /* Adds spacing inside the container */
 }
-
 .buttonsDivForNotifications {
   display: flex; /* Aligns buttons horizontally */
   justify-content: space-between; /* Adds equal space between buttons */
@@ -433,4 +426,3 @@
 .cleaarButtonOfNotifications:hover {
   background-color: #cc0000; /* Darker red on hover */
 }
-

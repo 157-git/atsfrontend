@@ -204,6 +204,8 @@ const AddManager = () => {
             const result = await response.text(); 
 
             if (response.ok) {
+                console.log(formData);
+                
                 toast.success(result.message || "Manager Data Added Successfully.");
                 setFormData({
                     managerId: "0",

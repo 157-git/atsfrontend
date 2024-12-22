@@ -63,7 +63,6 @@ const CallingExcelList = ({
   const [totalRecords, setTotalRecords] = useState(0);
 
   const fetchUpdatedData = (page, size) => {
-    setLoading(true); // Set loading to true before fetching the updated data
     fetch(
       `${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
     )
@@ -84,7 +83,7 @@ const CallingExcelList = ({
 
   useEffect(() => {
     fetchUpdatedData(currentPage, pageSize);
-  }, [employeeId, userType, currentPage, pageSize]);
+  }, [employeeId, userType, currentPage, pageSize,searchTerm]);
 
   useEffect(() => {
     const options = Object.keys(filteredCallingList[0] || {}).filter(
