@@ -6,7 +6,7 @@ import Profile from "../photos/profileImg.webp";
 import logoutImg from "../photos/download.jpeg";
 import { Modal, Button } from "react-bootstrap";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
-import { API_BASE_URL } from "../api/api";
+import { API_BASE_URL, CHAT_BASE_URL } from "../api/api";
 import watingImg from "../photos/fire-relax.gif";
 
 // added by sahil karnekar and commented because it was implemented just for testing purpose but dont remove this
@@ -577,10 +577,13 @@ function DailyWork({
     };
   }, [employeeId, userType]);
 
+
+
   // this is commented by sahil karnekar dont remove this comment
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleNotificationBox = () => {
+    console.log("clicked here..... 0111");
     setIsOpen((prev) => !prev);
   };
 
@@ -616,7 +619,8 @@ function DailyWork({
       });
 
       socket.on("connect_error", () => {
-        alert("Connection failed. Ensure your details are correct.");
+        console.log;
+        ("Connection failed. Ensure your details are correct.");
       });
 
       return () => {
@@ -627,25 +631,46 @@ function DailyWork({
 
   useEffect(() => {
     const query = { userId: employeeId, role: userType };
+
+    // if (userType === "Recruiters") {
+    //   query.teamLeaderId = "430";
+    //   query.managerId = "636,1342";
+    //   query.superUserId = "391";
+    // } else if (userType === "TeamLeader") {
+    //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
+    //   query.managerId = "1342";
+    //   query.superUserId = "391";
+    // } else if (userType === "Manager") {
+    //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
+    //   query.allTeams = "432,433,434,444,977,430";
+    //   query.superUserId = "390";
+    // } else if (userType === "SuperUser") {
+    //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
+    //   query.allTeams = "432,433,434,444,977,430";
+    //   query.allManagers = "869,870,871,1340,1341,1342,636";
+    // }
+
     if (userType === "Recruiters") {
-      query.teamLeaderId = "432,433,434,444,977";
-      query.managerId = "869,870,871,1340,1341,1342";
-      query.superUserId = "390,391,395,55";
+      query.teamLeaderId = "977";
+      query.managerId = "1342";
+      query.superUserId = "391";
     } else if (userType === "TeamLeader") {
       query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-      query.managerId = "869,870,871,1340,1341,1342";
-      query.superUserId = "390,391,395,55";
-    } else if (userType === "Manager") {
+      query.managerId = "1342";
+      query.superUserId = "391";
+    } else if (userType === "Manager") { //871 use kraa
+      query.allRecruiters = "1,2,3,4,5,6,7,8,9";
+      query.allTeams = "977,433,444,976";
+      query.superUserId = "391";
+    } else if (userType === "SuperUser") { //390 use kraa 
       query.allRecruiters = "1,2,3,4,5,6,7,8,9";
       query.allTeams = "432,433,434,444,977";
-      query.superUserId = "390,391,395,55";
-    } else if (userType === "SuperUser") {
-      query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-      query.allTeams = "432,433,434,444,977";
-      query.allManagers = "869,870,871,1340,1341,1342";
+      query.allManagers = "869,870,1340,871";
     }
 
-    const newSocket = io("http://rg.157careers.in", { query });
+
+    const newSocket = io(`${CHAT_BASE_URL}`, { query });
+    console.log(query);
     setSocket(newSocket);
   }, []);
 
@@ -661,6 +686,8 @@ function DailyWork({
     }
   };  
 
+
+  
   return (
     <div className="daily-timeanddate">
       <a href="#">
@@ -690,8 +717,7 @@ function DailyWork({
         {!showAllDailyBtns ? "Show" : "Hide"} All Buttons
       </button>
 
-      {userType != "SuperUser" &&
-      userType != "Applicant" &&
+      {userType != "Applicant" &&
       userType != "Vendor" ? (
         <>
           <div
@@ -762,8 +788,8 @@ function DailyWork({
             {(
               (employeeId == 5) || (employeeId == 977)|| (employeeId == 1342) || (employeeId == 391) || (employeeId == 444) ||
               (employeeId == 1) || (employeeId == 432)|| (employeeId == 871) || (employeeId == 390) || (employeeId == 1340) ||
-              (employeeId == 2) || (employeeId == 4)|| (employeeId == 433) || (employeeId == 869) || (employeeId == 1341)  ||
-              (employeeId == 3) || (employeeId == 6)|| (employeeId == 434) || (employeeId == 870) || (employeeId == 555)
+              (employeeId == 2) || (employeeId == 4)|| (employeeId == 430) || (employeeId == 869) || (employeeId == 1341)  ||
+              (employeeId == 3) || (employeeId == 430)|| (employeeId == 434) || (employeeId == 870) || (employeeId == 636)
             ) && (
         
          <div>
@@ -778,23 +804,26 @@ function DailyWork({
             </div>
             <button  className="daily-tr-btn" onClick={sendMessage}>Send</button>
             </div>
-            <div
-              className={`notificationMainCont1 ${isOpen ? "open" : "closed"}`}
-            >
+            
+          </div>
+        )}
+        </>
+        
+        <div
+              className={`notificationMainCont1 ${isOpen ? "open" : "closed"}`}>
               <div className="motificationSubCont1">
                 {messages.length > 0 ? (
                   messages.map((message, index) => (
                     <>
-                      <p>{message.name}</p>
-                      <p>{message.email}</p>
-                      <p>{message.number}</p>
+                     <s></s> <p>{index+1} - {message.name} & {message.email}</p>
+                      <hr />
+                      {/* <p>{message.number}</p> */}
                     </>
                   ))
                 ) : (
                   <p>No Notifications</p>
                 )}
               </div>
-
               <div className="buttonsDivForNotifications">
                 <CloseOutlined
                   style={{
@@ -810,9 +839,6 @@ function DailyWork({
                 </button>
               </div>
             </div>
-          </div>
-        )}
-        </>
 
           </div>
           <button
@@ -857,6 +883,7 @@ function DailyWork({
               </Modal.Footer>
             </div>
           </Modal>
+          
         </>
       ) : null
 
