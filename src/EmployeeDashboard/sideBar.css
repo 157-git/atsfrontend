@@ -262,7 +262,7 @@ body {
   color:var(--sidebar-txt-hover) !important;
 }
 .sub-menu.active li.active a > .sidebar-text {
-  color: var(--text-color) !important;
+  color: var(--sidebar-txt-hover) !important;
 }
 
 .sidebar-menu.active ul li.active a > .sidebar-text {
@@ -311,8 +311,8 @@ body {
 }
 
 /* Additional CSS for active state of the icons if needed */
-.sidebar .active i {
-  color: var(--heading-text-color); /* Or any other shade if you want a different color for active state */
+.sidebar .active i, .sidebar .active span, .sidebar .active .arrow {
+  color: var(--sidebar-txt-hover); /* Or any other shade if you want a different color for active state */
 }
 
 /* Example for setting the color of the arrow icons
@@ -331,8 +331,8 @@ body {
  }
 
  .buttoncss:hover{
-     background-color: var(--button-bg-hover-color);
-     color: var(--text-hover-color);
+     background-color: var(--primary-button-hover);
+     color: var(--button-txt-hover-color);
      border: 1px solid var(--button-border-color);
  }
  
@@ -347,8 +347,8 @@ body {
   .buttoncss {
     font-size: 18px;
     border-radius: 15px;
-    color:white;
-    background-color: var(--button-color);
+    color:var(--button-txt-color);
+    background-color: var(--primary-button-bg);
     display: inline-block;
     padding: 8px 25px;
     margin: 10px;

@@ -669,6 +669,7 @@ function DailyWork({
     // }
 
     const newSocket = io(`http://93.127.199.85:9092`, { query });
+    // const newSocket = io(`http://localhost:9092`, { query });
     console.log(query);
     setSocket(newSocket);
   }, []);
