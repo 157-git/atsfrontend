@@ -629,44 +629,44 @@ function DailyWork({
 
   useEffect(() => {
     const query = { userId: employeeId, role: userType };
-    // if (userType === "Recruiters") {
-    //   query.teamLeaderId = "430";
-    //   query.managerId = "636";
-    //   query.superUserId = "390";
-    // } else if (userType === "TeamLeader") {
-    //   query.allRecruiters = "1,2,3,4,5,6";
-    //   query.managerId = "636";
-    //   query.superUserId = "390";
-    // } else if (userType === "Manager") {
-    //   query.allRecruiters = "1,2,3,4,5,6";
-    //   query.allTeams = "430,431,432";
-    //   query.superUserId = "390";
-    // } else if (userType === "SuperUser") {
-    //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-    //   query.allTeams = "432,433,434,444,977,430";
-    //   query.allManagers = "869,870,871,1340,1341,1342,636";
-    // }
-
     if (userType === "Recruiters") {
-      //1 Use Kraa
-      query.teamLeaderId = "977";
-      query.managerId = "1342";
-      query.superUserId = "391";
+      query.teamLeaderId = "430";
+      query.managerId = "636";
+      query.superUserId = "390";
     } else if (userType === "TeamLeader") {
       query.allRecruiters = "1,2,3,4,5,6";
-      query.managerId = "1342";
-      query.superUserId = "391";
+      query.managerId = "636";
+      query.superUserId = "390";
     } else if (userType === "Manager") {
-      //871 use kraa
-      query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-      query.allTeams = "977,433,444,976";
-      query.superUserId = "391";
+      query.allRecruiters = "1,2,3,4,5,6";
+      query.allTeams = "430,431,432";
+      query.superUserId = "390";
     } else if (userType === "SuperUser") {
-      //390 use kraa
       query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-      query.allTeams = "432,433,434,444,977";
-      query.allManagers = "869,870,1340,871";
+      query.allTeams = "432,433,434,444,977,430";
+      query.allManagers = "869,870,871,1340,1341,1342,636";
     }
+
+    // if (userType === "Recruiters") {
+    //   //1 Use Kraa
+    //   query.teamLeaderId = "977";
+    //   query.managerId = "1342";
+    //   query.superUserId = "391";
+    // } else if (userType === "TeamLeader") {
+    //   query.allRecruiters = "1,2,3,4,5,6";
+    //   query.managerId = "1342";
+    //   query.superUserId = "391";
+    // } else if (userType === "Manager") {
+    //   //871 use kraa
+    //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
+    //   query.allTeams = "977,433,444,976";
+    //   query.superUserId = "391";
+    // } else if (userType === "SuperUser") {
+    //   //390 use kraa
+    //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
+    //   query.allTeams = "432,433,434,444,977";
+    //   query.allManagers = "869,870,1340,871";
+    // }
 
     const newSocket = io(`http://93.127.199.85:9092`, { query });
     console.log(query);
