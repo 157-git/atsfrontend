@@ -164,7 +164,7 @@ body{
   font-size: 14px; /* Reduced font size */
   border: none;
   border-radius: 5px;
-  background-color: var(--button-color);
+  background-color: var(--primary-button-bg);
   color: var(--button-text-color);
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;

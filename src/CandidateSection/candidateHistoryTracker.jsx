@@ -457,7 +457,7 @@ const CandidateHistoryTracker = () => {
             <div className="history-main-div">
               <button
                 onClick={handleButtonClick}
-                className="Candi-History-tracker-button"
+                className="lineUp-Filter-btn"
               >
                 {isVisible ? "Hide Filters" : "Show Filters"}
               </button>
@@ -465,7 +465,7 @@ const CandidateHistoryTracker = () => {
               {isVisible && (
                 <button
                   onClick={selectAllFilters}
-                  className="Candi-History-tracker-button"
+                  className="lineUp-Filter-btn"
                 >
                   {selectAll ? "Select All" : "Deselect All"}
                 </button>
@@ -492,7 +492,7 @@ const CandidateHistoryTracker = () => {
               {selectedFilters.length > 0 && (
                 <span className="handlePrintDiv">
                   <button
-                    className="Candi-History-tracker-button margin-left-set"
+                    className="lineUp-Filter-btn margin-left-set"
                     onClick={handlePrint}
                   >
                     Export PDF

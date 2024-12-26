@@ -278,7 +278,7 @@
   max-width: 600px; /* Maximum width it can expand to */
   transition: width 0.3s ease; /* Smooth transition when width changes */
   display: inline-block;
-  border: 1px solid black;
+  border: 1px solid var(--primary-border);
 }
 
 /* Style for the input */

@@ -889,7 +889,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
 
                         <td className=" TeamLead-main-table-td">
                           <button
-                            className="TeamLead-main-table-button"
+                            className="lineUp-Filter-btn"
                             onClick={() =>
                               handleUpdateClick(
                                 data.candidateId,

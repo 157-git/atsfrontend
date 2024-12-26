@@ -100,7 +100,7 @@
 }
 
 .d-grid button {
-  background-color: var(--button-color);
+  background-color: var(--primary-button-bg);
   height: 30px;
   width: 100%;
   /* Adjust width as needed */
@@ -122,7 +122,7 @@
 }
 
 .d-grid button:hover {
-  color: var(--text-hover-color);
+  color: var(--button-txt-hover-color);
 }
 
 .text-danger {

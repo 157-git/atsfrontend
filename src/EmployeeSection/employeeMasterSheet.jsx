@@ -685,7 +685,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                 <div>
                   {showShareButton ? (
                     <button
-                      className="EmployeeMasterSheet-share-btn"
+                      className="lineUp-Filter-btn"
                       onClick={() => setShowShareButton(false)}
                     >
                       Share

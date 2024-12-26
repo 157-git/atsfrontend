@@ -847,7 +847,7 @@ const handleSizeChange = (current, size) => {
                     <div>
                       {showShareButton ? (
                         <button
-                          className="selectedcan-share-btn"
+                          className="lineUp-Filter-btn"
                           onClick={() => setShowShareButton(false)}
                         >
                           Share
@@ -855,7 +855,7 @@ const handleSizeChange = (current, size) => {
                       ) : (
                         <div style={{ display: "flex", gap: "5px" }}>
                           <button
-                            className="selectedcan-share-close-btn"
+                            className="lineUp-Filter-btn"
                             onClick={() => {
                               setShowShareButton(true);
                               setSelectedRows([]);
@@ -875,7 +875,7 @@ const handleSizeChange = (current, size) => {
                           )}
                           {/* akash_pawar_SelectedCandidate_ShareFunctionality_18/07_609 */}
                           <button
-                            className="selectedcan-forward-btn"
+                            className="lineUp-Filter-btn"
                             onClick={forwardSelectedCandidate}
                           >
                             Forward

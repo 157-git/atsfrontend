@@ -131,7 +131,7 @@ body {
 .sidebar-menu ul li.active > a {
   /* color: gray; */
   /* padding: 7px; */
-  background-color: var(--hover-effect);
+  background-color: var(--sidebar-active-item-bg);
   /* this line is added by sahil karnekar for hover pointer effect */
   cursor: pointer;
 }
@@ -259,7 +259,7 @@ body {
   visibility: visible;  
 }
 .sidebar-menu ul li > a:hover .sidebar-text {
-  color:var(--text-color) !important;
+  color:var(--sidebar-txt-hover) !important;
 }
 .sub-menu.active li.active a > .sidebar-text {
   color: var(--text-color) !important;
@@ -269,7 +269,7 @@ body {
   color: var(--text-color) !important;
 }
 .sub-menu.active li a > .sidebar-text {
-  color: var(--heading-text-color) !important;
+  color: var(--sidebar-txt) !important;
 }
 
 /* .sidebar-menu .sub-menu.active ul li a>.sidebar-text{
@@ -307,7 +307,7 @@ body {
   color:var(--heading-text-color);
 }
 .sidebar-text {
-  color: gray;
+  color: var(--sidebar-txt);
 }
 
 /* Additional CSS for active state of the icons if needed */

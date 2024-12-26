@@ -629,7 +629,6 @@ function DailyWork({
 
   useEffect(() => {
     const query = { userId: employeeId, role: userType };
-
     // if (userType === "Recruiters") {
     //   query.teamLeaderId = "430";
     //   query.managerId = "636";
