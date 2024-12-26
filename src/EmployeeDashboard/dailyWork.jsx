@@ -6,15 +6,15 @@ import Profile from "../photos/profileImg.webp";
 import logoutImg from "../photos/download.jpeg";
 import { Modal, Button } from "react-bootstrap";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
-import { API_BASE_URL, CHAT_BASE_URL } from "../api/api";
+import { API_BASE_URL} from "../api/api";
 import watingImg from "../photos/fire-relax.gif";
 
-// added by sahil karnekar and commented because it was implemented just for testing purpose but dont remove this
+//added by sahil karnekar and commented because it was implemented just for testing purpose but dont remove this
 import { Avatar, Badge } from "antd";
 import { BellOutlined, CloseOutlined, ClearOutlined } from "@ant-design/icons";
 import { io } from "socket.io-client";
 
-// SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
+//SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
 
 function DailyWork({
   onCurrentEmployeeJobRoleSet,
@@ -632,15 +632,15 @@ function DailyWork({
 
     // if (userType === "Recruiters") {
     //   query.teamLeaderId = "430";
-    //   query.managerId = "636,1342";
-    //   query.superUserId = "391";
+    //   query.managerId = "636";
+    //   query.superUserId = "390";
     // } else if (userType === "TeamLeader") {
-    //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-    //   query.managerId = "1342";
-    //   query.superUserId = "391";
+    //   query.allRecruiters = "1,2,3,4,5,6";
+    //   query.managerId = "636";
+    //   query.superUserId = "390";
     // } else if (userType === "Manager") {
-    //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-    //   query.allTeams = "432,433,434,444,977,430";
+    //   query.allRecruiters = "1,2,3,4,5,6";
+    //   query.allTeams = "430,431,432";
     //   query.superUserId = "390";
     // } else if (userType === "SuperUser") {
     //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
@@ -649,11 +649,12 @@ function DailyWork({
     // }
 
     if (userType === "Recruiters") {
+      //1 Use Kraa
       query.teamLeaderId = "977";
       query.managerId = "1342";
       query.superUserId = "391";
     } else if (userType === "TeamLeader") {
-      query.allRecruiters = "1,2,3,4,5,6,7,8,9";
+      query.allRecruiters = "1,2,3,4,5,6";
       query.managerId = "1342";
       query.superUserId = "391";
     } else if (userType === "Manager") {
@@ -668,7 +669,7 @@ function DailyWork({
       query.allManagers = "869,870,1340,871";
     }
 
-    const newSocket = io(`${CHAT_BASE_URL}`, { query });
+    const newSocket = io(`http://93.127.199.85:9092`, { query });
     console.log(query);
     setSocket(newSocket);
   }, []);
