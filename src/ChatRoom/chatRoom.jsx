@@ -4,12 +4,13 @@ import { over } from "stompjs";
 import SockJS from "sockjs-client";
 import { useParams } from "react-router-dom";
 import HashLoader from "react-spinners/HashLoader";
-import { CHAT_BASE_URL } from "../api/api";
+// import { CHAT_BASE_URL } from "../api/api";
 import { API_BASE_URL } from "../api/api";  
 
 let stompClient = null;
 
 const ChatRoom = () => {
+  const CHAT_BASE_URL = "http://localhost:9092";
   const [privateChats, setPrivateChats] = useState(new Map());
   const [publicChats, setPublicChats] = useState([]);
   const [color] = useState("#ffcb9b");

@@ -205,25 +205,25 @@ const CandidateHistoryTracker = () => {
     if (selectAll) {
       const allFilters = [
         "extraCertificationCounts",
-        "onRoleCounts",
-        "distanceCounts",
         "genderCounts",
-        "ageCounts",
         "jobDesignationCounts",
         "salaryCounts",
         "communicationRatingCounts",
         "lastCompanyCounts",
-        "companyTypeCounts",
         "sourceNameCounts",
         "pickUpAndDropCounts",
         "experienceCounts",
         "holdingAnyOfferCounts",
-        "tatReportsCounts",
         "requirementCompanyCounts",
         "noticePeriodCounts",
         "incentiveCounts",
         "qualificationCounts",
         "maritalStatusCounts",
+        "onRoleCounts",
+        "ageCounts",
+        "companyTypeCounts",
+        "tatReportsCounts",
+        "distanceCounts",
         // "On Role Third Party",
         // "Salary"
       ];
@@ -514,7 +514,7 @@ const CandidateHistoryTracker = () => {
                     )}
                     onChange={handleFilterChange}
                   />{" "}
-                  Extra Certification
+                  Extra Certification hhh
                 </label>
                 <label className="checkbox-label">
                   <input
