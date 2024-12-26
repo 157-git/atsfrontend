@@ -320,7 +320,7 @@ const PainAreaSolving = () => {
           </ul>
         </div>
       </div>
-      <button className="painarea-button" onClick={handlePrint}>
+      <button className="lineUp-Filter-btn" onClick={handlePrint}>
         Export PDF
       </button>
     </div>

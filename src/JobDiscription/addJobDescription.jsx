@@ -863,7 +863,7 @@ const AddJobDescription = () => {
                       <div className="ajd-btndiv-div">
                         <button
                           type="button"
-                          className="job-button"
+                          className="lineUp-Filter-btn"
                           onClick={() => handleAddMore("responsibilities")}
                         >
                           Add More Responsibilities
@@ -925,7 +925,7 @@ const AddJobDescription = () => {
                       <div className="ajd-btndiv-div">
                         <button
                           type="button"
-                          className="job-button"
+                          className="lineUp-Filter-btn"
                           onClick={() => handleAddMore("jobRequirements")}
                         >
                           Add More Job Requirements
@@ -995,7 +995,7 @@ const AddJobDescription = () => {
                       <div className="ajd-btndiv-div">
                         <button
                           type="button"
-                          className="job-button-add-Preferred"
+                          className="lineUp-Filter-btn"
                           onClick={() =>
                             handleAddMore("preferredQualifications")
                           }

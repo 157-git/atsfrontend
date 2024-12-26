@@ -57,16 +57,16 @@
   font-size: 16px;
     border-radius: 15px;
     height: 30px;
-    color: white;
+    color: var(--button-txt-color);
     padding-left: 15px;
     padding-right: 15px;
-    background: var(--button-color);
-    border: 1px solid gray;
+    background: var(--primary-button-bg);
+    border: 1px solid var(--primary-border);
     cursor: pointer;
     margin-bottom: 10px;
 }
 .rejectedcan-Filter-btn:hover,.rejectedcan-share-close-btn:hover,.rejectedcan-share-btn:hover,.rejectedcan-share-select-btn:hover,.rejectedcan-forward-btn:hover,.rejectedcan-share-forward-popup-btn:hover,.rejectedcan-close-forward-popup-btn:hover{
-  background-color: var(--button-hover-color);
-  color: var(--text-hover-color);
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
     opacity: 0.8;
 }

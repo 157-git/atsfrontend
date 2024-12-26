@@ -8,13 +8,14 @@
 
 .sidebar {
   grid-column: 1 / 2;
-  background-color: var(--Bg-color);
+  background-color: var(--sidebar-bg);
 }
 
 .empDash-main-content {
   grid-column: 2 / 3;
   padding: 20px;
   overflow-y: auto;
+  background-color: var(--main-bg-color);
 }
 
 .time-and-data .head {

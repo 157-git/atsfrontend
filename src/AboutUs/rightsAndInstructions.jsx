@@ -292,7 +292,7 @@ const RightsAndInstructions = () => {
         </div>
       </div>
       <div className='handlePrintDiv'>
-        <button className='issue-button' onClick={handlePrint}>Export PDF</button>
+        <button className='lineUp-Filter-btn' onClick={handlePrint}>Export PDF</button>
       </div>
     </div>
   );

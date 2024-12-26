@@ -59,11 +59,11 @@
   font-size: 16px;
   border-radius: 15px;
   height: 30px;
-  color: white;
+  color: var(--button-txt-color);
   padding-left: 15px;
   padding-right: 15px;
-  background: var(--button-color);
-  border: 1px solid gray;
+  background: var(--primary-button-bg);
+  border: 1px solid var(--primary-border);
   cursor: pointer;
   margin-bottom: 10px;
 }
@@ -76,7 +76,7 @@
 .SCE-share-forward-popup-btn:hover,
 .SCE-close-forward-popup-btn:hover {
   background-color: var(--button-bg-hover-color);
-  color: var(--text-hover-color);
+  color: var(--button-txt-hover-color);
   opacity: 0.8;
 }
 

@@ -511,7 +511,7 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
                             <button
                               type="button"
                               onClick={addNewQuestionField}
-                              className="submit-button"
+                              className="lineUp-Filter-btn"
                             >
                               Add Answered Question
                             </button>
@@ -569,7 +569,7 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
                             <button
                               type="button"
                               onClick={addNewQuestionFieldforunans}
-                              className="submit-button"
+                              className="lineUp-Filter-btn"
                             >
                               Add Unanswered Question
                             </button>
@@ -699,7 +699,7 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
                     </div>
                   )}
                   <div className="submit-container">
-                    <button type="submit" className="submit-button">
+                    <button type="submit" className="lineUp-Filter-btn">
                       Submit
                     </button>
                   </div>

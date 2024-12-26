@@ -82,19 +82,19 @@
   align-items: center;
   gap: 5px;
   padding: 10px 15px;
-  background-color: var(--button-color);
-  color: var(--button-text-color);
+  background-color: var(--primary-button-bg);
+  color: var(--button-txt-color);
   cursor: pointer;
   border-radius: 15px;
   font-size: 16px;
   height: 30px;
   width: auto;
-  border: 1px solid gray;
+  border: 1px solid var(--primary-border);
 }
 
 .profile-back-button button:hover {
-  background-color: var(--button-bg-hover-color);
-  color: var(--text-hover-color);
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
   border: 1px solid var(--button-border-color);
 }
 

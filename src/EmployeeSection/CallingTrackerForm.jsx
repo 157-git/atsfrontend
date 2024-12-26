@@ -497,6 +497,7 @@ const CallingTrackerForm = ({
       } else if (userType === "TeamLeader") {
         dataToUpdate.callingTracker.teamLeader = { teamLeaderId: employeeId };
       }
+console.log(dataToUpdate);
 
       const response = await axios.post(
         `${API_BASE_URL}/calling-tracker/${employeeId}/${userType}`,
@@ -851,6 +852,8 @@ const CallingTrackerForm = ({
   };
 
   console.log(lineUpData);
+  console.log(callingTracker);
+  
 
   // this fucntion is made by sahil karnekar on date 25-11-2024
   const handleResumeUploadBoth = async (e) => {

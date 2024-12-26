@@ -78,7 +78,7 @@
   /* padding: 5px; */
   text-align: center;
   border: 1px solid gray;
-  color:var(--text-color);
+  color:var(--table-header-txt);
   white-space: nowrap;
   padding-left: 5px;
   padding-right: 5px;
@@ -106,9 +106,9 @@
 .view-details-button {
   padding: 1px 10px;
   margin: 1px;
-  background-color: var(--button-color);
-  color: white;
-  border: 1px solid gray;
+  background-color: var(--primary-button-bg);
+  color: var(--button-txt-color);
+  border: 1px solid var(--primary-border);
   border-radius: 15px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
@@ -116,6 +116,6 @@
 
 .status-button:hover,
 .view-details-button:hover {
-  background-color: var(--button-bg-hover-color);
-  color: var(--text-hover-color);
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
 }

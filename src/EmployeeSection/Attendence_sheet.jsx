@@ -682,7 +682,7 @@ const handleFilterOptionClick = (key) => {
 
                   <button
                     onClick={() => setDropdownOpen(false)}
-                    className="PI-Ok"
+                    className="lineUp-Filter-btn"
                   >
                     Ok
                   </button>
@@ -692,7 +692,7 @@ const handleFilterOptionClick = (key) => {
                       setTeamLeaders([]);
                       setRecruiters([]);
                     }}
-                    className="PI-reset"
+                    className="lineUp-Filter-btn"
                   >
                     Reset
                   </button>

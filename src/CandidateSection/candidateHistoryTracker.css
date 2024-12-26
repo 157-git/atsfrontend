@@ -33,8 +33,8 @@
 
 .can-history-data-table th {
   font-size: 16px;
-  background-color: #ffb281;
-  color: gray;
+  background-color: var(--Bg-color);
+  color: var(--table-header-txt);
 }
 
 .can-history-data-table tbody tr:nth-child(even) {
@@ -44,7 +44,7 @@
 .can-history-more-items {
   float: right;
   cursor: pointer;
-  color: #ffcb9b;
+  color: var(--Bg-color);
   border: none;
 }
 .can-history-popup {
@@ -119,11 +119,11 @@
 .Candi-History-tracker-button {
   font-size: 16px;
   border-radius: 15px;
-  color: white;
+  color: var(--button-txt-color);
   padding-left: 7px;
   padding-right: 7px;
-  background: var(--button-color);
-  border: 1px solid grey;
+  background: var(--primary-button-bg);
+  border: 1px solid var(--primary-border);
   cursor: pointer;
   margin-bottom: 10px;
   height: 30px;
@@ -131,8 +131,8 @@
 }
 
 .Candi-History-tracker-button:hover {
-  background-color: var(--button-hover-color);
-  color: var(--text-hover-color);
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
 
 }
 
@@ -141,7 +141,7 @@
 }
 
 .bhafilter-button {
-  background-color: var(--button-color);
+  background-color: var(--primary-button-bg);
   color: white;
   border: 1px solid var(--button-border-color);
   padding: 0px 8px; /* Adjust padding as needed */
@@ -157,12 +157,12 @@
 
 .bhafilter-button:hover {
   background-color: var(--button-bg-hover-color);
-  color: var(--text-hover-color);
+  color: var(--button-txt-hover-color);
 }
 
 .bhafilter-button.active {
   background-color: #f2f2f2; /* Background color when active */
-  color: var(--button-color);
+  color: var(--button-txt-hover-color);
 }
 
 .bhafilter-button:active {

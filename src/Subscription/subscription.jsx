@@ -328,7 +328,7 @@ const SubscriptionPlans = () => {
           </div>
           <div className="centbutton">
             <button
-              className="submitbuttonsubs"
+              className="lineUp-Filter-btn"
               type="button"
               onClick={handleCheckAndNavigate}
             >

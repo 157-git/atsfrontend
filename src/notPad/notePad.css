@@ -22,13 +22,13 @@
   padding-left: 10px;
   padding-right: 10px;
   color: white;
-  background-color: var(--button-color);
+  background-color: var(--primary-button-bg);
   font-size: 16px;
 }
 
 .note-submit-btn:hover {
   background-color: var(--button-hover-color);
-  color: var(--text-hover-color);
+  color: var(--button-txt-hover-color);
   border: 1px solid gray;
 
 }

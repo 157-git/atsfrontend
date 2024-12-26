@@ -40,14 +40,19 @@
   font-size: 18px;
   padding-left: 10px;
   padding-right: 10px;
-  color: white;
+  color: var(--button-txt-color);
   width: auto;
-  background-color: var(--button-color);
-  border: 1px solid gray;
+  background-color: var(--primary-button-bg);
+  border: 1px solid var(--primary-border);
   border-radius: 15px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin-bottom: 10px;
+}
+
+.payrolebutton:hover {
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
 }
 
 .employee-form button:hover {

@@ -16,6 +16,23 @@
   --filter-color: #ffcb9b;
   --dailyWork-btn: #ffcb9b;
   --button-border-color: gray;
+
+
+  --primary-button-bg: #ffcb9b;
+  --primary-button-hover: white;
+  --button-txt-color: white;
+  --button-txt-hover-color: #ffb281;
+  --active-icon: green;
+  --table-header-txt: gray;
+  --table-body-txt: gray;
+  --table-row-hover: #e6e6e6;
+  --tooltip-bg: #ffe5b5;
+  --tooltip-txt: gray;
+  --sidebar-bg: #ffe5b5;
+  --sidebar-txt: gray;
+  --sidebar-txt-hover: gray;
+  --sidebar-active-item-bg: #ffcb9b;
+  --primary-border: gray;
 }
 
 .accordion {

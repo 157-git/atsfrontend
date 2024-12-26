@@ -18,9 +18,9 @@
 }
 
 .capex-my-button {
-  background-color: var(--button-color);
-  color: var(--button-text-color);
-  border: 1px solid var(--button-border-color);
+  background-color: var(--primary-button-bg);
+  color: var(--button-txt-color);
+  border: 1px solid var(--primary-border);
   border-radius: 15px;
   height: 30px;
   width: auto;
@@ -31,8 +31,8 @@
 }
 
 .capex-my-button:hover {
-  background-color: var(--button-bg-hover-color);
-  color: var(--text-hover-color);
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
 }
 
 .capex-form-container {
@@ -77,9 +77,9 @@
 }
 
 .capex-form button, .opex-form button {
-  background-color: var(--button-color);
-  color: white;
-  border: 1px solid gray;
+  background-color: var(--primary-button-bg);
+  color: var(--button-txt-color);
+  border: 1px solid var(--primary-border);
   border-radius: 15px;
   height: 30px;
   width: auto;
@@ -91,8 +91,8 @@
 }
 
 .capex-form button:hover, .opex-form button:hover {
-  background-color: var(--button-hover-color);
-  color: var(--text-hover-color);
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
 }
 
 .capex-sub-btn, .opex-sub-btn {

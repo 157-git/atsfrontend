@@ -26,7 +26,7 @@
   .PIE-timetrackertablehead {
     white-space: nowrap;
     width: auto !important;
-    color:var(--text-color);
+    color:var(--table-header-txt);
     border: 1px solid gray;
     padding: 0 10px;
     font-size: 16px;
@@ -182,13 +182,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--button-color);
-    color: var(--button-text-color);
-    border: 1px solid gray;
+    background-color: var(--primary-button-bg);
+    color: var(--button-txt-color);
+    border: 1px solid var(--primary-border);
   }
   .PIE-filter-Btn:hover{
-    background-color: var(--button-bg-hover-color);
-    color: var(--text-hover-color);
+    background-color: var(--primary-button-hover);
+    color: var(--button-txt-hover-color);
     border: 1px solid var(--button-border-color);
   }
   
@@ -235,18 +235,18 @@
   .PIE-process-dropdown-content-Okbtn,.PIE-process-dropdown-content-Resetbtn{
     float: right;
     margin-left: 5px;
-    background-color: var(--button-color);
+    background-color: var(--primary-button-bg);
     border-radius: 15px;
     padding: 0 10px;
     /* margin: 5px; */
-    color: white;
-    border: 1px solid #ffcb9b;
+    color: var(--button-txt-color);
+    border: 1px solid var(--primary-border);
   }
   .PIE-process-dropdown-content-Okbtn:hover,.PIE-process-dropdown-content-Resetbtn:hover{
     /* margin: 5px; */
-    background-color: var(--button-bg-hover-color);
-    color: var(--text-hover-color);
-   border: 1px solid #ffcb9b;
+    background-color: var(--primary-button-hover);
+    color: var(--button-txt-hover-color);
+   border: 1px solid var(--primary-border);
   }
   
   .PIE-dropdown-section {

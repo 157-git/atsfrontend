@@ -630,23 +630,23 @@ function DailyWork({
   useEffect(() => {
     const query = { userId: employeeId, role: userType };
 
-    // if (userType === "Recruiters") {
-    //   query.teamLeaderId = "430";
-    //   query.managerId = "636,1342";
-    //   query.superUserId = "391";
-    // } else if (userType === "TeamLeader") {
-    //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-    //   query.managerId = "1342";
-    //   query.superUserId = "391";
-    // } else if (userType === "Manager") {
-    //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-    //   query.allTeams = "432,433,434,444,977,430";
-    //   query.superUserId = "390";
-    // } else if (userType === "SuperUser") {
-    //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-    //   query.allTeams = "432,433,434,444,977,430";
-    //   query.allManagers = "869,870,871,1340,1341,1342,636";
-    // }
+    if (userType === "Recruiters") {
+      query.teamLeaderId = "430";
+      query.managerId = "636,1342";
+      query.superUserId = "391";
+    } else if (userType === "TeamLeader") {
+      query.allRecruiters = "1,2,3,4,5,6,7,8,9";
+      query.managerId = "1342";
+      query.superUserId = "391";
+    } else if (userType === "Manager") {
+      query.allRecruiters = "1,2,3,4,5,6,7,8,9";
+      query.allTeams = "432,433,434,444,977,430";
+      query.superUserId = "390";
+    } else if (userType === "SuperUser") {
+      query.allRecruiters = "1,2,3,4,5,6,7,8,9";
+      query.allTeams = "432,433,434,444,977,430";
+      query.allManagers = "869,870,871,1340,1341,1342,636";
+    }
 
     if (userType === "Recruiters") {
       query.teamLeaderId = "977";

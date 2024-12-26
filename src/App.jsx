@@ -27,28 +27,67 @@ import ThankYouPage from "./Applicant/applicantThankYou.jsx";
 
 const applySavedColors = () => {
   const bgColor = localStorage.getItem("bgColor");
-  const buttonColor = localStorage.getItem("buttonColor");
-  const hoverColor = localStorage.getItem("hover-effect");
+  const primaryBgColor = localStorage.getItem("--primary-bg-color");
+  const sidebarBg = localStorage.getItem("--sidebar-bg");
+
+  const colors = [
+    { variable: "--primary-bg-color"},
+    { variable: "--secondary-bg-color" },
+    { variable: "--ternary-bg-color" },
+    { variable: "--primary-txt-color" },
+    { variable: "--secondary-txt-color" },
+    { variable: "--disable-txt-color" },
+    { variable: "--error-txt-color" },
+    { variable: "--success-txt-color" },
+    { variable: "--link-txt-color" },
+    { variable: "--icon-color" },
+    { variable: "--active-icon" },
+    { variable: "--disable-icons" },
+    { variable: "--primary-button-bg" },
+    { variable: "--primary-button-hover" },
+    { variable: "--secondary-button-bg" },
+    { variable: "--secondary-button-hover" },
+    { variable: "--button-txt-color" },
+    { variable: "--button-txt-hover-color" },
+    { variable: "--table-bg-color" },
+    { variable: "--table-header-txt" },
+    { variable: "--table-body-txt" },
+    { variable: "--table-row-hover" },
+    { variable: "--table-row-selected" },
+    { variable: "--tooltip-bg" },
+    { variable: "--tooltip-txt" },
+    { variable: "--sidebar-bg" },
+    { variable: "--sidebar-txt" },
+    { variable: "--sidebar-txt-hover" },
+    { variable: "--sidebar-active-item-bg" },
+    { variable: "--sidebar-submenu-bg" },
+    { variable: "--icons-txt-hover" },
+    { variable: "--card-or-button-hover-bg" },
+    { variable: "--primary-border" },
+    { variable: "--hover-border" },
+    { variable: "--overlay-bg" },
+    { variable: "--modal-bg" },
+    { variable: "--modal-txt" },
+    { variable: "--accent-color-1" },
+    { variable: "--accent-color-2" },
+  ];
 
   if (bgColor)
     document.documentElement.style.setProperty("--Bg-color", bgColor);
-  if (buttonColor)
-    document.documentElement.style.setProperty("--button-color", buttonColor);
-  if (hoverColor)
-    document.documentElement.style.setProperty("--hover-effect", hoverColor);
-  if (buttonColor)
-    document.documentElement.style.setProperty("--button-hover-color", "white");
-  if (bgColor)
-    document.documentElement.style.setProperty("--text-hover-color", bgColor);
-  if (bgColor)
-    document.documentElement.style.setProperty("--button-text-color", "white");
-  if (bgColor)
-    document.documentElement.style.setProperty("--button-border-color", "gray");
-  if (bgColor)
-    document.documentElement.style.setProperty(
-      "--button-bg-hover-color",
-      "white"
-    );
+    if (primaryBgColor) {
+      colors.forEach(({ variable }) => {
+        const value = localStorage.getItem(variable); // Use the correct property
+        if (value) {
+          document.documentElement.style.setProperty(variable, value); // Set CSS variable
+        }
+        console.log(variable, value); // Log variable and its value
+      });
+    }
+
+    if (sidebarBg) {
+      document.documentElement.style.setProperty("--sidebar-bg", sidebarBg);
+    }
+    
 };
 
 const App = () => {

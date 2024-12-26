@@ -584,14 +584,14 @@ strong {
   padding: 2px 20px;
   width: fit-content;
   border-radius: 15px;
-  background-color: var(--button-color);
+  background-color: var(--primary-button-bg);
   color: var(--button-text-color);
   border: 1px solid gray;
 }
 
 .calling-tracker-popup-open-btn:hover {
   background-color: var(--button-bg-hover-color);
-  color: var(--text-hover-color);
+  color: var(--button-txt-hover-color);
   border: 1px solid var(--button-border-color);
 }
 
@@ -604,7 +604,7 @@ strong {
 
 .calling-tracker-popup-sidebar {
   width: 20%;
-  background-color: #f8f9fa;
+  background-color: var(--sidebar-bg);
   padding: 15px;
   border-right: 1px solid #dee2e6;
 }
@@ -624,7 +624,7 @@ strong {
 
 .sidebar-item.active,
 .sidebar-item:hover {
-  background-color: var(--button-color);
+  background-color: var(--sidebar-active-item-bg);
   color: #fff;
 }
 
@@ -663,13 +663,13 @@ strong {
   font-size: 16px;
   border: none;
   border-radius: 15px;
-  background-color: var(--button-color);
-  border: 1px solid #ccc;
+  background-color: var(--primary-button-bg);
+  border: 1px solid var(--primary-border);
   color: white;
 }
 
 .callingTracker-popup-close-btn:hover {
-  color: var(--button-color);
+  color: var(--button-txt-hover-color);
   background-color: rgb(255, 255, 255);
   border: 1px solid #ccc;
 }

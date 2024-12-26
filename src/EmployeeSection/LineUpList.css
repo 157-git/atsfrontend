@@ -64,9 +64,9 @@
   padding-right: 15px;
   cursor: pointer;
   margin-bottom: 10px;
-  background-color: var(--button-color);
+  background-color: var(--primary-button-bg);
   color: var(--button-text-color);
-  border: 1px solid var(--button-border-color);
+  border: 1px solid var(--primary-border);
 }
 .lineUp-Filter-btn:hover,
 .lineUp-share-close-btn:hover,
@@ -75,8 +75,8 @@
 .lineUp-forward-btn:hover,
 .lineUp-share-forward-popup-btn:hover,
 .lineUp-close-forward-popup-btn:hover {
-  background-color: var(--button-bg-hover-color);
-  color: var(--text-hover-color);
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
  
 }
 
@@ -106,23 +106,23 @@
 }
 
 .buttoncss-ctn:hover {
-  background-color: var(--button-bg-hover-color);
-  color: var(--text-hover-color);
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
 }
 
 .buttoncss-ctn {
   font-size: 16px;
   border-radius: 15px;
-  color: white;
+  color: var(--button-txt-color);
   padding-left: 15px;
   padding-right: 15px;
   height: 30px;
-  background-color: var(--button-color);
+  background-color: var(--primary-button-bg);
   display: inline-block;
   margin: 10px;
   text-align: center;
   cursor: pointer;
-  border: 1px solid var(--button-border-color)
+  border: 1px solid var(--primary-border)
 }
 .blur-overlay {
   position: fixed;
