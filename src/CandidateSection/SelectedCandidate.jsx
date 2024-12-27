@@ -1534,7 +1534,7 @@ const handleSizeChange = (current, size) => {
                             <i
                               className="fas fa-eye"
                               style={{
-                                color: item.resume ? "green" : "inherit",
+                                color: item.resume ? "var(--active-icon)" : "inherit",
                               }}
                             ></i>
                           </button>

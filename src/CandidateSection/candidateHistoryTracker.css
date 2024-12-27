@@ -142,8 +142,8 @@
 
 .bhafilter-button {
   background-color: var(--primary-button-bg);
-  color: white;
-  border: 1px solid var(--button-border-color);
+  color: var(--button-txt-color);
+  border: 1px solid var(--primary-border);
   padding: 0px 8px; /* Adjust padding as needed */
   font-size: 16px;
   white-space: nowrap;

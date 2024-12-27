@@ -585,14 +585,14 @@ strong {
   width: fit-content;
   border-radius: 15px;
   background-color: var(--primary-button-bg);
-  color: var(--button-text-color);
-  border: 1px solid gray;
+  color: var(--button-txt-color);
+  border: 1px solid var(--primary-border);
 }
 
 .calling-tracker-popup-open-btn:hover {
   background-color: var(--button-bg-hover-color);
   color: var(--button-txt-hover-color);
-  border: 1px solid var(--button-border-color);
+  border: 1px solid var(--primary-border);
 }
 
 .calling-tracker-popup {
@@ -665,7 +665,7 @@ strong {
   border-radius: 15px;
   background-color: var(--primary-button-bg);
   border: 1px solid var(--primary-border);
-  color: white;
+  color: var(--button-txt-color);
 }
 
 .callingTracker-popup-close-btn:hover {

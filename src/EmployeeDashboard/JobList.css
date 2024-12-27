@@ -19,7 +19,7 @@
   border-radius: 15px;
   background-color: white;
   font-size: 16px;
-  color: var(--Bg-color);
+  color: var(--filter-button-txt);
   height: 30px;
   width: auto;
   padding-left: 10px;

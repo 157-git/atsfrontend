@@ -70,6 +70,7 @@ const applySavedColors = () => {
     { variable: "--modal-txt" },
     { variable: "--accent-color-1" },
     { variable: "--accent-color-2" },
+    { variable: "--filter-button-txt" },
   ];
 
   if (bgColor)
