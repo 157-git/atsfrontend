@@ -4,7 +4,6 @@ import { over } from "stompjs";
 import SockJS from "sockjs-client";
 import { useParams } from "react-router-dom";
 import HashLoader from "react-spinners/HashLoader";
-// import { CHAT_BASE_URL } from "../api/api";
 import { API_BASE_URL } from "../api/api";  
 
 let stompClient = null;
