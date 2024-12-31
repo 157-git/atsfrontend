@@ -130,7 +130,6 @@ const MonthReport = () => {
     const FetchDataDatewise = async () => {
 
       let baseURL = '';
-
       if (selectedManager.managerId) {
         baseURL = `${selectedManager.managerId}/${selectedManager.managerJobRole}`;
       }
@@ -147,7 +146,6 @@ const MonthReport = () => {
       )
       setReportDataDatewise(response.data);
       console.log(response.data);
-      // console.log(baseURL+"hhhhhhhhh");
     };
     FetchDataDatewise();
 
@@ -768,20 +766,12 @@ const MonthReport = () => {
               )}
             </div>
           </div>
-
-          <div className="options-section">
-          </div>
         </div>
-
         {showReport && (
           <div>
             <div className="month-report">
-
               <div className='month-report-sub-Div'>
-
                 <div className="month-selector">
-
-
                   {selectedDate && <PDFGenerator selectedDate={selectedDate} />}
                   <label>
                     <input
@@ -789,13 +779,11 @@ const MonthReport = () => {
                       value="CurrentMonth"
                       id='CurrentMonth'
                       name="reportOption"
-
                       checked={selectedMonth === 'CurrentMonth'}
                       onChange={handleMonthChange}
                       onClick={handleToggle}
-
                     />
-                    Current Month
+                    Current Month 
                   </label>
 
                   <label>
@@ -804,11 +792,9 @@ const MonthReport = () => {
                       value="LastMonth"
                       id='LastMonth'
                       name="reportOption"
-
                       checked={selectedMonth === 'LastMonth'}
                       onChange={handleMonthChange}
                       onClick={handleToggle}
-
                     />
                     Last Month
                   </label>
