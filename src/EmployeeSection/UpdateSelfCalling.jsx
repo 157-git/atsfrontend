@@ -13,6 +13,7 @@ import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker
 // line 14 to 15 added by sahil karnekar date 17-10-2024
 import { TimePicker } from "antd";
 import dayjs from "dayjs";
+import { getSocket } from "../EmployeeDashboard/socket";
 
 const UpdateSelfCalling = ({
   initialData,
@@ -109,12 +110,21 @@ const UpdateSelfCalling = ({
   const [startpoint, setStartPoint] = useState("");
   const [endpoint, setendPoint] = useState("");
   const [lineUpData, setLineUpData] = useState(initialLineUpState);
+  const { userType } = useParams();
+const [newChangesState, setNewChangesState] = useState({
+  candidateName: "",
+    candidateEmail: "",
+    jobDesignation: "",
+});
 
+  
+  
   // line 111 to 186 added by sahil karnekar date 17-10-2024
 
   const [errors, setErrors] = useState({});
   const [errorForDOB, setErrorForDOB] = useState("");
   const [errorInterviewSlot, seterrorInterviewSlot] = useState("");
+  const [socket, setSocket] = useState(null);
   // updated by sahil karnekar date 18-10-2024
   const today = new Date();
   const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
@@ -243,6 +253,9 @@ const UpdateSelfCalling = ({
       const data = await response.json();
       console.log(data);
       setCallingTracker(data);
+      newChangesState.candidateName = data.candidateName
+newChangesState.candidateEmail = data.candidateEmail
+newChangesState.jobDesignation = data.jobDesignation
       if (data.lineUp.resume !== "") {
         console.log(data.lineUp.resume);
         setResumeUploaded(true);
@@ -262,6 +275,11 @@ const UpdateSelfCalling = ({
       console.error("Error fetching candidate data:", error);
     }
   };
+
+  console.log(newChangesState);
+  
+  console.log(callingTracker);
+  
 
   const fetchRequirementOptions = async () => {
     try {
@@ -661,6 +679,11 @@ if (isNotInterested === false) {
     }
   };
 
+   useEffect(() => {
+      const newSocket = getSocket();
+      setSocket(newSocket);
+    }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -702,6 +725,11 @@ if (isNotInterested === false) {
 // this line added by sahil karnekar to trim the candidate name 
       const forTrimCandidateName = callingTracker.candidateName.trim();
 
+      console.log(initialLineUpState);
+      
+      console.log(lineUpData);
+      
+
       const dataToUpdate = {
         ...callingTracker,
         candidateName: forTrimCandidateName,
@@ -724,6 +752,86 @@ if (isNotInterested === false) {
           body: JSON.stringify(dataToUpdate),
         }
       );
+
+
+if (callingTracker.selectYesOrNo === "Interested") {
+
+if ((newChangesState.candidateName !== dataToUpdate.candidateName) ||
+  (newChangesState.candidateEmail !== dataToUpdate.candidateEmail) ||
+  (newChangesState.jobDesignation !== dataToUpdate.jobDesignation)
+) {
+  const candidateData = {
+    name: dataToUpdate.candidateName,
+    email: dataToUpdate.candidateEmail,
+    number: `${dataToUpdate.contactNumber}`,
+    senderId: employeeId,
+  };
+
+  const role = userType;
+  let params = {};
+
+if (role === 'Recruiters') {
+params = {
+  role: role,
+        recruiterId: '',
+        teamLeaderId: '977',
+        managerId: '1342',
+        superUserId: '391',
+};
+} else if (role === 'TeamLeader') {
+params = {
+  role: role,
+        recruiterId: '1,2,3,4,5',
+        teamLeaderId: '',
+        managerId: '1342',
+        superUserId: '391',
+};
+} else if (role === 'Manager') {
+params = {
+  role: role,
+        recruiterId: '1,2,3,4,5',
+        teamLeaderId: '977,430,390',
+        managerId: '',
+        superUserId: '391',
+};
+} else if (role === 'SuperUser') {
+params = {
+  role: role,
+  recruiterId: '1,2,3,4,5',
+  teamLeaderId: '977,430,390',
+  managerId: '1342',
+  superUserId: '',
+};
+}
+
+console.log(candidateData);
+
+
+axios.post(
+'http://localhost:8087/api/addCandidate',
+ candidateData , // Request body
+{
+  params: params, 
+  headers: {
+    'Content-Type': 'application/json', // Optional, depending on your API's requirements
+  },
+}
+)
+.then((response) => {
+  console.log('Response:', response.data);
+  socket.emit("update_candidate", candidateData);
+})
+.catch((error) => {
+  console.error('Error:', error);
+});
+}
+
+
+
+}
+
+
+
       if (response.ok) {
         if (callingTracker.selectYesOrNo === "Interested") {
           if (fromCallingList) {

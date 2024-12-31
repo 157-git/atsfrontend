@@ -565,10 +565,270 @@ const MonthReport = () => {
     }
     setAllSelected((prev) => !prev);
   }, [allSelected, filteredRecruiters]);
+const [openSelectDate, setOpenSelectDate] = useState(false);
+const handleOpenSelectDate = ()=>{
+setOpenSelectDate(!openSelectDate);
+}
+const [managersList, setManagersList]= useState([]);
+const handleDisplayManagers = async()=>{
+  const response = await axios.get(
+    `${API_BASE_URL}/get-all-managers`
+  );
+  setManagersList(response.data);
+}
+console.log(managersList);
+
+const scrollLeft = () => {
+  const container = document.querySelector(".typesOfReportDiv");
+  container.scrollBy({ left: -300, behavior: "smooth" });
+};
+
+const scrollRight = () => {
+  const container = document.querySelector(".typesOfReportDiv");
+  container.scrollBy({ left: 300, behavior: "smooth" });
+};
 
 
   return (
     <>
+   <div className="listofButtons11">
+
+    <button className="scrollButton left" onClick={scrollLeft}>
+    &#8249;
+  </button>
+
+
+<div className="typesOfReportDiv">
+
+      <div className="typeofReportSubDiv"
+      onClick={handleOpenSelectDate}
+      >
+        <div className="subdiviconandtext">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z"/></svg>
+        </div>
+        <div className="subdiviconandtext1">
+          <div className="textDiv1">
+Candidate Report
+          </div>
+        </div>
+      </div>
+
+      <div className="typeofReportSubDiv">
+        <div className="subdiviconandtext">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z"/></svg>
+        </div>
+        <div className="subdiviconandtext1">
+          <div className="textDiv1">
+Invoice Report
+          </div>
+        </div>
+      </div>
+
+      <div className="typeofReportSubDiv">
+        <div className="subdiviconandtext">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z"/></svg>
+        </div>
+        <div className="subdiviconandtext1">
+          <div className="textDiv1">
+Recruiters Report
+          </div>
+        </div>
+      </div>
+
+      <div className="typeofReportSubDiv">
+        <div className="subdiviconandtext">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z"/></svg>
+        </div>
+        <div className="subdiviconandtext1">
+          <div className="textDiv1">
+Candidate Report
+          </div>
+        </div>
+      </div>
+
+      <div className="typeofReportSubDiv">
+        <div className="subdiviconandtext">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z"/></svg>
+        </div>
+        <div className="subdiviconandtext1">
+          <div className="textDiv1">
+Candidate Report
+          </div>
+        </div>
+      </div>
+
+      <div className="typeofReportSubDiv">
+        <div className="subdiviconandtext">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z"/></svg>
+        </div>
+        <div className="subdiviconandtext1">
+          <div className="textDiv1">
+Candidate Report
+          </div>
+        </div>
+      </div>
+
+      <div className="typeofReportSubDiv">
+        <div className="subdiviconandtext">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z"/></svg>
+        </div>
+        <div className="subdiviconandtext1">
+          <div className="textDiv1">
+Candidate Report
+          </div>
+        </div>
+      </div>
+
+      
+
+      <div className="typeofReportSubDiv">
+        <div className="subdiviconandtext">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z"/></svg>
+        </div>
+        <div className="subdiviconandtext1">
+          <div className="textDiv1">
+Candidate Report
+          </div>
+        </div>
+      </div>
+      </div>
+      <button className="scrollButton right" onClick={scrollRight}>
+    &#8250;
+  </button>
+    </div>
+  
+
+{
+  openSelectDate && (
+<div className="tracker-date-report-option">
+          <div className="histry-date-div">
+          <label className="PI-radio-label">
+            <input
+              type="radio"
+              value="Current Month"
+              id="CurrentMonth"
+              name="reportOption"
+             
+            />
+            Current Month
+          </label>
+          <label className="PI-radio-label">
+            <input
+              type="radio"
+              value="Last Month"
+              id="LastMonth"
+              name="reportOption"
+             
+            />
+            Last Month
+          </label>
+          <label className="PI-radio-label">
+            <input
+              type="radio"
+              value="Last 3 Months"
+              id="Last3Months"
+              name="reportOption"
+             
+            />
+            Last 3 Months
+          </label>
+          <label className="PI-radio-label">
+            <input
+              type="radio"
+              value="Last 6 Months"
+              name="reportOption"
+              id="Last6Months"
+             
+            />
+            Last 6 Months
+          </label>
+          <label className="PI-radio-label">
+            <input
+              type="radio"
+              value="Last 1 Year"
+              name="reportOption"
+              id="Last1Year"
+             
+            />
+            Last 1 Year
+          </label>
+          <label className="PI-radio-label">
+            <input
+              type="radio"
+              value="custom"
+              
+              name="reportOption"
+              id="CustomDate"
+             
+            />
+            Custom Date
+          </label>
+          </div>
+          <center>
+          <div className="history-tracker-custom-dates">
+            {showCustomDiv && (
+                <div className="date-inputs">
+                  <label>
+                    Start Date:
+                    </label>
+                    <input
+                      type="date"
+                      value={customStartDate}
+                      onChange={handleCustomStartDateChange}
+                    />
+                 
+                  <label>
+                    End Date:
+                    </label>
+                    <input
+                      type="date"
+                      value={customEndDate}
+                      onChange={handleCustomEndDateChange}
+                    />
+                
+                  {/* <div className="filterDataButton">
+                    <button className="Candi-History-tracker-button">
+                      Filter Data
+                    </button>
+                  </div> */}
+                </div>
+              
+            )}
+          </div>
+          </center>
+        </div>
+  )
+}
+
+<div className="mainUserDropdown1">
+  <button
+  onClick={handleDisplayManagers}
+  >Manager</button>
+ <div className="listviewofmanagerswithcheckboxandarrow">
+  {
+    managersList.map((managerList, index) => (
+      <div key={index} className="manager-item">
+        <input type="radio" name="selectManager" />
+        <span
+        className='spanformanagerlistname'
+        >{managerList.managerName}
+       <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/></svg>
+        </span>
+      </div>
+    ))
+  }
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
       <div className="report-AppsTL">
         <div className="reports-selection-containerTL">
 

@@ -23,6 +23,7 @@ import Loader from "./loader";
 import { TimePicker } from "antd";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getSocket } from "../EmployeeDashboard/socket";
 
 const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
@@ -112,6 +113,8 @@ const CallingTrackerForm = ({
   const [errorInterviewSlot, seterrorInterviewSlot] = useState("");
   const [resumeSelected, setResumeSelected] = useState(false);
   const [errorForResumeUrl, setErrorForResumeUrl] = useState("");
+  // creating state for socket
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
     fetchRequirementOptions();
@@ -407,6 +410,12 @@ const CallingTrackerForm = ({
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
+  // establishing socket for emmiting event
+ useEffect(() => {
+    const newSocket = getSocket();
+    setSocket(newSocket);
+  }, []);
+
   const handleSubmit = async (e) => {
     setShowConfirmation(false);
     e.preventDefault();
@@ -508,6 +517,73 @@ console.log(dataToUpdate);
           },
         }
       );
+// this code is implemented just for testing of socket transmission
+      if (callingTracker.selectYesOrNo === "Interested") {
+        
+    const candidateData = {
+      name: callingTracker.jobDesignation,
+      email: `${callingTracker.selectYesOrNo} , Lineup `,
+      number: lineUpData.finalStatus,
+      senderId: `${userType}_${employeeId}`,
+    };
+
+    const role = userType;
+    let params = {};
+
+if (role === 'Recruiters') {
+  params = {
+    role: role,
+          recruiterId: '',
+          teamLeaderId: '977',
+          managerId: '1342',
+          superUserId: '391',
+  };
+} else if (role === 'TeamLeader') {
+  params = {
+    role: role,
+          recruiterId: '1,2,3,4,5',
+          teamLeaderId: '',
+          managerId: '1342',
+          superUserId: '391',
+  };
+} else if (role === 'Manager') {
+  params = {
+    role: role,
+          recruiterId: '1,2,3,4,5',
+          teamLeaderId: '977,430,390',
+          managerId: '',
+          superUserId: '391',
+  };
+} else if (role === 'SuperUser') {
+  params = {
+    role: role,
+    recruiterId: '1,2,3,4,5',
+    teamLeaderId: '977,430,390',
+    managerId: '1342',
+    superUserId: '',
+  };
+}
+
+axios.post(
+  'http://localhost:8087/api/addCandidate',
+  candidateData , // Request body
+  {
+    params: params, 
+    headers: {
+      'Content-Type': 'application/json', // Optional, depending on your API's requirements
+    },
+  }
+)
+  .then((response) => {
+    console.log('Response:', response.data);
+    socket.emit("add_candidate", candidateData);
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+      }
+
+
 
       if (response.status === 200 || response.status === 201) {
         //Arshad Attar Added this function to add data from excel and Resume data base and

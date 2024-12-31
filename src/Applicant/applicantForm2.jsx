@@ -31,22 +31,43 @@ import { toast } from "react-toastify";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import "./applicantFrom2.css";
 import { API_BASE_URL } from "../api/api";
+import CryptoJS from "crypto-js";
 
 function ApplicantForm2({ loginEmployeeName }) {
   //Arshad Attar Added This Code On 12-12-2024
   //This Code to hide Employee Id and UserType In Every Time
   const { encodedParams } = useParams();
   // Decode the encodedParams
-  const decodeParams = (encoded) => {
+  // const decodeParams = (encoded) => {
+  //   try {
+  //     const decoded = atob(encoded);
+  //     const [employeeId, userType] = decoded.split(":");
+  //     return { employeeId, userType };
+  //   } catch (error) {
+  //     console.error("Failed to decode parameters:", error);
+  //     return { employeeId: null, userType: null };
+  //   }
+  // };
+
+
+  // here i have performed decryption
+  // exposing directly in file just for testing and normal use purpose, please set this secreat key in env file while deploying on server
+  const secretKey = "157industries_pvt_ltd"; // Ensure this matches ShareLink
+
+  // Decryption logic
+  const decodeParams = (encrypted) => {
     try {
-      const decoded = atob(encoded);
-      const [employeeId, userType] = decoded.split(":");
-      return { employeeId, userType };
+      const bytes = CryptoJS.AES.decrypt(encrypted, secretKey);
+      const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+      const [id, type] = decrypted.split(":");
+      if (!id || !type) throw new Error("Invalid decrypted data");
+      return { employeeId: id, userType: type };
     } catch (error) {
-      console.error("Failed to decode parameters:", error);
-      return { employeeId: null, userType: null };
+      console.error("Decryption failed:", error);
+      return { employeeId: null, userType: null }; // Fallback if decryption fails
     }
   };
+
   const { employeeId, userType } = decodeParams(encodedParams);
 
   console.log("Decoded Employee ID:", employeeId);

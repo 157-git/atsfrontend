@@ -12,7 +12,7 @@ import watingImg from "../photos/fire-relax.gif";
 //added by sahil karnekar and commented because it was implemented just for testing purpose but dont remove this
 import { Avatar, Badge } from "antd";
 import { BellOutlined, CloseOutlined, ClearOutlined } from "@ant-design/icons";
-import { io } from "socket.io-client";
+import { initializeSocket } from "./socket.jsx";
 
 //SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
 
@@ -601,12 +601,22 @@ function DailyWork({
     }
   }, []);
 
+// updated by sahil karnekar
+  useEffect(() => {
+    const newSocket = initializeSocket(employeeId, userType);
+    setSocket(newSocket);
+  }, []);
+
+// updated by sahil karnekar date 30-12-2024
   useEffect(() => {
     if (socket) {
-      socket.on("receive_message", (message) => {
-        if (message.senderId !== employeeId) {
+      socket.on("receive_saved_candidate", (message) => {
+        console.log(message);
+        
+        if (message.candidate.senderId !== `${userType}_${employeeId}`) {
           setMessages((prevMessages) => {
             const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
             localStorage.setItem(
               `${userType}${employeeId}messages`,
               JSON.stringify(updatedMessages)
@@ -616,6 +626,24 @@ function DailyWork({
         }
       });
 
+
+      socket.on("receive_updated_candidate", (message) => {
+        console.log(message);
+        
+        if (message.candidate.senderId !== `${userType}_${employeeId}`) {
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        }
+      });
+
+
       socket.on("connect_error", () => {
         console.log;
         ("Connection failed. Ensure your details are correct.");
@@ -624,66 +652,79 @@ function DailyWork({
       return () => {
         socket.disconnect();
       };
+     
+      
     }
+    console.log(messages);
   }, [socket, employeeId]);
 
-  useEffect(() => {
-    const query = { userId: employeeId, role: userType };
-    if (userType === "Recruiters") {
-      query.teamLeaderId = "430";
-      query.managerId = "636";
-      query.superUserId = "390";
-    } else if (userType === "TeamLeader") {
-      query.allRecruiters = "1,2,3,4,5,6";
-      query.managerId = "636";
-      query.superUserId = "390";
-    } else if (userType === "Manager") {
-      query.allRecruiters = "1,2,3,4,5,6";
-      query.allTeams = "430,431,432";
-      query.superUserId = "390";
-    } else if (userType === "SuperUser") {
-      query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-      query.allTeams = "432,433,434,444,977,430";
-      query.allManagers = "869,870,871,1340,1341,1342,636";
-    }
 
-    // if (userType === "Recruiters") {
-    //   //1 Use Kraa
-    //   query.teamLeaderId = "977";
-    //   query.managerId = "1342";
-    //   query.superUserId = "391";
-    // } else if (userType === "TeamLeader") {
-    //   query.allRecruiters = "1,2,3,4,5,6";
-    //   query.managerId = "1342";
-    //   query.superUserId = "391";
-    // } else if (userType === "Manager") {
-    //   //871 use kraa
-    //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-    //   query.allTeams = "977,433,444,976";
-    //   query.superUserId = "391";
-    // } else if (userType === "SuperUser") {
-    //   //390 use kraa
-    //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-    //   query.allTeams = "432,433,434,444,977";
-    //   query.allManagers = "869,870,1340,871";
-    // }
-
-    const newSocket = io(`http://93.127.199.85:9092`, { query });
-    // const newSocket = io(`http://localhost:9092`, { query });
-    console.log(query);
-    setSocket(newSocket);
-  }, []);
-
+// updated by sahil karnekar date 30-12-2024
   const sendMessage = () => {
-    if (socket) {
-      const candidateData = {
-        name: "Demo",
-        email: "demo@gmail.com",
-        number: "22334455",
-        senderId: employeeId,
-      };
-      socket.emit("send_message", candidateData);
-    }
+
+    const candidateData = {
+      name: "Demo",
+      email: "demo@gmail.com",
+      number: "22334455",
+      senderId: `${userType}_${employeeId}`,
+    };
+
+    const role = userType;
+    let params = {};
+
+if (role === 'Recruiters') {
+  params = {
+    role: role,
+          recruiterId: '',
+          teamLeaderId: '977',
+          managerId: '1342',
+          superUserId: '391',
+  };
+} else if (role === 'TeamLeader') {
+  params = {
+    role: role,
+          recruiterId: '1,2,3,4,5',
+          teamLeaderId: '',
+          managerId: '1342',
+          superUserId: '391',
+  };
+} else if (role === 'Manager') {
+  params = {
+    role: role,
+          recruiterId: '1,2,3,4,5',
+          teamLeaderId: '977,430,390',
+          managerId: '',
+          superUserId: '391',
+  };
+} else if (role === 'SuperUser') {
+  params = {
+    role: role,
+    recruiterId: '1,2,3,4,5',
+    teamLeaderId: '977,430,390',
+    managerId: '1342',
+    superUserId: '',
+  };
+}
+
+// here we are calling our api
+    axios.post(
+      'http://localhost:8087/api/addCandidate',
+       candidateData , // Request body
+      {
+        params: params, 
+        headers: {
+          'Content-Type': 'application/json', // Optional, depending on your API's requirements
+        },
+      }
+    )
+      .then((response) => {
+        console.log('Response:', response.data);
+        // here we are emiting our event
+        socket.emit("add_candidate", candidateData);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   };
 
   return (
@@ -834,8 +875,21 @@ function DailyWork({
                     messages.map((message, index) => (
                       <>
                         <s></s>{" "}
+                        {/* data displays as per requirments */}
                         <p>
-                          {index + 1} - {message.name} & {message.email}
+                          {index + 1} - A Candidate {message.candidate.email} &  {message.candidate.number}
+                           
+                           Successfully By Sender ID : {message.candidate.senderId}
+                            For Job 
+                           {message.candidate.name} 
+                          <span>
+                            {
+                              message.eventName === "add_candidate" && (<span> Saved </span>)
+                            }
+                            {
+                              message.eventName === "update_candidate" && (<span> Updated </span>)
+                            }
+                            </span>
                         </p>
                         <hr />
                         {/* <p>{message.number}</p> */}
