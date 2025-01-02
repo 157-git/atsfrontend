@@ -8,18 +8,23 @@ import { json, useParams } from "react-router-dom";
 import "../Reports/MainReportDatapage.css";
 import { API_BASE_URL } from "../api/api";
 import { data } from 'autoprefixer';
+import Loader from '../EmployeeSection/loader';
 
 
 const MonthReport = () => {
   const { userType } = useParams();
   const { employeeId } = useParams();
   const [reportDataDatewise, setReportDataDatewise] = useState(null);
-  const [showReportData, setshowReportData] = useState(false);
+  const [selectedRole, setSelectedRole] = useState(null);
+const [selectedIds, setSelectedIds] = useState([]);
 
   const [openSelectDate, setOpenSelectDate] = useState(false);
-  const handleOpenSelectDate = () => {
-    setOpenSelectDate(!openSelectDate);
-  }
+  const [activeButton, setActiveButton] = useState(null);
+  const handleOpenSelectDate = (id) => {
+    setActiveButton(id); // Set active button
+    setOpenSelectDate(true);
+  };
+  
   const [managersList, setManagersList] = useState([]);
   const handleDisplayManagers = async () => {
     const response = await axios.get(
@@ -40,23 +45,25 @@ const MonthReport = () => {
     container.scrollBy({ left: 300, behavior: "smooth" });
   };
 const [teamLeadersList, setTeamLeadersList]= useState([]);
-  const handleOpenDownArrowContent = (managerid)=>{
-    const fetchTeamLeaderNames = async () => {
-      const response = await axios.get(
-        `${API_BASE_URL}/tl-namesIds/${managerid}`
-      );
-      setTeamLeadersList(response.data);
+  const handleOpenDownArrowContent = async(managerid)=>{
+   setSelectedIds([]);
+try {
+  const response = await axios.get(
+    `${API_BASE_URL}/tl-namesIds/${managerid}`
+  );
+  setTeamLeadersList(response.data);
 setDisplayTeamLeaders(true);
+} catch (error) {
+  console.log(error);
+  
+}
+  
 
-    };
-    if (managerid != "") {
-      fetchTeamLeaderNames();
-    }
     
   }
 const [recruitersList, setRecruitersList] = useState([]);
   const handleOpenDownArrowContentForRecruiters = async (teamLeaderId)=>{
-    setDisplayRecruiters(false);
+    setSelectedIds([]);
     const response = await axios.get(
       `${API_BASE_URL}/employeeId-names/${teamLeaderId}`
     );
@@ -66,6 +73,71 @@ const [recruitersList, setRecruitersList] = useState([]);
   }
 
 const [openReport, setOpenReport]= useState(false);
+const [loading, setLoading]= useState(false);
+
+
+const handleCheckboxChange = async (role, id, completeValueObject) => {
+  setLoading(true);
+
+  // Determine updated IDs manually
+  let updatedIds;
+  if (selectedRole && selectedRole !== role) {
+    setSelectedRole(role);
+    updatedIds = [id]; // Reset selection for a new role
+  } else {
+    updatedIds = selectedIds.includes(id)
+      ? selectedIds.filter((selectedId) => selectedId !== id) // Remove unselected ID
+      : [...selectedIds, id]; // Add new selected ID
+    setSelectedRole(role);
+  }
+
+  // Update state
+  setSelectedIds(updatedIds);
+
+  // Handle dependent display logic
+  if (role === "Manager") {
+    setDisplayTeamLeaders(false);
+    setDisplayRecruiters(false);
+  } else if (role === "TeamLeader") {
+    setDisplayRecruiters(false);
+  }
+
+  // Log the complete value object
+  console.log("Complete Value Object:", completeValueObject);
+
+  // Prepare API call
+  const userIdForApi = updatedIds.join(",");
+  console.log("Selected IDs for API:", userIdForApi);
+
+  // Date handling
+  const startDate = showCustomDiv ? customStartDate : startDate1;
+  const endDate = showCustomDiv ? customEndDate : endDate1;
+
+  // API Call
+  try {
+    const response = await axios.get(
+      `http://rg.157careers.in/api/ats/157industries/report-count/${userIdForApi}/${role}/${startDate}/${endDate}`
+    );
+    console.log("API Response:", response.data);
+    setReportDataDatewise(response.data);
+    setOpenReport(true);
+  } catch (error) {
+    console.error("Error fetching report data:", error);
+    // Provide user feedback here (e.g., toast)
+  }
+
+  setLoading(false);
+};
+
+
+
+console.log(selectedRole);
+console.log(selectedIds);
+
+
+
+
+
 const handleRadioChange = async (completeValueObject) => {
   let userTypeForApi = "";
   let userIdForApi = "";
@@ -97,7 +169,6 @@ if (showCustomDiv === true) {
       );
       console.log("API Response:", response.data);
       setReportDataDatewise(response.data);
-      setshowReportData(true);
       setOpenReport(true);
   } catch (error) {
       console.error("Error fetching report data:", error);
@@ -205,6 +276,12 @@ const [selectedOption, setSelectedOption] = useState("");
 
   const[displayMnagerDivWithBtn, setDisplayMnagerDivWithBtn] = useState(false);
 
+  const handleDisplayHideAll = ()=>{
+    setDisplayManagers(!displayManagers);
+    setDisplayTeamLeaders(!displayTeamLeaders);
+    setDisplayRecruiters(!displayRecruiters);
+  }
+
   return (
     <>
       <div className="listofButtons11">
@@ -215,99 +292,41 @@ const [selectedOption, setSelectedOption] = useState("");
 
 
         <div className="typesOfReportDiv">
-
-          <div className="typeofReportSubDiv"
-            onClick={handleOpenSelectDate}
-          >
-            <div className="subdiviconandtext">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z" /></svg>
-            </div>
-            <div className="subdiviconandtext1">
-              <div className="textDiv1">
-                Candidate Report
-              </div>
-            </div>
-          </div>
-
-          <div className="typeofReportSubDiv">
-            <div className="subdiviconandtext">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z" /></svg>
-            </div>
-            <div className="subdiviconandtext1">
-              <div className="textDiv1">
-                Invoice Report
-              </div>
-            </div>
-          </div>
-
-          <div className="typeofReportSubDiv">
-            <div className="subdiviconandtext">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z" /></svg>
-            </div>
-            <div className="subdiviconandtext1">
-              <div className="textDiv1">
-                Recruiters Report
-              </div>
-            </div>
-          </div>
-
-          <div className="typeofReportSubDiv">
-            <div className="subdiviconandtext">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z" /></svg>
-            </div>
-            <div className="subdiviconandtext1">
-              <div className="textDiv1">
-                Candidate Report
-              </div>
-            </div>
-          </div>
-
-          <div className="typeofReportSubDiv">
-            <div className="subdiviconandtext">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z" /></svg>
-            </div>
-            <div className="subdiviconandtext1">
-              <div className="textDiv1">
-                Candidate Report
-              </div>
-            </div>
-          </div>
-
-          <div className="typeofReportSubDiv">
-            <div className="subdiviconandtext">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z" /></svg>
-            </div>
-            <div className="subdiviconandtext1">
-              <div className="textDiv1">
-                Candidate Report
-              </div>
-            </div>
-          </div>
-
-          <div className="typeofReportSubDiv">
-            <div className="subdiviconandtext">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z" /></svg>
-            </div>
-            <div className="subdiviconandtext1">
-              <div className="textDiv1">
-                Candidate Report
-              </div>
-            </div>
-          </div>
+  {[
+    { id: 1, label: "Candidate Report" },
+    { id: 2, label: "Invoice Report" },
+    { id: 3, label: "Recruiters Report" },
+    { id: 4, label: "Candidate Report" },
+    { id: 5, label: "Candidate Report" },
+    { id: 6, label: "Candidate Report" },
+    { id: 7, label: "Candidate Report" },
+  ].map((report, index) => (
+    <div
+      key={report.id}
+      className={`typeofReportSubDiv ${
+        activeButton === report.id ? "active" : ""
+      }`}
+      onClick={() => handleOpenSelectDate(report.id)}
+    >
+      <div className="subdiviconandtext">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="#000000"
+        >
+          <path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z" />
+        </svg>
+      </div>
+      <div className="subdiviconandtext1">
+        <div className="textDiv1">{report.label}</div>
+      </div>
+    </div>
+  ))}
+</div>
 
 
-
-          <div className="typeofReportSubDiv">
-            <div className="subdiviconandtext">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z" /></svg>
-            </div>
-            <div className="subdiviconandtext1">
-              <div className="textDiv1">
-                Candidate Report
-              </div>
-            </div>
-          </div>
-        </div>
         <button className="scrollButton right" onClick={scrollRight}>
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/></svg>
         </button>
@@ -413,9 +432,16 @@ const [selectedOption, setSelectedOption] = useState("");
 {
   displayMnagerDivWithBtn && (
     <div className="mainUserDropdown1">
-    <button
+      <div className="buttonsForManagerAndHideAll">
+      <button className='daily-tr-btn'
       onClick={handleDisplayManagers}
     >Manager</button>
+    <button
+    className='daily-tr-btn'
+      onClick={handleDisplayHideAll}
+    >Hide All</button>
+      </div>
+   
 
     <div className="mainForLists">
 
@@ -426,13 +452,11 @@ const [selectedOption, setSelectedOption] = useState("");
       {
         managersList.map((managerList, index) => (
           <div key={index} className="manager-item">
-            <input type="radio" name="selectManager" 
-            onChange={() =>
-                handleRadioChange(
-                    managerList
-                )
-            }
-            />
+           <input
+            type="checkbox"
+            checked={selectedRole === "Manager" && selectedIds.includes(managerList.managerId)}
+            onChange={() => handleCheckboxChange("Manager", managerList.managerId, managerList)}
+          />
             <span
               className='spanformanagerlistname'
             >{managerList.managerName}
@@ -452,13 +476,11 @@ const [selectedOption, setSelectedOption] = useState("");
       {
         teamLeadersList.map((teamLeadersList, index) => (
           <div key={index} className="manager-item">
-            <input type="radio" name="selectManager" 
-             onChange={() =>
-              handleRadioChange(
-                teamLeadersList
-              )
-          }
-            />
+            <input
+            type="checkbox"
+            checked={selectedRole === "TeamLeader" && selectedIds.includes(teamLeadersList.teamLeaderId)}
+            onChange={() => handleCheckboxChange("TeamLeader", teamLeadersList.teamLeaderId, teamLeadersList)}
+          />
             <span
               className='spanformanagerlistname'
             >{teamLeadersList.teamLeaderName}
@@ -479,13 +501,11 @@ displayRecruiters && (
 {
 recruitersList.map((recruiterList, index) => (
   <div key={index} className="manager-item">
-    <input type="radio" name="selectManager" 
-       onChange={() =>
-        handleRadioChange(
-          recruiterList
-        )
-    }
-    />
+      <input
+            type="checkbox"
+            checked={selectedRole === "Recruiters" && selectedIds.includes(recruiterList.employeeId)}
+            onChange={() => handleCheckboxChange("Recruiters", recruiterList.employeeId, recruiterList)}
+          />
     <span
       className='spanformanagerlistname'
     >{recruiterList.employeeName}
@@ -507,8 +527,12 @@ recruitersList.map((recruiterList, index) => (
   )
 }
     
-
 {
+  loading && (
+    <Loader/>
+  )
+}
+{ 
   openReport && (
 <CreateReportTable reportDataDatewise={reportDataDatewise}/>
   )

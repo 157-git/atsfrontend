@@ -11,6 +11,7 @@
          import PieChart from "./PieChartReport";
          import PDFGenerator from "../Reports/PDFMain";
          import SliderReport from "../Reports/SliderReports";
+import axios from "axios";
          
          const LineUpDataDummy = [
            {
@@ -739,21 +740,33 @@
              setModalIsOpen(false);
            };
          console.log(reportDataDatewise);
+const[ newData, setNewData] = useState([]);
+
+         const handleFilterDataInterview = async()=>{
+const response = await axios.get(`http://192.168.1.42:9090/api/ats/157industries/candidate-category/Interview Schedule/430/TeamLeader/2024-12-20/2025-01-01`);
+console.log(response.data);
+setNewData(response.data);
+setLineUpDataReport(true);
+         }
+
          
            return (
              <div className="report-App-after">
                <div className="container-after1">
+                
                  <div className="attendanceTableData">
+                 <button className="shareDownloadbtn" onClick={handleRadioChange}>
+                       Share
+                     </button>
+                     <button className="shareDownloadbtn" onClick={handleDownloadPdf}>
+                       Download PDF
+                     </button>
                    <div style={{ textAlign: "-webkit-center" }}>
                    </div>
 
                    <div className="silderReport-align-div">
-                   <div className="fiter-heading-data">
-                   <h3>Filter Data By</h3>
-                   </div>
-                   <div>
-                   <SliderReport totalCandidateCount={totalCandidateCount} />
-                   </div>
+               
+             
                    <div
                      style={{
                        display: "flex",
@@ -763,12 +776,7 @@
                        paddingBottom: "5px",
                      }}
                    >
-                     <button className="shareDownloadbtn" onClick={handleRadioChange}>
-                       Share
-                     </button>
-                     <button className="shareDownloadbtn" onClick={handleDownloadPdf}>
-                       Download PDF
-                     </button>
+                   
                      {/* <PdfModal isOpen={modalIsOpen} closeModal={closeModal} pdfContent={pdfUrl} /> */}
                    </div>
                    </div>
@@ -795,7 +803,7 @@
                      </thead>
          
                      {reportDataDatewise.map((reportData, index) => (
-                       <td className="tabledata" key={index} onClick={()=>handleFilterLineUpChange('selected')}>
+                       <td className="tabledata" key={index} onClick={()=>handleFilterDataInterview('Interview Schedule')}>
                           {reportData.count}
                          &nbsp; <i class="fa fa-caret-down" aria-hidden="true"> </i>
                           
@@ -812,7 +820,7 @@
                    <div className="shortlisted-candidates-css">
                      {LineUpDataReport && (
                        <ShortListedCandidates
-                         filteredLineUpItems={filteredLineUpItems}
+                         filteredLineUpItems={newData}
                        />
                      )}
                    </div>
