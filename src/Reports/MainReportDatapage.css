@@ -983,7 +983,6 @@ color: grey;
   justify-content: space-between;
   overflow-x: scroll;
   margin-top: 5px;
-  padding-bottom: 25px;
  }
  .typeofReportSubDiv{
   min-width: 250px;
@@ -1019,4 +1018,8 @@ color: grey;
 }
 .listofButtons11{
   width: 100%;
+  display: flex;
+}
+.mainForLists{
+  display: flex;
 }
