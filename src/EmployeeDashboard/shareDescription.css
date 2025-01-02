@@ -155,9 +155,9 @@
 .apply-button-share {
   margin: 5px;
   margin-top: 10px;
-  background-color: var(--button-color);
+  background-color: var(--primary-button-bg);
   box-shadow: 0 0 5px #f2f2f2;
-  color: white;
+  color: var(--button-txt-color);
   cursor: pointer;
   border-radius: 15px;
   font-size: 16px;
@@ -169,8 +169,8 @@
 }
 
 .apply-button-share:hover {
-  background-color: var(--button-hover-color);
-  color: var(--text-hover-color);
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
   /* border: #f2f2f2; */
 }
 

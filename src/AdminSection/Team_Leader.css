@@ -547,12 +547,12 @@ html::-webkit-scrollbar {
 .assignoptionbtn {
   display: flex;
   align-items: center;
-  background-color: var(--button-color);
-  color: white;
+  background-color: var(--primary-button-bg);
+  color: var(--button-txt-color);
   align-items: center;
   cursor: pointer;
   border-radius: 15px;
-  border: 1px solid gray;
+  border: 1px solid var(--primary-border);
   font-size: 16px;
   padding: 10px;
   border-radius: 15px;
@@ -569,8 +569,8 @@ html::-webkit-scrollbar {
 }
 
 .assignoptionbtn:hover {
-  background-color: var(--button-hover-color);
-  color: var(--text-hover-color);
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
 }
 
 /* Assignments table */
@@ -682,6 +682,15 @@ html::-webkit-scrollbar {
   gap: 5px;
   /* padding: 10px; */
 }
+.TLR-buttons-div button {
+background-color: var(--primary-button-bg);
+color: var(--button-txt-color);
+border: 1px solid var(--primary-border);
+}
+.TLR-buttons-div button:hover {
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
+}
 
 .ok-button,
 .reset-selectTL-button,
@@ -714,17 +723,17 @@ html::-webkit-scrollbar {
   border-radius: 15px;
   height: 30px;
   margin: 5px;
-  color: var(--button-color);
+  color: var(--button-txt-color);
   padding-left: 15px;
   padding-right: 15px;
-  background-color: white;
-  border: 1px solid gray;
+  background-color: var(--primary-button-bg);
+  border: 1px solid var(--primary-border);
   cursor: pointer;
 }
 
 .category-share-btn:hover {
-  background-color: var(--button-hover-color);
-  color: var(--text-hover-color);
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
 }
 
 .response-msg {

@@ -234,8 +234,8 @@ text-align: center;
 
 }
 .lineUp-share-btn{
-  color: var(--button-text-color);
-  border-color: var(--button-border-color);
+  color: var(--button-txt-color);
+  border-color: var(--primary-border);
 }
 .lineUp-share-btn:hover{
   border-color: var(--button-border-color);

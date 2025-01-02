@@ -105,7 +105,7 @@
   width: 100%;
   /* Adjust width as needed */
   border-radius: 15px;
-  color: white;
+  color: var(--button-txt-color);
   padding: 0 20px;
   /* Adjust padding for text alignment */
   font-size: 16px;

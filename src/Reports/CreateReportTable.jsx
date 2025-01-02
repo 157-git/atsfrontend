@@ -748,9 +748,10 @@
 
                    <div className="silderReport-align-div">
                    <div className="fiter-heading-data">
-                   <h3>Filter Data By</h3>
+                   <h3>Filter By </h3>
                    </div>
                    <div>
+                    {/* indicator , pdf , share button component */}
                    <SliderReport totalCandidateCount={totalCandidateCount} />
                    </div>
                    <div
@@ -794,18 +795,15 @@
                      </thead>
          
                      {reportDataDatewise.map((reportData, index) => (
-                       <td className="tabledata" key={index} onClick={()=>handleFilterLineUpChange('selected')}>
+                       <td className="tabledata" key={index} onClick={()=> handleFilterLineUpChange('selected')}>
                           {reportData.count}
                          &nbsp; <i class="fa fa-caret-down" aria-hidden="true"> </i>
-                          
-                          {/* {reportData.category} */}
-         
                        </td>
                      ))}
+                     
                    </table>
                            <div>
                      <PieChart data={reportDataDatewise} />
-                    
                    </div>
          
                    <div className="shortlisted-candidates-css">

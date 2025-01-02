@@ -44,7 +44,7 @@
 
 .shareLink-view-btn:hover,
 .shareLink-share-btn:hover{
-    background-color: var(--button-hover-color);
+    background-color: var(--primary-button-hover);
     color: var(--button-txt-hover-color);   
 
 }

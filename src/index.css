@@ -33,6 +33,7 @@
   --sidebar-txt-hover: gray;
   --sidebar-active-item-bg: #ffcb9b;
   --primary-border: gray;
+  --filter-button-txt:"#ffcb9b";
 }
 
 .accordion {
