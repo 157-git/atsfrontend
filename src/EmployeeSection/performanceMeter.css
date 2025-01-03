@@ -53,6 +53,7 @@
     display: flex;
 width: 100%;
     border: 1px solid pink; 
+    padding: 20px;
   }
 
   .main-chart-container{

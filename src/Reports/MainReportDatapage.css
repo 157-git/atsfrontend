@@ -992,10 +992,11 @@ color: grey;
   border-radius: 10px;
   background-color: var(--primary-button-bg);
   margin-left: 10px;
-  color: var(--button-txt-hover-color);
+  color: var(--button-txt-color);
  }
  .typeofReportSubDiv:hover{
   background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
   cursor: pointer;
  }
  .selectDateDivFullwidth{

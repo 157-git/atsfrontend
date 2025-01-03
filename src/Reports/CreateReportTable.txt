@@ -12,6 +12,7 @@
          import PDFGenerator from "../Reports/PDFMain";
          import SliderReport from "../Reports/SliderReports";
 import axios from "axios";
+import { API_BASE_URL } from "../api/api";
          
          const LineUpDataDummy = [
            {
@@ -622,7 +623,7 @@ import axios from "axios";
            { status: "No show Candidate", CandidateCount: LineUpnoshowCount },
          ];
          
-         const Attendance = ({ reportDataDatewise }) => {
+         const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole,finalStartDatePropState,finalEndDatePropState }) => {
            const [attendanceData, setAttendanceData] = useState([]);
            const [loading, setLoading] = useState(true);
            const [error, setError] = useState(null);
@@ -741,9 +742,15 @@ import axios from "axios";
            };
          console.log(reportDataDatewise);
 const[ newData, setNewData] = useState([]);
+console.log(selectedIdsProp);
+const newIdsString = selectedIdsProp.join(",");
+console.log(newIdsString);
 
-         const handleFilterDataInterview = async()=>{
-const response = await axios.get(`http://192.168.1.42:9090/api/ats/157industries/candidate-category/Interview Schedule/430/TeamLeader/2024-12-20/2025-01-01`);
+
+         const handleFilterDataInterview = async(category)=>{
+const response = await axios.get(`${API_BASE_URL}/candidate-category/${category}/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`);
+console.log(`${API_BASE_URL}/candidate-category/${category}/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`);
+
 console.log(response.data);
 setNewData(response.data);
 setLineUpDataReport(true);
@@ -752,15 +759,11 @@ setLineUpDataReport(true);
          
            return (
              <div className="report-App-after">
+        
                <div className="container-after1">
                 
                  <div className="attendanceTableData">
-                 <button className="shareDownloadbtn" onClick={handleRadioChange}>
-                       Share
-                     </button>
-                     <button className="shareDownloadbtn" onClick={handleDownloadPdf}>
-                       Download PDF
-                     </button>
+               
                    <div style={{ textAlign: "-webkit-center" }}>
                    </div>
 
@@ -780,6 +783,15 @@ setLineUpDataReport(true);
                      {/* <PdfModal isOpen={modalIsOpen} closeModal={closeModal} pdfContent={pdfUrl} /> */}
                    </div>
                    </div>
+
+                   <div className="btnShareAndDownload">
+              <button className="shareDownloadbtn" onClick={handleRadioChange}>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m640-280-57-56 184-184-184-184 57-56 240 240-240 240ZM80-200v-160q0-83 58.5-141.5T280-560h247L383-704l57-56 240 240-240 240-57-56 144-144H280q-50 0-85 35t-35 85v160H80Z"/></svg>
+                     </button>
+                     <button className="shareDownloadbtn" onClick={handleDownloadPdf}>
+                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/></svg>
+                     </button>
+              </div>
          
                    <table className="report-attendance-table">
                      <thead>
@@ -803,7 +815,7 @@ setLineUpDataReport(true);
                      </thead>
          
                      {reportDataDatewise.map((reportData, index) => (
-                       <td className="tabledata" key={index} onClick={()=>handleFilterDataInterview('Interview Schedule')}>
+                       <td className="tabledata" key={index} onClick={()=>handleFilterDataInterview(reportData.category)}>
                           {reportData.count}
                          &nbsp; <i class="fa fa-caret-down" aria-hidden="true"> </i>
                           
