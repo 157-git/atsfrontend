@@ -416,76 +416,84 @@ const CallingTrackerForm = ({
     setSocket(newSocket);
   }, []);
 
-  const handleSubmit = async (e) => {
-    setShowConfirmation(false);
-    e.preventDefault();
 
-    if (errorForYOP !== "") {
-      setErrorForYOP("Please select a valid year of passing.");
-      return;
-    }
-    if (errorForDOB !== "") {
-      setErrorForDOB("Please select a valid date of birth.");
-      return;
-    }
-    // Validate fields
-    let callingTrackerErrors = validateCallingTracker() || {};
-    let lineUpDataErrors = validateLineUpData() || {};
+const handleSubmit = async (e) => {
+  setShowConfirmation(false);
+  e.preventDefault();
 
-    if (
-      Object.keys(callingTrackerErrors).length > 0 ||
-      Object.keys(lineUpDataErrors).length > 0
-    ) {
-      setErrors({ ...callingTrackerErrors, ...lineUpDataErrors });
-      return;
-    }
+  // Validate Year of Passing and Date of Birth
+  if (errorForYOP) {
+    setErrorForYOP("Please select a valid year of passing.");
+    return;
+  }
+  if (errorForDOB) {
+    setErrorForDOB("Please select a valid date of birth.");
+    return;
+  }
+
+  // Validate fields
+  let callingTrackerErrors = validateCallingTracker() || {};
+  let lineUpDataErrors = validateLineUpData() || {};
+
+  if (
+    Object.keys(callingTrackerErrors).length > 0 ||
+    Object.keys(lineUpDataErrors).length > 0
+  ) {
+    setErrors({ ...callingTrackerErrors, ...lineUpDataErrors });
+    return;
+  }
 
     // Ensure 'incentive' is a valid number (if it's invalid, default to 0.0)
     const incentiveValue = parseFloat(callingTracker.incentive);
     const validIncentive = isNaN(incentiveValue) ? 0.0 : incentiveValue;
 
-    // Update the incentive field in the state to ensure it's valid
-    setCallingTracker((prevState) => ({
-      ...prevState,
-      incentive: validIncentive.toFixed(1), // Ensure it's a number with one decimal point
-    }));
+  // Update incentive in state
+  setCallingTracker((prevState) => ({
+    ...prevState,
+    incentive: validIncentive.toFixed(1),
+  }));
 
-    let formFillingTime = null;
-    if (startTime) {
-      const endTime = new Date().getTime(); // Get the current time in milliseconds
-      const timeTaken = (endTime - startTime) / 1000; // Time in seconds
-      const minutes = Math.floor(timeTaken / 60);
-      const seconds = Math.floor(timeTaken % 60);
-      console.log(
-        `Time taken to fill the form: ${minutes} minutes and ${seconds} seconds`
-      );
-      formFillingTime = `${minutes} minutes and ${seconds} seconds`;
-    }
+  let formFillingTime = null;
+  if (startTime) {
+    const endTime = new Date().getTime();
+    const timeTaken = (endTime - startTime) / 1000;
+    const minutes = Math.floor(timeTaken / 60);
+    const seconds = Math.floor(timeTaken % 60);
+    formFillingTime = `${minutes} minutes and ${seconds} seconds`;
+  }
 
-    setSubmited(true);
-    setLoading(true);
+  setSubmited(true);
+  setLoading(true);
 
-    try {
-      // lines updated sahil karnekar
-      let dataToUpdate = {
-        callingTracker: {
-          ...callingTracker,
-          candidateName: callingTracker.candidateName.trim(), // Trim candidateName here
-        },
-        performanceIndicator: {
-          employeeId: employeeId,
-          employeeName: loginEmployeeName,
-          jobRole: userType,
-          candidateName: callingTracker.candidateName.trim(),
-          jobId: callingTracker.requirementId,
-          salary: convertedCurrentCTC,
-          experience: `${lineUpData.experienceYear} years ${lineUpData.experienceMonth} months`,
-          companyName: callingTracker.requirementCompany,
-          designation: callingTracker.jobDesignation,
-          candidateFormFillingDuration: formFillingTime,
-          callingTacker: new Date(),
-          lineup: new Date(),
-          mailToClient: null,
+  try {
+    // Prepare data for submission
+    const dataToUpdate = {
+      callingTracker: {
+        ...callingTracker,
+        candidateName: callingTracker.candidateName.trim(),
+        employee:
+          userType === "Recruiters"
+            ? { employeeId: employeeId }
+            : undefined,
+        teamLeader:
+          userType === "TeamLeader"
+            ? { teamLeaderId: employeeId }
+            : undefined,
+      },
+      performanceIndicator: {
+        employeeId,
+        employeeName: loginEmployeeName,
+        jobRole: userType,
+        candidateName: callingTracker.candidateName.trim(),
+        jobId: callingTracker.requirementId,
+        salary: convertedCurrentCTC,
+        experience: `${lineUpData.experienceYear} years ${lineUpData.experienceMonth} months`,
+        companyName: callingTracker.requirementCompany,
+        designation: callingTracker.jobDesignation,
+        candidateFormFillingDuration: formFillingTime,
+        callingTacker: new Date(),
+        lineup: new Date(),
+        mailToClient: null,
           mailResponse: null,
           sendingDocument: null,
           issueOfferLetter: null,
@@ -493,144 +501,74 @@ const CallingTrackerForm = ({
           joiningProcess: null,
           joinDate: null,
           interviewRoundList: [],
-        },
-      };
-
-      dataToUpdate.lineUp = {
+      },
+      lineUp: {
         ...lineUpData,
         resume: lineUpData.resume,
-      };
-
-      if (userType === "Recruiters") {
-        dataToUpdate.callingTracker.employee = { employeeId: employeeId };
-      } else if (userType === "TeamLeader") {
-        dataToUpdate.callingTracker.teamLeader = { teamLeaderId: employeeId };
-      }
-console.log(dataToUpdate);
-
-      const response = await axios.post(
-        `${API_BASE_URL}/calling-tracker/${employeeId}/${userType}`,
-        dataToUpdate,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-// this code is implemented just for testing of socket transmission
-      if (callingTracker.selectYesOrNo === "Interested") {
-        
-    const candidateData = {
-      name: callingTracker.jobDesignation,
-      email: `${callingTracker.selectYesOrNo} , Lineup `,
-      number: lineUpData.finalStatus,
-      senderId: `${userType}_${employeeId}`,
+      },
     };
 
-    const role = userType;
-    let params = {};
-
-if (role === 'Recruiters') {
-  params = {
-    role: role,
-          recruiterId: '',
-          teamLeaderId: '977',
-          managerId: '1342',
-          superUserId: '391',
-  };
-} else if (role === 'TeamLeader') {
-  params = {
-    role: role,
-          recruiterId: '1,2,3,4,5',
-          teamLeaderId: '',
-          managerId: '1342',
-          superUserId: '391',
-  };
-} else if (role === 'Manager') {
-  params = {
-    role: role,
-          recruiterId: '1,2,3,4,5',
-          teamLeaderId: '977,430,390',
-          managerId: '',
-          superUserId: '391',
-  };
-} else if (role === 'SuperUser') {
-  params = {
-    role: role,
-    recruiterId: '1,2,3,4,5',
-    teamLeaderId: '977,430,390',
-    managerId: '1342',
-    superUserId: '',
-  };
-}
-
-axios.post(
-  'http://localhost:8087/api/addCandidate',
-  candidateData , // Request body
-  {
-    params: params, 
-    headers: {
-      'Content-Type': 'application/json', // Optional, depending on your API's requirements
-    },
-  }
-)
-  .then((response) => {
-    console.log('Response:', response.data);
-    socket.emit("add_candidate", candidateData);
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
+    const response = await axios.post(
+      `${API_BASE_URL}/calling-tracker/${employeeId}/${userType}`,
+      dataToUpdate,
+      {
+        headers: { "Content-Type": "application/json" },
       }
+    );
 
-
-
-      if (response.status === 200 || response.status === 201) {
-        //Arshad Attar Added this function to add data from excel and Resume data base and
+    // Emit socket event if interested
+    // if (callingTracker.selectYesOrNo === "Interested") {
+    //   const candidateData = {
+    //     candidateName: callingTracker.candidateName.trim() || "N/A",
+    //     employeeName: loginEmployeeName || "N/A", // Recruiter Name
+    //     date: callingTracker.date,
+    //     senderId: `${userType}_${employeeId}`,
+    //   };
+    //   console.log("Sending Candidate Data:", candidateData); // Debugging log
+    //   socket.emit("add_candidate54", candidateData);
+    // }
+    
+    if (response.status === 200 || response.status === 201) {
+       //Arshad Attar Added this function to add data from excel and Resume data base and
         // after added in data based delete from excel & resume data base
         //added On Date : 22-11-2024
-        if (initialData && initialData.candidateId) {
-          if (initialData.sourceComponent === "ResumeList") {
-            await deleteResumeDataById(initialData.candidateId);
-          } else if (initialData.sourceComponent === "CallingExcelList") {
-            await deleteExcelDataById(initialData.candidateId);
-          }
+      if (initialData && initialData.candidateId) {
+        if (initialData.sourceComponent === "ResumeList") {
+          await deleteResumeDataById(initialData.candidateId);
+        } else if (initialData.sourceComponent === "CallingExcelList") {
+          await deleteExcelDataById(initialData.candidateId);
         }
-
-        if (callingTracker.selectYesOrNo === "Interested") {
-          onsuccessfulDataAdditions(true);
-        } else {
-          onsuccessfulDataAdditions(false);
-        }
-        setSubmited(false);
-        setLoading(true);
-        setShowConfetti(true);
-        setResumeSelected(false);
-        setTimeout(() => setShowConfetti(false), 4000);
-        toast.success("Candidate Added Successfully..");
-        setCallingTracker(initialCallingTrackerState);
-        setLineUpData(initialLineUpState);
       }
-      // console.log("-------    bye    ----------");
-    } catch (error) {
+
+      if (callingTracker.selectYesOrNo === "Interested") {
+        onsuccessfulDataAdditions(true);
+      } else {
+        onsuccessfulDataAdditions(false);
+      }
+
       setSubmited(false);
       setLoading(false);
-      if (error.response) {
-        console.log("Error Response:", error.response);
-        toast.error(
-          "Error: " + error.response.data.message || "An error occurred"
-        );
-      } else if (error.request) {
-        console.log("Error Request 09 --- :", error.request);
-        toast.error("No response received from the server");
-      } else {
-        console.log("Error Message  09 --- :", error.message);
-        toast.error("An error occurred: " + error.message);
-      }
-    } finally {
-      setLoading(false);
+      setShowConfetti(true);
+      setResumeSelected(false);
+      setTimeout(() => setShowConfetti(false), 4000);
+      toast.success("Candidate Added Successfully.");
+      setCallingTracker(initialCallingTrackerState);
+      setLineUpData(initialLineUpState);
     }
-  };
+  } catch (error) {
+    setSubmited(false);
+    setLoading(false);
+    if (error.response) {
+      toast.error(error.response.data.message || "An error occurred");
+    } else if (error.request) {
+      toast.error("No response received from the server");
+    } else {
+      toast.error(`An error occurred: ${error.message}`);
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   //Arshad Attar Added this function to add data from excel and after added in data based delete from excel
   //added On Date : 22-11-2024
@@ -926,9 +864,6 @@ axios.post(
       setIsOtherLocationSelected(false); // No additional input needed
     }
   };
-
-  console.log(lineUpData);
-  console.log(callingTracker);
   
 
   // this fucntion is made by sahil karnekar on date 25-11-2024

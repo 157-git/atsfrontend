@@ -1,16 +1,16 @@
 /* Name:-Prachi Parab Component:-Create Report Table page 
          End LineNo:-4 to 319 Date:-06/07 */
 
-         import React, { useState, useEffect } from "react";
-         import { useParams, useNavigate } from "react-router-dom";
-         import "../Reports/CreateReportTable.css";
-         import ShortListedCandidates from "../Reports/LineUpDataReport";
-         
-         import PdfModal from "../Reports/pdfModal";
-         import { createPdf } from "../Reports/pdfUtils";
-         import PieChart from "./PieChartReport";
-         import PDFGenerator from "../Reports/PDFMain";
-         import SliderReport from "../Reports/SliderReports";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import "../Reports/CreateReportTable.css";
+import ShortListedCandidates from "./LineUpDataReport";
+
+import PdfModal from "./pdfModal";
+import { createPdf } from "./pdfUtils";
+import PieChart from "./PieChartReport";
+import PDFGenerator from "./PDFMain";
+import SliderReport from "./SliderReports";
 import axios from "axios";
 import { API_BASE_URL } from "../api/api";
          
@@ -843,4 +843,6 @@ setLineUpDataReport(true);
          };
          
          export default Attendance;
+         
+
          
