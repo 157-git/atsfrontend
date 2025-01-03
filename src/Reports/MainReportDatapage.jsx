@@ -8,6 +8,7 @@ import { json, useParams } from "react-router-dom";
 import "../Reports/MainReportDatapage.css";
 import { API_BASE_URL } from "../api/api";
 
+
 const MonthReport = () => {
   const { userType } = useParams();
   const { employeeId } = useParams();
@@ -894,19 +895,17 @@ const MonthReport = () => {
               <div className='get-report-main-div '>
                 {(
                   <div className='filterDataButton'>
-                    <button className='filterDataButton1' onClick={showDataReport} >Get Main Report</button>
+                    <button className='filterDataButton1' onClick={showDataReport} >Get Report</button>
 
                   </div>
                 )}
               </div>
             </div>
-
             {showReportData ? (
               <div>
                 <CreateReportTable reportDataDatewise={reportDataDatewise} />
               </div>
             ) : (<p></p>)}
-            
           </div>
         )}
       </div>

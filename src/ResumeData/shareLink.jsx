@@ -1,28 +1,46 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "../ResumeData/shareLink.css";
+import CryptoJS from "crypto-js";
 
 const ShareLink = ({ toggleResumeLink }) => {
   const { employeeId, userType } = useParams();
   const [copyMessage, setCopyMessage] = useState("");
 
-  // Encoding logic to obscure employeeId, userType, and add randomness
-  const encodeParams = (id, type) => {
-    const randomString = Math.random().toString(36).substring(2, 8); // Random 6-character string
-    const timestamp = Date.now(); // Current timestamp
-    const combinedString = `${id}:${type}:${randomString}:${timestamp}`;
-    const encoded = btoa(combinedString); // Base64 encoding
-    return encoded;
+
+  // // Encoding logic to obscure employeeId, userType, and add randomness
+  // const encodeParams = (id, type) => {
+  //   const randomString = Math.random().toString(36).substring(2, 8); // Random 6-character string
+  //   const timestamp = Date.now(); // Current timestamp
+  //   const combinedString = `${id}:${type}:${randomString}:${timestamp}`;
+  //   const encoded = btoa(combinedString); // Base64 encoding
+  //   return encoded;
+  // };
+
+  // // Decoding logic (for use when the form is accessed)
+  // const decodeParams = (encoded) => {
+  //   const decoded = atob(encoded);
+  //   const [id, type] = decoded.split(":"); // Use only the first two parts
+  //   return { id, type };
+  // };
+
+
+  // updated code for strong encryption according to requirments
+ // exposing directly in file just for testing and normal use purpose, please set this secreat key in env file while deploying on server
+  const secretKey = "157industries_pvt_ltd"; // Use a consistent key across components
+
+  // Encryption logic
+  const encryptParams = (id, type) => {
+    try {
+      const data = `${id}:${type}`;
+      return CryptoJS.AES.encrypt(data, secretKey).toString();
+    } catch (error) {
+      console.error("Encryption failed:", error);
+      return null;
+    }
   };
 
-  // Decoding logic (for use when the form is accessed)
-  const decodeParams = (encoded) => {
-    const decoded = atob(encoded);
-    const [id, type] = decoded.split(":"); // Use only the first two parts
-    return { id, type };
-  };
-
-  const encodedParams = encodeParams(employeeId, userType);
+  const encodedParams = encryptParams(employeeId, userType);
   const shareUrl = `http://rg.157careers.in/157industries/${encodedParams}/candidate-form`;
 
   // Share using Web Share API

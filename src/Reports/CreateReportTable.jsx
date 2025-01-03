@@ -738,6 +738,7 @@
              setPdfUrl("");
              setModalIsOpen(false);
            };
+         console.log(reportDataDatewise);
          
            return (
              <div className="report-App-after">

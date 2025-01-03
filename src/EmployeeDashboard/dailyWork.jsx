@@ -6,13 +6,14 @@ import Profile from "../photos/profileImg.webp";
 import logoutImg from "../photos/download.jpeg";
 import { Modal, Button } from "react-bootstrap";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
-import { API_BASE_URL} from "../api/api";
+import { API_BASE_URL } from "../api/api";
 import watingImg from "../photos/fire-relax.gif";
+import socketIOClient from "socket.io-client";
 
 //added by sahil karnekar and commented because it was implemented just for testing purpose but dont remove this
 import { Avatar, Badge } from "antd";
 import { BellOutlined, CloseOutlined, ClearOutlined } from "@ant-design/icons";
-import { io } from "socket.io-client";
+import { initializeSocket } from "./socket.jsx";
 
 //SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
 
@@ -578,19 +579,20 @@ function DailyWork({
   }, [employeeId, userType]);
 
   // this is commented by sahil karnekar dont remove this comment
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // To toggle the notification box visibility
+  const [notificationCount, setNotificationCount] = useState(0); // To store notification count
+  const [messages, setMessages] = useState([]);
+  const [socket, setSocket] = useState(null);
 
   const toggleNotificationBox = () => {
-    console.log("clicked here..... 0111");
-    setIsOpen((prev) => !prev);
+    setIsOpen(!isOpen);
   };
 
   const handleClearNotifications = () => {
     localStorage.removeItem(`${userType}${employeeId}messages`);
     setMessages([]);
+    setNotificationCount(0);
   };
-  const [messages, setMessages] = useState([]);
-  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
     const storedMessages = localStorage.getItem(
@@ -601,10 +603,20 @@ function DailyWork({
     }
   }, []);
 
+  // updated by sahil karnekar
+  useEffect(() => {
+    const newSocket = initializeSocket(employeeId, userType);
+    setSocket(newSocket);
+  }, []);
+
+  // updated by sahil karnekar date 30-12-2024
   useEffect(() => {
     if (socket) {
-      socket.on("receive_message", (message) => {
-        if (message.senderId !== employeeId) {
+      socket.on("receive_saved_candidate", (message) => {
+        console.log("Notification received: ", message);
+
+        const recruiterName = `${userType}_${employeeId}`;
+        // if (message.candidate.senderId !== recruiterName) {
           setMessages((prevMessages) => {
             const updatedMessages = [...prevMessages, message];
             localStorage.setItem(
@@ -613,12 +625,7 @@ function DailyWork({
             );
             return updatedMessages;
           });
-        }
-      });
-
-      socket.on("connect_error", () => {
-        console.log;
-        ("Connection failed. Ensure your details are correct.");
+        // }
       });
 
       return () => {
@@ -627,64 +634,51 @@ function DailyWork({
     }
   }, [socket, employeeId]);
 
-  useEffect(() => {
-    const query = { userId: employeeId, role: userType };
-    if (userType === "Recruiters") {
-      query.teamLeaderId = "430";
-      query.managerId = "636";
-      query.superUserId = "390";
-    } else if (userType === "TeamLeader") {
-      query.allRecruiters = "1,2,3,4,5,6";
-      query.managerId = "636";
-      query.superUserId = "390";
-    } else if (userType === "Manager") {
-      query.allRecruiters = "1,2,3,4,5,6";
-      query.allTeams = "430,431,432";
-      query.superUserId = "390";
-    } else if (userType === "SuperUser") {
-      query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-      query.allTeams = "432,433,434,444,977,430";
-      query.allManagers = "869,870,871,1340,1341,1342,636";
-    }
-
-    // if (userType === "Recruiters") {
-    //   //1 Use Kraa
-    //   query.teamLeaderId = "977";
-    //   query.managerId = "1342";
-    //   query.superUserId = "391";
-    // } else if (userType === "TeamLeader") {
-    //   query.allRecruiters = "1,2,3,4,5,6";
-    //   query.managerId = "1342";
-    //   query.superUserId = "391";
-    // } else if (userType === "Manager") {
-    //   //871 use kraa
-    //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-    //   query.allTeams = "977,433,444,976";
-    //   query.superUserId = "391";
-    // } else if (userType === "SuperUser") {
-    //   //390 use kraa
-    //   query.allRecruiters = "1,2,3,4,5,6,7,8,9";
-    //   query.allTeams = "432,433,434,444,977";
-    //   query.allManagers = "869,870,1340,871";
-    // }
-
-    // const newSocket = io(`http://93.127.199.85:9092`, { query });
-    const newSocket = io(`http://localhost:9092`, { query });
-    console.log(query);
-    setSocket(newSocket);
-  }, []);
-
-  const sendMessage = () => {
-    if (socket) {
-      const candidateData = {
-        name: "Demo",
-        email: "demo@gmail.com",
-        number: "22334455",
-        senderId: employeeId,
-      };
-      socket.emit("send_message", candidateData);
-    }
+  const formatNotificationMessage = (message) => {
+    const candidateName = message?.candidate?.callingTracker?.candidateName || "Unknown Candidate";
+    const recruiterName = message?.candidate?.performanceIndicator?.employeeName || "Unknown Recruiter";
+    const date = message?.candidate?.callingTracker?.date || "Unknown Date";
+    const time = message?.candidate?.callingTracker?.candidateAddedTime || "Unknown Time";
+  
+    const formatTimeTo12Hour = (time24) => {
+      if (!time24) return "Unknown Time";
+      const [hour, minute] = time24.split(":").map(Number);
+      const ampm = hour >= 12 ? "PM" : "AM";
+      const hour12 = hour % 12 || 12; // Convert 0 to 12 for 12-hour clock
+      return `${hour12}:${minute.toString().padStart(2, "0")} ${ampm}`;
+    };
+  
+    const formattedTime = formatTimeTo12Hour(time);
+  
+    // Format date as '2 January 2025'
+    const formatDate = (dateString) => {
+      if (!dateString) return "Unknown Date";
+      const dateObj = new Date(dateString);
+      const options = { day: "numeric", month: "long", year: "numeric" };
+      return dateObj.toLocaleDateString("en-IN", options);
+    };
+  
+    const formattedDate = formatDate(date);
+  
+    return `${candidateName} was lined up by ${recruiterName} at ${formattedTime} on ${formattedDate}.`;
   };
+  
+  useEffect(() => {
+    const socket = socketIOClient("http://localhost:9092"); // Update with your server URL
+    socket.on("receive_saved_candidate", (data) => {
+      console.log("Received Candidate Data:", data); // Debugging log
+      setMessages((prevMessages) => {
+        const updatedMessages = [...prevMessages, data];
+        setNotificationCount(updatedMessages.length); // Update notification count
+        return updatedMessages;
+      });
+    });
+  
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+  
 
   return (
     <div className="daily-timeanddate">
@@ -715,201 +709,185 @@ function DailyWork({
         {!showAllDailyBtns ? "Show" : "Hide"} All Buttons
       </button>
 
-      {
-        userType != "Applicant" && userType != "Vendor" ? (
-          <>
-            <div
-              className={`all-daily-btns ${!showAllDailyBtns ? "hidden" : ""}`}
-            >
-              <div className="daily-t-btn">
-                <button
-                  className="daily-tr-btn"
-                  style={{ whiteSpace: "nowrap" }}
-                >
-                  Target : 10
-                </button>
-                <button
-                  className="daily-tr-btn"
-                  style={{
-                    color: data.archived <= 3 ? "red" : "green",
-                  }}
-                >
-                  Achieved : {data.archived}
-                </button>
-                <button
-                  className="daily-tr-btn"
-                  style={{
-                    color: data.pending < 7 ? "green" : "red",
-                  }}
-                >
-                  Pending : {data.pending}
-                </button>
-              </div>
-              <button className="loging-hr">
-                <h6 hidden>Time: {currentTime}</h6>
-                <h6 hidden>Date: {currentDate}</h6>
-                Login Hours : {time.hours.toString().padStart(2, "0")}:
-                {time.minutes.toString().padStart(2, "0")}:
-                {time.seconds.toString().padStart(2, "0")}
+      {userType != "Applicant" && userType != "Vendor" ? (
+        <>
+          <div
+            className={`all-daily-btns ${!showAllDailyBtns ? "hidden" : ""}`}
+          >
+            <div className="daily-t-btn">
+              <button className="daily-tr-btn" style={{ whiteSpace: "nowrap" }}>
+                Target : 10
               </button>
-              <div hidden>
-                <h6>Late Mark : {lateMark}</h6>
-                <h6>Leave Type : {leaveType}</h6>
-                <h6>Paid Leave : {paidLeave}</h6>
-                <h6>Unpaid Leave : {unpaidLeave}</h6>
-                <h6>Day Present Paid : {dayPresentPaid}</h6>
-                <h6>Day Present Unpaid: {dayPresentUnpaid}</h6>
-              </div>
-
-              <div hidden style={{ display: "flex", flexDirection: "column" }}>
-                <label htmlFor="remoteWork">Remote Work:</label>
-                <select
-                  className="select"
-                  id="remoteWork"
-                  value={remoteWork}
-                  onChange={(e) => setRemoteWork(e.target.value)}
-                >
-                  <option>Select</option>
-                  <option value="work from Office">WFO</option>
-                  <option value="Work from Home">WFH</option>
-                  <option value="hybrid">Hybrid</option>
-                </select>
-              </div>
-
               <button
-                className={running ? "timer-break-btn" : "timer-break-btn"}
-                onClick={running ? handlePause : handleResume}
-                style={{ height: "30px" }}
+                className="daily-tr-btn"
+                style={{
+                  color: data.archived <= 3 ? "red" : "green",
+                }}
               >
-                {running ? "Pause" : "Resume"}
+                Achieved : {data.archived}
               </button>
-
-              {/* commented by sahil karnekar */}
-              <>
-                {(employeeId == 5 ||
-                  employeeId == 977 ||
-                  employeeId == 1342 ||
-                  employeeId == 391 ||
-                  employeeId == 444 ||
-                  employeeId == 1 ||
-                  employeeId == 432 ||
-                  employeeId == 871 ||
-                  employeeId == 390 ||
-                  employeeId == 1340 ||
-                  employeeId == 2 ||
-                  employeeId == 4 ||
-                  employeeId == 430 ||
-                  employeeId == 869 ||
-                  employeeId == 1341 ||
-                  employeeId == 3 ||
-                  employeeId == 430 ||
-                  employeeId == 434 ||
-                  employeeId == 870 ||
-                  employeeId == 636) && (
-                  <div>
-                    <div style={{ display: "flex" }}>
-                      <div
-                        style={{ marginRight: "10px" }}
-                        onClick={toggleNotificationBox}
-                      >
-                        <Badge count={messages.length}>
-                          <Avatar shape="square" icon={<BellOutlined />} />
-                        </Badge>
-                      </div>
-                      <button className="daily-tr-btn" onClick={sendMessage}>
-                        Send
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </>
-
-              <div
-                className={`notificationMainCont1 ${
-                  isOpen ? "open" : "closed"
-                }`}
+              <button
+                className="daily-tr-btn"
+                style={{
+                  color: data.pending < 7 ? "green" : "red",
+                }}
               >
-                <div className="motificationSubCont1">
-                  {messages.length > 0 ? (
-                    messages.map((message, index) => (
-                      <>
-                        <s></s>{" "}
-                        <p>
-                          {index + 1} - {message.name} & {message.email}
-                        </p>
-                        <hr />
-                        {/* <p>{message.number}</p> */}
-                      </>
-                    ))
-                  ) : (
-                    <p>No Notifications</p>
-                  )}
-                </div>
-                <div className="buttonsDivForNotifications">
-                  <CloseOutlined
-                    style={{
-                      color: "red",
-                    }}
-                    onClick={toggleNotificationBox}
-                  />
-                  <button
-                    className="cleaarButtonOfNotifications daily-tr-btn"
-                    onClick={handleClearNotifications}
-                  >
-                    Clear <ClearOutlined />
-                  </button>
-                </div>
-              </div>
+                Pending : {data.pending}
+              </button>
             </div>
+            <button className="loging-hr">
+              <h6 hidden>Time: {currentTime}</h6>
+              <h6 hidden>Date: {currentDate}</h6>
+              Login Hours : {time.hours.toString().padStart(2, "0")}:
+              {time.minutes.toString().padStart(2, "0")}:
+              {time.seconds.toString().padStart(2, "0")}
+            </button>
+            <div hidden>
+              <h6>Late Mark : {lateMark}</h6>
+              <h6>Leave Type : {leaveType}</h6>
+              <h6>Paid Leave : {paidLeave}</h6>
+              <h6>Unpaid Leave : {unpaidLeave}</h6>
+              <h6>Day Present Paid : {dayPresentPaid}</h6>
+              <h6>Day Present Unpaid: {dayPresentUnpaid}</h6>
+            </div>
+
+            <div hidden style={{ display: "flex", flexDirection: "column" }}>
+              <label htmlFor="remoteWork">Remote Work:</label>
+              <select
+                className="select"
+                id="remoteWork"
+                value={remoteWork}
+                onChange={(e) => setRemoteWork(e.target.value)}
+              >
+                <option>Select</option>
+                <option value="work from Office">WFO</option>
+                <option value="Work from Home">WFH</option>
+                <option value="hybrid">Hybrid</option>
+              </select>
+            </div>
+
             <button
-              className="toggle-all-daily-btns"
-              onClick={handleToggleAllDailyBtns}
+              className={running ? "timer-break-btn" : "timer-break-btn"}
+              onClick={running ? handlePause : handleResume}
+              style={{ height: "30px" }}
             >
-              {showAllDailyBtns ? "Hide All Buttons" : "Show All Buttons"}
+              {running ? "Pause" : "Resume"}
             </button>
 
-            <Modal
-              show={showPauseModal}
-              onHide={() => {
-                if (allowCloseModal) {
-                  setShowPauseModal(false);
-                }
-              }}
-              className="dw-modal"
-            >
-              <div
-                onClick={(e) => e.stopPropagation()}
-                className="dw-modal-content"
-              >
-                {/* none working close button removed date : 23-10-2024 */}
-                <Modal.Header>
-                  <Modal.Title className="dw-modal-title">
-                    Break Runing...
-                  </Modal.Title>
-                </Modal.Header>
+            {/* commented by sahil karnekar */}
+            <>
+              {(employeeId == 5 ||
+                employeeId == 977 ||
+                employeeId == 1342 ||
+                employeeId == 391 ||
+                employeeId == 444 ||
+                employeeId == 1 ||
+                employeeId == 432 ||
+                employeeId == 871 ||
+                employeeId == 390 ||
+                employeeId == 1340 ||
+                employeeId == 2 ||
+                employeeId == 4 ||
+                employeeId == 430 ||
+                employeeId == 869 ||
+                employeeId == 1341 ||
+                employeeId == 3 ||
+                employeeId == 430 ||
+                employeeId == 434 ||
+                employeeId == 870 ||
+                employeeId == 636 ||
+                employeeId == 434 ||
+                employeeId == 7) && (
                 <div>
-                  <img
-                    src={watingImg}
-                    alt="Waiting"
-                    className="dw-waiting-img"
-                  />
-                </div>
-                <Modal.Footer className="dw-modal-footer">
-                  <div className="dw-resume-div">
-                    <h3>Timer is paused. Click Resume to continue...</h3>
-                    <button
-                      className="profile-back-button"
-                      onClick={handleResume}
+                  <div style={{ display: "flex" }}>
+                    <div
+                      style={{ marginRight: "10px" }}
+                      onClick={toggleNotificationBox}
                     >
-                      Resume
-                    </button>
+                      <Badge count={notificationCount}>
+                        <Avatar shape="square" icon={<BellOutlined />} />
+                      </Badge>
+                    </div>
                   </div>
-                </Modal.Footer>
+                </div>
+              )}
+            </>
+
+            <div
+              className={`notificationMainCont1 ${isOpen ? "open" : "closed"}`}
+            >
+              <div className="motificationSubCont1">
+                {messages.length > 0 ? (
+                  messages.map((message, index) => (
+                    <div key={index} className="notification-item">
+                      {formatNotificationMessage(message)}
+                      <hr />
+                    </div>
+                  ))
+                ) : (
+                  <p>No Notifications</p>
+                )}
               </div>
-            </Modal>
-          </>
-        ) : null
-      }
+              <div className="buttonsDivForNotifications">
+                <CloseOutlined
+                  style={{
+                    color: "red",
+                  }}
+                  onClick={toggleNotificationBox}
+                />
+                <button
+                  className="clearButtonOfNotifications daily-tr-btn"
+                  onClick={handleClearNotifications}
+                >
+                  Clear <ClearOutlined />
+                </button>
+              </div>
+            </div>
+          </div>
+          <button
+            className="toggle-all-daily-btns"
+            onClick={handleToggleAllDailyBtns}
+          >
+            {showAllDailyBtns ? "Hide All Buttons" : "Show All Buttons"}
+          </button>
+
+          <Modal
+            show={showPauseModal}
+            onHide={() => {
+              if (allowCloseModal) {
+                setShowPauseModal(false);
+              }
+            }}
+            className="dw-modal"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="dw-modal-content"
+            >
+              {/* none working close button removed date : 23-10-2024 */}
+              <Modal.Header>
+                <Modal.Title className="dw-modal-title">
+                  Break Runing...
+                </Modal.Title>
+              </Modal.Header>
+              <div>
+                <img src={watingImg} alt="Waiting" className="dw-waiting-img" />
+              </div>
+              <Modal.Footer className="dw-modal-footer">
+                <div className="dw-resume-div">
+                  <h3>Timer is paused. Click Resume to continue...</h3>
+                  <button
+                    className="profile-back-button"
+                    onClick={handleResume}
+                  >
+                    Resume
+                  </button>
+                </div>
+              </Modal.Footer>
+            </div>
+          </Modal>
+        </>
+      ) : null}
 
       <Modal show={showModal} onHide={handleSkip}>
         <div className="dw-reminder-content">

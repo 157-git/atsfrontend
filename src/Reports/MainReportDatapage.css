@@ -18,14 +18,15 @@
   
   .month-selector {
     display: flex;
-    justify-content: center;
     margin-bottom: 20px;
+    width: 100%;
   }
   
   .month-selector label {
     margin: 0 10px;
     font-size: 16px;
     color: grey;
+    min-width: 180px;
   }
   
   .report {
@@ -840,7 +841,6 @@ color: grey;
     
     .month-selector {
       display: flex;
-      justify-content: center;
       align-items: center;
       margin-bottom: 2px;
     }
@@ -972,4 +972,54 @@ color: grey;
     font-size: 18px;
     margin-top: -10px;
   }
- 
+ .reportsHeadDiv{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+ }
+ .typesOfReportDiv{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  overflow-x: scroll;
+  margin-top: 5px;
+ }
+ .typeofReportSubDiv{
+  min-width: 250px;
+  border: 1px solid var(--primary-border);
+  display: flex;
+  padding: 8px;
+  border-radius: 10px;
+  background-color: white;
+  margin-left: 10px;
+ }
+ .typeofReportSubDiv:hover{
+  background-color: #Ffcb9b;
+  cursor: pointer;
+ }
+ .selectDateDivFullwidth{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+ }
+.month-report-sub-Div{
+  width: 800px;
+    overflow-x: scroll;
+}
+.manager-item{
+  display: flex;
+}
+.spanformanagerlistname{
+  display: flex;
+}
+.typesOfReportDiv::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+.listofButtons11{
+  width: 100%;
+  display: flex;
+}
+.mainForLists{
+  display: flex;
+}
