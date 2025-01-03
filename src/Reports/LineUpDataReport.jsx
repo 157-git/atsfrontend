@@ -5,6 +5,9 @@
          import "../Reports/LineUpDataReport.css";
          
          const ShortListedCandidates=({filteredLineUpItems})=>{
+
+            console.log(filteredLineUpItems);
+            
          
              
              return(
@@ -92,21 +95,21 @@
                              {filteredLineUpItems.map((item=>(
                                  <tr key={item.id} className='attendancerows'>
                                      <td>{item.id}</td>
-                                     <td>{item.no}</td>
                                      <td>{item.date}</td>
+                                     <td>{item.candidateAddedTime}</td>
                                      <td></td>
-                                     <td>{item.CandidateId}</td>
-                                     <td>{item.RecruiterName}</td>
-                                     <td>{item.CandidateName}</td>
-                                     <td>{item.CandidateEmail}</td>
-                                     <td>{item.ContactNo}</td>
-                                     <td>{item.WhatsappNo}</td>
-                                     <td>{item.SourceName}</td>
-                                     <td>{item.JobDesignation}</td>
-                                     <td>{item.JobId}</td> 
-                                     <td>{item.ApplyingCompany}</td>
-                                     <td>{item.CommunicationRating}</td>  
-                                     <td>{item.CurrentLocation}</td>
+                                     <td>{item.candidateId}</td>
+                                     <td>{item.recruiterName}</td>
+                                     <td>{item.candidateName}</td>
+                                     <td>{item.candidateEmail}</td>
+                                     <td>{item.contactNumber}</td>
+                                     <td>"wathsapp number"</td>
+                                     <td>{item.sourceName}</td>
+                                     <td>{item.jobDesignation}</td>
+                                     <td>{item.requirementId}</td> 
+                                     <td>{item.companyName}</td>
+                                     <td>{item.communicationRating}</td>  
+                                     <td>{item.currentLocation}</td>
          
                                      
                                  </tr>

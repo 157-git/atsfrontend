@@ -990,11 +990,12 @@ color: grey;
   display: flex;
   padding: 8px;
   border-radius: 10px;
-  background-color: white;
+  background-color: var(--primary-button-bg);
   margin-left: 10px;
+  color: var(--button-txt-hover-color);
  }
  .typeofReportSubDiv:hover{
-  background-color: #Ffcb9b;
+  background-color: var(--primary-button-hover);
   cursor: pointer;
  }
  .selectDateDivFullwidth{
@@ -1012,6 +1013,7 @@ color: grey;
 }
 .spanformanagerlistname{
   display: flex;
+  margin-left: 10px;
 }
 .typesOfReportDiv::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
@@ -1022,4 +1024,24 @@ color: grey;
 }
 .mainForLists{
   display: flex;
+}
+.typeofReportSubDiv.active {
+  background-color: var(--sidebar-active-item-bg); /* Example: Highlight the active button */
+  border: 2px solid var(--primary-border); /* Example: Add border to the active button */
+  color: white;
+}
+.buttonsForManagerAndHideAll{
+  display: flex;
+}
+.buttonsForManagerAndHideAll button{
+  margin-right: 10px;
+}
+.listviewofmanagerswithcheckboxandarrow{
+  border: 1px solid var(--primary-border);
+    padding: 10px;
+    margin-right: 15px;
+
+}
+.mainForLists{
+  margin-top: 15px;
 }

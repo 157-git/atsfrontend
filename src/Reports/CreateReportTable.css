@@ -98,13 +98,12 @@
           background-attachment: fixed;
           height: 92vh;
           overflow: hidden !important;
-          margin-left: -120px;
+
         }
         
         .report-attendance-table {
           width: 100%;
           border-collapse: collapse;
-          margin-top: -70px;
         }
         
         .report-attendance-table thead th {

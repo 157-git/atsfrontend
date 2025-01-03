@@ -57,7 +57,9 @@ function ApplicantForm2({ loginEmployeeName }) {
   // Decryption logic
   const decodeParams = (encrypted) => {
     try {
-      const bytes = CryptoJS.AES.decrypt(encrypted, secretKey);
+      const base64 = encrypted.replace(/[^a-zA-Z0-9]/g, '');
+      const decodedBase64 = atob(base64);
+      const bytes = CryptoJS.AES.decrypt(decodedBase64, secretKey);
       const decrypted = bytes.toString(CryptoJS.enc.Utf8);
       const [id, type] = decrypted.split(":");
       if (!id || !type) throw new Error("Invalid decrypted data");
@@ -67,6 +69,7 @@ function ApplicantForm2({ loginEmployeeName }) {
       return { employeeId: null, userType: null }; // Fallback if decryption fails
     }
   };
+  
 
   const { employeeId, userType } = decodeParams(encodedParams);
 

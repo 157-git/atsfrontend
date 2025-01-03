@@ -33,12 +33,16 @@ const ShareLink = ({ toggleResumeLink }) => {
   const encryptParams = (id, type) => {
     try {
       const data = `${id}:${type}`;
-      return CryptoJS.AES.encrypt(data, secretKey).toString();
+      const encrypted = CryptoJS.AES.encrypt(data, secretKey).toString();
+      const base64 = btoa(encrypted);
+      const alphanumeric = base64.replace(/[^a-zA-Z0-9]/g, '');
+      return alphanumeric;
     } catch (error) {
       console.error("Encryption failed:", error);
       return null;
     }
   };
+  
 
   const encodedParams = encryptParams(employeeId, userType);
   const shareUrl = `http://rg.157careers.in/157industries/${encodedParams}/candidate-form`;
