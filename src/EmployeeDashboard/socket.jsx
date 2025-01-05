@@ -6,7 +6,7 @@ export const initializeSocket = (userId, userType) => {
   const query = { userId, role: userType };
 
   // replace with actual url
-  socket = io("http://192.168.1.46:9092", { query });
+  socket = io("http://localhost:8080", { query });
 
   return socket;
 };

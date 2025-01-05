@@ -6,13 +6,13 @@ import Profile from "../photos/profileImg.webp";
 import logoutImg from "../photos/download.jpeg";
 import { Modal, Button } from "react-bootstrap";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
-import { API_BASE_URL } from "../api/api";
+import { API_BASE_URL} from "../api/api";
 import watingImg from "../photos/fire-relax.gif";
-import socketIOClient from "socket.io-client";
 
 //added by sahil karnekar and commented because it was implemented just for testing purpose but dont remove this
 import { Avatar, Badge } from "antd";
 import { BellOutlined, CloseOutlined, ClearOutlined } from "@ant-design/icons";
+
 import { initializeSocket } from "./socket.jsx";
 
 //SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
@@ -579,20 +579,19 @@ function DailyWork({
   }, [employeeId, userType]);
 
   // this is commented by sahil karnekar dont remove this comment
-  const [isOpen, setIsOpen] = useState(false); // To toggle the notification box visibility
-  const [notificationCount, setNotificationCount] = useState(0); // To store notification count
-  const [messages, setMessages] = useState([]);
-  const [socket, setSocket] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggleNotificationBox = () => {
-    setIsOpen(!isOpen);
+    console.log("clicked here..... 0111");
+    setIsOpen((prev) => !prev);
   };
 
   const handleClearNotifications = () => {
     localStorage.removeItem(`${userType}${employeeId}messages`);
     setMessages([]);
-    setNotificationCount(0);
   };
+  const [messages, setMessages] = useState([]);
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
     const storedMessages = localStorage.getItem(
@@ -603,119 +602,162 @@ function DailyWork({
     }
   }, []);
 
-  // updated by sahil karnekar
+// updated by sahil karnekar
   useEffect(() => {
     const newSocket = initializeSocket(employeeId, userType);
     setSocket(newSocket);
   }, []);
-
-  // updated by sahil karnekar date 30-12-2024
+// updated by sahil karnekar date 30-12-2024
   useEffect(() => {
     if (socket) {
       socket.on("receive_saved_candidate", (message) => {
-        console.log("Notification received: ", message);
-
-        const recruiterName = `${userType}_${employeeId}`;
-        // if (message.candidate.senderId !== recruiterName) {
+        console.log(message);
+        
+        if (message.candidate.senderId !== `${userType}_${employeeId}`) {
           setMessages((prevMessages) => {
             const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
             localStorage.setItem(
               `${userType}${employeeId}messages`,
               JSON.stringify(updatedMessages)
             );
             return updatedMessages;
           });
-        // }
+        }
+      });
+      socket.on("receive_updated_candidate", (message) => {
+        console.log(message);
+        
+        if (message.candidate.senderId !== `${userType}_${employeeId}`) {
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        }
+      });
+
+      socket.on("connect_error", () => {
+        console.log;
+        ("Connection failed. Ensure your details are correct.");
       });
 
       return () => {
         socket.disconnect();
       };
+     
+      
     }
+    console.log(messages);
   }, [socket, employeeId]);
-
-  const formatNotificationMessage = (message) => {
-    const candidateName = message?.candidate?.callingTracker?.candidateName || "Unknown Candidate";
-    const recruiterName = message?.candidate?.performanceIndicator?.employeeName || "Unknown Recruiter";
-    const date = message?.candidate?.callingTracker?.date || "Unknown Date";
-    const time = message?.candidate?.callingTracker?.candidateAddedTime || "Unknown Time";
-  
-    const formatTimeTo12Hour = (time24) => {
-      if (!time24) return "Unknown Time";
-      const [hour, minute] = time24.split(":").map(Number);
-      const ampm = hour >= 12 ? "PM" : "AM";
-      const hour12 = hour % 12 || 12; // Convert 0 to 12 for 12-hour clock
-      return `${hour12}:${minute.toString().padStart(2, "0")} ${ampm}`;
-    };
-  
-    const formattedTime = formatTimeTo12Hour(time);
-  
-    // Format date as '2 January 2025'
-    const formatDate = (dateString) => {
-      if (!dateString) return "Unknown Date";
-      const dateObj = new Date(dateString);
-      const options = { day: "numeric", month: "long", year: "numeric" };
-      return dateObj.toLocaleDateString("en-IN", options);
-    };
-  
-    const formattedDate = formatDate(date);
-  
-    return `${candidateName} was lined up by ${recruiterName} at ${formattedTime} on ${formattedDate}.`;
+// updated by sahil karnekar date 30-12-2024
+const sendMessage = () => {
+  const candidateData = {
+    name: "Demo",
+    email: "demo@gmail.com",
+    number: "22334455",
+    senderId: `${userType}_${employeeId}`,
   };
-  
-  useEffect(() => {
-    const socket = socketIOClient("http://192.168.1.46:9092"); // Update with your server URL
-    socket.on("receive_saved_candidate", (data) => {
-      console.log("Received Candidate Data:", data); // Debugging log
-      setMessages((prevMessages) => {
-        const updatedMessages = [...prevMessages, data];
-        setNotificationCount(updatedMessages.length); // Update notification count
-        return updatedMessages;
-      });
+  const role = userType;
+  let params = {};
+if (role === 'Recruiters') {
+params = {
+  role: role,
+        recruiterId: '',
+        teamLeaderId: '977',
+        managerId: '1342',
+        superUserId: '391',
+};
+} else if (role === 'TeamLeader') {
+params = {
+  role: role,
+        recruiterId: '1,2,3,4,5',
+        teamLeaderId: '',
+        managerId: '1342',
+        superUserId: '391',
+};
+} else if (role === 'Manager') {
+params = {
+  role: role,
+        recruiterId: '1,2,3,4,5',
+        teamLeaderId: '977,430,390',
+        managerId: '',
+        superUserId: '391',
+};
+} else if (role === 'SuperUser') {
+params = {
+  role: role,
+  recruiterId: '1,2,3,4,5',
+  teamLeaderId: '977,430,390',
+  managerId: '1342',
+  superUserId: '',
+};
+}
+// here we are calling our api
+  axios.post(
+    'http://localhost:8087/api/addCandidate',
+     candidateData , // Request body
+    {
+      params: params, 
+      headers: {
+        'Content-Type': 'application/json', // Optional, depending on your API's requirements
+      },
+    }
+  )
+    .then((response) => {
+      console.log('Response:', response.data);
+      // here we are emiting our event
+      socket.emit("add_candidate", candidateData);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
     });
-  
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-  
+};
 
-  return (
-    <div className="daily-timeanddate">
-      <a href="#">
-        <div className="head" onClick={profilePageLink}>
-          <div className="user-img">
-            <img src={profileImage} alt="Profile" />
-          </div>
-          <div className="user-details">
-            <p>
-              {employeeData.name} -{" "}
-              {(userType == "Recruiters" ? "Recruiter" : "") ||
-                (userType == "TeamLeader" ? "Team Leader" : "") ||
-                (userType == "Manager" ? "Manager" : "") ||
-                (userType == "SuperUser" ? "Super User" : "")}
-              <br />
-              157{employeeId}
-            </p>
-          </div>
+return (
+  <div className="daily-timeanddate">
+    <a href="#">
+      <div className="head" onClick={profilePageLink}>
+        <div className="user-img">
+          <img src={profileImage} alt="Profile" />
         </div>
-      </a>
+        <div className="user-details">
+          <p>
+            {employeeData.name} -{" "}
+            {(userType == "Recruiters" ? "Recruiter" : "") ||
+              (userType == "TeamLeader" ? "Team Leader" : "") ||
+              (userType == "Manager" ? "Manager" : "") ||
+              (userType == "SuperUser" ? "Super User" : "")}
+            <br />
+            157{employeeId}
+          </p>
+        </div>
+      </div>
+    </a>
 
-      <button
-        className="toggle-all-daily-btns"
-        onClick={toggleAllDailyBtns}
-        style={{ backgroundColor: buttonColor }}
-      >
-        {!showAllDailyBtns ? "Show" : "Hide"} All Buttons
-      </button>
+    <button
+      className="toggle-all-daily-btns"
+      onClick={toggleAllDailyBtns}
+      style={{ backgroundColor: buttonColor }}
+    >
+      {!showAllDailyBtns ? "Show" : "Hide"} All Buttons
+    </button>
 
-      {userType != "Applicant" && userType != "Vendor" ? (
+    {
+      userType != "Applicant" && userType != "Vendor" ? (
         <>
           <div
             className={`all-daily-btns ${!showAllDailyBtns ? "hidden" : ""}`}
           >
             <div className="daily-t-btn">
-              <button className="daily-tr-btn" style={{ whiteSpace: "nowrap" }}>
+              <button
+                className="daily-tr-btn"
+                style={{ whiteSpace: "nowrap" }}
+              >
                 Target : 10
               </button>
               <button
@@ -795,99 +837,124 @@ function DailyWork({
                 employeeId == 430 ||
                 employeeId == 434 ||
                 employeeId == 870 ||
-                employeeId == 636 ||
-                employeeId == 434 ||
-                employeeId == 7) && (
+                employeeId == 636) && (
                 <div>
                   <div style={{ display: "flex" }}>
                     <div
                       style={{ marginRight: "10px" }}
                       onClick={toggleNotificationBox}
                     >
-                      <Badge count={notificationCount}>
+                      <Badge count={messages.length}>
                         <Avatar shape="square" icon={<BellOutlined />} />
                       </Badge>
                     </div>
+                    <button className="daily-tr-btn" onClick={sendMessage}>
+                      Send
+                    </button>
                   </div>
                 </div>
               )}
             </>
 
             <div
-              className={`notificationMainCont1 ${isOpen ? "open" : "closed"}`}
+              className={`notificationMainCont1 ${
+                isOpen ? "open" : "closed"
+              }`}
             >
               <div className="motificationSubCont1">
                 {messages.length > 0 ? (
                   messages.map((message, index) => (
-                    <div key={index} className="notification-item">
-                      {formatNotificationMessage(message)}
-                      <hr />
-                    </div>
-                  ))
-                ) : (
-                  <p>No Notifications</p>
-                )}
-              </div>
-              <div className="buttonsDivForNotifications">
-                <CloseOutlined
-                  style={{
-                    color: "red",
-                  }}
-                  onClick={toggleNotificationBox}
-                />
-                <button
-                  className="clearButtonOfNotifications daily-tr-btn"
-                  onClick={handleClearNotifications}
-                >
-                  Clear <ClearOutlined />
-                </button>
-              </div>
-            </div>
-          </div>
-          <button
-            className="toggle-all-daily-btns"
-            onClick={handleToggleAllDailyBtns}
-          >
-            {showAllDailyBtns ? "Hide All Buttons" : "Show All Buttons"}
-          </button>
-
-          <Modal
-            show={showPauseModal}
-            onHide={() => {
-              if (allowCloseModal) {
-                setShowPauseModal(false);
-              }
-            }}
-            className="dw-modal"
-          >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              className="dw-modal-content"
-            >
-              {/* none working close button removed date : 23-10-2024 */}
-              <Modal.Header>
-                <Modal.Title className="dw-modal-title">
-                  Break Runing...
-                </Modal.Title>
-              </Modal.Header>
-              <div>
-                <img src={watingImg} alt="Waiting" className="dw-waiting-img" />
-              </div>
-              <Modal.Footer className="dw-modal-footer">
-                <div className="dw-resume-div">
-                  <h3>Timer is paused. Click Resume to continue...</h3>
+                    <>
+                      <s></s>{" "}
+                      {/* data displays as per requirments */}
+                      <p>
+                      {index + 1} - A Candidate {message.candidate.email} &  {message.candidate.number}
+                           
+                           Successfully By Sender ID : {message.candidate.senderId}
+                            For Job 
+                           {message.candidate.name} 
+                          <span>
+                            {
+                              message.eventName === "add_candidate" && (<span> Saved </span>)
+                            }
+                            {
+                              message.eventName === "update_candidate" && (<span> Updated </span>)
+                            }
+                            </span>
+                        </p>
+                        <hr />
+                        {/* <p>{message.number}</p> */}
+                      </>
+                    ))
+                  ) : (
+                    <p>No Notifications</p>
+                  )}
+                </div>
+                <div className="buttonsDivForNotifications">
+                  <CloseOutlined
+                    style={{
+                      color: "red",
+                    }}
+                    onClick={toggleNotificationBox}
+                  />
                   <button
-                    className="profile-back-button"
-                    onClick={handleResume}
+                    className="cleaarButtonOfNotifications daily-tr-btn"
+                    onClick={handleClearNotifications}
                   >
-                    Resume
+                    Clear <ClearOutlined />
                   </button>
                 </div>
-              </Modal.Footer>
+              </div>
             </div>
-          </Modal>
-        </>
-      ) : null}
+            <button
+              className="toggle-all-daily-btns"
+              onClick={handleToggleAllDailyBtns}
+            >
+              {showAllDailyBtns ? "Hide All Buttons" : "Show All Buttons"}
+            </button>
+
+            <Modal
+              show={showPauseModal}
+              onHide={() => {
+                if (allowCloseModal) {
+                  setShowPauseModal(false);
+                }
+              }}
+              className="dw-modal"
+            >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="dw-modal-content"
+              >
+                {/* none working close button removed date : 23-10-2024 */}
+                <Modal.Header>
+                  <Modal.Title className="dw-modal-title">
+                    Break Runing...
+                  </Modal.Title>
+                </Modal.Header>
+                <div>
+                  <img
+                    src={watingImg}
+                    alt="Waiting"
+                    className="dw-waiting-img"
+                  />
+                </div>
+                <Modal.Footer className="dw-modal-footer">
+                  <div className="dw-resume-div">
+                    <h3>Timer is paused. Click Resume to continue...</h3>
+                    <button
+                      className="profile-back-button"
+                      onClick={handleResume}
+                    >
+                      Resume
+                    </button>
+                  </div>
+                </Modal.Footer>
+              </div>
+            </Modal>
+          </>
+        ) : null
+      }
 
       <Modal show={showModal} onHide={handleSkip}>
         <div className="dw-reminder-content">
