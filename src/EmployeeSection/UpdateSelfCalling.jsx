@@ -46,7 +46,9 @@ const UpdateSelfCalling = ({
     communicationRating: "",
     selectYesOrNo: "No",
     callingFeedback: "",
-    employeeId: "",
+    employee: {
+      employeeId: "",
+    },
     lineUp: {
       companyName: "",
       experienceYear: "",
@@ -250,11 +252,18 @@ const UpdateSelfCalling = ({
         `${API_BASE_URL}/specific-data/${candidateId}`
       );
       const data = await response.json();
-      console.log( " Specific Data... "+ data);
-      setCallingTracker(data);
+      console.log(" Specific Data... " + data);
+      setCallingTracker({
+        ...data,
+        employee: {
+          employeeId: data.employeeId, // Assuming 'employeeId' is returned in the response
+        },
+      });
+
       newChangesState.candidateName = data.candidateName;
       newChangesState.candidateEmail = data.candidateEmail;
       newChangesState.jobDesignation = data.jobDesignation;
+
       if (data.lineUp.resume !== "") {
         console.log(data.lineUp.resume);
         setResumeUploaded(true);
@@ -272,10 +281,6 @@ const UpdateSelfCalling = ({
       console.error("Error fetching candidate data:", error);
     }
   };
-
-  console.log(newChangesState);
-
-  console.log(callingTracker);
 
   const fetchRequirementOptions = async () => {
     try {
@@ -726,13 +731,19 @@ const UpdateSelfCalling = ({
         candidateName: forTrimCandidateName,
         recruiterName: loginEmployeeName,
         candidateAddedTime: callingTracker.candidateAddedTime,
+        employee: {
+          employeeId: callingTracker.employee.employeeId,
+        },
         lineUp: {
           ...callingTracker.lineUp,
         },
       };
 
-        // Log the data being sent
-    console.log("Data prepared for API request:", JSON.stringify(dataToUpdate, null, 2));
+      // Log the data being sent
+      console.log(
+        "Data prepared for API request:",
+        JSON.stringify(dataToUpdate, null, 2)
+      );
 
       const response = await fetch(
         `${API_BASE_URL}/update-calling-data/${candidateId}/${employeeId}/${userType}`,
@@ -744,7 +755,7 @@ const UpdateSelfCalling = ({
           body: JSON.stringify(dataToUpdate),
         }
       );
-      
+      console.log("Data For Update --  " + dataToUpdate);
       if (response.ok) {
         if (callingTracker.selectYesOrNo === "Interested") {
           if (fromCallingList) {

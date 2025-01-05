@@ -515,18 +515,6 @@ const handleSubmit = async (e) => {
         headers: { "Content-Type": "application/json" },
       }
     );
-
-    // Emit socket event if interested
-    // if (callingTracker.selectYesOrNo === "Interested") {
-    //   const candidateData = {
-    //     candidateName: callingTracker.candidateName.trim() || "N/A",
-    //     employeeName: loginEmployeeName || "N/A", // Recruiter Name
-    //     date: callingTracker.date,
-    //     senderId: `${userType}_${employeeId}`,
-    //   };
-    //   console.log("Sending Candidate Data:", candidateData); // Debugging log
-    //   socket.emit("add_candidate54", candidateData);
-    // }
     
     if (response.status === 200 || response.status === 201) {
        //Arshad Attar Added this function to add data from excel and Resume data base and

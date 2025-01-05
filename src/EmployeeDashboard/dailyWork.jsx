@@ -664,12 +664,12 @@ function DailyWork({
   };
   
   useEffect(() => {
-    const socket = socketIOClient("http://localhost:9092"); // Update with your server URL
+    const socket = socketIOClient("http://localhost:9092"); 
     socket.on("receive_saved_candidate", (data) => {
-      console.log("Received Candidate Data:", data); // Debugging log
+      console.log("Received Candidate Data:", data); 
       setMessages((prevMessages) => {
         const updatedMessages = [...prevMessages, data];
-        setNotificationCount(updatedMessages.length); // Update notification count
+        setNotificationCount(updatedMessages.length); 
         return updatedMessages;
       });
     });
