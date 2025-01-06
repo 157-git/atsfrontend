@@ -31,7 +31,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState({});
   const [showSearchBar, setShowSearchBar] = useState(false);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
   const [searchCount, setSearchCount] = useState(0);

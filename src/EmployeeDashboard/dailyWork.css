@@ -378,17 +378,17 @@
   }
 }
 .notificationMainCont1 {
-  background-color: var(--Bg-color); /* Keeps background consistent with theme */
+  background-color: var(--accent-color-2); /* Keeps background consistent with theme */
   color: var(--text-color); /* Matches text color to theme */
   position: absolute; /* Sticks to a fixed location relative to parent */
   top: 0; /* Aligns it to the top */
   right: 20px; /* Ensures proper spacing from the right */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
+  filter: drop-shadow(1px 4px 4px black);
   width: 350px; /* Fixed width for consistency */
   max-height: 600px; /* Restricts height to 800px */
   overflow-y: auto; /* Adds scrollbar when content overflows */
   overflow-x: hidden; /* Prevents horizontal scrollbar */
-  border-radius: 8px; /* Smooth corner radius */
+  border-radius: 3px; /* Smooth corner radius */
   transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth open/close transitions */
   z-index: 1000; /* Ensures it appears above other elements */
   margin-top: 80px; /* Adjusts spacing from top */
@@ -396,10 +396,12 @@
 
 
 .notificationMainCont1.open {
+  width: 40%;
   transform: translateY(0); /* Fully visible when open */
   opacity: 1; /* Makes it fully visible */
 }
 .notificationMainCont1.closed {
+  width: 40%;
   transform: translateY(-10px); /* Moves slightly up when closed */
   opacity: 0; /* Fades out */
   pointer-events: none; /* Disables interaction when closed */
@@ -424,5 +426,6 @@
 }
 
 .cleaarButtonOfNotifications:hover {
-  background-color: #cc0000; /* Darker red on hover */
+  background-color: var(--button-bg-hover-color); /* Darker red on hover */
+  color: var(--button-txt-hover-color);
 }

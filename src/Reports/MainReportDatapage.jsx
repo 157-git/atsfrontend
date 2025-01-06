@@ -151,7 +151,7 @@ const handleCheckboxChange = async (role, id, completeValueObject) => {
   // API Call
   try {
     const response = await axios.get(
-      `http://rg.157careers.in/api/ats/157industries/report-count/${userIdForApi}/${role}/${startDate}/${endDate}`
+      `${API_BASE_URL}/report-count/${userIdForApi}/${role}/${startDate}/${endDate}`
     );
     console.log("API Response:", response.data);
     setReportDataDatewise(response.data);

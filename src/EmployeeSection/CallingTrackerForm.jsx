@@ -31,10 +31,10 @@ const CallingTrackerForm = ({
   loginEmployeeName,
   onsuccessfulDataUpdation,
 }) => {
-  const { employeeId , userType} = useParams();
+  const { employeeId } = useParams();
   const [submited, setSubmited] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
-
+  const { userType } = useParams();
 
   // sahil karnekar line 33 to 38 date 15-10-2024
   const today = new Date();
@@ -416,10 +416,9 @@ const CallingTrackerForm = ({
     setSocket(newSocket);
   }, []);
 
-
   const handleSubmit = async (e) => {
-    e.preventDefault();
     setShowConfirmation(false);
+    e.preventDefault();
 
     if (errorForYOP !== "") {
       setErrorForYOP("Please select a valid year of passing.");
@@ -507,7 +506,6 @@ const CallingTrackerForm = ({
       } else if (userType === "TeamLeader") {
         dataToUpdate.callingTracker.teamLeader = { teamLeaderId: employeeId };
       }
-
       console.log(dataToUpdate);
 
       const response = await axios.post(
@@ -519,6 +517,31 @@ const CallingTrackerForm = ({
           },
         }
       );
+      // this code is implemented just for testing of socket transmission
+      const getFormattedDateTime = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1; // Months are 0-based in JavaScript
+        const day = now.getDate();
+        
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        const period = hours >= 12 ? 'PM' : 'AM';
+        const formattedHours = hours > 12 ? hours - 12 : hours === 0 ? 12 : hours;
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+      
+        const formattedDate = `${year}-${month}-${day}`;
+        return `Date: ${formattedDate}, Time: ${formattedHours}:${formattedMinutes} ${period}`;
+      };
+      const updatedCallingTracker = {
+        ...dataToUpdate.callingTracker,
+        candidateAddedTime: getFormattedDateTime() // or your desired value
+      };
+      if (callingTracker.selectYesOrNo === "Interested") {
+        socket.emit("add_candidate",  updatedCallingTracker  );
+      }
+
+
 
       if (response.status === 200 || response.status === 201) {
         //Arshad Attar Added this function to add data from excel and Resume data base and
@@ -530,11 +553,6 @@ const CallingTrackerForm = ({
           } else if (initialData.sourceComponent === "CallingExcelList") {
             await deleteExcelDataById(initialData.candidateId);
           }
-        }
-
-        if (callingTracker.selectYesOrNo === "Interested") {
-          console.log("Socket IO Connected In callingTracker -----------");
-          socket.emit("add_candidate", { callingTracker: { ...dataToUpdate.callingTracker } });
         }
 
         if (callingTracker.selectYesOrNo === "Interested") {
@@ -865,6 +883,11 @@ const CallingTrackerForm = ({
       setIsOtherLocationSelected(false); // No additional input needed
     }
   };
+
+  console.log(lineUpData);
+  console.log(callingTracker);
+
+
   // this fucntion is made by sahil karnekar on date 25-11-2024
   const handleResumeUploadBoth = async (e) => {
     const file = e.target.files[0];
@@ -917,7 +940,7 @@ const CallingTrackerForm = ({
     if (initialData !== null && initialData.resume !== "") {
       setErrorForResumeUrl("Please Click on EYE Button to View Resume");
     }
-  }, []);
+  }, [])
 
   return (
     <div className="calling-tracker-main">
@@ -982,13 +1005,13 @@ const CallingTrackerForm = ({
                   style={{ display: "block", flexDirection: "row" }}
                 >
                   {/* <input
-                    style={{ width: "-webkit-fill-available" }}
-                    type="file"
-                    name="resumeSet"
-                    onChange={handleResumeUploadBoth}
-                    className="plain-input"
-                    placeholder="Upload Resume"
-                  /> */}
+                   style={{ width: "-webkit-fill-available" }}
+                   type="file"
+                   name="resumeSet"
+                   onChange={handleResumeUploadBoth}
+                   className="plain-input"
+                   placeholder="Upload Resume"
+                 /> */}
                   <div
                     style={{
                       display: "flex",
@@ -1020,9 +1043,7 @@ const CallingTrackerForm = ({
                         className="fas fa-eye"
                         onClick={() => {
                           if (!resumeUploaded) {
-                            setErrorForResumeUrl(
-                              "Please upload a resume first."
-                            );
+                            setErrorForResumeUrl("Please upload a resume first.");
                           }
                           if (resumeUrl) {
                             setIsModalOpen(true);
@@ -1042,12 +1063,10 @@ const CallingTrackerForm = ({
                       style={{
                         color: "green",
                       }}
-                      className="error-message"
-                    >
-                      {errorForResumeUrl}
-                    </div>
+                      className="error-message">{errorForResumeUrl}</div>
                   )}
                 </div>
+
               </div>
             </div>
             <div className="calling-tracker-row-gray">
@@ -1385,8 +1404,8 @@ const CallingTrackerForm = ({
                       </option>
                       <option value="No Answer">No Answer</option>
                       {/* <option value="Call Disconnected by Candidate">
-                      Call Disconnected by Candidate
-                    </option> */}
+                     Call Disconnected by Candidate
+                   </option> */}
                       <option value="Network Issue">Network Issue</option>
                       <option value="Invalid Number">Invalid Number</option>
                       <option value="Need to call back">
@@ -2006,26 +2025,26 @@ const CallingTrackerForm = ({
                 >
                   {/* this lines commented by sahil karnekar on date 25-11-2024 */}
                   {/* <input
-                    type="file"
-                    name="resume"
-                    onChange={handleResumeUploadBoth}
-                    accept=".pdf,.doc,.docx"
-                    className="plain-input"
-                  />
-                  {resumeUploaded && (
-                    <FontAwesomeIcon
-                      icon={faCheckCircle}
-                      style={{
-                        color: "green",
-                        marginLeft: "3px",
-                        marginTop: "5px",
-                        fontSize: "22px",
-                      }}
-                    />
-                  )}
-                  {errors.resume && (
-                    <div className="error-message">{errors.resume}</div>
-                  )} */}
+                   type="file"
+                   name="resume"
+                   onChange={handleResumeUploadBoth}
+                   accept=".pdf,.doc,.docx"
+                   className="plain-input"
+                 />
+                 {resumeUploaded && (
+                   <FontAwesomeIcon
+                     icon={faCheckCircle}
+                     style={{
+                       color: "green",
+                       marginLeft: "3px",
+                       marginTop: "5px",
+                       fontSize: "22px",
+                     }}
+                   />
+                 )}
+                 {errors.resume && (
+                   <div className="error-message">{errors.resume}</div>
+                 )} */}
                   {/* line 1812 to 1846 added by sahil karnekar on date 25-11-2024 */}
                   <div
                     className="calling-tracker-two-input"
@@ -2145,7 +2164,7 @@ const CallingTrackerForm = ({
                         // line number 1563 added by sahil karnekar date : 15-10-2024
                         min="0"
                         max="11"
-                        //  {/* this line added by sahil date 22-10-2024 */}
+                      //  {/* this line added by sahil date 22-10-2024 */}
                       />
                       {/* sahil karnekar line 1542 to 1546 */}
                       {/* this line added by sahil date 22-10-2024 */}
@@ -2207,28 +2226,28 @@ const CallingTrackerForm = ({
                   {/* this line added by sahil date 22-10-2024 */}
                   {/* <div className="setRequiredStarDiv"> */}
                   {/* <input
-                        type="text"
-                        name="noticePeriod"
-                        placeholder="Notice Period"
-                        value={lineUpData.noticePeriod}
-                        onChange={handleLineUpChange}
-                        min="0"
-                        max="90" */}
+                       type="text"
+                       name="noticePeriod"
+                       placeholder="Notice Period"
+                       value={lineUpData.noticePeriod}
+                       onChange={handleLineUpChange}
+                       min="0"
+                       max="90" */}
                   {/* //  this line added by sahil date 22-10-2024 */}
                   {/* // style={{ width: "inherit" }} */}
                   {/* // /> */}
                   {/* this line added by sahil date 22-10-2024 */}
                   {/* {callingTracker.selectYesOrNo === "Interested" &&
-                        !lineUpData.noticePeriod && (
-                          <span className="requiredFieldStar">*</span>
-                        )} */}
+                       !lineUpData.noticePeriod && (
+                         <span className="requiredFieldStar">*</span>
+                       )} */}
                   {/* </div> */}
                   {/* sahil karnekar line 1581 to 1585 
-                    {errors.noticePeriod && (
-                      <div className="error-message">
-                        {errors.noticePeriod || errors.noticePeriod}
-                      </div>
-                    )} */}
+                   {errors.noticePeriod && (
+                     <div className="error-message">
+                       {errors.noticePeriod || errors.noticePeriod}
+                     </div>
+                   )} */}
                   {/* </div> */}
                 </div>
               </div>
@@ -2554,21 +2573,21 @@ const CallingTrackerForm = ({
                   </div>
 
                   {/* <input
-  type="text"
-  name="interviewTime"
-  placeholder="⏰(e.g 12:00 AM)"
-  value={lineUpData.interviewTime}
-  onChange={(e) =>
-    setLineUpData({
-      ...lineUpData,
-      interviewTime: e.target.value,
-    })
-  }
-  onFocus={(e) => (e.target.type = 'time')} // Change to time input on focus
-  onBlur={(e) => {
-    if (!e.target.value) e.target.type = 'text'; // Revert to text input if no time is selected
-  }}
- 
+ type="text"
+ name="interviewTime"
+ placeholder="⏰(e.g 12:00 AM)"
+ value={lineUpData.interviewTime}
+ onChange={(e) =>
+   setLineUpData({
+     ...lineUpData,
+     interviewTime: e.target.value,
+   })
+ }
+ onFocus={(e) => (e.target.type = 'time')} // Change to time input on focus
+ onBlur={(e) => {
+   if (!e.target.value) e.target.type = 'text'; // Revert to text input if no time is selected
+ }}
+
 /> */}
                 </div>
               </div>
@@ -2665,10 +2684,10 @@ const CallingTrackerForm = ({
         onUpdateExpectedCTCThousand={handleUpdateExpectedCTCThousand}
       />
       {/* {submited && (
-        <div className="SCE_Loading_Animation">
-          <ClipLoader size={50} color="#ffb281" />
-        </div>
-      )} */}
+       <div className="SCE_Loading_Animation">
+         <ClipLoader size={50} color="#ffb281" />
+       </div>
+     )} */}
     </div>
   );
 };
@@ -2804,36 +2823,33 @@ const ModalComponent = ({
         <div className="calling-tracker-popup">
           <div className="calling-tracker-popup-sidebar">
             <p
-              className={`sidebar-item ${
-                activeField === "distance" ? "active" : ""
-              }`}
+              className={`sidebar-item ${activeField === "distance" ? "active" : ""
+                }`}
               onClick={() => setActiveField("distance")}
             >
               Distance Calculation
             </p>
             <p
-              className={`sidebar-item ${
-                activeField === "salary" ? "active" : ""
-              }`}
+              className={`sidebar-item ${activeField === "salary" ? "active" : ""
+                }`}
               onClick={() => setActiveField("salary")}
             >
               Salary Calculation
             </p>
 
             {/* <p
-              className={`sidebar-item ${
-                activeField === "historyTracker" ? "active" : ""
-              }`}
+             className={`sidebar-item ${
+               activeField === "historyTracker" ? "active" : ""
+             }`}
 >>>>>>> 970775edad6a78d0c78fa6811619c6ada820873d
-              onClick={() => setActiveField("historyTracker")}
-            >
-              History Tracker
-            </p> */}
+             onClick={() => setActiveField("historyTracker")}
+           >
+             History Tracker
+           </p> */}
 
             <p
-              className={`sidebar-item ${
-                activeField === "previousQuestion" ? "active" : ""
-              }`}
+              className={`sidebar-item ${activeField === "previousQuestion" ? "active" : ""
+                }`}
               onClick={() => setActiveField("previousQuestion")}
             >
               Previous Question
@@ -3117,8 +3133,8 @@ const ModalComponent = ({
                           </div>
                           <div className="form-group">
                             {/* <label htmlFor="expectedCTCThousand">
-                              Thousand
-                            </label> */}
+                             Thousand
+                           </label> */}
                             <div style={{ position: "relative" }}>
                               <input
                                 type="text"

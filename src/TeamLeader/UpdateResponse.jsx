@@ -67,7 +67,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
 
   const { userType } = useParams();
   const { employeeId } = useParams();
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
   useEffect(() => {
@@ -231,17 +231,11 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     setShowResumeModal(false);
   };
 
-  const handleUpdateClick = (
-    candidateId,
-    employeeId,
-    requirementId,
-    candidateName,
-    employeeName
-  ) => {
+  const handleUpdateClick = (candidateId, employeeId, requirementId,candidateName,employeeName) => {
     setShowUpdateResponseID(candidateId);
     setShowEmployeeId(employeeId);
     setShowRequirementId(requirementId);
-    setShowCandidateName(candidateName);
+    setShowCandidateName(candidateName); 
     setShowEmployeeName(employeeName);
     setShowUpdateResponseForm(true);
   };
@@ -1000,7 +994,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
               >
                 <Modal.Body>
                   <div className="TeamLead-main-table-container">
-                    <UpdateResponseFrom
+                  <UpdateResponseFrom
                       candidateId={showUpdateResponseID}
                       passedEmployeeId={showEmployeeId}
                       requirementId={showRequirementId}

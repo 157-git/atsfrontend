@@ -58,7 +58,7 @@ const CallingExcelList = ({
   const [showUpdateCallingTracker, setShowUpdateCallingTracker] =
     useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
 

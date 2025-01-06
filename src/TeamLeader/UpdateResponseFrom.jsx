@@ -76,13 +76,6 @@ const UpdateResponseFrom = ({
     if (!formData.interviewRound) {
       errors.interviewRound = "Interview Round is required";
     }
-    // this lines commented by sahil karnekar please check them if it is required in my scenario there is no required to updation
-    // if (!formData.interviewResponse) {
-    //   errors.interviewResponse = "Interview Response is required";
-    // }
-    // if (!formData.responseUpdatedDate) {
-    //   errors.responseUpdatedDate = "Update Date is required";
-    // }
     return errors;
   };
 
