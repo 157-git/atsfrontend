@@ -15,6 +15,8 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
   const [showUpdateResponseID, setShowUpdateResponseID] = useState();
   const [showEmployeeId, setShowEmployeeId] = useState();
   const [showRequirementId, setShowRequirementId] = useState();
+  const [showCandidateName, setShowCandidateName] = useState();
+  const [showEmployeeName, setShowEmployeeName] = useState();
   const [showSearch, setShowSearch] = useState(false);
   let [color, setColor] = useState("#ffcb9b");
   const [loading, setLoading] = useState(true);
@@ -228,10 +230,12 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     setShowResumeModal(false);
   };
 
-  const handleUpdateClick = (candidateId, employeeId, requirementId) => {
+  const handleUpdateClick = (candidateId, employeeId, requirementId,candidateName,employeeName) => {
     setShowUpdateResponseID(candidateId);
     setShowEmployeeId(employeeId);
     setShowRequirementId(requirementId);
+    setShowCandidateName(candidateName); 
+    setShowEmployeeName(employeeName);
     setShowUpdateResponseForm(true);
   };
 
@@ -876,7 +880,9 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                               handleUpdateClick(
                                 data.candidateId,
                                 data.employeeId,
-                                data.requirementId
+                                data.requirementId,
+                                data.candidateName,
+                                data.employeeName
                               )
                             }
                           >
@@ -989,10 +995,12 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
               >
                 <Modal.Body>
                   <div className="TeamLead-main-table-container">
-                    <UpdateResponseFrom
+                  <UpdateResponseFrom
                       candidateId={showUpdateResponseID}
                       passedEmployeeId={showEmployeeId}
                       requirementId={showRequirementId}
+                      candidateName={showCandidateName}
+                      employeeName={showEmployeeName}
                       onClose={closeUpdateForm}
                       onSuccessAdd={onSuccessAdd}
                     />

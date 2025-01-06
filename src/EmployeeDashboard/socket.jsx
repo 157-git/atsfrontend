@@ -1,3 +1,4 @@
+
 import { io } from "socket.io-client";
 
 let socket;
@@ -6,7 +7,7 @@ export const initializeSocket = (userId, userType) => {
   const query = { userId, role: userType };
 
   // replace with actual url
-  socket = io("http://localhost:9092", { query });
+  socket = io("http://192.168.1.39:9092", { query });
 
   return socket;
 };

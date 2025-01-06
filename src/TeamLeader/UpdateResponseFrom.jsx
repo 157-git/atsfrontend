@@ -14,6 +14,8 @@ const UpdateResponseFrom = ({
   candidateId,
   passedEmployeeId,
   requirementId,
+  candidateName,
+  employeeName,
   onClose,
 }) => {
   const { employeeId, userType } = useParams();
@@ -139,6 +141,8 @@ const UpdateResponseFrom = ({
         callingTracker: { candidateId: candidateId },
         requirementInfo: { requirementId: requirementId },
         employee: { employeeId: passedEmployeeId },
+        candidateName: candidateName, // Added candidateName from props
+        employeeName: employeeName, // Added employeeName from props
       };
 
       const response = await axios.post(
@@ -151,6 +155,7 @@ const UpdateResponseFrom = ({
         }
       );
       if (response.status === 200) {
+        console.log("Emit object --- :", emitObject);
         socket.emit("interview_schedule", emitObject);
         const firstResponse = response.data;
         console.log(firstResponse); 
