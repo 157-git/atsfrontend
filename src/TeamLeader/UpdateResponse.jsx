@@ -8,6 +8,7 @@ import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import { Pagination } from "antd";
+import { set } from "date-fns";
 
 const UpdateResponse = ({ onSuccessAdd, date }) => {
   const [updateResponseList, setUpdateResponseList] = useState([]);
@@ -15,6 +16,8 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
   const [showUpdateResponseID, setShowUpdateResponseID] = useState();
   const [showEmployeeId, setShowEmployeeId] = useState();
   const [showRequirementId, setShowRequirementId] = useState();
+  const [showCandidateName, setShowCandidateName] = useState();
+  const [showEmployeeName, setShowEmployeeName] = useState();
   const [showSearch, setShowSearch] = useState(false);
   let [color, setColor] = useState("#ffcb9b");
   const [loading, setLoading] = useState(true);
@@ -70,7 +73,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
   useEffect(() => {
     fetchUpdateResponseList(currentPage, pageSize);
     setFormClosed(false);
-  }, [formClosed,currentPage,pageSize,filterValue]);
+  }, [formClosed, currentPage, pageSize, filterValue]);
 
   useEffect(() => {
     applyFilters();
@@ -87,12 +90,12 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
       );
       const data = await res.json();
 
-        setCallingList(data.content);
-        setFilteredCallingList(data.content);
-        setUpdateResponseList(data.content);
-        setSearchCount(data.length);
-        setTotalRecords(data.totalElements);
-        setFormClosed(false);
+      setCallingList(data.content);
+      setFilteredCallingList(data.content);
+      setUpdateResponseList(data.content);
+      setSearchCount(data.length);
+      setTotalRecords(data.totalElements);
+      setFormClosed(false);
 
       // setLoading(false);
       setLoading(false);
@@ -228,10 +231,18 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     setShowResumeModal(false);
   };
 
-  const handleUpdateClick = (candidateId, employeeId, requirementId) => {
+  const handleUpdateClick = (
+    candidateId,
+    employeeId,
+    requirementId,
+    candidateName,
+    employeeName
+  ) => {
     setShowUpdateResponseID(candidateId);
     setShowEmployeeId(employeeId);
     setShowRequirementId(requirementId);
+    setShowCandidateName(candidateName);
+    setShowEmployeeName(employeeName);
     setShowUpdateResponseForm(true);
   };
 
@@ -876,7 +887,9 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                               handleUpdateClick(
                                 data.candidateId,
                                 data.employeeId,
-                                data.requirementId
+                                data.requirementId,
+                                data.candidateName,
+                                data.employeeName
                               )
                             }
                           >
@@ -890,68 +903,66 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
               </div>
 
               <div className="search-count-last-div">
-                Total Results : {totalRecords
-                }
+                Total Results : {totalRecords}
               </div>
 
-
               <Pagination
-  current={currentPage}
-  total={totalRecords}
-  pageSize={pageSize}
-  onChange={handlePageChange}
-  showSizeChanger={false} // Hides the page size changer
-  showQuickJumper={false} // Hides the quick jump input
-  itemRender={(page, type) => {
-    if (type === 'prev') {
-      return (
-        <button
-          style={{
-            color: currentPage === 1 ? 'gray' : 'black', // Gray when disabled
-            cursor: currentPage === 1 ? 'not-allowed' : 'pointer', // Cursor for disabled state
-          }}
-          disabled={currentPage === 1}
-          onClick={() => {
-            if (currentPage !== 1) handlePageChange(currentPage - 1);
-          }}
-        >
-          Previous
-        </button>
-      );
-    }
-    if (type === 'next') {
-      return (
-        <button
-          style={{
-            color: filteredCallingList.length === 0 ? 'gray' : 'black', // Gray when no records
-            cursor: filteredCallingList.length === 0 ? 'not-allowed' : 'pointer', // Cursor for disabled state
-          }}
-          disabled={totalRecords === 0}
-          onClick={() => {
-            if (filteredCallingList.length > 0){
-              handlePageChange(currentPage + 1);
-            }else{
-              return;
-            }
-          }}
-        >
-          Next
-        </button>
-      );
-    }
-    return null; // Hides page numbers and other elements
-  }}
-  style={{
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: '20px',
-  }}
-/>
-
-
-
-
-
+                current={currentPage}
+                total={totalRecords}
+                pageSize={pageSize}
+                onChange={handlePageChange}
+                showSizeChanger={false} // Hides the page size changer
+                showQuickJumper={false} // Hides the quick jump input
+                itemRender={(page, type) => {
+                  if (type === "prev") {
+                    return (
+                      <button
+                        style={{
+                          color: currentPage === 1 ? "gray" : "black", // Gray when disabled
+                          cursor: currentPage === 1 ? "not-allowed" : "pointer", // Cursor for disabled state
+                        }}
+                        disabled={currentPage === 1}
+                        onClick={() => {
+                          if (currentPage !== 1)
+                            handlePageChange(currentPage - 1);
+                        }}
+                      >
+                        Previous
+                      </button>
+                    );
+                  }
+                  if (type === "next") {
+                    return (
+                      <button
+                        style={{
+                          color:
+                            filteredCallingList.length === 0 ? "gray" : "black", // Gray when no records
+                          cursor:
+                            filteredCallingList.length === 0
+                              ? "not-allowed"
+                              : "pointer", // Cursor for disabled state
+                        }}
+                        disabled={totalRecords === 0}
+                        onClick={() => {
+                          if (filteredCallingList.length > 0) {
+                            handlePageChange(currentPage + 1);
+                          } else {
+                            return;
+                          }
+                        }}
+                      >
+                        Next
+                      </button>
+                    );
+                  }
+                  return null; // Hides page numbers and other elements
+                }}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "20px",
+                }}
+              />
 
               <Modal show={showResumeModal} onHide={closeResumeModal} size="md">
                 <Modal.Header closeButton>
@@ -993,6 +1004,8 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                       candidateId={showUpdateResponseID}
                       passedEmployeeId={showEmployeeId}
                       requirementId={showRequirementId}
+                      candidateName={showCandidateName}
+                      employeeName={showEmployeeName}
                       onClose={closeUpdateForm}
                       onSuccessAdd={onSuccessAdd}
                     />

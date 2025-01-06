@@ -72,10 +72,6 @@ function ApplicantForm2({ loginEmployeeName }) {
   
 
   const { employeeId, userType } = decodeParams(encodedParams);
-
-  console.log("Decoded Employee ID:", employeeId);
-  console.log("Decoded User Type:", userType);
-
   const [loading, setLoading] = useState(false);
   const [resumeSelected, setResumeSelected] = useState(false);
   const [photoSelected, setPhotoSelected] = useState(false);
