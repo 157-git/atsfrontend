@@ -64,7 +64,6 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
 
   const { userType } = useParams();
   const { employeeId } = useParams();
-  console.log(date);
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
@@ -102,22 +101,6 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
       setLoading(false);
     }
   };
-
-  // const applyFilters = () => {
-  //   if (!filterType || !filterValue) {
-  //     setFilteredCallingList(updateResponseList);
-  //     return;
-  //   }
-
-  //   const filteredList = updateResponseList.filter((data) => {
-  //     return data[filterType]
-  //       ?.toString()
-  //       .toLowerCase()
-  //       .includes(filterValue.toLowerCase());
-  //   });
-
-  //   setFilteredCallingList(filteredList);
-  // };
 
   const applyFilters = () => {
     const lowerSearchTerm = filterValue.toLowerCase();
@@ -361,7 +344,6 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
         : [...prev[key], value], // Select the value
     }));
   };
-  console.log(filteredCallingList);
 
   const calculateWidth = () => {
     const baseWidth = 250;
@@ -1009,7 +991,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                   <div className="TeamLead-main-table-container">
                     <UpdateResponseFrom
                       candidateId={showUpdateResponseID}
-                      employeeId={showEmployeeId}
+                      passedEmployeeId={showEmployeeId}
                       requirementId={showRequirementId}
                       onClose={closeUpdateForm}
                       onSuccessAdd={onSuccessAdd}

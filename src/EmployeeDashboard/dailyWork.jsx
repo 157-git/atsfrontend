@@ -235,7 +235,6 @@ function DailyWork({
         `${API_BASE_URL}/fetch-work-id/${employeeId}/${userType}`
       );
       setFetchWorkId(response.data);
-      console.log(response.data + "----->");
     } catch (error) {
       console.error("Error fetching work ID:", error);
     }
@@ -617,14 +616,14 @@ function DailyWork({
 
         const recruiterName = `${userType}_${employeeId}`;
         // if (message.candidate.senderId !== recruiterName) {
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
         // }
       });
 
@@ -635,11 +634,15 @@ function DailyWork({
   }, [socket, employeeId]);
 
   const formatNotificationMessage = (message) => {
-    const candidateName = message?.candidate?.callingTracker?.candidateName || "Unknown Candidate";
-    const recruiterName = message?.candidate?.performanceIndicator?.employeeName || "Unknown Recruiter";
+    const candidateName =
+      message?.candidate?.callingTracker?.candidateName || "Unknown Candidate";
+    const recruiterName =
+      message?.candidate?.performanceIndicator?.employeeName ||
+      "Unknown Recruiter";
     const date = message?.candidate?.callingTracker?.date || "Unknown Date";
-    const time = message?.candidate?.callingTracker?.candidateAddedTime || "Unknown Time";
-  
+    const time =
+      message?.candidate?.callingTracker?.candidateAddedTime || "Unknown Time";
+
     const formatTimeTo12Hour = (time24) => {
       if (!time24) return "Unknown Time";
       const [hour, minute] = time24.split(":").map(Number);
@@ -647,9 +650,9 @@ function DailyWork({
       const hour12 = hour % 12 || 12; // Convert 0 to 12 for 12-hour clock
       return `${hour12}:${minute.toString().padStart(2, "0")} ${ampm}`;
     };
-  
+
     const formattedTime = formatTimeTo12Hour(time);
-  
+
     // Format date as '2 January 2025'
     const formatDate = (dateString) => {
       if (!dateString) return "Unknown Date";
@@ -657,28 +660,27 @@ function DailyWork({
       const options = { day: "numeric", month: "long", year: "numeric" };
       return dateObj.toLocaleDateString("en-IN", options);
     };
-  
+
     const formattedDate = formatDate(date);
-  
+
     return `${candidateName} was lined up by ${recruiterName} at ${formattedTime} on ${formattedDate}.`;
   };
-  
+
   useEffect(() => {
-    const socket = socketIOClient("http://localhost:9092"); 
+    const socket = socketIOClient("http://localhost:9092");
     socket.on("receive_saved_candidate", (data) => {
-      console.log("Received Candidate Data:", data); 
+      console.log("Received Candidate Data:", data);
       setMessages((prevMessages) => {
         const updatedMessages = [...prevMessages, data];
-        setNotificationCount(updatedMessages.length); 
+        setNotificationCount(updatedMessages.length);
         return updatedMessages;
       });
     });
-  
+
     return () => {
       socket.disconnect();
     };
   }, []);
-  
 
   return (
     <div className="daily-timeanddate">

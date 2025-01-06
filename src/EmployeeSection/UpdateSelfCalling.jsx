@@ -726,6 +726,53 @@ const UpdateSelfCalling = ({
       // this line added by sahil karnekar to trim the candidate name
       const forTrimCandidateName = callingTracker.candidateName.trim();
 
+      const callingTrackerObjectForEmit = {
+        date: callingTracker.date,
+        candidateId: callingTracker.candidateId,
+        candidateAddedTime: callingTracker.candidateAddedTime,
+        recruiterName: loginEmployeeName, // Ensure recruiterName is updated
+        candidateName: callingTracker.candidateName.trim(),
+        candidateEmail: callingTracker.candidateEmail,
+        jobDesignation: callingTracker.jobDesignation,
+        requirementId: callingTracker.requirementId,
+        requirementCompany: callingTracker.requirementCompany,
+        sourceName: callingTracker.sourceName,
+        contactNumber: callingTracker.contactNumber,
+        incentive: callingTracker.incentive,
+        alternateNumber: callingTracker.alternateNumber,
+        currentLocation: callingTracker.currentLocation,
+        fullAddress: callingTracker.fullAddress,
+        communicationRating: callingTracker.communicationRating,
+        selectYesOrNo: callingTracker.selectYesOrNo,
+        callingFeedback: callingTracker.callingFeedback,
+        employee: {
+          employeeId: callingTracker.employee?.employeeId, // Include only employeeId
+        },
+        lineUp: {
+          companyName: callingTracker.lineUp.companyName,
+          experienceYear: callingTracker.lineUp.experienceYear,
+          experienceMonth: callingTracker.lineUp.experienceMonth,
+          relevantExperience: callingTracker.lineUp.relevantExperience,
+          currentCTCLakh: callingTracker.lineUp.currentCTCLakh,
+          currentCTCThousand: callingTracker.lineUp.currentCTCThousand,
+          expectedCTCLakh: callingTracker.lineUp.expectedCTCLakh,
+          expectedCTCThousand: callingTracker.lineUp.expectedCTCThousand,
+          dateOfBirth: callingTracker.lineUp.dateOfBirth,
+          gender: callingTracker.lineUp.gender,
+          qualification: callingTracker.lineUp.qualification,
+          yearOfPassing: callingTracker.lineUp.yearOfPassing,
+          extraCertification: callingTracker.lineUp.extraCertification,
+          feedBack: callingTracker.lineUp.feedBack,
+          holdingAnyOffer: callingTracker.lineUp.holdingAnyOffer,
+          offerLetterMsg: callingTracker.lineUp.offerLetterMsg,
+          noticePeriod: callingTracker.lineUp.noticePeriod,
+          msgForTeamLeader: callingTracker.lineUp.msgForTeamLeader,
+          availabilityForInterview: callingTracker.lineUp.availabilityForInterview,
+          interviewTime: callingTracker.lineUp.interviewTime,
+          finalStatus: callingTracker.lineUp.finalStatus,
+        },
+      };
+      
       const dataToUpdate = {
         ...callingTracker,
         candidateName: forTrimCandidateName,
@@ -757,6 +804,12 @@ const UpdateSelfCalling = ({
       );
       console.log("Data For Update --  " + dataToUpdate);
       if (response.ok) {
+
+        if (callingTracker.selectYesOrNo === "Interested") {
+          console.log("Socket Connected In Update Calling Tracker ----------- 01 ");
+          socket.emit("update_candidate", callingTrackerObjectForEmit);
+        }
+
         if (callingTracker.selectYesOrNo === "Interested") {
           if (fromCallingList) {
             onsuccessfulDataUpdation(true);

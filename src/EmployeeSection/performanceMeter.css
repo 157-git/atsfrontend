@@ -53,15 +53,12 @@
     display: flex;
 width: 100%;
     border: 1px solid pink; 
+    padding: 20px;
   }
 
   .main-chart-container{
     border: 1px solid black;
 
-  }
-
-  .charts-container{
-    /* border: 2px solid red; */
   }
   
   .pointer {

@@ -6,10 +6,19 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
+import { useParams } from "react-router-dom";
+import { getSocket } from "../EmployeeDashboard/socket";
 
 // SwapnilRokade_UpdateResponseFrom_addedProcessImprovmentEvaluatorFunctionalityStoringInterviweResponse_08_to_486_29/07/2024
-const UpdateResponseFrom = ({ candidateId, onClose }) => {
+const UpdateResponseFrom = ({
+  candidateId,
+  passedEmployeeId,
+  requirementId,
+  onClose,
+}) => {
+  const { employeeId, userType } = useParams();
   const [data, setData] = useState([]);
+  const [socket, setSocket] = useState(null);
   const [submited, setSubmited] = useState(false);
   const [errors, setErrors] = useState({});
   const [performanceId, setPerformanceId] = useState();
@@ -21,12 +30,18 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
     nextInterviewDate: "",
     nextInterviewTiming: "",
     callingTracker: { candidateId: candidateId },
-    requirementInfo: { requirementId: 1 },
-    employee: { employeeId: 1 },
+    requirementInfo: { requirementId: requirementId },
+    employee: { employeeId: passedEmployeeId },
   });
+
 
   useEffect(() => {
     fetchDataToUpdate();
+  }, []);
+
+  useEffect(() => {
+    const newSocket = getSocket();
+    setSocket(newSocket);
   }, []);
 
   const fetchDataToUpdate = async () => {
@@ -35,7 +50,6 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
         `${API_BASE_URL}/fetch-specific-response/${candidateId}`
       );
       const responseData = await response.json();
-      console.log(responseData);
       setData(responseData);
       fetchPerformanceId();
     } catch (err) {
@@ -82,35 +96,53 @@ const UpdateResponseFrom = ({ candidateId, onClose }) => {
     };
     return new Intl.DateTimeFormat("en-IN", options).format(date);
   };
+
   const handleSubmit = async (e) => {
     setSubmited(true);
     e.preventDefault();
     const validationErrors = validateForm();
-    console.log(validationErrors);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       setSubmited(false);
       return;
     }
 
-if (data.length > 0 && formData.interviewResponse === "") {
-  setSubmited(false);
-  toast.error("Please select an interview response.");
-  return;
-}
+    if (data.length > 0 && formData.interviewResponse === "") {
+      setSubmited(false);
+      toast.error("Please select an interview response.");
+      return;
+    }
 
     try {
       // Save new interview response
       // added by sahil karnekar date 4-12-2024
-      console.log(formData);
+
+      console.log(
+        "Final formData being sent to API:",
+        JSON.stringify(formData, null, 2)
+      );
+
       if (data.length === 0) {
-  if (formData.interviewResponse === "") {
-        formData.interviewResponse = formData.interviewRound;
+        if (formData.interviewResponse === "") {
+          formData.interviewResponse = formData.interviewRound;
+        }
       }
-      }
-    
+
+       // Create the new object to emit
+       const emitObject = {
+        interviewRound: formData.interviewRound,
+        interviewResponse: formData.interviewResponse || "", // Fallback to empty string if not set
+        commentForTl: formData.commentForTl || "",
+        responseUpdatedDate: formData.responseUpdatedDate || formatDateToIST(new Date()),
+        nextInterviewDate: formData.nextInterviewDate || "",
+        nextInterviewTiming: formData.nextInterviewTiming || "",
+        callingTracker: { candidateId: candidateId },
+        requirementInfo: { requirementId: requirementId },
+        employee: { employeeId: passedEmployeeId },
+      };
+
       const response = await axios.post(
-        `${API_BASE_URL}/save-interview-response`,
+        `${API_BASE_URL}/save-interview-response/${employeeId}/${userType}`,
         formData,
         {
           headers: {
@@ -118,11 +150,10 @@ if (data.length > 0 && formData.interviewResponse === "") {
           },
         }
       );
-      console.log(response);
       if (response.status === 200) {
-        console.log("response received");
+        socket.emit("interview_schedule", emitObject);
         const firstResponse = response.data;
-        console.log(firstResponse); // Assuming you want the first response's date
+        console.log(firstResponse); 
 
         const responseUpdatedDateStr = firstResponse.responseUpdatedDate;
         const responseUpdatedDate = new Date(responseUpdatedDateStr);
@@ -143,7 +174,6 @@ if (data.length > 0 && formData.interviewResponse === "") {
         );
         const difference = `${daysDifference} days, ${hoursDifference} hours, and ${minutesDifference} minutes.`;
 
-        console.log(data.length);
 
         if (data.length === 0) {
           const additionalData = {
@@ -206,7 +236,7 @@ if (data.length > 0 && formData.interviewResponse === "") {
     } catch (err) {
       setSubmited(false);
       toast.error("Failed to Update Response line 176" + err);
-    }finally{
+    } finally {
       setSubmited(false);
     }
   };
@@ -229,25 +259,28 @@ if (data.length > 0 && formData.interviewResponse === "") {
     }
   };
 
-  console.log(data);
   return (
     <div className="p-6 bg-white shadow-md rounded-lg max-w-full">
       <div className="mb-4">
-        <h6 className="text-lg font-semibold">{data.length > 0 ? "Update Interview Response" : "Schedule Interview"}</h6>
+        <h6 className="text-lg font-semibold">
+          {data.length > 0 ? "Update Interview Response" : "Schedule Interview"}
+        </h6>
       </div>
       {/* line 222 to 233 updated by sahil karnekar date 14-11-2024 */}
       <form onSubmit={handleSubmit}>
-        <div className="overflow-x-auto"
-        style={{
-          width: "fit-content"
-        }}
+        <div
+          className="overflow-x-auto"
+          style={{
+            width: "fit-content",
+          }}
         >
           <table className="min-w-full border-collapse table-auto">
-            <thead className="bg-[#ffcb9b] text-gray-500"
-            style={{
-              backgroundColor:`var(--Bg-color)`,
-              lineHeight:"1",
-            }}
+            <thead
+              className="bg-[#ffcb9b] text-gray-500"
+              style={{
+                backgroundColor: `var(--Bg-color)`,
+                lineHeight: "1",
+              }}
             >
               <tr>
                 <th className="p-2 font-semibold text-xs sm:text-base">No</th>
@@ -256,8 +289,8 @@ if (data.length > 0 && formData.interviewResponse === "") {
                 </th>
                 {data.length > 0 && (
                   <th className="p-2 font-semibold text-xs sm:text-base">
-                  Interview Response
-                </th>
+                    Interview Response
+                  </th>
                 )}
 
                 <th className="p-2 font-semibold text-xs sm:text-base">
@@ -291,9 +324,12 @@ if (data.length > 0 && formData.interviewResponse === "") {
                           ? {
                               backgroundImage: "none",
                               boxShadow: `1px 1px 4px var(--Bg-color)`,
-                              lineHeight:"1",
+                              lineHeight: "1",
                             }
-                          : {boxShadow: `1px 1px 4px var(--Bg-color)`, lineHeight:"1",}
+                          : {
+                              boxShadow: `1px 1px 4px var(--Bg-color)`,
+                              lineHeight: "1",
+                            }
                       }
                     >
                       <option value="">Select Interview</option>
@@ -314,16 +350,25 @@ if (data.length > 0 && formData.interviewResponse === "") {
                     <select
                       className="form-select w-full border rounded text-xs sm:text-base"
                       name="interviewResponse"
-                      value={response.interviewResponse ? response.interviewResponse : response.interviewRound}
+                      value={
+                        response.interviewResponse
+                          ? response.interviewResponse
+                          : response.interviewRound
+                      }
                       onChange={(e) => handleInputChange(e, index)}
                       disabled={index < data.length - 1}
-                      style={index < data.length - 1
-                        ? {
-                            backgroundImage: "none",
-                            boxShadow: `1px 1px 4px var(--Bg-color)`,
-                            lineHeight:"1",
-                          }
-                        : {boxShadow: `1px 1px 4px var(--Bg-color)`,lineHeight:"1",}}
+                      style={
+                        index < data.length - 1
+                          ? {
+                              backgroundImage: "none",
+                              boxShadow: `1px 1px 4px var(--Bg-color)`,
+                              lineHeight: "1",
+                            }
+                          : {
+                              boxShadow: `1px 1px 4px var(--Bg-color)`,
+                              lineHeight: "1",
+                            }
+                      }
                     >
                       <option value="">Update Response</option>
                       <option value="Shortlisted For Hr Round">Hr Round</option>
@@ -349,7 +394,7 @@ if (data.length > 0 && formData.interviewResponse === "") {
                       disabled={index < data.length - 1}
                       style={{
                         boxShadow: `1px 1px 4px var(--Bg-color)`,
-                        lineHeight:"1",
+                        lineHeight: "1",
                       }}
                     />
                   </td>
@@ -363,7 +408,7 @@ if (data.length > 0 && formData.interviewResponse === "") {
                       disabled={index < data.length - 1}
                       style={{
                         boxShadow: `1px 1px 4px var(--Bg-color)`,
-                        lineHeight:"1",
+                        lineHeight: "1",
                       }}
                     />
                   </td>
@@ -377,7 +422,7 @@ if (data.length > 0 && formData.interviewResponse === "") {
                       disabled={index < data.length - 1}
                       style={{
                         boxShadow: `1px 1px 4px var(--Bg-color)`,
-                        lineHeight:"1",
+                        lineHeight: "1",
                       }}
                     />
                   </td>
@@ -391,7 +436,7 @@ if (data.length > 0 && formData.interviewResponse === "") {
                       disabled={index < data.length - 1}
                       style={{
                         boxShadow: `1px 1px 4px var(--Bg-color)`,
-                        lineHeight:"1",
+                        lineHeight: "1",
                       }}
                     />
                   </td>
@@ -399,121 +444,120 @@ if (data.length > 0 && formData.interviewResponse === "") {
               ))}
               <tr className="border-b">
                 <td className="p-2 text-xs sm:text-base"></td>
-                { data.length > 0 ? (
-                <td className="p-2">
-                  <select
-                    className="form-select w-full border rounded text-xs sm:text-base"
-                    name="interviewRound"
-                    // retriving data added by sahil karnekar
-                    value={formData.interviewRound = data[data.length - 1].interviewResponse ? data[data.length - 1].interviewResponse : data[data.length - 1].interviewRound}
-                    onChange={handleInputChange}
-                    style={{
-                      boxShadow: `1px 1px 4px var(--Bg-color)`,
-                      lineHeight:"1",
-                    }}
-                  >
-                    <option value="">Select interview Round</option>
-                    <option value="Shortlisted For Hr Round">
-                    Shortlisted For Hr Round
-                    </option>
-                    <option value="Shortlisted For Technical Round">
-                    Shortlisted For Technical Round
-                    </option>
-                    <option value="Shortlisted For L1 Round">
-                    Shortlisted For L1 Round
-                    </option>
-                    <option value="Shortlisted For L2 Round">
-                    Shortlisted For L2 Round
-                    </option>
-                    <option value="Shortlisted For L3 Round">
-                    Shortlisted For L3 Round
-                    </option>
-                    <option value="Selected">Selected</option>
-                      <option value="Rejected">Rejected</option>
-                      <option value="Hold">Hold</option>
-                  </select>
-                  {errors.interviewRound && (
-                    <div className="error-message">{errors.interviewRound}</div>
-                  )}
-                </td>
-                ):(
+                {data.length > 0 ? (
                   <td className="p-2">
-                  <select
-                    className="form-select w-full border rounded text-xs sm:text-base"
-                    name="interviewRound"
-                    value={formData.interviewRound}
-                    onChange={handleInputChange}
-                    style={{
-                      boxShadow: `1px 1px 4px var(--Bg-color)`,
-                      lineHeight:"1",
-                    }}
-                  >
-                    <option value="">Select interview Round</option>
-                    <option value="Shortlisted For Hr Round">
-                      Hr Round
-                    </option>
-                    <option value="Shortlisted For Technical Round">
-                      Technical Round
-                    </option>
-                    <option value="Shortlisted For L1 Round">
-                      L1 Round
-                    </option>
-                    <option value="Shortlisted For L2 Round">
-                      L2 Round
-                    </option>
-                    <option value="Shortlisted For L3 Round">
-                      L3 Round
-                    </option>
-                    <option value="Selected">Selected</option>
+                    <select
+                      className="form-select w-full border rounded text-xs sm:text-base"
+                      name="interviewRound"
+                      // retriving data added by sahil karnekar
+                      value={
+                        (formData.interviewRound = data[data.length - 1]
+                          .interviewResponse
+                          ? data[data.length - 1].interviewResponse
+                          : data[data.length - 1].interviewRound)
+                      }
+                      onChange={handleInputChange}
+                      style={{
+                        boxShadow: `1px 1px 4px var(--Bg-color)`,
+                        lineHeight: "1",
+                      }}
+                    >
+                      <option value="">Select interview Round</option>
+                      <option value="Shortlisted For Hr Round">
+                        Shortlisted For Hr Round
+                      </option>
+                      <option value="Shortlisted For Technical Round">
+                        Shortlisted For Technical Round
+                      </option>
+                      <option value="Shortlisted For L1 Round">
+                        Shortlisted For L1 Round
+                      </option>
+                      <option value="Shortlisted For L2 Round">
+                        Shortlisted For L2 Round
+                      </option>
+                      <option value="Shortlisted For L3 Round">
+                        Shortlisted For L3 Round
+                      </option>
+                      <option value="Selected">Selected</option>
                       <option value="Rejected">Rejected</option>
                       <option value="Hold">Hold</option>
-                  </select>
-                  {errors.interviewRound && (
-                    <div className="error-message">{errors.interviewRound}</div>
-                  )}
-                </td>
-                )
-              }
-                { data.length > 0 && (
-                <td className="p-2">
-                  <select
-                    className="form-select w-full border rounded text-xs sm:text-base"
-                    name="interviewResponse"
-                    value={formData.interviewResponse}
-                    onChange={handleInputChange}
-                    style={{
-                      boxShadow: `1px 1px 4px var(--Bg-color)`,
-                      lineHeight:"1",
-                    }}
-                  >
-                    <option value="">Update Response</option>
-                    <option value="Shortlisted For Hr Round">
-                      Shortlisted For Hr Round
-                    </option>
-                    <option value="Shortlisted For Technical Round">
-                      Shortlisted For Technical Round
-                    </option>
-                    <option value="Shortlisted For L1 Round">
-                      Shortlisted For L1 Round
-                    </option>
-                    <option value="Shortlisted For L2 Round">
-                      Shortlisted For L2 Round
-                    </option>
-                    <option value="Shortlisted For L3 Round">
-                      Shortlisted For L3 Round
-                    </option>
-                    <option value="Selected">Selected</option>
-                    <option value="Rejected">Rejected</option>
-                    <option value="Hold">Hold</option>
-                  </select>
-                  {errors.interviewResponse && (
-                    <div className="error-message">
-                      {errors.interviewResponse}
-                    </div>
-                  )}
-                </td> 
-                )
-                }
+                    </select>
+                    {errors.interviewRound && (
+                      <div className="error-message">
+                        {errors.interviewRound}
+                      </div>
+                    )}
+                  </td>
+                ) : (
+                  <td className="p-2">
+                    <select
+                      className="form-select w-full border rounded text-xs sm:text-base"
+                      name="interviewRound"
+                      value={formData.interviewRound}
+                      onChange={handleInputChange}
+                      style={{
+                        boxShadow: `1px 1px 4px var(--Bg-color)`,
+                        lineHeight: "1",
+                      }}
+                    >
+                      <option value="">Select interview Round</option>
+                      <option value="Shortlisted For Hr Round">Hr Round</option>
+                      <option value="Shortlisted For Technical Round">
+                        Technical Round
+                      </option>
+                      <option value="Shortlisted For L1 Round">L1 Round</option>
+                      <option value="Shortlisted For L2 Round">L2 Round</option>
+                      <option value="Shortlisted For L3 Round">L3 Round</option>
+                      <option value="Selected">Selected</option>
+                      <option value="Rejected">Rejected</option>
+                      <option value="Hold">Hold</option>
+                    </select>
+                    {errors.interviewRound && (
+                      <div className="error-message">
+                        {errors.interviewRound}
+                      </div>
+                    )}
+                  </td>
+                )}
+                {data.length > 0 && (
+                  <td className="p-2">
+                    <select
+                      className="form-select w-full border rounded text-xs sm:text-base"
+                      name="interviewResponse"
+                      value={formData.interviewResponse}
+                      onChange={handleInputChange}
+                      style={{
+                        boxShadow: `1px 1px 4px var(--Bg-color)`,
+                        lineHeight: "1",
+                      }}
+                    >
+                      <option value="">Update Response</option>
+                      <option value="Shortlisted For Hr Round">
+                        Shortlisted For Hr Round
+                      </option>
+                      <option value="Shortlisted For Technical Round">
+                        Shortlisted For Technical Round
+                      </option>
+                      <option value="Shortlisted For L1 Round">
+                        Shortlisted For L1 Round
+                      </option>
+                      <option value="Shortlisted For L2 Round">
+                        Shortlisted For L2 Round
+                      </option>
+                      <option value="Shortlisted For L3 Round">
+                        Shortlisted For L3 Round
+                      </option>
+                      <option value="Selected">Selected</option>
+                      <option value="Rejected">Rejected</option>
+                      <option value="Hold">Hold</option>
+                    </select>
+                    {errors.interviewResponse && (
+                      <div className="error-message">
+                        {errors.interviewResponse}
+                      </div>
+                    )}
+                  </td>
+                )}
                 <td className="p-2">
                   <input
                     className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
@@ -524,7 +568,7 @@ if (data.length > 0 && formData.interviewResponse === "") {
                     placeholder="Enter Comment here..."
                     style={{
                       boxShadow: `1px 1px 4px var(--Bg-color)`,
-                      lineHeight:"1",
+                      lineHeight: "1",
                     }}
                   />
                 </td>
@@ -537,7 +581,7 @@ if (data.length > 0 && formData.interviewResponse === "") {
                     onChange={handleInputChange}
                     style={{
                       boxShadow: `1px 1px 4px var(--Bg-color)`,
-                      lineHeight:"1",
+                      lineHeight: "1",
                     }}
                   />
                   {errors.responseUpdatedDate && (
@@ -555,7 +599,7 @@ if (data.length > 0 && formData.interviewResponse === "") {
                     onChange={handleInputChange}
                     style={{
                       boxShadow: `1px 1px 4px var(--Bg-color)`,
-                      lineHeight:"1",
+                      lineHeight: "1",
                     }}
                   />
                 </td>
@@ -568,7 +612,7 @@ if (data.length > 0 && formData.interviewResponse === "") {
                     onChange={handleInputChange}
                     style={{
                       boxShadow: `1px 1px 4px var(--Bg-color)`,
-                      lineHeight:"1",
+                      lineHeight: "1",
                     }}
                   />
                 </td>
