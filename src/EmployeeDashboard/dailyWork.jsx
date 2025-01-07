@@ -834,7 +834,8 @@ function DailyWork({
   )
 }
 {
-  message.eventName === "interview_schedule" &&
+  // condition changed
+  message.eventName === "interview_schedule" && (
   `${message.candidate.employee.employeeId}` === `${employeeId}` ? (
     message.candidate.interviewResponse === "Selected" ? (
       <p>
@@ -872,6 +873,7 @@ function DailyWork({
       </p>
     )
   )
+)
 }
 
 
