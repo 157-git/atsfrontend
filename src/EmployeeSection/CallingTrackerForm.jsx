@@ -31,10 +31,9 @@ const CallingTrackerForm = ({
   loginEmployeeName,
   onsuccessfulDataUpdation,
 }) => {
-  const { employeeId } = useParams();
+  const { employeeId,userType } = useParams();
   const [submited, setSubmited] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
-  const { userType } = useParams();
 
   // sahil karnekar line 33 to 38 date 15-10-2024
   const today = new Date();
@@ -528,10 +527,10 @@ const CallingTrackerForm = ({
       };
       const updatedCallingTracker = {
         ...dataToUpdate.callingTracker,
-        candidateAddedTime: getFormattedDateTime() // or your desired value
+        candidateAddedTime: getFormattedDateTime() 
       };
       if (callingTracker.selectYesOrNo === "Interested") {
-        socket.emit("add_candidate",  updatedCallingTracker  );
+        socket.emit("add_candidate",  updatedCallingTracker );
       }
 
 

@@ -3,11 +3,13 @@ import "./addJobDescription.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API_BASE_URL } from "../api/api";
-// import WebSocketService from '../websocket/WebSocketService';
+import {useParams } from "react-router-dom";
+import { getSocket } from "../EmployeeDashboard/socket";
 
 // sahil karnekar line 9_  date : 10-10-2024
 const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
-  console.log(onAddJD);
+  const { employeeId, userType } = useParams();
+  const [socket, setSocket] = useState(null);
   const [formData, setFormData] = useState({
     companyName: onAddJD.companyName || "",
     designation: onAddJD.designation || "",
@@ -46,27 +48,15 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
     preferredQualifications: onAddJD.preferredQualifications?.length
       ? onAddJD.preferredQualifications
       : [{ employeeId: "", preferredQualificationMsg: "" }],
-    // jdAddedDate:"",
   });
 
-  // useEffect(() => {
-  //   const formatDate = () => {
-  //     const date = new Date();
-  //     const day = date.getDate();
-  //     const month = date.toLocaleString("en-US", { month: "long" });
-  //     const year = date.getFullYear();
-  //     const hours = date.getHours() % 12 || 12;
-  //     const minutes = date.getMinutes().toString().padStart(2, "0");
-  //     const ampm = date.getHours() >= 12 ? "PM" : "AM";
-  //     return `${day} ${month} ${year} ${hours}:${minutes} ${ampm}`;
-  //   };
 
-  //   // Update jdAddedDate only once on mount
-  //   setFormData((prevFormData) => ({
-  //     ...prevFormData,
-  //     jdAddedDate: formatDate(),
-  //   }));
-  // }, []); // Empty dependency array to run only once
+    // establishing socket for emmiting event
+      useEffect(() => {
+        const newSocket = getSocket();
+        setSocket(newSocket);
+      }, []);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -105,30 +95,6 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
     }));
   };
 
-  useEffect(() => {
-    let subscription;
-    const setupWebSocket = async () => {
-      try {
-        subscription = await WebSocketService.subscribeToNotifications(
-          (notification) => {
-            if (notification.type === "ADD") {
-              toast.info(notification.message);
-            }
-          }
-        );
-      } catch (error) {
-        console.error("Failed to subscribe to notifications:", error);
-      }
-    };
-
-    setupWebSocket();
-
-    return () => {
-      if (subscription) {
-        subscription.unsubscribe();
-      }
-    };
-  }, []);
 
   const handleRemove = (field, index) => {
     setFormData((prevData) => ({
@@ -140,10 +106,9 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
   //   sahil karnekar line 128 to 202 date : 10-10-2024
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
     try {
       const response = await fetch(
-        `${API_BASE_URL}/update-job-description/${onAddJD.requirementId}`,
+        `${API_BASE_URL}/update-job-description/${onAddJD.requirementId}/${employeeId}/${userType}`,
         {
           method: "PUT",
           headers: {
@@ -154,6 +119,7 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
       );
       console.log(response);
       if (response.ok) {
+        socket.emit("update_job_description", formData);
         const result = await response.text();
         console.log(result);
         toast.success(result);

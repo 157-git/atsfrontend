@@ -3,10 +3,13 @@ import "./addJobDescription.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API_BASE_URL } from "../api/api";
-// import WebSocketService from '../websocket/WebSocketService';
 import Loader from "../EmployeeSection/loader";
+import {useParams } from "react-router-dom";
+import { getSocket } from "../EmployeeDashboard/socket";
 
 const AddJobDescription = () => {
+  const { employeeId,userType } = useParams();
+  const [socket, setSocket] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     companyName: "",
@@ -51,6 +54,12 @@ const AddJobDescription = () => {
   const [errors, setErrors] = useState({});
   const [errorForOverView, setErrorForOverview] = useState("");
 
+    // establishing socket for emmiting event
+    useEffect(() => {
+      const newSocket = getSocket();
+      setSocket(newSocket);
+    }, []);
+
   useEffect(() => {
     const formatDate = () => {
       const date = new Date();
@@ -62,12 +71,14 @@ const AddJobDescription = () => {
       const ampm = date.getHours() >= 12 ? "PM" : "AM";
       return `${day} ${month} ${year} ${hours}:${minutes} ${ampm}`;
     };
+
     // Update `jdAddedDate` only once on mount
     setFormData((prevFormData) => ({
       ...prevFormData,
       jdAddedDate: formatDate(),
     }));
-  }, []); // Empty dependency array to run only once
+  }, []); 
+  // Empty dependency array to run only once
   // Validate specific field
   // line 75 to  167 added by sahil karnekar date 3-12-2024
   const validateField = (name, value) => {
@@ -138,8 +149,6 @@ const AddJobDescription = () => {
     }));
   };
 
-
-
   const handlePositionOverviewChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -165,31 +174,6 @@ const AddJobDescription = () => {
       ],
     }));
   };
-
-  useEffect(() => {
-    let subscription;
-    const setupWebSocket = async () => {
-      try {
-        subscription = await WebSocketService.subscribeToNotifications(
-          (notification) => {
-            if (notification.type === "ADD") {
-              toast.info(notification.message);
-            }
-          }
-        );
-      } catch (error) {
-        console.error("Failed to subscribe to notifications:", error);
-      }
-    };
-
-    setupWebSocket();
-
-    return () => {
-      if (subscription) {
-        subscription.unsubscribe();
-      }
-    };
-  }, []);
 
   const handleRemove = (field, index) => {
     setFormData((prevData) => ({
@@ -247,10 +231,8 @@ const AddJobDescription = () => {
       return;
     }
     console.log(errors);
-
-    console.log(formData);
     try {
-      const response = await fetch(`${API_BASE_URL}/add-requirement`, {
+      const response = await fetch(`${API_BASE_URL}/add-requirement/${employeeId}/${userType}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -259,6 +241,8 @@ const AddJobDescription = () => {
       });
       console.log(response);
       if (response.ok) {
+        console.log(" Emit Data Of " + formData);
+        socket.emit("add_job_description",  formData);
         const result = await response.text();
         setLoading(true);
         toast.success(result);
