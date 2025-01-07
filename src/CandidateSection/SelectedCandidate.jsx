@@ -116,7 +116,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     ["yearOfPassing", "Year Of Passing"]
   ]
   const { userType } = useParams();
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
 

@@ -569,7 +569,6 @@ const CallingTrackerForm = ({
         setCallingTracker(initialCallingTrackerState);
         setLineUpData(initialLineUpState);
       }
-      // console.log("-------    bye    ----------");
     } catch (error) {
       setSubmited(false);
       setLoading(false);
