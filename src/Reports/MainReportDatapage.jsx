@@ -44,13 +44,13 @@ const [finalEndDatePropState, setFinalEndDatePropState] = useState('');
       setDisplayManagers(true);
     } else if ( userType === "Manager"){
       const response = await axios.get(
-        `${API_BASE_URL}/tl-namesIds/636`
+        `${API_BASE_URL}/tl-namesIds/${employeeId}`
       );
       setTeamLeadersList(response.data);
       setDisplayTeamLeaders(true)
     }else if ( userType === "TeamLeader"){
       const response = await axios.get(
-        `${API_BASE_URL}/employeeId-names/430`
+        `${API_BASE_URL}/employeeId-names/${employeeId}`
       );
       setRecruitersList(response.data);
       setDisplayRecruiters(true)
