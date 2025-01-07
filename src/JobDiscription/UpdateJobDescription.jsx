@@ -7,10 +7,11 @@ import {useParams } from "react-router-dom";
 import { getSocket } from "../EmployeeDashboard/socket";
 
 // sahil karnekar line 9_  date : 10-10-2024
-const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
+const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp,loginEmployeeName}) => {
   const { employeeId, userType } = useParams();
   const [socket, setSocket] = useState(null);
   const [formData, setFormData] = useState({
+    employee:loginEmployeeName,
     companyName: onAddJD.companyName || "",
     designation: onAddJD.designation || "",
     position: onAddJD.position || "",
@@ -107,6 +108,7 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+     
       const response = await fetch(
         `${API_BASE_URL}/update-job-description/${onAddJD.requirementId}/${employeeId}/${userType}`,
         {
@@ -119,6 +121,7 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
       );
       console.log(response);
       if (response.ok) {
+        console.log("API Object 001 :", JSON.stringify(formData, null, 2));
         socket.emit("update_job_description", formData);
         const result = await response.text();
         console.log(result);
@@ -140,6 +143,7 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp }) => {
           skills: "",
           companyLink: "",
           detailAddress: "",
+          employeeName: loginEmployeeName,
           shift: "",
           weekOff: "",
           noticePeriod: "",

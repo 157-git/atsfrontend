@@ -7,7 +7,7 @@ import Loader from "../EmployeeSection/loader";
 import {useParams } from "react-router-dom";
 import { getSocket } from "../EmployeeDashboard/socket";
 
-const AddJobDescription = () => {
+const AddJobDescription = ({loginEmployeeName}) => {
   const { employeeId,userType } = useParams();
   const [socket, setSocket] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -28,6 +28,7 @@ const AddJobDescription = () => {
     skills: "",
     companyLink: "",
     detailAddress: "",
+    employeeName: loginEmployeeName,
     shift: "",
     weekOff: "",
     noticePeriod: "",
@@ -230,7 +231,7 @@ const AddJobDescription = () => {
       setLoading(false);
       return;
     }
-    console.log(errors);
+    console.log("API Object:", JSON.stringify(formData, null, 2));
     try {
       const response = await fetch(`${API_BASE_URL}/add-requirement/${employeeId}/${userType}`, {
         method: "POST",
@@ -239,9 +240,8 @@ const AddJobDescription = () => {
         },
         body: JSON.stringify(formData),
       });
-      console.log(response);
       if (response.ok) {
-        console.log(" Emit Data Of " + formData);
+        console.log("Emit Data Of", JSON.stringify(formData, null, 2)); 
         socket.emit("add_job_description",  formData);
         const result = await response.text();
         setLoading(true);
@@ -292,7 +292,8 @@ const AddJobDescription = () => {
       setLoading(false);
     }
   };
-  console.log(errors);
+
+
   return (
     <div>
       {loading ? (

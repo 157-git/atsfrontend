@@ -755,8 +755,6 @@ function DailyWork({
               {running ? "Pause" : "Resume"}
             </button>
 
-            {/* commented by sahil karnekar */}
-            <>
               <div>
                 <div style={{ display: "flex" }}>
                   <div
@@ -769,8 +767,7 @@ function DailyWork({
                   </div>
                 </div>
               </div>
-            </>
-
+              
             <div
               className={`notificationMainCont1 ${isOpen ? "open" : "closed"}`}
             >

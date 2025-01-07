@@ -848,9 +848,9 @@ const EmpDashboard = ({ userGroup }) => {
             />
           )}
         </div>
-        <div>{addJobDescription && <AddJobDescription />}</div>
-        <div>{showJobDiscriptions && <Home />}</div>
-        <div>{showHome && <Home />}</div>
+        <div>{addJobDescription && <AddJobDescription  loginEmployeeName={loginEmployeeName}  />}</div>
+        <div>{showJobDiscriptions && <Home loginEmployeeName={loginEmployeeName}  />}</div>
+        <div>{showHome && <Home loginEmployeeName={loginEmployeeName}  />}</div>
         <div>{showAddedResumes && <AddResumes></AddResumes>}</div>
         <div>{showInvoice && <InvoiceTable />}</div>
         <div>
