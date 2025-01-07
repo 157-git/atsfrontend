@@ -668,6 +668,21 @@ function DailyWork({
         
       });
 
+      socket.on("receive_update_job_description_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
       socket.on("connect_error", () => {
         console.log;
         ("Connection failed. Ensure your details are correct.");
@@ -874,10 +889,15 @@ function DailyWork({
     </p>
   )
 }
-
-
-
-
+{
+  message.eventName === "update_job_description" && (
+    <p>
+    {index + 1} - Company Name : {message.candidate.companyName} {message.candidate.designation} Was
+<span> Updated </span>
+         By : {message.candidate.employeeName} On : {" "} {message.candidate.statusUpdateDate}
+    </p>
+  )
+}
                         <hr />
                         {/* <p>{message.number}</p> */}
                       </>

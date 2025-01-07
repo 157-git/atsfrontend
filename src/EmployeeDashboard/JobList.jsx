@@ -13,7 +13,7 @@ import axios from "../api/api";
 
 // SwapnilRokade_JobListing_filter_option__18/07
 
-const JobListing = () => {
+const JobListing = ({loginEmployeeName}) => {
   const { employeeId, userType } = useParams();
   const [jobDescriptions, setJobDescriptions] = useState([]);
   const [filterOptions, setFilterOptions] = useState([]);
@@ -870,8 +870,8 @@ const JobListing = () => {
         <>
           <UpdateJobDescription
             onAddJD={updateJD}
-            // sahil karnekar line 599 date : 10-10-2024
             toggleUpdateCompProp={handleUpdateCompProp}
+            loginEmployeeName={loginEmployeeName}
           />
         </>
       )}
@@ -880,10 +880,10 @@ const JobListing = () => {
 };
 
 //Arshad Attar Commented This : 11-10-2024
-const JobList = () => {
+const JobList = ({loginEmployeeName}) => {
   return (
     <div className="job-list">
-      <JobListing />
+      <JobListing loginEmployeeName={loginEmployeeName} />
     </div>
   );
 };

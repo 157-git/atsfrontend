@@ -28,6 +28,7 @@ const AddJobDescription = ({loginEmployeeName}) => {
     skills: "",
     companyLink: "",
     detailAddress: "",
+    employeeName: loginEmployeeName,
     shift: "",
     weekOff: "",
     noticePeriod: "",
@@ -35,7 +36,6 @@ const AddJobDescription = ({loginEmployeeName}) => {
     perks: "",
     incentive: "",
     reportingHierarchy: "",
-    employeeName: loginEmployeeName,
     gender: "",
     documentation: "",
     ageCriteria: "",
@@ -231,7 +231,7 @@ const AddJobDescription = ({loginEmployeeName}) => {
       setLoading(false);
       return;
     }
-    console.log(errors);
+    console.log("API Object:", JSON.stringify(formData, null, 2));
     try {
       const response = await fetch(`${API_BASE_URL}/add-requirement/${employeeId}/${userType}`, {
         method: "POST",
@@ -240,9 +240,9 @@ const AddJobDescription = ({loginEmployeeName}) => {
         },
         body: JSON.stringify(formData),
       });
-      console.log(response);
       if (response.ok) {
-        console.log(formData);
+
+        console.log("Emit Data Of", JSON.stringify(formData, null, 2)); 
         socket.emit("add_job_description",  formData);
         const result = await response.text();
         setLoading(true);
@@ -293,7 +293,8 @@ const AddJobDescription = ({loginEmployeeName}) => {
       setLoading(false);
     }
   };
-  console.log(errors);
+
+
   return (
     <div>
       {loading ? (
