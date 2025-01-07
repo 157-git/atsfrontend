@@ -1427,7 +1427,7 @@ function Sidebar({
                 {/* toggeleProfitChart */}
                 {/* ArshadAttar_EmpDashboard_Added_SuperUser_11/07/2024_LineNo_660 */}
 
-                {userType != "Vendor"  ? (
+                {userType != "Vendor" ? (
                   <li
                     className={activeSubMenu === "database" ? "active" : ""}
                     onClick={toggleSubMenu("database")}

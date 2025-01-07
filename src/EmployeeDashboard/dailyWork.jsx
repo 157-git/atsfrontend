@@ -653,6 +653,21 @@ function DailyWork({
         
       });
 
+      socket.on("receive_add_job_description_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
       socket.on("connect_error", () => {
         console.log;
         ("Connection failed. Ensure your details are correct.");
@@ -762,30 +777,7 @@ function DailyWork({
               >
                 {running ? "Pause" : "Resume"}
               </button>
-
-              {/* commented by sahil karnekar */}
-              <>
-                {(employeeId == 5 ||
-                  employeeId == 977 ||
-                  employeeId == 1342 ||
-                  employeeId == 391 ||
-                  employeeId == 444 ||
-                  employeeId == 1 ||
-                  employeeId == 432 ||
-                  employeeId == 871 ||
-                  employeeId == 390 ||
-                  employeeId == 1340 ||
-                  employeeId == 2 ||
-                  employeeId == 4 ||
-                  employeeId == 430 ||
-                  employeeId == 869 ||
-                  employeeId == 1341 ||
-                  employeeId == 3 ||
-                  employeeId == 430 ||
-                  employeeId == 434 ||
-                  employeeId == 870 ||
-                  employeeId == 636) && (
-                  <div>
+              <div>
                     <div style={{ display: "flex" }}>
                       <div
                         style={{ marginRight: "10px" }}
@@ -797,8 +789,6 @@ function DailyWork({
                       </div>
                     </div>
                   </div>
-                )}
-              </>
 
               <div
                 className={`notificationMainCont1 ${
@@ -834,7 +824,6 @@ function DailyWork({
   )
 }
 {
-  
   // condition changed
   message.eventName === "interview_schedule" && (
   `${message.candidate.employee.employeeId}` === `${employeeId}` ? (
@@ -875,6 +864,15 @@ function DailyWork({
     )
   )
 )
+}
+{
+  message.eventName === "add_job_description" && (
+    <p>
+    {index + 1} - New Job Dscription Company Name : {message.candidate.companyName} {message.candidate.designation} Was
+<span> Added </span>
+         By : {message.candidate.employeeName} On : {" "} {message.candidate.jdAddedDate}
+    </p>
+  )
 }
 
 
