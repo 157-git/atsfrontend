@@ -13,6 +13,8 @@ import PDFGenerator from "./PDFMain";
 import SliderReport from "./SliderReports";
 import axios from "axios";
 import { API_BASE_URL } from "../api/api";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
          
          const LineUpDataDummy = [
            {
@@ -712,29 +714,107 @@ import { API_BASE_URL } from "../api/api";
              (item) => item.status === "noshow"
            ).length;
          
-           // Prachi pdf download
-           const handleDownloadPdf = async () => {
-             try {
-               // Replace this with your logic to create or fetch the PDF content
-               const pdfContent = await createPdf(
-                 reportDataDatewise,
-                 SuperUserName,
-                 ManagerName,
-                 TeamLeaderName,
-                 RecruiterName,
-                 DateReportData,
-                 totalCandidatepdf,
-                 // reportDataDatewise
-               ); // Example function to create PDF content
-         
-               window.open(pdfContent, "_blank");
-         
-               // Open the modal
-               setModalIsOpen(true);
-             } catch (error) {
-               console.error("Error creating PDF:", error);
-             }
-           };
+           // sk pdf download
+          //  const handleDownloadPdf = async() => {
+          //   try {
+          //     // Create or fetch the PDF content (if needed separately)
+          //     const pdfContent = await createPdf(
+          //       reportDataDatewise,
+          //       SuperUserName,
+          //       ManagerName,
+          //       TeamLeaderName,
+          //       RecruiterName,
+          //       DateReportData,
+          //       totalCandidatepdf,
+          //       // reportDataDatewise
+          //     ); // Example function to create PDF content
+          
+          //     // Apply styling changes
+          //     const forPieWidth = document.querySelectorAll('canvas');
+          //     if (forPieWidth.length > 0) {
+          //       forPieWidth[0].style.width = '200px';
+          //       forPieWidth[0].style.height = '230px';
+          //     }
+          
+          //     const forPieWidthContainer = document.getElementsByClassName('piechrt-legends');
+          //     if (forPieWidthContainer.length > 0) {
+          //       forPieWidthContainer[0].style.height = '220px';
+          //       forPieWidthContainer[0].style.width = '260px';
+          //     }
+          
+          //     const forchartcontainerWidthContainer = document.getElementsByClassName('piechart-container');
+          //     if (forchartcontainerWidthContainer.length > 0) {
+          //       forchartcontainerWidthContainer[0].style.justifyContent = 'space-between';
+          //       forchartcontainerWidthContainer[0].style.width = '550px';
+          //     }
+          
+          //     const input = document.getElementById('divToPrint');
+          
+          //     // Optional: Adjust the canvas dimensions for better resolution
+          //     const options = {
+          //       scale: 2, // Adjust the scale for higher resolution
+          //     };
+          
+          //     html2canvas(input, options).then((canvas) => {
+          //       const imgData = canvas.toDataURL('image/png'); // Use PNG format
+          //       const pdf = new jsPDF({
+          //         orientation: 'portrait', // 'landscape' or 'portrait'
+          //         unit: 'px',
+          //         format: [canvas.width, canvas.height], // Match the canvas size
+          //       });
+          
+          //       pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+          //       pdf.save('download.pdf'); // Save the file as 'download.pdf'
+          
+          //       // Cleanup styling changes
+          //       if (forPieWidth.length > 0) {
+          //         forPieWidth[0].style.width = '';
+          //         forPieWidth[0].style.height = '';
+          //       }
+          
+          //       if (forPieWidthContainer.length > 0) {
+          //         forPieWidthContainer[0].style.height = '';
+          //         forPieWidthContainer[0].style.width = '';
+          //       }
+          
+          //       if (forchartcontainerWidthContainer.length > 0) {
+          //         forchartcontainerWidthContainer[0].style.justifyContent = '';
+          //         forchartcontainerWidthContainer[0].style.width = '';
+          //       }
+          //     });
+          
+          //     // Open the modal (if necessary)
+          //     setModalIsOpen(true);
+          //   } catch (error) {
+          //     console.error('Error creating PDF:', error);
+          //   }
+          // };
+          
+          const handleDownloadPdf = async () => {
+            try {
+              // Replace this with your logic to create or fetch the PDF content
+              const pdfContent = await createPdf(
+                reportDataDatewise,
+                SuperUserName,
+                ManagerName,
+                TeamLeaderName,
+                RecruiterName,
+                DateReportData,
+                totalCandidatepdf,
+                // reportDataDatewise
+              ); // Example function to create PDF content
+        
+              window.open(pdfContent, "_blank");
+        
+              // Open the modal
+              setModalIsOpen(true);
+            } catch (error) {
+              console.error("Error creating PDF:", error);
+            }
+          };
+
+          
+                   
            const closeModal = () => {
              // Clear the PDF URL and close the modal
              setPdfUrl("");
@@ -758,7 +838,9 @@ setLineUpDataReport(true);
 
          
            return (
-             <div className="report-App-after">
+             <div className="report-App-after"
+            
+             >
         
                <div className="container-after1">
                 

@@ -75,10 +75,12 @@
            
          
            return (
-             <div className="chart-container">
+             <div className="chart-container"
+             id="divToPrint"
+              >
                <div className='piechart-container'>
                <Pie data={tableData}  options={options}/>
-               </div>
+
                <div>
                    <div className='piechrt-legends'>
                    <h5 className='text-index-piechart'>Index</h5>
@@ -118,6 +120,8 @@
          
          
                </div>
+               </div>
+             
          
                
              </div>
