@@ -36,59 +36,80 @@
          
                          </div>
                      </div>
-                     <div className="attendanceTableData">
+         
                      <table id='shortlisted-table-id' className='attendance-table'>
                          <thead>
                              <tr className='attencerows-head'>
+                                 <th className='attendenceheading'>
+                                     <input type='checkbox'
+                                     name='selectAll'
+                                     
+                                     />
+         
+                                 </th>
                                  <th className="attendanceheading"> No.</th>
+                         <th className="attendanceheading">Date</th>
+                         <th className="attendanceheading">Time</th>
                          <th className="attendanceheading">Candidate's Id</th>
-                         <th className="attendanceheading">Added Date Time</th>
                          <th className="attendanceheading">Recruiter's Name</th>
                          <th className="attendanceheading">Candidate's Name</th>
                          <th className="attendanceheading">Candidate's Email</th>
                          <th className="attendanceheading">Contact Number</th>
+                         <th className="attendanceheading">Whatsapp Number</th>
                          <th className="attendanceheading">Source Name</th>
                          <th className="attendanceheading">Job Designation</th>
                          <th className="attendanceheading">Job Id</th>
                          <th className="attendanceheading">Applying Company</th>
+                         <th className="attendanceheading">Communication Rating</th>
                          <th className="attendanceheading">Current Location</th>
+                         <th className="attendanceheading">Full Address</th>
+                         <th className="attendanceheading">Calling Remark</th>
+                         <th className="attendanceheading">Recruiter's Incentive</th>
                          <th className="attendanceheading">Interested or Not</th>
                          <th className="attendanceheading">Current Company</th>
                          <th className="attendanceheading">Total Experience</th>
+                         <th className="attendanceheading">Relevant Experience</th>
                          <th className="attendanceheading">Current CTC</th>
                          <th className="attendanceheading">Expected CTC</th>
-                         <th className="attendanceheading">Holding Any Offe</th>
-                         <th className="attendanceheading">Notice Period</th>
-                         <th className="attendanceheading">Availability For Interview</th>
-                         <th className="attendanceheading">Interview Status</th>
+                         <th className="attendanceheading">Date Of Birth</th>
+                         <th className="attendanceheading">Gender</th>
+                         <th className="attendanceheading">Education</th>
+                         <th className="attendanceheading">Year Of Passing</th>
+                         <th className="attendanceheading">Call Summary</th>
                         
+                         <th className="attendanceheading">Holding Any Offer</th>
+                         <th className="attendanceheading">Offer Letter Message</th>
+                         <th className="attendanceheading">Resume</th>
+                         <th className="attendanceheading">Notice Period</th>
+                         <th className="attendanceheading">Message For Team Leader</th>
+                         <th className="attendanceheading">Interview Slot</th>
+                         <th className="attendanceheading">Interview Time</th>
+                         <th className="attendanceheading">Final Status</th>
+                         <th className="attendanceheading">Action</th>
+         
+         
                              </tr>
                          </thead>
                          <tbody>
                                     
-                             {filteredLineUpItems.map(((item,index) =>(
+                             {filteredLineUpItems.map((item=>(
                                  <tr key={item.id} className='attendancerows'>
-                                     <td className="tabledata ">{index +1}</td>
-                                     <td className="tabledata ">{item.candidateId}</td>
-                                     <td className="tabledata ">{item.candidateAddedTime}</td>
-                                     <td className="tabledata ">{item.recruiterName}</td>
-                                     <td className="tabledata ">{item.candidateName}</td>
-                                     <td className="tabledata ">{item.candidateEmail}</td>
-                                     <td className="tabledata ">{item.contactNumber}</td>
-                                     <td className="tabledata ">{item.sourceName}</td>
-                                     <td className="tabledata ">{item.jobDesignation}</td>
-                                     <td className="tabledata ">{item.requirementId}</td>
-                                     <td className="tabledata ">{item.requirementCompany}</td> 
-                                     <td className="tabledata ">{item.currentLocation}</td>
-                                     <td className="tabledata ">{item.selectYesOrNo}</td>  
-                                     <td className="tabledata ">{item.companyName}</td>
-                                     <td className="tabledata ">{item.experienceYear +"Years" +item.experienceYear + "Months" }</td>
-                                     <td className="tabledata ">{item.currentCTCLakh +"Lakh" +item.currentCTCThousand + "Thousand" }</td>
-                                     <td className="tabledata ">{item.expectedCTCLakh +"Lakh" +item.expectedCTCThousand + "Thousand" }</td>
-                                     <td className="tabledata ">{item.holdingAnyOffer}</td> 
-                                     <td className="tabledata ">{item.noticePeriod}</td>
-                                     <td className="tabledata ">{item.availabilityForInterview}</td>  
-                                     <td className="tabledata ">{item.finalStatus}</td>
+                                     <td>{item.id}</td>
+                                     <td>{item.date}</td>
+                                     <td>{item.candidateAddedTime}</td>
+                                     <td></td>
+                                     <td>{item.candidateId}</td>
+                                     <td>{item.recruiterName}</td>
+                                     <td>{item.candidateName}</td>
+                                     <td>{item.candidateEmail}</td>
+                                     <td>{item.contactNumber}</td>
+                                     <td>"wathsapp number"</td>
+                                     <td>{item.sourceName}</td>
+                                     <td>{item.jobDesignation}</td>
+                                     <td>{item.requirementId}</td> 
+                                     <td>{item.companyName}</td>
+                                     <td>{item.communicationRating}</td>  
+                                     <td>{item.currentLocation}</td>
          
                                      
                                  </tr>
@@ -98,7 +119,6 @@
          
          
                      </table>
-                     </div>
          
                  </div>
              )

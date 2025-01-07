@@ -1,45 +1,45 @@
-{/* Name:-Prachi Parab Component:-Report data page
-           End LineNo:-1 to 249 Date:-04/07 */}
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+{
+  /* Name:-Prachi Parab Component:-Report data page
+           End LineNo:-1 to 249 Date:-04/07 */
+}
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import "../Reports/MainReportDatapage.css";
 import CreateReportTable from "../Reports/CreateReportTable";
 import axios from "axios";
 import { json, useParams } from "react-router-dom";
 import "../Reports/MainReportDatapage.css";
 import { API_BASE_URL } from "../api/api";
-import { data } from 'autoprefixer';
-import Loader from '../EmployeeSection/loader';
-import { Avatar, Card, List, Modal } from 'antd';
-
+import { data } from "autoprefixer";
+import Loader from "../EmployeeSection/loader";
+import { Avatar, Card, List, Modal } from "antd";
 
 const MonthReport = () => {
   const { userType } = useParams();
   const { employeeId } = useParams();
   const [reportDataDatewise, setReportDataDatewise] = useState(null);
-  const [selectedRole, setSelectedRole] = useState('');
-const [selectedIds, setSelectedIds] = useState([]);
-const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState("");
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [openSelectDate, setOpenSelectDate] = useState(false);
   const [activeButton, setActiveButton] = useState(null);
-  const[displayManagerDivWithBtn, setdisplayManagerDivWithBtn] = useState(false);
-  const [openReport, setOpenReport]= useState(false);
-const [loading, setLoading]= useState(false);
-const [finalStartDatePropState, setFinalStartDatePropState] = useState('');
-const [finalEndDatePropState, setFinalEndDatePropState] = useState('');
+  const [displayManagerDivWithBtn, setdisplayManagerDivWithBtn] =
+    useState(false);
+  const [openReport, setOpenReport] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [finalStartDatePropState, setFinalStartDatePropState] = useState("");
+  const [finalEndDatePropState, setFinalEndDatePropState] = useState("");
   const handleOpenSelectDate = (id) => {
     setActiveButton(id); // Set active button
     setOpenSelectDate(true);
   };
-  
+
   const [managersList, setManagersList] = useState([]);
-  const [teamLeadersList, setTeamLeadersList]= useState([]);
+  const [teamLeadersList, setTeamLeadersList] = useState([]);
   const [recruitersList, setRecruitersList] = useState([]);
   const handleDisplayManagers = async () => {
-    if ( userType === "SuperUser") {
-      const response = await axios.get(
-        `${API_BASE_URL}/get-all-managers`
-      );
+    if (userType === "SuperUser") {
+      const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
       setManagersList(response.data);
       setDisplayManagers(true);
     } else if ( userType === "Manager"){
@@ -53,14 +53,10 @@ const [finalEndDatePropState, setFinalEndDatePropState] = useState('');
         `${API_BASE_URL}/employeeId-names/${employeeId}`
       );
       setRecruitersList(response.data);
-      setDisplayRecruiters(true)
+      setDisplayRecruiters(true);
     }
-   setDisplayModalContainer(true)
-  }
-  console.log(teamLeadersList);
-  
-
-  console.log(managersList);
+    setDisplayModalContainer(true);
+  };
 
   const scrollLeft = () => {
     const container = document.querySelector(".typesOfReportDiv");
@@ -72,24 +68,20 @@ const [finalEndDatePropState, setFinalEndDatePropState] = useState('');
     container.scrollBy({ left: 300, behavior: "smooth" });
   };
 
-  const handleOpenDownArrowContent = async(managerid)=>{
-   setSelectedIds([]);
-try {
-  const response = await axios.get(
-    `${API_BASE_URL}/tl-namesIds/${managerid}`
-  );
-  setTeamLeadersList(response.data);
-setDisplayTeamLeaders(true);
-} catch (error) {
-  console.log(error);
-  
-}
-  
+  const handleOpenDownArrowContent = async (managerid) => {
+    setSelectedIds([]);
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/tl-namesIds/${managerid}`
+      );
+      setTeamLeadersList(response.data);
+      setDisplayTeamLeaders(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    
-  }
-
-  const handleOpenDownArrowContentForRecruiters = async (teamLeaderId)=>{
+  const handleOpenDownArrowContentForRecruiters = async (teamLeaderId) => {
     setSelectedIds([]);
     const response = await axios.get(
       `${API_BASE_URL}/employeeId-names/${teamLeaderId}`
@@ -97,92 +89,83 @@ setDisplayTeamLeaders(true);
     setRecruitersList(response.data);
     console.log(response.data);
     setDisplayRecruiters(true);
-  }
+  };
 
+  const handleOk = () => {
+    setDisplayModalContainer(false);
+  };
+  const handleCancel = () => {
+    setDisplayModalContainer(false);
+  };
 
+  const handleCheckboxChange = async (role, id, completeValueObject) => {
+    setLoading(true);
 
-const handleOk = () => {
-  setDisplayModalContainer(false);
-};
-const handleCancel = () => {
-  setDisplayModalContainer(false);
-};
+    // Determine updated IDs manually
+    let updatedIds;
+    if (selectedRole && selectedRole !== role) {
+      setSelectedRole(role);
+      updatedIds = [id]; // Reset selection for a new role
+    } else {
+      updatedIds = selectedIds.includes(id)
+        ? selectedIds.filter((selectedId) => selectedId !== id) // Remove unselected ID
+        : [...selectedIds, id]; // Add new selected ID
+      setSelectedRole(role);
+    }
 
+    // Update state
+    setSelectedIds(updatedIds);
 
-const handleCheckboxChange = async (role, id, completeValueObject) => {
-  setLoading(true);
+    // Handle dependent display logic
+    if (role === "Manager") {
+      setDisplayTeamLeaders(false);
+      setDisplayRecruiters(false);
+    } else if (role === "TeamLeader") {
+      setDisplayRecruiters(false);
+    }
 
-  // Determine updated IDs manually
-  let updatedIds;
-  if (selectedRole && selectedRole !== role) {
-    setSelectedRole(role);
-    updatedIds = [id]; // Reset selection for a new role
-  } else {
-    updatedIds = selectedIds.includes(id)
-      ? selectedIds.filter((selectedId) => selectedId !== id) // Remove unselected ID
-      : [...selectedIds, id]; // Add new selected ID
-    setSelectedRole(role);
-  }
+    // Log the complete value object
+    console.log("Complete Value Object:", completeValueObject);
 
-  // Update state
-  setSelectedIds(updatedIds);
+    // Prepare API call
+    const userIdForApi = updatedIds.join(",");
+    console.log("Selected IDs for API:", userIdForApi);
 
-  // Handle dependent display logic
-  if (role === "Manager") {
-    setDisplayTeamLeaders(false);
-    setDisplayRecruiters(false);
-  } else if (role === "TeamLeader") {
-    setDisplayRecruiters(false);
-  }
+    // Date handling
+    const startDate = showCustomDiv ? customStartDate : startDate1;
+    const endDate = showCustomDiv ? customEndDate : endDate1;
+    setFinalStartDatePropState(startDate);
+    setFinalEndDatePropState(endDate);
 
-  // Log the complete value object
-  console.log("Complete Value Object:", completeValueObject);
+    // API Call
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/report-count/${userIdForApi}/${role}/${startDate}/${endDate}`
+      );
+      console.log("API Response:", response.data);
+      setReportDataDatewise(response.data);
+      setOpenReport(true);
+    } catch (error) {
+      console.error("Error fetching report data:", error);
+      // Provide user feedback here (e.g., toast)
+    }
 
-  // Prepare API call
-  const userIdForApi = updatedIds.join(",");
-  console.log("Selected IDs for API:", userIdForApi);
+    setLoading(false);
+  };
 
-  // Date handling
-  const startDate = showCustomDiv ? customStartDate : startDate1;
-  const endDate = showCustomDiv ? customEndDate : endDate1;
-  setFinalStartDatePropState(startDate);
-  setFinalEndDatePropState(endDate);
+  const [displayManagers, setDisplayManagers] = useState(false);
+  const [displayTeamLeaders, setDisplayTeamLeaders] = useState(false);
+  const [displayRecruiters, setDisplayRecruiters] = useState(false);
+  const [displayMoreButton, setDisplayMoreButton] = useState(false);
+  const [displayModalContainer, setDisplayModalContainer] = useState(false);
 
-  // API Call
-  try {
-    const response = await axios.get(
-      `${API_BASE_URL}/report-count/${userIdForApi}/${role}/${startDate}/${endDate}`
-    );
-    console.log("API Response:", response.data);
-    setReportDataDatewise(response.data);
-    setOpenReport(true);
-  } catch (error) {
-    console.error("Error fetching report data:", error);
-    // Provide user feedback here (e.g., toast)
-  }
-
-  setLoading(false);
-};
-
-console.log(selectedRole);
-console.log(selectedIds);
-
-console.log(reportDataDatewise);
- const [displayManagers, setDisplayManagers] = useState(false);
- const [displayTeamLeaders, setDisplayTeamLeaders] = useState(false);
- const [displayRecruiters, setDisplayRecruiters] = useState(false);
- const [displayMoreButton, setDisplayMoreButton] = useState(false);
- const [displayModalContainer, setDisplayModalContainer] = useState(false);
-
-
-
-// date inputs
-const [selectedOption, setSelectedOption] = useState("");
+  // date inputs
+  const [selectedOption, setSelectedOption] = useState("");
   const [showCustomDiv, setShowCustomDiv] = useState(false);
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
-  const[startDate1, setStartDate1]=useState('');
-  const[endDate1, setEndDate1]=useState('');
+  const [startDate1, setStartDate1] = useState("");
+  const [endDate1, setEndDate1] = useState("");
 
   const calculateDateRange = (option) => {
     const today = new Date();
@@ -257,70 +240,77 @@ const [selectedOption, setSelectedOption] = useState("");
       endDate: end,
     });
   };
-console.log(displayManagerDivWithBtn);
 
   return (
     <>
       <div className="listofButtons11">
-
         <button className="scrollButton left" onClick={scrollLeft}>
-        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M640-80 240-480l400-400 71 71-329 329 329 329-71 71Z"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#000000"
+          >
+            <path d="M640-80 240-480l400-400 71 71-329 329 329 329-71 71Z" />
+          </svg>
         </button>
         <div className="typesOfReportDiv">
-  {[
-    { id: 1, label: "Candidate Report" },
-    { id: 2, label: "Invoice Report" },
-    { id: 3, label: "Recruiters Report" },
-    { id: 4, label: "Candidate Report" },
-    { id: 5, label: "Candidate Report" },
-    { id: 6, label: "Candidate Report" },
-    { id: 7, label: "Candidate Report" },
-  ].map((report, index) => (
-    <div
-      key={report.id}
-      className={`typeofReportSubDiv ${
-        activeButton === report.id ? "active" : ""
-      }`}
-      onClick={() => handleOpenSelectDate(report.id)}
-    >
-      <div className="subdiviconandtext">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="24px"
-          viewBox="0 -960 960 960"
-          width="24px"
-          fill="#000000"
-        >
-          <path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z" />
-        </svg>
-      </div>
-      <div className="subdiviconandtext1">
-        <div className="textDiv1">{report.label}</div>
-      </div>
-    </div>
-  ))}
-</div>
+          {[
+            { id: 1, label: "Candidate Report" },
+            { id: 2, label: "Invoice Report" },
+            { id: 3, label: "Recruiters Report" },
+            { id: 4, label: "Candidate Report" },
+            { id: 5, label: "Candidate Report" },
+            { id: 6, label: "Candidate Report" },
+            { id: 7, label: "Candidate Report" },
+          ].map((report, index) => (
+            <div
+              key={report.id}
+              className={`typeofReportSubDiv ${
+                activeButton === report.id ? "active" : ""
+              }`}
+              onClick={() => handleOpenSelectDate(report.id)}
+            >
+              <div className="subdiviconandtext">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill="#000000"
+                >
+                  <path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z" />
+                </svg>
+              </div>
+              <div className="subdiviconandtext1">
+                <div className="textDiv1">{report.label}</div>
+              </div>
+            </div>
+          ))}
+        </div>
         <button className="scrollButton right" onClick={scrollRight}>
-        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#000000"
+          >
+            <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z" />
+          </svg>
         </button>
       </div>
 
-
-      {
-        openSelectDate && (
-          <div className="tracker-date-report-option">
+      {openSelectDate && (
+        <div className="tracker-date-report-option">
           <div className="histry-date-div">
+            {displayMoreButton && (
+              <button className="daily-tr-btn" onClick={handleDisplayManagers}>
+                Select More Users
+              </button>
+            )}
 
-{
-displayMoreButton && (
-  <button className='daily-tr-btn'
-  onClick={handleDisplayManagers}
->Select More Users</button>
-)
-}
-               
-          
-         
             <label className="PI-radio-label">
               <input
                 type="radio"
@@ -398,7 +388,7 @@ displayMoreButton && (
                     value={customStartDate}
                     onChange={handleCustomStartDateChange}
                   />
-  
+
                   <label>End Date:</label>
                   <input
                     type="date"
@@ -410,169 +400,218 @@ displayMoreButton && (
             </div>
           </center>
         </div>
-        )
-      }
+      )}
 
-{
-  displayModalContainer && (
-    <>
-    <Modal
-    width={1000}
-    open={displayModalContainer} onOk={handleOk} onCancel={handleCancel}
-    
-    // okButtonProps={{
-    //   style: { backgroundColor: 'green', color: 'white', border: 'none' },
-    //   className: 'custom-ok-button',
-    // }}
-    // cancelButtonProps={{
-    //   style: { backgroundColor: 'red', color: 'white', border: 'none' },
-    //   className: 'custom-cancel-button',
-    // }}
-    // okText="Confirm" // Change OK button text
-    // cancelText="Dismiss" // Change Cancel button text
-    >
-    <div className="mainForLists">
-    {
-     displayManagers && (
-      <Card
-      hoverable
-      style={{
-        width: 300,
-        marginRight:10,
-          height:"65vh",
-        overflowY:"scroll"
-      }}
-      title={"Managers"}
-    >
-  <List
-  
-          itemLayout="horizontal"
-          dataSource={managersList}
-          renderItem={(item, index) => (
-            <List.Item>
-               <input
-                   type="checkbox"
-                   checked={selectedRole === "Manager" && selectedIds.includes(item.managerId)}
-                   onChange={() => handleCheckboxChange("Manager", item.managerId, item)}
-                 />
-              <List.Item.Meta
-                avatar={<Avatar src={item.profileImage ? item.profileImage : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
-                title={item.managerName}
-              />
-               <svg
-                     onClick={((e)=>handleOpenDownArrowContent(item.managerId))}
-                     xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" /></svg>
-            </List.Item>
-          )}
+      {displayModalContainer && (
+        <>
+          <Modal
+            width={1000}
+            open={displayModalContainer}
+            onOk={handleOk}
+            onCancel={handleCancel}
+
+            // okButtonProps={{
+            //   style: { backgroundColor: 'green', color: 'white', border: 'none' },
+            //   className: 'custom-ok-button',
+            // }}
+            // cancelButtonProps={{
+            //   style: { backgroundColor: 'red', color: 'white', border: 'none' },
+            //   className: 'custom-cancel-button',
+            // }}
+            // okText="Confirm" // Change OK button text
+            // cancelText="Dismiss" // Change Cancel button text
+          >
+            <div className="mainForLists">
+              {displayManagers && (
+                <Card
+                  hoverable
+                  style={{
+                    width: 300,
+                    marginRight: 10,
+                    height: "65vh",
+                    overflowY: "scroll",
+                  }}
+                  title={"Managers"}
+                >
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={managersList}
+                    renderItem={(item, index) => (
+                      <List.Item>
+                        <input
+                          type="checkbox"
+                          checked={
+                            selectedRole === "Manager" &&
+                            selectedIds.includes(item.managerId)
+                          }
+                          onChange={() =>
+                            handleCheckboxChange(
+                              "Manager",
+                              item.managerId,
+                              item
+                            )
+                          }
+                        />
+                        <List.Item.Meta
+                          avatar={
+                            <Avatar
+                              src={
+                                item.profileImage
+                                  ? item.profileImage
+                                  : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                              }
+                            />
+                          }
+                          title={item.managerName}
+                        />
+                        <svg
+                          onClick={(e) =>
+                            handleOpenDownArrowContent(item.managerId)
+                          }
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="24px"
+                          viewBox="0 -960 960 960"
+                          width="24px"
+                          fill="#000000"
+                        >
+                          <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
+                        </svg>
+                      </List.Item>
+                    )}
+                  />
+                </Card>
+              )}
+              {displayTeamLeaders && (
+                <>
+                  {
+                    <Card
+                      hoverable
+                      style={{
+                        width: 300,
+                        marginRight: 10,
+                        height: "65vh",
+                        overflowY: "scroll",
+                      }}
+                      title={"Team Leaders"}
+                    >
+                      <List
+                        itemLayout="horizontal"
+                        dataSource={teamLeadersList}
+                        renderItem={(teamLeader, index) => (
+                          <List.Item>
+                            <input
+                              type="checkbox"
+                              checked={
+                                selectedRole === "TeamLeader" &&
+                                selectedIds.includes(teamLeader.teamLeaderId)
+                              }
+                              onChange={() =>
+                                handleCheckboxChange(
+                                  "TeamLeader",
+                                  teamLeader.teamLeaderId,
+                                  teamLeader
+                                )
+                              }
+                            />
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  src={
+                                    teamLeader.profileImage
+                                      ? teamLeader.profileImage
+                                      : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                                  }
+                                />
+                              }
+                              title={teamLeader.teamLeaderName}
+                            />
+                            <svg
+                              onClick={(e) =>
+                                handleOpenDownArrowContentForRecruiters(
+                                  teamLeader.teamLeaderId
+                                )
+                              }
+                              xmlns="http://www.w3.org/2000/svg"
+                              height="24px"
+                              viewBox="0 -960 960 960"
+                              width="24px"
+                              fill="#000000"
+                            >
+                              <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
+                            </svg>
+                          </List.Item>
+                        )}
+                      />
+                    </Card>
+                  }
+                </>
+              )}
+
+              {displayRecruiters && (
+                <>
+                  {
+                    <Card
+                      hoverable
+                      style={{
+                        width: 300,
+                        height: "65vh",
+                        overflowY: "scroll",
+                      }}
+                      title={"Recruiters"}
+                    >
+                      <List
+                        itemLayout="horizontal"
+                        dataSource={recruitersList}
+                        renderItem={(recruiter, index) => (
+                          <List.Item>
+                            <input
+                              type="checkbox"
+                              checked={
+                                selectedRole === "Recruiters" &&
+                                selectedIds.includes(recruiter.employeeId)
+                              }
+                              onChange={() =>
+                                handleCheckboxChange(
+                                  "Recruiters",
+                                  recruiter.employeeId,
+                                  recruiter
+                                )
+                              }
+                            />
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  src={
+                                    recruiter.profileImage
+                                      ? recruiter.profileImage
+                                      : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                                  }
+                                />
+                              }
+                              title={recruiter.employeeName}
+                            />
+                          </List.Item>
+                        )}
+                      />
+                    </Card>
+                  }
+                </>
+              )}
+            </div>
+          </Modal>
+        </>
+      )}
+
+      {loading && <Loader />}
+      {openReport && (
+        <CreateReportTable
+          reportDataDatewise={reportDataDatewise}
+          selectedIdsProp={selectedIds}
+          selectedJobRole={selectedRole}
+          finalStartDatePropState={finalStartDatePropState}
+          finalEndDatePropState={finalEndDatePropState}
         />
-    </Card>
-
-     )
-    }
-    {
-     displayTeamLeaders && (
-<>
-       {
-<Card
-    hoverable
-    style={{
-      width: 300,
-      marginRight:10,
-          height:"65vh",
-        overflowY:"scroll"
-    }}
-    title={"Team Leaders"}
->
-<List
-
-    itemLayout="horizontal"
-    dataSource={teamLeadersList}
-    renderItem={(teamLeader, index) => (
-      <List.Item>
-          <input
-             type="checkbox"
-             checked={selectedRole === "TeamLeader" && selectedIds.includes(teamLeader.teamLeaderId)}
-             onChange={() => handleCheckboxChange("TeamLeader", teamLeader.teamLeaderId, teamLeader)}
-           />
-        <List.Item.Meta
-          avatar={<Avatar src={teamLeader.profileImage ? teamLeader.profileImage :  `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
-          title={teamLeader.teamLeaderName}
-        />
-          <svg
-               onClick={((e)=>handleOpenDownArrowContentForRecruiters(teamLeader.teamLeaderId))}
-               xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" /></svg>
-      </List.Item>
-    )}
-  />
-  </Card>
-       }
-</>
-     )
-    }
-    
- {
- displayRecruiters && (
-<>
- {
-<Card
-    hoverable
-    style={{
-      width: 300,
-          height:"65vh",
-        overflowY:"scroll"
-    }}
-    title={"Recruiters"}
->
-<List
-
-    itemLayout="horizontal"
-    dataSource={recruitersList}
-    renderItem={(recruiter, index) => (
-      <List.Item>
-         <input
-             type="checkbox"
-             checked={selectedRole === "Recruiters" && selectedIds.includes(recruiter.employeeId)}
-             onChange={() => handleCheckboxChange("Recruiters", recruiter.employeeId, recruiter)}
-           />
-        <List.Item.Meta
-          avatar={<Avatar src={recruiter.profileImage ? recruiter.profileImage : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
-          title={recruiter.employeeName}
-        />
-         
-      </List.Item>
-    )}
-  />
-  </Card>
- }
-</>
- )
- }
- 
-    
- 
-     </div>
-      </Modal>
-      </>
-  )
-}
-    
-{
-  loading && (
-    <Loader/>
-  )
-}
-{ 
-  openReport && (
-<CreateReportTable 
-reportDataDatewise={reportDataDatewise}
-selectedIdsProp={selectedIds}
-selectedJobRole={selectedRole}
-finalStartDatePropState={finalStartDatePropState}
-finalEndDatePropState={finalEndDatePropState}
-/>
-  )
-}
-      
+      )}
     </>
   );
 };

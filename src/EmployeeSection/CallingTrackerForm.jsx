@@ -122,8 +122,6 @@ const CallingTrackerForm = ({
 
   useEffect(() => {
     if (initialData) {
-      console.log(initialData);
-
       const updatedCallingTracker = { ...initialCallingTrackerState };
       const updatedLineUpData = { ...initialLineUpState };
 
@@ -337,9 +335,6 @@ const CallingTrackerForm = ({
 
     // line number 314 to 324 added by sahil karnekar date : 15-10-2024
     if (name === "dateOfBirth") {
-      console.log(value);
-      console.log(maxDate);
-
       if (value > maxDate) {
         setErrorForDOB("MaxDate" + maxDate);
       } else {
@@ -506,8 +501,6 @@ const CallingTrackerForm = ({
       } else if (userType === "TeamLeader") {
         dataToUpdate.callingTracker.teamLeader = { teamLeaderId: employeeId };
       }
-      console.log(dataToUpdate);
-
       const response = await axios.post(
         `${API_BASE_URL}/calling-tracker/${employeeId}/${userType}`,
         dataToUpdate,
@@ -793,11 +786,7 @@ const CallingTrackerForm = ({
       }
 
       const data = await response.json();
-
       setResumeResponse(data);
-      console.log(data);
-      console.log(callingTracker.candidateName);
-
       // Update toast to success
       toast.update(toastId, {
         render: "Resume Uploaded and Data Autofilled Successfully!",
@@ -883,10 +872,6 @@ const CallingTrackerForm = ({
       setIsOtherLocationSelected(false); // No additional input needed
     }
   };
-
-  console.log(lineUpData);
-  console.log(callingTracker);
-
 
   // this fucntion is made by sahil karnekar on date 25-11-2024
   const handleResumeUploadBoth = async (e) => {
