@@ -162,9 +162,7 @@ function Sidebar({
         requestBody
       );
 
-      console.log("API Response:", response.data);
       console.log("Logout Successfully And Status Updated Successfully..");
-
       navigate(`/login/${userType}`, { replace: true });
       console.log("Temp Logout Successfully");
     } catch (error) {

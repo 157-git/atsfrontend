@@ -42,20 +42,21 @@ const MonthReport = () => {
       const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
       setManagersList(response.data);
       setDisplayManagers(true);
-    } else if (userType === "Manager") {
-      const response = await axios.get(`${API_BASE_URL}/tl-namesIds/636`);
+    } else if ( userType === "Manager"){
+      const response = await axios.get(
+        `${API_BASE_URL}/tl-namesIds/${employeeId}`
+      );
       setTeamLeadersList(response.data);
-      setDisplayTeamLeaders(true);
-    } else if (userType === "TeamLeader") {
-      const response = await axios.get(`${API_BASE_URL}/employeeId-names/430`);
+      setDisplayTeamLeaders(true)
+    }else if ( userType === "TeamLeader"){
+      const response = await axios.get(
+        `${API_BASE_URL}/employeeId-names/${employeeId}`
+      );
       setRecruitersList(response.data);
       setDisplayRecruiters(true);
     }
     setDisplayModalContainer(true);
   };
-  console.log(teamLeadersList);
-
-  console.log(managersList);
 
   const scrollLeft = () => {
     const container = document.querySelector(".typesOfReportDiv");
@@ -152,10 +153,6 @@ const MonthReport = () => {
     setLoading(false);
   };
 
-  console.log(selectedRole);
-  console.log(selectedIds);
-
-  console.log(reportDataDatewise);
   const [displayManagers, setDisplayManagers] = useState(false);
   const [displayTeamLeaders, setDisplayTeamLeaders] = useState(false);
   const [displayRecruiters, setDisplayRecruiters] = useState(false);
@@ -243,7 +240,6 @@ const MonthReport = () => {
       endDate: end,
     });
   };
-  console.log(displayManagerDivWithBtn);
 
   return (
     <>
