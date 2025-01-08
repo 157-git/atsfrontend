@@ -10,6 +10,8 @@ import ShareEDM from "../JobDiscription/shareEDM";
 import UpdateJobDescription from "../JobDiscription/UpdateJobDescription";
 import { toast } from "react-toastify";
 import axios from "../api/api";
+import { getSocket } from "../EmployeeDashboard/socket";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDay";
 
 // SwapnilRokade_JobListing_filter_option__18/07
 
@@ -60,6 +62,13 @@ const JobListing = ({loginEmployeeName}) => {
     "jdAddedDate",
     "holdStatus",
   ];
+
+  const [socket , setSocket]= useState(null);
+
+  useState(()=>{
+    const newSocket = getSocket();
+setSocket(newSocket);
+  },[]);
 
   useEffect(() => {
     // replaced base url with actual url just for testing by sahil karnekar please replace it with base url at the time of deployment
@@ -296,22 +305,25 @@ const JobListing = ({loginEmployeeName}) => {
   };
 
   // Function to delete JD by ID
-  const handleDeleteJD = async (requirementId) => {
+  const handleDeleteJD = async (item) => {
     const confirmDelete = window.confirm(
-      `Are you sure you want to delete JD with ID ${requirementId}?`
+      `Are you sure you want to delete JD with ID ${item.requirementId}?`
     );
     if (!confirmDelete) return;
     try {
       await axios.delete(
-        `${API_BASE_URL}/delete-job-description/${requirementId}`
+        `${API_BASE_URL}/delete-job-description/${item.requirementId}/${employeeId}/${userType}`
       );
       toast.success("JD Deleted Successfully..");
       setJobDescriptions((prevDescriptions) =>
-        prevDescriptions.filter((job) => job.requirementId !== requirementId)
+        prevDescriptions.filter((job) => job.requirementId !== item.requirementId)
       );
       setFilteredJobDescriptions((prevFiltered) =>
-        prevFiltered.filter((job) => job.requirementId !== requirementId)
+        prevFiltered.filter((job) => job.requirementId !== item.requirementId)
       );
+item.employeeName = loginEmployeeName,
+item.jdAddedDate = getFormattedDateTime();
+      socket.emit("delete_job_description", item );
     } catch (error) {
       toast.error(`Failed to delete JD: ${error.message}`);
     }
@@ -605,7 +617,7 @@ const JobListing = ({loginEmployeeName}) => {
                               <a href="#">
                                 <div
                                   onClick={() =>
-                                    handleDeleteJD(item.requirementId)
+                                    handleDeleteJD(item)
                                   }
                                 >
                                   Delete

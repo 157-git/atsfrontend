@@ -14,6 +14,8 @@ import { parse } from "date-fns";
 import axios from "../api/api";
 import { toast } from "react-toastify";
 import { Pagination } from "antd";
+import { getSocket } from "../EmployeeDashboard/socket";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDay";
 {
   /* this line added by sahil date 22-10-2024 */
 }
@@ -49,12 +51,17 @@ const ResumeList = ({
   const [isDataSending, setIsDataSending] = useState(false);
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
+  const [socket, setSocket] = useState(null);
   const [totalRecords, setTotalRecords] = useState(0);
 
   useEffect(() => {
     fetchData(currentPage, pageSize);
   }, [employeeId, currentPage, pageSize,searchTerm]);
 
+  useEffect(()=>{
+const newSocket = getSocket();
+setSocket(newSocket);
+  },[]);
   const fetchData = async (page, size) => {
     try {
       const response = await fetch(
@@ -732,10 +739,19 @@ const ResumeList = ({
         body: JSON.stringify(requestData),
       };
 
-      const url = `${API_BASE_URL}/share-resume-data`;
+      const url = `${API_BASE_URL}/share-resume-data/${employeeId}/${userType}`;
       const response = await fetch(url, requestOptions);
 
       const responseData = await response.text();
+
+      requestData.employeeName = loginEmployeeName,
+      requestData.sharedDate = getFormattedDateTime();
+
+console.log(requestData);
+
+
+socket.emit("share_resume_data", requestData);
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -745,7 +761,7 @@ const ResumeList = ({
       setShowForwardPopup(false); // Close the modal
       setShowShareButton(true); // Optional: Handle additional UI state
       setSelectedRows([]); // Reset selected rows
-      setSelectedRecruiters({ employeeId: null, jobRole: "" });cal
+      setSelectedRecruiters({ employeeId: null, jobRole: "" });
       console.log("Data Shared Successfully.......");
     } catch (error) {
       console.error("Error while forwarding candidates:", error);

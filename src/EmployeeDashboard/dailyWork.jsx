@@ -683,6 +683,65 @@ function DailyWork({
         
       });
 
+      socket.on("receive_delete_job_description_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
+      socket.on("receive_share_excel_data_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+      socket.on("receive_share_resume_data_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
+      socket.on("receive_user_login_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
       socket.on("connect_error", () => {
         console.log;
         ("Connection failed. Ensure your details are correct.");
@@ -895,6 +954,33 @@ function DailyWork({
     {index + 1} - Company Name : {message.candidate.companyName} {message.candidate.designation} Was
 <span> Updated </span>
          By : {message.candidate.employeeName} On : {" "} {message.candidate.statusUpdateDate}
+    </p>
+  )
+}
+{
+  message.eventName === "delete_job_description" && (
+    <p>
+    {index + 1} - Company Name : {message.candidate.companyName} JD
+<span> Dleted </span>
+         By : {message.candidate.employeeName} On : {" "} {message.candidate.jdAddedDate}
+    </p>
+  )
+}
+{
+  message.eventName === "share_excel_data" && (
+    <p>
+    {index + 1} -  {message.candidate.employeeName} Shared
+<span> Excel Data To You </span>
+       On {" "} {message.candidate.sharedDate} Please Check Database Section
+    </p>
+  )
+}
+{
+  message.eventName === "share_resume_data" && (
+    <p>
+    {index + 1} -  {message.candidate.employeeName} Shared
+<span> Resume Data To You </span>
+       On {" "} {message.candidate.sharedDate} Please Check Database Section
     </p>
   )
 }

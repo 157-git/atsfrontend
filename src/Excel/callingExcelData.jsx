@@ -11,6 +11,8 @@ import axios from "../api/api";
 import { toast } from "react-toastify";
 import { Pagination } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
+import { getSocket } from "../EmployeeDashboard/socket";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDay";
 
 const CallingExcelList = ({
   updateState,
@@ -26,6 +28,7 @@ const CallingExcelList = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOptions, setFilterOptions] = useState([]);
   const [sortCriteria, setSortCriteria] = useState(null);
+  const [socket, setSocket] =useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
   const [callingList, setCallingList] = useState([]);
   const [showFilterSection, setShowFilterSection] = useState(false);
@@ -61,6 +64,11 @@ const CallingExcelList = ({
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
+
+useEffect(()=>{
+const newSocket = getSocket();
+setSocket(newSocket);
+},[])
 
   const fetchUpdatedData = (page, size) => {
     fetch(
@@ -709,6 +717,13 @@ const CallingExcelList = ({
       const response = await fetch(url, requestOptions);
 
       const responseData = await response.text();
+
+requestData.employeeName = loginEmployeeName;
+requestData.sharedDate = getFormattedDateTime();
+console.log(requestData);
+
+socket.emit("share_excel_data", requestData);
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }

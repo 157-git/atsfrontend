@@ -48,7 +48,6 @@
   
   .chart-container {
     position: relative;
-    justify-content: space-between;
     /* width: 200px; */
     display: flex;
 width: 100%;

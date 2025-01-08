@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 // added by sahil karnekar date 2-12-2024
 import ForceLogout from "../LoginPage/ForceLogout";
+import { initializeSocket } from "../EmployeeDashboard/socket";
 //  sahil karnekar Worked on : - date 27 sep 2024
 // Sahil Karnekar Added line num 8 to line num 77
 
@@ -137,6 +138,24 @@ const LoginSignup = ({ onLogin }) => {
           );
 
           setEmployeeId(loginResponse.data.employeeId);
+console.log(loginResponse.data);
+
+const emitData = {
+  employeeId: "1",
+  userName: "sk",
+  employeeName:"jhdgjds",
+  loginTime:"fdgdfgdf"
+};
+console.log(emitData);
+
+const newSocket = initializeSocket(employeeId, userType);
+newSocket.emit("user_login_event", emitData);
+
+if (newSocket.connected) {
+  newSocket.disconnect();
+}
+
+
           // Navigate to the dashboard
           navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
         } else if (loginResponse.data.statusCode === "401 Unauthorized") {

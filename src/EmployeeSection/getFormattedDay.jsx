@@ -10,6 +10,6 @@ export const getFormattedDateTime = () => {
     const formattedHours = hours > 12 ? hours - 12 : hours === 0 ? 12 : hours;
     const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
   
-    const formattedDate = `${year}-${month}-${day}`;
+    const formattedDate = `${day}-${month}-${year}`;
     return `Date: ${formattedDate}, Time: ${formattedHours}:${formattedMinutes} ${period}`;
   };
