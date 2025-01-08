@@ -241,6 +241,7 @@ const AddJobDescription = ({loginEmployeeName}) => {
         body: JSON.stringify(formData),
       });
       if (response.ok) {
+
         console.log("Emit Data Of", JSON.stringify(formData, null, 2)); 
         socket.emit("add_job_description",  formData);
         const result = await response.text();

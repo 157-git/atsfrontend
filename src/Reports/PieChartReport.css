@@ -7,7 +7,8 @@
   }
 
   .piechart-container{
-    width: 550px;
+    width: 100%;
+    justify-content: space-between;
     height: 450px;
     display: flex;
     flex-direction: row;

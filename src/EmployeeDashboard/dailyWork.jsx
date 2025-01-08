@@ -6,7 +6,7 @@ import Profile from "../photos/profileImg.webp";
 import logoutImg from "../photos/download.jpeg";
 import { Modal, Button } from "react-bootstrap";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
-import { API_BASE_URL } from "../api/api";
+import { API_BASE_URL} from "../api/api";
 import watingImg from "../photos/fire-relax.gif";
 
 //added by sahil karnekar and commented because it was implemented just for testing purpose but dont remove this
@@ -601,53 +601,146 @@ function DailyWork({
     }
   }, []);
 
-  // updated by sahil karnekar
+// updated by sahil karnekar
   useEffect(() => {
     const newSocket = initializeSocket(employeeId, userType);
     setSocket(newSocket);
   }, []);
-  // updated by sahil karnekar date 30-12-2024
+
+// updated by sahil karnekar date 30-12-2024
   useEffect(() => {
     if (socket) {
       socket.on("receive_saved_candidate", (message) => {
         console.log(message);
 
-        setMessages((prevMessages) => {
-          const updatedMessages = [...prevMessages, message];
-          console.log(updatedMessages);
-          localStorage.setItem(
-            `${userType}${employeeId}messages`,
-            JSON.stringify(updatedMessages)
-          );
-          return updatedMessages;
-        });
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
       });
       socket.on("receive_updated_candidate", (message) => {
         console.log(message);
 
-        setMessages((prevMessages) => {
-          const updatedMessages = [...prevMessages, message];
-          console.log(updatedMessages);
-          localStorage.setItem(
-            `${userType}${employeeId}messages`,
-            JSON.stringify(updatedMessages)
-          );
-          return updatedMessages;
-        });
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
       });
 
       socket.on("receive_interview_schedule_data", (message) => {
         console.log(message);
 
-        setMessages((prevMessages) => {
-          const updatedMessages = [...prevMessages, message];
-          console.log(updatedMessages);
-          localStorage.setItem(
-            `${userType}${employeeId}messages`,
-            JSON.stringify(updatedMessages)
-          );
-          return updatedMessages;
-        });
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
+      socket.on("receive_add_job_description_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
+      socket.on("receive_update_job_description_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
+      socket.on("receive_delete_job_description_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
+      socket.on("receive_share_excel_data_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+      socket.on("receive_share_resume_data_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
+      socket.on("receive_user_login_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
       });
 
       socket.on("connect_error", () => {
@@ -660,6 +753,7 @@ function DailyWork({
     }
     console.log(messages);
   }, [socket, employeeId]);
+
 
   return (
     <div className="daily-timeanddate">
@@ -690,286 +784,280 @@ function DailyWork({
         {!showAllDailyBtns ? "Show" : "Hide"} All Buttons
       </button>
 
-      {userType != "Applicant" && userType != "Vendor" ? (
-        <>
-          <div
-            className={`all-daily-btns ${!showAllDailyBtns ? "hidden" : ""}`}
-          >
-            <div className="daily-t-btn">
-              <button className="daily-tr-btn" style={{ whiteSpace: "nowrap" }}>
-                Target : 10
-              </button>
-              <button
-                className="daily-tr-btn"
-                style={{
-                  color: data.archived <= 3 ? "red" : "green",
-                }}
-              >
-                Achieved : {data.archived}
-              </button>
-              <button
-                className="daily-tr-btn"
-                style={{
-                  color: data.pending < 7 ? "green" : "red",
-                }}
-              >
-                Pending : {data.pending}
-              </button>
-            </div>
-            <button className="loging-hr">
-              <h6 hidden>Time: {currentTime}</h6>
-              <h6 hidden>Date: {currentDate}</h6>
-              Login Hours : {time.hours.toString().padStart(2, "0")}:
-              {time.minutes.toString().padStart(2, "0")}:
-              {time.seconds.toString().padStart(2, "0")}
-            </button>
-            <div hidden>
-              <h6>Late Mark : {lateMark}</h6>
-              <h6>Leave Type : {leaveType}</h6>
-              <h6>Paid Leave : {paidLeave}</h6>
-              <h6>Unpaid Leave : {unpaidLeave}</h6>
-              <h6>Day Present Paid : {dayPresentPaid}</h6>
-              <h6>Day Present Unpaid: {dayPresentUnpaid}</h6>
-            </div>
-
-            <div hidden style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="remoteWork">Remote Work:</label>
-              <select
-                className="select"
-                id="remoteWork"
-                value={remoteWork}
-                onChange={(e) => setRemoteWork(e.target.value)}
-              >
-                <option>Select</option>
-                <option value="work from Office">WFO</option>
-                <option value="Work from Home">WFH</option>
-                <option value="hybrid">Hybrid</option>
-              </select>
-            </div>
-
-            <button
-              className={running ? "timer-break-btn" : "timer-break-btn"}
-              onClick={running ? handlePause : handleResume}
-              style={{ height: "30px" }}
-            >
-              {running ? "Pause" : "Resume"}
-            </button>
-
-              <div>
-                <div style={{ display: "flex" }}>
-                  <div
-                    style={{ marginRight: "10px" }}
-                    onClick={toggleNotificationBox}
-                  >
-                    <Badge count={messages.length}>
-                      <Avatar shape="square" icon={<BellOutlined />} />
-                    </Badge>
-                  </div>
-                </div>
-              </div>
-              
+      {
+        userType != "Applicant" && userType != "Vendor" ? (
+          <>
             <div
-              className={`notificationMainCont1 ${isOpen ? "open" : "closed"}`}
+              className={`all-daily-btns ${!showAllDailyBtns ? "hidden" : ""}`}
             >
-              <div className="motificationSubCont1">
-                {messages.length > 0 ? (
-                  messages.map((message, index) => (
-                    <>
-                      <s></s> {/* data displays as per requirments */}
-                      {message.eventName === "add_candidate" && (
-                        <p>
-                          {index + 1} - A Candidate{" "}
-                          {message.candidate.candidateName}
-                          <span> Added </span>
-                          By : {message.candidate.recruiterName} On :{" "}
-                          {message.candidate.candidateAddedTime}
-                        </p>
-                      )}
-                      {message.eventName === "update_candidate" && (
-                        <p>
-                          {index + 1} - A Candidate{" "}
-                          {message.candidate.candidateName}
-                          <span> Updated </span>
-                          By : {message.candidate.recruiterName} On :{" "}
-                          {message.candidate.candidateAddedTime}
-                        </p>
-                      )}
-                      {
-                        // condition changed
-                        message.eventName === "interview_schedule" &&
-                          (`${message.candidate.employee.employeeId}` ===
-                          `${employeeId}` ? (
-                            message.candidate.interviewResponse ===
-                            "Selected" ? (
-                              <p>
-                                {index + 1} - Congratulations! Your candidate{" "}
-                                {message.candidate.candidateName} has been
-                                Selected after the{" "}
-                                {message.candidate.interviewRound} for Job ID{" "}
-                                {
-                                  message.candidate.requirementInfo
-                                    .requirementId
-                                }
-                                . Further details will be shared soon.
-                              </p>
-                            ) : message.candidate.interviewResponse ===
-                              "Hold" ? (
-                              <p>
-                                {index + 1} - Your candidate{" "}
-                                {message.candidate.candidateName} is on Hold
-                                after the {message.candidate.interviewRound} for
-                                Job ID{" "}
-                                {
-                                  message.candidate.requirementInfo
-                                    .requirementId
-                                }
-                                . The next steps will be communicated soon.
-                              </p>
-                            ) : message.candidate.interviewResponse ===
-                              "Rejected" ? (
-                              <p>
-                                {index + 1} - Your candidate{" "}
-                                {message.candidate.candidateName} has been
-                                Rejected after the{" "}
-                                {message.candidate.interviewRound} for Job ID{" "}
-                                {
-                                  message.candidate.requirementInfo
-                                    .requirementId
-                                }
-                                . Please review and plan accordingly.
-                              </p>
-                            ) : (
-                              !["Rejected", "Hold", "Selected"].includes(
-                                message.candidate.interviewResponse
-                              ) && (
-                                <p>
-                                  {index + 1} - Your candidate{" "}
-                                  {message.candidate.candidateName} has been{" "}
-                                  {message.candidate.interviewResponse} for Job
-                                  ID{" "}
-                                  {
-                                    message.candidate.requirementInfo
-                                      .requirementId
-                                  }{" "}
-                                  on {message.candidate.nextInterviewDate} at{" "}
-                                  {message.candidate.nextInterviewTiming}.
-                                </p>
-                              )
-                            )
-                          ) : message.candidate.interviewResponse ===
-                            "Selected" ? (
-                            <p>
-                              {index + 1} - Congratulations! Candidate{" "}
-                              {message.candidate.candidateName} has been
-                              Selected after the{" "}
-                              {message.candidate.interviewRound} for Job ID{" "}
-                              {message.candidate.requirementInfo.requirementId}.
-                              Further details will be shared soon.
-                            </p>
-                          ) : message.candidate.interviewResponse === "Hold" ? (
-                            <p>
-                              {index + 1} - Candidate{" "}
-                              {message.candidate.candidateName} is on Hold after
-                              the {message.candidate.interviewRound} for Job ID{" "}
-                              {message.candidate.requirementInfo.requirementId}.
-                              The next steps will be communicated soon.
-                            </p>
-                          ) : message.candidate.interviewResponse ===
-                            "Rejected" ? (
-                            <p>
-                              {index + 1} - Candidate{" "}
-                              {message.candidate.candidateName} has been
-                              Rejected after the{" "}
-                              {message.candidate.interviewRound} for Job ID{" "}
-                              {message.candidate.requirementInfo.requirementId}.
-                              Please review and plan accordingly.
-                            </p>
-                          ) : (
-                            !["Rejected", "Hold", "Selected"].includes(
-                              message.candidate.interviewResponse
-                            ) && (
-                              <p>
-                                {index + 1} - Candidate{" "}
-                                {message.candidate.candidateName} has been{" "}
-                                {message.candidate.interviewResponse} for Job ID{" "}
-                                {
-                                  message.candidate.requirementInfo
-                                    .requirementId
-                                }{" "}
-                                on {message.candidate.nextInterviewDate} at{" "}
-                                {message.candidate.nextInterviewTiming}.
-                              </p>
-                            )
-                          ))
-                      }
-                      <hr />
-                      {/* <p>{message.number}</p> */}
-                    </>
-                  ))
-                ) : (
-                  <p>No Notifications</p>
-                )}
-              </div>
-              <div className="buttonsDivForNotifications">
-                <CloseOutlined
-                  style={{
-                    color: "red",
-                  }}
-                  onClick={toggleNotificationBox}
-                />
+              <div className="daily-t-btn">
                 <button
-                  className="cleaarButtonOfNotifications daily-tr-btn"
-                  onClick={handleClearNotifications}
+                  className="daily-tr-btn"
+                  style={{ whiteSpace: "nowrap" }}
                 >
-                  Clear <ClearOutlined />
+                  Target : 10
+                </button>
+                <button
+                  className="daily-tr-btn"
+                  style={{
+                    color: data.archived <= 3 ? "red" : "green",
+                  }}
+                >
+                  Achieved : {data.archived}
+                </button>
+                <button
+                  className="daily-tr-btn"
+                  style={{
+                    color: data.pending < 7 ? "green" : "red",
+                  }}
+                >
+                  Pending : {data.pending}
                 </button>
               </div>
-            </div>
-          </div>
-          <button
-            className="toggle-all-daily-btns"
-            onClick={handleToggleAllDailyBtns}
-          >
-            {showAllDailyBtns ? "Hide All Buttons" : "Show All Buttons"}
-          </button>
-
-          <Modal
-            show={showPauseModal}
-            onHide={() => {
-              if (allowCloseModal) {
-                setShowPauseModal(false);
-              }
-            }}
-            className="dw-modal"
-          >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              className="dw-modal-content"
-            >
-              {/* none working close button removed date : 23-10-2024 */}
-              <Modal.Header>
-                <Modal.Title className="dw-modal-title">
-                  Break Runing...
-                </Modal.Title>
-              </Modal.Header>
-              <div>
-                <img src={watingImg} alt="Waiting" className="dw-waiting-img" />
+              <button className="loging-hr">
+                <h6 hidden>Time: {currentTime}</h6>
+                <h6 hidden>Date: {currentDate}</h6>
+                Login Hours : {time.hours.toString().padStart(2, "0")}:
+                {time.minutes.toString().padStart(2, "0")}:
+                {time.seconds.toString().padStart(2, "0")}
+              </button>
+              <div hidden>
+                <h6>Late Mark : {lateMark}</h6>
+                <h6>Leave Type : {leaveType}</h6>
+                <h6>Paid Leave : {paidLeave}</h6>
+                <h6>Unpaid Leave : {unpaidLeave}</h6>
+                <h6>Day Present Paid : {dayPresentPaid}</h6>
+                <h6>Day Present Unpaid: {dayPresentUnpaid}</h6>
               </div>
-              <Modal.Footer className="dw-modal-footer">
-                <div className="dw-resume-div">
-                  <h3>Timer is paused. Click Resume to continue...</h3>
+
+              <div hidden style={{ display: "flex", flexDirection: "column" }}>
+                <label htmlFor="remoteWork">Remote Work:</label>
+                <select
+                  className="select"
+                  id="remoteWork"
+                  value={remoteWork}
+                  onChange={(e) => setRemoteWork(e.target.value)}
+                >
+                  <option>Select</option>
+                  <option value="work from Office">WFO</option>
+                  <option value="Work from Home">WFH</option>
+                  <option value="hybrid">Hybrid</option>
+                </select>
+              </div>
+
+              <button
+                className={running ? "timer-break-btn" : "timer-break-btn"}
+                onClick={running ? handlePause : handleResume}
+                style={{ height: "30px" }}
+              >
+                {running ? "Pause" : "Resume"}
+              </button>
+              <div>
+                    <div style={{ display: "flex" }}>
+                      <div
+                        style={{ marginRight: "10px" }}
+                        onClick={toggleNotificationBox}
+                      >
+                        <Badge count={messages.length}>
+                          <Avatar shape="square" icon={<BellOutlined />} />
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+
+              <div
+                className={`notificationMainCont1 ${
+                  isOpen ? "open" : "closed"
+                }`}
+              >
+                <div className="motificationSubCont1">
+                  {messages.length > 0 ? (
+                    messages.map((message, index) => (
+                      <>
+                        <s></s>{" "}
+                        {/* data displays as per requirments */}
+                      
+
+{
+  message.eventName === "add_candidate" && (
+    <p>
+    {index + 1} - A Candidate {message.candidate.candidateName} 
+<span> Added </span>
+         By : {message.candidate.recruiterName} {" "}
+        On : {message.candidate.candidateAddedTime}
+    </p>
+  )
+}
+
+{
+  message.eventName === "update_candidate" && (
+    <p>
+    {index + 1} - A Candidate {message.candidate.candidateName} 
+<span> Updated </span>
+         By : {message.candidate.recruiterName} On : {" "} {message.candidate.candidateAddedTime}
+    </p>
+  )
+}
+{
+  // condition changed
+  message.eventName === "interview_schedule" && (
+  `${message.candidate.employee.employeeId}` === `${employeeId}` ? (
+    message.candidate.interviewResponse === "Selected" ? (
+      <p>
+       {index + 1} - Congratulations! Your candidate {message.candidate.candidateName} has been Selected after the {message.candidate.interviewRound} for Job ID {message.candidate.requirementInfo.requirementId}. Further details will be shared soon.
+      </p>
+    ) : message.candidate.interviewResponse === "Hold" ? (
+      <p>
+       {index + 1} - Your candidate {message.candidate.candidateName} is on Hold after the {message.candidate.interviewRound} for Job ID {message.candidate.requirementInfo.requirementId}. The next steps will be communicated soon.
+      </p>
+    ) : message.candidate.interviewResponse === "Rejected" ? (
+      <p>
+       {index + 1} - Your candidate {message.candidate.candidateName} has been Rejected after the {message.candidate.interviewRound} for Job ID {message.candidate.requirementInfo.requirementId}. Please review and plan accordingly.
+      </p>
+    ) : !["Rejected", "Hold", "Selected"].includes(message.candidate.interviewResponse) && (
+      <p>
+       {index + 1} - Your candidate {message.candidate.candidateName} has been {message.candidate.interviewResponse} for Job ID {message.candidate.requirementInfo.requirementId} on {message.candidate.nextInterviewDate} at {message.candidate.nextInterviewTiming}.
+      </p>
+    )
+  ) : (
+    message.candidate.interviewResponse === "Selected" ? (
+      <p>
+         {index + 1} - Congratulations! Candidate {message.candidate.candidateName} has been Selected after the {message.candidate.interviewRound} for Job ID {message.candidate.requirementInfo.requirementId}. Further details will be shared soon.
+      </p>
+    ) : message.candidate.interviewResponse === "Hold" ? (
+      <p>
+       {index + 1} - Candidate {message.candidate.candidateName} is on Hold after the {message.candidate.interviewRound} for Job ID {message.candidate.requirementInfo.requirementId}. The next steps will be communicated soon.
+      </p>
+    ) : message.candidate.interviewResponse === "Rejected" ? (
+      <p>
+       {index + 1} - Candidate {message.candidate.candidateName} has been Rejected after the {message.candidate.interviewRound} for Job ID {message.candidate.requirementInfo.requirementId}. Please review and plan accordingly.
+      </p>
+    ) : !["Rejected", "Hold", "Selected"].includes(message.candidate.interviewResponse) && (
+      <p>
+       {index + 1} - Candidate {message.candidate.candidateName} has been {message.candidate.interviewResponse} for Job ID {message.candidate.requirementInfo.requirementId} on {message.candidate.nextInterviewDate} at {message.candidate.nextInterviewTiming}.
+      </p>
+    )
+  )
+)
+}
+{
+  message.eventName === "add_job_description" && (
+    <p>
+    {index + 1} - New Job Dscription Company Name : {message.candidate.companyName} {message.candidate.designation} Was
+<span> Added </span>
+         By : {message.candidate.employeeName} On : {" "} {message.candidate.jdAddedDate}
+    </p>
+  )
+}
+{
+  message.eventName === "update_job_description" && (
+    <p>
+    {index + 1} - Company Name : {message.candidate.companyName} {message.candidate.designation} Was
+<span> Updated </span>
+         By : {message.candidate.employeeName} On : {" "} {message.candidate.statusUpdateDate}
+    </p>
+  )
+}
+{
+  message.eventName === "delete_job_description" && (
+    <p>
+    {index + 1} - Company Name : {message.candidate.companyName} JD
+<span> Dleted </span>
+         By : {message.candidate.employeeName} On : {" "} {message.candidate.jdAddedDate}
+    </p>
+  )
+}
+{
+  message.eventName === "share_excel_data" && (
+    <p>
+    {index + 1} -  {message.candidate.employeeName} Shared
+<span> Excel Data To You </span>
+       On {" "} {message.candidate.sharedDate} Please Check Database Section
+    </p>
+  )
+}
+{
+  message.eventName === "share_resume_data" && (
+    <p>
+    {index + 1} -  {message.candidate.employeeName} Shared
+<span> Resume Data To You </span>
+       On {" "} {message.candidate.sharedDate} Please Check Database Section
+    </p>
+  )
+}
+                        <hr />
+                        {/* <p>{message.number}</p> */}
+                      </>
+                    ))
+                  ) : (
+                    <p>No Notifications</p>
+                  )}
+                </div>
+                <div className="buttonsDivForNotifications">
+                  <CloseOutlined
+                    style={{
+                      color: "red",
+                    }}
+                    onClick={toggleNotificationBox}
+                  />
                   <button
-                    className="profile-back-button"
-                    onClick={handleResume}
+                    className="cleaarButtonOfNotifications daily-tr-btn"
+                    onClick={handleClearNotifications}
                   >
-                    Resume
+                    Clear <ClearOutlined />
                   </button>
                 </div>
-              </Modal.Footer>
+              </div>
             </div>
-          </Modal>
-        </>
-      ) : null}
+            <button
+              className="toggle-all-daily-btns"
+              onClick={handleToggleAllDailyBtns}
+            >
+              {showAllDailyBtns ? "Hide All Buttons" : "Show All Buttons"}
+            </button>
+
+            <Modal
+              show={showPauseModal}
+              onHide={() => {
+                if (allowCloseModal) {
+                  setShowPauseModal(false);
+                }
+              }}
+              className="dw-modal"
+            >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="dw-modal-content"
+              >
+                {/* none working close button removed date : 23-10-2024 */}
+                <Modal.Header>
+                  <Modal.Title className="dw-modal-title">
+                    Break Runing...
+                  </Modal.Title>
+                </Modal.Header>
+                <div>
+                  <img
+                    src={watingImg}
+                    alt="Waiting"
+                    className="dw-waiting-img"
+                  />
+                </div>
+                <Modal.Footer className="dw-modal-footer">
+                  <div className="dw-resume-div">
+                    <h3>Timer is paused. Click Resume to continue...</h3>
+                    <button
+                      className="profile-back-button"
+                      onClick={handleResume}
+                    >
+                      Resume
+                    </button>
+                  </div>
+                </Modal.Footer>
+              </div>
+            </Modal>
+          </>
+        ) : null
+      }
 
       <Modal show={showModal} onHide={handleSkip}>
         <div className="dw-reminder-content">

@@ -217,6 +217,7 @@ const MonthReport = () => {
       setStartDate1(startDate.toISOString().split("T")[0]);
       setEndDate1(endDate.toISOString().split("T")[0]);
     }
+    handleDisplayManagers();
     setDisplayMoreButton(true);
   };
 

@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { Pagination } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import { getSocket } from "../EmployeeDashboard/socket";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDay";
 
 const CallingExcelList = ({
   updateState,
@@ -64,11 +65,11 @@ const CallingExcelList = ({
   const [totalRecords, setTotalRecords] = useState(0);
   const [socket, setSocket] = useState(null);
 
-      // establishing socket for emmiting event
-        useEffect(() => {
-          const newSocket = getSocket();
-          setSocket(newSocket);
-        }, []);
+  // establishing socket for emmiting event
+  useEffect(() => {
+    const newSocket = getSocket();
+    setSocket(newSocket);
+  }, []);
 
   const fetchUpdatedData = (page, size) => {
     fetch(
@@ -91,7 +92,7 @@ const CallingExcelList = ({
 
   useEffect(() => {
     fetchUpdatedData(currentPage, pageSize);
-  }, [employeeId, userType, currentPage, pageSize,searchTerm]);
+  }, [employeeId, userType, currentPage, pageSize, searchTerm]);
 
   useEffect(() => {
     const options = Object.keys(filteredCallingList[0] || {}).filter(
@@ -717,10 +718,19 @@ const CallingExcelList = ({
       const response = await fetch(url, requestOptions);
 
       const responseData = await response.text();
+
+      requestData.employeeName = loginEmployeeName;
+      requestData.sharedDate = getFormattedDateTime();
+      console.log(requestData);
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      console.log("API Object Share Excel Data :", JSON.stringify(requestData, null, 2));
+
+      console.log(
+        "API Object Share Excel Data :",
+        JSON.stringify(requestData, null, 2)
+      );
       socket.emit("share_excel_data", requestData);
 
       toast.success(responseData);
@@ -1391,12 +1401,16 @@ const CallingExcelList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                              { highlightText(item.date || "", searchTerm)  } -  {" "}  {item.candidateAddedTime}
+                          {highlightText(item.date || "", searchTerm)} -{" "}
+                          {item.candidateAddedTime}
                           <div className="tooltip">
-                            <span className="tooltiptext">{highlightText(
+                            <span className="tooltiptext">
+                              {highlightText(
                                 item.date.toString().toLowerCase() || "",
                                 searchTerm
-                              )}  - {" "}  {item.candidateAddedTime}</span>
+                              )}{" "}
+                              - {item.candidateAddedTime}
+                            </span>
                           </div>
                         </td>
                         <td
@@ -1404,7 +1418,7 @@ const CallingExcelList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.candidateName || "", searchTerm)}
+                          {highlightText(item.candidateName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1419,7 +1433,7 @@ const CallingExcelList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                            {highlightText(item.candidateEmail || "", searchTerm)}
+                          {highlightText(item.candidateEmail || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1434,7 +1448,7 @@ const CallingExcelList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                            {highlightText(item.contactNumber || "", searchTerm)}
+                          {highlightText(item.contactNumber || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1449,7 +1463,7 @@ const CallingExcelList = ({
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.jobDesignation || "", searchTerm)}
+                          {highlightText(item.jobDesignation || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1514,7 +1528,9 @@ const CallingExcelList = ({
                             <i
                               className="fas fa-eye"
                               style={{
-                                color: item.resume ? "var(--active-icon)" : "inherit",
+                                color: item.resume
+                                  ? "var(--active-icon)"
+                                  : "inherit",
                               }}
                             ></i>
                           </button>
@@ -1542,24 +1558,22 @@ const CallingExcelList = ({
                 </table>
               </div>
 
-
-
               <div className="search-count-last-div">
-            Total Results : {totalRecords}
-          </div>
+                Total Results : {totalRecords}
+              </div>
 
-        <Pagination
-        current={currentPage}
-        total={totalRecords}
-        pageSize={pageSize}
-        showSizeChanger
-        showQuickJumper
-        onShowSizeChange={handleSizeChange}
-        onChange={handlePageChange}
-        style={{
-          justifyContent: "center",
-        }}
-      />
+              <Pagination
+                current={currentPage}
+                total={totalRecords}
+                pageSize={pageSize}
+                showSizeChanger
+                showQuickJumper
+                onShowSizeChange={handleSizeChange}
+                onChange={handlePageChange}
+                style={{
+                  justifyContent: "center",
+                }}
+              />
 
               {/*Arshad Attar Added This Code On 18-11-2024
                Added New Share Data Frontend Logic line 1444 to 1572 */}
@@ -1861,8 +1875,6 @@ const CallingExcelList = ({
           )}
         </>
       )}
-
- 
     </div>
   );
 };

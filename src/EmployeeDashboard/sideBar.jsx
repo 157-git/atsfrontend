@@ -9,10 +9,12 @@ import { Modal } from "react-bootstrap";
 import ColorPicker from "../HomePage/ColorPicker";
 import { API_BASE_URL } from "../api/api";
 import LogoutOnEvent from "./logoutOnEvent";
+import { getSocket } from "../EmployeeDashboard/socket";
 
 // Swapnil_Sidebar_AddingEmployeeDetailsinto_ManagerSection_17/07
 
 function Sidebar({
+  loginEmployeeName,
   onLogout,
   openSidebarToggle,
   OpenSidebar,
@@ -81,6 +83,8 @@ function Sidebar({
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showColor, setShowColor] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
+  const [socket, setSocket] = useState(null);
+  
 
   const navigator = useNavigate();
   const { employeeId, userType } = useParams();
@@ -122,6 +126,14 @@ function Sidebar({
   //   onLogout(logoutTime);
   // };
 
+
+      // establishing socket for emmiting event
+      useEffect(() => {
+        const newSocket = getSocket();
+        setSocket(newSocket);
+      }, []);
+
+
   const temproryLogout = async () => {
     try {
       localStorage.removeItem(`loginTimeSaved_${employeeId}`);
@@ -140,17 +152,16 @@ function Sidebar({
       let requestBody = {};
       switch (userType) {
         case "SuperUser":
-          requestBody = { superUserId: employeeId };
+          requestBody = { superUserId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : new Date().toISOString()};
           break;
         case "Manager":
-          requestBody = { managerId: employeeId };
+          requestBody = { managerId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : new Date().toISOString()};
           break;
         case "TeamLeader":
-          requestBody = { teamLeaderId: employeeId };
+          requestBody = { teamLeaderId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : new Date().toISOString()};
           break;
         case "Recruiters":
-          requestBody = { employeeId: employeeId };
-          break;
+          requestBody = { employeeId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : new Date().toISOString()};
         default:
           console.error("Invalid user type");
           return;
@@ -161,7 +172,8 @@ function Sidebar({
         `${API_BASE_URL}/user-logout-157/${userType}`,
         requestBody
       );
-
+      console.log( "Logout Successfully Emit Object " + JSON.stringify( requestBody ));
+      socket.emit("user_logout_event",requestBody);
       console.log("Logout Successfully And Status Updated Successfully..");
       navigate(`/login/${userType}`, { replace: true });
       console.log("Temp Logout Successfully");

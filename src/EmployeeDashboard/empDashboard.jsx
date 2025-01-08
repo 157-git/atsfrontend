@@ -629,6 +629,7 @@ const EmpDashboard = ({ userGroup }) => {
       style={{ backgroundColor: "white", minHeight: "100vh" }}
     >
       <Sidebar
+       loginEmployeeName={loginEmployeeName}
         userGroup={userGroup}
         openSidebarToggle={openSidebarToggle}
         OpenSidebar={() => setOpenSidebarToggle(!openSidebarToggle)}
@@ -848,6 +849,7 @@ const EmpDashboard = ({ userGroup }) => {
             />
           )}
         </div>
+
         <div>{addJobDescription && <AddJobDescription  loginEmployeeName={loginEmployeeName}  />}</div>
         <div>{showJobDiscriptions && <Home loginEmployeeName={loginEmployeeName}  />}</div>
         <div>{showHome && <Home loginEmployeeName={loginEmployeeName}  />}</div>

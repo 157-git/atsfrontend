@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { API_BASE_URL } from "../api/api";
 import {useParams } from "react-router-dom";
 import { getSocket } from "../EmployeeDashboard/socket";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDay";
 
 // sahil karnekar line 9_  date : 10-10-2024
 const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp,loginEmployeeName}) => {
@@ -25,6 +26,8 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp,loginEmployeeName}
     experience: onAddJD.experience || "",
     bond: onAddJD.bond || "",
     percentage: onAddJD.percentage || "",
+    employeeName: loginEmployeeName,
+    statusUpdateDate: getFormattedDateTime(),
     skills: onAddJD.skills || "",
     companyLink: onAddJD.companyLink || "",
     detailAddress: onAddJD.detailAddress || "",
@@ -51,13 +54,11 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp,loginEmployeeName}
       : [{ employeeId: "", preferredQualificationMsg: "" }],
   });
 
-
     // establishing socket for emmiting event
       useEffect(() => {
         const newSocket = getSocket();
         setSocket(newSocket);
       }, []);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;

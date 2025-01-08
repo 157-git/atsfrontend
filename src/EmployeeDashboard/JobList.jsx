@@ -11,12 +11,13 @@ import UpdateJobDescription from "../JobDiscription/UpdateJobDescription";
 import { toast } from "react-toastify";
 import axios from "../api/api";
 import { getSocket } from "../EmployeeDashboard/socket";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDay";
 
 // SwapnilRokade_JobListing_filter_option__18/07
 
-const JobListing = ({loginEmployeeName}) => {
+const JobListing = ({ loginEmployeeName }) => {
   const { employeeId, userType } = useParams();
-   const [socket, setSocket] = useState(null);
+  const [socket, setSocket] = useState(null);
   const [jobDescriptions, setJobDescriptions] = useState([]);
   const [filterOptions, setFilterOptions] = useState([]);
   const [updateJD, setUpdateJd] = useState([]);
@@ -63,12 +64,12 @@ const JobListing = ({loginEmployeeName}) => {
     "holdStatus",
   ];
 
-      // establishing socket for emmiting event
-      useEffect(() => {
-        const newSocket = getSocket();
-        setSocket(newSocket);
-      }, []);
-      
+  // establishing socket for emmiting event
+  useEffect(() => {
+    const newSocket = getSocket();
+    setSocket(newSocket);
+  }, []);
+
   useEffect(() => {
     // replaced base url with actual url just for testing by sahil karnekar please replace it with base url at the time of deployment
     fetch(`${API_BASE_URL}/all-job-descriptions`)
@@ -304,32 +305,36 @@ const JobListing = ({loginEmployeeName}) => {
   };
 
   // Function to delete JD by ID
-  const handleDeleteJD = async (requirementId) => {
+  const handleDeleteJD = async (item) => {
     const confirmDelete = window.confirm(
-      `Are you sure you want to delete JD with ID ${requirementId}?`
+      `Are you sure you want to delete JD with ID ${item.requirementId}?`
     );
     if (!confirmDelete) return;
 
     try {
-          // Fetch the requirement data
-          const response = await fetch(
-            `${API_BASE_URL}/requirement-info/${requirementId}`
-          );
-          const data = await response.json();
+      // Fetch the requirement data
+      const response = await fetch(
+        `${API_BASE_URL}/requirement-info/${requirementId}`
+      );
+      const data = await response.json();
 
       await axios.delete(
-        `${API_BASE_URL}/delete-job-description/${requirementId}/${employeeId}/${userType}`
+        `${API_BASE_URL}/delete-job-description/${item.requirementId}/${employeeId}/${userType}`
       );
       toast.success("JD Deleted Successfully..");
 
       setJobDescriptions((prevDescriptions) =>
-        prevDescriptions.filter((job) => job.requirementId !== requirementId)
+        prevDescriptions.filter(
+          (job) => job.requirementId !== item.requirementId
+        )
       );
       setFilteredJobDescriptions((prevFiltered) =>
-        prevFiltered.filter((job) => job.requirementId !== requirementId)
+        prevFiltered.filter((job) => job.requirementId !== item.requirementId)
       );
-      console.log("Emit Data for Delete Job description " + data ); 
-      socket.emit("delete_job_description", data);
+
+      (item.employeeName = loginEmployeeName),
+        (item.jdAddedDate = getFormattedDateTime());
+      socket.emit("delete_job_description", item);
     } catch (error) {
       toast.error(`Failed to delete JD: ${error.message}`);
     }
@@ -488,7 +493,11 @@ const JobListing = ({loginEmployeeName}) => {
                 <div className="job-listing" key={item.requirementId}>
                   <div className="job-header">
                     {/* Arshad Attar , Added Job Id In Jd Card As per requirement on 27-11-2024 */}
-                    <div className="job-title">{item.requirementId}{" - "}{item.designation} </div>
+                    <div className="job-title">
+                      {item.requirementId}
+                      {" - "}
+                      {item.designation}{" "}
+                    </div>
                     <div className="job-company">{item.companyName} </div>
                   </div>
 
@@ -621,11 +630,7 @@ const JobListing = ({loginEmployeeName}) => {
                                 </div>
                               </a>
                               <a href="#">
-                                <div
-                                  onClick={() =>
-                                    handleDeleteJD(item.requirementId)
-                                  }
-                                >
+                                <div onClick={() => handleDeleteJD(item)}>
                                   Delete
                                 </div>
                               </a>
@@ -642,7 +647,7 @@ const JobListing = ({loginEmployeeName}) => {
                               toggleJobDescription(item.requirementId)
                             }
                           >
-                            View 
+                            View
                           </button>
                         )}
                         {(userType === "Manager" ||
@@ -739,9 +744,12 @@ const JobListing = ({loginEmployeeName}) => {
                             Share
                           </button>
                           <button onClick={handleclose}>
-  <i id="jd-cancle-btn" className="fa-solid fa-xmark" title="Cancel"></i>
-</button>
-
+                            <i
+                              id="jd-cancle-btn"
+                              className="fa-solid fa-xmark"
+                              title="Cancel"
+                            ></i>
+                          </button>
                         </div>
                       </span>
 
@@ -794,7 +802,7 @@ const JobListing = ({loginEmployeeName}) => {
                         {requirementData.yearOfPassing || "-"}
                       </p>
                       <p>
-                        <b>Gender :  </b>
+                        <b>Gender : </b>
                         {requirementData.gender || "-"}
                       </p>
                       <p>
@@ -839,7 +847,7 @@ const JobListing = ({loginEmployeeName}) => {
                         <b>Perks : </b>
                         {requirementData.perks || "-"}
                       </p>
-                     
+
                       <p>
                         <b>Reporting Hierarchy : </b>
                         {requirementData.reportingHierarchy || "-"}
@@ -852,7 +860,6 @@ const JobListing = ({loginEmployeeName}) => {
                         <b> Required Documentation : </b>
                         {requirementData.documentation || "-"}
                       </p>
-                     
                     </div>
                   </div>
                 </section>
@@ -898,7 +905,7 @@ const JobListing = ({loginEmployeeName}) => {
 };
 
 //Arshad Attar Commented This : 11-10-2024
-const JobList = ({loginEmployeeName}) => {
+const JobList = ({ loginEmployeeName }) => {
   return (
     <div className="job-list">
       <JobListing loginEmployeeName={loginEmployeeName} />

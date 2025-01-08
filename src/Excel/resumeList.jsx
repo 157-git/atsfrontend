@@ -15,6 +15,7 @@ import axios from "../api/api";
 import { toast } from "react-toastify";
 import { Pagination } from "antd";
 import { getSocket } from "../EmployeeDashboard/socket";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDay";
 {
   /* this line added by sahil date 22-10-2024 */
 }
@@ -744,6 +745,9 @@ const ResumeList = ({
       const response = await fetch(url, requestOptions);
 
       const responseData = await response.text();
+
+      requestData.employeeName = loginEmployeeName,
+      requestData.sharedDate = getFormattedDateTime();
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }

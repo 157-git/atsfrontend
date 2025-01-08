@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 // added by sahil karnekar date 2-12-2024
 import ForceLogout from "../LoginPage/ForceLogout";
+import { initializeSocket } from "../EmployeeDashboard/socket";
 //  sahil karnekar Worked on : - date 27 sep 2024
 // Sahil Karnekar Added line num 8 to line num 77
 const LoginSignup = ({ onLogin }) => {
@@ -34,11 +35,11 @@ const LoginSignup = ({ onLogin }) => {
   // only functionality javascript code added by sahil karnekar dont use html code , html code is not styled or not applied any css
   // please check the logic once
 
-      // establishing socket for emmiting event
-      useEffect(() => {
-        const newSocket = getSocket();
-        setSocket(newSocket);
-      }, []);
+  // establishing socket for emmiting event
+  useEffect(() => {
+    const newSocket = getSocket();
+    setSocket(newSocket);
+  }, []);
 
   useEffect(() => {
     AOS.init({ duration: 3000 });
@@ -123,10 +124,6 @@ const LoginSignup = ({ onLogin }) => {
       // line 125 to 154 added by sahil karnekar on date 28-11-2024
       if (loginResponse.status === 200) {
         console.log(loginResponse);
-
-        console.log("Emit Data for user login event", JSON.stringify(formData, null, 2)); 
-        socket.emit("user_login_event",  );
-
         if (loginResponse.data.statusCode === "200 OK") {
           // added by sahil karnekar date 2-12-2024
           localStorage.setItem(
@@ -147,6 +144,22 @@ const LoginSignup = ({ onLogin }) => {
           );
 
           setEmployeeId(loginResponse.data.employeeId);
+          console.log("Employee Id:", loginResponse.data.employeeId);
+          console.log(loginResponse.data);
+
+          const newSocket = initializeSocket(loginResponse.data.employeeId, userType);
+
+          const emitData = {
+            employeeName:  loginResponse.data.employeeName,
+            loginTime: new Date().toISOString(),
+          };
+          console.log("Emit Data:", emitData);
+          newSocket.emit("user_login_event", emitData);
+
+          if (newSocket.connected) {
+            newSocket.disconnect();
+          }
+
           // Navigate to the dashboard
           navigate(`/Dashboard/${loginResponse.data.employeeId}/${userType}`);
         } else if (loginResponse.data.statusCode === "401 Unauthorized") {
