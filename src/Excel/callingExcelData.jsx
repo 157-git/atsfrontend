@@ -11,6 +11,7 @@ import axios from "../api/api";
 import { toast } from "react-toastify";
 import { Pagination } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
+import { getSocket } from "../EmployeeDashboard/socket";
 
 const CallingExcelList = ({
   updateState,
@@ -61,6 +62,13 @@ const CallingExcelList = ({
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [socket, setSocket] = useState(null);
+
+      // establishing socket for emmiting event
+        useEffect(() => {
+          const newSocket = getSocket();
+          setSocket(newSocket);
+        }, []);
 
   const fetchUpdatedData = (page, size) => {
     fetch(
@@ -712,6 +720,8 @@ const CallingExcelList = ({
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+      console.log("API Object Share Excel Data :", JSON.stringify(requestData, null, 2));
+      socket.emit("share_excel_data", requestData);
 
       toast.success(responseData);
       fetchUpdatedData();

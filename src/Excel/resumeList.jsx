@@ -14,6 +14,7 @@ import { parse } from "date-fns";
 import axios from "../api/api";
 import { toast } from "react-toastify";
 import { Pagination } from "antd";
+import { getSocket } from "../EmployeeDashboard/socket";
 {
   /* this line added by sahil date 22-10-2024 */
 }
@@ -50,10 +51,16 @@ const ResumeList = ({
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const newSocket = getSocket();
+    setSocket(newSocket);
+  }, []);
 
   useEffect(() => {
     fetchData(currentPage, pageSize);
-  }, [employeeId, currentPage, pageSize,searchTerm]);
+  }, [employeeId, currentPage, pageSize, searchTerm]);
 
   const fetchData = async (page, size) => {
     try {
@@ -719,6 +726,7 @@ const ResumeList = ({
       candidateIds: selectedRows,
       employeeId: selectedRecruiters.employeeId,
       jobRole: selectedRecruiters.jobRole,
+      employeeName: loginEmployeeName,
     };
 
     console.log("Request Data:", requestData);
@@ -732,20 +740,25 @@ const ResumeList = ({
         body: JSON.stringify(requestData),
       };
 
-      const url = `${API_BASE_URL}/share-resume-data`;
+      const url = `${API_BASE_URL}/share-resume-data/${employeeId}/${userType}`;
       const response = await fetch(url, requestOptions);
 
       const responseData = await response.text();
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
+      console.log(
+        "API Object Share Resume Data :",
+        JSON.stringify(requestData, null, 2)
+      );
+      socket.emit("share_resume_data", requestData);
+      
       toast.success(responseData);
       fetchData(currentPage, pageSize);
       setShowForwardPopup(false); // Close the modal
       setShowShareButton(true); // Optional: Handle additional UI state
       setSelectedRows([]); // Reset selected rows
-      setSelectedRecruiters({ employeeId: null, jobRole: "" });cal
+      setSelectedRecruiters({ employeeId: null, jobRole: "" });
       console.log("Data Shared Successfully.......");
     } catch (error) {
       console.error("Error while forwarding candidates:", error);
@@ -828,10 +841,10 @@ const ResumeList = ({
     totalCount: 0,
     candidateIds: [],
   });
-  
+
   const [uploadSelectedRange, setUploadSelectedRange] = useState("0 DAY"); // Default for upload
   const [sharedSelectedRange, setSharedSelectedRange] = useState("0 DAY"); // Default for shared
-  
+
   const dateRanges = [
     { label: "Today", value: "0 DAY" },
     { label: "1 Week", value: "7 DAY" },
@@ -843,19 +856,22 @@ const ResumeList = ({
 
   const fetchUploadCountData = async (range) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/uploaded-resume-count`, {
-        params: {
-          employeeId: employeeId,
-          jobRole: userType,
-          dateRange: range,
-        },
-      });
+      const response = await axios.get(
+        `${API_BASE_URL}/uploaded-resume-count`,
+        {
+          params: {
+            employeeId: employeeId,
+            jobRole: userType,
+            dateRange: range,
+          },
+        }
+      );
       setUploadCountData(response.data);
     } catch (error) {
       console.error("Error fetching upload count data:", error);
     }
   };
-  
+
   // Fetch Shared Count Data
   const fetchSharedCountData = async (range) => {
     try {
@@ -871,26 +887,25 @@ const ResumeList = ({
       console.error("Error fetching shared count data:", error);
     }
   };
-  
 
-// Effect for Upload Count
-useEffect(() => {
-  fetchUploadCountData(uploadSelectedRange);
-}, [uploadSelectedRange]);
+  // Effect for Upload Count
+  useEffect(() => {
+    fetchUploadCountData(uploadSelectedRange);
+  }, [uploadSelectedRange]);
 
-// Effect for Shared Count
-useEffect(() => {
-  fetchSharedCountData(sharedSelectedRange);
-}, [sharedSelectedRange]);
+  // Effect for Shared Count
+  useEffect(() => {
+    fetchSharedCountData(sharedSelectedRange);
+  }, [sharedSelectedRange]);
 
-// Handlers for Dropdown Changes
-const handleUploadRangeChange = (event) => {
-  setUploadSelectedRange(event.target.value);
-};
+  // Handlers for Dropdown Changes
+  const handleUploadRangeChange = (event) => {
+    setUploadSelectedRange(event.target.value);
+  };
 
-const handleSharedRangeChange = (event) => {
-  setSharedSelectedRange(event.target.value);
-};
+  const handleSharedRangeChange = (event) => {
+    setSharedSelectedRange(event.target.value);
+  };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -1113,47 +1128,58 @@ const handleSharedRangeChange = (event) => {
                               )}
                             </div>
                           );
-                  {/* this modal added by sahil date 22-10-2024 */}
+                          {
+                            /* this modal added by sahil date 22-10-2024 */
+                          }
                         })}
                       </div>
                       <hr style={{ padding: "2px" }} />
                       <div className="count-div-resumlist">
-    {/* Upload Date Options */}
-    <div className="count-div-resumlist-sub">
-      <label htmlFor="uploadDateRange">Upload Date Options:</label>
-      <select
-        id="uploadDateRange"
-        value={uploadSelectedRange}
-        onChange={handleUploadRangeChange}
-      >
-        {dateRanges.map((range) => (
-          <option key={range.value} value={range.value}>
-            {range.label}
-          </option>
-        ))}
-      </select>
-      <p>Total Upload Count: {uploadCountData.totalCount}</p>
-    </div>
+                        {/* Upload Date Options */}
+                        <div className="count-div-resumlist-sub">
+                          <label htmlFor="uploadDateRange">
+                            Upload Date Options:
+                          </label>
+                          <select
+                            id="uploadDateRange"
+                            value={uploadSelectedRange}
+                            onChange={handleUploadRangeChange}
+                          >
+                            {dateRanges.map((range) => (
+                              <option key={range.value} value={range.value}>
+                                {range.label}
+                              </option>
+                            ))}
+                          </select>
+                          <p>
+                            Total Upload Count: {uploadCountData.totalCount}
+                          </p>
+                        </div>
 
-    {/* Share Date Options */}
-    {(userType === "Manager" || userType === "TeamLeader") && (
-      <div className="count-div-resumlist-sub">
-        <label htmlFor="shareDateRange">Share Date Options:</label>
-        <select
-          id="shareDateRange"
-          value={sharedSelectedRange}
-          onChange={handleSharedRangeChange}
-        >
-          {dateRanges.map((range) => (
-            <option key={range.value} value={range.value}>
-              {range.label}
-            </option>
-          ))}
-        </select>
-        <p>Shared Total Count: {sharedCountData.totalCount}</p>
-      </div>
-    )}
-  </div>
+                        {/* Share Date Options */}
+                        {(userType === "Manager" ||
+                          userType === "TeamLeader") && (
+                          <div className="count-div-resumlist-sub">
+                            <label htmlFor="shareDateRange">
+                              Share Date Options:
+                            </label>
+                            <select
+                              id="shareDateRange"
+                              value={sharedSelectedRange}
+                              onChange={handleSharedRangeChange}
+                            >
+                              {dateRanges.map((range) => (
+                                <option key={range.value} value={range.value}>
+                                  {range.label}
+                                </option>
+                              ))}
+                            </select>
+                            <p>
+                              Shared Total Count: {sharedCountData.totalCount}
+                            </p>
+                          </div>
+                        )}
+                      </div>
                     </>
                   )}
                 </div>
@@ -1447,7 +1473,9 @@ const handleSharedRangeChange = (event) => {
                             <i
                               className="fas fa-eye"
                               style={{
-                                color: item.resume ? "var(--active-icon)" : "inherit",
+                                color: item.resume
+                                  ? "var(--active-icon)"
+                                  : "inherit",
                               }}
                             ></i>
                           </button>
@@ -1482,21 +1510,21 @@ const handleSharedRangeChange = (event) => {
               </div>
 
               <div className="search-count-last-div">
-            Total Results : {totalRecords}
-          </div>
+                Total Results : {totalRecords}
+              </div>
 
               <Pagination
-        current={currentPage}
-        total={totalRecords}
-        pageSize={pageSize}
-        showSizeChanger
-        showQuickJumper
-        onShowSizeChange={handleSizeChange}
-        onChange={handlePageChange}
-        style={{
-          justifyContent: "center",
-        }}
-      />
+                current={currentPage}
+                total={totalRecords}
+                pageSize={pageSize}
+                showSizeChanger
+                showQuickJumper
+                onShowSizeChange={handleSizeChange}
+                onChange={handlePageChange}
+                style={{
+                  justifyContent: "center",
+                }}
+              />
 
               {/*Arshad Attar Added This Code On 03-12-2024
                Added New Share Data Frontend Logic line 1444 to 1572 */}
@@ -1604,9 +1632,6 @@ const handleSharedRangeChange = (event) => {
           </div>
         </>
       )}
-      
-  
-      
     </div>
   );
 };

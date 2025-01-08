@@ -32,6 +32,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import "./applicantFrom2.css";
 import { API_BASE_URL } from "../api/api";
 import CryptoJS from "crypto-js";
+import { getSocket } from "../EmployeeDashboard/socket";
 
 function ApplicantForm2({ loginEmployeeName }) {
   //Arshad Attar Added This Code On 12-12-2024
@@ -70,7 +71,7 @@ function ApplicantForm2({ loginEmployeeName }) {
     }
   };
   
-
+  const [socket, setSocket] = useState(null);
   const { employeeId, userType } = decodeParams(encodedParams);
   const [loading, setLoading] = useState(false);
   const [resumeSelected, setResumeSelected] = useState(false);
@@ -140,6 +141,12 @@ function ApplicantForm2({ loginEmployeeName }) {
 
   const [formData, setFormData] = useState(initialFormData);
   const navigator = useNavigate();
+
+      // establishing socket for emmiting event
+      useEffect(() => {
+        const newSocket = getSocket();
+        setSocket(newSocket);
+      }, []);
 
   // Set recruiterName when loginEmployeeName is available
   useEffect(() => {
@@ -294,7 +301,7 @@ function ApplicantForm2({ loginEmployeeName }) {
     console.log("FormData before submission:", updatedFormData);
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/save-applicant`,
+        `${API_BASE_URL}/save-applicant/${userType}`,
         updatedFormData,
         {
           headers: {
@@ -303,6 +310,7 @@ function ApplicantForm2({ loginEmployeeName }) {
         }
       );
       console.log("Form submitted successfully:", response.data);
+      socket.emit("save_applicant_data", updatedFormData);
       //toast.success("Your Details Submitted Successfully");
       // Set submitted state to true
       setIsSubmitted(true);

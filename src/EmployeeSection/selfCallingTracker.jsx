@@ -1199,7 +1199,7 @@ const CallingList = ({
                     <th className="attendanceheading">Interview Status</th>
                     <th className="attendanceheading">Employee Id</th>
 
-                    {(userType === "TeamLeader" || userType === "Manager") && (
+                    {(userType === "Manager") && (
                       <th className="attendanceheading">Team Leader Id</th>
                     )}
 
@@ -1897,8 +1897,7 @@ const CallingList = ({
                             </div>
                           </td>
 
-                          {(userType === "TeamLeader" ||
-                            userType === "Manager") && (
+                          {(userType === "Manager") && (
                             <td
                               className="tabledata"
                               onMouseOver={handleMouseOver}

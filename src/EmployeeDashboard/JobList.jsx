@@ -10,11 +10,13 @@ import ShareEDM from "../JobDiscription/shareEDM";
 import UpdateJobDescription from "../JobDiscription/UpdateJobDescription";
 import { toast } from "react-toastify";
 import axios from "../api/api";
+import { getSocket } from "../EmployeeDashboard/socket";
 
 // SwapnilRokade_JobListing_filter_option__18/07
 
 const JobListing = ({loginEmployeeName}) => {
   const { employeeId, userType } = useParams();
+   const [socket, setSocket] = useState(null);
   const [jobDescriptions, setJobDescriptions] = useState([]);
   const [filterOptions, setFilterOptions] = useState([]);
   const [updateJD, setUpdateJd] = useState([]);
@@ -61,6 +63,12 @@ const JobListing = ({loginEmployeeName}) => {
     "holdStatus",
   ];
 
+      // establishing socket for emmiting event
+      useEffect(() => {
+        const newSocket = getSocket();
+        setSocket(newSocket);
+      }, []);
+      
   useEffect(() => {
     // replaced base url with actual url just for testing by sahil karnekar please replace it with base url at the time of deployment
     fetch(`${API_BASE_URL}/all-job-descriptions`)
@@ -301,17 +309,27 @@ const JobListing = ({loginEmployeeName}) => {
       `Are you sure you want to delete JD with ID ${requirementId}?`
     );
     if (!confirmDelete) return;
+
     try {
+          // Fetch the requirement data
+          const response = await fetch(
+            `${API_BASE_URL}/requirement-info/${requirementId}`
+          );
+          const data = await response.json();
+
       await axios.delete(
-        `${API_BASE_URL}/delete-job-description/${requirementId}`
+        `${API_BASE_URL}/delete-job-description/${requirementId}/${employeeId}/${userType}`
       );
       toast.success("JD Deleted Successfully..");
+
       setJobDescriptions((prevDescriptions) =>
         prevDescriptions.filter((job) => job.requirementId !== requirementId)
       );
       setFilteredJobDescriptions((prevFiltered) =>
         prevFiltered.filter((job) => job.requirementId !== requirementId)
       );
+      console.log("Emit Data for Delete Job description " + data ); 
+      socket.emit("delete_job_description", data);
     } catch (error) {
       toast.error(`Failed to delete JD: ${error.message}`);
     }

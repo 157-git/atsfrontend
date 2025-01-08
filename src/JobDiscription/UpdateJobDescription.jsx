@@ -108,7 +108,6 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp,loginEmployeeName}
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-     
       const response = await fetch(
         `${API_BASE_URL}/update-job-description/${onAddJD.requirementId}/${employeeId}/${userType}`,
         {

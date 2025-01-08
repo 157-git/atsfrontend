@@ -7,17 +7,17 @@ import LoginImage from "../LogoImages/LoginImge.jpg";
 import ForgotPasswordForms from "./empForgotPasswords";
 import { API_BASE_URL } from "../api/api";
 import axios from "../api/api";
-
+import { getSocket } from "../EmployeeDashboard/socket";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 // added by sahil karnekar date 2-12-2024
 import ForceLogout from "../LoginPage/ForceLogout";
 //  sahil karnekar Worked on : - date 27 sep 2024
 // Sahil Karnekar Added line num 8 to line num 77
-
 const LoginSignup = ({ onLogin }) => {
   const { userType } = useParams();
   const [employeeId, setEmployeeId] = useState("");
+  const [socket, setSocket] = useState(null);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -33,6 +33,12 @@ const LoginSignup = ({ onLogin }) => {
 
   // only functionality javascript code added by sahil karnekar dont use html code , html code is not styled or not applied any css
   // please check the logic once
+
+      // establishing socket for emmiting event
+      useEffect(() => {
+        const newSocket = getSocket();
+        setSocket(newSocket);
+      }, []);
 
   useEffect(() => {
     AOS.init({ duration: 3000 });
@@ -117,6 +123,10 @@ const LoginSignup = ({ onLogin }) => {
       // line 125 to 154 added by sahil karnekar on date 28-11-2024
       if (loginResponse.status === 200) {
         console.log(loginResponse);
+
+        console.log("Emit Data for user login event", JSON.stringify(formData, null, 2)); 
+        socket.emit("user_login_event",  );
+
         if (loginResponse.data.statusCode === "200 OK") {
           // added by sahil karnekar date 2-12-2024
           localStorage.setItem(
