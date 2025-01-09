@@ -13,6 +13,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 // added by sahil karnekar date 2-12-2024
 import ForceLogout from "../LoginPage/ForceLogout";
 import { initializeSocket } from "../EmployeeDashboard/socket";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
 //  sahil karnekar Worked on : - date 27 sep 2024
 // Sahil Karnekar Added line num 8 to line num 77
 const LoginSignup = ({ onLogin }) => {
@@ -151,8 +152,8 @@ const LoginSignup = ({ onLogin }) => {
 
           const emitData = {
             employeeName:  loginResponse.data.employeeName,
-            loginTime: new Date().toISOString(),
-          };
+            loginTime: getFormattedDateTime(),
+          }
           console.log("Emit Data:", emitData);
           newSocket.emit("user_login_event", emitData);
 

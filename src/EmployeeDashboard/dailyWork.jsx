@@ -743,6 +743,81 @@ function DailyWork({
         
       });
 
+      socket.on("receive_user_logout_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
+      socket.on("receive_save_applicant_data", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
+      socket.on("receive_add_recruiter_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
+      socket.on("receive_add_teamLeader_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
+      socket.on("receive_add_manager_event", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
       socket.on("connect_error", () => {
         console.log;
         ("Connection failed. Ensure your details are correct.");
@@ -870,6 +945,7 @@ function DailyWork({
                   isOpen ? "open" : "closed"
                 }`}
               >
+                <div className="mainNotDiv">
                 <div className="motificationSubCont1">
                   {messages.length > 0 ? (
                     messages.map((message, index) => (
@@ -985,6 +1061,70 @@ function DailyWork({
     </p>
   )
 }
+{
+  message.eventName === "user_login_event" && (
+    <p>
+    {index + 1} -  {message.candidate.employeeName} 
+<span> Logged In </span>
+       On {" "} {message.candidate.loginTime}
+    </p>
+  )
+}
+{
+  message.eventName === "user_logout_event" && (
+    <p>
+    {index + 1} -  {message.candidate.employeeName} 
+<span> Logged Out </span>
+       On {" "} {message.candidate.logoutDateAndTime}
+    </p>
+  )
+}
+
+{
+  message.eventName === "save_applicant_data" && (
+    <p>
+    {index + 1} -  {message.candidate.candidateName} 
+<span> Added In Calling Tracker From {message.candidate.sourceName} Please Check Calling Tracker Section</span>
+      {" "} On {" "} {message.candidate.date}
+    </p>
+  )
+}
+{
+  message.eventName === "receive_add_recruiter_event" && (
+    <p>
+    {index + 1} -  {message.candidate.candidateName} 
+<span> Added In Calling Tracker From {message.candidate.sourceName} Please Check Calling Tracker Section</span>
+      {" "} On {" "} {message.candidate.date}
+    </p>
+  )
+}
+{
+  message.eventName === "add_recruiter_event" && (
+    <p>
+    {index + 1} -  {message.candidate.employeeName} New {message.candidate.jobRole}
+<span> Joined </span>
+      {" "} On {" "} {message.candidate.dateOfJoining}
+    </p>
+  )
+}
+{
+  message.eventName === "add_teamLeader_event" && (
+    <p>
+    {index + 1} -  {message.candidate.teamLeaderName} New {message.candidate.jobLevel}
+<span> Joined </span>
+      {" "} On {" "} {message.candidate.tlDateOfJoining}
+    </p>
+  )
+}
+{
+  message.eventName === "add_manager_event" && (
+    <p>
+    {index + 1} -  {message.candidate.managerName} New {message.candidate.jobRole}
+<span> Joined </span>
+      {" "} On {" "} {message.candidate.dateOfJoiningM}
+    </p>
+  )
+}
                         <hr />
                         {/* <p>{message.number}</p> */}
                       </>
@@ -992,6 +1132,7 @@ function DailyWork({
                   ) : (
                     <p>No Notifications</p>
                   )}
+                </div>
                 </div>
                 <div className="buttonsDivForNotifications">
                   <CloseOutlined

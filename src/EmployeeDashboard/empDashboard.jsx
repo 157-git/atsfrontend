@@ -787,7 +787,7 @@ const EmpDashboard = ({ userGroup }) => {
         </div>
 
         <div>{showInterviewDate && <InterviewDates />}</div>
-        <div>{showAddEmployee && <AddEmployee />}</div>
+        <div>{showAddEmployee && <AddEmployee loginEmployeeName={loginEmployeeName} />}</div>
         <div>
           {selectCandidate && (
             <SelectedCandidate loginEmployeeName={loginEmployeeName} />
@@ -928,8 +928,8 @@ const EmpDashboard = ({ userGroup }) => {
           )}
         </div>
 
-        <div>{showAddTeamLeader && <AddTeamLeader></AddTeamLeader>}</div>
-        <div>{showAddManager && <AddManager></AddManager>}</div>
+        <div>{showAddTeamLeader && <AddTeamLeader loginEmployeeName={loginEmployeeName}></AddTeamLeader>}</div>
+        <div>{showAddManager && <AddManager loginEmployeeName={loginEmployeeName}></AddManager>}</div>
         <div>
           {showSharedProfile && <ShareProfileData></ShareProfileData>}
         </div>

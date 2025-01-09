@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../EmployeeSection/addEmployee.css";
 import { toast } from "react-toastify"
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
+import { getSocket } from "../EmployeeDashboard/socket";
+import { getFormattedDateTime } from "./getFormattedDateTime";
 
-const AddTeamLeader = () => {
+const AddTeamLeader = ({loginEmployeeName}) => {
   const { employeeId, userType } = useParams();
   const [formData, setFormData] = useState({
     teamLeaderId:"0",
@@ -76,6 +78,7 @@ const AddTeamLeader = () => {
   const [passwordError, setPasswordError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errors, setErrors] = useState({});
+   const [socket, setSocket] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -171,7 +174,10 @@ const AddTeamLeader = () => {
       setPasswordError("");
     }
   };
-
+  useEffect(() => {
+    const newSocket = getSocket();
+    setSocket(newSocket);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -195,7 +201,7 @@ const AddTeamLeader = () => {
  
     try {
       const response = await fetch(
-        `${API_BASE_URL}/save-teamLeader/${employeeId}`,
+        `${API_BASE_URL}/save-teamLeader/${employeeId}/${userType}`,
         {
           method: "POST",
           body: formDataToSend,
@@ -205,6 +211,69 @@ const AddTeamLeader = () => {
       const result = await response.text(); 
       if (response.ok) {
         toast.success(result.message || "Team Leader Data Added Successfully."); 
+
+const emitData = {
+  teamLeaderId:"0",
+  teamLeaderName: formData.teamLeaderName,
+  userName: formData.userName,
+  tlDateOfJoining: getFormattedDateTime(),
+  tlDesignation: "",
+  tlDepartment: "",
+  tlOfficialMail: "",
+  tlPersonalEmailId: "",
+  tlOfficialContactNo: "",
+  tlAlternateContactNo: "",
+  tlDateOfBirth: "",
+  tlGender: "",
+  tlCompanyMobileNo: "",
+  tlWhatsAppNo: "",
+  tlEmergencyContactPerson: "",
+  tlEmergencyContactNo: "",
+  tlEmergencyPersonRelation: "",
+  tlPresentAddress: "",
+  tlExperience: "",
+  tlPerks: "",
+  tlMaritalStatus: "",
+  tlAnniversaryDate: "",
+  tlTShirtSize: "",
+  tlLastCompany: "",
+  tlWorkLocation: "",
+  tlEntrySource: "",
+  teamLeaderStatus: "",
+  lastWorkingDate: "",
+  tlReasonForLeaving: "",
+  tlInductionYesOrNo: "",
+  tlInductionComment: "",
+  tlTrainingSource: "",
+  tlTrainingCompleted: "",
+  tlTrainingTakenCount: "",
+  tlRoundsOfInterview: "",
+  tlInterviewTakenPerson: "",
+  tlWarningComments: "",
+  tlPerformanceIndicator: "",
+  messageForAdmin: "",
+  editDeleteAuthority: "",
+  linkedInURL: "",
+  faceBookURL: "",
+  twitterURL: "",
+  tlAddress: "",
+  bloodGroup: "",
+  tlAadhaarNo: "",
+  tlPanNo: "",
+  tlQualification: "",
+  tlSalary: "",
+  jobLevel: formData.jobLevel,
+  professionalPtNo: "",
+  esIcNo: "",
+  pfNo: "",
+  tlPassword: "",
+  tlConfirmPassword: "",
+  tlInsuranceNumber: "",
+  reportingAdminName: loginEmployeeName,
+  reportingAdminDesignation: "",
+}
+
+        socket.emit("add_teamLeader_event", emitData);
         setFormData({teamLeaderId:"0",
             teamLeaderName: "",
             userName: "",

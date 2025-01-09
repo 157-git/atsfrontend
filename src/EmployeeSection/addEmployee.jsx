@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../EmployeeSection/addEmployee.css";
 import { toast } from "react-toastify"
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
+import { getSocket } from "../EmployeeDashboard/socket";
+import { getFormattedDateTime } from "./getFormattedDateTime";
 
-const AddEmployee = () => {
+const AddEmployee = ({loginEmployeeName}) => {
   const { employeeId, userType } = useParams();
+   const [socket, setSocket] = useState(null);
   const [formData, setFormData] = useState({
     employeeId: "0",
     employeeName: "",
@@ -164,7 +167,10 @@ const AddEmployee = () => {
     }
   };
 
-
+  useEffect(() => {
+    const newSocket = getSocket();
+    setSocket(newSocket);
+  }, []);
   
   const handleConfirmPasswordBlur = () => {
     if (formData.employeePassword !== formData.confirmPassword) {
@@ -210,10 +216,11 @@ const AddEmployee = () => {
         formDataToSend.append(key, formData[key]);
       }
     }
+  console.log(formData);
   
     try {
       const response = await fetch(
-        `${API_BASE_URL}/add-employee/${employeeId}`,
+        `${API_BASE_URL}/add-employee/${employeeId}/${userType}`,
         {
           method: "POST",
           body: formDataToSend,
@@ -223,7 +230,76 @@ const AddEmployee = () => {
       const result = await response.text(); 
   
       if (response.ok) {
+        console.log(loginEmployeeName);
+        
+        const emitData = {
+
+          employeeId: "0",
+    employeeName: formData.employeeName,
+    dateOfJoining: getFormattedDateTime(),
+    userName: formData.userName,
+    designation: "",
+    department: "",
+    officialMail: "",
+    employeeEmail: "",
+    employeeNumber: "",
+    officialContactNumber: "",
+    alternateContactNo: "",
+    dateOfBirth: "",
+    gender: "",
+    companyMobileNumber: "",
+    whatsAppNumber: "",
+    emergencyContactPerson: "",
+    emergencyContactNumber: "",
+    emergencyPersonRelation: "",
+    employeePresentAddress: "",
+    employeeExperience: "",
+    perks: "",
+    maritalStatus: "",
+    anniversaryDate: "",
+    tshirtSize: "",
+    lastCompany: "",
+    workLocation: "",
+    entrySource: "",
+    employeeStatus: "",
+    lastWorkingDate: "",
+    reasonForLeaving: "",
+    inductionYesOrNo: "",
+    inductionComment: "",
+    trainingSource: "",
+    trainingCompletedYesOrNo: "",
+    trainingTakenCount: "",
+    roundsOfInterview: "",
+    interviewTakenPerson: "",
+    warningComments: "",
+    performanceIndicator: "",
+    teamLeaderMsg: loginEmployeeName,
+    editDeleteAuthority: "",
+    linkedInURl: "",
+    faceBookURL: "",
+    twitterURl: "",
+    employeeAddress: "",
+    bloodGroup: "",
+    aadhaarNo: "",
+    panNo: "",
+    educationalQualification: "",
+    offeredSalary: "",
+    jobRole: formData.jobRole,
+    professionalPtNo: "",
+    esIcNo: "",
+    pfNo: "",
+    employeePassword: "",
+    confirmPassword: "",
+    profileImage: null,
+    document: null,
+    resumeFile: null,
+    insuranceNumber: "",
+    reportingMangerName: "",
+    reportingMangerDesignation: "",
+
+        }
         toast.success(result.message || "Employee Data Added Successfully.");
+socket.emit("add_recruiter_event", emitData);
         setFormData({
           employeeId: "0",
           employeeName: "",

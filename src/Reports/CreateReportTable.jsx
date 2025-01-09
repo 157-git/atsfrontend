@@ -730,6 +730,16 @@ import html2canvas from 'html2canvas';
                  totalCandidatepdf
                );
         
+
+               console.log(reportDataDatewise);
+               console.log(SuperUserName);
+               console.log(                 ManagerName,
+               );
+               console.log(TeamLeaderName);
+               console.log(RecruiterName);
+               console.log(DateReportData);
+               console.log(totalCandidatepdf);
+               
            
                // Apply styling changes for canvas
                const forWidthMain = document.getElementById('divToPrint');

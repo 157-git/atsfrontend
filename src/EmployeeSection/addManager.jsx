@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../EmployeeSection/addEmployee.css";
 import { toast } from "react-toastify"
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
+import { getSocket } from "../EmployeeDashboard/socket";
+import { getFormattedDateTime } from "./getFormattedDateTime";
 
-const AddManager = () => {
+const AddManager = ({loginEmployeeName}) => {
     const { employeeId, userType } = useParams();
+    const [socket, setSocket] = useState(null);
     const [formData, setFormData] = useState({
         managerId: "0",
         managerName: "",
@@ -172,7 +175,10 @@ const AddManager = () => {
             setPasswordError("");
         }
     };
-
+  useEffect(() => {
+    const newSocket = getSocket();
+    setSocket(newSocket);
+  }, []);
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -195,7 +201,7 @@ const AddManager = () => {
 
         try {
             const response = await fetch(
-                `${API_BASE_URL}/save-managers/${employeeId}`,
+                `${API_BASE_URL}/save-managers/${employeeId}/${userType}`,
                 {
                     method: "POST",
                     body: formDataToSend,
@@ -207,6 +213,20 @@ const AddManager = () => {
                 console.log(formData);
                 
                 toast.success(result.message || "Manager Data Added Successfully.");
+
+
+const emitData = {
+    managerName: formData.managerName,
+    dateOfJoiningM: getFormattedDateTime(),
+    userName: formData.userName,
+    jobRole: formData.jobRole,
+    reportingAdminName: loginEmployeeName,
+}
+
+console.log(emitData);
+
+
+                socket.emit("add_manager_event", emitData);
                 setFormData({
                     managerId: "0",
                     managerName: "",

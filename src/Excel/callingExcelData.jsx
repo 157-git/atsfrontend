@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { Pagination } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import { getSocket } from "../EmployeeDashboard/socket";
-import { getFormattedDateTime } from "../EmployeeSection/getFormattedDay";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
 
 const CallingExcelList = ({
   updateState,

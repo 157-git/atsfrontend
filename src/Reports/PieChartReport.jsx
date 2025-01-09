@@ -120,9 +120,38 @@
          
          
                </div>
+
+
+               {/* <div className="createTable">
+          <table>
+            <thead>
+              <tr>
+                <th>Status of Candidate</th>
+                <th>No of Candidate</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+               {
+                data.map((item)=>(
+                  <>
+                  <tr>
+                  <td>{item.category}</td>
+                  <td>{item.count}</td>
+                  </tr>
+                  </>
+                ))
+               }
+             
+            </tbody>
+          </table>
+         </div> */}
+
+
+
                </div>
              
-         
+      
                
              </div>
            );
