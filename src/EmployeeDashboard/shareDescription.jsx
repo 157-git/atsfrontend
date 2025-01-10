@@ -120,14 +120,13 @@ const ShareDescription = ({ Descriptions }) => {
 
 <div className="setDisplayFlexForEdm">
             <div className="job-details-firstsection-share">
-              {Descriptions.companyName && (
-              <p>
+            {Descriptions.companyName && (
+              <p
+              contentEditable
+              >
                 <b
                 contentEditable
-                >Company Name : </b>
-                  {" "}
-                  {Descriptions.companyName}
-                
+                >Company Name:</b> {Descriptions.companyName}
               </p> )}
               {Descriptions.location && (
               <p

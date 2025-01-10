@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { API_BASE_URL } from "../api/api";
 import {useParams } from "react-router-dom";
 import { getSocket } from "../EmployeeDashboard/socket";
-import { getFormattedDateTime } from "../EmployeeSection/getFormattedDay";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
 
 // sahil karnekar line 9_  date : 10-10-2024
 const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp,loginEmployeeName}) => {

@@ -10,6 +10,7 @@ import ColorPicker from "../HomePage/ColorPicker";
 import { API_BASE_URL } from "../api/api";
 import LogoutOnEvent from "./logoutOnEvent";
 import { getSocket } from "../EmployeeDashboard/socket";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
 
 // Swapnil_Sidebar_AddingEmployeeDetailsinto_ManagerSection_17/07
 
@@ -150,22 +151,27 @@ function Sidebar({
       }
 
       let requestBody = {};
-      switch (userType) {
+      console.log(userType);
+      
+      switch (`${userType}`) {
         case "SuperUser":
-          requestBody = { superUserId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : new Date().toISOString()};
+          requestBody = { superUserId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : getFormattedDateTime()};
           break;
         case "Manager":
-          requestBody = { managerId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : new Date().toISOString()};
+          requestBody = { managerId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : getFormattedDateTime()};
           break;
         case "TeamLeader":
-          requestBody = { teamLeaderId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : new Date().toISOString()};
+          requestBody = { teamLeaderId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : getFormattedDateTime()};
           break;
         case "Recruiters":
-          requestBody = { employeeId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : new Date().toISOString()};
+          requestBody = { employeeId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : getFormattedDateTime()};
+          break;
         default:
           console.error("Invalid user type");
           return;
       }
+      console.log(requestBody);
+      
 
       // Make API call
       const response = await axios.post(
@@ -173,6 +179,8 @@ function Sidebar({
         requestBody
       );
       console.log( "Logout Successfully Emit Object " + JSON.stringify( requestBody ));
+      console.log(response);
+      
       socket.emit("user_logout_event",requestBody);
       console.log("Logout Successfully And Status Updated Successfully..");
       navigate(`/login/${userType}`, { replace: true });

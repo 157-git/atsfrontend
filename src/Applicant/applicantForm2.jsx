@@ -32,7 +32,8 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import "./applicantFrom2.css";
 import { API_BASE_URL } from "../api/api";
 import CryptoJS from "crypto-js";
-import { getSocket } from "../EmployeeDashboard/socket";
+import { initializeSocket } from "../EmployeeDashboard/socket";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
 
 function ApplicantForm2({ loginEmployeeName }) {
   //Arshad Attar Added This Code On 12-12-2024
@@ -131,7 +132,7 @@ function ApplicantForm2({ loginEmployeeName }) {
 
       // establishing socket for emmiting event
       useEffect(() => {
-        const newSocket = getSocket();
+        const newSocket = initializeSocket(2, "User");
         setSocket(newSocket);
       }, []);
 
@@ -285,7 +286,7 @@ function ApplicantForm2({ loginEmployeeName }) {
         : {}),
     };
 
-    console.log("FormData before submission:", updatedFormData);
+    console.log(updatedFormData);
     try {
       const response = await axios.post(
         `${API_BASE_URL}/save-applicant/${userType}`,
@@ -296,8 +297,32 @@ function ApplicantForm2({ loginEmployeeName }) {
           },
         }
       );
-      console.log("Form submitted successfully:", response.data);
-      socket.emit("save_applicant_data", updatedFormData);
+      console.log(response);
+      
+      console.log(response.data);
+
+     const emitData = {
+      date: getFormattedDateTime(),
+      candidateName: formData.candidateName,
+      contactNumber: formData.contactNumber,
+      candidateEmail: formData.candidateEmail,
+      jobDesignation: formData.jobDesignation,
+      currentLocation: formData.currentLocation,
+      recruiterName: formData.recruiterName,
+      alternateNumber: formData.alternateNumber,
+      sourceName: "Applicant Form",
+      requirementId: formData.requirementId,
+      requirementCompany: formData.requirementCompany,
+      communicationRating: formData.communicationRating,
+      fullAddress: formData.fullAddress,
+      callingFeedback: formData.callingFeedback,
+      selectYesOrNo: "Yet To Confirm",
+      incentive: formData.incentive,
+      oldEmployeeId: formData.oldEmployeeId,
+      distance: formData.distance,
+     }
+   
+      socket.emit("save_applicant_data", emitData);
       //toast.success("Your Details Submitted Successfully");
       // Set submitted state to true
       setIsSubmitted(true);

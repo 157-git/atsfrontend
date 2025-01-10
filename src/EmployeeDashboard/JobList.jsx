@@ -11,7 +11,7 @@ import UpdateJobDescription from "../JobDiscription/UpdateJobDescription";
 import { toast } from "react-toastify";
 import axios from "../api/api";
 import { getSocket } from "../EmployeeDashboard/socket";
-import { getFormattedDateTime } from "../EmployeeSection/getFormattedDay";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
 
 // SwapnilRokade_JobListing_filter_option__18/07
 
