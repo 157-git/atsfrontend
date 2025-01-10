@@ -349,7 +349,7 @@ colors.forEach(({ variable, value }) => {
       //   "gray", "#ccffcc", "#ff4d4d", "#99ffbb", "#ffffff", "#99ffbb", "gray", "#ffffff", "#66ff66", "#e60000",
       //   "#ff6666", "#ff4d4d", "gray", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","black","black"
       // ],
-    
+  
     };
   
   console.log(colorMapping);

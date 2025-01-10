@@ -39,19 +39,6 @@ function ApplicantForm2({ loginEmployeeName }) {
   //Arshad Attar Added This Code On 12-12-2024
   //This Code to hide Employee Id and UserType In Every Time
   const { encodedParams } = useParams();
-  // Decode the encodedParams
-  // const decodeParams = (encoded) => {
-  //   try {
-  //     const decoded = atob(encoded);
-  //     const [employeeId, userType] = decoded.split(":");
-  //     return { employeeId, userType };
-  //   } catch (error) {
-  //     console.error("Failed to decode parameters:", error);
-  //     return { employeeId: null, userType: null };
-  //   }
-  // };
-
-
   // here i have performed decryption
   // exposing directly in file just for testing and normal use purpose, please set this secreat key in env file while deploying on server
   const secretKey = "157industries_pvt_ltd"; // Ensure this matches ShareLink
@@ -936,4 +923,5 @@ function ApplicantForm2({ loginEmployeeName }) {
     </div>
   );
 }
+
 export default ApplicantForm2;

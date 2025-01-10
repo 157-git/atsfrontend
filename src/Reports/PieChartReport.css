@@ -105,9 +105,9 @@ border-right: 1px solid black;
   padding: 20px;
 }
 .tabledivmain{
-  display: block;
+  display: none;
 }
 .tablecont{
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
 }

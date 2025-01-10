@@ -312,12 +312,6 @@ const JobListing = ({ loginEmployeeName }) => {
     if (!confirmDelete) return;
 
     try {
-      // Fetch the requirement data
-      const response = await fetch(
-        `${API_BASE_URL}/requirement-info/${requirementId}`
-      );
-      const data = await response.json();
-
       await axios.delete(
         `${API_BASE_URL}/delete-job-description/${item.requirementId}/${employeeId}/${userType}`
       );
