@@ -64,3 +64,33 @@
 .pie-segment:hover .tooltip-piechart{
   opacity: 1; 
 }
+.mainChartContainer{
+  display: block;
+}
+.listOfIndex{
+  display: flex;
+}
+.newUlListDisplayGrid{
+  display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.newIndexDiv{
+  border: 1px solid gray;
+  padding: 10px;
+  height: fit-content;
+}
+.subdivforcharts{
+  display: flex;
+  justify-content: space-between;
+}
+.forborderfortds{
+border-right: 1px solid black;
+}
+.textAlignCenterForTableOfReport{
+  text-align: center;
+}
+.widthSetForTds{
+  width: 200px;
+  padding-bottom: 5px;
+}

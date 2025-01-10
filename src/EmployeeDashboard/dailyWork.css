@@ -430,6 +430,6 @@
   color: var(--button-txt-hover-color);
 }
 .mainNotDiv{
-  height: 65vh;
+  max-height: 65vh;
     overflow-y: scroll;
 }
