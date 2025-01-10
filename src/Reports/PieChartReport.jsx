@@ -5,14 +5,17 @@
          import "../Reports/PieChartReport.css";
          import { Pie } from 'react-chartjs-2';
          import { Chart, ArcElement,Tooltip } from 'chart.js';
-import { tr } from 'date-fns/locale';
+import { getFormattedDateTime } from '../EmployeeSection/getFormattedDateTime';
          
          Chart.register(Tooltip);
          Chart.register(ArcElement);
          
-         const PieChart = ({data}) => {
+         const PieChart = ({data,userName,finalStartDatePropState,finalEndDatePropState}) => {
            console.log(data)
-
+const [currentDate, setCurrentDate] = useState("");
+           useEffect(()=>{
+setCurrentDate(getFormattedDateTime())
+           },[]);
            const categories = data.map(item => item.category);
            const counts = data.map(item => item.count);
 
@@ -53,6 +56,39 @@ import { tr } from 'date-fns/locale';
            return (
           <>
           <div className="mainChartContainer" id='divToPrint'>
+
+<div className="tablecont">
+<div className="tabledivmain">
+  <div className="infodiv">
+  <p>{userName}</p>
+  <p>{currentDate}</p>
+  <p>This Report Data Is Generated From {finalStartDatePropState} to {finalEndDatePropState}</p>
+  </div>
+  <table className='textAlignCenterForTableOfReport'>
+    <thead>
+      <tr>
+        <td className='forborderfortds widthSetForTds'>Categories</td>
+        <td className='widthSetForTds'>Counts</td>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        data.map((item, index)=>(
+          <tr>
+            <td className='forborderfortds widthSetForTds'>{item.category}</td>
+            <td className='widthSetForTds'>{item.count}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+</div>
+
+
+
+
+
             <div className="subdivforcharts">
             <div className="piecontainer">
           <Pie data={chartData} />
@@ -76,27 +112,6 @@ import { tr } from 'date-fns/locale';
           </ul>
         </div>
         </div>
-
-<div className="tabledivmain">
-  <table className='textAlignCenterForTableOfReport'>
-    <thead>
-      <tr>
-        <td className='forborderfortds widthSetForTds'>Categories</td>
-        <td className='widthSetForTds'>Counts</td>
-      </tr>
-    </thead>
-    <tbody>
-      {
-        data.map((item, index)=>(
-          <tr>
-            <td className='forborderfortds widthSetForTds'>{item.category}</td>
-            <td className='widthSetForTds'>{item.count}</td>
-          </tr>
-        ))
-      }
-    </tbody>
-  </table>
-</div>
 
         </div>
           </>

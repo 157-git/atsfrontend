@@ -225,12 +225,12 @@
         }
       
         .shareDownloadbtn {
-          background: #ffcb9b;
-          border: 1px solid grey;
+          background: var(--primary-button-bg);
+          border: 1px solid var(--primary-border);
           height: 30px;
           width: auto; /* Adjust width as needed */
           border-radius: 15px;
-          color: white;
+          color: var(--button-txt-color);
           padding: 0 20px; /* Adjust padding for text alignment */
           font-size: 16px;
           cursor: pointer;
@@ -239,7 +239,7 @@
         }
       
         .shareDownloadbtn:hover {
-          background: white;
-          color: #ffcb9b;
+          background: var(--primary-button-hover);
+          color: var(--button-txt-hover-color);
         }
       

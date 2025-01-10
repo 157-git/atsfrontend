@@ -167,7 +167,7 @@
 
 .user-details p {
   font-size: 18px;
-  color:var(--text-color);
+  color:var(--sidebar-txt);
   font-weight: 400;
 }
 

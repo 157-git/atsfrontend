@@ -835,7 +835,7 @@ const EmpDashboard = ({ userGroup }) => {
           )}
         </div>
         <div>{showNotePad && <NotePad />}</div>
-        <div>{showMainReportDatapage && <MainReportDatapage />}</div>
+        <div>{showMainReportDatapage && <MainReportDatapage loginEmployeeName={loginEmployeeName} />}</div>
         <div>{showChatRoom && <ChatRoom />}</div>
         <div>
           {showShareLink && <ShareLink toggleResumeLink={toggleResumeLink} />}

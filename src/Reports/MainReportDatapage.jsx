@@ -13,7 +13,7 @@ import { data } from "autoprefixer";
 import Loader from "../EmployeeSection/loader";
 import { Avatar, Card, List, Modal } from "antd";
 
-const MonthReport = () => {
+const MonthReport = ({loginEmployeeName}) => {
   const { userType } = useParams();
   const { employeeId } = useParams();
   const [reportDataDatewise, setReportDataDatewise] = useState(null);
@@ -611,6 +611,7 @@ const MonthReport = () => {
           selectedJobRole={selectedRole}
           finalStartDatePropState={finalStartDatePropState}
           finalEndDatePropState={finalEndDatePropState}
+          loginEmployeeName={loginEmployeeName}
         />
       )}
     </>

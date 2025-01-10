@@ -336,6 +336,10 @@ Arshad Added Css line 337 to  */
 align-items: center;
 padding-left: 15px;
 }
+.newHegightSetForAlignment{
+  height: 400px;
+  overflow-y: scroll;
+}
 
 .modal-footer{
   padding-right: 5px;

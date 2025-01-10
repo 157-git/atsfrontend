@@ -373,6 +373,7 @@ colors.forEach(({ variable, value }) => {
         >
           {Object.keys(colorMapping).map((color, index) => (
             <div
+            className="colorpickerthemes"
               key={index}
               onClick={() => handleColorClick(color)}
               style={{
