@@ -625,7 +625,7 @@ strong {
 .sidebar-item.active,
 .sidebar-item:hover {
   background-color: var(--sidebar-active-item-bg);
-  color: #fff;
+  color: var(--sidebar-txt-hover);
 }
 
 .calling-tracker-popup-dashboard {
@@ -681,7 +681,7 @@ strong {
   margin-top: 10px;
 }
 .sal-cal-th {
-  color: white !important;
+  color: var(--sidebar-txt);
   background-color: var(--Bg-color) !important;
 }
 

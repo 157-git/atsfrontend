@@ -787,9 +787,22 @@ function DailyWork({
       {
         userType != "Applicant" && userType != "Vendor" ? (
           <>
+          
             <div
               className={`all-daily-btns ${!showAllDailyBtns ? "hidden" : ""}`}
             >
+               {/* <div> */}
+               <div style={{ display: "flex" }}>
+                      <div
+                        style={{ marginRight: "10px" }}
+                        onClick={toggleNotificationBox}
+                      >
+                        <Badge count={messages.length}>
+                          <Avatar shape="square" icon={<BellOutlined />} />
+                        </Badge>
+                      </div>
+                    </div>
+              {/* </div> */}
               <div className="daily-t-btn">
                 <button
                   className="daily-tr-btn"
@@ -852,18 +865,7 @@ function DailyWork({
               >
                 {running ? "Pause" : "Resume"}
               </button>
-              <div>
-                    <div style={{ display: "flex" }}>
-                      <div
-                        style={{ marginRight: "10px" }}
-                        onClick={toggleNotificationBox}
-                      >
-                        <Badge count={messages.length}>
-                          <Avatar shape="square" icon={<BellOutlined />} />
-                        </Badge>
-                      </div>
-                    </div>
-                  </div>
+             
 
               <div
                 className={`notificationMainCont1 ${

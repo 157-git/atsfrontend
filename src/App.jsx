@@ -81,7 +81,7 @@ const applySavedColors = () => {
         if (value) {
           document.documentElement.style.setProperty(variable, value); // Set CSS variable
         }
-        console.log(variable, value); // Log variable and its value
+        // console.log(variable, value); 
       });
     }
 

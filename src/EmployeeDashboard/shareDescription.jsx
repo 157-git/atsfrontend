@@ -38,8 +38,8 @@ const ShareDescription = ({ Descriptions }) => {
 
       // Remove spaces only after the last character of the entire content
       editableElements.forEach((element) => {
-        const cleanedContent = element.innerText.trimEnd(); // Trim spaces only at the end
-        element.innerText = cleanedContent; // Update the element's text
+        const cleanedContent = element.innerHTML.trimEnd(); // Trim spaces only at the end
+        element.innerHTML = cleanedContent; // Update the element's text
       });
       
       const input = document.getElementById("job-description-share");

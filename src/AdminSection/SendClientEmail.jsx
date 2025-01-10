@@ -1689,7 +1689,7 @@ const SendEmailPopup = ({
       candidateIds: selectedCandidate.map((can) => can.candidateId),
     };
     axios
-      .post(`${API_BASE_URL}/send-email`, emailData)
+      .post(`${API_BASE_URL}/send-email/${employeeId}/${userType}`, emailData)
       .then((response) => {
         handleStoreClientInformation();
         onSuccessFullEmailSend(true);
