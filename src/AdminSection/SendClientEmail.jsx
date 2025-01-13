@@ -591,11 +591,10 @@ const SendClientEmail = ({ clientEmailSender }) => {
     return (currentPage - 1) * pageSize + index + 1;
   };
 
-  console.log(selectedRows);
-  console.log(filteredCallingList);
-  console.log(selectedRows.length);
-  console.log(filteredCallingList.length);
-  
+  // console.log(selectedRows);
+  // console.log(filteredCallingList);
+  // console.log(selectedRows.length);
+  // console.log(filteredCallingList.length);
   
   const handleSelectAll = () => {
     if (allSelected) {
@@ -1718,10 +1717,7 @@ setSocket(newSocket);
         perDayBillingSentToClient: "300",
       })),
       candidateIds: selectedCandidate.map((can) => can.candidateId),
-    };
-    console.log(employeeId);
-    console.log(userType);
-    
+    };    
     
     axios
       .post(`${API_BASE_URL}/send-email/${employeeId}/${userType}`, emailData)

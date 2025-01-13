@@ -377,6 +377,7 @@
     transform: translateY(-20px);
   }
 }
+
 .notificationMainCont1 {
   background-color: var(--accent-color-2); /* Keeps background consistent with theme */
   color: var(--text-color); /* Matches text color to theme */
@@ -396,18 +397,31 @@
 
 
 .notificationMainCont1.open {
-  width: 40%;
+  width: 25%;
   transform: translateY(0); /* Fully visible when open */
   opacity: 1; /* Makes it fully visible */
 }
+
 .notificationMainCont1.closed {
-  width: 40%;
+  width: 25%;
   transform: translateY(-10px); /* Moves slightly up when closed */
   opacity: 0; /* Fades out */
   pointer-events: none; /* Disables interaction when closed */
 }
 .motificationSubCont1 {
   padding: 16px; /* Adds spacing inside the container */
+  margin: 18px;
+  padding: 15px;
+}
+
+.notification-gap{
+  border: 1px solid black;
+  margin: 10px;
+}
+
+.notification-Text{
+  margin: 20px;
+  border: 1px solid black;
 }
 .buttonsDivForNotifications {
   display: flex; /* Aligns buttons horizontally */
@@ -416,6 +430,7 @@
 }
 
 .cleaarButtonOfNotifications {
+  
   background-color: #ff4d4d; /* Red color for emphasis */
   color: white; /* White text for better contrast */
   border: none; /* Removes default border */
@@ -426,10 +441,11 @@
 }
 
 .cleaarButtonOfNotifications:hover {
+  border: 1px solid black;
   background-color: var(--button-bg-hover-color); /* Darker red on hover */
   color: var(--button-txt-hover-color);
 }
 .mainNotDiv{
   max-height: 65vh;
-    overflow-y: scroll;
+  overflow-y: scroll;
 }
