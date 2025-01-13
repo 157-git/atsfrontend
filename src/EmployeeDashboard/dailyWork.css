@@ -399,7 +399,9 @@
   width: 40%;
   transform: translateY(0); /* Fully visible when open */
   opacity: 1; /* Makes it fully visible */
+  /* margin-right: 150px; */
 }
+
 .notificationMainCont1.closed {
   width: 40%;
   transform: translateY(-10px); /* Moves slightly up when closed */
@@ -408,6 +410,19 @@
 }
 .motificationSubCont1 {
   padding: 16px; /* Adds spacing inside the container */
+  /* border: 1px solid black; */
+  margin: 20px;
+  padding: 10px;
+}
+
+.notification-gap{
+  border: 1px solid black;
+  margin: 10px;
+}
+
+.notification-Text{
+  margin: 20px;
+  border: 1px solid black;
 }
 .buttonsDivForNotifications {
   display: flex; /* Aligns buttons horizontally */
@@ -416,6 +431,7 @@
 }
 
 .cleaarButtonOfNotifications {
+  
   background-color: #ff4d4d; /* Red color for emphasis */
   color: white; /* White text for better contrast */
   border: none; /* Removes default border */
@@ -426,10 +442,11 @@
 }
 
 .cleaarButtonOfNotifications:hover {
+  border: 1px solid black;
   background-color: var(--button-bg-hover-color); /* Darker red on hover */
   color: var(--button-txt-hover-color);
 }
 .mainNotDiv{
   max-height: 65vh;
-    overflow-y: scroll;
+  overflow-y: scroll;
 }
