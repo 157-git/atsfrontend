@@ -103,11 +103,14 @@ border-right: 1px solid black;
 }
 .infodiv{
   padding: 20px;
+  width: 365px;
 }
 .tabledivmain{
   display: none;
+
 }
 .tablecont{
   display: flex;
-  /* justify-content: center; */
+  justify-content: center;
+  margin-bottom: 20px;
 }
