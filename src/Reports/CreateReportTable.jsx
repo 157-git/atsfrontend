@@ -736,66 +736,13 @@ useEffect(()=>{
            const handleDownloadPdf = async () => {
             setLoading(true);
              try {
-              //  // Fetch the existing PDF content
-              //  const pdfContent = await createPdf(
-              //    reportDataDatewise,
-              //    SuperUserName,
-              //    ManagerName,
-              //    TeamLeaderName,
-              //    RecruiterName,
-              //    DateReportData,
-              //    totalCandidatepdf
-              //  );
-        
-
-              //  console.log(reportDataDatewise);
-              //  console.log(SuperUserName);
-              //  console.log(                 ManagerName,
-              //  );
-              //  console.log(TeamLeaderName);
-              //  console.log(RecruiterName);
-              //  console.log(DateReportData);
-              //  console.log(totalCandidatepdf);
-               
-           
-               // Apply styling changes for canvas
-              //  const forWidthMain = document.getElementById('divToPrint');
-              //  if (forWidthMain.length > 0) {
-              //   forWidthMain[0].style.width = '400px';
-              //   forWidthMain[0].style.height = '430px';
-              //   forWidthMain[0].style.position = '';
-              //  }
-              // //  const forchartcontainerWidth = document.getElementsByClassName('chart-container');
-              // //  if (forchartcontainerWidth.length > 0) {
-              // //   forchartcontainerWidth[0].style.height = '';
-              // //  }
-
-              //  const forPieWidth = document.querySelectorAll('canvas');
-              //  if (forPieWidth.length > 0) {
-              //    forPieWidth[0].style.width = '200px';
-              //    forPieWidth[0].style.height = '230px';
-              //    forPieWidth[0].style.justifyContent = 'center';
-              //  }
-           
-              //  const forPieWidthContainer = document.getElementsByClassName('piechrt-legends');
-              //  if (forPieWidthContainer.length > 0) {
-              //    forPieWidthContainer[0].style.height = '220px';
-              //    forPieWidthContainer[0].style.width = '260px';
-                
-              //  }
-           
-              //  const forchartcontainerWidthContainer = document.getElementsByClassName('piechart-container');
-              //  if (forchartcontainerWidthContainer.length > 0) {
-              //    forchartcontainerWidthContainer[0].style.justifyContent = 'space-between';
-              //    forchartcontainerWidthContainer[0].style.width = '550px';
-              //  }
-
-
+          
               const forPieWidthContainer = document.getElementsByClassName('mainChartContainer');
               if (forPieWidthContainer.length > 0) {
                 // forPieWidthContainer[0].style.display = 'block';
                 forPieWidthContainer[0].style.width = 'fit-content';
-               
+                forPieWidthContainer[0].style.border = '2px solid black';
+                forPieWidthContainer[0].style.padding = '10px';
               }
               const forPieWidthContainer1 = document.getElementsByClassName('tabledivmain');
               if (forPieWidthContainer1.length > 0) {
@@ -815,11 +762,11 @@ useEffect(()=>{
                const pdf = new jsPDF({
                 orientation: "portrait", // or "landscape"
                 unit: "px", // Unit in which to measure dimensions
-                format: [canvas.width = 550, canvas.height = 700], // Match canvas size
+                format: [canvas.width = 420, canvas.height = 570], // Match canvas size
               });
           
               // Add the image to the PDF
-              pdf.addImage(imgData, "PNG", 10, 10, canvas.width = 500, canvas.height = 550);
+              pdf.addImage(imgData, "PNG", 10, 10, canvas.width = 400, canvas.height = 550);
           
               // Save the PDF
               pdf.save("document.pdf");
@@ -827,6 +774,8 @@ useEffect(()=>{
 
      if (forPieWidthContainer.length > 0) {
       forPieWidthContainer[0].style.width = '100%';
+      forPieWidthContainer[0].style.border = 'none';
+      forPieWidthContainer[0].style.padding = 'none';
               }
               if (forPieWidthContainer1.length > 0) {
                 // forPieWidthContainer[0].style.display = 'block';
@@ -840,151 +789,6 @@ useEffect(()=>{
                setLoading(false);
              }
            };
-
-          // const handleDownloadPdf = async () => {
-          //   try {
-          //     // Fetch the existing PDF content
-          //     const pdfContent = await createPdf(
-          //       reportDataDatewise,
-          //       SuperUserName,
-          //       ManagerName,
-          //       TeamLeaderName,
-          //       RecruiterName,
-          //       DateReportData,
-          //       totalCandidatepdf
-          //     );
-          
-          //     // Apply styling changes for canvas
-          //     const forWidthMain = document.getElementById('divToPrint');
-          //     if (forWidthMain.length > 0) {
-          //       forWidthMain[0].style.width = '400px';
-          //       forWidthMain[0].style.height = '430px';
-          //       forWidthMain[0].style.position = '';
-          //     }
-          
-          //     const forPieWidth = document.querySelectorAll('canvas');
-          //     if (forPieWidth.length > 0) {
-          //       forPieWidth[0].style.width = '200px';
-          //       forPieWidth[0].style.height = '230px';
-          //       forPieWidth[0].style.justifyContent = 'center';
-          //     }
-          
-          //     const forPieWidthContainer = document.getElementsByClassName('piechrt-legends');
-          //     if (forPieWidthContainer.length > 0) {
-          //       forPieWidthContainer[0].style.height = '220px';
-          //       forPieWidthContainer[0].style.width = '260px';
-          //     }
-          
-          //     const forchartcontainerWidthContainer = document.getElementsByClassName('piechart-container');
-          //     if (forchartcontainerWidthContainer.length > 0) {
-          //       forchartcontainerWidthContainer[0].style.justifyContent = 'space-between';
-          //       forchartcontainerWidthContainer[0].style.width = '550px';
-          //     }
-          
-          //     const input = document.getElementById('divToPrint');
-          
-          //     // Adjust the canvas dimensions for better resolution
-          //     const options = { scale: 2 }; // Adjust the scale for higher resolution
-          //     const canvas = await html2canvas(input, options);
-          
-          //     // Crop the image from the bottom
-          //     const cropHeight = 100; // Adjust the height to crop as needed
-          //     const cropImageFromBottom = (canvas, cropHeight) => {
-          //       const originalWidth = canvas.width;
-          //       const originalHeight = canvas.height;
-          //       const croppedHeight = originalHeight - cropHeight; // Height after cropping
-          
-          //       // Create a temporary canvas for cropping
-          //       const tempCanvas = document.createElement('canvas');
-          //       tempCanvas.width = originalWidth;
-          //       tempCanvas.height = croppedHeight;
-          
-          //       const tempContext = tempCanvas.getContext('2d');
-          
-          //       // Draw the original canvas content onto the temporary canvas
-          //       tempContext.drawImage(canvas, 0, 0, originalWidth, croppedHeight, 0, 0, originalWidth, croppedHeight);
-          
-          //       // Return the cropped canvas
-          //       return tempCanvas;
-          //     };
-          
-          //     const croppedCanvas = cropImageFromBottom(canvas, cropHeight);
-          //     const imgData = croppedCanvas.toDataURL('image/png'); // Use PNG format
-          
-          //     // Create a jsPDF instance for the canvas-based PDF
-          //     const jsPdf = new jsPDF({
-          //       orientation: 'portrait',
-          //       unit: 'px',
-          //       format: [croppedCanvas.width, croppedCanvas.height],
-          //     });
-          //     jsPdf.addImage(imgData, 'PNG', 0, 0, croppedCanvas.width, croppedCanvas.height);
-          
-          //     // Convert jsPDF to Blob for merging
-          //     const canvasPdfBlob = jsPdf.output('blob');
-          
-          //     // Load the existing PDF (pdfContent) and canvas PDF into pdf-lib
-          //     const existingPdfBytes = await fetch(pdfContent).then((res) => res.arrayBuffer());
-          //     const canvasPdfBytes = await canvasPdfBlob.arrayBuffer();
-          
-          //     const pdfDoc = await PDFDocument.load(existingPdfBytes);
-          //     const canvasPdfDoc = await PDFDocument.load(canvasPdfBytes);
-          
-          //     // Merge the canvas PDF into the existing PDF
-          //     const canvasPages = await pdfDoc.copyPages(canvasPdfDoc, canvasPdfDoc.getPageIndices());
-          //     canvasPages.forEach((page) => pdfDoc.addPage(page));
-          
-          //     // Save the merged PDF
-          //     const mergedPdfBytes = await pdfDoc.save();
-          //     const mergedPdfBlob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
-          
-          //     // Open the merged PDF in a new tab
-          //     const mergedPdfURL = URL.createObjectURL(mergedPdfBlob);
-          //     window.open(mergedPdfURL, "_blank");
-          
-          //     // Cleanup styling changes
-          //     if (forPieWidth.length > 0) {
-          //       forPieWidth[0].style.width = '';
-          //       forPieWidth[0].style.height = '';
-          //     }
-          //     if (forPieWidthContainer.length > 0) {
-          //       forPieWidthContainer[0].style.height = '';
-          //       forPieWidthContainer[0].style.width = '';
-          //     }
-          //     if (forchartcontainerWidthContainer.length > 0) {
-          //       forchartcontainerWidthContainer[0].style.justifyContent = '';
-          //       forchartcontainerWidthContainer[0].style.width = '';
-          //     }
-          
-          //     // Open the modal (if necessary)
-          //     setModalIsOpen(true);
-          //   } catch (error) {
-          //     console.error('Error creating and merging PDF:', error);
-          //   }
-          // };
-          
-          
-          // const handleDownloadPdf = async () => {
-          //   try {
-          //     // Replace this with your logic to create or fetch the PDF content
-          //     const pdfContent = await createPdf(
-          //       reportDataDatewise,
-          //       SuperUserName,
-          //       ManagerName,
-          //       TeamLeaderName,
-          //       RecruiterName,
-          //       DateReportData,
-          //       totalCandidatepdf,
-          //       // reportDataDatewise
-          //     ); // Example function to create PDF content
-        
-          //     window.open(pdfContent, "_blank");
-        
-          //     // Open the modal
-          //     setModalIsOpen(true);
-          //   } catch (error) {
-          //     console.error("Error creating PDF:", error);
-          //   }
-          // };
 
           
                    

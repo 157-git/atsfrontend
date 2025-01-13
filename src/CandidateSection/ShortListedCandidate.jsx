@@ -130,8 +130,6 @@ const ShortListedCandidates = ({
   };
   useEffect(() => {
     fetchShortListedData(currentPage, pageSize);
-    setSelectedRows([]);
-    setAllSelected(false);
   }, [currentPage, pageSize, triggerFetch, searchTerm]);
 
   //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_116
@@ -684,9 +682,7 @@ const ShortListedCandidates = ({
       )
     );
   };
-
-  console.log(selectedRows);
-  
+console.log(selectedRows);
 
   return (
     <>

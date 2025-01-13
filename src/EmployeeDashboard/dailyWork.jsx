@@ -4,15 +4,17 @@ import axios from "axios";
 import "../EmployeeDashboard/dailyWork.css";
 import Profile from "../photos/profileImg.webp";
 import logoutImg from "../photos/download.jpeg";
-import { Modal, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
 import { API_BASE_URL} from "../api/api";
 import watingImg from "../photos/fire-relax.gif";
 
 //added by sahil karnekar and commented because it was implemented just for testing purpose but dont remove this
-import { Avatar, Badge } from "antd";
+import { Avatar, Badge, notification, Button } from "antd";
 import { BellOutlined, CloseOutlined, ClearOutlined } from "@ant-design/icons";
 import { initializeSocket } from "./socket.jsx";
+
+
 
 //SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
 
@@ -77,6 +79,7 @@ function DailyWork({
   const [expiryMessage, setExpiryMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [paymentMade, setPaymentMade] = useState(false);
+  const [messagesContext, contextHolder] = notification.useNotification();
 
   const TIMER_DURATION = 15 * 60 * 1000;
   let timerId;
@@ -622,6 +625,8 @@ function DailyWork({
             );
             return updatedMessages;
           });
+
+          openNotification(message);
         
       });
       socket.on("receive_updated_candidate", (message) => {
@@ -636,7 +641,7 @@ function DailyWork({
             );
             return updatedMessages;
           });
-        
+          openNotification(message);
       });
 
       socket.on("receive_interview_schedule_data", (message) => {
@@ -651,7 +656,7 @@ function DailyWork({
             );
             return updatedMessages;
           });
-        
+          openNotification(message);
       });
 
       socket.on("receive_add_job_description_event", (message) => {
@@ -666,7 +671,7 @@ function DailyWork({
             );
             return updatedMessages;
           });
-        
+          openNotification(message);
       });
 
       socket.on("receive_update_job_description_event", (message) => {
@@ -681,7 +686,7 @@ function DailyWork({
             );
             return updatedMessages;
           });
-        
+          openNotification(message);
       });
 
       socket.on("receive_delete_job_description_event", (message) => {
@@ -696,7 +701,7 @@ function DailyWork({
             );
             return updatedMessages;
           });
-        
+          openNotification(message);
       });
 
       socket.on("receive_share_excel_data_event", (message) => {
@@ -711,7 +716,7 @@ function DailyWork({
             );
             return updatedMessages;
           });
-        
+          openNotification(message);
       });
       socket.on("receive_share_resume_data_event", (message) => {
         console.log(message);
@@ -725,7 +730,7 @@ function DailyWork({
             );
             return updatedMessages;
           });
-        
+          openNotification(message);
       });
 
       socket.on("receive_user_login_event", (message) => {
@@ -740,7 +745,7 @@ function DailyWork({
             );
             return updatedMessages;
           });
-        
+          openNotification(message);
       });
 
       socket.on("receive_user_logout_event", (message) => {
@@ -755,7 +760,7 @@ function DailyWork({
             );
             return updatedMessages;
           });
-        
+          openNotification(message);
       });
 
       socket.on("receive_save_applicant_data", (message) => {
@@ -770,7 +775,7 @@ function DailyWork({
             );
             return updatedMessages;
           });
-        
+          openNotification(message);
       });
 
       socket.on("receive_add_recruiter_event", (message) => {
@@ -785,7 +790,7 @@ function DailyWork({
             );
             return updatedMessages;
           });
-        
+          openNotification(message);
       });
 
       socket.on("receive_add_teamLeader_event", (message) => {
@@ -800,7 +805,7 @@ function DailyWork({
             );
             return updatedMessages;
           });
-        
+          openNotification(message);
       });
 
       socket.on("receive_add_manager_event", (message) => {
@@ -815,7 +820,7 @@ function DailyWork({
             );
             return updatedMessages;
           });
-        
+          openNotification(message);
       });
 
       socket.on("receive_share_profile", (message) => {
@@ -830,7 +835,7 @@ function DailyWork({
             );
             return updatedMessages;
           });
-        
+          openNotification(message);
       });
 
       socket.on("connect_error", () => {
@@ -844,6 +849,162 @@ function DailyWork({
     console.log(messages);
   }, [socket, employeeId]);
 
+
+  const getMessageDescription = (message) => {
+    console.log(message);
+    
+    switch (message.eventName) {
+      case "add_candidate":
+        return {
+          title: message.candidate.recruiterName,
+          desc: `Added A Candidate ${message.candidate.candidateName}`,
+        };
+  
+      case "update_candidate":
+        return {
+          title: message.candidate.recruiterName,
+          desc: `Updated Candidate Data ${message.candidate.candidateName}`,
+        };
+  
+      case "interview_schedule":
+        const employeeCheck = `${message.candidate.employee.employeeId}` === `${employeeId}`;
+        const interviewResponse = message.candidate.interviewResponse;
+        const round = message.candidate.interviewRound;
+        const jobId = message.candidate.requirementInfo.requirementId;
+
+        console.log("running this");
+        
+        console.log(employeeCheck);
+        console.log(interviewResponse);
+        console.log(round);
+        console.log(jobId);
+        
+  
+        if (employeeCheck) {
+          console.log("running first");
+          
+          return {
+            title: "Interview Notification",
+            desc:
+              interviewResponse === "Selected"
+                ? `Your candidate ${message.candidate.candidateName} has been Selected after the ${round} for Job ID ${jobId}.`
+                : interviewResponse === "Hold"
+                ? `Your candidate ${message.candidate.candidateName} is on Hold after the ${round} for Job ID ${jobId}.`
+                : interviewResponse === "Rejected"
+                ? `Your candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId}.`
+                : `Your candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId}.`,
+          };
+        } else {
+          console.log("running else");
+          
+          return {
+            title: "Interview Update",
+            desc:
+              interviewResponse === "Selected"
+                ? `Candidate ${message.candidate.candidateName} has been Selected after the ${round} for Job ID ${jobId}.`
+                : interviewResponse === "Hold"
+                ? `Candidate ${message.candidate.candidateName} is on Hold after the ${round} for Job ID ${jobId}.`
+                : interviewResponse === "Rejected"
+                ? `Candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId}.`
+                : `Candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId}.`,
+          };
+        }
+  
+      case "add_job_description":
+        return {
+          title: message.candidate.employeeName,
+          desc: `Added Job Description for ${message.candidate.companyName} - ${message.candidate.designation}`,
+        };
+  
+      case "update_job_description":
+        return {
+          title: message.candidate.employeeName,
+          desc: `Updated Job Description for ${message.candidate.companyName} - ${message.candidate.designation}}`,
+        };
+  
+      case "delete_job_description":
+        return {
+          title: message.candidate.employeeName,
+          desc: `Deleted Job Description for ${message.candidate.companyName}`,
+        };
+
+        case "share_excel_data":
+          return {
+            title: message.candidate.employeeName,
+            desc: `Shared Excel Data`,
+          };
+
+          case "share_resume_data":
+            return {
+              title: message.candidate.employeeName,
+              desc: `Shared Resume Data`,
+            };
+
+            case "user_login_event":
+              return {
+                title: message.candidate.employeeName,
+                desc: `Logged In On ${message.candidate.loginTime}`,
+              };
+
+              case "user_logout_event":
+                return {
+                  title: message.candidate.employeeName,
+                  desc: `Logged Out On ${message.candidate.logoutDateAndTime}`,
+                };
+
+                case "save_applicant_data":
+                  return {
+                    title: message.candidate.candidateName,
+                    desc: `Added In Calling Tracker, From ${message.candidate.sourceName} On ${message.candidate.date}`,
+                  };
+
+                  case "add_recruiter_event":
+                    return {
+                      title: message.candidate.employeeName,
+                      desc: `New ${message.candidate.jobRole} Joined`,
+                    };
+
+                    case "add_teamLeader_event":
+                      return {
+                        title: message.candidate.teamLeaderName,
+                        desc: `New ${message.candidate.jobLevel} Joined`,
+                      };
+
+                      case "add_manager_event":
+                        return {
+                          title: message.candidate.managerName,
+                          desc: `New ${message.candidate.jobRole} Joined `,
+                        };
+  
+      // Add more cases as needed for other eventName types
+  
+      default:
+        return {
+          title: "Unknown Event",
+          desc: `No specific description available for event: ${message.eventName}`,
+        };
+    }
+  };
+  
+  
+
+  const openNotification = (message) => {
+    const description = getMessageDescription(message);
+    messagesContext.info({
+      message: description.title,
+      description: description.desc,
+      duration: 0,
+      placement:"bottomRight",
+    });
+  };
+
+  const notificationContainers = document.querySelectorAll(".ant-notification-notice-wrapper");
+  if (notificationContainers.length > 0) {
+    notificationContainers.forEach((container) => {
+      container.style.right = "50px"; // Apply external margin to each notification container
+    });
+  }
+  
 
   return (
     <div className="daily-timeanddate">
@@ -881,7 +1042,9 @@ function DailyWork({
             <div
               className={`all-daily-btns ${!showAllDailyBtns ? "hidden" : ""}`}
             >
-            
+                
+              
+      {contextHolder}
               <div className="daily-t-btn">
                 <button
                   className="daily-tr-btn"
@@ -944,7 +1107,7 @@ function DailyWork({
               >
                 {running ? "Pause" : "Resume"}
               </button>
-             
+         
 
               <div>
                     <div style={{ display: "flex" }}>
@@ -1101,15 +1264,6 @@ function DailyWork({
 
 {
   message.eventName === "save_applicant_data" && (
-    <p>
-    {index + 1} -  {message.candidate.candidateName} 
-<span> Added In Calling Tracker From {message.candidate.sourceName} Please Check Calling Tracker Section</span>
-      {" "} On {" "} {message.candidate.date}
-    </p>
-  )
-}
-{
-  message.eventName === "receive_add_recruiter_event" && (
     <p>
     {index + 1} -  {message.candidate.candidateName} 
 <span> Added In Calling Tracker From {message.candidate.sourceName} Please Check Calling Tracker Section</span>
