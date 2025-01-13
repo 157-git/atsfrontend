@@ -16,6 +16,7 @@ import { API_BASE_URL } from "../api/api";
 import { PDFDocument } from 'pdf-lib';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import Loader from "../EmployeeSection/loader";
          
          const LineUpDataDummy = [
            {
@@ -626,21 +627,21 @@ import html2canvas from 'html2canvas';
            { status: "No show Candidate", CandidateCount: LineUpnoshowCount },
          ];
          
-         const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole,finalStartDatePropState,finalEndDatePropState }) => {
+         const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole,finalStartDatePropState,finalEndDatePropState, loginEmployeeName }) => {
            const [attendanceData, setAttendanceData] = useState([]);
-           const [loading, setLoading] = useState(true);
+           const [loading, setLoading] = useState(false);
            const [error, setError] = useState(null);
            const [LineUpDataReport, setLineUpDataReport] = useState(false);
            const [LineUpItems, setLineUpItems] = useState(reportDataDatewise);
            const [FilterLineUpItems, setFilterLineUpItems] = useState("selected");
            const [filterDataCategory, setfilterDataCategory] = useState();
+           const {userType} = useParams();
            // Prachi
            const [modalIsOpen, setModalIsOpen] = useState(false);
            const [pdfUrl, setPdfUrl] = useState("");
          
            const { workId } = useParams();
            const navigator = useNavigate();
-         
          
          
          
@@ -717,7 +718,23 @@ import html2canvas from 'html2canvas';
          
            // sk pdf download
            
+const [userName, setUserName] = useState("");
+
+useEffect(()=>{
+  if (userType === "Recruiters") {
+    setUserName(`Recruiters : ${loginEmployeeName}`);
+  }else if(userType === "TeamLeader"){
+    setUserName(`TeamLeader : ${loginEmployeeName}`);
+  }else if (userType === "Manager") {
+    setUserName(`Manager : ${loginEmployeeName}`);
+  }else if(userType === "SuperUser"){
+    setUserName(`SuperUser : ${loginEmployeeName}`);
+  }
+},[]);
+
+
            const handleDownloadPdf = async () => {
+            setLoading(true);
              try {
               //  // Fetch the existing PDF content
               //  const pdfContent = await createPdf(
@@ -780,9 +797,13 @@ import html2canvas from 'html2canvas';
                 forPieWidthContainer[0].style.width = 'fit-content';
                
               }
-
-
-           
+              const forPieWidthContainer1 = document.getElementsByClassName('tabledivmain');
+              if (forPieWidthContainer1.length > 0) {
+                // forPieWidthContainer[0].style.display = 'block';
+                forPieWidthContainer1[0].style.display = 'block';
+               
+              }
+              
                const input = document.getElementById('divToPrint');
            
                // Adjust the canvas dimensions for better resolution
@@ -798,14 +819,25 @@ import html2canvas from 'html2canvas';
               });
           
               // Add the image to the PDF
-              pdf.addImage(imgData, "PNG", 0, 0, canvas.width = 500, canvas.height = 400);
+              pdf.addImage(imgData, "PNG", 10, 10, canvas.width = 500, canvas.height = 550);
           
               // Save the PDF
               pdf.save("document.pdf");
                // Open the modal (if necessary)
+
+     if (forPieWidthContainer.length > 0) {
+      forPieWidthContainer[0].style.width = '100%';
+              }
+              if (forPieWidthContainer1.length > 0) {
+                // forPieWidthContainer[0].style.display = 'block';
+                forPieWidthContainer1[0].style.display = 'none';
+               
+              }
                setModalIsOpen(true);
+               setLoading(false);
              } catch (error) {
                console.error('Error creating and merging PDF:', error);
+               setLoading(false);
              }
            };
 
@@ -982,6 +1014,11 @@ setLineUpDataReport(true);
              <div className="report-App-after"
             
              >
+              {
+                loading && (
+                  <Loader/>
+                )
+              }
         
                <div className="container-after1">
                 
@@ -1048,7 +1085,7 @@ setLineUpDataReport(true);
                      ))}
                    </table>
                            <div>
-                     <PieChart data={reportDataDatewise} />
+                     <PieChart data={reportDataDatewise} userName={userName} finalStartDatePropState={finalStartDatePropState} finalEndDatePropState={finalEndDatePropState} />
                     
                    </div>
          

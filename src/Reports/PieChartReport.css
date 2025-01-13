@@ -94,3 +94,20 @@ border-right: 1px solid black;
   width: 200px;
   padding-bottom: 5px;
 }
+.piecontainer{
+  width: 500px;
+}
+.tabledivmain{
+  color: black;
+  font-weight: bold;
+}
+.infodiv{
+  padding: 20px;
+}
+.tabledivmain{
+  display: none;
+}
+.tablecont{
+  display: flex;
+  /* justify-content: center; */
+}

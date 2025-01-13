@@ -1697,6 +1697,7 @@ const ShortListedCandidates = ({
                           Forward To
                         </Modal.Header>
                         <Modal.Body
+                 
                           style={{
                             backgroundColor: "#f2f2f2",
                           }}
@@ -1886,7 +1887,7 @@ const ShortListedCandidates = ({
                                     <strong>TL - {loginEmployeeName} </strong>
                                   </label>
                                 </div>
-                                <div className="accordion-content">
+                                <div className="accordion-content newHegightSetForAlignment">
                                   <form>
                                     {recruiterUnderTeamLeader &&
                                       recruiterUnderTeamLeader.map(

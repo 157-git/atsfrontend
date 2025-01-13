@@ -109,7 +109,7 @@
         .report-attendance-table thead th {
           position: sticky;
           top: 0;
-          background-color: #ffcb9b;
+          background-color: var(--Bg-color);
           color:var(--text-color);
           z-index: 1;
           height: 30px;
@@ -234,4 +234,6 @@
           justify-content: space-around;
          }
       
-      
+      .shareDownloadbtn{
+        margin-right: 10px;
+      }

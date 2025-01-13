@@ -804,6 +804,21 @@ function DailyWork({
         });
       });
 
+      socket.on("receive_share_profile", (message) => {
+        console.log(message);
+
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, message];
+            console.log(updatedMessages);
+            localStorage.setItem(
+              `${userType}${employeeId}messages`,
+              JSON.stringify(updatedMessages)
+            );
+            return updatedMessages;
+          });
+        
+      });
+
       socket.on("connect_error", () => {
         console.log;
         ("Connection failed. Ensure your details are correct.");
@@ -849,18 +864,9 @@ function DailyWork({
           <div
             className={`all-daily-btns ${!showAllDailyBtns ? "hidden" : ""}`}
           >
-            {/* <div> */}
-            <div style={{ display: "flex" }}>
-              <div
-                style={{ marginRight: "10px" }}
-                onClick={toggleNotificationBox}
-              >
-                <Badge count={messages.length}>
-                  <Avatar shape="square" icon={<BellOutlined />} />
-                </Badge>
-              </div>
-            </div>
-            {/* </div> */}
+        
+        
+        
             <div className="daily-t-btn">
               <button className="daily-tr-btn" style={{ whiteSpace: "nowrap" }}>
                 Target : 10
@@ -920,7 +926,16 @@ function DailyWork({
             >
               {running ? "Pause" : "Resume"}
             </button>
-
+            <div style={{ display: "flex" }}>
+              <div
+                style={{ marginRight: "10px" }}
+                onClick={toggleNotificationBox}
+              >
+                <Badge count={messages.length}>
+                  <Avatar shape="square" icon={<BellOutlined />} />
+                </Badge>
+              </div>
+            </div>
             <div
               className={`notificationMainCont1 ${isOpen ? "open" : "closed"}`}
             >
