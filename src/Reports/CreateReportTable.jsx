@@ -1045,9 +1045,9 @@ setLineUpDataReport(true);
                    </div>
 
                    <div className="btnShareAndDownload">
-              <button className="shareDownloadbtn" onClick={handleRadioChange}>
+              {/* <button className="shareDownloadbtn" onClick={handleRadioChange}>
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m640-280-57-56 184-184-184-184 57-56 240 240-240 240ZM80-200v-160q0-83 58.5-141.5T280-560h247L383-704l57-56 240 240-240 240-57-56 144-144H280q-50 0-85 35t-35 85v160H80Z"/></svg>
-                     </button>
+                     </button> */}
                      <button className="shareDownloadbtn" onClick={handleDownloadPdf}>
                      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/></svg>
                      </button>

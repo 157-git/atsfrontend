@@ -48,6 +48,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [searchCount, setSearchCount] = useState(0);
+   const [allSelected, setAllSelected] = useState(false); // New state to track if all rows are selected
 
   const navigator = useNavigate();
 
@@ -118,6 +119,8 @@ const SendClientEmail = ({ clientEmailSender }) => {
 
   useEffect(() => {
     fetchCallingList(currentPage, pageSize);
+    setSelectedRows([]);
+    setAllSelected(false);
   }, [employeeId,currentPage,pageSize,searchTerm]);
 
   useEffect(() => {
@@ -587,6 +590,22 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const calculateRowIndex = (index) => {
     return (currentPage - 1) * pageSize + index + 1;
   };
+
+  // console.log(selectedRows);
+  // console.log(filteredCallingList);
+  // console.log(selectedRows.length);
+  // console.log(filteredCallingList.length);
+  
+  const handleSelectAll = () => {
+    if (allSelected) {
+      setSelectedRows([]);
+    } else {
+      const allRowIds = filteredCallingList.map((item) => item);
+      setSelectedRows(allRowIds);
+    }
+    setAllSelected(!allSelected);
+  };
+  
   
   return (
     <div className="SCE-list-container">
@@ -723,6 +742,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                     <th className="attendanceheading">
                       <input
                         type="checkbox"
+                        onChange={handleSelectAll}
                         checked={
                           selectedRows.length === filteredCallingList.length
                         }
@@ -1697,10 +1717,7 @@ setSocket(newSocket);
         perDayBillingSentToClient: "300",
       })),
       candidateIds: selectedCandidate.map((can) => can.candidateId),
-    };
-    console.log(employeeId);
-    console.log(userType);
-    
+    };    
     
     axios
       .post(`${API_BASE_URL}/send-email/${employeeId}/${userType}`, emailData)

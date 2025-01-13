@@ -377,6 +377,7 @@
     transform: translateY(-20px);
   }
 }
+
 .notificationMainCont1 {
   background-color: var(--accent-color-2); /* Keeps background consistent with theme */
   color: var(--text-color); /* Matches text color to theme */
@@ -396,23 +397,21 @@
 
 
 .notificationMainCont1.open {
-  width: 40%;
+  width: 25%;
   transform: translateY(0); /* Fully visible when open */
   opacity: 1; /* Makes it fully visible */
-  /* margin-right: 150px; */
 }
 
 .notificationMainCont1.closed {
-  width: 40%;
+  width: 25%;
   transform: translateY(-10px); /* Moves slightly up when closed */
   opacity: 0; /* Fades out */
   pointer-events: none; /* Disables interaction when closed */
 }
 .motificationSubCont1 {
   padding: 16px; /* Adds spacing inside the container */
-  /* border: 1px solid black; */
-  margin: 20px;
-  padding: 10px;
+  margin: 18px;
+  padding: 15px;
 }
 
 .notification-gap{

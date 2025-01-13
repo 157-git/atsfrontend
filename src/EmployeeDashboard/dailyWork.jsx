@@ -807,16 +807,15 @@ function DailyWork({
       socket.on("receive_share_profile", (message) => {
         console.log(message);
 
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
-        
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
       });
 
       socket.on("connect_error", () => {
@@ -864,9 +863,6 @@ function DailyWork({
           <div
             className={`all-daily-btns ${!showAllDailyBtns ? "hidden" : ""}`}
           >
-        
-        
-        
             <div className="daily-t-btn">
               <button className="daily-tr-btn" style={{ whiteSpace: "nowrap" }}>
                 Target : 10
@@ -944,90 +940,30 @@ function DailyWork({
                   {messages.length > 0 ? (
                     messages.map((message, index) => (
                       <>
-                        <s></s> 
+                        <s></s>
                         {message.eventName === "add_candidate" && (
-                          <p className="notification-Text">  
-                            A Candidate{" "}
-                            {message.candidate.candidateName}
+                          <p className="notification-Text">
+                            A Candidate {message.candidate.candidateName}
                             <span> Added </span>
-                            By : {message.candidate.recruiterName} On :{" "}
+                            By  {message.candidate.recruiterName} On :{" "}
                             {message.candidate.candidateAddedTime}
                           </p>
                         )}
                         {message.eventName === "update_candidate" && (
-                      <p className="notification-Text">  
-                            A Candidate{" "}
-                            {message.candidate.candidateName}
+                          <p className="notification-Text">
+                            A Candidate {message.candidate.candidateName}
                             <span> Updated </span>
-                            By : {message.candidate.recruiterName} On :{" "}
+                            By  {message.candidate.recruiterName} On :{" "}
                             {message.candidate.candidateAddedTime}
                           </p>
                         )}
-                        {
-                          message.eventName === "interview_schedule" &&
-                            (`${message.candidate.employee.employeeId}` ===
-                            `${employeeId}` ? (
-                              message.candidate.interviewResponse ===
-                              "Selected" ? (
-                                <p className="notification-Text">  
-                                  Congratulations! Your candidate{" "}
-                                  {message.candidate.candidateName} has been
-                                  Selected after the{" "}
-                                  {message.candidate.interviewRound} for Job ID{" "}
-                                  {
-                                    message.candidate.requirementInfo
-                                      .requirementId
-                                  }
-                                  . Further details will be shared soon.
-                                </p>
-                              ) : message.candidate.interviewResponse ===
-                                "Hold" ? (
-                                  <p className="notification-Text">  
-                                  Your candidate{" "}
-                                  {message.candidate.candidateName} is on Hold
-                                  after the {message.candidate.interviewRound}{" "}
-                                  for Job ID{" "}
-                                  {
-                                    message.candidate.requirementInfo
-                                      .requirementId
-                                  }
-                                  . The next steps will be communicated soon.
-                                </p>
-                              ) : message.candidate.interviewResponse ===
-                                "Rejected" ? (
-                                  <p className="notification-Text">  
-                                  Your candidate{" "}
-                                  {message.candidate.candidateName} has been
-                                  Rejected after the{" "}
-                                  {message.candidate.interviewRound} for Job ID{" "}
-                                  {
-                                    message.candidate.requirementInfo
-                                      .requirementId
-                                  }
-                                  . Please review and plan accordingly.
-                                </p>
-                              ) : (
-                                !["Rejected", "Hold", "Selected"].includes(
-                                  message.candidate.interviewResponse
-                                ) && (
-                                  <p className="notification-Text">  
-                                    Your candidate{" "}
-                                    {message.candidate.candidateName} has been{" "}
-                                    {message.candidate.interviewResponse} for
-                                    Job ID{" "}
-                                    {
-                                      message.candidate.requirementInfo
-                                        .requirementId
-                                    }{" "}
-                                    on {message.candidate.nextInterviewDate} at{" "}
-                                    {message.candidate.nextInterviewTiming}.
-                                  </p>
-                                )
-                              )
-                            ) : message.candidate.interviewResponse ===
-                              "Selected" ? (
-                                <p className="notification-Text">  
-                                Congratulations! Candidate{" "}
+                        {message.eventName === "interview_schedule" &&
+                          (`${message.candidate.employee.employeeId}` ===
+                          `${employeeId}` ? (
+                            message.candidate.interviewResponse ===
+                            "Selected" ? (
+                              <p className="notification-Text">
+                                Congratulations! Your candidate{" "}
                                 {message.candidate.candidateName} has been
                                 Selected after the{" "}
                                 {message.candidate.interviewRound} for Job ID{" "}
@@ -1039,11 +975,10 @@ function DailyWork({
                               </p>
                             ) : message.candidate.interviewResponse ===
                               "Hold" ? (
-                                <p className="notification-Text">  
-                                Candidate{" "}
-                                {message.candidate.candidateName} is on Hold
-                                after the {message.candidate.interviewRound} for
-                                Job ID{" "}
+                              <p className="notification-Text">
+                                Your candidate {message.candidate.candidateName}{" "}
+                                is on Hold after the{" "}
+                                {message.candidate.interviewRound} for Job ID{" "}
                                 {
                                   message.candidate.requirementInfo
                                     .requirementId
@@ -1052,10 +987,9 @@ function DailyWork({
                               </p>
                             ) : message.candidate.interviewResponse ===
                               "Rejected" ? (
-                              <p>
-                                Candidate{" "}
-                                {message.candidate.candidateName} has been
-                                Rejected after the{" "}
+                              <p className="notification-Text">
+                                Your candidate {message.candidate.candidateName}{" "}
+                                has been Rejected after the{" "}
                                 {message.candidate.interviewRound} for Job ID{" "}
                                 {
                                   message.candidate.requirementInfo
@@ -1067,8 +1001,8 @@ function DailyWork({
                               !["Rejected", "Hold", "Selected"].includes(
                                 message.candidate.interviewResponse
                               ) && (
-                                <p>
-                                  Candidate{" "}
+                                <p className="notification-Text">
+                                  Your candidate{" "}
                                   {message.candidate.candidateName} has been{" "}
                                   {message.candidate.interviewResponse} for Job
                                   ID{" "}
@@ -1080,41 +1014,81 @@ function DailyWork({
                                   {message.candidate.nextInterviewTiming}.
                                 </p>
                               )
-                            ))
-                        }
+                            )
+                          ) : message.candidate.interviewResponse ===
+                            "Selected" ? (
+                            <p className="notification-Text">
+                              Congratulations! Candidate{" "}
+                              {message.candidate.candidateName} has been
+                              Selected after the{" "}
+                              {message.candidate.interviewRound} for Job ID{" "}
+                              {message.candidate.requirementInfo.requirementId}.
+                              Further details will be shared soon.
+                            </p>
+                          ) : message.candidate.interviewResponse === "Hold" ? (
+                            <p className="notification-Text">
+                              Candidate {message.candidate.candidateName} is on
+                              Hold after the {message.candidate.interviewRound}{" "}
+                              for Job ID{" "}
+                              {message.candidate.requirementInfo.requirementId}.
+                              The next steps will be communicated soon.
+                            </p>
+                          ) : message.candidate.interviewResponse ===
+                            "Rejected" ? (
+                            <p>
+                              Candidate {message.candidate.candidateName} has
+                              been Rejected after the{" "}
+                              {message.candidate.interviewRound} for Job ID{" "}
+                              {message.candidate.requirementInfo.requirementId}.
+                              Please review and plan accordingly.
+                            </p>
+                          ) : (
+                            !["Rejected", "Hold", "Selected"].includes(
+                              message.candidate.interviewResponse
+                            ) && (
+                              <p>
+                                Candidate {message.candidate.candidateName} has
+                                been {message.candidate.interviewResponse} for
+                                Job ID{" "}
+                                {
+                                  message.candidate.requirementInfo
+                                    .requirementId
+                                }{" "}
+                                on {message.candidate.nextInterviewDate} at{" "}
+                                {message.candidate.nextInterviewTiming}.
+                              </p>
+                            )
+                          ))}
                         {message.eventName === "add_job_description" && (
                           <p>
                             New Job Dscription Company Name :{" "}
                             {message.candidate.companyName}{" "}
                             {message.candidate.designation} Was
                             <span> Added </span>
-                            By : {message.candidate.employeeName} On :{" "}
+                            By  {message.candidate.employeeName} On :{" "}
                             {message.candidate.jdAddedDate}
                           </p>
                         )}
                         {message.eventName === "update_job_description" && (
                           <p>
-                            Company Name :{" "}
                             {message.candidate.companyName}{" "}
                             {message.candidate.designation} Was
                             <span> Updated </span>
-                            By : {message.candidate.employeeName} On :{" "}
+                            By  {message.candidate.employeeName} On :{" "}
                             {message.candidate.statusUpdateDate}
                           </p>
                         )}
                         {message.eventName === "delete_job_description" && (
                           <p>
-                            Company Name :{" "}
                             {message.candidate.companyName} JD
                             <span> Deleted </span>
-                            By : {message.candidate.employeeName} On :{" "}
+                            By  {message.candidate.employeeName} On :{" "}
                             {message.candidate.jdAddedDate}
                           </p>
                         )}
                         {message.eventName === "share_excel_data" && (
                           <p>
-                            {message.candidate.employeeName}{" "}
-                            Shared
+                            {message.candidate.employeeName} Shared
                             <span> Excel Data To You </span>
                             On {message.candidate.sharedDate} Please Check
                             Database Section
@@ -1122,8 +1096,7 @@ function DailyWork({
                         )}
                         {message.eventName === "share_resume_data" && (
                           <p>
-                            {message.candidate.employeeName}{" "}
-                            Shared
+                            {message.candidate.employeeName} Shared
                             <span> Resume Data To You </span>
                             On {message.candidate.sharedDate} Please Check
                             Database Section
@@ -1193,7 +1166,7 @@ function DailyWork({
                           </p>
                         )}
                         <hr className="notification-gap" />
-                        
+
                         {/* <p>{message.number}</p> */}
                       </>
                     ))
