@@ -223,51 +223,72 @@ const ShareDescription = ({ Descriptions }) => {
           <p contentEditable>{Descriptions.positionOverview.overview}</p>
         </section> )}
         
-        <section className="responsibilities-share">
-          <h2>
-            <b contentEditable className="jd-sub-headings">Responsibilities</b>
-          </h2>
-          <div>
-            {Descriptions.responsibilities.map((responsibilites) => (
-              <div contentEditable key={responsibilites.responsibilitiesId}>
-                {responsibilites.responsibilitiesMsg && (
-                <i className="fa-solid fa-arrow-right"></i>  )} {" "}
-                {responsibilites.responsibilitiesMsg}{" "}
-              
-              </div>
-            ))}
+        {
+  (Descriptions.responsibilities &&
+    Descriptions.responsibilities.length > 0 &&
+    Descriptions.responsibilities[0].responsibilitiesMsg !== "") && (
+      <section className="responsibilities-share">
+      <h2>
+        <b contentEditable className="jd-sub-headings">Responsibilities</b>
+      </h2>
+      <div>
+        {Descriptions.responsibilities.map((responsibilites) => (
+          <div contentEditable key={responsibilites.responsibilitiesId}>
+            {responsibilites.responsibilitiesMsg && (
+            <i className="fa-solid fa-arrow-right"></i>  )} {" "}
+            {responsibilites.responsibilitiesMsg}{" "}
+          
           </div>
-        </section>
-        <section className="requirements-share">
-          <h2>
-            <b contentEditable className="jd-sub-headings">Requirements</b>
-          </h2>
-          <div>
-            {Descriptions.jobRequirements.map((requirements) => (
-              <div contentEditable key={requirements.jobRequirementId}>
-                {requirements.jobRequirementMsg && (
-                <i className="fa-solid fa-arrow-right"></i> )} {" "}
-                {requirements.jobRequirementMsg}{" "}
-              </div>
-            ))}
+        ))}
+      </div>
+    </section>
+    )
+  }
+
+{
+(Descriptions.jobRequirements &&
+    Descriptions.jobRequirements.length > 0 &&
+    Descriptions.jobRequirements[0].jobRequirementMsg !== "") && (
+      <section className="requirements-share">
+      <h2>
+        <b contentEditable className="jd-sub-headings">Requirements</b>
+      </h2>
+      <div>
+        {Descriptions.jobRequirements.map((requirements) => (
+          <div contentEditable key={requirements.jobRequirementId}>
+            {requirements.jobRequirementMsg && (
+            <i className="fa-solid fa-arrow-right"></i> )} {" "}
+            {requirements.jobRequirementMsg}{" "}
           </div>
-        </section>
+        ))}
+      </div>
+    </section>
+    )
+    }
 
 
-        <section className="preferred-qualifications-share">
-          <h2>
-            <b contentEditable className="jd-sub-headings">Preferred Qualifications</b>
-          </h2>
-          <div>
-            {Descriptions.preferredQualifications.map((qualifications) => (
-              <div contentEditable key={qualifications.preferredQualificationId}>
-                {qualifications.preferredQualificationMsg && (
-                <i className="fa-solid fa-arrow-right"></i> )} {" "}
-                {qualifications.preferredQualificationMsg}
-              </div>
-            ))}
+{
+(Descriptions.preferredQualifications &&
+    Descriptions.preferredQualifications.length > 0 &&
+    Descriptions.preferredQualifications[0].preferredQualificationMsg !== "") && (
+      <section className="preferred-qualifications-share">
+      <h2>
+        <b contentEditable className="jd-sub-headings">Preferred Qualifications</b>
+      </h2>
+      <div>
+        {Descriptions.preferredQualifications.map((qualifications) => (
+          <div contentEditable key={qualifications.preferredQualificationId}>
+            {qualifications.preferredQualificationMsg && (
+            <i className="fa-solid fa-arrow-right"></i> )} {" "}
+            {qualifications.preferredQualificationMsg}
           </div>
-        </section>
+        ))}
+      </div>
+    </section>
+    )
+  }
+
+
 
         <section className="preferred-qualifications-share">
           <h2 contentEditable className="jd-sub-headings">Contact Person</h2>

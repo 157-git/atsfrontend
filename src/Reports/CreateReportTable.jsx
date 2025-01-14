@@ -762,11 +762,11 @@ useEffect(()=>{
                const pdf = new jsPDF({
                 orientation: "portrait", // or "landscape"
                 unit: "px", // Unit in which to measure dimensions
-                format: [canvas.width = 420, canvas.height = 570], // Match canvas size
+                format: [canvas.width = 450, canvas.height = 570], // Match canvas size
               });
           
               // Add the image to the PDF
-              pdf.addImage(imgData, "PNG", 10, 10, canvas.width = 400, canvas.height = 550);
+              pdf.addImage(imgData, "PNG", 10, 10, canvas.width = 430, canvas.height = 550);
           
               // Save the PDF
               pdf.save("document.pdf");

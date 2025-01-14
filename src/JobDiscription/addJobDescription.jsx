@@ -263,6 +263,7 @@ const AddJobDescription = ({loginEmployeeName}) => {
           percentage: "",
           skills: "",
           companyLink: "",
+          employeeName: loginEmployeeName,
           detailAddress: "",
           shift: "",
           weekOff: "",

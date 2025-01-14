@@ -919,7 +919,7 @@ function DailyWork({
       case "update_job_description":
         return {
           title: message.candidate.employeeName,
-          desc: `Updated Job Description for ${message.candidate.companyName} - ${message.candidate.designation}}`,
+          desc: `Updated Job Description for ${message.candidate.companyName} - ${message.candidate.designation}`,
         };
   
       case "delete_job_description":
