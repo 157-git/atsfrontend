@@ -122,11 +122,12 @@ function Sidebar({
   };
 
   //Arshad Commente this code, dont remove
-  // const handleLogoutLocal = () => {
-  //   const logoutTime = new Date().toLocaleTimeString("en-IN");
-  //   onLogout(logoutTime);
-  // };
-
+  const handleLogoutLocal = () => {
+    console.log("Logout clicked 01");
+    const logoutTime = new Date().toLocaleTimeString("en-IN");
+    temproryLogout();
+    onLogout(logoutTime);
+  };
 
       // establishing socket for emmiting event
       useEffect(() => {
@@ -136,23 +137,9 @@ function Sidebar({
 
 
   const temproryLogout = async () => {
+    console.log("Logout clicked in Logout clicked 02");
     try {
-      localStorage.removeItem(`loginTimeSaved_${employeeId}`);
-      localStorage.removeItem(`loginDetailsSaved_${employeeId}`);
-      localStorage.removeItem(`stopwatchTime_${employeeId}`);
-      localStorage.removeItem(`dailyWorkData_${employeeId}`);
-      localStorage.removeItem(`breaks_${employeeId}`);
-      localStorage.removeItem(`user_${userType}${employeeId}`);
-      localStorage.removeItem("paymentMade");
-
-      // Construct request body based on userType
-      {
-        /* Arshad Attar , Added new Logout logic as As per requirement on 27-11-2024, Start Line 130 - end line 167 */
-      }
-
       let requestBody = {};
-      console.log(userType);
-      
       switch (`${userType}`) {
         case "SuperUser":
           requestBody = { superUserId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : getFormattedDateTime()};
@@ -170,21 +157,17 @@ function Sidebar({
           console.error("Invalid user type");
           return;
       }
-      console.log(requestBody);
-      
-
-      // Make API call
       const response = await axios.post(
         `${API_BASE_URL}/user-logout-157/${userType}`,
         requestBody
       );
-      console.log( "Logout Successfully Emit Object " + JSON.stringify( requestBody ));
+
+      console.log( " user-logout-157 --- Logout Successfully Emit Object " + JSON.stringify( requestBody ));
       console.log(response);
-      
-      socket.emit("user_logout_event",requestBody);
-      console.log("Logout Successfully And Status Updated Successfully..");
+      socket.emit("user_logout_event", requestBody);
+      console.log("Logout Successfully And Status Updated Successfully.. in Side ");
       navigate(`/login/${userType}`, { replace: true });
-      console.log("Temp Logout Successfully");
+      
     } catch (error) {
       console.error("Error during logout:", error);
     }
@@ -229,10 +212,9 @@ function Sidebar({
   //     // Attach event listeners
   //     window.addEventListener("beforeunload", handleBeforeUnload);
   //     // document.addEventListener("visibilitychange", handleVisibilityChange);
-  //     window.addEventListener("offline", handleOffline);
-
+  //     // window.addEventListener("offline", handleOffline);
   //     // Monitor for sleep with setInterval
-  //     const sleepInterval = setInterval(detectSleep, 10000); // Check every 10 seconds
+  //     const sleepInterval = setInterval(detectSleep, 10000); 
 
   //     // Cleanup event listeners and interval on component unmount
   //     return () => {
@@ -242,7 +224,6 @@ function Sidebar({
   //       clearInterval(sleepInterval);
   //     };
   //   }, []);
-
   //   return null;
   // };
   // Arshad Attar ( Note :- Commented This we will work after some its taking to much time  )
@@ -439,7 +420,7 @@ function Sidebar({
   return (
     <>
       <div className={`sidebar ${isActive ? "active" : ""}`}>
-        <LogoutOnEvent />
+        {/* <LogoutOnEvent /> */}
 
         {/* Swapnil_SideBar_responsiveAccordingToScreen_161to162_02/07 */}
         <div className="head-sidebar">
@@ -1891,7 +1872,7 @@ function Sidebar({
                   justifyContent: "center",
                 }}
               >
-                <button onClick={temproryLogout} className="buttoncss">
+                <button onClick={handleLogoutLocal} className="buttoncss">
                   Yes
                 </button>
 

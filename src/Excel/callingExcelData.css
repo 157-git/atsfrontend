@@ -335,7 +335,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.3s ease-in-out;
   min-height: 200px; /* Minimum height */
-  height: auto; /* Auto-adjust height */
+  height: 450px; /* Auto-adjust height */
   display: flex;
   flex-direction: column;
 }

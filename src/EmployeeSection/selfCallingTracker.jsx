@@ -134,29 +134,6 @@ const CallingList = ({
   const [totalRecords, setTotalRecords] = useState(0);
   const [triggerFetch, setTriggerFetch] = useState(false);
 
-  //akash_pawar_LineUpList_ShareFunctionality_16/07_128
-  // const fetchCallingTrackerData = async (page) => {
-  //   try {
-  //     const response = await fetch(
-  //       `${API_BASE_URL}/callingData/${employeeId}/${userType}?page=${page}&size=${pageSize}`,
-  //     );
-  //     if (!response.ok) {
-  //       console.log(response);
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
-  //     const data = await response.json();
-  //     console.log(data);
-  //     setCallingList(data.content);
-  //     setFilteredCallingList(data.content);
-  //     setTotalRecords(data.totalElements);
-  //     console.log(totalRecords);
-  //     setLoading(false);
-  //     console.log(data.content);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     setLoading(false);
-  //   }
-  // };
 
   // updated by sahil karnekar date 4-12-2024
   const fetchCallingTrackerData = async (page, size) => {
@@ -257,33 +234,28 @@ const CallingList = ({
     setShowUpdateCallingTracker(true);
   };
 
-  const handleUpdateSuccess = async (page, size) => {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/callingData/${employeeId}/${userType}?page=${page}&size=${size}`
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      setCallingList(data.content);
-      setFilteredCallingList(data.content);
-      setTotalRecords(data.totalElements);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  // const handleUpdateSuccess = () => {
-  //   setShowUpdateCallingTracker(false);
-  //   fetch(`${API_BASE_URL}/callingData/${employeeIdnew}/${userType}`)
-  //     .then((response) => response.json())
-  //     .then((data) => setCallingList(data))
-  //     .catch((error) => console.error("Error fetching data:", error));
+
+  // const handleUpdateSuccess = async (page, size) => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await fetch(
+  //       `${API_BASE_URL}/callingData/${employeeId}/${userType}?page=${page}&size=${size}`
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
+  //     const data = await response.json();
+  //     setCallingList(data.content);
+  //     setFilteredCallingList(data.content);
+  //     setTotalRecords(data.totalElements);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
   // };
+
 
   const handleMouseOver = (event) => {
     const tableData = event.currentTarget;
@@ -577,19 +549,23 @@ const CallingList = ({
     });
   };
 
-  //akash_pawar_SelfCallingTracker_ShareFunctionality_17/07_460
   const forwardSelectedCandidate = (e) => {
     e.preventDefault();
-    if (selectedRows.length > 0 && userType === "TeamLeader") {
-      setShowForwardPopup(true);
-    }
-    if (userType === "SuperUser") {
-      setShowForwardPopup(true);
-    }
-    if (userType === "Manager") {
-      setShowForwardPopup(true);
+    if (selectedRows.length >= 1) {
+      if (userType === "TeamLeader") {
+        setShowForwardPopup(true);
+      } else if (userType === "SuperUser") {
+        setShowForwardPopup(true);
+      } else if (userType === "Manager") {
+        setShowForwardPopup(true);
+      } else {
+        toast.error("Invalid user type. Cannot proceed.");
+      }
+    } else {
+      toast.error("Please select at least one Candidate to proceed.");
     }
   };
+  
   //akash_pawar_SelfCallingTracker_ShareFunctionality_17/07_472
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_475
@@ -645,7 +621,7 @@ const CallingList = ({
       // Handle success response
       setIsDataSending(false);
       toast.success("Candidates forwarded successfully!"); //Swapnil Error&success message
-      fetchCallingTrackerData();
+      fetchCallingTrackerData(currentPage, pageSize);
       setShowForwardPopup(false); // Close the modal or handle any further UI updates
       setShowShareButton(true);
       setSelectedRows([]);
@@ -2145,14 +2121,15 @@ const CallingList = ({
                             </div>
                           </div>
                         )}
+
                         {userType === "TeamLeader" && (
                           <div className="accordion-item">
                             <div className="accordion-header">
                               <label className="accordion-title">
-                                <strong>TL - {loginEmployeeName} </strong>
+                                <strong>Team Leader - {loginEmployeeName} </strong>
                               </label>
                             </div>
-                            <div className="accordion-content">
+                            <div className="accordion-content newHegightSetForAlignment">
                               <form>
                                 {recruiterUnderTeamLeader &&
                                   recruiterUnderTeamLeader.map((recruiters) => (
@@ -2249,16 +2226,14 @@ const CallingList = ({
             candidateId={selectedCandidateId}
             employeeId={employeeId}
             fromCallingList={true}
-            onSuccess={handleUpdateSuccess}
+            onSuccess={() => fetchCallingTrackerData(1, 20)}
             onCancel={() => setShowUpdateCallingTracker(false)}
             onsuccessfulDataUpdation={onsuccessfulDataUpdation}
             loginEmployeeName={loginEmployeeName}
             triggerFetch={handleTriggerFetch}
           />
         )}
-
         {/* added by sahil karnekar date 4-12-2024 */}
-
         {isDataSending && (
           <div className="ShareFunc_Loading_Animation">
             <Loader />

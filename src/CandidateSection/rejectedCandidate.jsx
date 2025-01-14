@@ -228,19 +228,23 @@ const RejectedCandidate = ({
     });
   };
 
-  //akash_pawar_RejectedCandidate_ShareFunctionality_18/07_210
-  const forwardSelectedCandidate = (e) => {
+//akash_pawar_RejectedCandidate_ShareFunctionality_18/07_210
+const forwardSelectedCandidate = (e) => {
     e.preventDefault();
-    if (selectedRows.length > 0 && userType === "TeamLeader") {
-      setShowForwardPopup(true);
+    if (selectedRows.length >= 1) {
+      if (userType === "TeamLeader") {
+        setShowForwardPopup(true);
+      } else if (userType === "SuperUser") {
+        setShowForwardPopup(true);
+      } else if (userType === "Manager") {
+        setShowForwardPopup(true);
+      } else {
+        toast.error("Invalid user type. Cannot proceed.");
+      }
+    } else {
+      toast.error("Please select at least one Candidate to proceed.");
     }
-    if (userType === "SuperUser") {
-      setShowForwardPopup(true);
-    }
-    if (userType === "Manager") {
-      setShowForwardPopup(true);
-    }
-  };
+};
 
   const handleShare = async () => {
     if (userType === "TeamLeader") {
@@ -290,9 +294,9 @@ const RejectedCandidate = ({
       }
       // Handle success response
       setIsDataSending(false);
-      toast.success("Candidates forwarded successfully!"); //Swapnil Error&success message
-      fetchRejectedData();
-      onSuccessAdd(true);
+      toast.success("Candidates forwarded successfully!");
+      fetchRejectedData(currentPage, pageSize);
+      // onSuccessAdd(true);
       setShowForwardPopup(false); // Close the modal or handle any further UI updates
       setShowShareButton(true);
       setSelectedRows([]);
@@ -582,7 +586,7 @@ const RejectedCandidate = ({
 
   const handleUpdateSuccess = () => {
     setShowUpdateCallingTracker(false);
-    fetchRejectedData();
+    fetchRejectedData(currentPage, pageSize);
   };
 
   const handleUpdate = (candidateId) => {
@@ -2073,7 +2077,7 @@ const RejectedCandidate = ({
                                     {loginEmployeeName}
                                   </label>
                                 </div>
-                                <div className="accordion-content">
+                                <div className="accordion-content newHegightSetForAlignment">
                                   <form>
                                     {recruiterUnderTeamLeader &&
                                       recruiterUnderTeamLeader.map(

@@ -77,7 +77,7 @@ function DailyWork({
   const [unpaidLeave, setUnpaidLeave] = useState(0);
   const [dayPresentPaid, setDayPresentPaid] = useState("No");
   const [dayPresentUnpaid, setDayPresentUnpaid] = useState("Yes");
-  const [remoteWork, setRemoteWork] = useState("Select");
+  const [remoteWork, setRemoteWork] = useState("work from Office");
   const [profileImage, setProfileImage] = useState(null);
   const [showPauseModal, setShowPauseModal] = useState(false);
   const [allowCloseModal, setAllowCloseModal] = useState(false);
@@ -134,13 +134,19 @@ function DailyWork({
 
   useEffect(() => {
     const now = new Date();
-    const timeString = now.toLocaleTimeString("en-IN");
-    console.log("Current Time:", new Date().toLocaleTimeString());
+
+   const timeString = now.toLocaleTimeString("en-IN", {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+  });
+    
     const dateString = `${now.getDate().toString().padStart(2, "0")}/${(
-      now.getMonth() + 1
-    )
-      .toString()
-      .padStart(2, "0")}/${now.getFullYear()}`;
+    now.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}/${now.getFullYear()}`;
+
     const dayOfWeek = now.getDay();
     setCurrentTime(timeString);
     setCurrentDate(dateString);
@@ -163,7 +169,13 @@ function DailyWork({
 
     const timer = setInterval(() => {
       const now = new Date();
-      setCurrentTime(now.toLocaleTimeString("en-IN"));
+      const updatedTime = now.toLocaleTimeString("en-IN", {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      });
+      setCurrentTime(updatedTime);
     }, 1000);
     return () => clearInterval(timer);
   }, []);
@@ -193,7 +205,7 @@ function DailyWork({
             employeeId,
             jobRole: userType,
             employeeName: name,
-            date: `${day}/${month}/${year}`,
+            date: `${year}-${month}-${day}`,
             loginTime: now.toLocaleTimeString("en-IN"),
             lateMark,
             leaveType,
@@ -202,6 +214,7 @@ function DailyWork({
             dailyTarget: data.pending + data.archived,
             dailyArchived: data.archived,
             dailyPending: data.pending,
+            remoteWork,
           };
           localStorage.setItem(
             `dailyWorkData_${employeeId}`,
@@ -215,7 +228,7 @@ function DailyWork({
           if (response.data) {
             fetchCurrentEmployerWorkId();
           }
-          console.log("Login details saved successfully.");
+          console.log("Login details saved successfully -- save-daily-work .");
           localStorage.setItem(
             `loginDetailsSaved_${employeeId}`,
             JSON.stringify(true)
@@ -365,11 +378,7 @@ function DailyWork({
       };
     }
     setData(updatedData);
-
-    console.log("Archived Increment:", archivedIncrement);
-    console.log("Pending Decrement:", pendingDecrement);
     console.log("Updated Data:", updatedData);
-
     if (updatedData.archived >= 3) {
       setDayPresentPaid("Yes");
       setDayPresentUnpaid("No");
@@ -436,11 +445,14 @@ function DailyWork({
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-handleLogoutLocal(changed) Start LineNo:-530 Date:-01/07
   useEffect(() => {
     logoutTimestamp != null ? handleLogoutLocal() : null;
+    console.log("Logout clicked 04 In dailyWork");
   }, [logoutTimestamp]);
-
+  
+  
   const handleLogoutLocal = async () => {
+    console.log("Logout clicked 05 in Daily Work handleLogoutLocal");
     try {
-      console.log(fetchWorkId);
+      console.log( " Fetched Work Id :- " + fetchWorkId);
       const breaksData = localStorage.getItem(`breaks_${employeeId}`);
       const breaks = breaksData ? JSON.parse(breaksData) : [];
       const totalHoursWork = calculateTotalHoursWork(
@@ -460,13 +472,10 @@ function DailyWork({
       console.log(typeof totalHoursWork);
       const formData = {
         employeeId,
-        date: `${day}/${month}/${year}`,
+        date: `${year}-${month}-${day}`,
         dailyTarget: data.pending + data.archived,
         dailyArchived: data.archived,
         dailyPending: data.pending,
-        loginTime: JSON.parse(
-          localStorage.getItem(`loginTimeSaved_${employeeId}`)
-        ),
         logoutTime: logoutTimestamp,
         totalHoursWork,
         dailyHours: breaks,
@@ -476,26 +485,25 @@ function DailyWork({
         paidLeave,
         unpaidLeave,
         dayPresentPaid,
-        dayPresentUnpaid,
-        remoteWork,
+        dayPresentUnpaid
       };
 
       await axios.put(
         `${API_BASE_URL}/update-daily-work/${fetchWorkId} `,
         formData
       );
-
+      console.log(" ----------------  update-daily-work");
       localStorage.removeItem(`loginTimeSaved_${employeeId}`);
       localStorage.removeItem(`loginDetailsSaved_${employeeId}`);
       localStorage.removeItem(`stopwatchTime_${employeeId}`);
       localStorage.removeItem(`dailyWorkData_${employeeId}`);
       localStorage.removeItem(`breaks_${employeeId}`);
-      localStorage.removeItem("employeeId");
+      localStorage.removeItem(`user_${userType}${employeeId}`);
+      localStorage.removeItem("paymentMade");
 
       setTime({ hours: 0, minutes: 0, seconds: 0 });
       setData({ archived: 0, pending: 10 });
-      console.log("Logged out successfully.");
-      navigate(`/login/${userType}`);
+      console.log("Logged out successfully. in daily work");
     } catch (error) {
       console.error("Error logging out:", error);
     }
@@ -773,7 +781,6 @@ function DailyWork({
 
       socket.on("receive_save_applicant_data", (message) => {
         console.log(message);
-
           setMessages((prevMessages) => {
             const updatedMessages = [...prevMessages, message];
             console.log(updatedMessages);
@@ -1248,11 +1255,11 @@ return time;
               <select
                 className="select"
                 id="remoteWork"
-                value={remoteWork}
+                value={remoteWork || "work from Office"} 
                 onChange={(e) => setRemoteWork(e.target.value)}
               >
                 <option>Select</option>
-                <option value="work from Office">WFO</option>
+                <option value="Work from Office">WFO</option>
                 <option value="Work from Home">WFH</option>
                 <option value="hybrid">Hybrid</option>
               </select>

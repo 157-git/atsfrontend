@@ -79,23 +79,21 @@ const InterviewPreviousQuestion = () => {
               <p className="card-content"><strong>Duration :- </strong>{`${interviewData.interviewDuration}`}</p>
             </div>
 
-            {/* Display Asked Questions */}
-            <div className="card">
-              <h2 className="card-title">Asked Questions</h2>
+            <div className="question-card-main-div">
+            <div className="question-card">
+              <h2 className="question-card-title">Asked Questions</h2>
               {interviewData.askedQuestions && interviewData.askedQuestions.length > 0 ? (
                 interviewData.askedQuestions.map((question, index) => (
                   <p key={index} className="card-content">
-                    Q.{index + 1}: {question}
+                    Q.{index + 1} : {question}
                   </p>
                 ))
               ) : (
                 <p>No asked questions available.</p>
               )}
             </div>
-
-            {/* Display Unanswered Questions */}
-            <div className="card">
-              <h2 className="card-title">Unanswered Questions</h2>
+            <div className="question-card">
+              <h2 className="question-card-title">Unanswered Questions</h2>
               {interviewData.unansweredQuestions && interviewData.unansweredQuestions.length > 0 ? (
                 interviewData.unansweredQuestions.map((question, index) => (
                   <p key={index} className="card-content">
@@ -106,6 +104,8 @@ const InterviewPreviousQuestion = () => {
                 <p>No unanswered questions available.</p>
               )}
             </div>
+            </div>
+
           </>
         )}
       </div>

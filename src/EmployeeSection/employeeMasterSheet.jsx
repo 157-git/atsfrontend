@@ -263,7 +263,6 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
       extractUniqueValues(data.content);
       setTotalRecords(data.totalElements);
       setSearchCount(Object.keys(data.content).length);
-      console.log(data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
@@ -317,19 +316,23 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
     });
   };
 
-  //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_159
-  const forwardSelectedCandidate = (e) => {
+const forwardSelectedCandidate = (e) => {
     e.preventDefault();
-    if (selectedRows.length > 0 && userType === "TeamLeader") {
-      setShowForwardPopup(true);
+    if (selectedRows.length >= 1) {
+      if (userType === "TeamLeader") {
+        setShowForwardPopup(true);
+      } else if (userType === "SuperUser") {
+        setShowForwardPopup(true);
+      } else if (userType === "Manager") {
+        setShowForwardPopup(true);
+      } else {
+        toast.error("Invalid user type. Cannot proceed.");
+      }
+    } else {
+      toast.error("Please select at least one Candidate to proceed.");
     }
-    if (userType === "SuperUser") {
-      setShowForwardPopup(true);
-    }
-    if (userType === "Manager") {
-      setShowForwardPopup(true);
-    }
-  };
+};
+
 
   const handleShare = async () => {
     if (userType === "TeamLeader") {
@@ -378,9 +381,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
       }
       // Handle success response
       setIsDataSending(false);
-      toast.log("Candidates forwarded successfully!"); //Swapnil Error&success message
-      fetchCallingTrackerData();
-      onSuccessAdd(true);
+      toast.success("Candidates forwarded successfully!");
+      fetchData(currentPage, pageSize);
+      // onSuccessAdd(true);
       setShowForwardPopup(false); // Close the modal or handle any further UI updates
       setShowShareButton(true);
       setSelectedRows([]);
@@ -616,10 +619,6 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
     return (currentPage - 1) * pageSize + index + 1;
   };
 
-  console.log(Object.keys(data).length);
-  console.log(typeof data);
-
-  console.log(applyFilters(data).length);
   useEffect(() => {
     if (applyFilters) {
       setSearchCount(applyFilters(data).length);
@@ -2125,7 +2124,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                                 {loginEmployeeName}
                               </label>
                             </div>
-                            <div className="accordion-content">
+                            <div className="accordion-content newHegightSetForAlignment">
                               <form>
                                 {recruiterUnderTeamLeader &&
                                   recruiterUnderTeamLeader.map((recruiters) => (

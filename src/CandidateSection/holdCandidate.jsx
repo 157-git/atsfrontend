@@ -425,7 +425,7 @@ const HoldCandidate = ({
 
   const handleUpdateSuccess = () => {
     setShowUpdateCallingTracker(false);
-    fetchHoldCandidateData();
+    fetchHoldCandidateData(currentPage, pageSize);
   };
 
   const handleUpdate = (candidateId) => {
@@ -523,14 +523,18 @@ const HoldCandidate = ({
   //akash_pawar_HoldCandidate_ShareFunctionality_18/07_408
   const forwardSelectedCandidate = (e) => {
     e.preventDefault();
-    if (selectedRows.length > 0 && userType === "TeamLeader") {
-      setShowForwardPopup(true);
-    }
-    if (userType === "SuperUser") {
-      setShowForwardPopup(true);
-    }
-    if (userType === "Manager") {
-      setShowForwardPopup(true);
+    if (selectedRows.length >= 1) {
+      if (userType === "TeamLeader") {
+        setShowForwardPopup(true);
+      } else if (userType === "SuperUser") {
+        setShowForwardPopup(true);
+      } else if (userType === "Manager") {
+        setShowForwardPopup(true);
+      } else {
+        toast.error("Invalid user type. Cannot proceed.");
+      }
+    } else {
+      toast.error("Please select at least one Candidate to proceed.");
     }
   };
 
@@ -584,8 +588,8 @@ const HoldCandidate = ({
       // Handle success response
       setIsDataSending(false);
       toast.success("Candidates forwarded successfully!");
-      fetchHoldCandidateData();
-      onSuccessAdd(true);
+      fetchHoldCandidateData(currentPage, pageSize);
+      // onSuccessAdd(true);
       setShowForwardPopup(false); // Close the modal or handle any further UI updates
       setShowShareButton(true);
       setSelectedRows([]);
@@ -2080,7 +2084,7 @@ const HoldCandidate = ({
                                     {loginEmployeeName}
                                   </label>
                                 </div>
-                                <div className="accordion-content">
+                                <div className="accordion-content newHegightSetForAlignment">
                                   <form>
                                     {recruiterUnderTeamLeader &&
                                       recruiterUnderTeamLeader.map(

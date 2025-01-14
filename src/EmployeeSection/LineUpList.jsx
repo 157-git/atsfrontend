@@ -497,20 +497,22 @@ const LineUpList = ({
     });
   };
 
-  //akash_pawar_SelfCallingTracker_ShareFunctionality_17/07_460
   const forwardSelectedCandidate = (e) => {
     e.preventDefault();
-    if (selectedRows.length > 0 && userType === "TeamLeader") {
-      setShowForwardPopup(true);
-    }
-    if (userType === "SuperUser") {
-      setShowForwardPopup(true);
-    }
-    if (userType === "Manager") {
-      setShowForwardPopup(true);
+    if (selectedRows.length >= 1) {
+      if (userType === "TeamLeader") {
+        setShowForwardPopup(true);
+      } else if (userType === "SuperUser") {
+        setShowForwardPopup(true);
+      } else if (userType === "Manager") {
+        setShowForwardPopup(true);
+      } else {
+        toast.error("Invalid user type. Cannot proceed.");
+      }
+    } else {
+      toast.error("Please select at least one Candidate to proceed.");
     }
   };
-  //akash_pawar_SelfCallingTracker_ShareFunctionality_17/07_472
 
   //akash_pawar_LineUpList_ShareFunctionality_17/07_475
   const handleShare = async () => {
@@ -563,8 +565,8 @@ const LineUpList = ({
       // Handle success response
       setIsDataSending(false);
       toast.success("Candidates forwarded successfully!"); //Swapnil Error&success message
-      fetchCallingTrackerData();
-      onSuccessAdd(true);
+      fetchCallingTrackerData(currentPage, pageSize);
+      // onSuccessAdd(true); commented by arshad on 13-01-2025
       setShowForwardPopup(false); // Close the modal or handle any further UI updates
       setShowShareButton(true);
       setSelectedRows([]);
@@ -2009,7 +2011,7 @@ const LineUpList = ({
                                     <strong>TL - {loginEmployeeName} </strong>
                                   </label>
                                 </div>
-                                <div className="accordion-content">
+                                <div className="accordion-content newHegightSetForAlignment">
                                   <form>
                                     {recruiterUnderTeamLeader &&
                                       recruiterUnderTeamLeader.map(
