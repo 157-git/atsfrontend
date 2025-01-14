@@ -1,8 +1,5 @@
 /* Swapnil_DailyWork_Cloud_OverFlow_Adjust_28_to_39_02/07 */
 
-
-
-
 .daily-work-div {
   display: flex;
   align-items: center;
@@ -29,7 +26,6 @@
   border: 1px solid var(--text-hover-color);
 }
 
-
 .header-clouds {
   position: fixed;
   top: -136px;
@@ -53,8 +49,6 @@
   }
 }
 
-
-
 .working-time-div {
   display: flex;
   gap: 10px;
@@ -75,7 +69,7 @@
 .timer-break-btn:hover,
 .logout-btn:hover {
   background-color: var(--button-bg-hover-color);
-  border: 1px solid var(--button-border-color);  
+  border: 1px solid var(--button-border-color);
   color: var(--button-txt-hover-color);
 }
 
@@ -86,15 +80,13 @@
 }
 
 .logout-btn {
-
   cursor: pointer;
 
-  border-Radius: 60%;
+  border-radius: 60%;
   height: 30px;
   width: 40px;
 
   background-color: var(--button-color);
-
 }
 
 .loging-hr {
@@ -156,7 +148,6 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 10px;
-
 }
 
 .daily-timeanddate .head {
@@ -164,10 +155,9 @@
   /* padding-top: 12px; */
 }
 
-
 .user-details p {
   font-size: 18px;
-  color:var(--sidebar-txt);
+  color: var(--sidebar-txt);
   font-weight: 400;
 }
 
@@ -177,8 +167,6 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
-
-
 }
 
 .show-daily-t-btn {
@@ -193,7 +181,6 @@
   flex-direction: column;
 }
 
-
 .toggle-all-daily-btns {
   display: none;
   font-size: 14px;
@@ -203,7 +190,7 @@
   height: 30px;
   width: 120px;
   background-color: var(--primary-button-bg);
-  color:var(--button-txt-color);
+  color: var(--button-txt-color);
   transition: background-color 0.3s ease;
   margin: 10px auto;
   text-align: center;
@@ -256,7 +243,6 @@
   }
 }
 
-
 /* Arshad Start css from here */
 /* Center the modal */
 .dw-modal {
@@ -274,53 +260,52 @@
   width: 450x;
   height: 500px;
   margin: 10px;
-  border: 2px solid black;
-  }
+  /* border: 2px solid black; */
+}
 
-  .dw-reminder-content {
-    background-color: white;
-    border-radius: 3px;
-    width: 450x;
-    height: 280px;
-    margin: 10px;
-    /* border: 2px solid black; */
-    }
-  .dw-reminder-div{
-    background-color: white;
-    border-radius: 3px;
-    width: 450x;
-    height: 200px;
-    margin: 10px;
-    /* border: 2px solid red; */
-  }
+.dw-reminder-content {
+  background-color: white;
+  border-radius: 3px;
+  width: 450x;
+  height: 280px;
+  margin: 10px;
+  /* border: 2px solid black; */
+}
+.dw-reminder-div {
+  background-color: white;
+  border-radius: 3px;
+  width: 450x;
+  height: 200px;
+  margin: 10px;
+  /* border: 2px solid red; */
+}
 
-.dw-reminder-button-div{
+.dw-reminder-button-div {
   align-items: center;
   display: flex;
   flex-direction: column;
 }
-  .profile-back-button {
-    border-radius: 15px;
-    font-size: 16px;
-    height: 30px;
-    width: auto;
-    padding-left: 15px;
-    padding-right: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* background-color: var(--button-color); */
-    color: var(--button-text-color);
-    /* border: 1px solid gray; */
-  }
+.profile-back-button {
+  border-radius: 15px;
+  font-size: 16px;
+  height: 30px;
+  width: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: var(--button-color); */
+  color: var(--button-text-color);
+  /* border: 1px solid gray; */
+}
 
-  /* .profile-back-button:hover {
+/* .profile-back-button:hover {
     background-color: var(--button-bg-hover-color);
     color: var(--text-hover-color);
     border: 1px solid var(--button-border-color);
   }
    */
-
 
 /* Waiting image styling */
 .dw-waiting-img {
@@ -328,7 +313,7 @@
   width: 500px;
 }
 
-.dw-resume-div{
+.dw-resume-div {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -345,7 +330,7 @@
 
 /* Button styling */
 .dw-close-profile-popup-btn {
-  color:var(--text-color); /* Button text color */
+  color: var(--text-color); /* Button text color */
   border: none;
   border-radius: 5px; /* Rounded corners */
   cursor: pointer; /* Pointer cursor on hover */
@@ -379,7 +364,9 @@
 }
 
 .notificationMainCont1 {
-  background-color: var(--accent-color-2); /* Keeps background consistent with theme */
+  background-color: var(
+    --accent-color-2
+  ); /* Keeps background consistent with theme */
   color: var(--text-color); /* Matches text color to theme */
   position: absolute; /* Sticks to a fixed location relative to parent */
   top: 0; /* Aligns it to the top */
@@ -394,7 +381,6 @@
   z-index: 1000; /* Ensures it appears above other elements */
   margin-top: 80px; /* Adjusts spacing from top */
 }
-
 
 .notificationMainCont1.open {
   width: 25%;
@@ -413,10 +399,9 @@
   padding: 10px;
 }
 
-.notification-gap{
+.notification-gap {
   margin: 10px;
 }
-
 
 .buttonsDivForNotifications {
   display: flex; /* Aligns buttons horizontally */
@@ -439,7 +424,7 @@
   background-color: var(--button-bg-hover-color); /* Darker red on hover */
   color: var(--button-txt-hover-color);
 }
-.mainNotDiv{
+.mainNotDiv {
   max-height: 65vh;
   overflow-y: scroll;
 }

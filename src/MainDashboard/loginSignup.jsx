@@ -122,7 +122,6 @@ const LoginSignup = ({ onLogin }) => {
         }
       );
       console.log("Response Status:", loginResponse.status);
-      // line 125 to 154 added by sahil karnekar on date 28-11-2024
       if (loginResponse.status === 200) {
         console.log(loginResponse);
         if (loginResponse.data.statusCode === "200 OK") {
