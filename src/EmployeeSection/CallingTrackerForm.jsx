@@ -2821,16 +2821,6 @@ const ModalComponent = ({
               Salary Calculation
             </p>
 
-            {/* <p
-             className={`sidebar-item ${
-               activeField === "historyTracker" ? "active" : ""
-             }`}
->>>>>>> 970775edad6a78d0c78fa6811619c6ada820873d
-             onClick={() => setActiveField("historyTracker")}
-           >
-             History Tracker
-           </p> */}
-
             <p
               className={`sidebar-item ${activeField === "previousQuestion" ? "active" : ""
                 }`}

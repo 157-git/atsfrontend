@@ -69,7 +69,7 @@ function DailyWork({
   const [unpaidLeave, setUnpaidLeave] = useState(0);
   const [dayPresentPaid, setDayPresentPaid] = useState("No");
   const [dayPresentUnpaid, setDayPresentUnpaid] = useState("Yes");
-  const [remoteWork, setRemoteWork] = useState("Select");
+  const [remoteWork, setRemoteWork] = useState("work from Office");
   const [profileImage, setProfileImage] = useState(null);
   const [showPauseModal, setShowPauseModal] = useState(false);
   const [allowCloseModal, setAllowCloseModal] = useState(false);
@@ -123,13 +123,19 @@ function DailyWork({
 
   useEffect(() => {
     const now = new Date();
-    const timeString = now.toLocaleTimeString("en-IN");
-    console.log("Current Time:", new Date().toLocaleTimeString());
+
+   const timeString = now.toLocaleTimeString("en-IN", {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+  });
+    
     const dateString = `${now.getDate().toString().padStart(2, "0")}/${(
-      now.getMonth() + 1
-    )
-      .toString()
-      .padStart(2, "0")}/${now.getFullYear()}`;
+    now.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}/${now.getFullYear()}`;
+
     const dayOfWeek = now.getDay();
     setCurrentTime(timeString);
     setCurrentDate(dateString);
@@ -152,7 +158,13 @@ function DailyWork({
 
     const timer = setInterval(() => {
       const now = new Date();
-      setCurrentTime(now.toLocaleTimeString("en-IN"));
+      const updatedTime = now.toLocaleTimeString("en-IN", {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      });
+      setCurrentTime(updatedTime);
     }, 1000);
     return () => clearInterval(timer);
   }, []);
@@ -182,7 +194,7 @@ function DailyWork({
             employeeId,
             jobRole: userType,
             employeeName: name,
-            date: `${day}/${month}/${year}`,
+            date: `${year}-${month}-${day}`,
             loginTime: now.toLocaleTimeString("en-IN"),
             lateMark,
             leaveType,
@@ -191,6 +203,7 @@ function DailyWork({
             dailyTarget: data.pending + data.archived,
             dailyArchived: data.archived,
             dailyPending: data.pending,
+            remoteWork,
           };
           localStorage.setItem(
             `dailyWorkData_${employeeId}`,
@@ -204,7 +217,7 @@ function DailyWork({
           if (response.data) {
             fetchCurrentEmployerWorkId();
           }
-          console.log("Login details saved successfully.");
+          console.log("Login details saved successfully -- save-daily-work .");
           localStorage.setItem(
             `loginDetailsSaved_${employeeId}`,
             JSON.stringify(true)
@@ -354,11 +367,7 @@ function DailyWork({
       };
     }
     setData(updatedData);
-
-    console.log("Archived Increment:", archivedIncrement);
-    console.log("Pending Decrement:", pendingDecrement);
     console.log("Updated Data:", updatedData);
-
     if (updatedData.archived >= 3) {
       setDayPresentPaid("Yes");
       setDayPresentUnpaid("No");
@@ -425,11 +434,14 @@ function DailyWork({
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-handleLogoutLocal(changed) Start LineNo:-530 Date:-01/07
   useEffect(() => {
     logoutTimestamp != null ? handleLogoutLocal() : null;
+    console.log("Logout clicked 04 In dailyWork");
   }, [logoutTimestamp]);
-
+  
+  
   const handleLogoutLocal = async () => {
+    console.log("Logout clicked 05 in Daily Work handleLogoutLocal");
     try {
-      console.log(fetchWorkId);
+      console.log( " Fetched Work Id :- " + fetchWorkId);
       const breaksData = localStorage.getItem(`breaks_${employeeId}`);
       const breaks = breaksData ? JSON.parse(breaksData) : [];
       const totalHoursWork = calculateTotalHoursWork(
@@ -449,13 +461,10 @@ function DailyWork({
       console.log(typeof totalHoursWork);
       const formData = {
         employeeId,
-        date: `${day}/${month}/${year}`,
+        date: `${year}-${month}-${day}`,
         dailyTarget: data.pending + data.archived,
         dailyArchived: data.archived,
         dailyPending: data.pending,
-        loginTime: JSON.parse(
-          localStorage.getItem(`loginTimeSaved_${employeeId}`)
-        ),
         logoutTime: logoutTimestamp,
         totalHoursWork,
         dailyHours: breaks,
@@ -465,26 +474,25 @@ function DailyWork({
         paidLeave,
         unpaidLeave,
         dayPresentPaid,
-        dayPresentUnpaid,
-        remoteWork,
+        dayPresentUnpaid
       };
 
       await axios.put(
         `${API_BASE_URL}/update-daily-work/${fetchWorkId} `,
         formData
       );
-
+      console.log(" ----------------  update-daily-work");
       localStorage.removeItem(`loginTimeSaved_${employeeId}`);
       localStorage.removeItem(`loginDetailsSaved_${employeeId}`);
       localStorage.removeItem(`stopwatchTime_${employeeId}`);
       localStorage.removeItem(`dailyWorkData_${employeeId}`);
       localStorage.removeItem(`breaks_${employeeId}`);
-      localStorage.removeItem("employeeId");
+      localStorage.removeItem(`user_${userType}${employeeId}`);
+      localStorage.removeItem("paymentMade");
 
       setTime({ hours: 0, minutes: 0, seconds: 0 });
       setData({ archived: 0, pending: 10 });
-      console.log("Logged out successfully.");
-      navigate(`/login/${userType}`);
+      console.log("Logged out successfully. in daily work");
     } catch (error) {
       console.error("Error logging out:", error);
     }
@@ -750,7 +758,6 @@ function DailyWork({
 
       socket.on("receive_save_applicant_data", (message) => {
         console.log(message);
-
         setMessages((prevMessages) => {
           const updatedMessages = [...prevMessages, message];
           console.log(updatedMessages);
@@ -905,11 +912,11 @@ function DailyWork({
               <select
                 className="select"
                 id="remoteWork"
-                value={remoteWork}
+                value={remoteWork || "work from Office"} 
                 onChange={(e) => setRemoteWork(e.target.value)}
               >
                 <option>Select</option>
-                <option value="work from Office">WFO</option>
+                <option value="Work from Office">WFO</option>
                 <option value="Work from Home">WFH</option>
                 <option value="hybrid">Hybrid</option>
               </select>
@@ -945,7 +952,7 @@ function DailyWork({
                           <p className="notification-Text">
                             A Candidate {message.candidate.candidateName}
                             <span> Added </span>
-                            By  {message.candidate.recruiterName} On :{" "}
+                            By {message.candidate.recruiterName} On :{" "}
                             {message.candidate.candidateAddedTime}
                           </p>
                         )}
@@ -953,7 +960,7 @@ function DailyWork({
                           <p className="notification-Text">
                             A Candidate {message.candidate.candidateName}
                             <span> Updated </span>
-                            By  {message.candidate.recruiterName} On :{" "}
+                            By {message.candidate.recruiterName} On :{" "}
                             {message.candidate.candidateAddedTime}
                           </p>
                         )}
@@ -963,15 +970,12 @@ function DailyWork({
                             message.candidate.interviewResponse ===
                             "Selected" ? (
                               <p className="notification-Text">
-                                Congratulations! Your candidate{" "}
+                                Congratulations ! Your candidate{" "}
                                 {message.candidate.candidateName} has been
                                 Selected after the{" "}
-                                {message.candidate.interviewRound} for Job ID{" "}
-                                {
-                                  message.candidate.requirementInfo
-                                    .requirementId
-                                }
-                                . Further details will be shared soon.
+                                {message.candidate.interviewRound} for Job Id{" "}
+                                {message.candidate.requirementId}. Further
+                                details will be shared soon.
                               </p>
                             ) : message.candidate.interviewResponse ===
                               "Hold" ? (
@@ -979,11 +983,8 @@ function DailyWork({
                                 Your candidate {message.candidate.candidateName}{" "}
                                 is on Hold after the{" "}
                                 {message.candidate.interviewRound} for Job ID{" "}
-                                {
-                                  message.candidate.requirementInfo
-                                    .requirementId
-                                }
-                                . The next steps will be communicated soon.
+                                {message.candidate.requirementId}. The next
+                                steps will be communicated soon.
                               </p>
                             ) : message.candidate.interviewResponse ===
                               "Rejected" ? (
@@ -991,11 +992,8 @@ function DailyWork({
                                 Your candidate {message.candidate.candidateName}{" "}
                                 has been Rejected after the{" "}
                                 {message.candidate.interviewRound} for Job ID{" "}
-                                {
-                                  message.candidate.requirementInfo
-                                    .requirementId
-                                }
-                                . Please review and plan accordingly.
+                                {message.candidate.requirementId}. Please review
+                                and plan accordingly.
                               </p>
                             ) : (
                               !["Rejected", "Hold", "Selected"].includes(
@@ -1005,12 +1003,8 @@ function DailyWork({
                                   Your candidate{" "}
                                   {message.candidate.candidateName} has been{" "}
                                   {message.candidate.interviewResponse} for Job
-                                  ID{" "}
-                                  {
-                                    message.candidate.requirementInfo
-                                      .requirementId
-                                  }{" "}
-                                  on {message.candidate.nextInterviewDate} at{" "}
+                                  ID {message.candidate.requirementId} on{" "}
+                                  {message.candidate.nextInterviewDate} at{" "}
                                   {message.candidate.nextInterviewTiming}.
                                 </p>
                               )
@@ -1018,20 +1012,19 @@ function DailyWork({
                           ) : message.candidate.interviewResponse ===
                             "Selected" ? (
                             <p className="notification-Text">
-                              Congratulations! Candidate{" "}
+                              Congratulations ! Candidate{" "}
                               {message.candidate.candidateName} has been
                               Selected after the{" "}
                               {message.candidate.interviewRound} for Job ID{" "}
-                              {message.candidate.requirementInfo.requirementId}.
-                              Further details will be shared soon.
+                              {message.candidate.requirementId}. Further details
+                              will be shared soon.
                             </p>
                           ) : message.candidate.interviewResponse === "Hold" ? (
                             <p className="notification-Text">
                               Candidate {message.candidate.candidateName} is on
                               Hold after the {message.candidate.interviewRound}{" "}
-                              for Job ID{" "}
-                              {message.candidate.requirementInfo.requirementId}.
-                              The next steps will be communicated soon.
+                              for Job ID {message.candidate.requirementId}. The
+                              next steps will be communicated soon.
                             </p>
                           ) : message.candidate.interviewResponse ===
                             "Rejected" ? (
@@ -1039,8 +1032,8 @@ function DailyWork({
                               Candidate {message.candidate.candidateName} has
                               been Rejected after the{" "}
                               {message.candidate.interviewRound} for Job ID{" "}
-                              {message.candidate.requirementInfo.requirementId}.
-                              Please review and plan accordingly.
+                              {message.candidate.requirementId}. Please review
+                              and plan accordingly.
                             </p>
                           ) : (
                             !["Rejected", "Hold", "Selected"].includes(
@@ -1049,12 +1042,8 @@ function DailyWork({
                               <p>
                                 Candidate {message.candidate.candidateName} has
                                 been {message.candidate.interviewResponse} for
-                                Job ID{" "}
-                                {
-                                  message.candidate.requirementInfo
-                                    .requirementId
-                                }{" "}
-                                on {message.candidate.nextInterviewDate} at{" "}
+                                Job ID {message.candidate.requirementId} on{" "}
+                                {message.candidate.nextInterviewDate} at{" "}
                                 {message.candidate.nextInterviewTiming}.
                               </p>
                             )
@@ -1062,27 +1051,28 @@ function DailyWork({
                         {message.eventName === "add_job_description" && (
                           <p>
                             New Job Dscription Company Name :{" "}
-                            {message.candidate.companyName}{" "}
+                            {message.candidate.companyName} {" - "}{" "}
                             {message.candidate.designation} Was
                             <span> Added </span>
-                            By  {message.candidate.employeeName} On :{" "}
+                            By {message.candidate.employeeName} On :{" "}
                             {message.candidate.jdAddedDate}
                           </p>
                         )}
                         {message.eventName === "update_job_description" && (
                           <p>
-                            {message.candidate.companyName}{" "}
-                            {message.candidate.designation} Was
+                            {message.candidate.companyName}
+                            {" - "}
+                            {message.candidate.designation} Jd Was
                             <span> Updated </span>
-                            By  {message.candidate.employeeName} On :{" "}
+                            By {message.candidate.employeeName} On :{" "}
                             {message.candidate.statusUpdateDate}
                           </p>
                         )}
                         {message.eventName === "delete_job_description" && (
                           <p>
-                            {message.candidate.companyName} JD
+                            {message.candidate.companyName} JD was
                             <span> Deleted </span>
-                            By  {message.candidate.employeeName} On :{" "}
+                            By {message.candidate.employeeName} On :{" "}
                             {message.candidate.jdAddedDate}
                           </p>
                         )}
@@ -1118,34 +1108,19 @@ function DailyWork({
                         )}
                         {message.eventName === "save_applicant_data" && (
                           <p>
-                            {message.candidate.candidateName}
-                            <span>
-                              {" "}
-                              Added In Calling Tracker From{" "}
-                              {message.candidate.sourceName} Please Check
-                              Calling Tracker Section
-                            </span>{" "}
-                            On {message.candidate.date}
+                            {message.candidate.candidateName} has filled an
+                            application from{" "}
+                            <span>{message.candidate.sourceName}</span>. Please
+                            check the Calling Tracker section on{" "}
+                            <span>{message.candidate.date}</span>.
                           </p>
                         )}
-                        {message.eventName ===
-                          "receive_add_recruiter_event" && (
-                          <p>
-                            {message.candidate.candidateName}
-                            <span>
-                              {" "}
-                              Added In Calling Tracker From{" "}
-                              {message.candidate.sourceName} Please Check
-                              Calling Tracker Section
-                            </span>{" "}
-                            On {message.candidate.date}
-                          </p>
-                        )}
+
                         {message.eventName === "add_recruiter_event" && (
                           <p>
                             {message.candidate.employeeName} New{" "}
                             {message.candidate.jobRole}
-                            <span> Joined </span> On{" "}
+                            <span> has Join from </span>{" "}
                             {message.candidate.dateOfJoining}
                           </p>
                         )}
@@ -1153,7 +1128,7 @@ function DailyWork({
                           <p>
                             {message.candidate.teamLeaderName} New{" "}
                             {message.candidate.jobLevel}
-                            <span> Joined </span> On{" "}
+                            <span> has join </span> from{" "}
                             {message.candidate.tlDateOfJoining}
                           </p>
                         )}
@@ -1161,7 +1136,7 @@ function DailyWork({
                           <p>
                             {message.candidate.managerName} New{" "}
                             {message.candidate.jobRole}
-                            <span> Joined </span> On{" "}
+                            <span> has join </span> from{" "}
                             {message.candidate.dateOfJoiningM}
                           </p>
                         )}

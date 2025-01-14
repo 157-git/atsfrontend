@@ -635,7 +635,7 @@ strong {
 
 .distance-calculation,
 .salary-calculation {
-  padding: 20px;
+  padding-top: 30px;
 }
 
 .form-group {
@@ -798,4 +798,15 @@ padding-right: 8px;
   border-radius: 5px;
   max-width: 1000px;
   width: 100%;
+}
+
+/* Arshad Attar added This CSS on 13-01-2025 */
+
+.question-card{
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  overflow-y: scroll;
+  max-height: 240px;
 }

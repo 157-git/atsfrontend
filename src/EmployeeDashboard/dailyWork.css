@@ -409,20 +409,15 @@
   pointer-events: none; /* Disables interaction when closed */
 }
 .motificationSubCont1 {
-  padding: 16px; /* Adds spacing inside the container */
   margin: 18px;
-  padding: 15px;
+  padding: 10px;
 }
 
 .notification-gap{
-  border: 1px solid black;
   margin: 10px;
 }
 
-.notification-Text{
-  margin: 20px;
-  border: 1px solid black;
-}
+
 .buttonsDivForNotifications {
   display: flex; /* Aligns buttons horizontally */
   justify-content: space-between; /* Adds equal space between buttons */
@@ -430,7 +425,6 @@
 }
 
 .cleaarButtonOfNotifications {
-  
   background-color: #ff4d4d; /* Red color for emphasis */
   color: white; /* White text for better contrast */
   border: none; /* Removes default border */

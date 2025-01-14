@@ -1,6 +1,7 @@
 // This is done by vaibhavi kawarkhe Date: 10-12-2024
 // Task: Applicant Form
 import React, { useRef, useState, useEffect } from "react";
+import "./applicantFrom2.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
@@ -29,11 +30,9 @@ import { FormControlLabel, Radio } from "@mui/material";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import "./applicantFrom2.css";
 import { API_BASE_URL } from "../api/api";
 import CryptoJS from "crypto-js";
-import { initializeSocket } from "../EmployeeDashboard/socket";
-import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
+import { getSocket } from "../EmployeeDashboard/socket";
 
 function ApplicantForm2({ loginEmployeeName }) {
   //Arshad Attar Added This Code On 12-12-2024
@@ -46,7 +45,7 @@ function ApplicantForm2({ loginEmployeeName }) {
   // Decryption logic
   const decodeParams = (encrypted) => {
     try {
-      const base64 = encrypted.replace(/[^a-zA-Z0-9]/g, '');
+      const base64 = encrypted.replace(/[^a-zA-Z0-9]/g, "");
       const decodedBase64 = atob(base64);
       const bytes = CryptoJS.AES.decrypt(decodedBase64, secretKey);
       const decrypted = bytes.toString(CryptoJS.enc.Utf8);
@@ -58,7 +57,7 @@ function ApplicantForm2({ loginEmployeeName }) {
       return { employeeId: null, userType: null }; // Fallback if decryption fails
     }
   };
-  
+
   const [socket, setSocket] = useState(null);
   const { employeeId, userType } = decodeParams(encodedParams);
   const [loading, setLoading] = useState(false);
@@ -95,6 +94,7 @@ function ApplicantForm2({ loginEmployeeName }) {
     distance: "",
     lineUp: {
       experienceYear: "",
+      experienceMonth: "",
       relevantExperience: "",
       currentCTCLakh: "",
       expectedCTCLakh: "",
@@ -130,11 +130,11 @@ function ApplicantForm2({ loginEmployeeName }) {
   const [formData, setFormData] = useState(initialFormData);
   const navigator = useNavigate();
 
-      // establishing socket for emmiting event
-      useEffect(() => {
-        const newSocket = initializeSocket(2, "User");
-        setSocket(newSocket);
-      }, []);
+  // establishing socket for emmiting event
+  useEffect(() => {
+    const newSocket = getSocket();
+    setSocket(newSocket);
+  }, []);
 
   // Set recruiterName when loginEmployeeName is available
   useEffect(() => {
@@ -148,11 +148,29 @@ function ApplicantForm2({ loginEmployeeName }) {
   }, [loginEmployeeName]);
 
   const handleChange = (e) => {
-    const { name, files } = e.target;
+    const { name, files, value } = e.target;
+
+    // Clear the error for the specific field when typing
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: undefined,
+    }));
 
     if (name === "lineUp.resume" && files.length > 0) {
+      const maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
+
+      // File size validation
+      if (files[0].size > maxFileSize) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "File size should not exceed 5MB",
+        }));
+        return; // Stop further processing
+      }
+
       setResumeSelected(true);
     }
+
     if (name === "lineUp.photo" && files.length > 0) {
       setPhotoSelected(true);
     }
@@ -173,7 +191,6 @@ function ApplicantForm2({ loginEmployeeName }) {
           );
         }
         base64String = btoa(base64String);
-        // Update form data here if needed
       };
       reader.readAsArrayBuffer(files[0]);
     }
@@ -186,7 +203,7 @@ function ApplicantForm2({ loginEmployeeName }) {
         const updatedQuestions = [...prevData.questions];
         updatedQuestions[questionIndex] = {
           ...updatedQuestions[questionIndex],
-          [questionKey]: e.target.type === "file" ? files[0] : e.target.value,
+          [questionKey]: e.target.type === "file" ? files[0] : value,
         };
 
         return {
@@ -200,17 +217,18 @@ function ApplicantForm2({ loginEmployeeName }) {
         ...prevData,
         lineUp: {
           ...prevData.lineUp,
-          [nestedField]: e.target.type === "file" ? files[0] : e.target.value,
+          [nestedField]: e.target.type === "file" ? files[0] : value,
         },
       }));
     } else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: e.target.type === "file" ? files[0] : e.target.value,
+        [name]: e.target.type === "file" ? files[0] : value,
       }));
     }
   };
 
+  //rajalxmi JAgadale 10-01-2025
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -223,10 +241,16 @@ function ApplicantForm2({ loginEmployeeName }) {
     });
   };
 
+  const getNestedValue = (obj, path) => {
+    return path.split(".").reduce((acc, key) => {
+      return acc && acc[key] !== undefined ? acc[key] : undefined;
+    }, obj);
+  };
+  //Field Added RAjlaxmi Jagadale 13-01-2025
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check for required fields
     const requiredFields = [
       "candidateName",
       "contactNumber",
@@ -241,17 +265,46 @@ function ApplicantForm2({ loginEmployeeName }) {
       "questions[0].question3",
       "lineUp.resume",
       "lineUp.photo",
+      "lineUp.extraCertification",
+      "lineUp.dateOfBirth",
+      "lineUp.preferredLocation",
+      "lineUp.noticePeriod",
+      "lineUp.availabilityForInterview",
+      "lineUp.expectedJoiningDate",
+      "lineUp.relevantExperience",
+      "lineUp.gender",
+      "lineUp.companyName",
+      "lineUp.offersalary",
+      "lineUp.offerdetails",
     ];
 
-    const isFormValid = requiredFields.every((field) => {
+    let isFormValid = true;
+    const newErrors = {};
+
+    requiredFields.forEach((field) => {
       const value = field.includes(".")
         ? getNestedValue(formData, field)
         : formData[field];
-      return value && value.toString().trim() !== "";
+
+      const error = validateField(field, value || "");
+      if (error) {
+        newErrors[field] = error;
+        isFormValid = false;
+      }
     });
 
+    setErrors(newErrors);
+
     if (!isFormValid) {
-      toast.error("Please fill all required fields");
+      const firstErrorField = Object.keys(newErrors)[0];
+      const errorElement = document.querySelector(
+        `[name="${firstErrorField}"]`
+      );
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus();
+      }
+      toast.error("Please fix the errors before submitting.");
       return;
     }
 
@@ -267,7 +320,6 @@ function ApplicantForm2({ loginEmployeeName }) {
       }),
       lineUp: {
         ...formData.lineUp,
-        // Convert resume and photo to base64 if they exist
         resume:
           formData.lineUp.resume instanceof File
             ? await convertToBase64(formData.lineUp.resume)
@@ -286,7 +338,6 @@ function ApplicantForm2({ loginEmployeeName }) {
         : {}),
     };
 
-    console.log(updatedFormData);
     try {
       const response = await axios.post(
         `${API_BASE_URL}/save-applicant/${userType}`,
@@ -297,43 +348,37 @@ function ApplicantForm2({ loginEmployeeName }) {
           },
         }
       );
-      console.log(response);
-      
-      console.log(response.data);
-
-     const emitData = {
-      date: getFormattedDateTime(),
-      candidateName: formData.candidateName,
-      contactNumber: formData.contactNumber,
-      candidateEmail: formData.candidateEmail,
-      jobDesignation: formData.jobDesignation,
-      currentLocation: formData.currentLocation,
-      recruiterName: formData.recruiterName,
-      alternateNumber: formData.alternateNumber,
-      sourceName: "Applicant Form",
-      requirementId: formData.requirementId,
-      requirementCompany: formData.requirementCompany,
-      communicationRating: formData.communicationRating,
-      fullAddress: formData.fullAddress,
-      callingFeedback: formData.callingFeedback,
-      selectYesOrNo: "Yet To Confirm",
-      incentive: formData.incentive,
-      oldEmployeeId: formData.oldEmployeeId,
-      distance: formData.distance,
-     }
-   
-      socket.emit("save_applicant_data", emitData);
-      //toast.success("Your Details Submitted Successfully");
-      // Set submitted state to true
+      console.log("Form submitted successfully:", response.data);
       setIsSubmitted(true);
+      const emitData = {
+        date: getFormattedDateTime(),
+        candidateName: formData.candidateName,
+        contactNumber: formData.contactNumber,
+        candidateEmail: formData.candidateEmail,
+        jobDesignation: formData.jobDesignation,
+        currentLocation: formData.currentLocation,
+        recruiterName: formData.recruiterName,
+        alternateNumber: formData.alternateNumber,
+        sourceName: "Applicant Form",
+        requirementId: formData.requirementId,
+        requirementCompany: formData.requirementCompany,
+        communicationRating: formData.communicationRating,
+        fullAddress: formData.fullAddress,
+        callingFeedback: formData.callingFeedback,
+        selectYesOrNo: "Yet To Confirm",
+        incentive: formData.incentive,
+        oldEmployeeId: formData.oldEmployeeId,
+        distance: formData.distance,
+      };
+
+      socket.emit("save_applicant_data", emitData);
       navigator("/thank-you");
-      // Optional: Reset form after a delay or keep thank you message
       setTimeout(() => {
         setFormData(initialFormData);
         setResumeSelected(false);
         setPhotoSelected(false);
         setIsSubmitted(false);
-      }, 3000); // Reset after 3 seconds
+      }, 3000);
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("Failed to submit details");
@@ -342,20 +387,291 @@ function ApplicantForm2({ loginEmployeeName }) {
     }
   };
 
-  // Helper function to get nested object values
-  function getNestedValue(obj, path) {
-    return path.split(".").reduce((acc, part) => {
-      if (part.includes("[")) {
-        const [arrKey, index] = part.replace("]", "").split("[");
-        return acc[arrKey] ? acc[arrKey][index] : undefined;
-      }
-      return acc && acc[part];
-    }, obj);
-  }
+  //Validation Rajlaxmi Jagadale 10-01-2025/13-01-2025
+  const validateField = (name, value) => {
+    let error = "";
+    switch (name) {
+      case "candidateName":
+        if (!value.trim()) {
+          error = "Enter Your Name.";
+        } else if (/[^a-zA-Z\s]/.test(value)) {
+          error = "Only alphabets and spaces are allowed.";
+        } else if (value.length > 100) {
+          error = "Name cannot exceed 100 characters.";
+        }
+        break;
+
+      case "lineUp.extraCertification":
+        if (!value.trim()) {
+          error = "Enter Your Certification Deatils";
+        } else if (/[^a-zA-Z\s]/.test(value)) {
+          error = "Only Alphabets Allow";
+        } else if (value.length > 100) {
+          error = "Company name cannot exceed 100 characters.";
+        }
+
+        break;
+      case "contactNumber":
+        if (!value.trim()) {
+          error = "Enter Your Contact Number";
+        } else if (!/^\d{11}$/.test(value)) {
+          error = "Contact Number must be exactly 10 digits";
+        }
+        break;
+
+      case "lineUp.dateOfBirth":
+        if (!value.trim()) {
+          error = "Enter Your Birth Date";
+        } else {
+          const dob = new Date(value);
+          const today = new Date();
+          const age = today.getFullYear() - dob.getFullYear();
+          const month = today.getMonth() - dob.getMonth();
+
+          if (month < 0 || (month === 0 && today.getDate() < dob.getDate())) {
+            age--;
+          }
+
+          if (age < 18) {
+            error = "You must be at least 18 years old to apply.";
+          } else if (isNaN(dob)) {
+            error = "Enter a valid Birth Date";
+          }
+        }
+        break;
+
+      case "candidateEmail":
+        if (!value.trim()) {
+          error = "Enter Your Email Address";
+        } else if (
+          !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
+        ) {
+          error = "Enter a valid Email Address";
+        } else if (value.length > 100) {
+          error = "Company name cannot exceed 100 characters.";
+        }
+        break;
+
+      case "jobDesignation":
+        if (!value.trim()) {
+          error = "Enter Your Job Designation";
+        } else if (
+          !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
+        ) {
+          error = "Enter a valid Email Address";
+        } else if (value.length > 100) {
+          error = "Company name cannot exceed 100 characters.";
+        }
+        break;
+
+      case "currentLocation":
+        if (!value.trim()) {
+          error = "Enter The Current Location";
+        } else if (
+          !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
+        ) {
+          error = "Enter a valid Email Address";
+        } else if (value.length > 100) {
+          error = "Company name cannot exceed 100 characters.";
+        }
+        break;
+
+      case "LineUp.experienceYear":
+        if (!value.trim()) {
+          error = "Enter the Experience Year";
+        } else if (
+          !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
+        ) {
+          error = "Enter a valid Email Address";
+        } else if (value.length > 100) {
+          error = "Company name cannot exceed 100 characters.";
+        }
+        break;
+
+      case "lineUp.expectedJoiningDate":
+        const todays = new Date().toISOString().split("T")[0];
+        if (!value.trim()) {
+          error = "Enter Expected Date Of Joining";
+        } else if (new Date(value) < new Date(todays)) {
+          error = "Please select today or a future date.";
+        } else if (value.length > 100) {
+          error = "Company name cannot exceed 100 characters.";
+        }
+        break;
+
+      case "LineUp.currentCTCLakh":
+        if (!value.trim()) {
+          error = "Enter the CurrentCTCLakh";
+        } else if (!/^\d+(\.\d{1,2})?$/.test(value)) {
+          error = "Enter a valid number with up to two decimal places";
+        } else if (value.length > 100) {
+          error = "Company name cannot exceed 100 characters.";
+        }
+        break;
+
+      case "lineUp.qualification":
+        if (!value.trim()) {
+          error = "Enter Your Qualification";
+        } else if (!/^[a-zA-Z\s]+$/.test(value)) {
+          error = "Only Alphabets and Spaces are allowed";
+        } else if (value.length > 100) {
+          error = "Company name cannot exceed 100 characters.";
+        }
+        break;
+
+      case "lineUp.photo":
+        if (!value) {
+          error = "Upload the photo";
+        } else if (!["image/jpeg", "image/png"].includes(value.type)) {
+          error = "Only JPEG and PNG formats are allowed";
+        } else if (value.size > 2 * 1024 * 1024) {
+          error = "File size must not exceed 2 MB";
+        }
+        break;
+
+      case "lineUp.resume":
+        if (!value || value.length === 0) {
+          error = "Please upload your resume";
+        } else if (!(value instanceof File)) {
+          error = "Invalid file format";
+        } else if (value.size > 5 * 1024 * 1024) {
+          error = "File size must not exceed 5 MB";
+        }
+        break;
+
+      case "questions[0].question3":
+        if (!value.trim()) {
+          error = "You can only provide up to 200 words.";
+        } else {
+          const wordCount = value.trim().split(/\s+/).length;
+          if (wordCount > 200) {
+            error = "You can only provide up to 100 words.";
+          }
+        }
+        break;
+
+      case "lineUp.holdingAnyOffer":
+        if (value === undefined) {
+          error = "Please select whether you are holding any offer.";
+        }
+        break;
+      case "questions[0].question1":
+        if (!value.trim()) {
+          error = "You can only provide up to 200 words";
+        } else {
+          const wordCount = value.trim().split(/\s+/).length;
+          if (wordCount > 100) {
+            error = "You can only enter up to 200 words.";
+          }
+        }
+        break;
+
+      case "lineUp.experienceYear":
+        if (!value.trim()) {
+          error = "Experience Month is required.";
+        } else if (value < 0 || value > 12) {
+          error = "Month must be between 0 and 12.";
+        }
+        break;
+
+      case "lineUp.currentCTCLakh":
+        if (
+          name === "lineUp.currentCTCLakh" ||
+          name === "lineUp.currentCTCThousand"
+        ) {
+          if (value === "" || isNaN(value) || value <= 0) {
+            error = "Please enter a valid salary amount greater than zero.";
+          } else if (!/^\d+(\.\d{1,2})?$/.test(value)) {
+            error =
+              "Please enter a valid salary amount with up to two decimal places.";
+          }
+        }
+        break;
+
+      case "lineUp.expectedCTCLakh":
+        if (
+          name === "lineUp.expectedCTCLakh" ||
+          name === "lineUp.expectedCTCThousand"
+        ) {
+          if (value === "" || isNaN(value) || value <= 0) {
+            error = "Please enter a valid salary";
+          } else if (value.length > 2) {
+            error = "Salary must be a two-digit number.";
+          }
+        }
+        break;
+
+      case "lineUp.preferredLocation":
+        if (!value.trim()) {
+          error = "Enter Your Location";
+        } else if (/[^a-zA-Z\s]/.test(value)) {
+          error = "Only Alphabets and Spaces are allowed";
+        }
+        break;
+
+      case "lineUp.noticePeriod":
+        if (!value.trim()) {
+          error = "Enter Your Notice Period";
+        } else if (!/^\d{10}$/.test(value)) {
+          error = "Only Alphabets and Spaces are allowed";
+        }
+        break;
+      case "lineUp.availabilityForInterview":
+        const today = new Date().toISOString().split("T")[0];
+        if (!value.trim()) {
+          error = "Enter your available date.";
+        } else if (new Date(value) < new Date(today)) {
+          error = " Please select today's date or a future date.";
+        }
+        break;
+
+      case "lineUp.relevantExperience":
+        if (!value.trim()) {
+          error = "Enter Your Notice Period";
+        } else if (!/^[a-zA-Z0-9 ]+$/.test(value)) {
+          error = "Only Alphabets and Spaces are allowed";
+        }
+        break;
+
+      case "lineUp.gender":
+        if (!value.trim()) {
+          error = "Select Gender";
+        }
+        break;
+      case "lineUp.companyName":
+        if (!value.trim()) {
+          error = "Enter The Company Name";
+        } else if (/[^a-zA-Z\s]/.test(value)) {
+          error = "Only Alphabets and Spaces are allowed";
+        }
+        break;
+      case "lineUp.offersalary":
+        if (!value.trim()) {
+          error = "Enter The salary";
+        } else if (!/^\d{10}$/.test(value)) {
+          error = "Only Number can Accept ";
+        }
+        break;
+      case "lineUp.offerdetails":
+        if (!value.trim()) {
+          error = "Enter The Offer details.";
+        } else if (/[^a-zA-Z\s]/.test(value)) {
+          error = "Only Alphabets and Spaces are allowed.";
+        } else if (value.split(/\s+/).length > 200) {
+          error = "Offer details cannot exceed 200 words.";
+        }
+        break;
+
+      default:
+        break;
+    }
+    return error;
+  };
 
   const [lastScrollPos, setLastScrollPos] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollingUp, setScrollingUp] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -365,7 +681,7 @@ function ApplicantForm2({ loginEmployeeName }) {
 
       if (currentScrollY > 50) {
         setIsScrolled(true);
-        setScrollingUp(lastScrollY > currentScrollY); // Detect scroll direction
+        setScrollingUp(lastScrollY > currentScrollY);
       } else {
         setIsScrolled(false);
         setScrollingUp(false);
@@ -381,6 +697,7 @@ function ApplicantForm2({ loginEmployeeName }) {
     };
   }, []);
 
+  //Error msg Rajlaxmi jagadale 13-01-2025
   return (
     <div className="form-container-December">
       <h1 id="applicant-form-heading">Applicant Form</h1>
@@ -407,9 +724,13 @@ function ApplicantForm2({ loginEmployeeName }) {
                   placeholder="Candidate's Full Name"
                   value={formData.candidateName}
                   onChange={handleChange}
+                  maxLength={100}
                   required
                 />
               </div>
+              {errors.candidateName && (
+                <span className="error">{errors.candidateName}</span>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -425,9 +746,13 @@ function ApplicantForm2({ loginEmployeeName }) {
                   name="contactNumber"
                   value={formData.contactNumber}
                   onChange={handleChange}
+                  maxLength={11}
                   required
                 />
               </div>
+              {errors.contactNumber && (
+                <span className="error">{errors.contactNumber}</span>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -443,11 +768,14 @@ function ApplicantForm2({ loginEmployeeName }) {
                   placeholder="Candidate Email"
                   value={formData.candidateEmail}
                   onChange={handleChange}
+                  maxLength={100}
                   required
                 />
               </div>
+              {errors.candidateEmail && (
+                <span className="error">{errors.candidateEmail}</span>
+              )}
             </div>
-
             <div className="form-group-December">
               <label>Applicant's Current Salary</label>
               <div className="input-with-icon-December">
@@ -461,6 +789,11 @@ function ApplicantForm2({ loginEmployeeName }) {
                   placeholder="Lakhs"
                   value={formData.lineUp.currentCTCLakh}
                   onChange={handleChange}
+                  onInput={(e) => {
+                    if (e.target.value.length > 2) {
+                      e.target.value = e.target.value.slice(0, 2);
+                    }
+                  }}
                   required
                 />
                 <span></span> {/* Optional separator */}
@@ -470,9 +803,21 @@ function ApplicantForm2({ loginEmployeeName }) {
                   placeholder="Thousands"
                   value={formData.lineUp.currentCTCThousand}
                   onChange={handleChange}
+                  onInput={(e) => {
+                    if (e.target.value.length > 2) {
+                      e.target.value = e.target.value.slice(0, 2);
+                    }
+                  }}
                   required
                 />
               </div>
+              {(errors["lineUp.currentCTCLakh"] ||
+                errors["lineUp.currentCTCThousand"]) && (
+                <span className="error">
+                  {errors["lineUp.currentCTCLakh"] ||
+                    errors["lineUp.currentCTCThousand"]}
+                </span>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -488,6 +833,11 @@ function ApplicantForm2({ loginEmployeeName }) {
                   placeholder="Lakhs"
                   value={formData.lineUp.expectedCTCLakh}
                   onChange={handleChange}
+                  onInput={(e) => {
+                    if (e.target.value.length > 2) {
+                      e.target.value = e.target.value.slice(0, 2);
+                    }
+                  }}
                   required
                 />
                 <span></span> {/* Optional separator */}
@@ -497,9 +847,21 @@ function ApplicantForm2({ loginEmployeeName }) {
                   placeholder="Thousands"
                   value={formData.lineUp.expectedCTCThousand}
                   onChange={handleChange}
+                  onInput={(e) => {
+                    if (e.target.value.length > 2) {
+                      e.target.value = e.target.value.slice(0, 2);
+                    }
+                  }}
                   required
                 />
               </div>
+              {(errors["lineUp.expectedCTCLakh"] ||
+                errors["lineUp.expectedCTCThousand"]) && (
+                <span className="error">
+                  {errors["lineUp.expectedCTCLakh"] ||
+                    errors["lineUp.expectedCTCThousand"]}
+                </span>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -515,9 +877,13 @@ function ApplicantForm2({ loginEmployeeName }) {
                   placeholder="Education"
                   value={formData.lineUp.qualification}
                   onChange={handleChange}
+                  maxLength={100}
                   required
                 />
               </div>
+              {errors["lineUp.qualification"] && (
+                <span className="error">{errors["lineUp.qualification"]}</span>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -533,9 +899,13 @@ function ApplicantForm2({ loginEmployeeName }) {
                   placeholder="Designation"
                   value={formData.jobDesignation}
                   onChange={handleChange}
+                  maxLength={100}
                   required
                 />
               </div>
+              {errors.jobDesignation && (
+                <span className="error">{errors.jobDesignation}</span>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -554,6 +924,9 @@ function ApplicantForm2({ loginEmployeeName }) {
                   required
                 />
               </div>
+              {errors.currentLocation && (
+                <span className="error">{errors.currentLocation}</span>
+              )}
             </div>
           </div>
 
@@ -571,8 +944,14 @@ function ApplicantForm2({ loginEmployeeName }) {
                   placeholder="Preferred Location"
                   value={formData.lineUp.preferredLocation}
                   onChange={handleChange}
+                  maxLength={100}
                 />
               </div>
+              {errors["lineUp.preferredLocation"] && (
+                <span className="error">
+                  {errors["lineUp.preferredLocation"]}
+                </span>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -588,8 +967,12 @@ function ApplicantForm2({ loginEmployeeName }) {
                   placeholder="Notice Period In Days"
                   value={formData.lineUp.noticePeriod}
                   onChange={handleChange}
+                  maxLength={100}
                 />
               </div>
+              {errors["lineUp.noticePeriod"] && (
+                <div className="error">{errors["lineUp.noticePeriod"]}</div>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -607,6 +990,11 @@ function ApplicantForm2({ loginEmployeeName }) {
                   onChange={handleChange}
                 />
               </div>
+              {errors["lineUp.availabilityForInterview"] && (
+                <div className="error">
+                  {errors["lineUp.availabilityForInterview"]}
+                </div>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -624,10 +1012,14 @@ function ApplicantForm2({ loginEmployeeName }) {
                   onChange={handleChange}
                 />
               </div>
+              {errors["lineUp.expectedJoiningDate"] && (
+                <div className="error">
+                  {errors["lineUp.expectedJoiningDate"]}
+                </div>
+              )}
             </div>
-
             <div className="form-group-December">
-              <label>Total Experience(Years)</label>
+              <label>Total Experience (Years)</label>
               <div className="input-with-icon-December">
                 <FontAwesomeIcon
                   icon={faKeyboard}
@@ -639,9 +1031,39 @@ function ApplicantForm2({ loginEmployeeName }) {
                   placeholder="Total Experience (Years)"
                   value={formData.lineUp.experienceYear}
                   onChange={handleChange}
+                  onInput={(e) => {
+                    if (e.target.value.length > 2) {
+                      e.target.value = e.target.value.slice(0, 2);
+                    }
+                  }}
+                  required
+                />
+
+                <span></span>
+                <input
+                  type="number"
+                  name="lineUp.experienceMonth"
+                  placeholder="Month"
+                  value={formData.lineUp.experienceMonth}
+                  onChange={handleChange}
+                  onInput={(e) => {
+                    // Ensure the input value is between 0 and 12
+                    let monthValue = e.target.value;
+                    if (monthValue > 12) {
+                      e.target.value = 12;
+                    } else if (monthValue < 0) {
+                      e.target.value = 0;
+                    }
+                    if (e.target.value.length > 2) {
+                      e.target.value = e.target.value.slice(0, 2);
+                    }
+                  }}
                   required
                 />
               </div>
+              {errors["lineUp.experienceYear"] && (
+                <span className="error">{errors["lineUp.experienceYear"]}</span>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -657,8 +1079,14 @@ function ApplicantForm2({ loginEmployeeName }) {
                   placeholder="Relevant Experience"
                   value={formData.lineUp.relevantExperience}
                   onChange={handleChange}
+                  maxLength={100}
                 />
               </div>
+              {errors["lineUp.relevantExperience"] && (
+                <span className="error">
+                  {errors["lineUp.relevantExperience"]}
+                </span>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -681,6 +1109,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                     }
                     label="Male"
                   />
+
                   <FormControlLabel
                     control={
                       <Radio
@@ -698,6 +1127,9 @@ function ApplicantForm2({ loginEmployeeName }) {
                     label="Female"
                   />
                 </div>
+                {errors["lineUp.gender"] && (
+                  <span className="error">{errors["lineUp.gender"]}</span>
+                )}
               </div>
             </div>
 
@@ -753,10 +1185,14 @@ function ApplicantForm2({ loginEmployeeName }) {
                       placeholder="company Name"
                       value={formData.lineUp.companyName}
                       onChange={handleChange}
+                      maxLength={100}
                       required
                       className="form-textfield"
                     />
                   </div>
+                  {errors["lineUp.companyName"] && (
+                    <div className="error">{errors["lineUp.companyName"]}</div>
+                  )}
                 </div>
                 <br></br>
 
@@ -773,10 +1209,14 @@ function ApplicantForm2({ loginEmployeeName }) {
                       placeholder="Salary (Lakh)"
                       value={formData.lineUp.offersalary}
                       onChange={handleChange}
+                      maxLength={2}
                       required
                       className="form-textfield"
                     />
                   </div>
+                  {errors["lineUp.offersalary"] && (
+                    <div className="error">{errors["lineUp.offersalary"]}</div>
+                  )}
                 </div>
                 <br></br>
 
@@ -787,9 +1227,13 @@ function ApplicantForm2({ loginEmployeeName }) {
                     placeholder="Details about the offer"
                     value={formData.lineUp.offerdetails}
                     onChange={handleChange}
+                    maxLength={200}
                     rows="6"
                     className="form-textfield"
                   />
+                  {errors["lineUp.offerdetails"] && (
+                    <div className="error">{errors["lineUp.offerdetails"]}</div>
+                  )}
                 </div>
               </div>
             )}
@@ -810,8 +1254,14 @@ function ApplicantForm2({ loginEmployeeName }) {
                   placeholder="Enter Certificate Details"
                   value={formData.lineUp.extraCertification}
                   onChange={handleChange}
+                  maxLength={100}
                 />
               </div>
+              {errors["lineUp.extraCertification"] && (
+                <span className="error">
+                  {errors["lineUp.extraCertification"]}
+                </span>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -829,6 +1279,9 @@ function ApplicantForm2({ loginEmployeeName }) {
                   onChange={handleChange}
                 />
               </div>
+              {errors["lineUp.dateOfBirth"] && (
+                <span className="error">{errors["lineUp.dateOfBirth"]}</span>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -839,9 +1292,15 @@ function ApplicantForm2({ loginEmployeeName }) {
                 placeholder="Your motivation for applying"
                 value={formData.questions[0].question1}
                 onChange={handleChange}
+                maxLength={200}
                 rows="6"
                 required
               />
+              {errors["questions[0].question1"] && (
+                <span className="error">
+                  {errors["questions[0].question1"]}
+                </span>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -854,9 +1313,15 @@ function ApplicantForm2({ loginEmployeeName }) {
                 placeholder="Your approach to deadline management"
                 value={formData.questions[0].question3}
                 onChange={handleChange}
+                maxLength={200}
                 rows="6"
                 required
               />
+              {errors["questions[0].question3"] && (
+                <span className="error">
+                  {errors["questions[0].question3"]}
+                </span>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -880,6 +1345,9 @@ function ApplicantForm2({ loginEmployeeName }) {
                   />
                 )}
               </div>
+              {errors["lineUp.resume"] && (
+                <span className="error">{errors["lineUp.resume"]}</span>
+              )}
             </div>
 
             <div className="form-group-December">
@@ -904,6 +1372,9 @@ function ApplicantForm2({ loginEmployeeName }) {
                 )}
                 <br></br>
               </div>
+              {errors["lineUp.photo"] && (
+                <span className="error">{errors["lineUp.photo"]}</span>
+              )}
             </div>
           </div>
         </div>

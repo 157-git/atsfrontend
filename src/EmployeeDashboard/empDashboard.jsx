@@ -168,6 +168,7 @@ const EmpDashboard = ({ userGroup }) => {
   };
 
   const handleLogoutTime = (timestamp) => {
+    console.log("Logout clicked 03 in EmpDashboard");
     setLogoutTimestamp(timestamp);
   };
 

@@ -158,7 +158,6 @@ const App = () => {
           <Route path="/thank-you" element={<ThankYouPage></ThankYouPage>}>
           </Route>
 
-
           {/* <Route
             path="/157industries/:encodedParams/candidate-form"
             element={<ApplicantForm loginEmployeeName={loginEmployeeName} />}

@@ -72,7 +72,6 @@ const ResumeList = ({
         throw new Error("Network response was not ok");
       }
       const result = await response.json();
-      console.log(result);
       setData(result.content);
       setFilteredData(result.content);
       setTotalRecords(result.totalElements);
@@ -702,18 +701,23 @@ const ResumeList = ({
     }
   }, []);
 
-  const forwardSelectedCandidate = (e) => {
+const forwardSelectedCandidate = (e) => {
     e.preventDefault();
-    if (selectedRows.length > 0 && userType === "TeamLeader") {
-      setShowForwardPopup(true);
+    if (selectedRows.length >= 1) {
+      if (userType === "TeamLeader") {
+        setShowForwardPopup(true);
+      } else if (userType === "SuperUser") {
+        setShowForwardPopup(true);
+      } else if (userType === "Manager") {
+        setShowForwardPopup(true);
+      } else {
+        toast.error("Invalid user type. Cannot proceed.");
+      }
+    } else {
+      toast.error("Please select at least one Candidate to proceed.");
     }
-    if (userType === "SuperUser") {
-      setShowForwardPopup(true);
-    }
-    if (userType === "Manager") {
-      setShowForwardPopup(true);
-    }
-  };
+};
+
 
   const handleShare = async () => {
     setIsDataSending(true);

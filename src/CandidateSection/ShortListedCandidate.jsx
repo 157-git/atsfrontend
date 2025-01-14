@@ -207,7 +207,8 @@ const ShortListedCandidates = ({
 
   const handleUpdateSuccess = () => {
     setShowUpdateCallingTracker(false);
-    fetchShortListedData(); // Corrected from fetchRejectedData to fetchShortListedData
+    fetchShortListedData(currentPage, pageSize); 
+    // Corrected from fetchRejectedData to fetchShortListedData
   };
 
   const handleUpdate = (candidateId) => {
@@ -273,19 +274,22 @@ const ShortListedCandidates = ({
     });
   };
 
-  //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_252
   const forwardSelectedCandidate = (e) => {
     e.preventDefault();
-    if (selectedRows.length > 0 && userType === "TeamLeader") {
-      setShowForwardPopup(true);
+    if (selectedRows.length >= 1) {
+      if (userType === "TeamLeader") {
+        setShowForwardPopup(true);
+      } else if (userType === "SuperUser") {
+        setShowForwardPopup(true);
+      } else if (userType === "Manager") {
+        setShowForwardPopup(true);
+      } else {
+        toast.error("Invalid user type. Cannot proceed.");
+      }
+    } else {
+      toast.error("Please select at least one Candidate to proceed.");
     }
-    if (userType === "SuperUser") {
-      setShowForwardPopup(true);
-    }
-    if (userType === "Manager") {
-      setShowForwardPopup(true);
-    }
-  };
+  };  
 
   const handleShare = async () => {
     setIsDataSending(true);
@@ -329,7 +333,7 @@ const ShortListedCandidates = ({
       setIsDataSending(false);
       toast.success("Candidates forwarded successfully!");
       console.log("Candidates forwarded successfully!");
-      fetchShortListedData();
+      fetchShortListedData(currentPage, pageSize);
       // onSuccessAdd(true);
       setShowForwardPopup(false); // Close the modal or handle any further UI updates
       setShowShareButton(true);
@@ -1889,7 +1893,7 @@ const ShortListedCandidates = ({
                               <div className="accordion-item">
                                 <div className="accordion-header">
                                   <label className="accordion-title">
-                                    <strong>TL - {loginEmployeeName} </strong>
+                                    <strong>Team Leader - {loginEmployeeName} </strong>
                                   </label>
                                 </div>
                                 <div className="accordion-content newHegightSetForAlignment">

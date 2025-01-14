@@ -354,7 +354,7 @@ const JobListing = ({ loginEmployeeName }) => {
       if (remainingMonths > 0) {
         return `Posted on ${timeValue} ${timeUnit}${
           timeValue > 1 ? "s" : ""
-        } ${remainingMonths} ${remainingMonths > 1 ? "Months" : "Month"} Ago`;
+        } ${remainingMonths} ${remainingMonths > 1 ? "Months" : "Month"} ago`;
       }
     } else if (differenceInMonths >= 1) {
       timeValue = differenceInMonths;
@@ -374,7 +374,7 @@ const JobListing = ({ loginEmployeeName }) => {
     }
 
     const formattedTimeUnit = timeValue > 1 ? `${timeUnit}s` : timeUnit;
-    return `Posted on ${timeValue} ${formattedTimeUnit} Ago`;
+    return `Posted on ${timeValue} ${formattedTimeUnit} ago`;
   };
 
   return (
@@ -932,27 +932,27 @@ const TimeDifference = ({ date }) => {
         remainingMonths > 0
           ? remainingMonths + " Month" + (remainingMonths > 1 ? "s" : "")
           : ""
-      } Ago`;
+      } ago`;
     } else if (differenceInMonths >= 1) {
       return `Posted on ${differenceInMonths} Month${
         differenceInMonths > 1 ? "s" : ""
-      } Ago`;
+      } ago`;
     } else if (differenceInWeeks >= 1) {
       return `Posted on ${differenceInWeeks} Week${
         differenceInWeeks > 1 ? "s" : ""
-      } Ago`;
+      } ago`;
     } else if (differenceInDays >= 1) {
       return `Posted on ${differenceInDays} Day${
         differenceInDays > 1 ? "s" : ""
-      } Ago`;
+      } ago`;
     } else if (differenceInHours >= 1) {
       return `Posted on ${differenceInHours} Hour${
         differenceInHours > 1 ? "s" : ""
-      } Ago`;
+      } ago`;
     } else {
       return `Posted on ${differenceInMinutes} Minute${
         differenceInMinutes > 1 ? "s" : ""
-      } Ago`;
+      } ago`;
     }
   };
 

@@ -6,7 +6,6 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import HashLoader from "react-spinners/HashLoader";
 import * as XLSX from "xlsx";
-import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
@@ -395,7 +394,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     setSelectedCandidateId(null);
     setSelectedEmployeeId(null);
     setSelectedRequirementId(null);
-    fetchSelectedCandidateData();
+    fetchSelectedCandidateData(currentPage, pageSize);
   };
 
   const handleMouseOver = (event) => {
@@ -448,34 +447,38 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   //akash_pawar_SelectedCandidate_ShareFunctionality_18/07_404
   const forwardSelectedCandidate = (e) => {
     e.preventDefault();
-    if (selectedRows.length > 0 && userType === "TeamLeader") {
-      setShowForwardPopup(true);
-    }
-    if (userType === "SuperUser") {
-      setShowForwardPopup(true);
-    }
-    if (userType === "Manager") {
-      setShowForwardPopup(true);
+    if (selectedRows.length >= 1) {
+      if (userType === "TeamLeader") {
+        setShowForwardPopup(true);
+      } else if (userType === "SuperUser") {
+        setShowForwardPopup(true);
+      } else if (userType === "Manager") {
+        setShowForwardPopup(true);
+      } else {
+        toast.error("Invalid user type. Cannot proceed.");
+      }
+    } else {
+      toast.error("Please select at least one Candidate to proceed.");
     }
   };
-
+  
   const handleShare = async () => {
-
     if (userType === "TeamLeader") {
       if (selectedRecruiters.recruiterId === "") {
-        setErrorForShare("Please Select A Recruiter ! ")
+        setErrorForShare("Please Select A Recruiter!");
         return;
-      }else{
+      } else {
         setErrorForShare("");
       }
     }
-
+  
     setIsDataSending(true);
     let url = `${API_BASE_URL}/updateIds/${userType}`;
     let requestData;
+  
     if (
       userType === "TeamLeader" &&
-      selectedRecruiters.recruiterId != "" &&
+      selectedRecruiters.recruiterId !== "" &&
       selectedRows.length > 0
     ) {
       requestData = {
@@ -493,28 +496,32 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
         newManagerId: parseInt(newSelectedManager.newManagerId),
       };
     }
+  
     try {
       const requestOptions = {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          // Add any additional headers as needed
         },
         body: JSON.stringify(requestData),
       };
+  
       const response = await fetch(url, requestOptions);
+  
       if (!response.ok) {
         setIsDataSending(false);
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      // Handle success response
+  
+      // If response is OK, proceed with success operations
       setIsDataSending(false);
       toast.success("Candidates forwarded successfully!");
-      fetchSelectedCandidateData();
-      onSuccessAdd(true);
-      setShowForwardPopup(false); // Close the modal or handle any further UI updates
+      fetchSelectedCandidateData(currentPage, pageSize);
+        // onSuccessAdd(true); commented by arshad on 13-01-2025
+      setShowForwardPopup(false);
       setShowShareButton(true);
       setSelectedRows([]);
+  
       setSelectedRecruiters({
         index: "",
         recruiterId: "",
@@ -536,14 +543,18 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
         newManagerId: "",
         newManagerJobRole: "",
       });
-      // fetchSelectedCandidateData(); // Uncomment this if you want to refresh the data after forwarding
     } catch (error) {
       setIsDataSending(false);
       setShowForwardPopup(false);
-      toast.error("Error while forwarding candidates:", error);
-      // Handle error scenarios or show error messages to the user
+  
+      // Log the error for debugging
+      console.error("Error while forwarding candidates:", error);
+  
+      // Display a more user-friendly error message
+      toast.error("Error while forwarding candidates. Please try again.");
     }
   };
+  
   //akash_pawar_SelectedCandidate_ShareFunctionality_18/07_486
 
   //Name:-Akash Pawar Component:-SelectedCandidate Subcategory:-ResumeViewButton(added) start LineNo:-322 Date:-02/07
@@ -1881,7 +1892,7 @@ const handleSizeChange = (current, size) => {
                                     {loginEmployeeName}
                                   </label>
                                 </div>
-                                <div className="accordion-content">
+                                <div className="accordion-content newHegightSetForAlignment">
                                   <form>
                                     {recruiterUnderTeamLeader &&
                                       recruiterUnderTeamLeader.map(
@@ -2013,7 +2024,7 @@ const handleSizeChange = (current, size) => {
       )}
       {isDataSending && (
         <div className="ShareFunc_Loading_Animation">
-          <ClipLoader size={50} color="#ffb281" />
+          <Loader size={50} color="#ffb281" />
         </div>
       )}
     
