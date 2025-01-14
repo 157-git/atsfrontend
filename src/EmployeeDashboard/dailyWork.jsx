@@ -8,11 +8,15 @@ import { Modal } from "react-bootstrap";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
 import { API_BASE_URL } from "../api/api";
 import watingImg from "../photos/fire-relax.gif";
+// line 12 to 19 added by sahil karnekar on date 14-01-2025
+import { useDispatch } from "react-redux";
+import { setProfileImageFromRedux } from "../EmployeeDashboard/employeeSlice.jsx";
 
 //added by sahil karnekar and commented because it was implemented just for testing purpose but dont remove this
-import { Avatar, Badge, notification, Button } from "antd";
+import { Avatar, Badge, notification, List, Card } from "antd";
 import { BellOutlined, CloseOutlined, ClearOutlined } from "@ant-design/icons";
 import { initializeSocket } from "./socket.jsx";
+import Meta from "antd/es/card/Meta.js";
 
 
 
@@ -40,6 +44,8 @@ function DailyWork({
   const [loginDetailsSaved, setLoginDetailsSaved] = useState(false);
   const [showAlreadyLoggedInMessage, setShowAlreadyLoggedInMessage] =
     useState(false);
+    // this line added by sahil karnekar date 14-01-2025
+    const dispatch = useDispatch();
 
   const [buttonColor, setButtonColor] = useState(() => {
     return localStorage.getItem("buttonColor");
@@ -117,6 +123,8 @@ function DailyWork({
         const blob = new Blob([byteArray], { type: "image/jpeg" });
         const url = URL.createObjectURL(blob);
         setProfileImage(url);
+        // this line added by sahil karnekar date 14-01-2025
+      dispatch(setProfileImageFromRedux(url));
         return () => URL.revokeObjectURL(url);
       }
     } catch (error) {
@@ -914,6 +922,7 @@ function DailyWork({
         return {
           title: message.candidate.employeeName,
           desc: `Added Job Description for ${message.candidate.companyName} - ${message.candidate.designation}`,
+          
         };
   
       case "update_job_description":
@@ -962,6 +971,7 @@ function DailyWork({
                     return {
                       title: message.candidate.employeeName,
                       desc: `New ${message.candidate.jobRole} Joined`,
+                      dateOfJoining
                     };
 
                     case "add_teamLeader_event":
@@ -985,7 +995,152 @@ function DailyWork({
         };
     }
   };
+
+  // line 998 to 1143 added by sahil karnekar on date 14-01-2025
+  const extractTimeOnly = (timeString) =>{
+    const timeMatch = timeString.match(/Time: (\d{1,2}:\d{2} [APM]+)/);
+const time = timeMatch ? timeMatch[1] : null;
+return time;
+  }
+
+  const getTitleDescription = (message) => {
+    switch (message.eventName) {
+      case "add_candidate":
+        return {
+          title: message.candidate.recruiterName,
+          desc: `Added A Candidate ${message.candidate.candidateName} On ${message.candidate.candidateAddedTime}`,
+          time: `${message.candidate.candidateAddedTime}`
+        };
   
+      case "update_candidate":
+        return {
+          title: message.candidate.recruiterName,
+          desc: `Updated Candidate Data ${message.candidate.candidateName} On ${message.candidate.candidateAddedTime}`,
+          time: `${message.candidate.candidateAddedTime}`
+        };
+  
+      case "interview_schedule":
+        const employeeCheck = `${message.candidate.employee.employeeId}` === `${employeeId}`;
+        const interviewResponse = message.candidate.interviewResponse;
+        const round = message.candidate.interviewRound;
+        const jobId = message.candidate.requirementInfo.requirementId;
+
+        if (employeeCheck) {
+
+          return {
+            title: "Interview Notification",
+            desc:
+              interviewResponse === "Selected"
+                ? `Your candidate ${message.candidate.candidateName} has been Selected after the ${round} for Job ID ${jobId} Further details will be shared soon.`
+                : interviewResponse === "Hold"
+                ? `Your candidate ${message.candidate.candidateName} is on Hold after the ${round} for Job ID ${jobId} The next steps will be communicated soon.`
+                : interviewResponse === "Rejected"
+                ? `Your candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId} Please review and plan accordingly.`
+                : `Your candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId} on ${message.candidate.nextInterviewDate} at ${message.candidate.nextInterviewTiming}.`,
+   
+          };
+        } else {
+          console.log("running else");
+          
+          return {
+            title: "Interview Update",
+            desc:
+              interviewResponse === "Selected"
+                ? `Congratulations! Candidate ${message.candidate.candidateName} has been Selected after the ${round} for Job ID ${jobId} Further details will be shared soon.`
+                : interviewResponse === "Hold"
+                ? `Candidate ${message.candidate.candidateName} is on Hold after the ${round} for Job ID ${jobId} The next steps will be communicated soon.`
+                : interviewResponse === "Rejected"
+                ? `Candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId} Please review and plan accordingly.`
+                : `Candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId} on ${message.candidate.nextInterviewDate} at ${message.candidate.nextInterviewTiming}.`,
+          };
+        }
+  
+      case "add_job_description":
+        return {
+          title: message.candidate.employeeName,
+          desc: `New Job Dscription Company Name : ${message.candidate.companyName} - ${message.candidate.designation}  Added On ${message.candidate.jdAddedDate}`,
+          time: `${message.candidate.jdAddedDate}`
+        };
+  
+      case "update_job_description":
+        return {
+          title: message.candidate.employeeName,
+          desc: `Updated Job Description for ${message.candidate.companyName} - ${message.candidate.designation} On ${message.candidate.statusUpdateDate}`,
+          time: `${message.candidate.statusUpdateDate}`
+        };
+  
+      case "delete_job_description":
+        return {
+          title: message.candidate.employeeName,
+          desc: `Deleted Job Description for ${message.candidate.companyName} On ${message.candidate.jdAddedDate}`,
+           time: `${message.candidate.jdAddedDate}`
+        };
+
+        case "share_excel_data":
+          return {
+            title: message.candidate.employeeName,
+            desc: `Shared Excel Data To You On ${message.candidate.sharedDate} Please Check Database Section`,
+               time: `${message.candidate.sharedDate}`
+          };
+
+          case "share_resume_data":
+            return {
+              title: message.candidate.employeeName,
+              desc: `Shared Resume Data To You On ${message.candidate.sharedDate} Please Check Database Section`,
+                 time: `${message.candidate.sharedDate}`
+            };
+
+            case "user_login_event":
+              return {
+                title: message.candidate.employeeName,
+                desc: `Logged In On ${message.candidate.loginTime}`,
+                   time: `${message.candidate.loginTime}`
+              };
+
+              case "user_logout_event":
+                return {
+                  title: message.candidate.employeeName,
+                  desc: `Logged Out On ${message.candidate.logoutDateAndTime}`,
+                      time: `${message.candidate.logoutDateAndTime}`
+                };
+
+                case "save_applicant_data":
+                  return {
+                    title: message.candidate.candidateName,
+                    desc: `Added In Calling Tracker, From ${message.candidate.sourceName} On ${message.candidate.date}`,
+                           time: `${message.candidate.date}`
+                  };
+
+                  case "add_recruiter_event":
+                    return {
+                      title: message.candidate.employeeName,
+                      desc: `New ${message.candidate.jobRole} Joined On ${message.candidate.dateOfJoining}`,
+                            time: `${message.candidate.dateOfJoining}`
+                    };
+
+                    case "add_teamLeader_event":
+                      return {
+                        title: message.candidate.teamLeaderName,
+                        desc: `New ${message.candidate.jobLevel} Joined On ${message.candidate.tlDateOfJoining}`,
+                           time: `${message.candidate.tlDateOfJoining}`
+                      };
+
+                      case "add_manager_event":
+                        return {
+                          title: message.candidate.managerName,
+                          desc: `New ${message.candidate.jobRole} Joined On ${message.candidate.dateOfJoiningM}`,
+                               time: `${message.candidate.dateOfJoiningM}`
+                        };
+  
+      // Add more cases as needed for other eventName types
+  
+      default:
+        return {
+          title: "Unknown Event",
+          desc: `No specific description available for event: ${message.eventName}`,
+        };
+    }
+  }; 
   
 
   const openNotification = (message) => {
@@ -1126,225 +1281,47 @@ function DailyWork({
               <div className="mainNotDiv">
                 <div className="motificationSubCont1">
                   {messages.length > 0 ? (
-                    messages.map((message, index) => (
                       <>
-                        <s></s>
-                        {message.eventName === "add_candidate" && (
-                          <p className="notification-Text">
-                            A Candidate {message.candidate.candidateName}
-                            <span> Added </span>
-                            By  {message.candidate.recruiterName} On :{" "}
-                            {message.candidate.candidateAddedTime}
-                          </p>
-                        )}
-                        {message.eventName === "update_candidate" && (
-                          <p className="notification-Text">
-                            A Candidate {message.candidate.candidateName}
-                            <span> Updated </span>
-                            By  {message.candidate.recruiterName} On :{" "}
-                            {message.candidate.candidateAddedTime}
-                          </p>
-                        )}
-                        {message.eventName === "interview_schedule" &&
-                          (`${message.candidate.employee.employeeId}` ===
-                          `${employeeId}` ? (
-                            message.candidate.interviewResponse ===
-                            "Selected" ? (
-                              <p className="notification-Text">
-                                Congratulations! Your candidate{" "}
-                                {message.candidate.candidateName} has been
-                                Selected after the{" "}
-                                {message.candidate.interviewRound} for Job ID{" "}
-                                {
-                                  message.candidate.requirementInfo
-                                    .requirementId
-                                }
-                                . Further details will be shared soon.
-                              </p>
-                            ) : message.candidate.interviewResponse ===
-                              "Hold" ? (
-                              <p className="notification-Text">
-                                Your candidate {message.candidate.candidateName}{" "}
-                                is on Hold after the{" "}
-                                {message.candidate.interviewRound} for Job ID{" "}
-                                {
-                                  message.candidate.requirementInfo
-                                    .requirementId
-                                }
-                                . The next steps will be communicated soon.
-                              </p>
-                            ) : message.candidate.interviewResponse ===
-                              "Rejected" ? (
-                              <p className="notification-Text">
-                                Your candidate {message.candidate.candidateName}{" "}
-                                has been Rejected after the{" "}
-                                {message.candidate.interviewRound} for Job ID{" "}
-                                {
-                                  message.candidate.requirementInfo
-                                    .requirementId
-                                }
-                                . Please review and plan accordingly.
-                              </p>
-                            ) : (
-                              !["Rejected", "Hold", "Selected"].includes(
-                                message.candidate.interviewResponse
-                              ) && (
-                                <p className="notification-Text">
-                                  Your candidate{" "}
-                                  {message.candidate.candidateName} has been{" "}
-                                  {message.candidate.interviewResponse} for Job
-                                  ID{" "}
-                                  {
-                                    message.candidate.requirementInfo
-                                      .requirementId
-                                  }{" "}
-                                  on {message.candidate.nextInterviewDate} at{" "}
-                                  {message.candidate.nextInterviewTiming}.
-                                </p>
-                              )
-                            )
-                          ) : message.candidate.interviewResponse ===
-                            "Selected" ? (
-                            <p className="notification-Text">
-                              Congratulations! Candidate{" "}
-                              {message.candidate.candidateName} has been
-                              Selected after the{" "}
-                              {message.candidate.interviewRound} for Job ID{" "}
-                              {message.candidate.requirementInfo.requirementId}.
-                              Further details will be shared soon.
-                            </p>
-                          ) : message.candidate.interviewResponse === "Hold" ? (
-                            <p className="notification-Text">
-                              Candidate {message.candidate.candidateName} is on
-                              Hold after the {message.candidate.interviewRound}{" "}
-                              for Job ID{" "}
-                              {message.candidate.requirementInfo.requirementId}.
-                              The next steps will be communicated soon.
-                            </p>
-                          ) : message.candidate.interviewResponse ===
-                            "Rejected" ? (
-                            <p>
-                              Candidate {message.candidate.candidateName} has
-                              been Rejected after the{" "}
-                              {message.candidate.interviewRound} for Job ID{" "}
-                              {message.candidate.requirementInfo.requirementId}.
-                              Please review and plan accordingly.
-                            </p>
-                          ) : (
-                            !["Rejected", "Hold", "Selected"].includes(
-                              message.candidate.interviewResponse
-                            ) && (
-                              <p>
-                                Candidate {message.candidate.candidateName} has
-                                been {message.candidate.interviewResponse} for
-                                Job ID{" "}
-                                {
-                                  message.candidate.requirementInfo
-                                    .requirementId
-                                }{" "}
-                                on {message.candidate.nextInterviewDate} at{" "}
-                                {message.candidate.nextInterviewTiming}.
-                              </p>
-                            )
-                          ))}
-                        {message.eventName === "add_job_description" && (
-                          <p>
-                            New Job Dscription Company Name :{" "}
-                            {message.candidate.companyName}{" "}
-                            {message.candidate.designation} Was
-                            <span> Added </span>
-                            By  {message.candidate.employeeName} On :{" "}
-                            {message.candidate.jdAddedDate}
-                          </p>
-                        )}
-                        {message.eventName === "update_job_description" && (
-                          <p>
-                            {message.candidate.companyName}{" "}
-                            {message.candidate.designation} Was
-                            <span> Updated </span>
-                            By  {message.candidate.employeeName} On :{" "}
-                            {message.candidate.statusUpdateDate}
-                          </p>
-                        )}
-                        {message.eventName === "delete_job_description" && (
-                          <p>
-                            {message.candidate.companyName} JD
-                            <span> Deleted </span>
-                            By  {message.candidate.employeeName} On :{" "}
-                            {message.candidate.jdAddedDate}
-                          </p>
-                        )}
-                        {message.eventName === "share_excel_data" && (
-                          <p>
-                            {message.candidate.employeeName} Shared
-                            <span> Excel Data To You </span>
-                            On {message.candidate.sharedDate} Please Check
-                            Database Section
-                          </p>
-                        )}
-                        {message.eventName === "share_resume_data" && (
-                          <p>
-                            {message.candidate.employeeName} Shared
-                            <span> Resume Data To You </span>
-                            On {message.candidate.sharedDate} Please Check
-                            Database Section
-                          </p>
-                        )}
-                        {message.eventName === "user_login_event" && (
-                          <p>
-                            {message.candidate.employeeName}
-                            <span> Logged In </span>
-                            On {message.candidate.loginTime}
-                          </p>
-                        )}
-                        {message.eventName === "user_logout_event" && (
-                          <p>
-                            {message.candidate.employeeName}
-                            <span> Logged Out </span>
-                            On {message.candidate.logoutDateAndTime}
-                          </p>
-                        )}
-                        {message.eventName === "save_applicant_data" && (
-                          <p>
-                            {message.candidate.candidateName}
-                            <span>
-                              {" "}
-                              Added In Calling Tracker From{" "}
-                              {message.candidate.sourceName} Please Check
-                              Calling Tracker Section
-                            </span>{" "}
-                            On {message.candidate.date}
-                          </p>
-                        )}
-                        {message.eventName === "add_recruiter_event" && (
-                          <p>
-                            {message.candidate.employeeName} New{" "}
-                            {message.candidate.jobRole}
-                            <span> Joined </span> On{" "}
-                            {message.candidate.dateOfJoining}
-                          </p>
-                        )}
-                        {message.eventName === "add_teamLeader_event" && (
-                          <p>
-                            {message.candidate.teamLeaderName} New{" "}
-                            {message.candidate.jobLevel}
-                            <span> Joined </span> On{" "}
-                            {message.candidate.tlDateOfJoining}
-                          </p>
-                        )}
-                        {message.eventName === "add_manager_event" && (
-                          <p>
-                            {message.candidate.managerName} New{" "}
-                            {message.candidate.jobRole}
-                            <span> Joined </span> On{" "}
-                            {message.candidate.dateOfJoiningM}
-                          </p>
-                        )}
-                        <hr className="notification-gap" />
-                        <hr />
-                        {/* <p>{message.number}</p> */}
-                      </>
-                    ))
+                      <List
+    itemLayout="horizontal"
+    dataSource={messages}
+    renderItem={(message, index) => (
+      <Badge.Ribbon text={getTitleDescription(message).time ? extractTimeOnly(getTitleDescription(message).time) : "" }
+      style={{
+        top: "auto", // Remove the default top position
+        bottom: 4, // Position at the bottom
+
+      }}
+      placement="end" // Optional: Keeps ribbon at the starting edge
+      color="#7e7ee7"
+      >
+     <Card
+     style={{ marginBottom: '10px', 
+      // borderColor:"var(--primary-border)"
+borderColor:"#cccccc"
+     }}
+   >
+     <Meta
+       avatar={<Avatar src={
+        message.candidate.fullAddress && message.candidate.fullAddress !== "" 
+        ? `${message.candidate.fullAddress}` 
+        : 
+        `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
+       />}
+
+       title={
+        getTitleDescription(message).title
+      }
+      description={
+        getTitleDescription(message).desc
+      }
+     />
+   </Card>
+   </Badge.Ribbon>
+
+    )}
+  />
+      </>
                   ) : (
                     <p>No Notifications</p>
                   )}

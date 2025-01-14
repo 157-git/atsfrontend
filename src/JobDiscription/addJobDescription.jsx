@@ -6,6 +6,7 @@ import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import {useParams } from "react-router-dom";
 import { getSocket } from "../EmployeeDashboard/socket";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
 
 const AddJobDescription = ({loginEmployeeName}) => {
   const { employeeId,userType } = useParams();
@@ -76,7 +77,7 @@ const AddJobDescription = ({loginEmployeeName}) => {
     // Update `jdAddedDate` only once on mount
     setFormData((prevFormData) => ({
       ...prevFormData,
-      jdAddedDate: formatDate(),
+      jdAddedDate: getFormattedDateTime(),
     }));
   }, []); 
   // Empty dependency array to run only once
