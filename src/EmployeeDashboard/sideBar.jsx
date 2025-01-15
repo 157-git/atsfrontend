@@ -162,12 +162,17 @@ function Sidebar({
         requestBody
       );
 
-      console.log( " user-logout-157 --- Logout Successfully Emit Object " + JSON.stringify( requestBody ));
+      console.log( " user-logout-157 -- " + JSON.stringify( requestBody ));
       console.log(response);
-      socket.emit("user_logout_event", requestBody);
+
+      if (socket && typeof socket.emit === "function") {
+        socket.emit("user_logout_event", requestBody);
+        console.log("Logout Successfully And Status Updated Successfully.. In Successfully Emit ");
+      } else {
+        console.warn("Socket is not defined or emit is not a function. Skipping emit  Without Emit");
+      }
       console.log("Logout Successfully And Status Updated Successfully.. in Side ");
       navigate(`/login/${userType}`, { replace: true });
-      
     } catch (error) {
       console.error("Error during logout:", error);
     }
@@ -226,7 +231,6 @@ function Sidebar({
   //   }, []);
   //   return null;
   // };
-  // Arshad Attar ( Note :- Commented This we will work after some its taking to much time  )
 
   const handleColorClick = (color) => {
     applyColor(color);

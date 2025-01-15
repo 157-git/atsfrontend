@@ -8,14 +8,9 @@ import { Modal } from "react-bootstrap";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
 import { API_BASE_URL } from "../api/api";
 import watingImg from "../photos/fire-relax.gif";
-
-//added by sahil karnekar and commented because it was implemented just for testing purpose but dont remove this
 import { Avatar, Badge, notification, Button } from "antd";
 import { BellOutlined, CloseOutlined, ClearOutlined } from "@ant-design/icons";
 import { initializeSocket } from "./socket.jsx";
-
-
-
 //SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
 
 function DailyWork({
@@ -29,7 +24,7 @@ function DailyWork({
   emailSenderInformation,
   successfulDataUpdation,
 }) {
-  const { employeeId } = useParams();
+  const { employeeId, userType } = useParams();
   const [fetchWorkId, setFetchWorkId] = useState(null);
   const [employeeData, setEmployeeData] = useState({});
   const [employeeName, setEmployeeName] = useState();
@@ -40,7 +35,6 @@ function DailyWork({
   const [loginDetailsSaved, setLoginDetailsSaved] = useState(false);
   const [showAlreadyLoggedInMessage, setShowAlreadyLoggedInMessage] =
     useState(false);
-
   const [buttonColor, setButtonColor] = useState(() => {
     return localStorage.getItem("buttonColor");
   });
@@ -83,13 +77,16 @@ function DailyWork({
 
   const TIMER_DURATION = 15 * 60 * 1000;
   let timerId;
-
   const navigate = useNavigate();
-  const { userType } = useParams();
 
   useEffect(() => {
     fetchEmployeeData();
   }, [lateMark, leaveType, paidLeave, unpaidLeave, loginTime, data]);
+
+  useEffect(() => {
+    // Call the function to check if user data is present
+    fetchCurrentEmployerWorkId();
+  }, []);  // Runs only once when the page loads
 
   const fetchEmployeeData = async () => {
     try {
@@ -106,7 +103,6 @@ function DailyWork({
         senderMail: response.data.officialMail,
       };
       emailSenderInformation(emailSender);
-      //Akash_Pawar_DailyWork_senderinformation_09/07_81
       if (response.data.profileImage) {
         const byteCharacters = atob(response.data.profileImage);
         const byteNumbers = new Array(byteCharacters.length);
@@ -126,19 +122,15 @@ function DailyWork({
 
   useEffect(() => {
     const now = new Date();
+    const timeString = now.toLocaleTimeString("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
 
-   const timeString = now.toLocaleTimeString("en-IN", {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: true,
-  });
-    
-    const dateString = `${now.getDate().toString().padStart(2, "0")}/${(
-    now.getMonth() + 1)
-    .toString()
+    const dateString = `${now.getDate().toString().padStart(2, "0")}/${(now.getMonth() + 1).toString()
     .padStart(2, "0")}/${now.getFullYear()}`;
-
     const dayOfWeek = now.getDay();
     setCurrentTime(timeString);
     setCurrentDate(dateString);
@@ -162,9 +154,9 @@ function DailyWork({
     const timer = setInterval(() => {
       const now = new Date();
       const updatedTime = now.toLocaleTimeString("en-IN", {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
         hour12: true,
       });
       setCurrentTime(updatedTime);
@@ -182,6 +174,7 @@ function DailyWork({
     }
 
     let executed = false;
+
     const saveLoginDetails = async () => {
       if (loginDetailsSaved) {
         fetchCurrentEmployerWorkId();
@@ -212,6 +205,7 @@ function DailyWork({
             `dailyWorkData_${employeeId}`,
             JSON.stringify({ archived: data.archived, pending: data.pending })
           );
+
           const response = await axios.post(
             `${API_BASE_URL}/save-daily-work/${employeeId}/${userType}`,
             formData
@@ -300,21 +294,13 @@ function DailyWork({
           }
         });
       }
-
-      console.log(`Total Break Duration (seconds): ${totalBreakDuration}`);
-
       totalWorkTime -= totalBreakDuration;
-
-      console.log(`Adjusted Total Work Time (seconds): ${totalWorkTime}`);
-
       if (totalWorkTime < 0) {
         totalWorkTime = 0;
       }
-
       const hours = Math.floor(totalWorkTime / 3600);
       const minutes = Math.floor((totalWorkTime % 3600) / 60);
       const seconds = Math.floor(totalWorkTime % 60);
-
       const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
         .toString()
         .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
@@ -439,12 +425,11 @@ function DailyWork({
     logoutTimestamp != null ? handleLogoutLocal() : null;
     console.log("Logout clicked 04 In dailyWork");
   }, [logoutTimestamp]);
-  
-  
+
   const handleLogoutLocal = async () => {
     console.log("Logout clicked 05 in Daily Work handleLogoutLocal");
     try {
-      console.log( " Fetched Work Id :- " + fetchWorkId);
+      console.log(" Fetched Work Id :- " + fetchWorkId);
       const breaksData = localStorage.getItem(`breaks_${employeeId}`);
       const breaks = breaksData ? JSON.parse(breaksData) : [];
       const totalHoursWork = calculateTotalHoursWork(
@@ -477,7 +462,7 @@ function DailyWork({
         paidLeave,
         unpaidLeave,
         dayPresentPaid,
-        dayPresentUnpaid
+        dayPresentUnpaid,
       };
 
       await axios.put(
@@ -624,225 +609,224 @@ function DailyWork({
       socket.on("receive_saved_candidate", (message) => {
         console.log(message);
 
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
 
-          openNotification(message);
-        
+        openNotification(message);
       });
       socket.on("receive_updated_candidate", (message) => {
         console.log(message);
 
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
-          openNotification(message);
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
+        openNotification(message);
       });
 
       socket.on("receive_interview_schedule_data", (message) => {
         console.log(message);
 
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
-          openNotification(message);
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
+        openNotification(message);
       });
 
       socket.on("receive_add_job_description_event", (message) => {
         console.log(message);
 
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
-          openNotification(message);
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
+        openNotification(message);
       });
 
       socket.on("receive_update_job_description_event", (message) => {
         console.log(message);
 
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
-          openNotification(message);
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
+        openNotification(message);
       });
 
       socket.on("receive_delete_job_description_event", (message) => {
         console.log(message);
 
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
-          openNotification(message);
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
+        openNotification(message);
       });
 
       socket.on("receive_share_excel_data_event", (message) => {
         console.log(message);
 
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
-          openNotification(message);
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
+        openNotification(message);
       });
       socket.on("receive_share_resume_data_event", (message) => {
         console.log(message);
 
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
-          openNotification(message);
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
+        openNotification(message);
       });
 
       socket.on("receive_user_login_event", (message) => {
         console.log(message);
 
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
-          openNotification(message);
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
+        openNotification(message);
       });
 
       socket.on("receive_user_logout_event", (message) => {
         console.log(message);
 
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
-          openNotification(message);
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
+        openNotification(message);
       });
 
       socket.on("receive_save_applicant_data", (message) => {
         console.log(message);
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
-          openNotification(message);
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
+        openNotification(message);
       });
 
       socket.on("receive_add_recruiter_event", (message) => {
         console.log(message);
 
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
-          openNotification(message);
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
+        openNotification(message);
       });
 
       socket.on("receive_add_teamLeader_event", (message) => {
         console.log(message);
 
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
-          openNotification(message);
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
+        openNotification(message);
       });
 
       socket.on("receive_add_manager_event", (message) => {
         console.log(message);
 
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
-          openNotification(message);
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
+        openNotification(message);
       });
 
       socket.on("receive_share_profile", (message) => {
         console.log(message);
 
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, message];
-            console.log(updatedMessages);
-            localStorage.setItem(
-              `${userType}${employeeId}messages`,
-              JSON.stringify(updatedMessages)
-            );
-            return updatedMessages;
-          });
-          openNotification(message);
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log(updatedMessages);
+          localStorage.setItem(
+            `${userType}${employeeId}messages`,
+            JSON.stringify(updatedMessages)
+          );
+          return updatedMessages;
+        });
+        openNotification(message);
       });
 
       socket.on("connect_error", () => {
@@ -856,40 +840,39 @@ function DailyWork({
     console.log(messages);
   }, [socket, employeeId]);
 
-
   const getMessageDescription = (message) => {
     console.log(message);
-    
+
     switch (message.eventName) {
       case "add_candidate":
         return {
           title: message.candidate.recruiterName,
           desc: `Added A Candidate ${message.candidate.candidateName}`,
         };
-  
+
       case "update_candidate":
         return {
           title: message.candidate.recruiterName,
           desc: `Updated Candidate Data ${message.candidate.candidateName}`,
         };
-  
+
       case "interview_schedule":
-        const employeeCheck = `${message.candidate.employee.employeeId}` === `${employeeId}`;
+        const employeeCheck =
+          `${message.candidate.employee.employeeId}` === `${employeeId}`;
         const interviewResponse = message.candidate.interviewResponse;
         const round = message.candidate.interviewRound;
         const jobId = message.candidate.requirementInfo.requirementId;
 
         console.log("running this");
-        
+
         console.log(employeeCheck);
         console.log(interviewResponse);
         console.log(round);
         console.log(jobId);
-        
-  
+
         if (employeeCheck) {
           console.log("running first");
-          
+
           return {
             title: "Interview Notification",
             desc:
@@ -903,7 +886,7 @@ function DailyWork({
           };
         } else {
           console.log("running else");
-          
+
           return {
             title: "Interview Update",
             desc:
@@ -916,75 +899,75 @@ function DailyWork({
                 : `Candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId}.`,
           };
         }
-  
+
       case "add_job_description":
         return {
           title: message.candidate.employeeName,
           desc: `Added Job Description for ${message.candidate.companyName} - ${message.candidate.designation}`,
         };
-  
+
       case "update_job_description":
         return {
           title: message.candidate.employeeName,
           desc: `Updated Job Description for ${message.candidate.companyName} - ${message.candidate.designation}}`,
         };
-  
+
       case "delete_job_description":
         return {
           title: message.candidate.employeeName,
           desc: `Deleted Job Description for ${message.candidate.companyName}`,
         };
 
-        case "share_excel_data":
-          return {
-            title: message.candidate.employeeName,
-            desc: `Shared Excel Data`,
-          };
+      case "share_excel_data":
+        return {
+          title: message.candidate.employeeName,
+          desc: `Shared Excel Data`,
+        };
 
-          case "share_resume_data":
-            return {
-              title: message.candidate.employeeName,
-              desc: `Shared Resume Data`,
-            };
+      case "share_resume_data":
+        return {
+          title: message.candidate.employeeName,
+          desc: `Shared Resume Data`,
+        };
 
-            case "user_login_event":
-              return {
-                title: message.candidate.employeeName,
-                desc: `Logged In On ${message.candidate.loginTime}`,
-              };
+      case "user_login_event":
+        return {
+          title: message.candidate.employeeName,
+          desc: `Logged In On ${message.candidate.loginTime}`,
+        };
 
-              case "user_logout_event":
-                return {
-                  title: message.candidate.employeeName,
-                  desc: `Logged Out On ${message.candidate.logoutDateAndTime}`,
-                };
+      case "user_logout_event":
+        return {
+          title: message.candidate.employeeName,
+          desc: `Logged Out On ${message.candidate.logoutDateAndTime}`,
+        };
 
-                case "save_applicant_data":
-                  return {
-                    title: message.candidate.candidateName,
-                    desc: `Added In Calling Tracker, From ${message.candidate.sourceName} On ${message.candidate.date}`,
-                  };
+      case "save_applicant_data":
+        return {
+          title: message.candidate.candidateName,
+          desc: `Added In Calling Tracker, From ${message.candidate.sourceName} On ${message.candidate.date}`,
+        };
 
-                  case "add_recruiter_event":
-                    return {
-                      title: message.candidate.employeeName,
-                      desc: `New ${message.candidate.jobRole} Joined`,
-                    };
+      case "add_recruiter_event":
+        return {
+          title: message.candidate.employeeName,
+          desc: `New ${message.candidate.jobRole} Joined`,
+        };
 
-                    case "add_teamLeader_event":
-                      return {
-                        title: message.candidate.teamLeaderName,
-                        desc: `New ${message.candidate.jobLevel} Joined`,
-                      };
+      case "add_teamLeader_event":
+        return {
+          title: message.candidate.teamLeaderName,
+          desc: `New ${message.candidate.jobLevel} Joined`,
+        };
 
-                      case "add_manager_event":
-                        return {
-                          title: message.candidate.managerName,
-                          desc: `New ${message.candidate.jobRole} Joined `,
-                        };
-  
+      case "add_manager_event":
+        return {
+          title: message.candidate.managerName,
+          desc: `New ${message.candidate.jobRole} Joined `,
+        };
+
       // Add more cases as needed for other eventName types
-  
+
       default:
         return {
           title: "Unknown Event",
@@ -992,8 +975,6 @@ function DailyWork({
         };
     }
   };
-  
-  
 
   const openNotification = (message) => {
     const description = getMessageDescription(message);
@@ -1001,17 +982,18 @@ function DailyWork({
       message: description.title,
       description: description.desc,
       duration: 0,
-      placement:"bottomRight",
+      placement: "bottomRight",
     });
   };
 
-  const notificationContainers = document.querySelectorAll(".ant-notification-notice-wrapper");
+  const notificationContainers = document.querySelectorAll(
+    ".ant-notification-notice-wrapper"
+  );
   if (notificationContainers.length > 0) {
     notificationContainers.forEach((container) => {
       container.style.right = "50px"; // Apply external margin to each notification container
     });
   }
-  
 
   return (
     <div className="daily-timeanddate">
@@ -1042,48 +1024,39 @@ function DailyWork({
         {!showAllDailyBtns ? "Show" : "Hide"} All Buttons
       </button>
 
-
-      {
-        userType != "Applicant" && userType != "Vendor" ? (
-          <>
-          
-            <div
-              className={`all-daily-btns ${!showAllDailyBtns ? "hidden" : ""}`}
-            >
-                
-              
-      {contextHolder}
-              <div className="daily-t-btn">
-                <button
-                  className="daily-tr-btn"
-                  style={{ whiteSpace: "nowrap" }}
-                >
-                  Target : 10
-                </button>
-                <button
-                  className="daily-tr-btn"
-                  style={{
-                    color: data.archived <= 3 ? "red" : "green",
-                  }}
-                >
-                  Achieved : {data.archived}
-                </button>
-                <button
-                  className="daily-tr-btn"
-                  style={{
-                    color: data.pending < 7 ? "green" : "red",
-                  }}
-                >
-                  Pending : {data.pending}
-                </button>
-              </div>
-              <button className="loging-hr">
-                <h6 hidden>Time: {currentTime}</h6>
-                <h6 hidden>Date: {currentDate}</h6>
-                Login Hours : {time.hours.toString().padStart(2, "0")}:
-                {time.minutes.toString().padStart(2, "0")}:
-                {time.seconds.toString().padStart(2, "0")}
-
+      {userType != "Applicant" && userType != "Vendor" ? (
+        <>
+          <div
+            className={`all-daily-btns ${!showAllDailyBtns ? "hidden" : ""}`}
+          >
+            {contextHolder}
+            <div className="daily-t-btn">
+              <button className="daily-tr-btn" style={{ whiteSpace: "nowrap" }}>
+                Target : 10
+              </button>
+              <button
+                className="daily-tr-btn"
+                style={{
+                  color: data.archived <= 3 ? "red" : "green",
+                }}
+              >
+                Achieved : {data.archived}
+              </button>
+              <button
+                className="daily-tr-btn"
+                style={{
+                  color: data.pending < 7 ? "green" : "red",
+                }}
+              >
+                Pending : {data.pending}
+              </button>
+            </div>
+            <button className="loging-hr">
+              <h6 hidden>Time: {currentTime}</h6>
+              <h6 hidden>Date: {currentDate}</h6>
+              Login Hours : {time.hours.toString().padStart(2, "0")}:
+              {time.minutes.toString().padStart(2, "0")}:
+              {time.seconds.toString().padStart(2, "0")}
             </button>
             <div hidden>
               <h6>Late Mark : {lateMark}</h6>
@@ -1094,13 +1067,12 @@ function DailyWork({
               <h6>Day Present Unpaid: {dayPresentUnpaid}</h6>
             </div>
 
-
             <div hidden style={{ display: "flex", flexDirection: "column" }}>
               <label htmlFor="remoteWork">Remote Work:</label>
               <select
                 className="select"
                 id="remoteWork"
-                value={remoteWork || "work from Office"} 
+                value={remoteWork || "work from Office"}
                 onChange={(e) => setRemoteWork(e.target.value)}
               >
                 <option>Select</option>
