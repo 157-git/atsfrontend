@@ -24,7 +24,6 @@ const UpdateResponseFrom = ({
   const [submited, setSubmited] = useState(false);
   const [errors, setErrors] = useState({});
   const [performanceId, setPerformanceId] = useState();
-
   const [formData, setFormData] = useState({
     interviewRound: "",
     interviewResponse: "",

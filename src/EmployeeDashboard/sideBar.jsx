@@ -125,6 +125,8 @@ function Sidebar({
   const handleLogoutLocal = () => {
     console.log("Logout clicked 01");
     const logoutTime = new Date().toLocaleTimeString("en-IN");
+    console.log(logoutTime);
+    
     temproryLogout();
     onLogout(logoutTime);
   };

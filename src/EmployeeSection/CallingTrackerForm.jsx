@@ -40,7 +40,6 @@ const CallingTrackerForm = ({
   const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
     .toISOString()
     .split("T")[0]; // Format as YYYY-MM-DD
-
   const initialCallingTrackerState = {
     date: new Date().toISOString().slice(0, 10),
     candidateAddedTime: "",
@@ -527,7 +526,7 @@ const CallingTrackerForm = ({
       };
       const updatedCallingTracker = {
         ...dataToUpdate.callingTracker,
-        candidateAddedTime: getFormattedDateTime() 
+        candidateAddedTime: getFormattedDateTime(),
       };
       if (callingTracker.selectYesOrNo === "Interested") {
         socket.emit("add_candidate",  updatedCallingTracker );

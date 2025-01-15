@@ -15,7 +15,6 @@ import { TimePicker } from "antd";
 import dayjs from "dayjs";
 import { getSocket } from "../EmployeeDashboard/socket";
 // this line added by sahil karnekar on date 14-01-2024
-import { useSelector } from "react-redux";
 
 const UpdateSelfCalling = ({
   initialData,
@@ -114,7 +113,6 @@ const UpdateSelfCalling = ({
   const [lineUpData, setLineUpData] = useState(initialLineUpState);
   const { userType } = useParams();
   // this line added by sahil karnekar on date 14-01-2024
-  const employeProfileImageFromRedux = useSelector((state) => state.employeeProfileImage.profileImageFromRedux);
   
   
 // line 111 to 186 added by sahil karnekar date 17-10-2024
@@ -778,12 +776,12 @@ const UpdateSelfCalling = ({
         incentive: callingTracker.incentive,
         alternateNumber: callingTracker.alternateNumber,
         currentLocation: callingTracker.currentLocation,
-        fullAddress: callingTracker.fullAddress,
+        fullAddress: userType,
         communicationRating: callingTracker.communicationRating,
         selectYesOrNo: callingTracker.selectYesOrNo,
         callingFeedback: callingTracker.callingFeedback,
         employee: {
-          employeeId: callingTracker.employeeId, // Include only employeeId
+          employeeId: employeeId, // Include only employeeId
         },
         lineUp: {
           companyName: callingTracker.lineUp.companyName,
@@ -809,7 +807,6 @@ const UpdateSelfCalling = ({
           interviewTime: callingTracker.lineUp.interviewTime,
           finalStatus: callingTracker.lineUp.finalStatus,
         },
-        userProfileImage:employeProfileImageFromRedux,
       };
       if (callingTracker.selectYesOrNo === "Interested") {
         console.log("emit called", callingTrackerObjectForEmit);
