@@ -83,6 +83,7 @@
 .subdivforcharts{
   display: flex;
   justify-content: space-between;
+  margin-bottom: 50px;
 }
 .forborderfortds{
 border-right: 1px solid black;
@@ -112,5 +113,5 @@ border-right: 1px solid black;
 .tablecont{
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }

@@ -14,6 +14,8 @@ import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker
 import { TimePicker } from "antd";
 import dayjs from "dayjs";
 import { getSocket } from "../EmployeeDashboard/socket";
+// this line added by sahil karnekar on date 14-01-2024
+import { useSelector } from "react-redux";
 
 const UpdateSelfCalling = ({
   initialData,
@@ -111,8 +113,12 @@ const UpdateSelfCalling = ({
   const [endpoint, setendPoint] = useState("");
   const [lineUpData, setLineUpData] = useState(initialLineUpState);
   const { userType } = useParams();
+  // this line added by sahil karnekar on date 14-01-2024
+  const employeProfileImageFromRedux = useSelector((state) => state.employeeProfileImage.profileImageFromRedux);
+  
+  
+// line 111 to 186 added by sahil karnekar date 17-10-2024
 
-  // line 111 to 186 added by sahil karnekar date 17-10-2024
 
   const [errors, setErrors] = useState({});
   const [errorForDOB, setErrorForDOB] = useState("");
@@ -711,6 +717,8 @@ const UpdateSelfCalling = ({
       const forTrimCandidateName = callingTracker.candidateName.trim();
 
       console.log(initialLineUpState);
+      
+
 
       console.log(lineUpData);
 

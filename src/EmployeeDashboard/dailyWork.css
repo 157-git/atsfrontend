@@ -395,8 +395,7 @@
   pointer-events: none; /* Disables interaction when closed */
 }
 .motificationSubCont1 {
-  margin: 18px;
-  padding: 10px;
+  margin: 8px;
 }
 
 .notification-gap {
