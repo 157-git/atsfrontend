@@ -1310,10 +1310,12 @@ borderColor:"#cccccc"
    >
      <Meta
        avatar={<Avatar src={
-        message.candidate.fullAddress && message.candidate.fullAddress !== "" 
-        ? `${message.candidate.fullAddress}` 
+        message.candidate.userProfileImage && message.candidate.userProfileImage !== "" 
+        ? `${message.candidate.userProfileImage}` 
         : 
-        `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
+        `https://api.dicebear.com/7.x/miniavs/svg?seed=0`}
+
+        size="large"
        />}
 
        title={

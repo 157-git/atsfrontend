@@ -809,6 +809,7 @@ const UpdateSelfCalling = ({
           interviewTime: callingTracker.lineUp.interviewTime,
           finalStatus: callingTracker.lineUp.finalStatus,
         },
+        userProfileImage:employeProfileImageFromRedux,
       };
       if (callingTracker.selectYesOrNo === "Interested") {
         console.log("emit called", callingTrackerObjectForEmit);
