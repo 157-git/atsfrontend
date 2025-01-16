@@ -221,6 +221,8 @@ const emitData = {
     userName: formData.userName,
     jobRole: formData.jobRole,
     reportingAdminName: loginEmployeeName,
+    employeeId:employeeId,
+    userType: userType,
 }
 
 console.log(emitData);

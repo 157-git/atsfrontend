@@ -85,7 +85,6 @@ function Sidebar({
   const [showColor, setShowColor] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
   const [socket, setSocket] = useState(null);
-  
 
   const navigator = useNavigate();
   const { employeeId, userType } = useParams();
@@ -125,16 +124,122 @@ function Sidebar({
   const handleLogoutLocal = () => {
     console.log("Logout clicked 01");
     const logoutTime = new Date().toLocaleTimeString("en-IN");
+    console.log(logoutTime);
+
     temproryLogout();
     onLogout(logoutTime);
+
+    localStorage.removeItem("selectedColor");
+    localStorage.removeItem("bgColor");
+    localStorage.removeItem("buttonColor");
+    localStorage.removeItem("hoverColor");
+    localStorage.removeItem("hover-effect");
+
+    const colors = [
+      { variable: "--primary-bg-color" },
+      { variable: "--secondary-bg-color" },
+      { variable: "--ternary-bg-color" },
+      { variable: "--primary-txt-color" },
+      { variable: "--secondary-txt-color" },
+      { variable: "--disable-txt-color" },
+      { variable: "--error-txt-color" },
+      { variable: "--success-txt-color" },
+      { variable: "--link-txt-color" },
+      { variable: "--icon-color" },
+      { variable: "--active-icon" },
+      { variable: "--disable-icons" },
+      { variable: "--primary-button-bg" },
+      { variable: "--primary-button-hover" },
+      { variable: "--secondary-button-bg" },
+      { variable: "--secondary-button-hover" },
+      { variable: "--button-txt-color" },
+      { variable: "--button-txt-hover-color" },
+      { variable: "--table-bg-color" },
+      { variable: "--table-header-txt" },
+      { variable: "--table-body-txt" },
+      { variable: "--table-row-hover" },
+      { variable: "--table-row-selected" },
+      { variable: "--tooltip-bg" },
+      { variable: "--tooltip-txt" },
+      { variable: "--sidebar-bg" },
+      { variable: "--sidebar-txt" },
+      { variable: "--sidebar-txt-hover" },
+      { variable: "--sidebar-active-item-bg" },
+      { variable: "--sidebar-submenu-bg" },
+      { variable: "--icons-txt-hover" },
+      { variable: "--card-or-button-hover-bg" },
+      { variable: "--primary-border" },
+      { variable: "--hover-border" },
+      { variable: "--overlay-bg" },
+      { variable: "--modal-bg" },
+      { variable: "--modal-txt" },
+      { variable: "--accent-color-1" },
+      { variable: "--accent-color-2" },
+      { variable: "--filter-button-txt" },
+    ];
+
+    // Loop through and clear localStorage for each variable
+    colors.forEach(({ variable }) => {
+      localStorage.removeItem(variable);
+    });
+
+    localStorage.setItem("--sidebar-bg", "#ffe5b5");
+
+    // Set default styles
+    document.documentElement.style.setProperty("--Bg-color", "#ffe5b5");
+    document.documentElement.style.setProperty("--button-color", "#ffcb9b");
+    document.documentElement.style.setProperty("--button-hover-color", "white");
+    document.documentElement.style.setProperty("--text-color", "gray");
+    document.documentElement.style.setProperty("--text-hover-color", "#ffb281");
+    document.documentElement.style.setProperty("--heading-text-color", "gray");
+    document.documentElement.style.setProperty(
+      "--button-hover-text-color",
+      "#ffb281"
+    );
+    document.documentElement.style.setProperty("--hover-effect", "#ffcb9b");
+    document.documentElement.style.setProperty("--filter-color", "#ffcb9b");
+    document.documentElement.style.setProperty("-dailyWork-btn", "#ffcb9b");
+
+    document.documentElement.style.setProperty(
+      "--primary-button-bg",
+      "#ffcb9b"
+    );
+    document.documentElement.style.setProperty(
+      "--primary-button-hover",
+      "white"
+    );
+    document.documentElement.style.setProperty("--button-txt-color", "white");
+    document.documentElement.style.setProperty(
+      "--button-txt-hover-color",
+      "#ffb281"
+    );
+    document.documentElement.style.setProperty("--active-icon", "green");
+    document.documentElement.style.setProperty("--table-header-txt", "gray");
+    document.documentElement.style.setProperty("--table-body-txt", "gray");
+    document.documentElement.style.setProperty("--table-header-txt", "gray");
+    document.documentElement.style.setProperty("--table-row-hover", "#e6e6e6");
+    document.documentElement.style.setProperty("--tooltip-bg", "#ffe5b5");
+    document.documentElement.style.setProperty("--tooltip-txt", "gray");
+    document.documentElement.style.setProperty("--sidebar-bg", "#ffe5b5");
+    document.documentElement.style.setProperty("--sidebar-txt", "gray");
+    document.documentElement.style.setProperty("--sidebar-txt-hover", "gray");
+    document.documentElement.style.setProperty(
+      "--sidebar-active-item-bg",
+      "#ffcb9b"
+    );
+    document.documentElement.style.setProperty("--primary-border", "gray");
+    document.documentElement.style.setProperty(
+      "--filter-button-txt",
+      "#ffe5b5"
+    );
+    document.documentElement.style.setProperty("--accent-color-2", "#ffe5b5");
   };
 
-      // establishing socket for emmiting event
-      useEffect(() => {
-        const newSocket = getSocket();
-        setSocket(newSocket);
-      }, []);
-
+  // establishing socket for emmiting event
+  useEffect(() => {
+    const newSocket = getSocket();
+    setSocket(newSocket);
+  }, []);
 
   const temproryLogout = async () => {
     console.log("Logout clicked in Logout clicked 02");
@@ -142,16 +247,32 @@ function Sidebar({
       let requestBody = {};
       switch (`${userType}`) {
         case "SuperUser":
-          requestBody = { superUserId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : getFormattedDateTime()};
+          requestBody = {
+            superUserId: employeeId,
+            employeeName: loginEmployeeName,
+            logoutDateAndTime: getFormattedDateTime(),
+          };
           break;
         case "Manager":
-          requestBody = { managerId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : getFormattedDateTime()};
+          requestBody = {
+            managerId: employeeId,
+            employeeName: loginEmployeeName,
+            logoutDateAndTime: getFormattedDateTime(),
+          };
           break;
         case "TeamLeader":
-          requestBody = { teamLeaderId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : getFormattedDateTime()};
+          requestBody = {
+            teamLeaderId: employeeId,
+            employeeName: loginEmployeeName,
+            logoutDateAndTime: getFormattedDateTime(),
+          };
           break;
         case "Recruiters":
-          requestBody = { employeeId: employeeId , employeeName : loginEmployeeName, logoutDateAndTime : getFormattedDateTime()};
+          requestBody = {
+            employeeId: employeeId,
+            employeeName: loginEmployeeName,
+            logoutDateAndTime: getFormattedDateTime(),
+          };
           break;
         default:
           console.error("Invalid user type");
@@ -162,16 +283,22 @@ function Sidebar({
         requestBody
       );
 
-      console.log( " user-logout-157 -- " + JSON.stringify( requestBody ));
+      console.log(" user-logout-157 -- " + JSON.stringify(requestBody));
       console.log(response);
 
       if (socket && typeof socket.emit === "function") {
         socket.emit("user_logout_event", requestBody);
-        console.log("Logout Successfully And Status Updated Successfully.. In Successfully Emit ");
+        console.log(
+          "Logout Successfully And Status Updated Successfully.. In Successfully Emit "
+        );
       } else {
-        console.warn("Socket is not defined or emit is not a function. Skipping emit  Without Emit");
+        console.warn(
+          "Socket is not defined or emit is not a function. Skipping emit  Without Emit"
+        );
       }
-      console.log("Logout Successfully And Status Updated Successfully.. in Side ");
+      console.log(
+        "Logout Successfully And Status Updated Successfully.. in Side "
+      );
       navigate(`/login/${userType}`, { replace: true });
     } catch (error) {
       console.error("Error during logout:", error);
@@ -219,7 +346,7 @@ function Sidebar({
   //     // document.addEventListener("visibilitychange", handleVisibilityChange);
   //     // window.addEventListener("offline", handleOffline);
   //     // Monitor for sleep with setInterval
-  //     const sleepInterval = setInterval(detectSleep, 10000); 
+  //     const sleepInterval = setInterval(detectSleep, 10000);
 
   //     // Cleanup event listeners and interval on component unmount
   //     return () => {
@@ -1018,6 +1145,83 @@ function Sidebar({
                     >
                       <>
                         <li
+                          onClick={handleButtonClick(
+                            "sendCandidate",
+                            toggleSendCandidate
+                          )}
+                          style={{ marginLeft: "10px" }}
+                          className={
+                            activeButton === "sendCandidate" ? "active" : ""
+                          }
+                        >
+                          <a href="#">
+                            <span className="sidebar-text">Sent Profile</span>
+                          </a>
+                        </li>
+
+                        <li
+                          onClick={handleButtonClick(
+                            "updateResponse",
+                            toggleUpdateResponse
+                          )}
+                          className={
+                            activeButton === "updateResponse" ? "active" : ""
+                          }
+                          style={{ marginLeft: "10px" }}
+                        >
+                          <a href="#">
+                            <span className="sidebar-text">
+                              Update Response
+                            </span>
+                          </a>
+                        </li>
+
+                        <li
+                          onClick={handleButtonClick(
+                            "sharedProfiles",
+                            toggleSharedProfiles
+                          )}
+                          className={
+                            activeButton === "sharedProfiles" ? "active" : ""
+                          }
+                          style={{ marginLeft: "10px" }}
+                        >
+                          <a href="#">
+                            <span className="sidebar-text">
+                              Shared Profiles
+                            </span>
+                          </a>
+                        </li>
+
+                        <li
+                          onClick={handleButtonClick("payRoll", togglePayRoll)}
+                          style={{ marginLeft: "10px" }}
+                          className={activeButton === "payRoll" ? "active" : ""}
+                        >
+                          <a href="#">
+                            <span className="sidebar-text">Pay Roll</span>
+                          </a>
+                        </li>
+
+                        <li
+                          onClick={handleButtonClick(
+                            "scheduleinterview",
+                            togglescheduleinterview
+                          )}
+                          className={
+                            activeButton === "scheduleinterview" ? "active" : ""
+                          }
+                          style={{ marginLeft: "10px" }}
+                        >
+                          <a href="#">
+                            {/* <img src={Circle} style={{ width: "10px" }} alt="" /> */}
+                            <span className="sidebar-text">
+                              Schedule Interview
+                            </span>
+                          </a>
+                        </li>
+
+                        <li
                           onClick={handleButtonClick("billing", toggleBilling)}
                           style={{ marginLeft: "10px" }}
                           className={activeButton === "billing" ? "active" : ""}
@@ -1028,15 +1232,7 @@ function Sidebar({
                             </span>
                           </a>
                         </li>
-                        <li
-                          onClick={handleButtonClick("payRoll", togglePayRoll)}
-                          style={{ marginLeft: "10px" }}
-                          className={activeButton === "payRoll" ? "active" : ""}
-                        >
-                          <a href="#">
-                            <span className="sidebar-text">Pay Roll</span>
-                          </a>
-                        </li>
+
                         <li
                           onClick={handleButtonClick("invoice", toggleInvoice)}
                           style={{ marginLeft: "10px" }}
@@ -1065,38 +1261,6 @@ function Sidebar({
                           </a>
                         </li>
                         {/* ArshadAttar_EmpDashboard_AddedPayrollToggeleFunction_10/07/2024_LineNo_438-445 */}
-                        <li
-                          onClick={handleButtonClick(
-                            "updateResponse",
-                            toggleUpdateResponse
-                          )}
-                          className={
-                            activeButton === "updateResponse" ? "active" : ""
-                          }
-                          style={{ marginLeft: "10px" }}
-                        >
-                          <a href="#">
-                            <span className="sidebar-text">
-                              Update Response
-                            </span>
-                          </a>
-                        </li>
-                        <li
-                          onClick={handleButtonClick(
-                            "sharedProfiles",
-                            toggleSharedProfiles
-                          )}
-                          className={
-                            activeButton === "sharedProfiles" ? "active" : ""
-                          }
-                          style={{ marginLeft: "10px" }}
-                        >
-                          <a href="#">
-                            <span className="sidebar-text">
-                              Shared Profiles
-                            </span>
-                          </a>
-                        </li>
 
                         {/* <li
                           onClick={handleButtonClick(
@@ -1115,23 +1279,7 @@ function Sidebar({
                           </a>
                         </li>
                         {/* neha_add_scheduleinterview_page_line_no511_523 */}
-                        <li
-                          onClick={handleButtonClick(
-                            "scheduleinterview",
-                            togglescheduleinterview
-                          )}
-                          className={
-                            activeButton === "scheduleinterview" ? "active" : ""
-                          }
-                          style={{ marginLeft: "10px" }}
-                        >
-                          <a href="#">
-                            {/* <img src={Circle} style={{ width: "10px" }} alt="" /> */}
-                            <span className="sidebar-text">
-                              Schedule Interview
-                            </span>
-                          </a>
-                        </li>
+
                         {/* <li
                           onClick={handleButtonClick(
                             "invoiceReport",
@@ -1207,21 +1355,6 @@ function Sidebar({
                           </a>
                         </li>
                       </>
-
-                      <li
-                        onClick={handleButtonClick(
-                          "sendCandidate",
-                          toggleSendCandidate
-                        )}
-                        style={{ marginLeft: "10px" }}
-                        className={
-                          activeButton === "sendCandidate" ? "active" : ""
-                        }
-                      >
-                        <a href="#">
-                          <span className="sidebar-text">Sent Profile</span>
-                        </a>
-                      </li>
 
                       <li
                         onClick={handleButtonClick(

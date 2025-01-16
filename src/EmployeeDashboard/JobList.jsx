@@ -328,7 +328,15 @@ const JobListing = ({ loginEmployeeName }) => {
 
       (item.employeeName = loginEmployeeName),
         (item.jdAddedDate = getFormattedDateTime());
-      socket.emit("delete_job_description", item);
+        const emitItem = {
+          ...item,
+          employeeId:employeeId,
+          userType: userType,
+        }
+
+        console.log(emitItem);
+        
+      socket.emit("delete_job_description", emitItem);
     } catch (error) {
       toast.error(`Failed to delete JD: ${error.message}`);
     }

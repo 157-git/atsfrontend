@@ -13,6 +13,8 @@ const AddJobDescription = ({loginEmployeeName}) => {
   const [socket, setSocket] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
+    employeeId:employeeId,
+    userType: userType,
     companyName: "",
     designation: "",
     position: "",

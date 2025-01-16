@@ -703,8 +703,10 @@ const forwardSelectedCandidate = (e) => {
 
     const requestData = {
       candidateIds: selectedRows,
-      employeeId: selectedRecruiters.employeeId,
+      sharedEmployeeId: selectedRecruiters.employeeId,
       jobRole: selectedRecruiters.jobRole,
+      employeeId: employeeId,
+      userType:userType,
     };
 
     console.log("Request Data:", requestData);
@@ -735,6 +737,8 @@ const forwardSelectedCandidate = (e) => {
         "API Object Share Excel Data :",
         JSON.stringify(requestData, null, 2)
       );
+      console.log(requestData);
+      
       socket.emit("share_excel_data", requestData);
 
       toast.success(responseData);
@@ -1361,7 +1365,7 @@ const forwardSelectedCandidate = (e) => {
                       ) : null}
 
                       <th className="attendanceheading">No.</th>
-                      <th className="attendanceheading">Added Date</th>
+                      <th className="attendanceheading">Excel Upload Date</th>
                       <th className="attendanceheading">Candidate Name</th>
                       <th className="attendanceheading">Candidate Email</th>
                       <th className="attendanceheading">Contact Number</th>
@@ -1405,15 +1409,13 @@ const forwardSelectedCandidate = (e) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {highlightText(item.date || "", searchTerm)} -{" "}
-                          {item.candidateAddedTime}
+                          {highlightText(item.excelFileUploadDate || "", searchTerm)} -{" "}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
-                                item.date.toString().toLowerCase() || "",
+                               item.excelFileUploadDate || "",
                                 searchTerm
-                              )}{" "}
-                              - {item.candidateAddedTime}
+                              )}
                             </span>
                           </div>
                         </td>
@@ -1799,11 +1801,12 @@ const forwardSelectedCandidate = (e) => {
                       {showModal?.availabilityForInterview || "-"}
                     </p>
                   </div>
+                  
 
                   <div className="popup-section">
                     <p>
-                      <strong>Excel Upload Date: </strong>
-                      {showModal?.excelFileUploadDate || "-"}
+                      <strong>Candidate Added Date: </strong>
+                      {showModal?.date  || "-"}
                     </p>
                     <p>
                       <strong>Extra Columns 1: </strong>

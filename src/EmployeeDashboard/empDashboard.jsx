@@ -171,6 +171,7 @@ const EmpDashboard = ({ userGroup }) => {
     console.log("Logout clicked 03 in EmpDashboard");
     setLogoutTimestamp(timestamp);
   };
+console.log(logoutTimestamp);
 
   const handleSuccessfulDataAdditions = (check) => {
     setSuccessfulDataAdditions(check);

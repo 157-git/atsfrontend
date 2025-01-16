@@ -367,6 +367,11 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     setCurrentPage(1); // Reset to the first page after page size changes
   };
 
+
+  const calculateRowIndex = (index) => {
+    return (currentPage - 1) * pageSize + index + 1;
+  };
+  
   return (
     // SwapnilRokade_UpdateResponse_FilterAdded_7_to_504_10/07"
     <div className="TeamLead-main">
@@ -557,7 +562,18 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                   <tbody>
                     {filteredCallingList.map((data, index) => (
                       <tr key={index} className="attendancerows">
-                        <td className="tabledata">{index + 1}</td>
+                        <td
+                          className="tabledata "
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {calculateRowIndex(index)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {calculateRowIndex(index)}
+                            </span>
+                          </div>
+                        </td>
                         <td className="tabledata">
                           {highlightText(
                             data.candidateId.toString().toLowerCase() || "",
@@ -865,63 +881,20 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                 Total Results : {totalRecords}
               </div>
 
-              <Pagination
-                current={currentPage}
-                total={totalRecords}
-                pageSize={pageSize}
-                onChange={handlePageChange}
-                showSizeChanger={false} // Hides the page size changer
-                showQuickJumper={false} // Hides the quick jump input
-                itemRender={(page, type) => {
-                  if (type === "prev") {
-                    return (
-                      <button
-                        style={{
-                          color: currentPage === 1 ? "gray" : "black", // Gray when disabled
-                          cursor: currentPage === 1 ? "not-allowed" : "pointer", // Cursor for disabled state
-                        }}
-                        disabled={currentPage === 1}
-                        onClick={() => {
-                          if (currentPage !== 1)
-                            handlePageChange(currentPage - 1);
-                        }}
-                      >
-                        Previous
-                      </button>
-                    );
-                  }
-                  if (type === "next") {
-                    return (
-                      <button
-                        style={{
-                          color:
-                            filteredCallingList.length === 0 ? "gray" : "black", // Gray when no records
-                          cursor:
-                            filteredCallingList.length === 0
-                              ? "not-allowed"
-                              : "pointer", // Cursor for disabled state
-                        }}
-                        disabled={totalRecords === 0}
-                        onClick={() => {
-                          if (filteredCallingList.length > 0) {
-                            handlePageChange(currentPage + 1);
-                          } else {
-                            return;
-                          }
-                        }}
-                      >
-                        Next
-                      </button>
-                    );
-                  }
-                  return null; // Hides page numbers and other elements
-                }}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "20px",
-                }}
-              />
+
+ <Pagination
+        current={currentPage}
+        total={totalRecords}
+        pageSize={pageSize}
+        showSizeChanger
+        showQuickJumper 
+        onShowSizeChange={handleSizeChange}
+        onChange={handlePageChange}
+        style={{
+          justifyContent: 'center',
+        }}
+      />
+
 
               <Modal show={showResumeModal} onHide={closeResumeModal} size="md">
                 <Modal.Header closeButton>

@@ -15,7 +15,6 @@ import { TimePicker } from "antd";
 import dayjs from "dayjs";
 import { getSocket } from "../EmployeeDashboard/socket";
 // this line added by sahil karnekar on date 14-01-2024
-import { useSelector } from "react-redux";
 
 const UpdateSelfCalling = ({
   initialData,
@@ -33,7 +32,7 @@ const UpdateSelfCalling = ({
     date: new Date().toISOString().slice(0, 10),
     candidateId: candidateId,
     candidateAddedTime: "",
-    recruiterName: loginEmployeeName,
+    recruiterName: "",
     candidateName: "",
     candidateEmail: "",
     jobDesignation: "",
@@ -114,7 +113,6 @@ const UpdateSelfCalling = ({
   const [lineUpData, setLineUpData] = useState(initialLineUpState);
   const { userType } = useParams();
   // this line added by sahil karnekar on date 14-01-2024
-  const employeProfileImageFromRedux = useSelector((state) => state.employeeProfileImage.profileImageFromRedux);
   
   
 // line 111 to 186 added by sahil karnekar date 17-10-2024
@@ -250,17 +248,14 @@ const UpdateSelfCalling = ({
         `${API_BASE_URL}/specific-data/${candidateId}`
       );
       const data = await response.json();
-      console.log(data);
       setCallingTracker(data);
       if (data.lineUp.resume !== "") {
         setResumeUploaded(true);
       }
       if (data.lineUp.resume === undefined) {
-        console.log(data.lineUp.resume);
         setResumeUploaded(false);
       }
       if (data.lineUp.resume === "") {
-        console.log(data.lineUp.resume);
         setResumeUploaded(false);
       }
       setCandidateFetched(true);
@@ -268,8 +263,6 @@ const UpdateSelfCalling = ({
       console.error("Error fetching candidate data:", error);
     }
   };
-
-  console.log(callingTracker);
 
   const fetchRequirementOptions = async () => {
     try {
@@ -288,7 +281,6 @@ const UpdateSelfCalling = ({
       name === "selectYesOrNo"
         ? value !== "Interested"
         : callingTracker.selectYesOrNo !== "Interested";
-    console.log(isNotInterested);
 
     if (
       (name === "candidateName" || name === "currentLocation") &&
@@ -311,9 +303,6 @@ const UpdateSelfCalling = ({
     }
 
     if (name === "lineUp.dateOfBirth") {
-      console.log(value);
-      console.log(maxDate);
-
       if (value > maxDate) {
         setErrorForDOB("MaxDate" + maxDate);
       } else {
@@ -355,7 +344,7 @@ const UpdateSelfCalling = ({
         };
       });
     }
-    console.log(errors);
+ 
 
     setCallingTracker((prevState) => {
       if (name.includes("lineUp")) {
@@ -682,7 +671,7 @@ const UpdateSelfCalling = ({
     // Display loginEmployeeName in the input field
     setCallingTracker({
       ...callingTracker,
-      recruiterName: loginEmployeeName, // Set recruiterName to loginEmployeeName
+      // recruiterName: loginEmployeeName, 
     });
 
     console.log("Recruiter Name to be sent:", callingTracker.recruiterName); // Print recruiterName
@@ -716,16 +705,10 @@ const UpdateSelfCalling = ({
       // this line added by sahil karnekar to trim the candidate name
       const forTrimCandidateName = callingTracker.candidateName.trim();
 
-      console.log(initialLineUpState);
-      
-
-
-      console.log(lineUpData);
-
       const dataToUpdate = {
         ...callingTracker,
         candidateName: forTrimCandidateName,
-        recruiterName: loginEmployeeName,
+        // recruiterName: loginEmployeeName,
         candidateAddedTime: callingTracker.candidateAddedTime,
         lineUp: {
           ...callingTracker.lineUp,
@@ -743,7 +726,7 @@ const UpdateSelfCalling = ({
           body: JSON.stringify(dataToUpdate),
         }
       );
-      console.log(callingTracker);
+
       const getFormattedDateTime = () => {
         const now = new Date();
         const year = now.getFullYear();
@@ -764,10 +747,12 @@ const UpdateSelfCalling = ({
       console.log(getFormattedDateTime()); // Example output: Date: 2024-1-1, Time: 4:05 PM
 
       const callingTrackerObjectForEmit = {
+        employeeId:employeeId,
+        userType: userType,
         date: callingTracker.date,
         candidateId: callingTracker.candidateId,
         candidateAddedTime: getFormattedDateTime(),
-        recruiterName: loginEmployeeName, // Ensure recruiterName is updated
+        recruiterName: loginEmployeeName, 
         candidateName: callingTracker.candidateName.trim(),
         candidateEmail: callingTracker.candidateEmail,
         jobDesignation: callingTracker.jobDesignation,
@@ -778,12 +763,12 @@ const UpdateSelfCalling = ({
         incentive: callingTracker.incentive,
         alternateNumber: callingTracker.alternateNumber,
         currentLocation: callingTracker.currentLocation,
-        fullAddress: callingTracker.fullAddress,
+        fullAddress: userType,
         communicationRating: callingTracker.communicationRating,
         selectYesOrNo: callingTracker.selectYesOrNo,
         callingFeedback: callingTracker.callingFeedback,
         employee: {
-          employeeId: callingTracker.employeeId, // Include only employeeId
+          employeeId: employeeId, // Include only employeeId
         },
         lineUp: {
           companyName: callingTracker.lineUp.companyName,
@@ -813,7 +798,6 @@ const UpdateSelfCalling = ({
       if (callingTracker.selectYesOrNo === "Interested") {
         console.log("emit called", callingTrackerObjectForEmit);
         socket.emit("update_candidate", callingTrackerObjectForEmit);
-        console.log("end");
       }
       if (response.ok) {
         if (callingTracker.selectYesOrNo === "Interested") {

@@ -271,6 +271,8 @@ const emitData = {
   tlInsuranceNumber: "",
   reportingAdminName: loginEmployeeName,
   reportingAdminDesignation: "",
+  employeeId:employeeId,
+  userType: userType,
 }
 
         socket.emit("add_teamLeader_event", emitData);

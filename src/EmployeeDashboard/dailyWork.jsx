@@ -40,8 +40,6 @@ function DailyWork({
   const [loginDetailsSaved, setLoginDetailsSaved] = useState(false);
   const [showAlreadyLoggedInMessage, setShowAlreadyLoggedInMessage] =
     useState(false);
-  // this line added by sahil karnekar date 14-01-2025
-  const dispatch = useDispatch();
   const [buttonColor, setButtonColor] = useState(() => {
     return localStorage.getItem("buttonColor");
   });
@@ -80,7 +78,13 @@ function DailyWork({
   const [expiryMessage, setExpiryMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [paymentMade, setPaymentMade] = useState(false);
-  const [messagesContext, contextHolder] = notification.useNotification();
+  const [messagesContext, contextHolder] = notification.useNotification({
+    stack: true
+      ? {
+          threshold : 1,
+        }
+      : false,
+  });
 
   const TIMER_DURATION = 15 * 60 * 1000;
   let timerId;
@@ -120,8 +124,6 @@ function DailyWork({
         const blob = new Blob([byteArray], { type: "image/jpeg" });
         const url = URL.createObjectURL(blob);
         setProfileImage(url);
-        // this line added by sahil karnekar date 14-01-2025
-        dispatch(setProfileImageFromRedux(url));
         return () => URL.revokeObjectURL(url);
       }
     } catch (error) {
@@ -257,6 +259,8 @@ function DailyWork({
       const response = await axios.get(
         `${API_BASE_URL}/fetch-work-id/${employeeId}/${userType}`
       );
+      console.log(response);
+
       setFetchWorkId(response.data);
       console.log(response.data + "----->");
     } catch (error) {
@@ -1150,6 +1154,41 @@ function DailyWork({
     });
   }
 
+  const [allImages, setAllImages] = useState([]); // Initialize as an object
+
+  const getUserImageFromApi = async (employeeId, userType) => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/fetch-profile-details/${employeeId}/${userType}`
+      );
+      const byteCharacters = atob(response.data.profileImage);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: "image/jpeg" });
+      const url = URL.createObjectURL(blob);
+      return url;
+    } catch (error) {
+      console.error("Error fetching user image:", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const fetchAllImages = async () => {
+      const images = await Promise.all(
+        messages.map(async (message) => {
+          return await getUserImageFromApi(message.candidate.employeeId, message.candidate.userType);
+        })
+      );
+      setAllImages(images); // Set the array of image URLs
+    };
+  
+    fetchAllImages();
+  }, [messages]);
+
   return (
     <div className="daily-timeanddate">
       <a href="#">
@@ -1262,50 +1301,46 @@ function DailyWork({
                   {messages.length > 0 ? (
                     <>
                       <List
-                        itemLayout="horizontal"
-                        dataSource={messages}
-                        renderItem={(message, index) => (
-                          <Badge.Ribbon
-                            text={
-                              getTitleDescription(message).time
-                                ? extractTimeOnly(
-                                    getTitleDescription(message).time
-                                  )
-                                : ""
-                            }
-                            style={{
-                              top: "auto", // Remove the default top position
-                              bottom: 4, // Position at the bottom
-                            }}
-                            placement="end" // Optional: Keeps ribbon at the starting edge
-                            color="#7e7ee7"
-                          >
-                            <Card
-                              style={{
-                                marginBottom: "10px",
-                                // borderColor:"var(--primary-border)"
-                                borderColor: "#cccccc",
-                              }}
-                            >
-                              <Meta
-                                avatar={
-                                  <Avatar
-                                    src={
-                                      message.candidate.fullAddress &&
-                                      message.candidate.fullAddress !== ""
-                                        ? `${message.candidate.fullAddress}`
-                                        : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
-                                    }
-                                  />
-                                }
-                                title={getTitleDescription(message).title}
-                                description={getTitleDescription(message).desc}
-                              />
-                            </Card>
-                          </Badge.Ribbon>
-                        )}
-                      />
-                    </>
+    itemLayout="horizontal"
+    dataSource={[...messages].reverse()}
+    renderItem={(message, index) => {
+      const reversedIndex = messages.length - 1 - index;
+      return (
+      <Badge.Ribbon text={getTitleDescription(message).time ? extractTimeOnly(getTitleDescription(message).time) : "" }
+      style={{
+        top: "auto", // Remove the default top position
+        bottom: 4, // Position at the bottom
+
+      }}
+      placement="end" // Optional: Keeps ribbon at the starting edge
+      color="#7e7ee7"
+      >
+     <Card
+     style={{ marginBottom: '10px', 
+      // borderColor:"var(--primary-border)"
+borderColor:"#cccccc"
+     }}
+   >
+     <Meta
+       avatar={<Avatar src={
+       allImages[reversedIndex]
+    }
+        size="large"
+       />}
+
+       title={
+        getTitleDescription(message).title
+      }
+      description={
+        getTitleDescription(message).desc
+      }
+     />
+   </Card>
+   </Badge.Ribbon>
+                  )
+    }}
+  />
+      </>
                   ) : (
                     <p>No Notifications</p>
                   )}

@@ -150,6 +150,8 @@ const UpdateResponseFrom = ({
 
        // Create the new object to emit
        const emitObject = {
+        employeeId:employeeId,
+        userType: userType,
         interviewRound: formData.interviewRound,
         interviewResponse: formData.interviewResponse || "", // Fallback to empty string if not set
         commentForTl: formData.commentForTl || "",

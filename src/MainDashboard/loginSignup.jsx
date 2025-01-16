@@ -102,11 +102,16 @@ const LoginSignup = ({ onLogin }) => {
   };
 
   // handle submit method for authenticate user by username and password from line num 53 to line num 77
+  let isLocked = false; // Lock variable to prevent re-entry
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (isLocked) return; // If locked, return early
+    isLocked = true; // Lock the function
+
     if (!employeeId || !password) {
       setError("Please fill in both fields before submitting.");
+      isLocked = false; // Unlock on validation failure
       return;
     }
 
@@ -152,6 +157,8 @@ const LoginSignup = ({ onLogin }) => {
           const emitData = {
             employeeName:  loginResponse.data.employeeName,
             loginTime: getFormattedDateTime(),
+            employeeId:loginResponse.data.employeeId,
+            userType: userType,
           }
           console.log("Emit Data:", emitData);
           newSocket.emit("user_login_event", emitData);
@@ -235,6 +242,8 @@ const LoginSignup = ({ onLogin }) => {
         console.log("Error setting up the request:", error.message);
         setError("An error occurred. Please try again.");
       }
+    } finally {
+      isLocked = false; // Unlock after execution completes
     }
   };
   // line 220 to 229 added by sahil karnekar on date 29-11-2024
