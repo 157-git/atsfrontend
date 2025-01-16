@@ -703,8 +703,10 @@ const forwardSelectedCandidate = (e) => {
 
     const requestData = {
       candidateIds: selectedRows,
-      employeeId: selectedRecruiters.employeeId,
+      sharedEmployeeId: selectedRecruiters.employeeId,
       jobRole: selectedRecruiters.jobRole,
+      employeeId: employeeId,
+      userType:userType,
     };
 
     console.log("Request Data:", requestData);
@@ -735,6 +737,8 @@ const forwardSelectedCandidate = (e) => {
         "API Object Share Excel Data :",
         JSON.stringify(requestData, null, 2)
       );
+      console.log(requestData);
+      
       socket.emit("share_excel_data", requestData);
 
       toast.success(responseData);

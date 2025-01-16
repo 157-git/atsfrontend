@@ -233,8 +233,8 @@ const AddEmployee = ({loginEmployeeName}) => {
         console.log(loginEmployeeName);
         
         const emitData = {
-
-          employeeId: "0",
+          employeeId:employeeId,
+          userType: userType,
     employeeName: formData.employeeName,
     dateOfJoining: getFormattedDateTime(),
     userName: formData.userName,

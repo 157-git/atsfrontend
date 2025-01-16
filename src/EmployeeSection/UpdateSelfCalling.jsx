@@ -762,6 +762,8 @@ const UpdateSelfCalling = ({
       console.log(getFormattedDateTime()); // Example output: Date: 2024-1-1, Time: 4:05 PM
 
       const callingTrackerObjectForEmit = {
+        employeeId:employeeId,
+        userType: userType,
         date: callingTracker.date,
         candidateId: callingTracker.candidateId,
         candidateAddedTime: getFormattedDateTime(),

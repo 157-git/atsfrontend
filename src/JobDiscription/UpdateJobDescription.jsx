@@ -12,6 +12,8 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp,loginEmployeeName}
   const { employeeId, userType } = useParams();
   const [socket, setSocket] = useState(null);
   const [formData, setFormData] = useState({
+    employeeId:employeeId,
+    userType: userType,
     employee:loginEmployeeName,
     companyName: onAddJD.companyName || "",
     designation: onAddJD.designation || "",

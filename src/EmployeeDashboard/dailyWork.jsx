@@ -78,7 +78,13 @@ function DailyWork({
   const [expiryMessage, setExpiryMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [paymentMade, setPaymentMade] = useState(false);
-  const [messagesContext, contextHolder] = notification.useNotification();
+  const [messagesContext, contextHolder] = notification.useNotification({
+    stack: true
+      ? {
+          threshold : 1,
+        }
+      : false,
+  });
 
   const TIMER_DURATION = 15 * 60 * 1000;
   let timerId;

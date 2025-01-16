@@ -26,7 +26,7 @@ body {
   background-repeat: initial;
   display: flex;
   flex-direction: column;
-  background-color: var(--Bg-color);
+  background-color: var(--sidebar-bg);
   padding: 0px;
   transition: width 0.8s;
 }
@@ -37,11 +37,11 @@ body {
   width: 5px; /* Width of the scrollbar */
 }
 .sidebar::-webkit-scrollbar-thumb {
-  background: var(--Bg-color); /* Color of the scrollbar thumb */
+  background: var(--sidebar-bg); /* Color of the scrollbar thumb */
   border-radius: 4px; /* Rounded corners */
 }
 .sidebar::-webkit-scrollbar-thumb:hover {
-  background: var(--Bg-color); /* Darker color on hover */
+  background: var(--sidebar-bg); /* Darker color on hover */
 }
 
 .sidebar-clouds1 {

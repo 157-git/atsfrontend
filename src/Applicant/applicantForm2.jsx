@@ -369,6 +369,8 @@ function ApplicantForm2({ loginEmployeeName }) {
         incentive: formData.incentive,
         oldEmployeeId: formData.oldEmployeeId,
         distance: formData.distance,
+        employeeId:employeeId,
+        userType:userType,
       };
 
       socket.emit("save_applicant_data", emitData);

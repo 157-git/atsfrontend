@@ -729,9 +729,11 @@ const forwardSelectedCandidate = (e) => {
 
     const requestData = {
       candidateIds: selectedRows,
-      employeeId: selectedRecruiters.employeeId,
+      sharedEmployeeId: selectedRecruiters.employeeId,
       jobRole: selectedRecruiters.jobRole,
       employeeName: loginEmployeeName,
+      employeeId: employeeId,
+      userType:userType,
     };
 
     console.log("Request Data:", requestData);

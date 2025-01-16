@@ -157,6 +157,8 @@ const LoginSignup = ({ onLogin }) => {
           const emitData = {
             employeeName:  loginResponse.data.employeeName,
             loginTime: getFormattedDateTime(),
+            employeeId:loginResponse.data.employeeId,
+            userType: userType,
           }
           console.log("Emit Data:", emitData);
           newSocket.emit("user_login_event", emitData);

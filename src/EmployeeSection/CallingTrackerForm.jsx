@@ -58,6 +58,8 @@ const CallingTrackerForm = ({
     communicationRating: "",
     selectYesOrNo: "Yet To Confirm",
     callingFeedback: "",
+    employeeId:employeeId,
+    userType: userType,
   };
 
   const initialLineUpState = {
