@@ -16,6 +16,7 @@ const UpdateResponseFrom = ({
   requirementId,
   candidateName,
   employeeName,
+  passedJobRole,
   onClose,
 }) => {
   const { employeeId, userType } = useParams();
@@ -25,17 +26,40 @@ const UpdateResponseFrom = ({
   const [errors, setErrors] = useState({});
   const [performanceId, setPerformanceId] = useState();
 
-  const [formData, setFormData] = useState({
+ // Initialize formData with dynamic logic
+ const [formData, setFormData] = useState(() => {
+  let baseFormData = {
     interviewRound: "",
     interviewResponse: "",
     commentForTl: "",
     responseUpdatedDate: "",
     nextInterviewDate: "",
     nextInterviewTiming: "",
+    requirementId,
     callingTracker: { candidateId: candidateId },
-    requirementInfo: { requirementId: requirementId },
-    employee: { employeeId: passedEmployeeId },
-  });
+  };
+
+   // Conditional logic for setting employee or teamLeader
+   if (passedJobRole === "Recruiters") {
+    console.log("Passed Job Role is Recruiters");
+    baseFormData = {
+      ...baseFormData,
+      employee: { employeeId: passedEmployeeId },
+      teamLeader: null, // Ensure teamLeader is null
+    };
+  } else if (passedJobRole === "TeamLeader") {
+    console.log("Passed Job Role is TeamLeader");
+    
+    baseFormData = {
+      ...baseFormData,
+      teamLeader: { teamLeaderId: passedEmployeeId },
+      employee: null, // Ensure employee is null
+    };
+  }
+
+  return baseFormData;
+});
+
 
 
   useEffect(() => {
@@ -132,8 +156,8 @@ const UpdateResponseFrom = ({
         responseUpdatedDate: formData.responseUpdatedDate || formatDateToIST(new Date()),
         nextInterviewDate: formData.nextInterviewDate || "",
         nextInterviewTiming: formData.nextInterviewTiming || "",
+        requirementId: formData.requirementId || "",
         callingTracker: { candidateId: candidateId },
-        requirementInfo: { requirementId: requirementId },
         employee: { employeeId: passedEmployeeId },
         candidateName: candidateName, // Added candidateName from props
         employeeName: employeeName, // Added employeeName from props

@@ -31,7 +31,6 @@ const ShareDescription = ({ Descriptions }) => {
   const generateAndShareImage = async () => {
     console.log(Descriptions);
     try {
-
       // line 37 to 43 added by sahil karnekar
 
       const editableElements = document.querySelectorAll("[contenteditable]");
@@ -41,7 +40,7 @@ const ShareDescription = ({ Descriptions }) => {
         const cleanedContent = element.innerHTML.trimEnd(); // Trim spaces only at the end
         element.innerHTML = cleanedContent; // Update the element's text
       });
-      
+
       const input = document.getElementById("job-description-share");
       const canvas = await html2canvas(input, { scale: 2, logging: true });
       const blob = await new Promise((resolve) =>
@@ -83,7 +82,7 @@ const ShareDescription = ({ Descriptions }) => {
   return (
     <main className="main-description-share">
       <section className="closeButtonDiv">
-      <button
+        <button
           onClick={closeJobDescrptionShare}
           className="apply-button-share"
         >
@@ -92,226 +91,255 @@ const ShareDescription = ({ Descriptions }) => {
       </section>
       <div className="job-post-share" id="job-description-share">
         <section className="job-details-section-share">
-        {Descriptions.designation && (
-          <div className="job-title-share">
-            <p className="job-title-share-title"
-            contentEditable
-            >
-              We are Hiring For "{Descriptions.designation}"
-            </p>
-          </div> )}
+          {Descriptions.designation && (
+            <div className="job-title-share">
+              <p className="job-title-share-title" contentEditable>
+                We are Hiring For "{Descriptions.designation}"
+              </p>
+            </div>
+          )}
           <hr />
-          
-          <div className="job-details-share">
 
-<div className="setEdmWith">
-<h2
+          <div className="job-details-share">
+            <div className="setEdmWith">
+              <h2
                 style={{
                   fontWeight: "bold",
-                  paddingTop:"8px",
+                  paddingTop: "8px",
                   marginRight: "10px",
-                  fontSize:"20px"
+                  fontSize: "20px",
                 }}
                 contentEditable
               >
                 Job Description
               </h2>
-</div>
+            </div>
 
-<div className="setDisplayFlexForEdm">
-            <div className="job-details-firstsection-share">
-            {Descriptions.companyName && (
+            <div className="setDisplayFlexForEdm">
+              <div className="job-details-firstsection-share">
+                {/* {Descriptions.companyName && (
               <p
               contentEditable
               >
                 <b
                 contentEditable
                 >Company Name:</b> {Descriptions.companyName}
-              </p> )}
-              {Descriptions.location && (
-              <p
-              contentEditable
-              >
-                <b
-                contentEditable
-                >Location:</b> {Descriptions.location}
-              </p> )}
-              {Descriptions.salary && (
-              <p contentEditable>
-                <b contentEditable>Salary:</b> {Descriptions.salary}
-              </p> )}
-              {Descriptions.designation && (
-              <p contentEditable>
-                <b contentEditable>Designation:</b> {Descriptions.designation}
-              </p> )}
-              {Descriptions.qualification && (
-              <p contentEditable>
-                <b contentEditable>Educational Qualifications:</b> {Descriptions.qualification}
-              </p> )}
-              {Descriptions.experience && (
-              <p contentEditable>
-                <b contentEditable>Experience:</b> {Descriptions.experience}
-              </p> )}
-              {Descriptions.skills && (
-              <p contentEditable>
-                <b contentEditable>Key Skills:</b> {Descriptions.skills}
-              </p> )}
+              </p> )} */}
 
-              {Descriptions.companyLink && (
-              <p contentEditable>
-                <b contentEditable>Company Link:</b>{" "}
-                <a href={`${Descriptions.companyLink}`}>
-                  {Descriptions.companyLink}
-                </a>
-              </p>
-              )}
-              {Descriptions.detailAddress && (
-              <p contentEditable>
-                <b contentEditable>Address:</b> {Descriptions.detailAddress}
-              </p> )}
-              {Descriptions.shift && (
-              <p contentEditable>
-                <b contentEditable>Shifts:</b> {Descriptions.shift}
-              </p>
-              )}
-            </div>
-
-            <div className="job-details-secondsection-share">
-              <div className="jd-logo-div">
-                <img src={LoginImage} alt="Logo" className="jd-logo" />
-              </div>
-              <div className="jd-logo-below-div">
-              {Descriptions.weekOff && (
-                <p contentEditable>
-                  <b contentEditable>Week Off's:</b> {Descriptions.weekOff}
-                </p>
+                {Descriptions.designation && (
+                  <p contentEditable>
+                    <b contentEditable>Designation:</b>{" "}
+                    {Descriptions.designation}
+                  </p>
                 )}
-                {Descriptions.noticePeriod && (
-                <p contentEditable>
-                  <b contentEditable>Notice Period:</b> {Descriptions.noticePeriod}
-                </p> )}
                 {Descriptions.jobRole && (
-                <p contentEditable>
-                  <b contentEditable>Job Role:</b> {Descriptions.jobRole}
-                </p>
+                  <p contentEditable>
+                    <b contentEditable>Job Role:</b> {Descriptions.jobRole}
+                  </p>
                 )}
-                {/* <p>
+                {Descriptions.salary && (
+                  <p contentEditable>
+                    <b contentEditable>Salary:</b> {Descriptions.salary}
+                  </p>
+                )}
+                {Descriptions.location && (
+                  <p contentEditable>
+                    <b contentEditable>Location:</b> {Descriptions.location}
+                  </p>
+                )}
+
+                {Descriptions.qualification && (
+                  <p contentEditable>
+                    <b contentEditable>Educational Qualifications:</b>{" "}
+                    {Descriptions.qualification}
+                  </p>
+                )}
+                {Descriptions.experience && (
+                  <p contentEditable>
+                    <b contentEditable>Experience:</b> {Descriptions.experience}
+                  </p>
+                )}
+                {Descriptions.skills && (
+                  <p contentEditable>
+                    <b contentEditable>Key Skills:</b> {Descriptions.skills}
+                  </p>
+                )}
+
+                {Descriptions.companyLink && (
+                  <p contentEditable>
+                    <b contentEditable>Company Link:</b>{" "}
+                    <a href={`${Descriptions.companyLink}`}>
+                      {Descriptions.companyLink}
+                    </a>
+                  </p>
+                )}
+                {Descriptions.detailAddress && (
+                  <p contentEditable>
+                    <b contentEditable>Address:</b> {Descriptions.detailAddress}
+                  </p>
+                )}
+                {Descriptions.shift && (
+                  <p contentEditable>
+                    <b contentEditable>Shifts:</b> {Descriptions.shift}
+                  </p>
+                )}
+
+                {Descriptions.noticePeriod && (
+                  <p contentEditable>
+                    <b contentEditable>Notice Period:</b>{" "}
+                    {Descriptions.noticePeriod}
+                  </p>
+                )}
+              </div>
+
+              <div className="job-details-secondsection-share">
+                <div className="jd-logo-div">
+                  <img src={LoginImage} alt="Logo" className="jd-logo" />
+                </div>
+                <div className="jd-logo-below-div">
+                  {Descriptions.weekOff && (
+                    <p contentEditable>
+                      <b contentEditable>Week Off's:</b> {Descriptions.weekOff}
+                    </p>
+                  )}
+
+                  {/* <p>
                   <b>Incentives For Recruiters:</b> {Descriptions.incentive}
                 </p> */}
-                {Descriptions.position > 0 && (
-                <p contentEditable>
-                  <b contentEditable>Number of Positions:</b> {Descriptions.position}
-                </p> )}
-                {Descriptions.jobType && (
-                <p id="job-roles-share">
-                  <b contentEditable >Job Type:</b> <span contentEditable>{Descriptions.jobType}</span>
-                </p> )}
-                {Descriptions.perks && (
-                <p>
-                  <b contentEditable>Perks:</b> <span contentEditable>{Descriptions.perks}</span>
-                </p> )}
+                  {Descriptions.position > 0 && (
+                    <p contentEditable>
+                      <b contentEditable>Number of Positions:</b>{" "}
+                      {Descriptions.position}
+                    </p>
+                  )}
+                  {Descriptions.jobType && (
+                    <p id="job-roles-share">
+                      <b contentEditable>Job Type:</b>{" "}
+                      <span contentEditable>{Descriptions.jobType}</span>
+                    </p>
+                  )}
+                  {Descriptions.perks && (
+                    <p>
+                      <b contentEditable>Perks:</b>{" "}
+                      <span contentEditable>{Descriptions.perks}</span>
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
             </div>
           </div>
         </section>
-        {Descriptions.positionOverview.overview &&  (
-        <section className="positionOverview-share">
-          <h2>
-            <b contentEditable className="jd-sub-headings">Position Overview</b>
-          </h2>
-          <p contentEditable>{Descriptions.positionOverview.overview}</p>
-        </section> )}
-        
-        {
-  (Descriptions.responsibilities &&
-    Descriptions.responsibilities.length > 0 &&
-    Descriptions.responsibilities[0].responsibilitiesMsg !== "") && (
-      <section className="responsibilities-share">
-      <h2>
-        <b contentEditable className="jd-sub-headings">Responsibilities</b>
-      </h2>
-      <div>
-        {Descriptions.responsibilities.map((responsibilites) => (
-          <div contentEditable key={responsibilites.responsibilitiesId}>
-            {responsibilites.responsibilitiesMsg && (
-            <i className="fa-solid fa-arrow-right"></i>  )} {" "}
-            {responsibilites.responsibilitiesMsg}{" "}
-          
-          </div>
-        ))}
-      </div>
-    </section>
-    )
-  }
+        {Descriptions.positionOverview.overview && (
+          <section className="positionOverview-share">
+            <h2>
+              <b contentEditable className="jd-sub-headings">
+                Position Overview
+              </b>
+            </h2>
+            <p contentEditable>{Descriptions.positionOverview.overview}</p>
+          </section>
+        )}
 
-{
-(Descriptions.jobRequirements &&
-    Descriptions.jobRequirements.length > 0 &&
-    Descriptions.jobRequirements[0].jobRequirementMsg !== "") && (
-      <section className="requirements-share">
-      <h2>
-        <b contentEditable className="jd-sub-headings">Requirements</b>
-      </h2>
-      <div>
-        {Descriptions.jobRequirements.map((requirements) => (
-          <div contentEditable key={requirements.jobRequirementId}>
-            {requirements.jobRequirementMsg && (
-            <i className="fa-solid fa-arrow-right"></i> )} {" "}
-            {requirements.jobRequirementMsg}{" "}
-          </div>
-        ))}
-      </div>
-    </section>
-    )
-    }
+        {Descriptions.responsibilities &&
+          Descriptions.responsibilities.length > 0 &&
+          Descriptions.responsibilities[0].responsibilitiesMsg !== "" && (
+            <section className="responsibilities-share">
+              <h2>
+                <b contentEditable className="jd-sub-headings">
+                  Responsibilities
+                </b>
+              </h2>
+              <div>
+                {Descriptions.responsibilities.map((responsibilites) => (
+                  <div contentEditable key={responsibilites.responsibilitiesId}>
+                    {responsibilites.responsibilitiesMsg && (
+                      <i className="fa-solid fa-arrow-right"></i>
+                    )}{" "}
+                    {responsibilites.responsibilitiesMsg}{" "}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
+        {Descriptions.jobRequirements &&
+          Descriptions.jobRequirements.length > 0 &&
+          Descriptions.jobRequirements[0].jobRequirementMsg !== "" && (
+            <section className="requirements-share">
+              <h2>
+                <b contentEditable className="jd-sub-headings">
+                  Requirements
+                </b>
+              </h2>
+              <div>
+                {Descriptions.jobRequirements.map((requirements) => (
+                  <div contentEditable key={requirements.jobRequirementId}>
+                    {requirements.jobRequirementMsg && (
+                      <i className="fa-solid fa-arrow-right"></i>
+                    )}{" "}
+                    {requirements.jobRequirementMsg}{" "}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
-{
-(Descriptions.preferredQualifications &&
-    Descriptions.preferredQualifications.length > 0 &&
-    Descriptions.preferredQualifications[0].preferredQualificationMsg !== "") && (
-      <section className="preferred-qualifications-share">
-      <h2>
-        <b contentEditable className="jd-sub-headings">Preferred Qualifications</b>
-      </h2>
-      <div>
-        {Descriptions.preferredQualifications.map((qualifications) => (
-          <div contentEditable key={qualifications.preferredQualificationId}>
-            {qualifications.preferredQualificationMsg && (
-            <i className="fa-solid fa-arrow-right"></i> )} {" "}
-            {qualifications.preferredQualificationMsg}
-          </div>
-        ))}
-      </div>
-    </section>
-    )
-  }
-
-
+        {Descriptions.preferredQualifications &&
+          Descriptions.preferredQualifications.length > 0 &&
+          Descriptions.preferredQualifications[0].preferredQualificationMsg !==
+            "" && (
+            <section className="preferred-qualifications-share">
+              <h2>
+                <b contentEditable className="jd-sub-headings">
+                  Preferred Qualifications
+                </b>
+              </h2>
+              <div>
+                {Descriptions.preferredQualifications.map((qualifications) => (
+                  <div
+                    contentEditable
+                    key={qualifications.preferredQualificationId}
+                  >
+                    {qualifications.preferredQualificationMsg && (
+                      <i className="fa-solid fa-arrow-right"></i>
+                    )}{" "}
+                    {qualifications.preferredQualificationMsg}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
         <section className="preferred-qualifications-share">
-          <h2 contentEditable className="jd-sub-headings">Contact Person</h2>
+          <h2 contentEditable className="jd-sub-headings">
+            Contact Person
+          </h2>
           <div className="jd-employeeinfo">
             <div className="share-jd-contact-div">
-              <span contentEditable className="label">Name : </span> 
+              <span contentEditable className="label">
+                Name :{" "}
+              </span>
               <input
-                value={data?.name.split(" ")[0] }
+                value={data?.name.split(" ")[0]}
                 onChange={(e) => handleInputChange(e, "name")}
                 className="share-edm-input"
               />
             </div>
             <div className="share-jd-contact-div">
-              <span contentEditable className="label">Email : </span> 
+              <span contentEditable className="label">
+                Email :{" "}
+              </span>
               <input
                 value={data?.email}
                 onChange={(e) => handleInputChange(e, "email")}
                 className="share-edm-input"
-                style={{width:"220px"}}
+                style={{ width: "220px" }}
               />
             </div>
             <div className="share-jd-contact-div">
-              <span contentEditable className="label">Contact  Number : </span> 
+              <span contentEditable className="label">
+                Contact Number :{" "}
+              </span>
               <input
                 type="tel"
                 value={data?.contact}
@@ -321,13 +349,11 @@ const ShareDescription = ({ Descriptions }) => {
             </div>
           </div>
         </section>
-
       </div>
       <section className="apply-section-share">
         <button className="apply-button-share" onClick={generateAndShareImage}>
           Share Job Description
         </button>
-       
       </section>
     </main>
   );

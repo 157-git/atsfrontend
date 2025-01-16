@@ -31,6 +31,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
   const [filterOptions, setFilterOptions] = useState([]);
   const [formClosed, setFormClosed] = useState(false);
   const [searchCount, setSearchCount] = useState(0);
+  const [showJobRole, setShowJobRole] = useState();
 
   const limitedOptions = [
     ["candidateId", "Candidate Id"],
@@ -38,7 +39,6 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     ["jobDesignation", "Job Designation"],
     ["requirementId", "Requirement Id"],
     ["employeeId", "Employee Id"],
-
     ["candidateEmail", "Candidate Email"],
     ["commentForTL", "Comment For TL"],
     ["contactNumber", "Contact Number"],
@@ -231,12 +231,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     setShowResumeModal(false);
   };
 
-  const handleUpdateClick = (candidateId, employeeId, requirementId,candidateName,employeeName) => {
+  const handleUpdateClick = (candidateId, employeeId, requirementId,candidateName,employeeName,jobRole) => {
     setShowUpdateResponseID(candidateId);
     setShowEmployeeId(employeeId);
     setShowRequirementId(requirementId);
     setShowCandidateName(candidateName); 
     setShowEmployeeName(employeeName);
+    setShowJobRole(jobRole);
     setShowUpdateResponseForm(true);
   };
 
@@ -416,23 +417,6 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           )}
                         </div>
                       </div>
-
-                      {/* <select
-                      className="white-Btn"
-                      value={filterType}
-                      onChange={handleFilterTypeChange}
-                    >
-                      <option value="">Select Filter Type</option>
-                      <option value="candidateId">Candidate ID</option>
-                      <option value="candidateName">Candidate Name</option>
-                      <option value="requirementId">Requirement ID</option>
-                      <option value="requirementCompany">
-                        Requirement Company
-                      </option>
-                      <option value="jobDesignation">Job Designation</option>
-                      <option value="employeeName">Employee Name</option>
-                      <option value="employeeId">Employee ID</option>
-                    </select> */}
                     </div>
                   </div>
                   <div>
@@ -551,6 +535,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                       <th className="attendanceheading">Job Id</th>
                       <th className="attendanceheading">Applying Company</th>
                       <th className="attendanceheading">Job Designation</th>
+                      <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">Comment for TL</th>
                       <th className="attendanceheading">Last Status</th>
                       <th className="attendanceheading">Interview Round</th>
@@ -566,8 +551,6 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                       <th className="attendanceheading">Employee Name</th>
                       <th className="attendanceheading">Employee Mail Id</th>
                       <th className="attendanceheading">Employee Role</th>
-                      <th className="attendanceheading">Resume</th>
-                      <th className="attendanceheading">Manager Name</th>
                       <th className="attendanceheading">Action</th>
                     </tr>
                   </thead>
@@ -689,6 +672,20 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                               )}
                             </span>
                           </div>
+                        </td>
+
+                        <td className="tabledata">
+                          <button
+                            onClick={() => openResumeModal(data.resume)}
+                            style={{ background: "none", border: "none" }}
+                          >
+                            <i
+                              className="fas fa-eye"
+                              style={{
+                                color: data.resume ? "green" : "inherit",
+                              }}
+                            ></i>
+                          </button>
                         </td>
 
                         <td
@@ -841,39 +838,6 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           </div>
                         </td>
 
-                        <td className="tabledata">
-                          <button
-                            onClick={() => openResumeModal(data.resume)}
-                            style={{ background: "none", border: "none" }}
-                          >
-                            <i
-                              className="fas fa-eye"
-                              style={{
-                                color: data.resume ? "green" : "inherit",
-                              }}
-                            ></i>
-                          </button>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {highlightText(
-                            data.reportingManagerName || "",
-                            filterValue
-                          )}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                data.reportingManagerName || "",
-                                filterValue
-                              )}
-                            </span>
-                          </div>
-                        </td>
-
                         <td className=" TeamLead-main-table-td">
                           <button
                             className="lineUp-Filter-btn"
@@ -883,7 +847,8 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                                 data.employeeId,
                                 data.requirementId,
                                 data.candidateName,
-                                data.employeeName
+                                data.employeeName,
+                                data.jobRole
                               )
                             }
                           >
@@ -1000,6 +965,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                       requirementId={showRequirementId}
                       candidateName={showCandidateName}
                       employeeName={showEmployeeName}
+                      passedJobRole={showJobRole}
                       onClose={closeUpdateForm}
                       onSuccessAdd={onSuccessAdd}
                     />

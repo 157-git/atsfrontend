@@ -553,7 +553,7 @@ const ShortListedCandidates = ({
           ></i>
         </div>
         <h5 style={{ color: "gray", paddingTop: "5px" }}>
-          Team Details
+          Team Details jjj
         </h5>
 
         <div
