@@ -66,6 +66,7 @@ import AddTeamLeader from "../EmployeeSection/addTeamLeader";
 import AddManager from "../EmployeeSection/addManager";
 import ApplicantForm from "../Applicant/applicantFrom";
 import ShareProfileData from "../TeamLeader/shareProfileData";
+import { tr } from "date-fns/locale";
 
 const EmpDashboard = ({ userGroup }) => {
   const { userType } = useParams();
@@ -171,7 +172,6 @@ const EmpDashboard = ({ userGroup }) => {
     console.log("Logout clicked 03 in EmpDashboard");
     setLogoutTimestamp(timestamp);
   };
-console.log(logoutTimestamp);
 
   const handleSuccessfulDataAdditions = (check) => {
     setSuccessfulDataAdditions(check);
@@ -233,33 +233,33 @@ console.log(logoutTimestamp);
 
   const togglescheduleinterview = () => {
     resetAllToggles();
-    setscheduleinterview(!showscheduleinterview);
+    setscheduleinterview(true);
   };
   const toggelAddRecruiter = () => {
     resetAllToggles();
-    setShowAddEmployee(!showAddEmployee);
+    setShowAddEmployee(true);
     setIncentive(false);
   };
 
   const toggelDisplayNotPad = () => {
     resetAllToggles();
-    setShowNotePad(!showNotePad);
+    setShowNotePad(true);
     setIncentive(false);
   };
   const toggleReports = () => {
     resetAllToggles();
-    setShowReports(!showReports);
+    setShowReports(true);
     setIncentive(false);
   };
   const toggleMainReportDatapage = () => {
     resetAllToggles();
-    setshowMainReportDatapage(!showMainReportDatapage);
+    setshowMainReportDatapage(true);
     setIncentive(false);
   };
 
   const toggleAddJobDescription = () => {
     resetAllToggles();
-    setAddJobDescription(!addJobDescription);
+    setAddJobDescription(true);
     setIncentive(false);
   };
 
@@ -271,7 +271,7 @@ console.log(logoutTimestamp);
   /*Akash_Pawar_EmpDashboard_toggleShowShortListedCandidateData_23/07_LineNo_213*/
   const toggleShowShortListedCandidateData = () => {
     resetAllToggles();
-    setShortlistedCandidateData(!showShortlistedCandidateData);
+    setShortlistedCandidateData(true);
     setShowInterviewDate(false);
     setIncentive(false);
   };
@@ -363,19 +363,19 @@ console.log(logoutTimestamp);
   /* ArshadAttar_EmpDashboard_AddedPayrollToggeleFunction_10/07/2024_LineNo_198-202 */
   const togglePayRoll = () => {
     resetAllToggles();
-    setShowPayRoll(!showPayRoll);
+    setShowPayRoll(true);
   };
 
   // Swapnil_AddedEmployeeDetails_16/07
   const toggleEmployeeDetails = () => {
     resetAllToggles();
-    setShowEmployeeDetails(!showEmployeeDetails);
+    setShowEmployeeDetails(true);
   };
 
   /*Akash_Pawar_EmpDashboard_AddedAddCompanyToggle_11/07_LineNo_233-235*/
   const toggleAddCompany = () => {
     resetAllToggles();
-    setShowAddCompany(!showPayRoll);
+    setShowAddCompany(true);
   };
 
   const funForUpdateSelfCalling = () => {
@@ -394,16 +394,12 @@ console.log(logoutTimestamp);
   };
   const toggleEmployeeMasterSheet = () => {
     resetAllToggles();
-    setShowEmployeeMasterSheet(!showEmployeeMasterSheet);
+    setShowEmployeeMasterSheet(true);
   };
 
   const toggleCallingTrackerForm = () => {
     resetAllToggles();
-    setAddCandidate(!addCandidate);
-  };
-  const toggelHelp = () => {
-    resetAllToggles();
-    setshowHelp(!showHelp);
+    setAddCandidate(true);
   };
 
   /*Akash_Pawar_EmpDashboard_toggleShortListed(show interview candidate)_23/07_LineNo_345*/
@@ -417,38 +413,38 @@ console.log(logoutTimestamp);
 
   const toggleSelectCandidate = () => {
     resetAllToggles();
-    setSelectedCandidate(!selectCandidate);
+    setSelectedCandidate(true);
   };
 
   const toggleHoldCandidate = () => {
     resetAllToggles();
-    setHoldCandidate(!holdCandidate);
+    setHoldCandidate(true);
   };
 
   const toggleRejectedCandidate = () => {
     resetAllToggles();
-    setRejectedCandidate(!rejectedCandidate);
+    setRejectedCandidate(true);
   };
 
   const toggleJobDescription = () => {
     resetAllToggles();
-    setShowJobDiscriptions(!showJobDiscriptions);
+    setShowJobDiscriptions(true);
   };
 
   const toggleSelfCalling = () => {
     resetAllToggles();
-    setSelfCalling(!selfCalling);
+    setSelfCalling(true);
     setSuccessShare(true);
   };
 
   const toggelLineUp = () => {
     resetAllToggles();
-    setLineUp(!lineUp);
+    setLineUp(true);
   };
 
   const toggelResumeData = () => {
     resetAllToggles();
-    setShowResumeData(!showResumeData);
+    setShowResumeData(true);
   };
 
   const toggleAttendance = () => {
@@ -465,7 +461,7 @@ console.log(logoutTimestamp);
 
   const toggleAssigncolumns = () => {
     resetAllToggles();
-    setAssignColumns(!assignColumns);
+    setAssignColumns(true);
   };
 
   const toggleResumeLink = () => {
@@ -483,7 +479,7 @@ console.log(logoutTimestamp);
   };
   const toggleShareLink = () => {
     resetAllToggles();
-    setShowShareLink(!showShareLink);
+    setShowShareLink(true);
   };
   const toggleUpdateCallingTracker = () => {
     resetAllToggles();
@@ -514,70 +510,70 @@ console.log(logoutTimestamp);
 
   const toggleExcelCalling = () => {
     resetAllToggles();
-    setShowCallingExcel(!showCallingExcel);
+    setShowCallingExcel(true);
   };
 
   const toggeExcelCallingData = () => {
     resetAllToggles();
-    setShowCallingExcelList(!showCallingExcelList);
+    setShowCallingExcelList(true);
   };
 
   const toggelExcelLineup = () => {
     resetAllToggles();
-    setShowLineupExcelList(!showLineupExcelList);
+    setShowLineupExcelList(true);
   };
   const toggleSendCandidate = () => {
     resetAllToggles();
-    setshowSendClientMail(!showSendClientMail);
+    setshowSendClientMail(true);
   };
   const toggleInvoice = () => {
     resetAllToggles();
-    setShowInvoice(!showInvoice);
+    setShowInvoice(true);
   };
   const toggleInvoiceReport = () => {
     resetAllToggles();
-    setShowInvoiceReport(!showInvoiceReport);
+    setShowInvoiceReport(true);
   };
   const handleInvoicePdf = () => {
     resetAllToggles();
-    setShowInvoicePdf(!showInvoicePdf);
+    setShowInvoicePdf(true);
   };
   const toggleQuestionPaper = () => {
     resetAllToggles();
-    setShowQuestionpaper(!showQuestionpaper);
+    setShowQuestionpaper(true);
   };
 
   const toggleCapex = () => {
     resetAllToggles();
-    setShowCapex(!showCapex);
+    setShowCapex(true);
   };
   const toggeleRightsInstructions = () => {
     resetAllToggles();
-    setShowRightsInstruction(!showRightsInstruction);
+    setShowRightsInstruction(true);
   };
   const toggleTeamDetails = () => {
     resetAllToggles();
-    setShowTeamDetails(!showTeamDetails);
+    setShowTeamDetails(true);
   };
   const toggeleCompanyPolicy = () => {
     resetAllToggles();
-    setShowCompanyPolicy(!showCompanyPolicy);
+    setShowCompanyPolicy(true);
   };
   const toggeleIssueSolving = () => {
     resetAllToggles();
-    setShowIssueSolving(!showIssueSolving);
+    setShowIssueSolving(true);
   };
   const toggelePainArea = () => {
     resetAllToggles();
-    setShowPainArea(!showPainArea);
+    setShowPainArea(true);
   };
   const toggelSubscriptions = () => {
     resetAllToggles();
-    setShowSubscription(!showSubscription);
+    setShowSubscription(true);
   };
   const toggleBilling = () => {
     resetAllToggles();
-    setShowBilling(!showBilling);
+    setShowBilling(true);
   };
   const togglePayment = () => {
     resetAllToggles();
@@ -585,16 +581,16 @@ console.log(logoutTimestamp);
   };
   const toggeleInterviewForm = () => {
     resetAllToggles();
-    setShowInterviewForm(!showInterviewForm);
+    setShowInterviewForm(true);
   };
   const toggleAllInterviewResponse = () => {
     resetAllToggles();
-    setShowAllInterviewResponses(!showAllInterviewResponses);
+    setShowAllInterviewResponses(true);
   };
 
   const toggelCandidateHistory = () => {
     resetAllToggles();
-    setShowCandidateHistory(!showCandidateHistory);
+    setShowCandidateHistory(true);
   };
 
   const togglePerformanceImprovement = () => {
@@ -620,7 +616,7 @@ console.log(logoutTimestamp);
 
   const toggleSharedProfiles = ()=>{
     resetAllToggles();
-    setShowSharedProfile(!showSharedProfile)
+    setShowSharedProfile(true)
   };
 
   return (

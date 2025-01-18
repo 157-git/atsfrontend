@@ -1395,7 +1395,7 @@ borderColor:"#cccccc"
                 <div className="dw-resume-div">
                   <h3>Timer is paused. Click Resume to continue...</h3>
                   <button
-                    className="profile-back-button"
+                    className="profile-resume-button"
                     onClick={handleResume}
                   >
                     Resume

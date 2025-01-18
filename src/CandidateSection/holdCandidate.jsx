@@ -10,6 +10,7 @@ import Loader from "../EmployeeSection/loader";
 import { toast } from "react-toastify";
 import { Pagination } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
+import limitedOptions from "../helper/limitedOptions";
 // SwapnilRokade_HoldCandidate_ModifyFilters_47to534_11/07
 const HoldCandidate = ({
   updateState,
@@ -78,52 +79,6 @@ const HoldCandidate = ({
   //akash_pawar_HoldCandidate_ShareFunctionality_18/07_67
 
   const navigator = useNavigate();
-  // prachi Hold candidate filter 11/09
-
-  const limitedOptions = [
-    ["alternateNumber", "Alternate Number"],
-    ["availabilityForInterview", "Availability For Interview"],
-    ["callingFeedback", "Calling Feedback"],
-    ["candidateAddedTime", "Candidate Added Time"],
-    ["candidateEmail", "Candidate Email"],
-    ["candidateId", "Candidate Id"],
-    ["candidateName", "Candidate Name"],
-    ["communicationRating", "Communication Rating"],
-    ["companyName", "Company Name"],
-    ["contactNumber", "Contact Number"],
-    ["currentCTCLakh", "Current CTC (Lakh)"],
-    ["currentCTCThousand", "Current CTC (Thousand)"],
-    ["currentLocation", "Current Location"],
-    ["date", "Date"],
-    ["dateOfBirth", "Date Of Birth"],
-    ["empId", "Emp Id"],
-    ["expectedCTCLakh", "Expected CTC (Lakh)"],
-    ["expectedCTCThousand", "Expected CTC (Thousand)"],
-    ["experienceMonth", "Experience Month"],
-    ["experienceYear", "Experience Year"],
-    ["extraCertification", "Extra Certification"],
-    ["feedBack", "FeedBack"],
-    ["finalStatus", "Final Status"],
-    ["fullAddress", "Full Address"],
-    ["gender", "Gender"],
-    ["holdingAnyOffer", "Holding Any Offer"],
-    ["incentive", "Incentive"],
-    ["interviewTime", "Interview Time"],
-    ["jobDesignation", "Job Designation"],
-    ["msgForTeamLeader", "Message For Team Leader"],
-    ["noticePeriod", "Notice Period"],
-    ["offerLetterMsg", "Offer Letter Message"],
-    ["oldEmployeeId", "Old Employee Id"],
-    ["qualification", "Qualification"],
-    ["recruiterName", "Recruiter Name"],
-    ["relevantExperience", "Relevant Experience"],
-    ["requirementCompany", "Requirement Company"],
-    ["requirementId", "Job Id"],
-    ["selectYesOrNo", "Status"],
-    ["sourceName", "Source Name"],
-    ["yearOfPassing", "Year Of Passing"],
-  ];
-
   const { userType } = useParams();
 
   const [pageSize, setPageSize] = useState(20);

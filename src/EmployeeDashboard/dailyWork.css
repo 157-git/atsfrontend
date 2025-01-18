@@ -81,11 +81,9 @@
 
 .logout-btn {
   cursor: pointer;
-
   border-radius: 60%;
   height: 30px;
   width: 40px;
-
   background-color: var(--button-color);
 }
 
@@ -285,7 +283,8 @@
   display: flex;
   flex-direction: column;
 }
-.profile-back-button {
+
+.profile-resume-button {
   border-radius: 15px;
   font-size: 16px;
   height: 30px;
@@ -295,17 +294,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: var(--button-color); */
-  color: var(--button-text-color);
-  /* border: 1px solid gray; */
+  background-color: var(--primary-button-bg);
+  color: var(--button-txt-color);
+  border: 1px solid var(--primary-border);
 }
 
-/* .profile-back-button:hover {
-    background-color: var(--button-bg-hover-color);
-    color: var(--text-hover-color);
-    border: 1px solid var(--button-border-color);
-  }
-   */
+.profile-resume-button:hover {
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
+  border: 1px solid var(--button-border-color);
+}
 
 /* Waiting image styling */
 .dw-waiting-img {
@@ -424,6 +422,21 @@
   color: var(--button-txt-hover-color);
 }
 .mainNotDiv {
-  max-height: 65vh;
+  max-height: 75vh;
   overflow-y: scroll;
+}
+
+
+:where(.css-dev-only-do-not-override-ni1kz0).ant-notification-bottomRight.ant-notification-stack
+.ant-notification-notice-wrapper {
+  background-color: rgb(214, 213, 213);
+  color: white;
+  border: 1px solid rgb(167, 165, 165);
+}
+
+:where(.css-dev-only-do-not-override-ni1kz0).ant-notification
+ .ant-notification-notice-wrapper
+ .ant-notification-notice-with-icon
+ .ant-notification-notice-message { 
+  font-weight: bold;
 }

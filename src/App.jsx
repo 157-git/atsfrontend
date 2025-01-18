@@ -151,10 +151,11 @@ const App = () => {
             element={<AddEmployee />}
           ></Route>
 
-          {/* <Route
+          <Route
             path="/157industries/:encodedParams/candidate-form"
             element={<ApplicantForm2 loginEmployeeName={loginEmployeeName} />}
-          ></Route> */}
+          ></Route>
+
           <Route path="/thank-you" element={<ThankYouPage></ThankYouPage>}>
           </Route>
 

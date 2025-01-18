@@ -26,7 +26,6 @@ const UpdateResponseFrom = ({
   const [errors, setErrors] = useState({});
   const [performanceId, setPerformanceId] = useState();
 
- // Initialize formData with dynamic logic
  const [formData, setFormData] = useState(() => {
   let baseFormData = {
     interviewRound: "",
@@ -39,28 +38,21 @@ const UpdateResponseFrom = ({
     callingTracker: { candidateId: candidateId },
   };
 
-   // Conditional logic for setting employee or teamLeader
    if (passedJobRole === "Recruiters") {
-    console.log("Passed Job Role is Recruiters");
     baseFormData = {
       ...baseFormData,
       employee: { employeeId: passedEmployeeId },
-      teamLeader: null, // Ensure teamLeader is null
+      teamLeader: null, 
     };
   } else if (passedJobRole === "TeamLeader") {
-    console.log("Passed Job Role is TeamLeader");
-    
     baseFormData = {
       ...baseFormData,
       teamLeader: { teamLeaderId: passedEmployeeId },
-      employee: null, // Ensure employee is null
+      employee: null, 
     };
   }
-
   return baseFormData;
 });
-
-
 
   useEffect(() => {
     fetchDataToUpdate();
@@ -103,7 +95,6 @@ const UpdateResponseFrom = ({
     return errors;
   };
 
-  // Define formatDateToIST function
   const formatDateToIST = (date) => {
     const options = {
       timeZone: "Asia/Kolkata",
@@ -134,9 +125,7 @@ const UpdateResponseFrom = ({
     }
 
     try {
-      // Save new interview response
       // added by sahil karnekar date 4-12-2024
-
       console.log(
         "Final formData being sent to API:",
         JSON.stringify(formData, null, 2)

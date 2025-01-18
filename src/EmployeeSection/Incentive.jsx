@@ -101,7 +101,7 @@ const Incentive = ({onCloseIncentive}) => {
           <span id="incetive-heading">Incentive Table</span>
         </div>
         <div className="incentive-close-btn-div">
-          <button className="incentive-close-btn" onClick={onCloseIncentive}>Close</button>
+          <button className="incentive-close-btn" onClick={onCloseIncentive}>Back</button>
         </div>{" "}
       </div>
       {error && <div className="error-message">{error}</div>}

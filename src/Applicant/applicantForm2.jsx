@@ -92,8 +92,11 @@ function ApplicantForm2({ loginEmployeeName }) {
     incentive: "",
     oldEmployeeId: "",
     distance: "",
+    task: "",
+    position: "",
     lineUp: {
       experienceYear: "",
+      experienceMonth: "",
       relevantExperience: "",
       currentCTCLakh: "",
       expectedCTCLakh: "",
@@ -110,7 +113,6 @@ function ApplicantForm2({ loginEmployeeName }) {
       offerdetails: "",
       companyName: "",
       offersalary: "",
-      experienceMonth: "",
       dateOfBirth: "",
       extraCertification: "",
       feedBack: "",
@@ -253,6 +255,8 @@ function ApplicantForm2({ loginEmployeeName }) {
     const requiredFields = [
       "candidateName",
       "contactNumber",
+      "task",
+      "position",
       "candidateEmail",
       "lineUp.currentCTCLakh",
       "lineUp.expectedCTCLakh",
@@ -347,32 +351,10 @@ function ApplicantForm2({ loginEmployeeName }) {
           },
         }
       );
-      console.log("Form submitted successfully:", response.data);
-      setIsSubmitted(true);
-      const emitData = {
-        date: getFormattedDateTime(),
-        candidateName: formData.candidateName,
-        contactNumber: formData.contactNumber,
-        candidateEmail: formData.candidateEmail,
-        jobDesignation: formData.jobDesignation,
-        currentLocation: formData.currentLocation,
-        recruiterName: formData.recruiterName,
-        alternateNumber: formData.alternateNumber,
-        sourceName: "Applicant Form",
-        requirementId: formData.requirementId,
-        requirementCompany: formData.requirementCompany,
-        communicationRating: formData.communicationRating,
-        fullAddress: formData.fullAddress,
-        callingFeedback: formData.callingFeedback,
-        selectYesOrNo: "Yet To Confirm",
-        incentive: formData.incentive,
-        oldEmployeeId: formData.oldEmployeeId,
-        distance: formData.distance,
-        employeeId:employeeId,
-        userType:userType,
-      };
 
-      socket.emit("save_applicant_data", emitData);
+      console.log("Form submitted successfully:", response.data);
+      // socket.emit("save_applicant_data", updatedFormData);
+      setIsSubmitted(true);
       navigator("/thank-you");
       setTimeout(() => {
         setFormData(initialFormData);
@@ -415,31 +397,33 @@ function ApplicantForm2({ loginEmployeeName }) {
       case "contactNumber":
         if (!value.trim()) {
           error = "Enter Your Contact Number";
-        } else if (!/^\d{11}$/.test(value)) {
-          error = "Contact Number must be exactly 10 digits";
+        } else if (!/^\d{6,16}$/.test(value)) {
+          // Allow 6 to 11 digits
+          error = "Contact Number must be between 6 and 11 digits.";
         }
         break;
 
-        case "lineUp.dateOfBirth":
-          if (!value.trim()) {
-            error = "Enter Your Birth Date";
-          } else {
-            const dob = new Date(value);
-            const today = new Date();
-            let age = today.getFullYear() - dob.getFullYear(); // Changed from const to let
-            const month = today.getMonth() - dob.getMonth();
-        
-            if (month < 0 || (month === 0 && today.getDate() < dob.getDate())) {
-              age--; // Now valid because 'age' is a let
-            }
-        
-            if (age < 18) {
-              error = "You must be at least 18 years old to apply.";
-            } else if (isNaN(dob.getTime())) { // Improved validation for invalid date
-              error = "Enter a valid Birth Date";
-            }
+      case "lineUp.dateOfBirth":
+        if (!value.trim()) {
+          error = "Enter Your Birth Date";
+        } else {
+          const dob = new Date(value);
+          const today = new Date();
+          let age = today.getFullYear() - dob.getFullYear(); // Changed from const to let
+          const month = today.getMonth() - dob.getMonth();
+
+          if (month < 0 || (month === 0 && today.getDate() < dob.getDate())) {
+            age--; // Now valid because 'age' is a let
           }
-          break;
+
+          if (age < 18) {
+            error = "You must be at least 18 years old to apply.";
+          } else if (isNaN(dob.getTime())) {
+            // Improved validation for invalid date
+            error = "Enter a valid Birth Date";
+          }
+        }
+        break;
 
       case "candidateEmail":
         if (!value.trim()) {
@@ -456,24 +440,20 @@ function ApplicantForm2({ loginEmployeeName }) {
       case "jobDesignation":
         if (!value.trim()) {
           error = "Enter Your Job Designation";
-        } else if (
-          !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
-        ) {
-          error = "Enter a valid Email Address";
+        } else if (!/^[a-zA-Z\s]+$/.test(value)) {
+          error = "Job designation must contain only letters and spaces.";
         } else if (value.length > 100) {
-          error = "Company name cannot exceed 100 characters.";
+          error = "Job designation cannot exceed 100 characters.";
         }
         break;
 
       case "currentLocation":
         if (!value.trim()) {
-          error = "Enter The Current Location";
-        } else if (
-          !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
-        ) {
-          error = "Enter a valid Email Address";
+          error = "Enter Your Job Designation";
+        } else if (!/^[a-zA-Z\s]+$/.test(value)) {
+          error = "Job designation must contain only letters and spaces.";
         } else if (value.length > 100) {
-          error = "Company name cannot exceed 100 characters.";
+          error = "Job designation cannot exceed 100 characters.";
         }
         break;
 
@@ -540,14 +520,11 @@ function ApplicantForm2({ loginEmployeeName }) {
         }
         break;
 
-      case "questions[0].question3":
+      case "position":
         if (!value.trim()) {
           error = "You can only provide up to 200 words.";
-        } else {
-          const wordCount = value.trim().split(/\s+/).length;
-          if (wordCount > 200) {
-            error = "You can only provide up to 100 words.";
-          }
+        } else if (value.trim().split(/\s+/).length > 200) {
+          error = "Only 100 Numbers are accept";
         }
         break;
 
@@ -556,22 +533,20 @@ function ApplicantForm2({ loginEmployeeName }) {
           error = "Please select whether you are holding any offer.";
         }
         break;
-      case "questions[0].question1":
+
+      case "task":
         if (!value.trim()) {
           error = "You can only provide up to 200 words";
-        } else {
-          const wordCount = value.trim().split(/\s+/).length;
-          if (wordCount > 100) {
-            error = "You can only enter up to 200 words.";
-          }
+        } else if (value.trim().split(/\s+/).length > 200) {
+          error = "Only 100 Numbers are accept";
         }
         break;
 
       case "lineUp.experienceYear":
         if (!value.trim()) {
           error = "Experience Month is required.";
-        } else if (value < 0 || value > 12) {
-          error = "Month must be between 0 and 12.";
+        } else if (value < 0 || value > 11) {
+          error = "Month must be between 0 and 11.";
         }
         break;
 
@@ -612,9 +587,10 @@ function ApplicantForm2({ loginEmployeeName }) {
 
       case "lineUp.noticePeriod":
         if (!value.trim()) {
-          error = "Enter Your Notice Period";
-        } else if (!/^\d{10}$/.test(value)) {
-          error = "Only Alphabets and Spaces are allowed";
+          error = "Enter Your Contact Number";
+        } else if (!/^\d{2,5}$/.test(value)) {
+          // Allow 6 to 11 digits
+          error = "Notice Period must  be 2 or 5 digits.";
         }
         break;
       case "lineUp.availabilityForInterview":
@@ -639,29 +615,27 @@ function ApplicantForm2({ loginEmployeeName }) {
           error = "Select Gender";
         }
         break;
-      case "lineUp.companyName":
-        if (!value.trim()) {
-          error = "Enter The Company Name";
-        } else if (/[^a-zA-Z\s]/.test(value)) {
-          error = "Only Alphabets and Spaces are allowed";
-        }
-        break;
-      case "lineUp.offersalary":
-        if (!value.trim()) {
-          error = "Enter The salary";
-        } else if (!/^\d{10}$/.test(value)) {
-          error = "Only Number can Accept ";
-        }
-        break;
-      case "lineUp.offerdetails":
-        if (!value.trim()) {
-          error = "Enter The Offer details.";
-        } else if (/[^a-zA-Z\s]/.test(value)) {
-          error = "Only Alphabets and Spaces are allowed.";
-        } else if (value.split(/\s+/).length > 200) {
-          error = "Offer details cannot exceed 200 words.";
-        }
-        break;
+      // case "lineUp.companyName":
+      //   if (!value.trim()) {
+      //     error = "Enter The Company Name";
+      //   } else if (/[^a-zA-Z\s]/.test(value)) {
+      //     error = "Only Alphabets and Spaces are allowed";
+      //   }
+      //   break;
+      // case "lineUp.offersalary":
+      //   if (!value.trim()) {
+      //     error = "Only Accepted Numbers.";
+      //   }a
+      //   break;
+      // case "lineUp.offerdetails":
+      //   if (!value.trim()) {
+      //     error = "Enter The Offer details.";
+      //   } else if (/[^a-zA-Z\s]/.test(value)) {
+      //     error = "Only Alphabets and Spaces are allowed.";
+      //   } else if (value.split(/\s+/).length > 200) {
+      //     error = "Offer details cannot exceed 200 words.";
+      //   }
+      //   break;
 
       default:
         break;
@@ -747,7 +721,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   name="contactNumber"
                   value={formData.contactNumber}
                   onChange={handleChange}
-                  maxLength={11}
+                  maxLength={16}
                   required
                 />
               </div>
@@ -1286,42 +1260,32 @@ function ApplicantForm2({ loginEmployeeName }) {
             </div>
 
             <div className="form-group-December">
-              <label>What Motivated You To Apply For This Position ? </label>
+              <label>
+                How you Prioritize Your Task When Working On Multiple Projects
+              </label>
               <textarea
-                name="questions[0].question1"
-                className="form-textfield"
-                placeholder="Your motivation for applying"
-                value={formData.questions[0].question1}
+                name="task"
+                placeholder="Details about the offer"
+                value={formData.task}
                 onChange={handleChange}
-                maxLength={200}
                 rows="6"
-                required
+                className="form-textfield"
               />
-              {errors["questions[0].question1"] && (
-                <span className="error">
-                  {errors["questions[0].question1"]}
-                </span>
-              )}
+              {errors["task"] && <div className="error">{errors["task"]}</div>}
             </div>
 
             <div className="form-group-December">
-              <label>
-                How you Prioritize Your Task When Working On Multiple Projects ?
-              </label>
+              <label>What Motivated You To Apply For This Position</label>
               <textarea
-                className="form-textfield"
-                name="questions[0].question3"
-                placeholder="Your approach to deadline management"
-                value={formData.questions[0].question3}
+                name="position"
+                placeholder="Details about the offer"
+                value={formData.position}
                 onChange={handleChange}
-                maxLength={200}
                 rows="6"
-                required
+                className="form-textfield"
               />
-              {errors["questions[0].question3"] && (
-                <span className="error">
-                  {errors["questions[0].question3"]}
-                </span>
+              {errors["position"] && (
+                <div className="error">{errors["position"]}</div>
               )}
             </div>
 
@@ -1363,7 +1327,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   id="photoUpload"
                   name="lineUp.photo"
                   onChange={handleChange}
-                  accept=".pdf,.doc,.docx"
+                  accept=".jpng,.png,.jpg"
                 />
                 {photoSelected && (
                   <FontAwesomeIcon
