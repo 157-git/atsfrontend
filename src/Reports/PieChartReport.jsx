@@ -91,7 +91,9 @@ setCurrentDate(getFormattedDateTime())
 
             <div className="subdivforcharts">
             <div className="piecontainer">
-          <Pie data={chartData} />
+          <Pie 
+          className='newsahilcanvas'
+          data={chartData} />
           </div>
 
           <div className='newIndexDiv'>

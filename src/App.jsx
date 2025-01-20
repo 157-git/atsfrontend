@@ -71,6 +71,11 @@ const applySavedColors = () => {
     { variable: "--accent-color-1" },
     { variable: "--accent-color-2" },
     { variable: "--filter-button-txt" },
+    { variable: "--table-header-bg" },
+    { variable: "--profile-txt" },
+    { variable: "--notification-icon-background" },
+    { variable: "--notification-badge-background" },
+    { variable: "--notification-icon-color" },
   ];
 
   if (bgColor)

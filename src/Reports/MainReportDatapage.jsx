@@ -633,7 +633,7 @@ const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
                             />
                             <List.Item.Meta
                               avatar={
-                                <Skeleton.Avatar loading={fetchRecruitersImages} active >
+                                // <Skeleton.Avatar loading={fetchRecruitersImages} active >
                                 <Avatar
                                   src={
                                     // recruiter.profileImage
@@ -643,7 +643,7 @@ const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
                                     allImagesForRecruiters[index] !== null ? allImagesForRecruiters[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
                                   }
                                 />
-                                </Skeleton.Avatar>
+                                // </Skeleton.Avatar>
                               }
                               title={recruiter.employeeName}
                             />

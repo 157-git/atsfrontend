@@ -1,0 +1,1000 @@
+// Name : Shubhangi Mahadev Metkari
+// Date : 24-10-2024
+//Task: save the Interview Form data.
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import "./InterviewForm.css";
+import { API_BASE_URL } from "../api/api";
+import { toast } from "react-toastify";
+import Loader from "../EmployeeSection/loader";
+
+const InterviewForm = ({ toggleAllInterviewResponse }) => {
+  const [formData, setFormData] = useState({
+    candidateId: "",
+    candidateName: "",
+    requirementId: "",
+    companyName: "",
+    designation: "",
+    interviewType: "",
+    interviewStatus: "",
+    interviewerName: "",
+    interviewDuration: "",
+    questionsAsked: [""],
+    unansweredQuestions: [""],
+    comments: "",
+    reasonForNotAttend: "",
+    requestReschedule: "",
+    attendingStatus: "",
+    responseGiven: "",
+    comment: "",
+  });
+
+  const initialInterviewDataState = {
+    jobDesignation: "",
+    requirementId: "",
+    requirementCompany: "",
+  };
+
+  const { employeeId } = useParams();
+  const [interviewData, setInterviewData] = useState(initialInterviewDataState);
+  const [showReminder, setShowReminder] = useState(false);
+  const [showAdditionalFields, setShowAdditionalFields] = useState(false);
+  const [showNoFields, setShowNoFields] = useState(false);
+  const [showYetToBeConfirmedFields, setShowYetToBeConfirmedFields] =
+    useState(false);
+  const [errors, setErrors] = useState({});
+
+  const [requirementOptions, setRequirementOptions] = useState([]);
+  const [candidateData, setCandidateData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [newCandidateData, setNewCandidateData] = useState({
+    candidateId: "",
+    candidateName: "",
+    candidateInterview: "",
+    candidateInterviewTime: "",
+  });
+
+  useEffect(() => {
+    fetchRequirementOptions();
+  }, [employeeId]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleStatusChange = (e) => {
+    const { value } = e.target;
+    setFormData({
+      ...formData,
+      interviewStatus: value,
+    });
+    if (value === "Yes") {
+      setShowReminder(false);
+      setShowAdditionalFields(true);
+      setShowNoFields(false);
+      setShowYetToBeConfirmedFields(false);
+    } else if (value === "NO") {
+      setShowReminder(false);
+      setShowAdditionalFields(false);
+      setShowNoFields(true);
+      setShowYetToBeConfirmedFields(false);
+    } else if (value === "Yet to be confirmed") {
+      setShowReminder(false);
+      setShowAdditionalFields(false);
+      setShowNoFields(false);
+      setShowYetToBeConfirmedFields(true);
+    } else {
+      setShowReminder(true);
+      setShowAdditionalFields(false);
+      setShowNoFields(false);
+      setShowYetToBeConfirmedFields(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    setLoading(true);
+    e.preventDefault();
+    setFormData((prevState) => ({
+      ...prevState,
+      ...newCandidateData,
+      ...interviewData,
+    }));
+    setFormData((prevState) => ({
+      ...prevState,
+      ...newCandidateData,
+      ...interviewData,
+    }));
+
+    if (!formData.candidateId || !formData.requirementId) {
+      console.error("Candidate ID or Requirement ID is not set.");
+      toast.error("Please Select Job Id & Candidate Id");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.post(`${API_BASE_URL}/save-interview-data`, {
+        candidateId: formData.candidateId,
+        requirementId: formData.requirementId,
+        requirementCompany: formData.companyName,
+        jobDesignation: formData.designation,
+        candidateName: formData.candidateName,
+        interviewType: formData.interviewType,
+        interviewStatus: formData.interviewStatus,
+        interviewerName: formData.interviewerName,
+        interviewDuration: formData.interviewDuration,
+        questionsAsked: formData.questionsAsked,
+        unansweredQuestions: formData.unansweredQuestions,
+        comments: formData.comments,
+        reasonForNotAttend: formData.reasonForNotAttend,
+        requestReschedule: formData.requestReschedule,
+        attendingStatus: formData.attendingStatus,
+        responseGiven: formData.responseGiven,
+        comment: formData.comment,
+      });
+      console.log("Response:", response.data);
+      setLoading(true);
+      toast.success("Interview Question Added Successfully...");
+
+      setFormData({
+        candidateId: "",
+        candidateName: "",
+        requirementId: "",
+        companyName: "",
+        designation: "",
+        interviewType: "",
+        interviewStatus: "",
+        interviewerName: "",
+        interviewDuration: "",
+        questionsAsked: [""],
+        unansweredQuestions: [""],
+        comments: "",
+        reasonForNotAttend: "",
+        requestReschedule: "",
+        attendingStatus: "",
+        responseGiven: "",
+        comment: "",
+      });
+
+      setNewCandidateData({
+        candidateId: "",
+        candidateName: "",
+        candidateInterview: "",
+        candidateInterviewTime: "",
+      });
+      setInterviewData(initialInterviewDataState);
+      setShowReminder(false);
+      setShowAdditionalFields(false);
+      setShowNoFields(false);
+      setShowYetToBeConfirmedFields(false);
+    } catch (error) {
+      console.error("Error submitting form", error);
+      toast.error("An error occurred: " + error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch available job requirements for dropdown
+  const fetchRequirementOptions = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/company-details`);
+      setRequirementOptions(response.data);
+    } catch (error) {
+      console.error("Error fetching requirement options:", error);
+    }
+  };
+
+  // Fetch candidate details based on selected job ID
+  const fetchRequirementIdCandidate = async (requirementId) => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/candidate-details/${requirementId}`
+      );
+      setCandidateData(response.data);
+    } catch (error) {
+      console.error("Error fetching candidate details:", error);
+    }
+  };
+
+  // Handle Job ID selection and fetch company and designation details
+  const handleRequirementChange = (e) => {
+    const { value } = e.target;
+    const selectedRequirement = requirementOptions.find(
+      (requirement) => requirement.requirementId === parseInt(value)
+    );
+
+    if (selectedRequirement) {
+      // Update the form data with selected job details
+      setFormData((prevData) => ({
+        ...prevData,
+        requirementId: selectedRequirement.requirementId,
+        companyName: selectedRequirement.companyName,
+        designation: selectedRequirement.designation,
+      }));
+
+      // Fetch related candidates for the selected job ID
+      fetchRequirementIdCandidate(selectedRequirement.requirementId);
+    }
+  };
+
+  // Handle Candidate ID selection and fetch candidate details
+  const handleCandidateChange = (e) => {
+    const { value } = e.target;
+    const selectedCandidate = candidateData.find(
+      (candidate) => candidate[0] === parseInt(value)
+    );
+
+    if (selectedCandidate) {
+      setFormData((prevData) => ({
+        ...prevData,
+        candidateId: selectedCandidate[0], // Set the selected candidate ID
+        candidateName: selectedCandidate[1],
+        candidateInterview: selectedCandidate[2],
+        candidateInterviewTime: selectedCandidate[3],
+      }));
+    }
+  };
+
+  // Function to handle input changes
+  const handleUnansweredQuestionChange = (index, value) => {
+    const updatedQuestions = [...formData.unansweredQuestions];
+    updatedQuestions[index] = value; // Update the specific question
+    setFormData({
+      ...formData,
+      unansweredQuestions: updatedQuestions, // Set the updated array
+    });
+  };
+
+  // Function to handle changes in the question input fields
+  const handleQuestionChange = (index, value) => {
+    const updatedQuestions = [...formData.questionsAsked];
+    updatedQuestions[index] = value; // Update the specific question
+    setFormData({
+      ...formData,
+      questionsAsked: updatedQuestions, // Set the updated array back to the state
+    });
+  };
+
+  // Function to add a new input field
+  const addNewQuestionField = () => {
+    setFormData({
+      ...formData,
+      questionsAsked: [...formData.questionsAsked, ""],
+    });
+  };
+
+  const addNewQuestionFieldforunans = () => {
+    setFormData({
+      ...formData,
+      unansweredQuestions: [...formData.unansweredQuestions, ""],
+    });
+  };
+
+  return (
+    <div>
+      {loading ? (
+        <div className="register">
+          <Loader></Loader>
+        </div>
+      ) : (
+        <>
+          <form onSubmit={handleSubmit}>
+            <div className="dhann-container">
+              <div className="card left-card">
+                <div className="dhansform-group">
+                  <div className="dhansform-label-input">
+                    <div className="dhansform-label">
+                      <label>Job Id</label>
+                    </div>
+
+                    <div>
+                      <select
+                        id="requirementId"
+                        name="requirementId"
+                        value={formData.requirementId}
+                        onChange={handleRequirementChange}
+                      >
+                        <option value="">Select Job ID</option>
+                        {requirementOptions.map((option) => (
+                          <option
+                            key={option.requirementId}
+                            value={option.requirementId}
+                          >
+                            {option.requirementId} - {option.companyName}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div className="dhansform-group">
+                  <div className="dhansform-label-input">
+                    <div className="dhansform-label">
+                      <label>Company Name : </label>
+                    </div>
+                    <div className="job-id-side-input">
+                      <input
+                        type="text"
+                        id="requirementCompany"
+                        name="requirementCompany"
+                        value={formData.companyName}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="dhansform-group">
+                  <div className="dhansform-label-input">
+                    <div className="dhansform-label">
+                      <label>Designation:</label>
+                    </div>
+                    <div className="job-id-side-input">
+                      <input
+                        type="text"
+                        id="jobDesignation"
+                        name="jobDesignation"
+                        value={formData.designation}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="dhansform-group">
+                  <div className="dhansform-label-input">
+                    <div className="dhansform-label">
+                      <label>Candidate Id</label>
+                    </div>
+                    <div>
+                      <select
+                        id="candidateId"
+                        name="candidateId"
+                        value={formData.candidateId}
+                        onChange={handleCandidateChange}
+                      >
+                        <option value="">Select Candidate ID</option>
+                        {Array.isArray(candidateData) &&
+                          candidateData.map((option) => (
+                            <option key={option[0]} value={option[0]}>
+                              {option[0]} -{option[1]}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div className="dhansform-group">
+                  <div className="dhansform-label-input">
+                    <div className="dhansform-label">
+                      <label>Candidate Name</label>
+                    </div>
+                    <div className="job-id-side-input">
+                      <input
+                        type="text"
+                        id="candidateName"
+                        name="candidateName"
+                        value={formData.candidateName}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="dhansform-group">
+                  <div className="dhansform-label-input">
+                    <div className="dhansform-label">
+                      <label>Interview Schedule Time:</label>
+                    </div>
+                    <div className="job-id-side-input">
+                      <input
+                        type="text"
+                        id="candidateInterviewTime"
+                        name="candidateInterviewTime"
+                        value={formData.candidateInterviewTime}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="dhansform-group">
+                  <div className="dhansform-label-input">
+                    <div className="dhansform-label">
+                      <label>Interview Type:</label>
+                    </div>
+                    <div className="job-id-side-input">
+                      <input
+                        type="text"
+                        id="candidateInterview"
+                        name="candidateInterview"
+                        value={formData.candidateInterview}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                  {/* Arshad Attar Commented This 20-10-2024 */}
+                  {/* <div className='interview-question-view-btn'>
+                <button className='submit-button' onClick={toggleAllInterviewResponse}>View all Responses</button>
+              </div> */}
+                </div>
+              </div>
+
+              <div className="SampleBhagya">
+                <div className="card right-card">
+                  <div className="dhansform-group">
+                    <div className="dhansform-label-input">
+                      <div className="dhansform-label">
+                        <label>Interview Status:</label>
+                      </div>
+                      <div className="dhansform-input">
+                        <select
+                          name="interviewStatus"
+                          value={formData.interviewStatus}
+                          onChange={handleStatusChange}
+                          className="bhagyainput"
+                        >
+                          <option value="">Select Status</option>
+                          <option value="Yes">Yes</option>
+                          <option value="NO">No</option>
+                          <option value="Yet to be confirmed">
+                            Yet to be confirmed
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  {showAdditionalFields && (
+                    <div>
+                      {/* Additional fields for "Yes" status */}
+                      <div className="dhansform-group">
+                        <div className="dhansform-label-input">
+                          <div className="dhansform-label">
+                            <label>Who has taken the interview:</label>
+                          </div>
+                          <div className="dhansform-input">
+                            <input
+                              type="text"
+                              name="interviewerName"
+                              value={formData.interviewerName}
+                              onChange={handleChange}
+                              placeholder="Name of the interviewer"
+                              className="bhagyainput"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="dhansform-group">
+                        <div className="dhansform-label-input">
+                          <div className="dhansform-label">
+                            <label>Duration of the interview:</label>
+                          </div>
+                          <div className="dhansform-input">
+                            <input
+                              type="text"
+                              name="interviewDuration"
+                              value={formData.interviewDuration}
+                              onChange={handleChange}
+                              placeholder="Enter Duration"
+                              className="bhagyainput"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="dhansform-group">
+                        <div className="dhansform-label-input">
+                          <div className="dhansform-label">
+                            <label>Questions asked in the interview:</label>
+                          </div>
+
+                          <div className="dhansform-input">
+                            {formData.questionsAsked.map((question, index) => (
+                              <div key={index}>
+                                <input
+                                  type="text"
+                                  value={question}
+                                  onChange={(e) =>
+                                    handleQuestionChange(index, e.target.value)
+                                  }
+                                  placeholder={`Enter Question ${index + 1}`}
+                                  className="bhagyainput"
+                                />
+                              </div>
+                            ))}
+
+                            <button
+                              type="button"
+                              onClick={addNewQuestionField}
+                              className="lineUp-Filter-btn"
+                            >
+                              Add Answered Question
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* <div className="dhansform-group">
+              <div className="dhansform-label-input">
+                <div className="dhansform-label">
+                  <label>Which questions you answered?</label>
+                </div>
+
+                <div className="dhansform-input">
+                  <input
+                    type="text"
+                    name="answersGiven"
+                    value={formData.answersGiven}
+                    onChange={handleChange}
+                    placeholder="Enter Answers Given"
+                    className="bhagyainput"
+                  />
+                </div>
+              </div>
+            </div> */}
+
+                      <div className="dhansform-group">
+                        <div className="dhansform-label-input">
+                          <div className="dhansform-label">
+                            <label>Unanswered Questions:</label>
+                          </div>
+
+                          <div className="dhansform-input">
+                            {formData.unansweredQuestions.map(
+                              (question, index) => (
+                                <div key={index}>
+                                  <input
+                                    type="text"
+                                    value={question}
+                                    onChange={(e) =>
+                                      handleUnansweredQuestionChange(
+                                        index,
+                                        e.target.value
+                                      )
+                                    }
+                                    placeholder={`Enter Unanswered Question ${
+                                      index + 1
+                                    }`}
+                                    className="bhagyainput"
+                                  />
+                                </div>
+                              )
+                            )}
+
+                            <button
+                              type="button"
+                              onClick={addNewQuestionFieldforunans}
+                              className="lineUp-Filter-btn"
+                            >
+                              Add Unanswered Question
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="dhansform-group">
+                        <div className="dhansform-label-input">
+                          <div className="dhansform-label">
+                            <label>Comment:</label>
+                          </div>
+                          <div className="dhansform-input">
+                            <input
+                              type="text"
+                              name="comments"
+                              value={formData.comments}
+                              onChange={handleChange}
+                              placeholder="Enter The Comment Below"
+                              className="bhagyainput"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {showNoFields && (
+                    <div>
+                      {/* Fields for "No" status */}
+                      <div className="dhansform-group">
+                        <div className="dhansform-label-input">
+                          <div className="dhansform-label">
+                            <label>Request to Reschedule:</label>
+                          </div>
+                          <div className="dhansform-input">
+                            <input
+                              type="text"
+                              name="requestReschedule"
+                              value={formData.requestReschedule}
+                              onChange={handleChange}
+                              placeholder="Enter Rescheduling Request"
+                              className="bhagyainput"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="dhansform-group">
+                        <div className="dhansform-label-input">
+                          <div className="dhansform-label">
+                            <label>
+                              Reason for not attending the interview:
+                            </label>
+                          </div>
+                          <div className="dhansform-input">
+                            <input
+                              type="text"
+                              name="reasonForNotAttend"
+                              value={formData.reasonForNotAttend}
+                              onChange={handleChange}
+                              placeholder="Enter Reason"
+                              className="bhagyainput"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {showYetToBeConfirmedFields && (
+                    <div>
+                      {/* Fields for "Yet to be confirmed" status */}
+                      <div className="dhansform-group">
+                        <div className="dhansform-label-input">
+                          <div className="dhansform-label">
+                            <label>Attending:</label>
+                          </div>
+                          <div className="dhansform-input">
+                            <input
+                              type="text"
+                              name="attendingStatus"
+                              value={formData.attendingStatus}
+                              onChange={handleChange}
+                              placeholder="Enter Attending Status"
+                              className="bhagyainput"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="dhansform-group">
+                        <div className="dhansform-label-input">
+                          <div className="dhansform-label">
+                            <label>Response Given:</label>
+                          </div>
+                          <div className="dhansform-input">
+                            <input
+                              type="text"
+                              name="responseGiven"
+                              value={formData.responseGiven}
+                              onChange={handleChange}
+                              placeholder="Enter Response"
+                              className="bhagyainput"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="dhansform-group">
+                        <div className="dhansform-label-input">
+                          <div className="dhansform-label">
+                            <label>Comment:</label>
+                          </div>
+                          <div className="dhansform-input">
+                            <input
+                              type="text"
+                              name="comment"
+                              value={formData.comment}
+                              onChange={handleChange}
+                              placeholder="Enter Comment"
+                              className="bhagyainput"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  <div className="submit-container">
+                    <button type="submit" className="lineUp-Filter-btn">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default InterviewForm;
+
+
+
+// css start
+
+/* Dhanashree_InterviewForm_Date(27/07)_Css Start line no. 4*/
+/* RecruiterReminder.css */
+/* General Styles */
+
+.dhann-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto; /* Ensure container takes full viewport height */
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
+.card {
+  /* uncommented by sahil karnekar date 3-12-2024 */
+  background-color: #f2f2f2;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin: 10px;
+  box-sizing: border-box; /* Ensure padding and border are included in element's total width and height */
+  overflow: hidden; /* Prevent content from overflowing the card */
+  display: flex; /* Use flexbox for internal layout */
+  flex-direction: column; /* Stack children vertically */
+}
+
+/* Left and Right Cards */
+.left-card {
+  height: 100%; /* Ensure it takes full height of the container */
+  background-color: var(--Bg-color);
+ width: 550px;
+ border: 2px solid black;
+}
+
+/* Right Card with Fixed Width */
+.right-card {
+  flex: 0 0 75%; /* 75% width for right card */
+  width: 550px; /* Set a fixed width for the right card */
+  height: 100%; /* Ensure it takes full height of the container */
+  max-width: 100%; /* Ensure it does not exceed the container width */
+}
+
+/* Ensure text within the card remains on a single line */
+.dhansform-group {
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden; /* Hide any overflowing text */
+  text-overflow: ellipsis; /* Add ellipsis if text overflows */
+  word-wrap: break-word; /* Ensure long words break */
+}
+
+.dhansform-label-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dhansform-label {
+  font-size: 18px;
+  font-weight: bold;
+  color: gray; /* Set color to gray for labels */
+}
+
+.dhansform-input {
+  margin: 10px;
+  margin-left: 10px;
+  font-size: 16px;
+  overflow: hidden; /* Hide any overflowing content */
+  color: gray; /* Set text color to gray for input fields */
+  background-color: #f9f9f9; /* Light gray background for input fields */
+  width: 55%; /* Adjust the width as needed */
+}
+
+.job-id-side-input{
+  margin: 10px;
+  width: 210px;
+}
+
+.dhanssform-input {
+  margin: 16px;
+  margin-left: 10px;
+  font-size: 16px;
+  overflow: hidden; /* Hide any overflowing content */
+  color: gray; /* Set text color to gray for input fields */
+  background-color: #f9f9f9; /* Light gray background for input fields */
+  width: 100%; /* Adjust the width as needed */
+}
+
+.bhagyainput {
+  width: 100%; /* Adjust the width as needed */
+  padding: 3px;
+}
+
+.bhagyashreeinput {
+  width: 100%;
+  padding: 3px;
+}
+
+/* Input and Textarea styling */
+
+
+/* this code commented by sahil karnekar because it is affecting other html elements also date 18-11-2024 */
+
+/* input[type="text"],
+input[type="email"],
+input[type="password"], */
+/* textarea { */
+  /* color: gray; Set text color to gray */
+  /* background-color: #f9f9f9; Light gray background */
+  /* border: 1px solid #ccc; Light gray border */
+  /* box-sizing: border-box; Ensure padding and border are included in element's total width and height */
+  /* overflow: hidden; Hide any overflowing content */
+  /* padding-left: 5px;
+
+} */
+
+/* Ensure text fields adjust */
+input:-webkit-autofill {
+  color: gray !important; /* Set auto-filled text color to gray */
+  background-color: #f9f9f9 !important; /* Ensure background color remains consistent */
+}
+
+/* Status styling */
+.status {
+  color: gray; /* Set text color for status elements to gray */
+}
+
+.status-text {
+  color: gray;
+}
+
+/* Select Box styling */
+select {
+  color: gray; /* Set text color for select box */
+  background-color: #f9f9f9; /* Light gray background */
+  border: 1px solid #ccc; /* Light gray border */
+  padding: 5px; /* Add padding for better appearance */
+  box-sizing: border-box; /* Ensure padding and border are included in element's total width and height */
+  overflow: hidden; /* Hide any overflowing content */
+}
+
+/* Heading styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: gray; /* Set color to gray for all headings */
+  overflow-wrap: break-word; /* Break long words */
+}
+
+/* Responsive Design */
+
+/* Dhanashree_InterviewForm_Date(27/07)_Css End line no. 148*/
+
+/* Dhanashree_InterviewForm_Date(29/07)_Css Start line no. 164*/
+
+/* Additional Responsive Styles */
+
+/* Adjust card layout for smaller screens */
+@media (max-width: 1200px) {
+  .right-card {
+    flex: 1 1 100%;
+    width: auto; /* Remove fixed width */
+    max-width: 100%;
+    height: auto;
+    max-height: fit-content;
+  }
+
+  .left-card {
+    height: 100vh; /* Allow height to adjust */
+    max-height: fit-content;
+  }
+
+  .dhann-container {
+    flex-direction: column; /* Stack cards vertically */
+  }
+}
+
+@media (max-width: 768px) {
+  .dhann-container {
+    flex-direction: column;
+  }
+
+  .left-card,
+  .right-card {
+    flex: 1 1 100%;
+    width: auto; /* Remove fixed width */
+    height: auto; /* Allow height to adjust */
+    margin: 10px 0; /* Add margin for separation */
+  }
+
+  .card {
+    padding: 15px;
+    margin: 10px 5px; /* Reduce margin for smaller screens */
+  }
+
+  .dhansform-input,
+  .dhanssform-input {
+    width: 100%; /* Ensure inputs take full width */
+    font-size: 14px; /* Reduce font size for better fit */
+  }
+
+  .dhansform-label {
+    font-size: 16px; /* Adjust label font size */
+  }
+}
+
+@media (max-width: 480px) {
+  .submit-button {
+    font-size: 14px; /* Reduce button font size */
+    padding: 5px 8px; /* Adjust padding */
+  }
+
+  .dhansform-label {
+    font-size: 14px; /* Further adjust label font size */
+  }
+
+  .dhansform-input,
+  .dhanssform-input {
+    font-size: 12px; /* Further reduce input font size */
+  }
+
+  .card {
+    padding: 10px; /* Further reduce padding */
+  }
+}
+
+/* Dhanashree_InterviewForm_Date(29/07)_Css End line no. 228*/
+
+/* Dhanashree_InterviewForm_Date(27/07)_Css Start line no. 242*/
+
+/* Flexbox for footer */
+.submit-container {
+  margin-top: auto; /* Push submit button to the bottom */
+  /* padding: 20px; */
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.submit-button {
+  background-color: var(--button-color); /* Background color */
+  color: white; /* Text color */
+  border: 1px solid gray;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center; /* Center text */
+  text-decoration: none; /* Remove underline */
+  display: inline-block; /* Align with other inline elements */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Cursor pointer */
+  border-radius: 15px; /* Rounded corners */
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease,
+    border-color 0.3s ease; /* Transition effects */
+}
+
+.submit-button:hover {
+  background-color: var(--button-bg-hover-color);
+  color: var(--text-hover-color);/* Text color on hover */
+  border: 1px solid gray;
+}
+
+.SampleBhagyashree {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+ 
+}
+
+/* Dhanashree_InterviewForm_Date(27/07)_Css End line no. 279*/
+
+.interview-question-view-btn {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}

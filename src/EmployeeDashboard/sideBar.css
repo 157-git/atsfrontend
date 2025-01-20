@@ -304,7 +304,7 @@ body {
 
 /* Set all icons in the sidebar to gray color */
 .sidebar i {
-  color:var(--heading-text-color);
+  color:var(--sidebar-txt);
 }
 .sidebar-text {
   color: var(--sidebar-txt);
