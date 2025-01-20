@@ -54,6 +54,9 @@ const ShortListedCandidates = ({
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
+  //Name:-Akash Pawar Component:-ShortListedCandidate Subcategory:-ResumeViewButton(added) start LineNo:-165 Date:-02/07
+  const [showResumeModal, setShowResumeModal] = useState(false);
+  const [selectedCandidateResume, setSelectedCandidateResume] = useState("");
 
   // updated by sahil karnekar date 17-12-2024
   const [triggerFetch, setTriggerFetch] = useState(false);
@@ -165,11 +168,10 @@ const ShortListedCandidates = ({
 
     setIsDataSending(true);
     const url = `${API_BASE_URL}/share-candidate-data/${employeeId}/${userType}`;
-
     const requestData = {
       employeeId: parseInt(selectedEmployeeId),
       candidateIds: selectedRows,
-      jobRole: selectedRole, // Dynamically pass the selected role
+      jobRole: selectedRole, 
     };
 
     try {
@@ -293,11 +295,6 @@ const ShortListedCandidates = ({
     setShowSearchBar(false);
     setShowFilterSection(!showFilterSection);
   };
-
-  //Name:-Akash Pawar Component:-ShortListedCandidate Subcategory:-ResumeViewButton(added) start LineNo:-165 Date:-02/07
-
-  const [showResumeModal, setShowResumeModal] = useState(false);
-  const [selectedCandidateResume, setSelectedCandidateResume] = useState("");
 
   const openResumeModal = (byteCode) => {
     setSelectedCandidateResume(byteCode);
