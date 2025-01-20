@@ -21,7 +21,6 @@ const MonthReport = ({loginEmployeeName}) => {
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedIds, setSelectedIds] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [openSelectDate, setOpenSelectDate] = useState(false);
   const [activeButton, setActiveButton] = useState(null);
   const [displayManagerDivWithBtn, setdisplayManagerDivWithBtn] =
@@ -38,6 +37,7 @@ const MonthReport = ({loginEmployeeName}) => {
   const [managersList, setManagersList] = useState([]);
   const [teamLeadersList, setTeamLeadersList] = useState([]);
   const [recruitersList, setRecruitersList] = useState([]);
+  
   const handleDisplayManagers = async () => {
     if (userType === "SuperUser") {
       const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
@@ -243,6 +243,8 @@ const MonthReport = ({loginEmployeeName}) => {
       endDate: end,
     });
   };
+
+
   const [allImagesForRecruiters, setAllImagesForRecruiters] = useState([]); // Initialize as an object
 const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
   useEffect(() => {
@@ -288,10 +290,6 @@ const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
   
     fetchAllImagesForManagers();
   }, [managersList]);
-
-  console.log(allImagesForRecruiters);
-  console.log(allImagesForTeamLeaders);
-  console.log(allImagesForManagers);
   
   return (
     <>
@@ -461,17 +459,6 @@ const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
             open={displayModalContainer}
             onOk={handleOk}
             onCancel={handleCancel}
-
-            // okButtonProps={{
-            //   style: { backgroundColor: 'green', color: 'white', border: 'none' },
-            //   className: 'custom-ok-button',
-            // }}
-            // cancelButtonProps={{
-            //   style: { backgroundColor: 'red', color: 'white', border: 'none' },
-            //   className: 'custom-cancel-button',
-            // }}
-            // okText="Confirm" // Change OK button text
-            // cancelText="Dismiss" // Change Cancel button text
           >
             <div className="mainForLists">
               {displayManagers && (
@@ -654,6 +641,7 @@ const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
                   }
                 </>
               )}
+
             </div>
           </Modal>
         </>

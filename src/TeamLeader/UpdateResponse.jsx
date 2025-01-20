@@ -231,11 +231,18 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     setShowResumeModal(false);
   };
 
-  const handleUpdateClick = (candidateId, employeeId, requirementId,candidateName,employeeName,jobRole) => {
+  const handleUpdateClick = (
+    candidateId,
+    employeeId,
+    requirementId,
+    candidateName,
+    employeeName,
+    jobRole
+  ) => {
     setShowUpdateResponseID(candidateId);
     setShowEmployeeId(employeeId);
     setShowRequirementId(requirementId);
-    setShowCandidateName(candidateName); 
+    setShowCandidateName(candidateName);
     setShowEmployeeName(employeeName);
     setShowJobRole(jobRole);
     setShowUpdateResponseForm(true);
@@ -367,13 +374,14 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     setCurrentPage(1); // Reset to the first page after page size changes
   };
 
-
   const calculateRowIndex = (index) => {
     return (currentPage - 1) * pageSize + index + 1;
   };
-  
+
   return (
     // SwapnilRokade_UpdateResponse_FilterAdded_7_to_504_10/07"
+    <>
+      <div className="calling-list-container">
     <div className="TeamLead-main">
       {loading ? (
         <div className="register">
@@ -527,6 +535,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                   )}
                 </div>
               </div>
+
               <div className="attendanceTableData">
                 <table className="attendance-table">
                   <thead>
@@ -559,343 +568,356 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                       <th className="attendanceheading">Action</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {filteredCallingList.map((data, index) => (
-                      <tr key={index} className="attendancerows">
-                        <td
-                          className="tabledata "
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {calculateRowIndex(index)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {calculateRowIndex(index)}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="tabledata">
-                          {highlightText(
-                            data.candidateId.toString().toLowerCase() || "",
-                            filterValue
-                          )}
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {highlightText(data.candidateName || "", filterValue)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                data.candidateName || "",
-                                filterValue
-                              )}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {highlightText(
-                            data.candidateEmail || "",
-                            filterValue
-                          )}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                data.candidateEmail || "",
-                                filterValue
-                              )}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {highlightText(data.contactNumber || "", filterValue)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                data.contactNumber || "",
-                                filterValue
-                              )}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {highlightText(data.sourceName || "", filterValue)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                data.sourceName || "",
-                                filterValue
-                              )}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td className="tabledata">
-                          {highlightText(
-                            data.requirementId.toString().toLowerCase() || "",
-                            filterValue
-                          )}
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {highlightText(
-                            data.requirementCompany || "",
-                            filterValue
-                          )}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                data.requirementCompany || "",
-                                filterValue
-                              )}
-                            </span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {highlightText(
-                            data.jobDesignation || "",
-                            filterValue
-                          )}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                data.jobDesignation || "",
-                                filterValue
-                              )}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td className="tabledata">
-                          <button
-                            onClick={() => openResumeModal(data.resume)}
-                            style={{ background: "none", border: "none" }}
+                  <>
+                    <tbody>
+                      {filteredCallingList.map((data, index) => (
+                        <tr key={index} className="attendancerows">
+                          <td
+                            className="tabledata "
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
                           >
-                            <i
-                              className="fas fa-eye"
-                              style={{
-                                color: data.resume ? "green" : "inherit",
-                              }}
-                            ></i>
-                          </button>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {highlightText(data.commentForTL || "", filterValue)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                data.commentForTL || "",
-                                filterValue
-                              )}
-                            </span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {highlightText(data.finalStatus || "", filterValue)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                data.finalStatus || "",
-                                filterValue
-                              )}
-                            </span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {highlightText(
-                            data.interviewRound || "",
-                            filterValue
-                          )}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                data.interviewRound || "",
-                                filterValue
-                              )}
-                            </span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {highlightText(
-                            data.interviewResponse || "",
-                            filterValue
-                          )}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                data.interviewResponse || "",
-                                filterValue
-                              )}
-                            </span>
-                          </div>
-                        </td>
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {highlightText(
-                            data.responseUpdatedDate || "",
-                            filterValue
-                          )}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                data.responseUpdatedDate || "",
-                                filterValue
-                              )}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="tabledata">
-                          {highlightText(
-                            data.nextInterviewDate.toString().toLowerCase() ||
-                              "",
-                            filterValue
-                          )}
-                        </td>
-                        <td className="tabledata">
-                          {highlightText(
-                            data.nextInterviewTiming.toString().toLowerCase() ||
-                              "",
-                            filterValue
-                          )}
-                        </td>
-                        <td className="tabledata">
-                          {highlightText(
-                            data.employeeId.toString().toLowerCase() || "",
-                            filterValue
-                          )}
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {highlightText(data.employeeName || "", filterValue)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                data.employeeName || "",
-                                filterValue
-                              )}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {highlightText(data.officialMail || "", filterValue)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                data.officialMail || "",
-                                filterValue
-                              )}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td
-                          className="tabledata"
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {highlightText(data.jobRole || "", filterValue)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(data.jobRole || "", filterValue)}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td className=" TeamLead-main-table-td">
-                          <button
-                            className="lineUp-Filter-btn"
-                            onClick={() =>
-                              handleUpdateClick(
-                                data.candidateId,
-                                data.employeeId,
-                                data.requirementId,
-                                data.candidateName,
-                                data.employeeName,
-                                data.jobRole
-                              )
-                            }
+                            {calculateRowIndex(index)}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {calculateRowIndex(index)}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="tabledata">
+                            {highlightText(
+                              data.candidateId.toString().toLowerCase() || "",
+                              filterValue
+                            )}
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
                           >
-                            Update
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
+                            {highlightText(
+                              data.candidateName || "",
+                              filterValue
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  data.candidateName || "",
+                                  filterValue
+                                )}
+                              </span>
+                            </div>
+                          </td>
+
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {highlightText(
+                              data.candidateEmail || "",
+                              filterValue
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  data.candidateEmail || "",
+                                  filterValue
+                                )}
+                              </span>
+                            </div>
+                          </td>
+
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {highlightText(
+                              data.contactNumber || "",
+                              filterValue
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  data.contactNumber || "",
+                                  filterValue
+                                )}
+                              </span>
+                            </div>
+                          </td>
+
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {highlightText(data.sourceName || "", filterValue)}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  data.sourceName || "",
+                                  filterValue
+                                )}
+                              </span>
+                            </div>
+                          </td>
+
+                          <td className="tabledata">
+                            {highlightText(
+                              data.requirementId.toString().toLowerCase() || "",
+                              filterValue
+                            )}
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {highlightText(
+                              data.requirementCompany || "",
+                              filterValue
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  data.requirementCompany || "",
+                                  filterValue
+                                )}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {highlightText(
+                              data.jobDesignation || "",
+                              filterValue
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  data.jobDesignation || "",
+                                  filterValue
+                                )}
+                              </span>
+                            </div>
+                          </td>
+
+                          <td className="tabledata">
+                            <button
+                              onClick={() => openResumeModal(data.resume)}
+                              style={{ background: "none", border: "none" }}
+                            >
+                              <i
+                                className="fas fa-eye"
+                                style={{
+                                  color: data.resume ? "green" : "inherit",
+                                }}
+                              ></i>
+                            </button>
+                          </td>
+
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {highlightText(
+                              data.commentForTL || "",
+                              filterValue
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  data.commentForTL || "",
+                                  filterValue
+                                )}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {highlightText(data.finalStatus || "", filterValue)}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  data.finalStatus || "",
+                                  filterValue
+                                )}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {highlightText(
+                              data.interviewRound || "",
+                              filterValue
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  data.interviewRound || "",
+                                  filterValue
+                                )}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {highlightText(
+                              data.interviewResponse || "",
+                              filterValue
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  data.interviewResponse || "",
+                                  filterValue
+                                )}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {highlightText(
+                              data.responseUpdatedDate || "",
+                              filterValue
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  data.responseUpdatedDate || "",
+                                  filterValue
+                                )}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="tabledata">
+                            {highlightText(
+                              data.nextInterviewDate.toString().toLowerCase() ||
+                                "",
+                              filterValue
+                            )}
+                          </td>
+                          <td className="tabledata">
+                            {highlightText(
+                              data.nextInterviewTiming
+                                .toString()
+                                .toLowerCase() || "",
+                              filterValue
+                            )}
+                          </td>
+                          <td className="tabledata">
+                            {highlightText(
+                              data.employeeId.toString().toLowerCase() || "",
+                              filterValue
+                            )}
+                          </td>
+
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {highlightText(
+                              data.employeeName || "",
+                              filterValue
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  data.employeeName || "",
+                                  filterValue
+                                )}
+                              </span>
+                            </div>
+                          </td>
+
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {highlightText(
+                              data.officialMail || "",
+                              filterValue
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  data.officialMail || "",
+                                  filterValue
+                                )}
+                              </span>
+                            </div>
+                          </td>
+
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {highlightText(data.jobRole || "", filterValue)}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(data.jobRole || "", filterValue)}
+                              </span>
+                            </div>
+                          </td>
+
+                          <td className=" TeamLead-main-table-td">
+                            <button
+                              className="lineUp-Filter-btn"
+                              onClick={() =>
+                                handleUpdateClick(
+                                  data.candidateId,
+                                  data.employeeId,
+                                  data.requirementId,
+                                  data.candidateName,
+                                  data.employeeName,
+                                  data.jobRole
+                                )
+                              }
+                            >
+                              Update
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </>
                 </table>
               </div>
-
               <div className="search-count-last-div">
                 Total Results : {totalRecords}
               </div>
-
-
- <Pagination
-        current={currentPage}
-        total={totalRecords}
-        pageSize={pageSize}
-        showSizeChanger
-        showQuickJumper 
-        onShowSizeChange={handleSizeChange}
-        onChange={handlePageChange}
-        style={{
-          justifyContent: 'center',
-        }}
-      />
-
-
+              <Pagination
+                current={currentPage}
+                total={totalRecords}
+                pageSize={pageSize}
+                showSizeChanger
+                showQuickJumper
+                onShowSizeChange={handleSizeChange}
+                onChange={handlePageChange}
+                style={{
+                  justifyContent: "center",
+                }}
+              />
               <Modal show={showResumeModal} onHide={closeResumeModal} size="md">
                 <Modal.Header closeButton>
                   <Modal.Title>Resume</Modal.Title>
@@ -932,7 +954,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
               >
                 <Modal.Body>
                   <div className="TeamLead-main-table-container">
-                  <UpdateResponseFrom
+                    <UpdateResponseFrom
                       candidateId={showUpdateResponseID}
                       passedEmployeeId={showEmployeeId}
                       requirementId={showRequirementId}
@@ -950,6 +972,8 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
         </>
       )}
     </div>
+    </div>
+    </>
   );
 };
 

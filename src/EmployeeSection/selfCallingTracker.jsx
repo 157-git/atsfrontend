@@ -14,6 +14,8 @@ import Loader from "./loader";
 import { Pagination } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import { elements } from "chart.js";
+import FilterData from "../helper/filterData";
+import limitedOptions from "../helper/limitedOptions";
 
 // SwapnilRokade_lineUpList_ModifyFilters_47to534_11/07
 const CallingList = ({
@@ -64,51 +66,6 @@ const CallingList = ({
       recruiterJobRole: "",
     });
 
-  //akash_pawar_LineUpList_ShareFunctionality_17/07_71
-  const limitedOptions = [
-    // line number 83 edited by sahil karnekar according to tester suggestion date 14-10-2024
-    ["alternateNumber", "WhatsApp Number"],
-    ["availabilityForInterview", "Availability For Interview"],
-    ["callingFeedback", "Calling Feedback"],
-    ["candidateAddedTime", "Candidate Added Time"],
-    ["candidateEmail", "Candidate Email"],
-    ["candidateId", "Candidate Id"],
-    ["candidateName", "Candidate Name"],
-    ["communicationRating", "Communication Rating"],
-    ["companyName", "Company Name"],
-    ["contactNumber", "Contact Number"],
-    ["currentCTCLakh", "Current CTC (Lakh)"],
-    ["currentCTCThousand", "Current CTC (Thousand)"],
-    ["currentLocation", "Current Location"],
-    ["date", "Date"],
-    ["dateOfBirth", "Date Of Birth"],
-    ["empId", "Employee Id"],
-    ["expectedCTCLakh", "Expected CTC (Lakh)"],
-    ["expectedCTCThousand", "Expected CTC (Thousand)"],
-    ["experienceMonth", "Experience Month"],
-    ["experienceYear", "Experience Year"],
-    ["extraCertification", "Extra Certification"],
-    ["feedBack", "Feed Back"],
-    ["finalStatus", "Final Status"],
-    ["fullAddress", "Full Address"],
-    ["gender", "Gender"],
-    ["holdingAnyOffer", "Holding Any Offer"],
-    ["incentive", "Incentive"],
-    ["interviewTime", "Interview Time"],
-    ["jobDesignation", "Job Designation"],
-    ["msgForTeamLeader", "Message For Team Leader"],
-    ["noticePeriod", "Notice Period"],
-    ["offerLetterMsg", "Offer Letter Message"],
-    ["oldEmployeeId", "Old Employee Id"],
-    ["qualification", "Qualification"],
-    ["recruiterName", "Recruiter Name"],
-    ["relevantExperience", "Relevant Experience"],
-    ["requirementCompany", "Applied Company"],
-    ["requirementId", "Job Id"],
-    ["selectYesOrNo", "Status"],
-    ["sourceName", "Source Name"],
-    ["yearOfPassing", "Year Of Passing"],
-  ];
   const { userType } = useParams();
   // added by sahil karnekar date 4-12-2024
   const [pageSize, setPageSize] = useState(20);
@@ -244,158 +201,7 @@ const CallingList = ({
   };
 
   useEffect(() => {
-    const filtered = callingList.filter((item) => {
-      const searchTermLower = searchTerm.toLowerCase();
-      return (
-        (item.date && item.date.toLowerCase().includes(searchTermLower)) ||
-        (item.recruiterName &&
-          item.recruiterName.toLowerCase().includes(searchTermLower)) ||
-        (item.candidateName &&
-          item.candidateName.toLowerCase().includes(searchTermLower)) ||
-        (item.candidateEmail &&
-          item.candidateEmail.toLowerCase().includes(searchTermLower)) ||
-        (item.contactNumber &&
-          item.contactNumber.toString().includes(searchTermLower)) ||
-        (item.alternateNumber &&
-          item.alternateNumber.toString().includes(searchTermLower)) ||
-        (item.sourceName &&
-          item.sourceName.toLowerCase().includes(searchTermLower)) ||
-        (item.requirementId &&
-          item.requirementId
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.requirementCompany &&
-          item.requirementCompany.toLowerCase().includes(searchTermLower)) ||
-        (item.communicationRating &&
-          item.communicationRating.toLowerCase().includes(searchTermLower)) ||
-        (item.currentLocation &&
-          item.currentLocation.toLowerCase().includes(searchTermLower)) ||
-        (item.personalFeedback &&
-          item.personalFeedback.toLowerCase().includes(searchTermLower)) ||
-        (item.callingFeedback &&
-          item.callingFeedback.toLowerCase().includes(searchTermLower)) ||
-        // line 350 to 400 updated by sahil karnekar on date 17-12-2024
-        (item.jobDesignation &&
-          item.jobDesignation
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.requirementId &&
-          item.requirementId
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.fullAddress &&
-          item.fullAddress
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.experienceYear &&
-          item.experienceYear
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.experienceMonth &&
-          item.experienceMonth
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.relevantExperience &&
-          item.relevantExperience
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.currentCTCLakh &&
-          item.currentCTCLakh
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.currentCTCThousand &&
-          item.currentCTCThousand
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.expectedCTCLakh &&
-          item.expectedCTCLakh
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.expectedCTCThousand &&
-          item.expectedCTCThousand
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.yearOfPassing &&
-          item.yearOfPassing
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.extraCertification &&
-          item.extraCertification
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.holdingAnyOffer &&
-          item.holdingAnyOffer
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.offerLetterMsg &&
-          item.offerLetterMsg
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.noticePeriod &&
-          item.noticePeriod
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.msgForTeamLeader &&
-          item.msgForTeamLeader
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.availabilityForInterview &&
-          item.availabilityForInterview
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.interviewTime &&
-          item.interviewTime
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.finalStatus &&
-          item.finalStatus
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.dateOfBirth &&
-          item.dateOfBirth
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.gender &&
-          item.gender.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.qualification &&
-          item.qualification
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.incentive &&
-          item.incentive.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.candidateId &&
-          item.candidateId
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.empId &&
-          item.empId.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.selectYesOrNo &&
-          item.selectYesOrNo.toLowerCase().includes(searchTermLower))
-      );
-    });
+    const filtered = FilterData(callingList, searchTerm);
     setFilteredCallingList(filtered);
     setSearchCount(filtered.length);
   }, [searchTerm, callingList]);
@@ -2208,15 +2014,8 @@ console.log(selectedRows);
             <Loader />
           </div>
         )}
-        {/* <Pagination
-        current={currentPage}
-        total={totalRecords}
-        pageSize={pageSize}
-        showSizeChanger
-        onShowSizeChange={handleSizeChange}
-        onChange={handlePageChange}
-      /> */}
       </div>
+
       {!showUpdateCallingTracker && (
         <div
           style={{
