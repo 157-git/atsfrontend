@@ -58,30 +58,12 @@ const CallingList = ({
   const [errorForShare, setErrorForShare] = useState("");
   const [searchCount, setSearchCount] = useState(0);
 
-  //akash_pawar_LineUpList_ShareFunctionality_17/07_48
-  const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
-    oldTeamLeaderId: "",
-    oldTeamLeaderJobRole: "",
-  });
-  const [newselectedTeamLeader, setNewSelectedTeamLeader] = useState({
-    newTeamLeaderId: "",
-    newTeamLeaderJobRole: "",
-  });
+    const [selectedRecruiters, setSelectedRecruiters] = useState({
+      index: "",
+      recruiterId: "",
+      recruiterJobRole: "",
+    });
 
-  const [selectedRecruiters, setSelectedRecruiters] = useState({
-    index: "",
-    recruiterId: "",
-    recruiterJobRole: "",
-  });
-
-  const [oldSelectedManager, setOldSelectedManager] = useState({
-    oldManagerId: "",
-    oldManagerJobRole: "",
-  });
-  const [newSelectedManager, setNewSelectedManager] = useState({
-    newManagerId: "",
-    newManagerJobRole: "",
-  });
   //akash_pawar_LineUpList_ShareFunctionality_17/07_71
   const limitedOptions = [
     // line number 83 edited by sahil karnekar according to tester suggestion date 14-10-2024
@@ -233,29 +215,6 @@ const CallingList = ({
     setSelectedCandidateId(candidateId);
     setShowUpdateCallingTracker(true);
   };
-
-
-
-  // const handleUpdateSuccess = async (page, size) => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await fetch(
-  //       `${API_BASE_URL}/callingData/${employeeId}/${userType}?page=${page}&size=${size}`
-  //     );
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
-  //     const data = await response.json();
-  //     setCallingList(data.content);
-  //     setFilteredCallingList(data.content);
-  //     setTotalRecords(data.totalElements);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
 
   const handleMouseOver = (event) => {
     const tableData = event.currentTarget;
@@ -528,8 +487,11 @@ const CallingList = ({
     }
     return null;
   };
+console.log(selectedRows);
 
   const handleSelectAll = () => {
+    console.log(selectedRows);
+    
     if (allSelected) {
       setSelectedRows([]);
     } else {
@@ -568,8 +530,6 @@ const CallingList = ({
   
   //akash_pawar_SelfCallingTracker_ShareFunctionality_17/07_472
 
-  //akash_pawar_LineUpList_ShareFunctionality_17/07_475
-
   // this code line 420 to 427 added by sahil karnekar date 24-10-2024
   const handleShare = async () => {
     if (userType === "TeamLeader") {
@@ -581,22 +541,25 @@ const CallingList = ({
       }
     }
     setIsDataSending(true);
-    let url = `${API_BASE_URL}/updateIds/${userType}`;
+    let url = `${API_BASE_URL}/share-candidate-data/${employeeId}/${userType}`;
     let requestData;
     if (
       userType === "TeamLeader" &&
       // this line updated by sahil karnekar date 24-10-2024
       selectedRecruiters.recruiterId !== "" &&
       selectedRows.length > 0
+
     ) {
       requestData = {
         employeeId: parseInt(selectedRecruiters.recruiterId),
         candidateIds: selectedRows,
+        jobRole : "Recruiters"
       };
     } else if (userType === "Manager") {
       requestData = {
         currentTeamLeaderId: parseInt(oldselectedTeamLeader.oldTeamLeaderId),
-        newTeamLeaderId: parseInt(newselectedTeamLeader.newTeamLeaderId),
+        newTeamLeaderId: parseInt(f.newTeamLeaderId),
+
       };
     } else {
       requestData = {
@@ -970,7 +933,7 @@ const CallingList = ({
                         className="lineUp-share-btn"
                         onClick={() => setShowShareButton(false)}
                       >
-                        Share
+                        Share 
                       </button>
                     ) : (
                       <div style={{ display: "flex", gap: "5px" }}>
@@ -985,7 +948,7 @@ const CallingList = ({
                           Close
                         </button>
                         {/* akash_pawar_SelfCallingTracker_ShareFunctionality_17/07_793 */}
-                        {userType === "TeamLeader" && (
+                        {((userType === "TeamLeader") || (userType === "Manager")) && (
                           <button
                             className="lineUp-share-btn"
                             onClick={handleSelectAll}
@@ -1090,7 +1053,9 @@ const CallingList = ({
               {!loading && !showUpdateCallingTracker && (
                 <thead>
                   <tr className="attendancerows-head">
-                    {!showShareButton && userType === "TeamLeader" ? (
+                    
+                    {!showShareButton && userType === "TeamLeader" ||
+                     !showShareButton && userType === "Manager" ? (
                       <th className="attendanceheading">
                         <input
                           type="checkbox"
@@ -1189,7 +1154,9 @@ const CallingList = ({
                   <tbody>
                     {filteredCallingList.map((item, index) => (
                       <tr key={item.candidateId} className="attendancerows">
-                        {!showShareButton && userType === "TeamLeader" ? (
+
+                        {!showShareButton && userType === "TeamLeader" ||
+                         !showShareButton && userType === "Manager" ? (
                           <td className="tabledata">
                             <input
                               type="checkbox"
@@ -2033,6 +2000,8 @@ const CallingList = ({
                             </div>
                           </div>
                         )}
+
+
 
                         {fetchTeamleader && userType === "Manager" && (
                           <div className="teamleader-data-transfer">

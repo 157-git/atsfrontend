@@ -208,9 +208,12 @@ const AddTeamLeader = ({loginEmployeeName}) => {
         }
       );
 
-      const result = await response.text(); 
+    
+      const responseBody = await response.json();
+    console.log('Response Body:', responseBody);
+    let newId = responseBody.id;
       if (response.ok) {
-        toast.success(result.message || "Team Leader Data Added Successfully."); 
+        toast.success("Team Leader Data Added Successfully."); 
 
 const emitData = {
   teamLeaderId:"0",
@@ -271,8 +274,8 @@ const emitData = {
   tlInsuranceNumber: "",
   reportingAdminName: loginEmployeeName,
   reportingAdminDesignation: "",
-  employeeId:employeeId,
-  userType: userType,
+  employeeId:newId,
+  userType: "TeamLeader",
 }
 
         socket.emit("add_teamLeader_event", emitData);
@@ -339,7 +342,7 @@ const emitData = {
             resumeFile: null,
         })
       } else {
-        toast.error(result.error || "All Fields Are Mandatory. Please Fill All Fields."); 
+        toast.error("All Fields Are Mandatory. Please Fill All Fields."); 
       }
     } catch (error) {
       console.error("Error:", error);

@@ -94,7 +94,6 @@ function ApplicantForm2({ loginEmployeeName }) {
     distance: "",
     lineUp: {
       experienceYear: "",
-      experienceMonth: "",
       relevantExperience: "",
       currentCTCLakh: "",
       expectedCTCLakh: "",
@@ -421,26 +420,26 @@ function ApplicantForm2({ loginEmployeeName }) {
         }
         break;
 
-      case "lineUp.dateOfBirth":
-        if (!value.trim()) {
-          error = "Enter Your Birth Date";
-        } else {
-          const dob = new Date(value);
-          const today = new Date();
-          const age = today.getFullYear() - dob.getFullYear();
-          const month = today.getMonth() - dob.getMonth();
-
-          if (month < 0 || (month === 0 && today.getDate() < dob.getDate())) {
-            age--;
+        case "lineUp.dateOfBirth":
+          if (!value.trim()) {
+            error = "Enter Your Birth Date";
+          } else {
+            const dob = new Date(value);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear(); // Changed from const to let
+            const month = today.getMonth() - dob.getMonth();
+        
+            if (month < 0 || (month === 0 && today.getDate() < dob.getDate())) {
+              age--; // Now valid because 'age' is a let
+            }
+        
+            if (age < 18) {
+              error = "You must be at least 18 years old to apply.";
+            } else if (isNaN(dob.getTime())) { // Improved validation for invalid date
+              error = "Enter a valid Birth Date";
+            }
           }
-
-          if (age < 18) {
-            error = "You must be at least 18 years old to apply.";
-          } else if (isNaN(dob)) {
-            error = "Enter a valid Birth Date";
-          }
-        }
-        break;
+          break;
 
       case "candidateEmail":
         if (!value.trim()) {

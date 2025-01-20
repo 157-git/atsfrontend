@@ -256,7 +256,7 @@ const forwardSelectedCandidate = (e) => {
       }
     }
     setIsDataSending(true);
-    let url = `${API_BASE_URL}/updateIds/${userType}`;
+    let url = `${API_BASE_URL}/share-candidate-data/${employeeId}/${userType}`;
     let requestData;
     if (
       userType === "TeamLeader" &&
@@ -266,6 +266,7 @@ const forwardSelectedCandidate = (e) => {
       requestData = {
         employeeId: parseInt(selectedRecruiters.recruiterId),
         candidateIds: selectedRows,
+        jobRole : "Recruiters"
       };
     } else if (userType === "Manager") {
       requestData = {

@@ -244,7 +244,7 @@ const MonthReport = ({loginEmployeeName}) => {
     });
   };
   const [allImagesForRecruiters, setAllImagesForRecruiters] = useState([]); // Initialize as an object
-
+const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
   useEffect(() => {
     const fetchAllImagesForRecruiters = async () => {
       const images = await Promise.all(
@@ -256,6 +256,7 @@ const MonthReport = ({loginEmployeeName}) => {
     };
   
     fetchAllImagesForRecruiters();
+    setFetchRecruitersImges(false);
   }, [recruitersList]);
 
   const [allImagesForTeamLeaders, setAllImagesForTeamLeaders] = useState([]); // Initialize as an object
@@ -632,7 +633,7 @@ const MonthReport = ({loginEmployeeName}) => {
                             />
                             <List.Item.Meta
                               avatar={
-                              <Skeleton.Avatar>
+                                <Skeleton.Avatar loading={fetchRecruitersImages} active >
                                 <Avatar
                                   src={
                                     // recruiter.profileImage

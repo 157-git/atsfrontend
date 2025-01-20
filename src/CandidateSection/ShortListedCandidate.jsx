@@ -10,6 +10,7 @@ import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { toast } from "react-toastify";
 import { Pagination } from "antd";
+import { el } from "date-fns/locale";
 // SwapnilRokade_ShortListedCandidates_ModifyFilters_11/07
 
 const ShortListedCandidates = ({
@@ -19,13 +20,10 @@ const ShortListedCandidates = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOptions, setFilterOptions] = useState([]);
-
   const [sortCriteria, setSortCriteria] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
-
   const [shortListedData, setShortListedData] = useState([]);
-  const [showUpdateCallingTracker, setShowUpdateCallingTracker] =
-    useState(false);
+  const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
   const [selectedCandidateId, setSelectedCandidateId] = useState(null);
   const [showFilterSection, setShowFilterSection] = useState(false);
   const [showselectedFilters, setShowselectedFilters] = useState(false);
@@ -44,34 +42,14 @@ const ShortListedCandidates = ({
   const [isDataSending, setIsDataSending] = useState(false);
   const [loading, setLoading] = useState(true);
   const [searchCount, setSearchCount] = useState(0);
-
   const { employeeId } = useParams();
   const newEmployeeId = parseInt(employeeId, 10);
-  const navigator = useNavigate();
 
   //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_39
-  const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
-    oldTeamLeaderId: "",
-    oldTeamLeaderJobRole: "",
-  });
-  const [newselectedTeamLeader, setNewSelectedTeamLeader] = useState({
-    newTeamLeaderId: "",
-    newTeamLeaderJobRole: "",
-  });
-
   const [selectedRecruiters, setSelectedRecruiters] = useState({
     index: "",
     recruiterId: "",
     recruiterJobRole: "",
-  });
-
-  const [oldSelectedManager, setOldSelectedManager] = useState({
-    oldManagerId: "",
-    oldManagerJobRole: "",
-  });
-  const [newSelectedManager, setNewSelectedManager] = useState({
-    newManagerId: "",
-    newManagerJobRole: "",
   });
   //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_62
 
@@ -128,6 +106,7 @@ const ShortListedCandidates = ({
   const handleTriggerFetch = () => {
     setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
   };
+
   useEffect(() => {
     fetchShortListedData(currentPage, pageSize);
   }, [currentPage, pageSize, triggerFetch, searchTerm]);
@@ -148,6 +127,7 @@ const ShortListedCandidates = ({
       const response = await fetch(`${API_BASE_URL}/tl-namesIds/${empId}`);
       const data = await response.json();
       setFetchTeamleader(data);
+      console.log("recruiters under team leader --- 01");
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
     }
@@ -174,6 +154,7 @@ const ShortListedCandidates = ({
       fetchRecruiters(newEmployeeId);
     }
   }, []);
+
   //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_160
 
   const handleSort = (criteria) => {
@@ -195,7 +176,6 @@ const ShortListedCandidates = ({
       setFilteredShortListed(data.content);
       setTotalRecords(data.totalElements);
       setSearchCount(data.length);
-      console.log(data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
@@ -206,7 +186,6 @@ const ShortListedCandidates = ({
   const handleUpdateSuccess = () => {
     setShowUpdateCallingTracker(false);
     fetchShortListedData(currentPage, pageSize); 
-    // Corrected from fetchRejectedData to fetchShortListedData
   };
 
   const handleUpdate = (candidateId) => {
@@ -291,8 +270,8 @@ const ShortListedCandidates = ({
 
   const handleShare = async () => {
     setIsDataSending(true);
-    let url = `${API_BASE_URL}/updateIds/${userType}`;
-    let requestData;
+     let url = `${API_BASE_URL}/share-candidate-data/${employeeId}/${userType}`;
+    let requestData;    
     if (
       userType === "TeamLeader" &&
       selectedRecruiters.recruiterId != "" &&
@@ -301,24 +280,15 @@ const ShortListedCandidates = ({
       requestData = {
         employeeId: parseInt(selectedRecruiters.recruiterId),
         candidateIds: selectedRows,
+        jobRole : "Recruiters",
       };
-    } else if (userType === "Manager") {
-      requestData = {
-        currentTeamLeaderId: parseInt(oldselectedTeamLeader.oldTeamLeaderId),
-        newTeamLeaderId: parseInt(newselectedTeamLeader.newTeamLeaderId),
-      };
-    } else {
-      requestData = {
-        currentManagerId: parseInt(oldSelectedManager.oldManagerId),
-        newManagerId: parseInt(newSelectedManager.newManagerId),
-      };
-    }
+    } 
     try {
+      console.log("Data going to API (00001):", JSON.stringify(requestData, null, 2));
       const requestOptions = {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          // Add any additional headers as needed
         },
         body: JSON.stringify(requestData),
       };
@@ -327,12 +297,10 @@ const ShortListedCandidates = ({
         setIsDataSending(false);
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      // Handle success response
       setIsDataSending(false);
       toast.success("Candidates forwarded successfully!");
       console.log("Candidates forwarded successfully!");
       fetchShortListedData(currentPage, pageSize);
-      // onSuccessAdd(true);
       setShowForwardPopup(false); // Close the modal or handle any further UI updates
       setShowShareButton(true);
       setSelectedRows([]);
@@ -341,27 +309,10 @@ const ShortListedCandidates = ({
         recruiterId: "",
         recruiterJobRole: "",
       });
-      setOldSelectedTeamLeader({
-        oldTeamLeaderId: "",
-        oldTeamLeaderJobRole: "",
-      });
-      setNewSelectedTeamLeader({
-        newTeamLeaderId: "",
-        newTeamLeaderJobRole: "",
-      });
-      setOldSelectedManager({
-        oldManagerId: "",
-        oldManagerJobRole: "",
-      });
-      setNewSelectedManager({
-        newManagerId: "",
-        newManagerJobRole: "",
-      });
       // fetchShortListedData(); // Uncomment this if you want to refresh the data after forwarding
     } catch (error) {
       setIsDataSending(false);
       console.error("Error while forwarding candidates:", error);
-      // Handle error scenarios or show error messages to the user
     }
   };
   //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_336
@@ -525,15 +476,12 @@ const ShortListedCandidates = ({
     } else {
       setActiveFilterOption(key);
     }
-
     setSelectedFilters((prev) => {
       const newSelectedFilters = { ...prev };
-
       if (key in newSelectedFilters) {
       } else {
         newSelectedFilters[key] = [];
       }
-
       return newSelectedFilters;
     });
   };
@@ -790,7 +738,7 @@ const ShortListedCandidates = ({
                               Close
                             </button>
                             {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_602 */}
-                            {userType === "TeamLeader" && (
+                            {((userType === "TeamLeader") || (userType === "Manager")) && (
                               <button
                                 className="lineUp-share-btn"
                                 onClick={handleSelectAll}
@@ -894,7 +842,9 @@ const ShortListedCandidates = ({
                   <table id="shortlisted-table-id" className="attendance-table">
                     <thead>
                       <tr className="attendancerows-head">
-                        {!showShareButton && userType === "TeamLeader" ? (
+
+                        {!showShareButton && userType === "TeamLeader" ||
+                         !showShareButton && userType === "Manager" ? (
                           <th className="attendanceheading">
                             <input
                               type="checkbox"
@@ -972,7 +922,9 @@ const ShortListedCandidates = ({
                     <tbody>
                       {filteredShortListed.map((item, index) => (
                         <tr key={item.candidateId} className="attendancerows">
-                          {!showShareButton && userType === "TeamLeader" ? (
+
+                          {!showShareButton && userType === "TeamLeader" ||
+                         !showShareButton && userType === "Manager" ? (
                             <td className="tabledata">
                               <input
                                 type="checkbox"
@@ -1796,94 +1748,6 @@ const ShortListedCandidates = ({
                               </div>
                             )}
 
-                            {fetchTeamleader && userType === "Manager" && (
-                              <div className="teamleader-data-transfer">
-                                <div className="old-teamleader-data">
-                                  <center>
-                                    <h1>Old Team Leaders</h1>
-                                  </center>
-                                  {fetchTeamleader.map((teamleaders) => (
-                                    <div
-                                      className="accordion-item-M"
-                                      key={teamleaders.teamLeaderId}
-                                    >
-                                      <div className="accordion-header-M">
-                                        <label
-                                          htmlFor={`old-${teamleaders.teamLeaderId}`}
-                                          className="accordion-title"
-                                        >
-                                          <input
-                                            type="radio"
-                                            name="oldteamleaders"
-                                            id={`old-${teamleaders.teamLeaderId}`}
-                                            value={teamleaders.teamLeaderId}
-                                            checked={
-                                              oldselectedTeamLeader.oldTeamLeaderId ===
-                                              teamleaders.teamLeaderId
-                                            }
-                                            onChange={() =>
-                                              setOldSelectedTeamLeader({
-                                                oldTeamLeaderId:
-                                                  teamleaders.teamLeaderId,
-                                                oldTeamLeaderJobRole:
-                                                  teamleaders.teamLeaderJobRole,
-                                              })
-                                            }
-                                          />{" "}
-                                          {teamleaders.teamLeaderName}
-                                        </label>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-
-                                <div className="new-teamleader-data">
-                                  <center>
-                                    <h1>New Team Leaders</h1>
-                                  </center>
-                                  {fetchTeamleader
-                                    .filter(
-                                      (item) =>
-                                        item.teamLeaderId !==
-                                        oldselectedTeamLeader.oldTeamLeaderId
-                                    )
-                                    .map((teamleaders) => (
-                                      <div
-                                        className="accordion-item-M"
-                                        key={teamleaders.managerId}
-                                      >
-                                        <div className="accordion-header-SU">
-                                          <label
-                                            htmlFor={`new-${teamleaders.teamLeaderId}`}
-                                            className="accordion-title"
-                                          >
-                                            <input
-                                              type="radio"
-                                              name="newteamleaders"
-                                              id={`new-${teamleaders.teamLeaderId}`}
-                                              value={teamleaders.teamLeaderId}
-                                              checked={
-                                                newselectedTeamLeader.newTeamLeaderId ===
-                                                teamleaders.teamLeaderId
-                                              }
-                                              onChange={() =>
-                                                setNewSelectedTeamLeader({
-                                                  newTeamLeaderId:
-                                                    teamleaders.teamLeaderId,
-                                                  newTeamLeaderJobRole:
-                                                    teamleaders.teamLeaderJobRole,
-                                                })
-                                              }
-                                            />{" "}
-                                            {teamleaders.teamLeaderName}
-                                          </label>
-                                        </div>
-                                      </div>
-                                    ))}
-                                </div>
-                              </div>
-                            )}
-
                             {userType === "TeamLeader" && (
                               <div className="accordion-item">
                                 <div className="accordion-header">
@@ -1912,10 +1776,8 @@ const ShortListedCandidates = ({
                                                 onChange={() =>
                                                   setSelectedRecruiters({
                                                     index: 1,
-                                                    recruiterId:
-                                                      recruiters.employeeId,
-                                                    recruiterJobRole:
-                                                      recruiters.jobRole,
+                                                    recruiterId:recruiters.employeeId,
+                                                    recruiterJobRole:recruiters.jobRole,
                                                   })
                                                 }
                                               />{" "}

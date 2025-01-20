@@ -181,6 +181,9 @@ const CallingTrackerForm = ({
 
   const validateCallingTracker = () => {
     let errors = {};
+    if (!callingTracker.requirementId) {
+      errors.requirementId = "Please Select Job Id";
+    }
     if (!callingTracker.candidateName) {
       errors.candidateName = "Candidate Name is required";
     }
@@ -1259,11 +1262,11 @@ const CallingTrackerForm = ({
                       </select>
 
                       {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" &&
-                        !callingTracker.requirementId && (
+                      {!callingTracker.requirementId && (
                           <span className="requiredFieldStar">*</span>
                         )}
                     </div>
+                    
                     {errors.requirementId && (
                       <div className="error-message">
                         {errors.requirementId}

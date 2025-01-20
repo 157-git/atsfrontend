@@ -227,14 +227,18 @@ const AddEmployee = ({loginEmployeeName}) => {
         }
       );
   
-      const result = await response.text(); 
+console.log(response);
+
+const responseBody = await response.json();
+    console.log('Response Body:', responseBody);
+    let newId = responseBody.id;
   
       if (response.ok) {
         console.log(loginEmployeeName);
         
         const emitData = {
-          employeeId:employeeId,
-          userType: userType,
+          employeeId:newId,
+          userType: "Recruiters",
     employeeName: formData.employeeName,
     dateOfJoining: getFormattedDateTime(),
     userName: formData.userName,
@@ -298,7 +302,9 @@ const AddEmployee = ({loginEmployeeName}) => {
     reportingMangerDesignation: "",
 
         }
-        toast.success(result.message || "Employee Data Added Successfully.");
+        console.log(emitData);
+        
+        toast.success("Employee Data Added Successfully.");
 socket.emit("add_recruiter_event", emitData);
         setFormData({
           employeeId: "0",
@@ -366,7 +372,7 @@ socket.emit("add_recruiter_event", emitData);
         });
 
       } else {
-        toast.error(result.error || "Please Fill All Inputs.");
+        toast.error("Please Fill All Inputs.");
       }
     } catch (error) {
       console.error("Error:", error);

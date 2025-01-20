@@ -225,6 +225,8 @@ function DailyWork({
             formData
           );
 
+         console.log("Data going to API (formData):", JSON.stringify(formData, null, 2));
+       
           if (response.data) {
             fetchCurrentEmployerWorkId();
           }
@@ -881,14 +883,13 @@ function DailyWork({
 
         console.log("running this");
 
-        console.log(employeeCheck);
-        console.log(interviewResponse);
-        console.log(round);
-        console.log(jobId);
+        console.log( " employeeCheck ---" + employeeCheck);
+        console.log( " interviewResponse --- "+ interviewResponse);
+        console.log( "Round --- " +round);
+        console.log( "Job Id " + jobId);
 
         if (employeeCheck) {
           console.log("running first");
-
           return {
             title: "Interview Notification",
             desc:
@@ -901,8 +902,6 @@ function DailyWork({
                 : `Your candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId}.`,
           };
         } else {
-          console.log("running else");
-
           return {
             title: "Interview Update",
             desc:
@@ -1036,8 +1035,6 @@ function DailyWork({
                 : `Your candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId} on ${message.candidate.nextInterviewDate} at ${message.candidate.nextInterviewTiming}.`,
           };
         } else {
-          console.log("running else");
-
           return {
             title: "Interview Update",
             desc:
@@ -1143,7 +1140,7 @@ function DailyWork({
     messagesContext.info({
       message: description.title,
       description: description.desc,
-      duration: 0,
+      duration: 3,
       placement: "bottomRight",
     });
   };
