@@ -343,12 +343,12 @@ colors.forEach(({ variable, value }) => {
       //   "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ffb3b3", "#ff4d4d", "#ff8080", "#ff3333", "#e60000",
       //   "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","black","black"
       // ],
-      // "#99ffbb": [
-      //   "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
-      //   "#ffb3b3", "#ff6666", "#80ff80", "#ffffff", "#e60000", "#ff8080", "#ffffff", "#80ff80", "#99ffbb", "black",
-      //   "gray", "#ccffcc", "#ff4d4d", "#99ffbb", "#ffffff", "#99ffbb", "gray", "#ffffff", "#66ff66", "#e60000",
-      //   "#ff6666", "#ff4d4d", "gray", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","black","black"
-      // ],
+      "#27374D": [
+        "#27374D", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
+        "#ffb3b3", "#ff6666", "#9DB2BF", "#ffffff", "#e60000", "#ff8080", "#ffffff", "#80ff80", "#99ffbb", "black",
+        "gray", "#ccffcc", "#ff4d4d", "#99ffbb", "#ffffff", "#526D82", "gray", "#ffffff", "#66ff66", "#e60000",
+        "#ff6666", "#ff4d4d", "gray", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","black","black"
+      ],
   
     };
   

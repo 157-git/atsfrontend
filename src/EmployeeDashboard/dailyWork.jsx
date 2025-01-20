@@ -1140,7 +1140,7 @@ function DailyWork({
     messagesContext.info({
       message: description.title,
       description: description.desc,
-      duration: 0,
+      duration: 3,
       placement: "bottomRight",
     });
   };

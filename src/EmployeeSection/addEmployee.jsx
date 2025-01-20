@@ -220,7 +220,6 @@ const AddEmployee = ({ loginEmployeeName }) => {
         formDataToSend.append(key, formData[key]);
       }
     }
-    console.log(formData);
 
     try {
       const response = await fetch(
@@ -230,15 +229,16 @@ const AddEmployee = ({ loginEmployeeName }) => {
           body: formDataToSend,
         }
       );
-
-      const result = await response.text();
+      const responseBody = await response.json();
+      console.log("Response Body:", responseBody);
+      let newId = responseBody.id;
 
       if (response.ok) {
         console.log(loginEmployeeName);
 
         const emitData = {
-          employeeId: employeeId,
-          userType: userType,
+          employeeId: newId,
+          userType: "Recruiters",
           employeeName: formData.employeeName,
           dateOfJoining: getFormattedDateTime(),
           userName: formData.userName,
@@ -301,7 +301,9 @@ const AddEmployee = ({ loginEmployeeName }) => {
           reportingMangerName: "",
           reportingMangerDesignation: "",
         };
-        toast.success(result.message || "Employee Data Added Successfully.");
+        console.log(emitData);
+
+        toast.success("Employee Data Added Successfully.");
         socket.emit("add_recruiter_event", emitData);
         setFormData({
           employeeId: "0",
@@ -368,21 +370,13 @@ const AddEmployee = ({ loginEmployeeName }) => {
           reportingMangerDesignation: "",
         });
       } else {
-        toast.error(result.error || "Please Fill All Inputs.");
+        toast.error("Please Fill All Inputs.");
       }
     } catch (error) {
       console.error("Error:", error);
       toast.error("Error occurred while adding employee data.");
     }
   };
-
-  // const handleJobRoleChange = (e) => {
-  //   const { value } = e.target;
-  //   setFormData((prevState) => ({
-  //     ...prevState,
-  //     jobRole: value,
-  //   }));
-  // };
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prev) => !prev);

@@ -293,8 +293,11 @@ const CallingList = ({
     }
     return null;
   };
+console.log(selectedRows);
 
   const handleSelectAll = () => {
+    console.log(selectedRows);
+    
     if (allSelected) {
       setSelectedRows([]);
     } else {
@@ -361,7 +364,7 @@ const CallingList = ({
     } else if (userType === "Manager") {
       requestData = {
         currentTeamLeaderId: parseInt(oldselectedTeamLeader.oldTeamLeaderId),
-        newTeamLeaderId: parseInt(newselectedTeamLeader.newTeamLeaderId),
+        newTeamLeaderId: parseInt(f.newTeamLeaderId),
 
       };
     } else {

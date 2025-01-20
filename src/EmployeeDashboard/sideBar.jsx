@@ -248,21 +248,24 @@ function Sidebar({
       switch (`${userType}`) {
         case "SuperUser":
           requestBody = {
-            superUserId: employeeId,
+            employeeId: employeeId,
+            userType:"SuperUser",
             employeeName: loginEmployeeName,
             logoutDateAndTime: getFormattedDateTime(),
           };
           break;
         case "Manager":
           requestBody = {
-            managerId: employeeId,
+            employeeId: employeeId,
+            userType:"Manager",
             employeeName: loginEmployeeName,
             logoutDateAndTime: getFormattedDateTime(),
           };
           break;
         case "TeamLeader":
           requestBody = {
-            teamLeaderId: employeeId,
+            employeeId: employeeId,
+            userType:"TeamLeader",
             employeeName: loginEmployeeName,
             logoutDateAndTime: getFormattedDateTime(),
           };
@@ -270,6 +273,7 @@ function Sidebar({
         case "Recruiters":
           requestBody = {
             employeeId: employeeId,
+            userType:"Recruiters",
             employeeName: loginEmployeeName,
             logoutDateAndTime: getFormattedDateTime(),
           };

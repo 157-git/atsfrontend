@@ -207,12 +207,13 @@ const AddManager = ({loginEmployeeName}) => {
                     body: formDataToSend,
                 }
             );
-            const result = await response.text(); 
-
+            const responseBody = await response.json();
+            console.log('Response Body:', responseBody);
+            let newId = responseBody.id;
             if (response.ok) {
                 console.log(formData);
                 
-                toast.success(result.message || "Manager Data Added Successfully.");
+                toast.success( "Manager Data Added Successfully.");
 
 
 const emitData = {
@@ -221,8 +222,8 @@ const emitData = {
     userName: formData.userName,
     jobRole: formData.jobRole,
     reportingAdminName: loginEmployeeName,
-    employeeId:employeeId,
-    userType: userType,
+    employeeId:newId,
+    userType: "Manager",
 }
 
 console.log(emitData);
@@ -294,7 +295,7 @@ console.log(emitData);
 
                 })
             } else {
-                toast.error(result.error || "All Fields Are Mandatory. Please Fill All Fields.");
+                toast.error("All Fields Are Mandatory. Please Fill All Fields.");
             }
         } catch (error) {
             console.error("Error:", error);

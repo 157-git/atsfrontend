@@ -11,7 +11,8 @@ import "../Reports/MainReportDatapage.css";
 import { API_BASE_URL } from "../api/api";
 import { data } from "autoprefixer";
 import Loader from "../EmployeeSection/loader";
-import { Avatar, Card, List, Modal } from "antd";
+import { Avatar, Card, List, Modal, Skeleton } from "antd";
+import { getUserImageFromApiForReport } from "./getUserImageFromApiForReport";
 
 const MonthReport = ({loginEmployeeName}) => {
   const { userType } = useParams();
@@ -76,6 +77,7 @@ const MonthReport = ({loginEmployeeName}) => {
       );
       setTeamLeadersList(response.data);
       setDisplayTeamLeaders(true);
+      setDisplayRecruiters(false);
     } catch (error) {
       console.log(error);
     }
@@ -242,6 +244,53 @@ const MonthReport = ({loginEmployeeName}) => {
     });
   };
 
+
+  const [allImagesForRecruiters, setAllImagesForRecruiters] = useState([]); // Initialize as an object
+const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
+  useEffect(() => {
+    const fetchAllImagesForRecruiters = async () => {
+      const images = await Promise.all(
+        recruitersList.map(async (message) => {
+          return await getUserImageFromApiForReport(message.employeeId, message.jobRole);
+        })
+      );
+      setAllImagesForRecruiters(images); // Set the array of image URLs
+    };
+  
+    fetchAllImagesForRecruiters();
+    setFetchRecruitersImges(false);
+  }, [recruitersList]);
+
+  const [allImagesForTeamLeaders, setAllImagesForTeamLeaders] = useState([]); // Initialize as an object
+
+  useEffect(() => {
+    const fetchAllImagesForTeamLeaders = async () => {
+      const images = await Promise.all(
+        teamLeadersList.map(async (message) => {
+          return await getUserImageFromApiForReport(message.teamLeaderId, message.jobRole);
+        })
+      );
+      setAllImagesForTeamLeaders(images); // Set the array of image URLs
+    };
+  
+    fetchAllImagesForTeamLeaders();
+  }, [teamLeadersList]);
+
+  const [allImagesForManagers, setAllImagesForManagers] = useState([]); // Initialize as an object
+
+  useEffect(() => {
+    const fetchAllImagesForManagers = async () => {
+      const images = await Promise.all(
+        managersList.map(async (message) => {
+          return await getUserImageFromApiForReport(message.managerId, message.jobRole);
+        })
+      );
+      setAllImagesForManagers(images); // Set the array of image URLs
+    };
+  
+    fetchAllImagesForManagers();
+  }, [managersList]);
+  
   return (
     <>
       <div className="listofButtons11">
@@ -429,6 +478,7 @@ const MonthReport = ({loginEmployeeName}) => {
                     renderItem={(item, index) => (
                       <List.Item>
                         <input
+                        className="managersTeamRecruitersInputMargin"
                           type="checkbox"
                           checked={
                             selectedRole === "Manager" &&
@@ -446,9 +496,8 @@ const MonthReport = ({loginEmployeeName}) => {
                           avatar={
                             <Avatar
                               src={
-                                item.profileImage
-                                  ? item.profileImage
-                                  : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                                allImagesForManagers.length > 0 ? 
+                                allImagesForManagers[index] !== null ? allImagesForManagers[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
                               }
                             />
                           }
@@ -490,6 +539,7 @@ const MonthReport = ({loginEmployeeName}) => {
                         renderItem={(teamLeader, index) => (
                           <List.Item>
                             <input
+                            className="managersTeamRecruitersInputMargin"
                               type="checkbox"
                               checked={
                                 selectedRole === "TeamLeader" &&
@@ -507,9 +557,8 @@ const MonthReport = ({loginEmployeeName}) => {
                               avatar={
                                 <Avatar
                                   src={
-                                    teamLeader.profileImage
-                                      ? teamLeader.profileImage
-                                      : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                                    allImagesForTeamLeaders.length > 0 ? 
+                                    allImagesForTeamLeaders[index] !== null ? allImagesForTeamLeaders[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
                                   }
                                 />
                               }
@@ -555,6 +604,7 @@ const MonthReport = ({loginEmployeeName}) => {
                         renderItem={(recruiter, index) => (
                           <List.Item>
                             <input
+                            className="managersTeamRecruitersInputMargin"
                               type="checkbox"
                               checked={
                                 selectedRole === "Recruiters" &&
@@ -570,13 +620,17 @@ const MonthReport = ({loginEmployeeName}) => {
                             />
                             <List.Item.Meta
                               avatar={
+                                // <Skeleton.Avatar loading={fetchRecruitersImages} active >
                                 <Avatar
                                   src={
-                                    recruiter.profileImage
-                                      ? recruiter.profileImage
-                                      : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                                    // recruiter.profileImage
+                                    //   ? recruiter.profileImage
+                                    //   : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                                    allImagesForRecruiters.length > 0 ? 
+                                    allImagesForRecruiters[index] !== null ? allImagesForRecruiters[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
                                   }
                                 />
+                                // </Skeleton.Avatar>
                               }
                               title={recruiter.employeeName}
                             />

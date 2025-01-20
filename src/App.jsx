@@ -31,7 +31,7 @@ const applySavedColors = () => {
   const sidebarBg = localStorage.getItem("--sidebar-bg");
 
   const colors = [
-    { variable: "--primary-bg-color"},
+    { variable: "--primary-bg-color" },
     { variable: "--secondary-bg-color" },
     { variable: "--ternary-bg-color" },
     { variable: "--primary-txt-color" },
@@ -75,20 +75,19 @@ const applySavedColors = () => {
 
   if (bgColor)
     document.documentElement.style.setProperty("--Bg-color", bgColor);
-    if (primaryBgColor) {
-      colors.forEach(({ variable }) => {
-        const value = localStorage.getItem(variable); // Use the correct property
-        if (value) {
-          document.documentElement.style.setProperty(variable, value); // Set CSS variable
-        }
-        // console.log(variable, value); 
-      });
-    }
+  if (primaryBgColor) {
+    colors.forEach(({ variable }) => {
+      const value = localStorage.getItem(variable); // Use the correct property
+      if (value) {
+        document.documentElement.style.setProperty(variable, value); // Set CSS variable
+      }
+      // console.log(variable, value);
+    });
+  }
 
-    if (sidebarBg) {
-      document.documentElement.style.setProperty("--sidebar-bg", sidebarBg);
-    }
-    
+  if (sidebarBg) {
+    document.documentElement.style.setProperty("--sidebar-bg", sidebarBg);
+  }
 };
 
 const App = () => {
@@ -155,9 +154,10 @@ const App = () => {
             path="/157industries/:encodedParams/candidate-form"
             element={<ApplicantForm2 loginEmployeeName={loginEmployeeName} />}
           ></Route>
-
-          <Route path="/thank-you" element={<ThankYouPage></ThankYouPage>}>
-          </Route>
+          <Route
+            path="/thank-you"
+            element={<ThankYouPage></ThankYouPage>}
+          ></Route>
 
           {/* <Route
             path="/157industries/:encodedParams/candidate-form"
@@ -169,7 +169,6 @@ const App = () => {
             path="/157industries/:employeeId/:userType/candidate-form"
             element={<ApplicationForm1 loginEmployeeName={loginEmployeeName}  />}
           ></Route> */}
-
         </Routes>
       </BrowserRouter>
       <ToastContainer />
