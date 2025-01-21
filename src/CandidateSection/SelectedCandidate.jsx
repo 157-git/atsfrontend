@@ -9,9 +9,13 @@ import * as XLSX from "xlsx";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
-import { Pagination } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
+import FilterData from "../helper/filterData";
 import limitedOptions from "../helper/limitedOptions";
+import convertToDocumentLink from "../helper/convertToDocumentLink";
+import axios from "axios";
+// added by sahil karnekar
+import { Avatar, Card, List, Pagination } from "antd";
 
 // SwapnilRokade_SelectedCandidate_ModifyFilters_47to534_11/07
 const SelectedCandidate = ({ loginEmployeeName }) => {
@@ -43,52 +47,10 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   const [clickedTime, setClickedTime] = useState();
   const [errorForShare, setErrorForShare] = useState("");
   const [searchCount, setSearchCount] = useState(0);
-
-  //akash_pawar_SelectedCandidate_ShareFunctionality_18/07_34
-  const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
-    oldTeamLeaderId: "",
-    oldTeamLeaderJobRole: "",
-  });
-  const [newselectedTeamLeader, setNewSelectedTeamLeader] = useState({
-    newTeamLeaderId: "",
-    newTeamLeaderJobRole: "",
-  });
-
-  const [selectedRecruiters, setSelectedRecruiters] = useState({
-    index: "",
-    recruiterId: "",
-    recruiterJobRole: "",
-  });
-
-  const [oldSelectedManager, setOldSelectedManager] = useState({
-    oldManagerId: "",
-    oldManagerJobRole: "",
-  });
-  const [newSelectedManager, setNewSelectedManager] = useState({
-    newManagerId: "",
-    newManagerJobRole: "",
-  });
-  //akash_pawar_SelectedCandidate_ShareFunctionality_18/07_58
-
-  const { employeeId } = useParams();
-  const { userType } = useParams();
+  const { employeeId, userType } = useParams();
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
-
-  useEffect(() => {
-    fetchSelectedCandidateData(currentPage, pageSize);
-  }, [employeeId,currentPage, pageSize,searchTerm]);
-
-  useEffect(() => {
-    const options = limitedOptions
-      .filter(([key]) =>
-        Object.keys(filteredCallingList[0] || {}).includes(key)
-      )
-      .map(([key]) => key);
-    setFilterOptions(options);
-  }, [filteredCallingList]);
-  
 
   const fetchSelectedCandidateData = async (page, size) => {
     try {
@@ -108,144 +70,24 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   };
 
   useEffect(() => {
+    fetchSelectedCandidateData(currentPage, pageSize);
+  }, [employeeId, currentPage, pageSize, searchTerm]);
+
+  useEffect(() => {
+    const options = limitedOptions
+      .filter(([key]) =>
+        Object.keys(filteredCallingList[0] || {}).includes(key)
+      )
+      .map(([key]) => key);
+    setFilterOptions(options);
+  }, [filteredCallingList]);
+
+  useEffect(() => {
     filterData();
   }, [selectedFilters, callingList]);
 
-
-  //akash_pawar_SelectedCandidate_ShareFunctionality_18/07_138
-  const fetchManager = async () => {
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/get-all-managers`
-      );
-      const data = await response.json();
-      setFetchAllManager(data);
-    } catch (error) {
-      console.error("Error fetching shortlisted data:", error);
-    }
-  };
-
-  const fetchTeamLeader = async (empId) => {
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/tl-namesIds/${empId}`
-      );
-      const data = await response.json();
-      setFetchTeamleader(data);
-    } catch (error) {
-      console.error("Error fetching shortlisted data:", error);
-    }
-  };
-
-  const fetchRecruiters = async (teamLeaderId) => {
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/employeeId-names/${teamLeaderId}`
-      );
-      const data = await response.json();
-      setRecruiterUnderTeamLeader(data);
-    } catch (error) {
-      console.error("Error fetching shortlisted data:", error);
-    }
-  };
-
   useEffect(() => {
-    if (userType === "SuperUser") {
-      fetchManager();
-    } else if (userType === "Manager") {
-      fetchTeamLeader(employeeId);
-    } else {
-      fetchRecruiters(employeeId);
-    }
-  }, []);
-  //akash_pawar_SelectedCandidate_ShareFunctionality_18/07_182
-
-  useEffect(() => {
-    const filtered = callingList.filter((item) => {
-      const searchTermLower = searchTerm.toLowerCase();
-      return (
-        (item.date && item.date.toLowerCase().includes(searchTermLower)) ||
-        (item.recruiterName &&
-          item.recruiterName.toLowerCase().includes(searchTermLower)) ||
-        (item.candidateName &&
-          item.candidateName.toLowerCase().includes(searchTermLower)) ||
-        (item.candidateEmail &&
-          item.candidateEmail.toLowerCase().includes(searchTermLower)) ||
-        (item.contactNumber &&
-          item.contactNumber.toString().includes(searchTermLower)) ||
-        (item.alternateNumber &&
-          item.alternateNumber.toString().includes(searchTermLower)) ||
-        (item.sourceName &&
-          item.sourceName.toLowerCase().includes(searchTermLower)) ||
-        (item.requirementId &&
-          item.requirementId
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.requirementCompany &&
-          item.requirementCompany.toLowerCase().includes(searchTermLower)) ||
-        (item.communicationRating &&
-          item.communicationRating.toLowerCase().includes(searchTermLower)) ||
-        (item.currentLocation &&
-          item.currentLocation.toLowerCase().includes(searchTermLower)) ||
-        (item.personalFeedback &&
-          item.personalFeedback.toLowerCase().includes(searchTermLower)) ||
-        (item.callingFeedback &&
-          item.callingFeedback.toLowerCase().includes(searchTermLower)) ||
-          (item.jobDesignation &&
-            item.jobDesignation.toString().toLowerCase().includes(searchTermLower)) ||
-            (item.requirementId &&
-              item.requirementId.toString().toLowerCase().includes(searchTermLower)) ||
-              (item.fullAddress &&
-                item.fullAddress.toString().toLowerCase().includes(searchTermLower)) ||
-                (item.experienceYear &&
-                  item.experienceYear.toString().toLowerCase().includes(searchTermLower)) ||
-                  (item.experienceMonth &&
-                    item.experienceMonth.toString().toLowerCase().includes(searchTermLower)) ||
-                    (item.relevantExperience &&
-                      item.relevantExperience.toString().toLowerCase().includes(searchTermLower)) ||
-                      (item.currentCTCLakh &&
-                        item.currentCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
-                        (item.currentCTCThousand &&
-                          item.currentCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
-                          (item.expectedCTCLakh &&
-                            item.expectedCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
-                            (item.expectedCTCThousand &&
-                              item.expectedCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
-                              (item.yearOfPassing &&
-                                item.yearOfPassing.toString().toLowerCase().includes(searchTermLower)) ||
-                                (item.extraCertification &&
-                                  item.extraCertification.toString().toLowerCase().includes(searchTermLower)) ||
-                                  (item.holdingAnyOffer &&
-                                    item.holdingAnyOffer.toString().toLowerCase().includes(searchTermLower)) ||
-                                    (item.offerLetterMsg &&
-                                      item.offerLetterMsg.toString().toLowerCase().includes(searchTermLower)) ||
-                                      (item.noticePeriod &&
-                                        item.noticePeriod.toString().toLowerCase().includes(searchTermLower)) ||
-                                        (item.msgForTeamLeader &&
-                                          item.msgForTeamLeader.toString().toLowerCase().includes(searchTermLower)) ||
-                                          (item.availabilityForInterview &&
-                                            item.availabilityForInterview.toString().toLowerCase().includes(searchTermLower)) ||
-                                            (item.interviewTime &&
-                                              item.interviewTime.toString().toLowerCase().includes(searchTermLower)) ||
-                                              (item.finalStatus &&
-                                                item.finalStatus.toString().toLowerCase().includes(searchTermLower)) ||
-                                                (item.dateOfBirth &&
-                                                  item.dateOfBirth.toString().toLowerCase().includes(searchTermLower)) ||
-                                                  (item.gender &&
-                                                    item.gender.toString().toLowerCase().includes(searchTermLower)) ||
-                                                    (item.qualification &&
-                                                      item.qualification.toString().toLowerCase().includes(searchTermLower)) ||
-                                                      (item.incentive &&
-                                                        item.incentive.toString().toLowerCase().includes(searchTermLower)) ||
-                                                        (item.candidateId &&
-                                                          item.candidateId.toString().toLowerCase().includes(searchTermLower)) ||
-                                                          (item.empId &&
-                                                            item.empId.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.selectYesOrNo &&
-          item.selectYesOrNo.toLowerCase().includes(searchTermLower))
-      );
-    });
+    const filtered = FilterData(callingList, searchTerm);
     setFilteredCallingList(filtered);
     setSearchCount(filtered.length);
   }, [searchTerm, callingList]);
@@ -270,33 +112,31 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     }
   }, [sortCriteria, sortOrder]);
 
-
   // changed this function sahil karnekar date : 22-10-2024
   const filterData = () => {
     let filteredData = [...callingList];
-  
+
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
         filteredData = filteredData.filter((item) => {
           const itemValue = item[option]?.toString().toLowerCase(); // normalize the field value to lowercase
-          return values.some((value) =>
-            itemValue === value.toLowerCase() // exact match
+          return values.some(
+            (value) => itemValue === value.toLowerCase() // exact match
           );
         });
       }
     });
     setFilteredCallingList(filteredData);
   };
- // updated this function sahil karnekar date : 22-10-2024
- const handleFilterSelect = (key, value) => {
-  setSelectedFilters((prev) => ({
-    ...prev,
-    [key]: prev[key].includes(value)
-      ? prev[key].filter((item) => item !== value.toLowerCase())
-      : [...prev[key], value.toLowerCase()], // store filter values in lowercase
-  }));
-};
-  
+  // updated this function sahil karnekar date : 22-10-2024
+  const handleFilterSelect = (key, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [key]: prev[key].includes(value)
+        ? prev[key].filter((item) => item !== value.toLowerCase())
+        : [...prev[key], value.toLowerCase()], // store filter values in lowercase
+    }));
+  };
 
   const handleSort = (criteria) => {
     if (criteria === sortCriteria) {
@@ -312,7 +152,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     setShowFilterSection(!showFilterSection);
   };
 
-//  filter problem solved updated by sahil karnekar date 21-10-2024 complete  handleFilterOptionClick method
+  //  filter problem solved updated by sahil karnekar date 21-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
     if (activeFilterOption === key) {
       setActiveFilterOption(null);
@@ -323,21 +163,10 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
       const newSelectedFilters = { ...prev };
       if (key in newSelectedFilters) {
       } else {
-        newSelectedFilters[key] = []; 
+        newSelectedFilters[key] = [];
       }
       return newSelectedFilters;
     });
-  };
-
-  const getSortIcon = (criteria) => {
-    if (sortCriteria === criteria) {
-      return sortOrder === "asc" ? (
-        <i className="fa-solid fa-arrow-up"></i>
-      ) : (
-        <i className="fa-solid fa-arrow-down"></i>
-      );
-    }
-    return null;
   };
 
   const viewPage = (candidateId, requirementId) => {
@@ -418,146 +247,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
       toast.error("Please select at least one Candidate to proceed.");
     }
   };
-  
-  const handleShare = async () => {
-    if (userType === "TeamLeader") {
-      if (selectedRecruiters.recruiterId === "") {
-        setErrorForShare("Please Select A Recruiter!");
-        return;
-      } else {
-        setErrorForShare("");
-      }
-    }
-  
-    setIsDataSending(true);
-    let url = `${API_BASE_URL}/share-candidate-data/${employeeId}/${userType}`;
-    let requestData;
-  
-    if (
-      userType === "TeamLeader" &&
-      selectedRecruiters.recruiterId !== "" &&
-      selectedRows.length > 0
-    ) {
-      requestData = {
-        employeeId: parseInt(selectedRecruiters.recruiterId),
-        candidateIds: selectedRows,
-         jobRole : "Recruiters"
-      };
-    } else if (userType === "Manager") {
-      requestData = {
-        currentTeamLeaderId: parseInt(oldselectedTeamLeader.oldTeamLeaderId),
-        newTeamLeaderId: parseInt(newselectedTeamLeader.newTeamLeaderId),
-      };
-    } else {
-      requestData = {
-        currentManagerId: parseInt(oldSelectedManager.oldManagerId),
-        newManagerId: parseInt(newSelectedManager.newManagerId),
-      };
-    }
-  
-    try {
-      const requestOptions = {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      };
-  
-      const response = await fetch(url, requestOptions);
-  
-      if (!response.ok) {
-        setIsDataSending(false);
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-  
-      // If response is OK, proceed with success operations
-      setIsDataSending(false);
-      toast.success("Candidates forwarded successfully!");
-      fetchSelectedCandidateData(currentPage, pageSize);
-        // onSuccessAdd(true); commented by arshad on 13-01-2025
-      setShowForwardPopup(false);
-      setShowShareButton(true);
-      setSelectedRows([]);
-  
-      setSelectedRecruiters({
-        index: "",
-        recruiterId: "",
-        recruiterJobRole: "",
-      });
-      setOldSelectedTeamLeader({
-        oldTeamLeaderId: "",
-        oldTeamLeaderJobRole: "",
-      });
-      setNewSelectedTeamLeader({
-        newTeamLeaderId: "",
-        newTeamLeaderJobRole: "",
-      });
-      setOldSelectedManager({
-        oldManagerId: "",
-        oldManagerJobRole: "",
-      });
-      setNewSelectedManager({
-        newManagerId: "",
-        newManagerJobRole: "",
-      });
-    } catch (error) {
-      setIsDataSending(false);
-      setShowForwardPopup(false);
-  
-      // Log the error for debugging
-      console.error("Error while forwarding candidates:", error);
-  
-      // Display a more user-friendly error message
-      toast.error("Error while forwarding candidates. Please try again.");
-    }
-  };
-  
-  //akash_pawar_SelectedCandidate_ShareFunctionality_18/07_486
 
-  //Name:-Akash Pawar Component:-SelectedCandidate Subcategory:-ResumeViewButton(added) start LineNo:-322 Date:-02/07
-  const convertToDocumentLink = (byteCode, fileName) => {
-    if (byteCode) {
-      try {
-        // Detect file type based on file name extension or content
-        const fileType = fileName.split(".").pop().toLowerCase();
-
-        // Convert PDF
-        if (fileType === "pdf") {
-          const binary = atob(byteCode);
-          const array = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) {
-            array[i] = binary.charCodeAt(i);
-          }
-          const blob = new Blob([array], { type: "application/pdf" });
-          return URL.createObjectURL(blob);
-        }
-
-        // Convert Word document (assuming docx format)
-        if (fileType === "docx") {
-          const binary = atob(byteCode);
-          const array = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) {
-            array[i] = binary.charCodeAt(i);
-          }
-          const blob = new Blob([array], {
-            type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          });
-          return URL.createObjectURL(blob);
-        }
-
-        // Handle other document types here if needed
-
-        // If file type is not supported
-        console.error(`Unsupported document type: ${fileType}`);
-        return "Unsupported Document";
-      } catch (error) {
-        console.error("Error converting byte code to document:", error);
-        return "Invalid Document";
-      }
-    }
-    return "Document Not Found";
-  };
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [selectedCandidateResume, setSelectedCandidateResume] = useState("");
 
@@ -636,13 +326,16 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
         "Recruiter's Incentive": item.incentive || "-",
         "Interested and Eligible": item.selectYesOrNo || "-",
         "Current Company": item.lineUp?.companyName || "-",
-        "Total Experience": `${item.lineUp?.experienceYear || "0"} Years ${item.lineUp?.experienceMonth || "0"
-          } Month`,
+        "Total Experience": `${item.lineUp?.experienceYear || "0"} Years ${
+          item.lineUp?.experienceMonth || "0"
+        } Month`,
         "Relevant Experience": item.lineUp?.relevantExperience || "-",
-        "Current CTC": `${item.lineUp?.currentCTCLakh || "0"} Lakh ${item.lineUp?.currentCTCThousand || "0"
-          } Thousand`,
-        "Expected CTC": `${item.lineUp?.expectedCTCLakh || "0"} Lakh ${item.lineUp?.expectedCTCThousand || "0"
-          } Thousand`,
+        "Current CTC": `${item.lineUp?.currentCTCLakh || "0"} Lakh ${
+          item.lineUp?.currentCTCThousand || "0"
+        } Thousand`,
+        "Expected CTC": `${item.lineUp?.expectedCTCLakh || "0"} Lakh ${
+          item.lineUp?.expectedCTCThousand || "0"
+        } Thousand`,
         "Date Of Birth": item.lineUp?.dateOfBirth || "-",
         Gender: item.lineUp?.gender || "-",
         Education: item.lineUp?.qualification || "-",
@@ -711,7 +404,6 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     hidePopup();
   };
 
-  
   const calculateWidth = () => {
     const baseWidth = 250;
     const increment = 10;
@@ -719,205 +411,371 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
   };
 
- // added by sahil karnekar date 4-12-2024
- const handlePageChange = (page) => {
-  setCurrentPage(page);
-};
+  // added by sahil karnekar date 4-12-2024
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
-const handleSizeChange = (current, size) => {
-  setPageSize(size); // Update the page size
-  setCurrentPage(1); // Reset to the first page after page size changes
-};
+  const handleSizeChange = (current, size) => {
+    setPageSize(size); // Update the page size
+    setCurrentPage(1); // Reset to the first page after page size changes
+  };
 
   //Swapnil_Rokade_SelectedCandidate_columnsToInclude_columnsToExclude_17/07/2024//
 
   const calculateRowIndex = (index) => {
     return (currentPage - 1) * pageSize + index + 1;
   };
+
+  const [selectedRole, setSelectedRole] = useState("");
+  const [displayManagers, setDisplayManagers] = useState(false);
+  const [displayTeamLeaders, setDisplayTeamLeaders] = useState(false);
+  const [displayRecruiters, setDisplayRecruiters] = useState(false);
+  const [managersList, setManagersList] = useState([]);
+  const [teamLeadersList, setTeamLeadersList] = useState([]);
+  const [recruitersList, setRecruitersList] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [displayModalContainer, setDisplayModalContainer] = useState(false);
+
+  const handleShare = async () => {
+    if (!selectedEmployeeId || selectedRows.length === 0) {
+      toast.error("Please select a recruiter and at least one candidate.");
+      return;
+    }
+
+    setIsDataSending(true);
+    const url = `${API_BASE_URL}/share-candidate-data/${employeeId}/${userType}`;
+
+    const requestData = {
+      employeeId: parseInt(selectedEmployeeId),
+      candidateIds: selectedRows,
+      jobRole: selectedRole, // Dynamically pass the selected role
+    };
+
+    try {
+      console.log(JSON.stringify(requestData, null, 2));
+      const requestOptions = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      };
+      const response = await fetch(url, requestOptions);
+      if (!response.ok) {
+        setIsDataSending(false);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      setIsDataSending(false);
+      toast.success("Candidates forwarded successfully!");
+      console.log("Candidates forwarded successfully!");
+      resetSelections();
+      fetchSelectedCandidateData(currentPage, pageSize);
+      setShowForwardPopup(false);
+      setShowShareButton(true);
+      setSelectedRows([]);
+    } catch (error) {
+      setIsDataSending(false);
+      console.error("Error while forwarding candidates:", error);
+    }
+  };
+
+  const resetSelections = () => {
+    setSelectedEmployeeId(null); // Clear the selected recruiter ID
+    setSelectedRole(""); // Clear the selected role
+  };
+
+  useEffect(() => {
+    handleDisplayManagers();
+  }, []);
+
+  const handleDisplayManagers = async () => {
+    if (userType === "SuperUser") {
+      const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
+      setManagersList(response.data);
+      setDisplayManagers(true);
+    } else if (userType === "Manager") {
+      const response = await axios.get(
+        `${API_BASE_URL}/tl-namesIds/${employeeId}`
+      );
+      setTeamLeadersList(response.data);
+      setDisplayTeamLeaders(true);
+    } else if (userType === "TeamLeader") {
+      const response = await axios.get(
+        `${API_BASE_URL}/employeeId-names/${employeeId}`
+      );
+      setRecruitersList(response.data);
+      setDisplayRecruiters(true);
+    }
+    setDisplayModalContainer(true);
+  };
+
+  const handleOpenDownArrowContentForRecruiters = async (teamLeaderId) => {
+    setSelectedIds([]);
+    const response = await axios.get(
+      `${API_BASE_URL}/employeeId-names/${teamLeaderId}`
+    );
+    setRecruitersList(response.data);
+    setDisplayRecruiters(true);
+  };
+
+  const renderCard = (title, list) => (
+    <Card
+      hoverable
+      style={{
+        width: 380,
+        height: 580,
+        overflowY: "scroll",
+      }}
+      title={title}
+    >
+      <List
+        itemLayout="horizontal"
+        dataSource={list}
+        renderItem={(item, index) => (
+          <List.Item>
+            <input
+              style={{ width: "18px", height: "18px" }}
+              type="radio"
+              className="share-data-input-card"
+              checked={
+                selectedEmployeeId === (item.employeeId || item.teamLeaderId)
+              }
+              onChange={() => {
+                setSelectedRole(
+                  title === "Recruiters" ? "Recruiters" : "TeamLeader"
+                );
+                setSelectedEmployeeId(item.employeeId || item.teamLeaderId);
+              }}
+            />
+            <List.Item.Meta
+              avatar={
+                <Avatar
+                  src={
+                    item.profileImage
+                      ? item.profileImage
+                      : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                  }
+                />
+              }
+              title={item.employeeName || item.teamLeaderName}
+            />
+            <svg
+              onClick={() =>
+                handleOpenDownArrowContentForRecruiters(
+                  item.employeeId || item.teamLeaderId
+                )
+              }
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#000000"
+            >
+              <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
+            </svg>
+          </List.Item>
+        )}
+      />
+    </Card>
+  );
+
   return (
     <div className="App-after">
-{/* updated by sahil karnekar date 17-12-2024 */}
-{
-  !selectedCandidateId && (
+      {/* updated by sahil karnekar date 17-12-2024 */}
+      {!selectedCandidateId && (
+        <>
+          <div className="search">
+            {/* line 689 added by sahil karnekar date 24-10-2024 */}
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <i
+                className="fa-solid fa-magnifying-glass"
+                style={{ margin: "10px", width: "auto", fontSize: "15px" }}
+              ></i>
+              {/* line 698 to 708 added by sahil karnekar date 24-10-2024 */}
 
-    <>
-       <div className="search">
-                {/* line 689 added by sahil karnekar date 24-10-2024 */}
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <i
-                  className="fa-solid fa-magnifying-glass"
-                 
-                  style={{ margin: "10px", width: "auto", fontSize: "15px" }}
-                ></i>
-                {/* line 698 to 708 added by sahil karnekar date 24-10-2024 */}
-     
-                <div
-                    className="search-input-div"
-                    style={{ width: `${calculateWidth()}px` }}
-                  >
-                    <div className="forxmarkdiv">
-                    <input
-                      type="text"
-                      className="search-input removeBorderForSearchInput"
-                      placeholder="Search here..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    { searchTerm && (
-                      <div className="svgimagesetinInput">
-                    <svg onClick={(()=>setSearchTerm(""))} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+              <div
+                className="search-input-div"
+                style={{ width: `${calculateWidth()}px` }}
+              >
+                <div className="forxmarkdiv">
+                  <input
+                    type="text"
+                    className="search-input removeBorderForSearchInput"
+                    placeholder="Search here..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  {searchTerm && (
+                    <div className="svgimagesetinInput">
+                      <svg
+                        onClick={() => setSearchTerm("")}
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#000000"
+                      >
+                        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                      </svg>
                     </div>
-                    )}
-                    
-                    </div>
-                  </div>
-      
+                  )}
+                </div>
               </div>
-                <h5 style={{ color: "grey", textAlign: "center" }}>
-                  Selected Candidates {" "}
-                </h5>
+            </div>
+            <h5 style={{ color: "grey", textAlign: "center" }}>
+              Selected Candidates{" "}
+            </h5>
 
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "5px",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: "10px",
-                  }}
-                >
-                  <div>
-                     {(userType === 'Manager' || userType === 'TeamLeader') && (
-                    <button className="lineUp-share-btn" onClick={showPopup}>
+            <div
+              style={{
+                display: "flex",
+                gap: "5px",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "10px",
+              }}
+            >
+              <div>
+                {(userType === "Manager" || userType === "TeamLeader") && (
+                  <button className="lineUp-share-btn" onClick={showPopup}>
                     Create Excel
+                  </button>
+                )}
+                {showExportConfirmation && (
+                  <div className="popup-containers">
+                    <p className="confirmation-texts">
+                      Are you sure you want to generate the Excel file?
+                    </p>
+                    <button onClick={confirmExport} className="buttoncss-ctn">
+                      Yes
                     </button>
-                     )}
-                    {showExportConfirmation && (
-                      <div className="popup-containers">
-                        <p className="confirmation-texts">
-                          Are you sure you want to generate the Excel file?
-                        </p>
-                        <button
-                          onClick={confirmExport}
-                          className="buttoncss-ctn"
-                        >
-                          Yes
-                        </button>
-                        <button
-                          onClick={cancelExport}
-                          className="buttoncss-ctn"
-                        >
-                          No
-                        </button>
-                      </div>
-                    )}
+                    <button onClick={cancelExport} className="buttoncss-ctn">
+                      No
+                    </button>
                   </div>
-                  {userType !== "Recruiters" && (
-                    <div>
-                      {showShareButton ? (
+                )}
+              </div>
+              {userType !== "Recruiters" && (
+                <div>
+                  {showShareButton ? (
+                    <button
+                      className="lineUp-Filter-btn"
+                      onClick={() => setShowShareButton(false)}
+                    >
+                      Share
+                    </button>
+                  ) : (
+                    <div style={{ display: "flex", gap: "5px" }}>
+                      <button
+                        className="lineUp-Filter-btn"
+                        onClick={() => {
+                          setShowShareButton(true);
+                          setSelectedRows([]);
+                          setAllSelected(false);
+                        }}
+                      >
+                        close
+                      </button>
+                      {/* akash_pawar_SelectedCandidate_ShareFunctionality_18/07_604 */}
+                      {userType === "TeamLeader" && (
                         <button
-                          className="lineUp-Filter-btn"
-                          onClick={() => setShowShareButton(false)}
+                          className="lineUp-share-btn"
+                          onClick={handleSelectAll}
                         >
-                          Share
+                          {allSelected ? "Deselect All" : "Select All"}
                         </button>
-                      ) : (
-                        <div style={{ display: "flex", gap: "5px" }}>
-                          <button
-                            className="lineUp-Filter-btn"
-                            onClick={() => {
-                              setShowShareButton(true);
-                              setSelectedRows([]);
-                              setAllSelected(false);
-                            }}
-                          >
-                            close
-                          </button>
-                          {/* akash_pawar_SelectedCandidate_ShareFunctionality_18/07_604 */}
-                          {userType === "TeamLeader" && (
-                            <button
-                        className="lineUp-share-btn"
-                              onClick={handleSelectAll}
-                            >
-                              {allSelected ? "Deselect All" : "Select All"}
-                            </button>
-                          )}
-                          {/* akash_pawar_SelectedCandidate_ShareFunctionality_18/07_609 */}
-                          <button
-                            className="lineUp-Filter-btn"
-                            onClick={forwardSelectedCandidate}
-                          >
-                            Forward
-                          </button>
+                      )}
+                      {/* akash_pawar_SelectedCandidate_ShareFunctionality_18/07_609 */}
+                      <button
+                        className="lineUp-Filter-btn"
+                        onClick={forwardSelectedCandidate}
+                      >
+                        Forward
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+              <button
+                className="lineUp-Filter-btn"
+                onClick={toggleFilterSection}
+              >
+                Filter <i className="fa-solid fa-filter"></i>
+              </button>
+            </div>
+          </div>
+
+          {/* line 795 to 844 added by sahil karnekar date 22-10-2024 */}
+          <div className="filter-dropdowns">
+            {/* updated this filter section by sahil karnekar date 22-10-2024 */}
+            {showFilterSection && (
+              <div className="filter-section">
+                {limitedOptions.map(([optionKey, optionLabel]) => {
+                  const uniqueValues = Array.from(
+                    new Set(
+                      callingList
+                        .map((item) =>
+                          item[optionKey]?.toString().toLowerCase()
+                        )
+                        .filter(
+                          (value) =>
+                            value &&
+                            value !== "-" &&
+                            !(optionKey === "alternateNumber" && value === "0")
+                        )
+                    )
+                  );
+
+                  return (
+                    <div key={optionKey} className="filter-option">
+                      <button
+                        className="white-Btn"
+                        onClick={() => handleFilterOptionClick(optionKey)}
+                      >
+                        {optionLabel}
+                        <span className="filter-icon">&#x25bc;</span>
+                      </button>
+
+                      {activeFilterOption === optionKey && (
+                        <div className="city-filter">
+                          <div className="optionDiv">
+                            {uniqueValues.length > 0 ? (
+                              uniqueValues.map((value) => (
+                                <label
+                                  key={value}
+                                  className="selfcalling-filter-value"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={
+                                      selectedFilters[optionKey]?.includes(
+                                        value
+                                      ) || false
+                                    }
+                                    onChange={() =>
+                                      handleFilterSelect(optionKey, value)
+                                    }
+                                    style={{ marginRight: "5px" }}
+                                  />
+                                  {value}
+                                </label>
+                              ))
+                            ) : (
+                              <div>No values</div>
+                            )}
+                          </div>
                         </div>
                       )}
                     </div>
-                  )}
-                  <button
-                    className="lineUp-Filter-btn"
-                    onClick={toggleFilterSection}
-                  >
-                    Filter <i className="fa-solid fa-filter"></i>
-                  </button>
-                </div>
+                  );
+                })}
               </div>
-
-              {/* line 795 to 844 added by sahil karnekar date 22-10-2024 */}
-<div className="filter-dropdowns">
-   {/* updated this filter section by sahil karnekar date 22-10-2024 */}
-   {showFilterSection && (
-  <div className="filter-section">
-    {limitedOptions.map(([optionKey, optionLabel]) => {
-      const uniqueValues = Array.from(
-        new Set(
-          callingList
-            .map((item) => item[optionKey]?.toString().toLowerCase())
-            .filter((value) => value && value !== '-' && !(optionKey === 'alternateNumber' && value === '0'))
-        )
-      );
-
-      return (
-        <div key={optionKey} className="filter-option">
-          <button
-            className="white-Btn"
-            onClick={() => handleFilterOptionClick(optionKey)}
-          >
-            {optionLabel}
-            <span className="filter-icon">&#x25bc;</span>
-          </button>
-
-          {activeFilterOption === optionKey && (
-            <div className="city-filter">
-              <div className="optionDiv">
-                {uniqueValues.length > 0 ? (
-                  uniqueValues.map((value) => (
-                    <label key={value} className="selfcalling-filter-value">
-                      <input
-                        type="checkbox"
-                        checked={selectedFilters[optionKey]?.includes(value) || false}
-                        onChange={() => handleFilterSelect(optionKey, value)}
-                        style={{ marginRight: '5px' }}
-                      />
-                      {value}
-                    </label>
-                  ))
-                ) : (
-                  <div>No values</div>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    })}
-  </div>
-)}
-</div>
-{/* updated by sahil karnekar date 17-12-2024 */}
-    </>
-
-  )
-}
+            )}
+          </div>
+          {/* updated by sahil karnekar date 17-12-2024 */}
+        </>
+      )}
 
       {loading ? (
         <div className="register">
@@ -927,12 +785,12 @@ const handleSizeChange = (current, size) => {
         <>
           {!selectedCandidateId ? (
             <>
-
               <div className="attendanceTableData">
                 <table className="attendance-table">
                   <thead>
                     <tr className="attendancerows-head">
-                      {!showShareButton && userType === "TeamLeader" ? (
+                      {(!showShareButton && userType === "TeamLeader") ||
+                      (!showShareButton && userType === "Manager") ? (
                         <th className="attendanceheading">
                           <input
                             type="checkbox"
@@ -944,14 +802,14 @@ const handleSizeChange = (current, size) => {
                           />
                         </th>
                       ) : null}
-                     <th className="attendanceheading">Sr No.</th>
+                      <th className="attendanceheading">Sr No.</th>
                       <th className="attendanceheading">Candidate Id</th>
 
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("date")}
                       >
-                       Added Date Time
+                        Added Date Time
                       </th>
                       <th
                         className="attendanceheading"
@@ -992,24 +850,29 @@ const handleSizeChange = (current, size) => {
                       <th className="attendanceheading">Gender</th>
                       <th className="attendanceheading">Education</th>
                       <th className="attendanceheading">Year Of Passing</th>
-                      <th className="attendanceheading">Any Extra Certification</th>
+                      <th className="attendanceheading">
+                        Any Extra Certification
+                      </th>
                       {/* <th className="attendanceheading">Feedback</th> */}
                       <th className="attendanceheading">Holding Any Offer</th>
                       <th className="attendanceheading">Offer Letter Msg</th>
                       <th className="attendanceheading">Resume</th>
                       <th className="attendanceheading">Notice Period</th>
-                      {userType === 'TeamLeader' &&
+                      {userType === "TeamLeader" && (
                         <th className="attendanceheading">
                           Message For Manager
-                        </th>}
-                      {userType === 'Recruiters' &&
+                        </th>
+                      )}
+                      {userType === "Recruiters" && (
                         <th className="attendanceheading">
                           Message For Team Leader
-                        </th>}
-                      {userType === 'Manager' &&
+                        </th>
+                      )}
+                      {userType === "Manager" && (
                         <th className="attendanceheading">
                           Message For Super User
-                        </th>}
+                        </th>
+                      )}
                       {/* <th className="attendanceheading">
                         Availability For Interview
                       </th>
@@ -1017,7 +880,7 @@ const handleSizeChange = (current, size) => {
                       <th className="attendanceheading">Interview Status</th>
                       <th className="attendanceheading">Employee ID</th>
 
-                      {(userType === 'TeamLeader' || userType === 'Manager') && (
+                      {userType === "Manager" && (
                         <th className="attendanceheading">Team Leader Id</th>
                       )}
                       <th className="attendanceheading">Action</th>
@@ -1026,7 +889,8 @@ const handleSizeChange = (current, size) => {
                   <tbody>
                     {filteredCallingList.map((item, index) => (
                       <tr key={item.candidateId} className="attendancerows">
-                        {!showShareButton && userType === "TeamLeader" ? (
+                        {(!showShareButton && userType === "TeamLeader") ||
+                        (!showShareButton && userType === "Manager") ? (
                           <td className="tabledata">
                             <input
                               type="checkbox"
@@ -1034,26 +898,29 @@ const handleSizeChange = (current, size) => {
                               onChange={() => handleSelectRow(item.candidateId)}
                             />
                           </td>
-
-
                         ) : null}
-  <td
+                        <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {calculateRowIndex(index)}
+                          {calculateRowIndex(index)}
                           <div className="tooltip">
-                            <span className="tooltiptext">{calculateRowIndex(index)}</span>
+                            <span className="tooltiptext">
+                              {calculateRowIndex(index)}
+                            </span>
                           </div>
                         </td>
 
-<td
-  className="tabledata"
-  onMouseOver={handleMouseOver}
-  onMouseOut={handleMouseOut}
->
-{highlightText(item.candidateId.toString().toLowerCase() || "", searchTerm)}
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(
+                            item.candidateId.toString().toLowerCase() || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1062,30 +929,32 @@ const handleSizeChange = (current, size) => {
                               )}
                             </span>
                           </div>
-</td>
+                        </td>
 
-<td
-  className="tabledata"
-  onMouseOver={handleMouseOver}
-  onMouseOut={handleMouseOut}
->
-{ highlightText(item.date || "", searchTerm)  } - {item.candidateAddedTime || "-"}
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(item.date || "", searchTerm)} -{" "}
+                          {item.candidateAddedTime || "-"}
                           <div className="tooltip">
-                            <span className="tooltiptext">{highlightText(
+                            <span className="tooltiptext">
+                              {highlightText(
                                 item.date.toString().toLowerCase() || "",
                                 searchTerm
-                              )}  - {" "}  {item.candidateAddedTime}</span>
+                              )}{" "}
+                              - {item.candidateAddedTime}
+                            </span>
                           </div>
-</td>
+                        </td>
 
-
-
-<td
-  className="tabledata"
-  onMouseOver={handleMouseOver}
-  onMouseOut={handleMouseOut}
->
-{highlightText(item.recruiterName || "", searchTerm)}
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(item.recruiterName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1094,13 +963,13 @@ const handleSizeChange = (current, size) => {
                               )}
                             </span>
                           </div>
-</td>
+                        </td>
                         <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.candidateName || "", searchTerm)}
+                          {highlightText(item.candidateName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1130,7 +999,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                        {highlightText(item.contactNumber || "", searchTerm)}
+                          {highlightText(item.contactNumber || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1145,7 +1014,10 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.alternateNumber || "", searchTerm)}
+                          {highlightText(
+                            item.alternateNumber || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1160,13 +1032,10 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                        {highlightText(item.sourceName || "", searchTerm)}
+                          {highlightText(item.sourceName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {highlightText(
-                                item.sourceName || "",
-                                searchTerm
-                              )}
+                              {highlightText(item.sourceName || "", searchTerm)}
                             </span>
                           </div>
                         </td>
@@ -1205,7 +1074,10 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.requirementCompany || "", searchTerm)}
+                          {highlightText(
+                            item.requirementCompany || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1220,7 +1092,10 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.communicationRating || "", searchTerm)}
+                          {highlightText(
+                            item.communicationRating || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1235,7 +1110,10 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.currentLocation || "", searchTerm)}
+                          {highlightText(
+                            item.currentLocation || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1250,7 +1128,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.fullAddress || "", searchTerm)}
+                          {highlightText(item.fullAddress || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1261,11 +1139,14 @@ const handleSizeChange = (current, size) => {
                           </div>
                         </td>
                         <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                     {highlightText(item.callingFeedback || "", searchTerm)}
+                          className="tabledata "
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(
+                            item.callingFeedback || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1274,28 +1155,28 @@ const handleSizeChange = (current, size) => {
                               )}
                             </span>
                           </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                       {highlightText(item.feedBack || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.feedBack || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
-                    </td>
+                        </td>
                         <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {highlightText(item.incentive.toString().toLowerCase() || "", searchTerm)}
+                          {highlightText(item.feedBack || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(item.feedBack || "", searchTerm)}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className="tabledata "
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(
+                            item.incentive.toString().toLowerCase() || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1310,7 +1191,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.selectYesOrNo || "", searchTerm)}
+                          {highlightText(item.selectYesOrNo || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1326,7 +1207,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.companyName || "", searchTerm)}
+                          {highlightText(item.companyName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1341,13 +1222,13 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.experienceYear} Years {" "}
-                          {item.experienceMonth} Month
+                          {item.experienceYear} Years {item.experienceMonth}{" "}
+                          Month
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {" "}
-                              {item.experienceYear} Years  {" "}
-                              {item.experienceMonth} Month
+                              {item.experienceYear} Years {item.experienceMonth}{" "}
+                              Month
                             </span>
                           </div>
                         </td>
@@ -1356,7 +1237,10 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {highlightText(item.relevantExperience || "", searchTerm)}
+                          {highlightText(
+                            item.relevantExperience || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1366,31 +1250,43 @@ const handleSizeChange = (current, size) => {
                             </span>
                           </div>
                         </td>
-                        
-                        <td className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}>
 
-                            {item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand
-                            <div className="tooltip">
-                              <span className="tooltiptext">{item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand</span>
-                            </div>
-                          </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.currentCTCLakh} Lakh {item.currentCTCThousand}{" "}
+                          Thousand
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.currentCTCLakh} Lakh{" "}
+                              {item.currentCTCThousand} Thousand
+                            </span>
+                          </div>
+                        </td>
 
-                          <td className="tabledata" onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}>
-                            {item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand} {" "} Thousand
-                            <div className="tooltip">
-                              <span className="tooltiptext">{item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand}  {" "} Thousand</span>
-                            </div>
-                          </td>
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {item.expectedCTCLakh} Lakh {item.expectedCTCThousand}{" "}
+                          Thousand
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {item.expectedCTCLakh} Lakh{" "}
+                              {item.expectedCTCThousand} Thousand
+                            </span>
+                          </div>
+                        </td>
 
                         <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.dateOfBirth || "", searchTerm)}
+                          {highlightText(item.dateOfBirth || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1405,13 +1301,10 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                            {highlightText(item.gender || "", searchTerm)}
+                          {highlightText(item.gender || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
-                              {highlightText(
-                                item.gender || "",
-                                searchTerm
-                              )}
+                              {highlightText(item.gender || "", searchTerm)}
                             </span>
                           </div>
                         </td>
@@ -1420,7 +1313,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.qualification || "", searchTerm)}
+                          {highlightText(item.qualification || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1435,7 +1328,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.yearOfPassing || "", searchTerm)}
+                          {highlightText(item.yearOfPassing || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1450,7 +1343,10 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                             {highlightText(item.extraCertification || "", searchTerm)}
+                          {highlightText(
+                            item.extraCertification || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1465,7 +1361,10 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                            {highlightText(item.holdingAnyOffer || "", searchTerm)}
+                          {highlightText(
+                            item.holdingAnyOffer || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1480,7 +1379,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.offerLetterMsg || "", searchTerm)}
+                          {highlightText(item.offerLetterMsg || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1490,12 +1389,11 @@ const handleSizeChange = (current, size) => {
                             </span>
                           </div>
                         </td>
-                        
 
                         {/* Name:-Akash Pawar Component:-SelectedCandidate
                   Subcategory:-ResumeViewButton(added) start LineNo:-953
                   Date:-02/07 */}
-                         <td className="tabledata">
+                        <td className="tabledata">
                           <button
                             onClick={() => openResumeModal(item.resume)}
                             style={{ background: "none", border: "none" }}
@@ -1503,7 +1401,9 @@ const handleSizeChange = (current, size) => {
                             <i
                               className="fas fa-eye"
                               style={{
-                                color: item.resume ? "var(--active-icon)" : "inherit",
+                                color: item.resume
+                                  ? "var(--active-icon)"
+                                  : "inherit",
                               }}
                             ></i>
                           </button>
@@ -1517,7 +1417,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                            {highlightText(item.noticePeriod || "", searchTerm)}
+                          {highlightText(item.noticePeriod || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1532,7 +1432,10 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                             {highlightText(item.msgForTeamLeader || "", searchTerm)}
+                          {highlightText(
+                            item.msgForTeamLeader || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1542,36 +1445,12 @@ const handleSizeChange = (current, size) => {
                             </span>
                           </div>
                         </td>
-                        {/* <td
-                          className="tabledata "
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                          {item.availabilityForInterview}{" "}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.availabilityForInterview}{" "}
-                            </span>
-                          </div>
-                        </td>
                         <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                          {item.interviewTime}{" "}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {item.interviewTime}
-                            </span>
-                          </div>
-                        </td> */}
-                        <td
-                          className="tabledata "
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                           {highlightText(item.finalStatus || "", searchTerm)}
+                          {highlightText(item.finalStatus || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1586,7 +1465,10 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.empId.toString().toLowerCase() || "", searchTerm)}
+                          {highlightText(
+                            item.empId.toString().toLowerCase() || "",
+                            searchTerm
+                          )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1597,324 +1479,88 @@ const handleSizeChange = (current, size) => {
                           </div>
                         </td>
 
-                        {(userType === 'TeamLeader' || userType === 'Manager') && (
-                            <td
-                              className="tabledata"
-                              onMouseOver={handleMouseOver}
-                              onMouseOut={handleMouseOut}
-                            >
-                              {highlightText(item.teamLeaderId.toString().toLowerCase() || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.teamLeaderId.toString().toLowerCase() || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
-                            </td>
-                          )}
+                        {userType === "Manager" && (
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {highlightText(
+                              item.teamLeaderId.toString().toLowerCase() || "",
+                              searchTerm
+                            )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.teamLeaderId.toString().toLowerCase() ||
+                                    "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
+                          </td>
+                        )}
 
                         <td className="tabledata ">
-                          <button    className="table-icon-div">
-                          <i
-                            onClick={() => viewPage(item.candidateId,item.requirementId)}
-                            className="fa-regular fa-pen-to-square"
-
-                          ></i>
-
+                          <button className="table-icon-div">
+                            <i
+                              onClick={() =>
+                                viewPage(item.candidateId, item.requirementId)
+                              }
+                              className="fa-regular fa-pen-to-square"
+                            ></i>
                           </button>
-                         
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
+
                 {showForwardPopup ? (
                   <>
-                    <div
-                      className="bg-black bg-opacity-50 modal show"
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        position: "fixed",
-                        width: "100%",
-                        height: "100vh",
-                      }}
-                    >
-                      <Modal.Dialog
-                        style={{
-                          width: "500px",
-                          height: "800px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          marginTop: "100px",
-                        }}
-                      >
-                        <Modal.Header
-                          style={{
-                            fontSize: "18px",
-                            backgroundColor: "#f2f2f2",
-                          }}
-                        >
-                          Forward To
-                        </Modal.Header>
-                        <Modal.Body
-                          style={{
-                            backgroundColor: "#f2f2f2",
-                          }}
-                        >
-                          {/* akash_pawar_SelectedCandidate_ShareFunctionality_18/07_1300 */}
-                          <div className="accordion">
-                            {fetchAllManager && userType === "SuperUser" && (
-                              <div className="manager-data-transfer">
-                                <div className="old-manager-data">
-                                  <center>
-                                    <h1>Old Managers</h1>
-                                  </center>
-                                  {fetchAllManager.map((managers) => (
-                                    <div
-                                      className="accordion-item-SU"
-                                      key={managers.managerId}
-                                    >
-                                      <div className="accordion-header-SU">
-                                        <label
-                                          htmlFor={`old-${managers.managerId}`}
-                                          className="accordion-title"
-                                        >
-                                          <input
-                                            type="radio"
-                                            name="oldmanagers"
-                                            id={`old-${managers.managerId}`}
-                                            value={managers.managerId}
-                                            checked={
-                                              oldSelectedManager.oldManagerId ===
-                                              managers.managerId
-                                            }
-                                            onChange={() =>
-                                              setOldSelectedManager({
-                                                oldManagerId:
-                                                  managers.managerId,
-                                                oldManagerJobRole:
-                                                  managers.managerJobRole,
-                                              })
-                                            }
-                                          />{" "}
-                                          {managers.managerName}
-                                        </label>
-                                      </div>
-                                    </div>
-                                  ))}
+                    <div className="custom-modal-overlay">
+                      <div className="custom-modal-container">
+                        <div className="custom-modal-dialog">
+                          <div className="custom-modal-header">Forward To</div>
+                          <div className="custom-modal-body">
+                            <div className="custom-accordion">
+                              {userType === "TeamLeader" && (
+                                <div className="custom-main-list">
+                                  {displayRecruiters &&
+                                    renderCard("Recruiters", recruitersList)}
                                 </div>
+                              )}
 
-                                <div className="new-manager-data">
-                                  <center>
-                                    <h1>New Managers</h1>
-                                  </center>
-                                  {fetchAllManager
-                                    .filter(
-                                      (item) =>
-                                        item.managerId !==
-                                        oldSelectedManager.oldManagerId
-                                    )
-                                    .map((managers) => (
-                                      <div
-                                        className="accordion-item-SU"
-                                        key={managers.managerId}
-                                      >
-                                        <div className="accordion-header-SU">
-                                          <label
-                                            htmlFor={`new-${managers.managerId}`}
-                                            className="accordion-title"
-                                          >
-                                            <input
-                                              type="radio"
-                                              name="newmanagers"
-                                              id={`new-${managers.managerId}`}
-                                              value={managers.managerId}
-                                              checked={
-                                                newSelectedManager.newManagerId ===
-                                                managers.managerId
-                                              }
-                                              onChange={() =>
-                                                setNewSelectedManager({
-                                                  newManagerId:
-                                                    managers.managerId,
-                                                  newManagerJobRole:
-                                                    managers.managerJobRole,
-                                                })
-                                              }
-                                            />{" "}
-                                            {managers.managerName}
-                                          </label>
-                                        </div>
-                                      </div>
-                                    ))}
+                              {userType === "Manager" && (
+                                <div className="custom-main-list">
+                                  {displayTeamLeaders &&
+                                    renderCard("Team Leaders", teamLeadersList)}
+                                  {displayRecruiters &&
+                                    renderCard("Recruiters", recruitersList)}
                                 </div>
-                              </div>
-                            )}
-
-                            {fetchTeamleader && userType === "Manager" && (
-                              <div className="teamleader-data-transfer">
-                                <div className="old-teamleader-data">
-                                  <center>
-                                    <h1>Old Team Leaders</h1>
-                                  </center>
-                                  {fetchTeamleader.map((teamleaders) => (
-                                    <div
-                                      className="accordion-item-M"
-                                      key={teamleaders.teamLeaderId}
-                                    >
-                                      <div className="accordion-header-M">
-                                        <label
-                                          htmlFor={`old-${teamleaders.teamLeaderId}`}
-                                          className="accordion-title"
-                                        >
-                                          <input
-                                            type="radio"
-                                            name="oldteamleaders"
-                                            id={`old-${teamleaders.teamLeaderId}`}
-                                            value={teamleaders.teamLeaderId}
-                                            checked={
-                                              oldselectedTeamLeader.oldTeamLeaderId ===
-                                              teamleaders.teamLeaderId
-                                            }
-                                            onChange={() =>
-                                              setOldSelectedTeamLeader({
-                                                oldTeamLeaderId:
-                                                  teamleaders.teamLeaderId,
-                                                oldTeamLeaderJobRole:
-                                                  teamleaders.teamLeaderJobRole,
-                                              })
-                                            }
-                                          />{" "}
-                                          {teamleaders.teamLeaderName}
-                                        </label>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-
-                                <div className="new-teamleader-data">
-                                  <center>
-                                    <h1>New Team Leaders</h1>
-                                  </center>
-                                  {fetchTeamleader
-                                    .filter(
-                                      (item) =>
-                                        item.teamLeaderId !==
-                                        oldselectedTeamLeader.oldTeamLeaderId
-                                    )
-                                    .map((teamleaders) => (
-                                      <div
-                                        className="accordion-item-M"
-                                        key={teamleaders.managerId}
-                                      >
-                                        <div className="accordion-header-SU">
-                                          <label
-                                            htmlFor={`new-${teamleaders.teamLeaderId}`}
-                                            className="accordion-title"
-                                          >
-                                            <input
-                                              type="radio"
-                                              name="newteamleaders"
-                                              id={`new-${teamleaders.teamLeaderId}`}
-                                              value={teamleaders.teamLeaderId}
-                                              checked={
-                                                newselectedTeamLeader.newTeamLeaderId ===
-                                                teamleaders.teamLeaderId
-                                              }
-                                              onChange={() =>
-                                                setNewSelectedTeamLeader({
-                                                  newTeamLeaderId:
-                                                    teamleaders.teamLeaderId,
-                                                  newTeamLeaderJobRole:
-                                                    teamleaders.teamLeaderJobRole,
-                                                })
-                                              }
-                                            />{" "}
-                                            {teamleaders.teamLeaderName}
-                                          </label>
-                                        </div>
-                                      </div>
-                                    ))}
-                                </div>
-                              </div>
-                            )}
-                            {userType === "TeamLeader" && (
-                              <div className="accordion-item">
-                                <div className="accordion-header">
-                                  <label className="accordion-title">
-                                    {loginEmployeeName}
-                                  </label>
-                                </div>
-                                <div className="accordion-content newHegightSetForAlignment">
-                                  <form>
-                                    {recruiterUnderTeamLeader &&
-                                      recruiterUnderTeamLeader.map(
-                                        (recruiters) => (
-                                          <div
-                                            key={recruiters.recruiterId}
-                                            className="form-group"
-                                          >
-                                            <label
-                                              htmlFor={recruiters.employeeId}
-                                            >
-                                              <input
-                                              // line 1678 added by sahil karnekar date 24-10-2024
-                                              style={{width:"auto"}}
-                                                type="radio"
-                                                id={recruiters.employeeId}
-                                                name="recruiter"
-                                                value={recruiters.employeeId}
-                                                checked={
-                                                  selectedRecruiters.recruiterId ===
-                                                  recruiters.employeeId
-                                                }
-                                                onChange={() =>
-                                                  setSelectedRecruiters({
-                                                    index: 1,
-                                                    recruiterId:
-                                                      recruiters.employeeId,
-                                                    recruiterJobRole:
-                                                      recruiters.jobRole,
-                                                  })
-                                                }
-                                              />{" "}
-                                              {recruiters.employeeName}
-                                            </label>
-                                          </div>
-                                        )
-                                      )}
-                                  </form>
-                                </div>
-                              </div>
-                            )}
+                              )}
+                            </div>
                           </div>
-                          {/* akash_pawar_SelectedCandidate_ShareFunctionality_18/07_1523 */}
-                        </Modal.Body>
-                        {
-                         errorForShare && (
-                          <div style={{textAlign:"center", color:"red"}}>{errorForShare}</div>
-                         )
-                        }
-                        <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
-                          <button
-                            onClick={handleShare}
-                            className="selectedcan-share-forward-popup-btn"
-                          >
-                            Share
-                          </button>
-                          <button
-                            onClick={() => setShowForwardPopup(false)}
-                            className="selectedcan-close-forward-popup-btn"
-                          >
-                            Close
-                          </button>
-                        </Modal.Footer>
-                      </Modal.Dialog>
+
+                          <div className="custom-modal-footer">
+                            <button
+                              onClick={handleShare}
+                              className="daily-tr-btn"
+                            >
+                              Share
+                            </button>
+                            <button
+                              onClick={() => {
+                                setShowForwardPopup(false);
+                                resetSelections();
+                              }}
+                              className="daily-tr-btn"
+                            >
+                              Close
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </>
                 ) : null}
@@ -1954,20 +1600,20 @@ const handleSizeChange = (current, size) => {
           Subcategory:-ResumeModel(added) End LineNo:-1184 Date:-02/07 */}
               </div>
               <div className="search-count-last-div">
-            Total Results : {totalRecords}
-          </div>
-        <Pagination
-        current={currentPage}
-        total={totalRecords}
-        pageSize={pageSize}
-        showSizeChanger
-        showQuickJumper 
-        onShowSizeChange={handleSizeChange}
-        onChange={handlePageChange}
-        style={{
-          justifyContent: 'center',
-        }}
-      />
+                Total Results : {totalRecords}
+              </div>
+              <Pagination
+                current={currentPage}
+                total={totalRecords}
+                pageSize={pageSize}
+                showSizeChanger
+                showQuickJumper
+                onShowSizeChange={handleSizeChange}
+                onChange={handlePageChange}
+                style={{
+                  justifyContent: "center",
+                }}
+              />
             </>
           ) : (
             <AfterSelection
@@ -1985,7 +1631,6 @@ const handleSizeChange = (current, size) => {
           <Loader size={50} color="#ffb281" />
         </div>
       )}
-    
     </div>
   );
 };

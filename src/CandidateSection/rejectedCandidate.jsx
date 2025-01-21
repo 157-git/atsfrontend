@@ -8,10 +8,15 @@ import * as XLSX from "xlsx";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { toast } from "react-toastify";
-import { Pagination } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import limitedOptions from "../helper/limitedOptions";
-// SwapnilRokade_RejectedCandidate_ModifyFilters_11/07
+import convertToDocumentLink from "../helper/convertToDocumentLink";
+import axios from "axios";
+// added by sahil karnekar
+import { Avatar, Card, List, Pagination } from "antd";
+import FilterData from "../helper/filterData";
+
+
 const RejectedCandidate = ({
   updateState,
   funForGettingCandidateId,
@@ -50,55 +55,10 @@ const RejectedCandidate = ({
   const [searchCount, setSearchCount] = useState(0);
   // added by sahil karnekar to refresh the useeffect on date 17-12-2024
   const [triggerFetch, setTriggerFetch] = useState(false);
-
-  const { employeeId } = useParams();
-  const newEmployeeId = parseInt(employeeId, 10);
-
-  //akash_pawar_RejectedCandidate_ShareFunctionality_18/07_43
-  const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
-    oldTeamLeaderId: "",
-    oldTeamLeaderJobRole: "",
-  });
-  const [newselectedTeamLeader, setNewSelectedTeamLeader] = useState({
-    newTeamLeaderId: "",
-    newTeamLeaderJobRole: "",
-  });
-
-  const [selectedRecruiters, setSelectedRecruiters] = useState({
-    index: "",
-    recruiterId: "",
-    recruiterJobRole: "",
-  });
-
-  const [oldSelectedManager, setOldSelectedManager] = useState({
-    oldManagerId: "",
-    oldManagerJobRole: "",
-  });
-  const [newSelectedManager, setNewSelectedManager] = useState({
-    newManagerId: "",
-    newManagerJobRole: "",
-  });
-  //akash_pawar_RejectedCandidate_ShareFunctionality_18/07_65
-
-  const navigator = useNavigate();
-
-  const { userType } = useParams();
+  const { employeeId , userType } = useParams();
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
-
-  useEffect(() => {
-    fetchRejectedData(currentPage, pageSize);
-  }, [employeeId, currentPage, pageSize, triggerFetch, searchTerm]);
-
-  useEffect(() => {
-    const options = limitedOptions
-      .filter(([key]) =>
-        Object.keys(filteredCallingList[0] || {}).includes(key)
-      )
-      .map(([key]) => key);
-    setFilterOptions(options);
-  }, [filteredCallingList]);
 
   const fetchRejectedData = async (page, size) => {
     try {
@@ -118,53 +78,21 @@ const RejectedCandidate = ({
   };
 
   useEffect(() => {
-    filterData();
-  }, [selectedFilters, callingList]);
-
-  //akash_pawar_RejectedCandidate_ShareFunctionality_18/07_144
-
-  const fetchManager = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/get-all-managers`);
-      const data = await response.json();
-      setFetchAllManager(data);
-    } catch (error) {
-      console.error("Error fetching shortlisted data:", error);
-    }
-  };
-
-  const fetchTeamLeader = async (empId) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/tl-namesIds/${empId}`);
-      const data = await response.json();
-      setFetchTeamleader(data);
-    } catch (error) {
-      console.error("Error fetching shortlisted data:", error);
-    }
-  };
-
-  const fetchRecruiters = async (teamLeaderId) => {
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/employeeId-names/${teamLeaderId}`
-      );
-      const data = await response.json();
-      setRecruiterUnderTeamLeader(data);
-    } catch (error) {
-      console.error("Error fetching shortlisted data:", error);
-    }
-  };
+    fetchRejectedData(currentPage, pageSize);
+  }, [employeeId, currentPage, pageSize, triggerFetch, searchTerm]);
 
   useEffect(() => {
-    if (userType === "SuperUser") {
-      fetchManager();
-    } else if (userType === "Manager") {
-      fetchTeamLeader(employeeId);
-    } else {
-      fetchRecruiters(employeeId);
-    }
-  }, []);
-  //akash_pawar_RejectedCandidate_ShareFunctionality_18/07_188
+    const options = limitedOptions
+      .filter(([key]) =>
+        Object.keys(filteredCallingList[0] || {}).includes(key)
+      )
+      .map(([key]) => key);
+    setFilterOptions(options);
+  }, [filteredCallingList]);
+
+  useEffect(() => {
+    filterData();
+  }, [selectedFilters, callingList]);
 
   const handleSelectAll = () => {
     if (allSelected) {
@@ -186,7 +114,7 @@ const RejectedCandidate = ({
     });
   };
 
-//akash_pawar_RejectedCandidate_ShareFunctionality_18/07_210
+//Arshad Attar_ShareFunctionality 20-01-2025
 const forwardSelectedCandidate = (e) => {
     e.preventDefault();
     if (selectedRows.length >= 1) {
@@ -203,92 +131,6 @@ const forwardSelectedCandidate = (e) => {
       toast.error("Please select at least one Candidate to proceed.");
     }
 };
-
-  const handleShare = async () => {
-    if (userType === "TeamLeader") {
-      if (selectedRecruiters.recruiterId === "") {
-        setErrorForShare("Please Select A Recruiter ! ");
-        return;
-      } else {
-        setErrorForShare("");
-      }
-    }
-    setIsDataSending(true);
-    let url = `${API_BASE_URL}/share-candidate-data/${employeeId}/${userType}`;
-    let requestData;
-    if (
-      userType === "TeamLeader" &&
-      selectedRecruiters.recruiterId != "" &&
-      selectedRows.length > 0
-    ) {
-      requestData = {
-        employeeId: parseInt(selectedRecruiters.recruiterId),
-        candidateIds: selectedRows,
-        jobRole : "Recruiters"
-      };
-    } else if (userType === "Manager") {
-      requestData = {
-        currentTeamLeaderId: parseInt(oldselectedTeamLeader.oldTeamLeaderId),
-        newTeamLeaderId: parseInt(newselectedTeamLeader.newTeamLeaderId),
-      };
-    } else {
-      requestData = {
-        currentManagerId: parseInt(oldSelectedManager.oldManagerId),
-        newManagerId: parseInt(newSelectedManager.newManagerId),
-      };
-    }
-    try {
-      const requestOptions = {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          // Add any additional headers as needed
-        },
-        body: JSON.stringify(requestData),
-      };
-      const response = await fetch(url, requestOptions);
-      if (!response.ok) {
-        setIsDataSending(false);
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      // Handle success response
-      setIsDataSending(false);
-      toast.success("Candidates forwarded successfully!");
-      fetchRejectedData(currentPage, pageSize);
-      // onSuccessAdd(true);
-      setShowForwardPopup(false); // Close the modal or handle any further UI updates
-      setShowShareButton(true);
-      setSelectedRows([]);
-      setSelectedRecruiters({
-        index: "",
-        recruiterId: "",
-        recruiterJobRole: "",
-      });
-      setOldSelectedTeamLeader({
-        oldTeamLeaderId: "",
-        oldTeamLeaderJobRole: "",
-      });
-      setNewSelectedTeamLeader({
-        newTeamLeaderId: "",
-        newTeamLeaderJobRole: "",
-      });
-      setOldSelectedManager({
-        oldManagerId: "",
-        oldManagerJobRole: "",
-      });
-      setNewSelectedManager({
-        newManagerId: "",
-        newManagerJobRole: "",
-      });
-      // fetchShortListedData(); // Uncomment this if you want to refresh the data after forwarding
-    } catch (error) {
-      setIsDataSending(false);
-      setShowForwardPopup(false);
-      toast.error("Error while forwarding candidates"); //Swapnil Error&success message
-      // Handle error scenarios or show error messages to the user
-    }
-  };
-  //akash_pawar_RejectedCandidate_ShareFunctionality_18/07_294
 
   //  filter problem solved updated by sahil karnekar date 21-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
@@ -308,165 +150,11 @@ const forwardSelectedCandidate = (e) => {
   };
 
   useEffect(() => {
-    const filtered = callingList.filter((item) => {
-      const searchTermLower = searchTerm.toLowerCase();
-      return (
-        (item.date && item.date.toLowerCase().includes(searchTermLower)) ||
-        (item.recruiterName &&
-          item.recruiterName.toLowerCase().includes(searchTermLower)) ||
-        (item.candidateName &&
-          item.candidateName.toLowerCase().includes(searchTermLower)) ||
-        (item.candidateEmail &&
-          item.candidateEmail.toLowerCase().includes(searchTermLower)) ||
-        (item.contactNumber &&
-          item.contactNumber.toString().includes(searchTermLower)) ||
-        (item.alternateNumber &&
-          item.alternateNumber.toString().includes(searchTermLower)) ||
-        (item.sourceName &&
-          item.sourceName.toLowerCase().includes(searchTermLower)) ||
-        (item.requirementId &&
-          item.requirementId
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.requirementCompany &&
-          item.requirementCompany.toLowerCase().includes(searchTermLower)) ||
-        (item.communicationRating &&
-          item.communicationRating.toLowerCase().includes(searchTermLower)) ||
-        (item.currentLocation &&
-          item.currentLocation.toLowerCase().includes(searchTermLower)) ||
-        (item.personalFeedback &&
-          item.personalFeedback.toLowerCase().includes(searchTermLower)) ||
-        (item.callingFeedback &&
-          item.callingFeedback.toLowerCase().includes(searchTermLower)) ||
-        (item.jobDesignation &&
-          item.jobDesignation
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.requirementId &&
-          item.requirementId
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.fullAddress &&
-          item.fullAddress
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.experienceYear &&
-          item.experienceYear
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.experienceMonth &&
-          item.experienceMonth
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.relevantExperience &&
-          item.relevantExperience
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.currentCTCLakh &&
-          item.currentCTCLakh
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.currentCTCThousand &&
-          item.currentCTCThousand
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.expectedCTCLakh &&
-          item.expectedCTCLakh
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.expectedCTCThousand &&
-          item.expectedCTCThousand
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.yearOfPassing &&
-          item.yearOfPassing
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.extraCertification &&
-          item.extraCertification
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.holdingAnyOffer &&
-          item.holdingAnyOffer
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.offerLetterMsg &&
-          item.offerLetterMsg
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.noticePeriod &&
-          item.noticePeriod
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.msgForTeamLeader &&
-          item.msgForTeamLeader
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.availabilityForInterview &&
-          item.availabilityForInterview
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.interviewTime &&
-          item.interviewTime
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.finalStatus &&
-          item.finalStatus
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.dateOfBirth &&
-          item.dateOfBirth
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.gender &&
-          item.gender.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.qualification &&
-          item.qualification
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.incentive &&
-          item.incentive.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.candidateId &&
-          item.candidateId
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.empId &&
-          item.empId.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.teamLeaderId &&
-          item.teamLeaderId
-            .toString()
-            .toLowerCase()
-            .includes(searchTermLower)) ||
-        (item.selectYesOrNo &&
-          item.selectYesOrNo.toLowerCase().includes(searchTermLower))
-      );
-    });
+    const filtered = FilterData(callingList, searchTerm);
     setFilteredCallingList(filtered);
     setSearchCount(filtered.length);
   }, [searchTerm, callingList]);
+
 
   useEffect(() => {
     if (sortCriteria) {
@@ -532,17 +220,6 @@ const forwardSelectedCandidate = (e) => {
     setShowFilterSection(!showFilterSection);
   };
 
-  const getSortIcon = (criteria) => {
-    if (sortCriteria === criteria) {
-      return sortOrder === "asc" ? (
-        <i className="fa-solid fa-arrow-up"></i>
-      ) : (
-        <i className="fa-solid fa-arrow-down"></i>
-      );
-    }
-    return null;
-  };
-
   const handleUpdateSuccess = () => {
     setShowUpdateCallingTracker(false);
     fetchRejectedData(currentPage, pageSize);
@@ -580,49 +257,7 @@ const forwardSelectedCandidate = (e) => {
     }
   };
 
-  //Name:-Akash Pawar Component:-RejectedCandidate Subcategory:-ResumeViewButton(added) start LineNo:-326 Date:-02/07
-  const convertToDocumentLink = (byteCode, fileName) => {
-    if (byteCode) {
-      try {
-        // Detect file type based on file name extension or content
-        const fileType = fileName.split(".").pop().toLowerCase();
 
-        // Convert PDF
-        if (fileType === "pdf") {
-          const binary = atob(byteCode);
-          const array = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) {
-            array[i] = binary.charCodeAt(i);
-          }
-          const blob = new Blob([array], { type: "application/pdf" });
-          return URL.createObjectURL(blob);
-        }
-
-        // Convert Word document (assuming docx format)
-        if (fileType === "docx") {
-          const binary = atob(byteCode);
-          const array = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) {
-            array[i] = binary.charCodeAt(i);
-          }
-          const blob = new Blob([array], {
-            type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          });
-          return URL.createObjectURL(blob);
-        }
-
-        // Handle other document types here if needed
-
-        // If file type is not supported
-        console.error(`Unsupported document type: ${fileType}`);
-        return "Unsupported Document";
-      } catch (error) {
-        console.error("Error converting byte code to document:", error);
-        return "Invalid Document";
-      }
-    }
-    return "Document Not Found";
-  };
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [selectedCandidateResume, setSelectedCandidateResume] = useState("");
 
@@ -801,6 +436,161 @@ const forwardSelectedCandidate = (e) => {
   const calculateRowIndex = (index) => {
     return (currentPage - 1) * pageSize + index + 1;
   };
+
+
+  const [selectedRole, setSelectedRole] = useState("");
+  const [displayManagers, setDisplayManagers] = useState(false);
+  const [displayTeamLeaders, setDisplayTeamLeaders] = useState(false);
+  const [displayRecruiters, setDisplayRecruiters] = useState(false);
+  const [managersList, setManagersList] = useState([]);
+  const [teamLeadersList, setTeamLeadersList] = useState([]);
+  const [recruitersList, setRecruitersList] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [displayModalContainer, setDisplayModalContainer] = useState(false);
+
+  const handleShare = async () => {
+    if (!selectedEmployeeId || selectedRows.length === 0) {
+      toast.error("Please select a recruiter and at least one candidate.");
+      return;
+    }
+
+    setIsDataSending(true);
+    const url = `${API_BASE_URL}/share-candidate-data/${employeeId}/${userType}`;
+
+    const requestData = {
+      employeeId: parseInt(selectedEmployeeId),
+      candidateIds: selectedRows,
+      jobRole: selectedRole, // Dynamically pass the selected role
+    };
+
+    try {
+      console.log(JSON.stringify(requestData, null, 2));
+      const requestOptions = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      };
+      const response = await fetch(url, requestOptions);
+      if (!response.ok) {
+        setIsDataSending(false);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      setIsDataSending(false);
+      toast.success("Candidates forwarded successfully!");
+      console.log("Candidates forwarded successfully!");
+      resetSelections();
+      fetchRejectedData(currentPage, pageSize);
+      setShowForwardPopup(false);
+      setShowShareButton(true);
+      setSelectedRows([]);
+    } catch (error) {
+      setIsDataSending(false);
+      console.error("Error while forwarding candidates:", error);
+    }
+  };
+
+  const resetSelections = () => {
+    setSelectedEmployeeId(null); // Clear the selected recruiter ID
+    setSelectedRole(""); // Clear the selected role
+  };
+
+  useEffect(() => {
+    handleDisplayManagers();
+  }, []);
+
+  const handleDisplayManagers = async () => {
+    if (userType === "SuperUser") {
+      const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
+      setManagersList(response.data);
+      setDisplayManagers(true);
+    } else if (userType === "Manager") {
+      const response = await axios.get(
+        `${API_BASE_URL}/tl-namesIds/${employeeId}`
+      );
+      setTeamLeadersList(response.data);
+      setDisplayTeamLeaders(true);
+    } else if (userType === "TeamLeader") {
+      const response = await axios.get(
+        `${API_BASE_URL}/employeeId-names/${employeeId}`
+      );
+      setRecruitersList(response.data);
+      setDisplayRecruiters(true);
+    }
+    setDisplayModalContainer(true);
+  };
+
+  const handleOpenDownArrowContentForRecruiters = async (teamLeaderId) => {
+    setSelectedIds([]);
+    const response = await axios.get(
+      `${API_BASE_URL}/employeeId-names/${teamLeaderId}`
+    );
+    setRecruitersList(response.data);
+    setDisplayRecruiters(true);
+  };
+
+  const renderCard = (title, list) => (
+    <Card
+      hoverable
+      style={{
+        width: 380,
+        height: 580,
+        overflowY: "scroll",
+      }}
+      title={title}
+    >
+      <List
+        itemLayout="horizontal"
+        dataSource={list}
+        renderItem={(item, index) => (
+          <List.Item>
+            <input
+              style={{ width: "18px", height: "18px" }}
+              type="radio"
+              className="share-data-input-card"
+              checked={
+                selectedEmployeeId === (item.employeeId || item.teamLeaderId)
+              }
+              onChange={() => {
+                setSelectedRole(
+                  title === "Recruiters" ? "Recruiters" : "TeamLeader"
+                );
+                setSelectedEmployeeId(item.employeeId || item.teamLeaderId);
+              }}
+            />
+            <List.Item.Meta
+              avatar={
+                <Avatar
+                  src={
+                    item.profileImage
+                      ? item.profileImage
+                      : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                  }
+                />
+              }
+              title={item.employeeName || item.teamLeaderName}
+            />
+            <svg
+              onClick={() =>
+                handleOpenDownArrowContentForRecruiters(
+                  item.employeeId || item.teamLeaderId
+                )
+              }
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#000000"
+            >
+              <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
+            </svg>
+          </List.Item>
+        )}
+      />
+    </Card>
+  );
+
 
   return (
     <div className="calling-list-container">
@@ -1009,7 +799,10 @@ const forwardSelectedCandidate = (e) => {
                 <table className="attendance-table">
                   <thead>
                     <tr className="attendancerows-head">
-                      {!showShareButton && userType === "TeamLeader" ? (
+
+                    {(!showShareButton && userType === "TeamLeader") ||
+                      (!showShareButton && userType === "Manager") ? (  
+
                         <th className="attendanceheading">
                           <input
                             type="checkbox"
@@ -1101,8 +894,7 @@ const forwardSelectedCandidate = (e) => {
                       <th className="attendanceheading">Interview Status</th>
                       <th className="attendanceheading">Employee ID</th>
 
-                      {(userType === "TeamLeader" ||
-                        userType === "Manager") && (
+                      {(userType === "Manager") && (
                         <th className="attendanceheading">Team Leader Id</th>
                       )}
 
@@ -1112,7 +904,8 @@ const forwardSelectedCandidate = (e) => {
                   <tbody>
                     {filteredCallingList.map((item, index) => (
                       <tr key={item.candidateId} className="attendancerows">
-                        {!showShareButton && userType === "TeamLeader" ? (
+                        {(!showShareButton && userType === "TeamLeader") ||
+                        (!showShareButton && userType === "Manager") ? (  
                           <td className="tabledata">
                             <input
                               type="checkbox"
@@ -1642,19 +1435,7 @@ const forwardSelectedCandidate = (e) => {
                             </div>
                           </td>
 
-                          {/* <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {item.resume || "-"}
-                            <div className="tooltip">
-                              <span className="tooltiptext">{item.resume}</span>
-                            </div>
-                          </td> */}
-                          {/* Name:-Akash Pawar Component:-LineUpList
-                  Subcategory:-ResumeViewButton(added) start LineNo:-993
-                  Date:-02/07 */}
+                        
                           <td className="tabledata">
                             <button
                               onClick={() => openResumeModal(item.resume)}
@@ -1780,8 +1561,7 @@ const forwardSelectedCandidate = (e) => {
                             </div>
                           </td>
 
-                          {(userType === "TeamLeader" ||
-                            userType === "Manager") && (
+                          {(userType === "Manager") && (
                             <td
                               className="tabledata"
                               onMouseOver={handleMouseOver}
@@ -1816,293 +1596,56 @@ const forwardSelectedCandidate = (e) => {
                     ))}
                   </tbody>
                 </table>
-                {showForwardPopup ? (
+         
+               {showForwardPopup ? (
                   <>
-                    <div
-                      className="bg-black bg-opacity-50 modal show"
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        position: "fixed",
-                        width: "100%",
-                        height: "100vh",
-                      }}
-                    >
-                      <Modal.Dialog
-                        style={{
-                          width: "500px",
-                          height: "800px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          marginTop: "100px",
-                        }}
-                      >
-                        <Modal.Header
-                          style={{
-                            fontSize: "18px",
-                            backgroundColor: "#f2f2f2",
-                          }}
-                        >
-                          Forward To
-                        </Modal.Header>
-                        <Modal.Body
-                          style={{
-                            backgroundColor: "#f2f2f2",
-                          }}
-                        >
-                          {/* akash_pawar_RejectedCandidate_ShareFunctionality_18/07_1339 */}
-                          <div className="accordion">
-                            {fetchAllManager && userType === "SuperUser" && (
-                              <div className="manager-data-transfer">
-                                <div className="old-manager-data">
-                                  <center>
-                                    <h1>Old Managers</h1>
-                                  </center>
-                                  {fetchAllManager.map((managers) => (
-                                    <div
-                                      className="accordion-item-SU"
-                                      key={managers.managerId}
-                                    >
-                                      <div className="accordion-header-SU">
-                                        <label
-                                          htmlFor={`old-${managers.managerId}`}
-                                          className="accordion-title"
-                                        >
-                                          <input
-                                            type="radio"
-                                            name="oldmanagers"
-                                            id={`old-${managers.managerId}`}
-                                            value={managers.managerId}
-                                            checked={
-                                              oldSelectedManager.oldManagerId ===
-                                              managers.managerId
-                                            }
-                                            onChange={() =>
-                                              setOldSelectedManager({
-                                                oldManagerId:
-                                                  managers.managerId,
-                                                oldManagerJobRole:
-                                                  managers.managerJobRole,
-                                              })
-                                            }
-                                          />{" "}
-                                          {managers.managerName}
-                                        </label>
-                                      </div>
-                                    </div>
-                                  ))}
+                    <div className="custom-modal-overlay">
+                      <div className="custom-modal-container">
+                        <div className="custom-modal-dialog">
+                          <div className="custom-modal-header">Forward To</div>
+                          <div className="custom-modal-body">
+                            <div className="custom-accordion">
+                              {userType === "TeamLeader" && (
+                                <div className="custom-main-list">
+                                  {displayRecruiters &&
+                                    renderCard("Recruiters", recruitersList)}
                                 </div>
+                              )}
 
-                                <div className="new-manager-data">
-                                  <center>
-                                    <h1>New Managers</h1>
-                                  </center>
-                                  {fetchAllManager
-                                    .filter(
-                                      (item) =>
-                                        item.managerId !==
-                                        oldSelectedManager.oldManagerId
-                                    )
-                                    .map((managers) => (
-                                      <div
-                                        className="accordion-item-SU"
-                                        key={managers.managerId}
-                                      >
-                                        <div className="accordion-header-SU">
-                                          <label
-                                            htmlFor={`new-${managers.managerId}`}
-                                            className="accordion-title"
-                                          >
-                                            <input
-                                              type="radio"
-                                              name="newmanagers"
-                                              id={`new-${managers.managerId}`}
-                                              value={managers.managerId}
-                                              checked={
-                                                newSelectedManager.newManagerId ===
-                                                managers.managerId
-                                              }
-                                              onChange={() =>
-                                                setNewSelectedManager({
-                                                  newManagerId:
-                                                    managers.managerId,
-                                                  newManagerJobRole:
-                                                    managers.managerJobRole,
-                                                })
-                                              }
-                                            />{" "}
-                                            {managers.managerName}
-                                          </label>
-                                        </div>
-                                      </div>
-                                    ))}
+                              {userType === "Manager" && (
+                                <div className="custom-main-list">
+                                  {displayTeamLeaders &&
+                                    renderCard("Team Leaders", teamLeadersList)}
+                                  {displayRecruiters &&
+                                    renderCard("Recruiters", recruitersList)}
                                 </div>
-                              </div>
-                            )}
-
-                            {fetchTeamleader && userType === "Manager" && (
-                              <div className="teamleader-data-transfer">
-                                <div className="old-teamleader-data">
-                                  <center>
-                                    <h1>Old Team Leaders</h1>
-                                  </center>
-                                  {fetchTeamleader.map((teamleaders) => (
-                                    <div
-                                      className="accordion-item-M"
-                                      key={teamleaders.teamLeaderId}
-                                    >
-                                      <div className="accordion-header-M">
-                                        <label
-                                          htmlFor={`old-${teamleaders.teamLeaderId}`}
-                                          className="accordion-title"
-                                        >
-                                          <input
-                                            type="radio"
-                                            name="oldteamleaders"
-                                            id={`old-${teamleaders.teamLeaderId}`}
-                                            value={teamleaders.teamLeaderId}
-                                            checked={
-                                              oldselectedTeamLeader.oldTeamLeaderId ===
-                                              teamleaders.teamLeaderId
-                                            }
-                                            onChange={() =>
-                                              setOldSelectedTeamLeader({
-                                                oldTeamLeaderId:
-                                                  teamleaders.teamLeaderId,
-                                                oldTeamLeaderJobRole:
-                                                  teamleaders.teamLeaderJobRole,
-                                              })
-                                            }
-                                          />{" "}
-                                          {teamleaders.teamLeaderName}
-                                        </label>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-
-                                <div className="new-teamleader-data">
-                                  <center>
-                                    <h1>New Team Leaders</h1>
-                                  </center>
-                                  {fetchTeamleader
-                                    .filter(
-                                      (item) =>
-                                        item.teamLeaderId !==
-                                        oldselectedTeamLeader.oldTeamLeaderId
-                                    )
-                                    .map((teamleaders) => (
-                                      <div
-                                        className="accordion-item-M"
-                                        key={teamleaders.managerId}
-                                      >
-                                        <div className="accordion-header-SU">
-                                          <label
-                                            htmlFor={`new-${teamleaders.teamLeaderId}`}
-                                            className="accordion-title"
-                                          >
-                                            <input
-                                              type="radio"
-                                              name="newteamleaders"
-                                              id={`new-${teamleaders.teamLeaderId}`}
-                                              value={teamleaders.teamLeaderId}
-                                              checked={
-                                                newselectedTeamLeader.newTeamLeaderId ===
-                                                teamleaders.teamLeaderId
-                                              }
-                                              onChange={() =>
-                                                setNewSelectedTeamLeader({
-                                                  newTeamLeaderId:
-                                                    teamleaders.teamLeaderId,
-                                                  newTeamLeaderJobRole:
-                                                    teamleaders.teamLeaderJobRole,
-                                                })
-                                              }
-                                            />{" "}
-                                            {teamleaders.teamLeaderName}
-                                          </label>
-                                        </div>
-                                      </div>
-                                    ))}
-                                </div>
-                              </div>
-                            )}
-                            {userType === "TeamLeader" && (
-                              <div className="accordion-item">
-                                <div className="accordion-header">
-                                  <label className="accordion-title">
-                                    {loginEmployeeName}
-                                  </label>
-                                </div>
-                                <div className="accordion-content newHegightSetForAlignment">
-                                  <form>
-                                    {recruiterUnderTeamLeader &&
-                                      recruiterUnderTeamLeader.map(
-                                        (recruiters) => (
-                                          <div
-                                            key={recruiters.recruiterId}
-                                            className="form-group"
-                                          >
-                                            <label
-                                              htmlFor={recruiters.employeeId}
-                                            >
-                                              <input
-                                                style={{ width: "auto" }}
-                                                type="radio"
-                                                id={recruiters.employeeId}
-                                                name="recruiter"
-                                                value={recruiters.employeeId}
-                                                checked={
-                                                  selectedRecruiters.recruiterId ===
-                                                  recruiters.employeeId
-                                                }
-                                                onChange={() =>
-                                                  setSelectedRecruiters({
-                                                    index: 1,
-                                                    recruiterId:
-                                                      recruiters.employeeId,
-                                                    recruiterJobRole:
-                                                      recruiters.jobRole,
-                                                  })
-                                                }
-                                              />{" "}
-                                              {recruiters.employeeName}
-                                            </label>
-                                          </div>
-                                        )
-                                      )}
-                                  </form>
-                                </div>
-                              </div>
-                            )}
+                              )}
+                            </div>
                           </div>
-                          {/* akash_pawar_RejectedCandidate_ShareFunctionality_18/07_1563 */}
-                        </Modal.Body>
-                        {errorForShare && (
-                          <div style={{ textAlign: "center", color: "red" }}>
-                            {errorForShare}
+
+                          <div className="custom-modal-footer">
+                            <button
+                              onClick={handleShare}
+                              className="daily-tr-btn"
+                            >
+                              Share
+                            </button>
+                            <button
+                              onClick={() => {
+                                setShowForwardPopup(false);
+                                resetSelections();
+                              }}
+                              className="daily-tr-btn"
+                            >
+                              Close
+                            </button>
                           </div>
-                        )}
-                        <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
-                          <button
-                            onClick={handleShare}
-                            className="selectedcan-share-forward-popup-btn"
-                          >
-                            Share
-                          </button>
-                          <button
-                            onClick={() => setShowForwardPopup(false)}
-                            className="selectedcan-close-forward-popup-btn"
-                          >
-                            Close
-                          </button>
-                        </Modal.Footer>
-                      </Modal.Dialog>
+                        </div>
+                      </div>
                     </div>
                   </>
                 ) : null}
+
                 {/* Name:-Akash Pawar Component:-RejectedCandidate
           Subcategory:-ResumeModel(added) End LineNo:-1176 Date:-02/07 */}
                 <Modal

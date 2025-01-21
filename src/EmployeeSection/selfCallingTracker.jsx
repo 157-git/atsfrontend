@@ -10,12 +10,14 @@ import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
-// added by sahil karnekar
-import { Pagination } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import { elements } from "chart.js";
 import FilterData from "../helper/filterData";
 import limitedOptions from "../helper/limitedOptions";
+import convertToDocumentLink from "../helper/convertToDocumentLink";
+import axios from "axios";
+// added by sahil karnekar
+import { Avatar, Card, List, Pagination } from "antd";
 
 // SwapnilRokade_lineUpList_ModifyFilters_47to534_11/07
 const CallingList = ({
@@ -108,51 +110,6 @@ const CallingList = ({
   };
   //akash_pawar_selfCallingTracker_ShareFunctionality_17/07_171
 
-  //akash_pawar_LineUpList_ShareFunctionality_17/07_144
-  const fetchManager = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/get-all-managers`);
-      const data = await response.json();
-      setFetchAllManager(data);
-    } catch (error) {
-      console.error("Error fetching shortlisted data:", error);
-    }
-  };
-  //akash_pawar_selfCallingTracker_ShareFunctionality_17/07_183
-
-  //akash_pawar_LineUpList_ShareFunctionality_17/07_156
-
-  const fetchTeamLeader = async (empId) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/tl-namesIds/${empId}`);
-      console.log(response);
-      const data = await response.json();
-      setFetchTeamleader(data);
-    } catch (error) {
-      console.error("Error fetching shortlisted data:", error);
-    }
-  };
-  const fetchRecruiters = async (teamLeaderId) => {
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/employeeId-names/${teamLeaderId}`
-      );
-      const data = await response.json();
-      setRecruiterUnderTeamLeader(data);
-    } catch (error) {
-      console.error("Error fetching shortlisted data:", error);
-    }
-  };
-  useEffect(() => {
-    if (userType === "SuperUser") {
-      fetchManager();
-    } else if (userType === "Manager") {
-      fetchTeamLeader(employeeId);
-    } else {
-      fetchRecruiters(employeeId);
-    }
-  }, []);
-  //akash_pawar_LineUpList_ShareFunctionality_16/07_202
 
   useEffect(() => {
     const options = limitedOptions
@@ -293,7 +250,6 @@ const CallingList = ({
     }
     return null;
   };
-console.log(selectedRows);
 
   const handleSelectAll = () => {
     console.log(selectedRows);
@@ -337,136 +293,6 @@ console.log(selectedRows);
   //akash_pawar_SelfCallingTracker_ShareFunctionality_17/07_472
 
   // this code line 420 to 427 added by sahil karnekar date 24-10-2024
-  const handleShare = async () => {
-    if (userType === "TeamLeader") {
-      if (selectedRecruiters.recruiterId === "") {
-        setErrorForShare("Please Select A Recruiter ! ");
-        return;
-      } else {
-        setErrorForShare("");
-      }
-    }
-    setIsDataSending(true);
-    let url = `${API_BASE_URL}/share-candidate-data/${employeeId}/${userType}`;
-    let requestData;
-    if (
-      userType === "TeamLeader" &&
-      // this line updated by sahil karnekar date 24-10-2024
-      selectedRecruiters.recruiterId !== "" &&
-      selectedRows.length > 0
-
-    ) {
-      requestData = {
-        employeeId: parseInt(selectedRecruiters.recruiterId),
-        candidateIds: selectedRows,
-        jobRole : "Recruiters"
-      };
-    } else if (userType === "Manager") {
-      requestData = {
-        currentTeamLeaderId: parseInt(oldselectedTeamLeader.oldTeamLeaderId),
-        newTeamLeaderId: parseInt(f.newTeamLeaderId),
-
-      };
-    } else {
-      requestData = {
-        currentManagerId: parseInt(oldSelectedManager.oldManagerId),
-        newManagerId: parseInt(newSelectedManager.newManagerId),
-      };
-    }
-    try {
-      const requestOptions = {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          // Add any additional headers as needed
-        },
-        body: JSON.stringify(requestData),
-      };
-      const response = await fetch(url, requestOptions);
-      if (!response.ok) {
-        setIsDataSending(false);
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      // Handle success response
-      setIsDataSending(false);
-      toast.success("Candidates forwarded successfully!"); //Swapnil Error&success message
-      fetchCallingTrackerData(currentPage, pageSize);
-      setShowForwardPopup(false); // Close the modal or handle any further UI updates
-      setShowShareButton(true);
-      setSelectedRows([]);
-      setSelectedRecruiters({
-        index: "",
-        recruiterId: "",
-        recruiterJobRole: "",
-      });
-      setOldSelectedTeamLeader({
-        oldTeamLeaderId: "",
-        oldTeamLeaderJobRole: "",
-      });
-      setNewSelectedTeamLeader({
-        newTeamLeaderId: "",
-        newTeamLeaderJobRole: "",
-      });
-      setOldSelectedManager({
-        oldManagerId: "",
-        oldManagerJobRole: "",
-      });
-      setNewSelectedManager({
-        newManagerId: "",
-        newManagerJobRole: "",
-      });
-      // fetchShortListedData(); // Uncomment this if you want to refresh the data after forwarding
-    } catch (error) {
-      console.error("Error while forwarding candidates:", error);
-
-      setIsDataSending(false);
-      setShowForwardPopup(false); //Swapnil Error&success message
-      toast.error("Error while forwarding candidates:"); //Swapnil Error&success message
-      // Handle error scenarios or show error messages to the user
-    }
-  };
-  //akash_pawar_LineUpList_ShareFunctionality_17/07_546
-
-  //Name:-Akash Pawar Component:-ShortListedCandidate Subcategory:-ResumeViewButton(added) start LineNo:-165 Date:-02/07
-  const convertToDocumentLink = (byteCode, fileName) => {
-    if (byteCode) {
-      try {
-        // Detect file type based on file name extension or content
-        const fileType = fileName.split(".").pop().toLowerCase();
-
-        // Convert PDF
-        if (fileType === "pdf") {
-          const binary = atob(byteCode);
-          const array = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) {
-            array[i] = binary.charCodeAt(i);
-          }
-          const blob = new Blob([array], { type: "application/pdf" });
-          return URL.createObjectURL(blob);
-        }
-        // Convert Word document (assuming docx format)
-        if (fileType === "docx") {
-          const binary = atob(byteCode);
-          const array = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) {
-            array[i] = binary.charCodeAt(i);
-          }
-          const blob = new Blob([array], {
-            type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          });
-          return URL.createObjectURL(blob);
-        }
-        // Handle other document types here if needed
-        // If file type is not supported
-        console.error(`Unsupported document type: ${fileType}`);
-        return "Unsupported Document";
-      } catch (error) {
-        console.error("Error converting byte code to document:", error);
-        return "Invalid Document";
-      }
-    }
-    return "Document Not Found";
-  };
 
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [selectedCandidateResume, setSelectedCandidateResume] = useState("");
@@ -651,6 +477,164 @@ console.log(selectedRows);
   const calculateRowIndex = (index) => {
     return (currentPage - 1) * pageSize + index + 1;
   };
+
+    const [selectedRole, setSelectedRole] = useState("");
+    const [displayManagers, setDisplayManagers] = useState(false);
+    const [displayTeamLeaders, setDisplayTeamLeaders] = useState(false);
+    const [displayRecruiters, setDisplayRecruiters] = useState(false);
+    const [managersList, setManagersList] = useState([]);
+    const [teamLeadersList, setTeamLeadersList] = useState([]);
+    const [recruitersList, setRecruitersList] = useState([]);
+    const [selectedIds, setSelectedIds] = useState([]);
+    const [displayModalContainer, setDisplayModalContainer] = useState(false);
+
+    const handleShare = async () => {
+      if (!selectedEmployeeId || selectedRows.length === 0) {
+        toast.error("Please select a recruiter and at least one candidate.");
+        return; 
+      }
+  
+      setIsDataSending(true);
+      const url = `${API_BASE_URL}/share-candidate-data/${employeeId}/${userType}`;
+  
+      const requestData = {
+        employeeId: parseInt(selectedEmployeeId),
+        candidateIds: selectedRows,
+        jobRole: selectedRole, // Dynamically pass the selected role
+      };
+  
+      try {
+        console.log(JSON.stringify(requestData, null, 2));
+        const requestOptions = {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestData),
+        };
+        const response = await fetch(url, requestOptions);
+        if (!response.ok) {
+          setIsDataSending(false);
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        setIsDataSending(false);
+        toast.success("Candidates forwarded successfully!");
+        console.log("Candidates forwarded successfully!");
+        resetSelections();
+        fetchCallingTrackerData(currentPage, pageSize);
+        setShowForwardPopup(false);
+        setShowShareButton(true);
+        setSelectedRows([]);
+      } catch (error) {
+        setIsDataSending(false);
+        console.error("Error while forwarding candidates:", error);
+      }
+    };
+  
+    const resetSelections = () => {
+      setSelectedEmployeeId(null); // Clear the selected recruiter ID
+      setSelectedRole(""); // Clear the selected role
+    };
+  
+
+    useEffect(() => {
+      handleDisplayManagers();
+    }, []);
+  
+    
+    const handleDisplayManagers = async () => {
+      if (userType === "SuperUser") {
+        const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
+        setManagersList(response.data);
+        setDisplayManagers(true);
+      } else if (userType === "Manager") {
+        const response = await axios.get(
+          `${API_BASE_URL}/tl-namesIds/${employeeId}`
+        );
+        setTeamLeadersList(response.data);
+        setDisplayTeamLeaders(true);
+      } else if (userType === "TeamLeader") {
+        const response = await axios.get(
+          `${API_BASE_URL}/employeeId-names/${employeeId}`
+        );
+        setRecruitersList(response.data);
+        setDisplayRecruiters(true);
+      }
+      setDisplayModalContainer(true);
+    };
+  
+    const handleOpenDownArrowContentForRecruiters = async (teamLeaderId) => {
+      setSelectedIds([]);
+      const response = await axios.get(
+        `${API_BASE_URL}/employeeId-names/${teamLeaderId}`
+      );
+      setRecruitersList(response.data);
+      console.log(response.data);
+      setDisplayRecruiters(true);
+    };
+  
+    const renderCard = (title, list) => (
+      <Card
+        hoverable
+        style={{
+          width: 380,
+          height: 580,
+          overflowY: "scroll",
+        }}
+        title={title}
+      >
+        <List
+          itemLayout="horizontal"
+          dataSource={list}
+          renderItem={(item, index) => (
+            <List.Item>
+              <input
+                style={{ width: "18px", height: "18px" }}
+                type="radio"
+                className="share-data-input-card"
+                checked={
+                  selectedEmployeeId === (item.employeeId || item.teamLeaderId)
+                }
+                onChange={() => {
+                  setSelectedRole(
+                    title === "Recruiters" ? "Recruiters" : "TeamLeader"
+                  );
+                  setSelectedEmployeeId(item.employeeId || item.teamLeaderId);
+                }}
+              />
+              <List.Item.Meta
+                avatar={
+                  <Avatar
+                    src={
+                      item.profileImage
+                        ? item.profileImage
+                        : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                    }
+                  />
+                }
+                title={item.employeeName || item.teamLeaderName}
+              />
+              <svg
+                onClick={() =>
+                  handleOpenDownArrowContentForRecruiters(
+                    item.employeeId || item.teamLeaderId
+                  )
+                }
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#000000"
+              >
+                <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
+              </svg>
+            </List.Item>
+          )}
+        />
+      </Card>
+    );
+
+    
 
   return (
     // complete render html elements updated by sahil karnekar on date 17-12-2024
@@ -1683,287 +1667,55 @@ console.log(selectedRows);
                 </>
               )}
             </table>
-            {showForwardPopup ? (
-              <>
-                <div
-                  className="bg-black bg-opacity-50 modal show"
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    position: "fixed",
-                    width: "100%",
-                    height: "100vh",
-                  }}
-                >
-                  <Modal.Dialog
-                    style={{
-                      width: "500px",
-                      height: "800px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginTop: "100px",
-                    }}
-                  >
-                    <Modal.Header
-                      style={{
-                        fontSize: "18px",
-                        backgroundColor: "#f2f2f2",
-                      }}
-                    >
-                      Forward To
-                    </Modal.Header>
-                    <Modal.Body
-                      style={{
-                        backgroundColor: "#f2f2f2",
-                      }}
-                    >
-                      {/* akash_pawar_LineUpList_ShareFunctionality_17/07_1524 */}
-                      <div className="accordion">
-                        {fetchAllManager && userType === "SuperUser" && (
-                          <div className="manager-data-transfer">
-                            <div className="old-manager-data">
-                              <center>
-                                <h1>Old Managers</h1>
-                              </center>
-                              {fetchAllManager.map((managers) => (
-                                <div
-                                  className="accordion-item-SU"
-                                  key={managers.managerId}
-                                >
-                                  <div className="accordion-header-SU">
-                                    <label
-                                      htmlFor={`old-${managers.managerId}`}
-                                      className="accordion-title"
-                                    >
-                                      <input
-                                        type="radio"
-                                        name="oldmanagers"
-                                        id={`old-${managers.managerId}`}
-                                        value={managers.managerId}
-                                        checked={
-                                          oldSelectedManager.oldManagerId ===
-                                          managers.managerId
-                                        }
-                                        onChange={() =>
-                                          setOldSelectedManager({
-                                            oldManagerId: managers.managerId,
-                                            oldManagerJobRole:
-                                              managers.managerJobRole,
-                                          })
-                                        }
-                                      />{" "}
-                                      {managers.managerName}
-                                    </label>
-                                  </div>
+
+                {showForwardPopup ? (
+                  <>
+                    <div className="custom-modal-overlay">
+                      <div className="custom-modal-container">
+                        <div className="custom-modal-dialog">
+                          <div className="custom-modal-header">Forward To</div>
+                          <div className="custom-modal-body">
+                            <div className="custom-accordion">
+                              {userType === "TeamLeader" && (
+                                <div className="custom-main-list">
+                                  {displayRecruiters &&
+                                    renderCard("Recruiters", recruitersList)}
                                 </div>
-                              ))}
-                            </div>
+                              )}
 
-                            <div className="new-manager-data">
-                              <center>
-                                <h1>New Managers</h1>
-                              </center>
-                              {fetchAllManager
-                                .filter(
-                                  (item) =>
-                                    item.managerId !==
-                                    oldSelectedManager.oldManagerId
-                                )
-                                .map((managers) => (
-                                  <div
-                                    className="accordion-item-SU"
-                                    key={managers.managerId}
-                                  >
-                                    <div className="accordion-header-SU">
-                                      <label
-                                        htmlFor={`new-${managers.managerId}`}
-                                        className="accordion-title"
-                                      >
-                                        <input
-                                          type="radio"
-                                          name="newmanagers"
-                                          id={`new-${managers.managerId}`}
-                                          value={managers.managerId}
-                                          checked={
-                                            newSelectedManager.newManagerId ===
-                                            managers.managerId
-                                          }
-                                          onChange={() =>
-                                            setNewSelectedManager({
-                                              newManagerId: managers.managerId,
-                                              newManagerJobRole:
-                                                managers.managerJobRole,
-                                            })
-                                          }
-                                        />{" "}
-                                        {managers.managerName}
-                                      </label>
-                                    </div>
-                                  </div>
-                                ))}
-                            </div>
-                          </div>
-                        )}
-
-
-
-                        {fetchTeamleader && userType === "Manager" && (
-                          <div className="teamleader-data-transfer">
-                            <div className="old-teamleader-data">
-                              <center>
-                                <h1>Old Team Leaders</h1>
-                              </center>
-                              {fetchTeamleader.map((teamleaders) => (
-                                <div
-                                  className="accordion-item-M"
-                                  key={teamleaders.teamLeaderId}
-                                >
-                                  <div className="accordion-header-M">
-                                    <label
-                                      htmlFor={`old-${teamleaders.teamLeaderId}`}
-                                      className="accordion-title"
-                                    >
-                                      <input
-                                        type="radio"
-                                        name="oldteamleaders"
-                                        id={`old-${teamleaders.teamLeaderId}`}
-                                        value={teamleaders.teamLeaderId}
-                                        checked={
-                                          oldselectedTeamLeader.oldTeamLeaderId ===
-                                          teamleaders.teamLeaderId
-                                        }
-                                        onChange={() =>
-                                          setOldSelectedTeamLeader({
-                                            oldTeamLeaderId:
-                                              teamleaders.teamLeaderId,
-                                            oldTeamLeaderJobRole:
-                                              teamleaders.teamLeaderJobRole,
-                                          })
-                                        }
-                                      />{" "}
-                                      {teamleaders.teamLeaderName}
-                                    </label>
-                                  </div>
+                              {userType === "Manager" && (
+                                <div className="custom-main-list">
+                                  {displayTeamLeaders &&
+                                    renderCard("Team Leaders", teamLeadersList)}
+                                  {displayRecruiters &&
+                                    renderCard("Recruiters", recruitersList)}
                                 </div>
-                              ))}
-                            </div>
-
-                            <div className="new-teamleader-data">
-                              <center>
-                                <h1>New Team Leaders</h1>
-                              </center>
-                              {fetchTeamleader
-                                .filter(
-                                  (item) =>
-                                    item.teamLeaderId !==
-                                    oldselectedTeamLeader.oldTeamLeaderId
-                                )
-                                .map((teamleaders) => (
-                                  <div
-                                    className="accordion-item-M"
-                                    key={teamleaders.managerId}
-                                  >
-                                    <div className="accordion-header-SU">
-                                      <label
-                                        htmlFor={`new-${teamleaders.teamLeaderId}`}
-                                        className="accordion-title"
-                                      >
-                                        <input
-                                          type="radio"
-                                          name="newteamleaders"
-                                          id={`new-${teamleaders.teamLeaderId}`}
-                                          value={teamleaders.teamLeaderId}
-                                          checked={
-                                            newselectedTeamLeader.newTeamLeaderId ===
-                                            teamleaders.teamLeaderId
-                                          }
-                                          onChange={() =>
-                                            setNewSelectedTeamLeader({
-                                              newTeamLeaderId:
-                                                teamleaders.teamLeaderId,
-                                              newTeamLeaderJobRole:
-                                                teamleaders.teamLeaderJobRole,
-                                            })
-                                          }
-                                        />{" "}
-                                        {teamleaders.teamLeaderName}
-                                      </label>
-                                    </div>
-                                  </div>
-                                ))}
+                              )}
                             </div>
                           </div>
-                        )}
 
-                        {userType === "TeamLeader" && (
-                          <div className="accordion-item">
-                            <div className="accordion-header">
-                              <label className="accordion-title">
-                                <strong>Team Leader - {loginEmployeeName} </strong>
-                              </label>
-                            </div>
-                            <div className="accordion-content newHegightSetForAlignment">
-                              <form>
-                                {recruiterUnderTeamLeader &&
-                                  recruiterUnderTeamLeader.map((recruiters) => (
-                                    <div key={recruiters.recruiterId}>
-                                      <label htmlFor={recruiters.employeeId}>
-                                        <input
-                                          type="radio"
-                                          id={recruiters.employeeId}
-                                          name="recruiter"
-                                          value={recruiters.employeeId}
-                                          checked={
-                                            selectedRecruiters.recruiterId ===
-                                            recruiters.employeeId
-                                          }
-                                          onChange={() =>
-                                            setSelectedRecruiters({
-                                              index: 1,
-                                              recruiterId:
-                                                recruiters.employeeId,
-                                              recruiterJobRole:
-                                                recruiters.jobRole,
-                                            })
-                                          }
-                                        />{" "}
-                                        - {recruiters.employeeName}
-                                      </label>
-                                    </div>
-                                  ))}
-                              </form>
-                            </div>
+                          <div className="custom-modal-footer">
+                            <button
+                              onClick={handleShare}
+                              className="daily-tr-btn"
+                            >
+                              Share
+                            </button>
+                            <button
+                              onClick={() => {
+                                setShowForwardPopup(false);
+                                resetSelections();
+                              }}
+                              className="daily-tr-btn"
+                            >
+                              Close
+                            </button>
                           </div>
-                        )}
+                        </div>
                       </div>
-                      {/* akash_pawar_LineUpList_ShareFunctionality_17/07_1747 */}
-                    </Modal.Body>
-                    {/* this line added by sahil karnekar date 24-10-2024 */}
-                    {errorForShare && (
-                      <div style={{ textAlign: "center", color: "red" }}>
-                        {errorForShare}
-                      </div>
-                    )}
-                    <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
-                      <button
-                        onClick={handleShare}
-                        className="lineUp-share-forward-popup-btn"
-                      >
-                        Share
-                      </button>
-                      <button
-                        onClick={() => setShowForwardPopup(false)}
-                        className="lineUp-close-forward-popup-btn"
-                      >
-                        Close
-                      </button>
-                    </Modal.Footer>
-                  </Modal.Dialog>
-                </div>
-              </>
-            ) : null}
+                    </div>
+                  </>
+                ) : null}
             {/* Name:-Akash Pawar Component:-LineUpList
                      Subcategory:-ResumeModel(added) End LineNo:-1153 Date:-02/07 */}
             <Modal show={showResumeModal} onHide={closeResumeModal} size="md">

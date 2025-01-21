@@ -440,3 +440,9 @@
  .ant-notification-notice-message { 
   font-weight: bold;
 }
+
+.user-img img{
+  background: none; /* Ensures no background is applied */
+  border: none; /* Removes any borders if present */
+  display: block; /* Ensures no extra space below the image */
+}

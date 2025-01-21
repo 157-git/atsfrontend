@@ -13,9 +13,11 @@ import Loader from "../EmployeeSection/loader";
 import { parse } from "date-fns";
 import axios from "../api/api";
 import { toast } from "react-toastify";
-import { Pagination } from "antd";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
+import FilterData from "../helper/filterData";
+import convertToDocumentLink from "../helper/convertToDocumentLink";
+import { Avatar, Card, List, Pagination } from "antd";
 {
   /* this line added by sahil date 22-10-2024 */
 }
@@ -53,15 +55,8 @@ const ResumeList = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
   const [socket, setSocket] = useState(null);
+    const [searchCount, setSearchCount] = useState(0);
 
-  useEffect(() => {
-    const newSocket = getSocket();
-    setSocket(newSocket);
-  }, []);
-
-  useEffect(() => {
-    fetchData(currentPage, pageSize);
-  }, [employeeId, currentPage, pageSize, searchTerm]);
 
   const fetchData = async (page, size) => {
     try {
@@ -83,6 +78,16 @@ const ResumeList = ({
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const newSocket = getSocket();
+    setSocket(newSocket);
+  }, []);
+
+  useEffect(() => {
+    fetchData(currentPage, pageSize);
+  }, [employeeId, currentPage, pageSize, searchTerm]);
+
 
   useEffect(() => {
     if (viewsSearchTerm) {
@@ -219,43 +224,6 @@ const ResumeList = ({
     setShowResumeModal(false);
   };
 
-  const convertToDocumentLink = (byteCode, fileName) => {
-    if (byteCode) {
-      try {
-        const fileType = fileName.split(".").pop().toLowerCase();
-
-        if (fileType === "pdf") {
-          const binary = atob(byteCode);
-          const array = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) {
-            array[i] = binary.charCodeAt(i);
-          }
-          const blob = new Blob([array], { type: "application/pdf" });
-          return URL.createObjectURL(blob);
-        }
-
-        if (fileType === "docx") {
-          const binary = atob(byteCode);
-          const array = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) {
-            array[i] = binary.charCodeAt(i);
-          }
-          const blob = new Blob([array], {
-            type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          });
-          return URL.createObjectURL(blob);
-        }
-
-        console.error(`Unsupported document type: ${fileType}`);
-        return "Unsupported Document";
-      } catch (error) {
-        console.error("Error converting byte code to document:", error);
-        return "Invalid Document";
-      }
-    }
-    return "Document Not Found";
-  };
-
   const toggleFilterSection = () => {
     setShowFilterSection(!showFilterSection);
   };
@@ -279,6 +247,7 @@ const ResumeList = ({
     ["employeeId", "Employee Id"],
     ["employeeName", "Employee Name"],
   ];
+
   const handleFilterOptionClick = (key) => {
     if (activeFilterOption === key) {
       setActiveFilterOption(null); // Close the current filter
@@ -401,242 +370,6 @@ const ResumeList = ({
     return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
   };
 
-  // Arshad Attar Added This Code On 03-12-2024
-  // Added New Share Data Frontend Logic line
-  const [employeeCount, setEmployeeCount] = useState([]);
-  const [managers, setManagers] = useState([]);
-  const [teamLeaders, setTeamLeaders] = useState([]);
-  const [recruiters, setRecruiters] = useState([]);
-  const [selectedManagers, setSelectedManagers] = useState([]);
-  const [selectedTeamLeaders, setSelectedTeamLeaders] = useState([]);
-  const [expandedManagerId, setExpandedManagerId] = useState(null);
-  const [expandedTeamLeaderId, setExpandedTeamLeaderId] = useState(null);
-  const [customRange, setCustomRange] = useState({ start: null, end: null });
-  const [customStart, setCustomStart] = useState("");
-  const [customEnd, setCustomEnd] = useState("");
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [searchCount, setSearchCount] = useState(0);
-
-  useEffect(() => {
-    const fetchManagerNames = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
-        setManagers(response.data);
-      } catch (error) {
-        console.error("Error fetching manager names:", error);
-      }
-    };
-
-    if (userType === "SuperUser") {
-      fetchManagerNames();
-    } else if (userType === "Manager") {
-      fetchTeamLeaderNames(employeeId);
-    } else if (userType === "TeamLeader") {
-      fetchRecruiterUnderTeamLeaderData(employeeId);
-    }
-  }, [userType, employeeId]);
-
-  useEffect(() => {
-    if (expandedManagerId != null) {
-      fetchTeamLeaderNames(expandedManagerId);
-    }
-  }, [expandedManagerId]);
-
-  useEffect(() => {
-    if (expandedTeamLeaderId != null) {
-      fetchRecruiterUnderTeamLeaderData(expandedTeamLeaderId);
-    }
-  }, [expandedTeamLeaderId]);
-
-  const fetchTeamLeaderNames = async (id) => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/tl-namesIds/${id}`);
-      setTeamLeaders(response.data);
-    } catch (error) {
-      console.error("Error fetching team leader names:", error);
-    }
-  };
-
-  const fetchRecruiterUnderTeamLeaderData = useCallback(async (id) => {
-    try {
-      const response = await axios.get(
-        `${API_BASE_URL}/employeeId-names/${id}`
-      );
-      setRecruiters(response.data);
-    } catch (error) {
-      console.error("Error fetching recruiter data:", error);
-    }
-  }, []);
-
-  const toggleTeamLeaderExpand = (teamLeaderId) => {
-    setExpandedTeamLeaderId(
-      expandedTeamLeaderId === teamLeaderId ? null : teamLeaderId
-    );
-  };
-  const handleManagerCheckboxChange = (manager) => {
-    setSelectedManagers((prev) =>
-      prev.some((item) => item.managerId === manager.managerId)
-        ? prev.filter((item) => item.managerId !== manager.managerId)
-        : [
-            ...prev,
-            {
-              managerId: manager.managerId,
-              managerJobRole: manager.jobRole,
-            },
-          ]
-    );
-  };
-
-  const handleTeamLeaderCheckboxChange = (teamLeader) => {
-    setSelectedTeamLeaders((prev) =>
-      prev.some((item) => item.teamLeaderId === teamLeader.teamLeaderId)
-        ? prev.filter((item) => item.teamLeaderId !== teamLeader.teamLeaderId)
-        : [
-            ...prev,
-            {
-              teamLeaderId: teamLeader.teamLeaderId,
-              teamLeaderJobRole: teamLeader.jobRole,
-            },
-          ]
-    );
-    setSelectedRecruiters({
-      employeeId: teamLeader.teamLeaderId,
-      jobRole: teamLeader.jobRole,
-    });
-  };
-
-  const handleRecruiterCheckboxChange = (recruiter) => {
-    setSelectedRecruiters((prev) => {
-      if (prev.some((item) => item.employeeId === recruiter.employeeId)) {
-        // Remove the recruiter if already selected
-        return prev.filter((item) => item.employeeId !== recruiter.employeeId);
-      } else {
-        // Add the recruiter to the selection
-        return [...prev, recruiter];
-      }
-    });
-  };
-
-  const renderManagers = () => {
-    return managers.map((manager) => (
-      <div key={manager.managerId} className="dropdown-section">
-        <div className="PI-dropdown-row">
-          <input
-            style={{
-              transform: "scale(1.4)",
-              margin: "5px",
-            }}
-            type="radio"
-            checked={selectedManagers.some(
-              (item) => item.managerId === manager.managerId
-            )}
-            onChange={() => handleManagerCheckboxChange(manager)}
-          />
-          <label
-            className="clickable-label"
-            onClick={() => toggleManagerExpand(manager.managerId)}
-          >
-            {manager.managerName}
-            <i
-              className={`fa-solid ${
-                expandedManagerId === manager.managerId
-                  ? "fa-angle-up"
-                  : "fa-angle-down"
-              }`}
-            ></i>
-          </label>
-        </div>
-        {expandedManagerId === manager.managerId && (
-          <div className="PI-dropdown-column ">
-            {renderTeamLeaders(manager.managerId)}
-          </div>
-        )}
-      </div>
-    ));
-  };
-
-  const renderTeamLeaders = (managerId) => {
-    return teamLeaders.map((teamLeader) => (
-      <div key={teamLeader.teamLeaderId} className="PI-dropdown-section">
-        <div className="PI-dropdown-row">
-          <input
-            type="radio"
-            checked={
-              selectedRecruiters.employeeId === teamLeader.teamLeaderId &&
-              selectedRecruiters.jobRole === teamLeader.jobRole
-            }
-            onChange={() =>
-              setSelectedRecruiters({
-                employeeId: teamLeader.teamLeaderId,
-                jobRole: teamLeader.jobRole,
-              })
-            }
-          />
-          <label
-            className="clickable-label"
-            onClick={() => toggleTeamLeaderExpand(teamLeader.teamLeaderId)}
-          >
-            {teamLeader.teamLeaderName}
-            <i
-              className={`fa-solid ${
-                expandedTeamLeaderId === teamLeader.teamLeaderId
-                  ? "fa-angle-up"
-                  : "fa-angle-down"
-              }`}
-            ></i>
-          </label>
-        </div>
-        {expandedTeamLeaderId === teamLeader.teamLeaderId && (
-          <div className="PI-dropdown-column">{renderRecruiters()}</div>
-        )}
-      </div>
-    ));
-  };
-
-  const renderRecruiters = () => {
-    return recruiters.map((recruiter) => (
-      <div key={recruiter.employeeId} className="PI-dropdown-row">
-        <input
-          type="radio"
-          name="recruiter" // Ensure only one recruiter can be selected
-          checked={selectedRecruiters.employeeId === recruiter.employeeId}
-          onChange={() =>
-            setSelectedRecruiters({
-              employeeId: recruiter.employeeId,
-              jobRole: recruiter.jobRole,
-            })
-          }
-        />
-        <label>{recruiter.employeeName}</label>
-      </div>
-    ));
-  };
-
-  // Arshad Attar Added This Code On 03-12-2024
-  // Added New Share Data Frontend Logic,
-  const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
-    oldTeamLeaderId: "",
-    oldTeamLeaderJobRole: "",
-  });
-  const [newselectedTeamLeader, setNewSelectedTeamLeader] = useState({
-    newTeamLeaderId: "",
-    newTeamLeaderJobRole: "",
-  });
-
-  const [selectedRecruiters, setSelectedRecruiters] = useState({
-    employeeId: null,
-    jobRole: "",
-  });
-
-  const [oldSelectedManager, setOldSelectedManager] = useState({
-    oldManagerId: "",
-    oldManagerJobRole: "",
-  });
-  const [newSelectedManager, setNewSelectedManager] = useState({
-    newManagerId: "",
-    newManagerJobRole: "",
-  });
-
   const handleSelectAll = () => {
     if (allSelected) {
       setSelectedRows([]);
@@ -657,50 +390,6 @@ const ResumeList = ({
     });
   };
 
-  // Arshad Attar Added This Code On 03-12-2024
-  // Added New Share Data Frontend Logic
-  const fetchRecruiters = async (teamLeaderId) => {
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/employeeId-names/${teamLeaderId}`
-      );
-      const data = await response.json();
-      setRecruiterUnderTeamLeader(data);
-    } catch (error) {
-      console.error("Error fetching shortlisted data:", error);
-    }
-  };
-
-  const fetchTeamLeader = async (empId) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/tl-namesIds/${empId}`);
-      const data = await response.json();
-      setFetchTeamleader(data);
-    } catch (error) {
-      console.error("Error fetching shortlisted data:", error);
-    }
-  };
-
-  const fetchManager = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/get-all-managers`);
-      const data = await response.json();
-      setFetchAllManager(data);
-    } catch (error) {
-      console.error("Error fetching shortlisted data:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (userType === "SuperUser") {
-      fetchManager();
-    } else if (userType === "Manager") {
-      fetchTeamLeader(employeeId);
-    } else {
-      fetchRecruiters(employeeId);
-    }
-  }, []);
-
 const forwardSelectedCandidate = (e) => {
     e.preventDefault();
     if (selectedRows.length >= 1) {
@@ -717,67 +406,6 @@ const forwardSelectedCandidate = (e) => {
       toast.error("Please select at least one Candidate to proceed.");
     }
 };
-
-
-  const handleShare = async () => {
-    setIsDataSending(true);
-    if (!selectedRecruiters.employeeId || selectedRows.length === 0) {
-      toast.error("Please select an employee and rows to share.");
-      setIsDataSending(false);
-      return;
-    }
-
-    const requestData = {
-      candidateIds: selectedRows,
-      sharedEmployeeId: selectedRecruiters.employeeId,
-      jobRole: selectedRecruiters.jobRole,
-      employeeName: loginEmployeeName,
-      employeeId: employeeId,
-      userType:userType,
-    };
-
-    console.log("Request Data:", requestData);
-
-    try {
-      const requestOptions = {
-        method: "Post",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      };
-
-      const url = `${API_BASE_URL}/share-resume-data/${employeeId}/${userType}`;
-      const response = await fetch(url, requestOptions);
-
-      const responseData = await response.text();
-
-      requestData.employeeName = loginEmployeeName,
-      requestData.sharedDate = getFormattedDateTime();
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      console.log(
-        "API Object Share Resume Data :",
-        JSON.stringify(requestData, null, 2)
-      );
-      socket.emit("share_resume_data", requestData);
-      
-      toast.success(responseData);
-      fetchData(currentPage, pageSize);
-      setShowForwardPopup(false); // Close the modal
-      setShowShareButton(true); // Optional: Handle additional UI state
-      setSelectedRows([]); // Reset selected rows
-      setSelectedRecruiters({ employeeId: null, jobRole: "" });
-      console.log("Data Shared Successfully.......");
-    } catch (error) {
-      console.error("Error while forwarding candidates:", error);
-      setIsDataSending(false);
-      toast.error("Failed to forward candidates. Please try again.");
-    } finally {
-      setIsDataSending(false);
-    }
-  };
 
   // Arshad Attar Added This Code On 03-12-2024
   // Added New Share Data Frontend Logic
@@ -929,6 +557,164 @@ const forwardSelectedCandidate = (e) => {
   const calculateRowIndex = (index) => {
     return (currentPage - 1) * pageSize + index + 1;
   };
+
+
+    
+  const [selectedRole, setSelectedRole] = useState("");
+  const [displayManagers, setDisplayManagers] = useState(false);
+  const [displayTeamLeaders, setDisplayTeamLeaders] = useState(false);
+  const [displayRecruiters, setDisplayRecruiters] = useState(false);
+  const [managersList, setManagersList] = useState([]);
+  const [teamLeadersList, setTeamLeadersList] = useState([]);
+  const [recruitersList, setRecruitersList] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [displayModalContainer, setDisplayModalContainer] = useState(false);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+  const [selectedRows, setSelectedRows] = useState([]);
+
+  const handleShare = async () => {
+    if (!selectedEmployeeId || selectedRows.length === 0) {
+      toast.error("Please select a recruiter and at least one candidate.");
+      return;
+    }
+
+    setIsDataSending(true);
+    const url = `${API_BASE_URL}/share-resume-data/${employeeId}/${userType}`;
+
+    const requestData = {
+      employeeId: parseInt(selectedEmployeeId),
+      candidateIds: selectedRows,
+      jobRole: selectedRole, // Dynamically pass the selected role
+    };
+
+    try {
+      console.log(JSON.stringify(requestData, null, 2));
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      };
+      const response = await fetch(url, requestOptions);
+      if (!response.ok) {
+        setIsDataSending(false);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      setIsDataSending(false);
+      toast.success("Candidates forwarded successfully!");
+      console.log("Candidates forwarded successfully!");
+      resetSelections();
+      fetchData(currentPage, pageSize);
+      setShowForwardPopup(false);
+      setShowShareButton(true);
+      setSelectedRows([]);
+    } catch (error) {
+      setIsDataSending(false);
+      console.error("Error while forwarding candidates:", error);
+    }
+  };
+
+  const resetSelections = () => {
+    setSelectedEmployeeId(null); // Clear the selected recruiter ID
+    setSelectedRole(""); // Clear the selected role
+  };
+
+  useEffect(() => {
+    handleDisplayManagers();
+  }, []);
+
+  const handleDisplayManagers = async () => {
+    if (userType === "SuperUser") {
+      const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
+      setManagersList(response.data);
+      setDisplayManagers(true);
+    } else if (userType === "Manager") {
+      const response = await axios.get(
+        `${API_BASE_URL}/tl-namesIds/${employeeId}`
+      );
+      setTeamLeadersList(response.data);
+      setDisplayTeamLeaders(true);
+    } else if (userType === "TeamLeader") {
+      const response = await axios.get(
+        `${API_BASE_URL}/employeeId-names/${employeeId}`
+      );
+      setRecruitersList(response.data);
+      setDisplayRecruiters(true);
+    }
+    setDisplayModalContainer(true);
+  };
+
+  const handleOpenDownArrowContentForRecruiters = async (teamLeaderId) => {
+    setSelectedIds([]);
+    const response = await axios.get(
+      `${API_BASE_URL}/employeeId-names/${teamLeaderId}`
+    );
+    setRecruitersList(response.data);
+    setDisplayRecruiters(true);
+  };
+
+  const renderCard = (title, list) => (
+    <Card
+      hoverable
+      style={{
+        width: 380,
+        height: 580,
+        overflowY: "scroll",
+      }}
+      title={title}
+    >
+      <List
+        itemLayout="horizontal"
+        dataSource={list}
+        renderItem={(item, index) => (
+          <List.Item>
+            <input
+              style={{ width: "18px", height: "18px" }}
+              type="radio"
+              className="share-data-input-card"
+              checked={
+                selectedEmployeeId === (item.employeeId || item.teamLeaderId)
+              }
+              onChange={() => {
+                setSelectedRole(
+                  title === "Recruiters" ? "Recruiters" : "TeamLeader"
+                );
+                setSelectedEmployeeId(item.employeeId || item.teamLeaderId);
+              }}
+            />
+            <List.Item.Meta
+              avatar={
+                <Avatar
+                  src={
+                    item.profileImage
+                      ? item.profileImage
+                      : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                  }
+                />
+              }
+              title={item.employeeName || item.teamLeaderName}
+            />
+            <svg
+              onClick={() =>
+                handleOpenDownArrowContentForRecruiters(
+                  item.employeeId || item.teamLeaderId
+                )
+              }
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#000000"
+            >
+              <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
+            </svg>
+          </List.Item>
+        )}
+      />
+    </Card>
+  );
+
 
   return (
     <div className="App-after1">
@@ -1536,63 +1322,56 @@ const forwardSelectedCandidate = (e) => {
                 }}
               />
 
-              {/*Arshad Attar Added This Code On 03-12-2024
-               Added New Share Data Frontend Logic line 1444 to 1572 */}
-              {showForwardPopup && (
-                <div className="custom-modal-overlay">
-                  <div className="custom-modal-container">
-                    <div className="custom-modal-header">
-                      <h2>Share To</h2>
-                      <button
-                        onClick={() => setShowForwardPopup(false)}
-                        title="Cancel"
-                      >
-                        <i id="jd-cancel-btn" className="fa-solid fa-xmark"></i>
-                      </button>
-                    </div>
-                    <div className="custom-modal-body">
-                      <div className="accordion">
-                        <div className="share-data-name">
-                          {userType === "Recruiters" && <span>Recruiter</span>}
-                          {userType === "TeamLeader" && (
-                            <span>Team Leader ( Select Recruiters )</span>
-                          )}
-                          {userType === "Manager" && (
-                            <span>
-                              Manager ( Select Team Leader OR Recruiters )
-                            </span>
-                          )}
-                          {userType === "SuperUser" && <span>Super User</span>}
-                        </div>
-                        <hr />
-                        <div className="PI-dropdown-container">
-                          <div className="PI-dropdown-content">
-                            {userType === "SuperUser" && renderManagers()}
-                            {userType === "Manager" &&
-                              renderTeamLeaders(employeeId)}
-                            {userType === "TeamLeader" &&
-                              renderRecruiters(employeeId)}
-                            <div style={{ display: "flex", gap: "7px" }}>
-                              <button
-                                onClick={handleShare}
-                                className="daily-tr-btn"
-                              >
-                                Share
-                              </button>
-                              <button
-                                onClick={() => setShowForwardPopup(false)}
-                                className="daily-tr-btn"
-                              >
-                                Close
-                              </button>
+              {/*Arshad Attar Added This Code On 20-01-205*/}
+              {showForwardPopup ? (
+                  <>
+                    <div className="custom-modal-overlay">
+                      <div className="custom-modal-container">
+                        <div className="custom-modal-dialog">
+                          <div className="custom-modal-header">Forward To</div>
+                          <div className="custom-modal-body">
+                            <div className="custom-accordion">
+                              {userType === "TeamLeader" && (
+                                <div className="custom-main-list">
+                                  {displayRecruiters &&
+                                    renderCard("Recruiters", recruitersList)}
+                                </div>
+                              )}
+
+                              {userType === "Manager" && (
+                                <div className="custom-main-list">
+                                  {displayTeamLeaders &&
+                                    renderCard("Team Leaders", teamLeadersList)}
+                                  {displayRecruiters &&
+                                    renderCard("Recruiters", recruitersList)}
+                                </div>
+                              )}
                             </div>
+                          </div>
+
+                          <div className="custom-modal-footer">
+                            <button
+                              onClick={handleShare}
+                              className="daily-tr-btn"
+                            >
+                              Share
+                            </button>
+                            <button
+                              onClick={() => {
+                                setShowForwardPopup(false);
+                                resetSelections();
+                              }}
+                              className="daily-tr-btn"
+                            >
+                              Close
+                            </button>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              )}
+                  </>
+                ) : null}
+
 
               <div>
                 <Modal
