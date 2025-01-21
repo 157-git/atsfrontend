@@ -144,6 +144,7 @@ function Sidebar({
       switch (`${userType}`) {
         case "SuperUser":
           requestBody = {
+            superUserId:employeeId,
             employeeId: employeeId,
             userType:"SuperUser",
             employeeName: loginEmployeeName,
@@ -152,6 +153,7 @@ function Sidebar({
           break;
         case "Manager":
           requestBody = {
+            managerId: employeeId,
             employeeId: employeeId,
             userType:"Manager",
             employeeName: loginEmployeeName,
@@ -160,6 +162,7 @@ function Sidebar({
           break;
         case "TeamLeader":
           requestBody = {
+            teamLeaderId: employeeId,
             employeeId: employeeId,
             userType:"TeamLeader",
             employeeName: loginEmployeeName,
@@ -191,15 +194,21 @@ function Sidebar({
         console.log(
           "Logout Successfully And Status Updated Successfully.. In Successfully Emit "
         );
+        navigate(`/login/${userType}`, { replace: true });
       } else {
         console.warn(
           "Socket is not defined or emit is not a function. Skipping emit  Without Emit"
         );
+        navigate(`/login/${userType}`, { replace: true });
       }
       console.log(
         "Logout Successfully And Status Updated Successfully.. in Side "
       );
-      navigate(`/login/${userType}`, { replace: true });
+
+      // if (socket.connected) {
+      //   socket.disconnect();
+      // }
+      // navigate(`/login/${userType}`, { replace: true });
     } catch (error) {
       console.error("Error during logout:", error);
     }

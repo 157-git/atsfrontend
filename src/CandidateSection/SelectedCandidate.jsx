@@ -78,7 +78,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
 
   useEffect(() => {
     fetchSelectedCandidateData(currentPage, pageSize);
-  }, [employeeId,currentPage, pageSize,searchTerm]);
+  }, [employeeId, currentPage, pageSize, searchTerm]);
 
   useEffect(() => {
     const options = limitedOptions
@@ -88,7 +88,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
       .map(([key]) => key);
     setFilterOptions(options);
   }, [filteredCallingList]);
-  
+
 
   const fetchSelectedCandidateData = async (page, size) => {
     try {
@@ -192,56 +192,56 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
           item.personalFeedback.toLowerCase().includes(searchTermLower)) ||
         (item.callingFeedback &&
           item.callingFeedback.toLowerCase().includes(searchTermLower)) ||
-          (item.jobDesignation &&
-            item.jobDesignation.toString().toLowerCase().includes(searchTermLower)) ||
-            (item.requirementId &&
-              item.requirementId.toString().toLowerCase().includes(searchTermLower)) ||
-              (item.fullAddress &&
-                item.fullAddress.toString().toLowerCase().includes(searchTermLower)) ||
-                (item.experienceYear &&
-                  item.experienceYear.toString().toLowerCase().includes(searchTermLower)) ||
-                  (item.experienceMonth &&
-                    item.experienceMonth.toString().toLowerCase().includes(searchTermLower)) ||
-                    (item.relevantExperience &&
-                      item.relevantExperience.toString().toLowerCase().includes(searchTermLower)) ||
-                      (item.currentCTCLakh &&
-                        item.currentCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
-                        (item.currentCTCThousand &&
-                          item.currentCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
-                          (item.expectedCTCLakh &&
-                            item.expectedCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
-                            (item.expectedCTCThousand &&
-                              item.expectedCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
-                              (item.yearOfPassing &&
-                                item.yearOfPassing.toString().toLowerCase().includes(searchTermLower)) ||
-                                (item.extraCertification &&
-                                  item.extraCertification.toString().toLowerCase().includes(searchTermLower)) ||
-                                  (item.holdingAnyOffer &&
-                                    item.holdingAnyOffer.toString().toLowerCase().includes(searchTermLower)) ||
-                                    (item.offerLetterMsg &&
-                                      item.offerLetterMsg.toString().toLowerCase().includes(searchTermLower)) ||
-                                      (item.noticePeriod &&
-                                        item.noticePeriod.toString().toLowerCase().includes(searchTermLower)) ||
-                                        (item.msgForTeamLeader &&
-                                          item.msgForTeamLeader.toString().toLowerCase().includes(searchTermLower)) ||
-                                          (item.availabilityForInterview &&
-                                            item.availabilityForInterview.toString().toLowerCase().includes(searchTermLower)) ||
-                                            (item.interviewTime &&
-                                              item.interviewTime.toString().toLowerCase().includes(searchTermLower)) ||
-                                              (item.finalStatus &&
-                                                item.finalStatus.toString().toLowerCase().includes(searchTermLower)) ||
-                                                (item.dateOfBirth &&
-                                                  item.dateOfBirth.toString().toLowerCase().includes(searchTermLower)) ||
-                                                  (item.gender &&
-                                                    item.gender.toString().toLowerCase().includes(searchTermLower)) ||
-                                                    (item.qualification &&
-                                                      item.qualification.toString().toLowerCase().includes(searchTermLower)) ||
-                                                      (item.incentive &&
-                                                        item.incentive.toString().toLowerCase().includes(searchTermLower)) ||
-                                                        (item.candidateId &&
-                                                          item.candidateId.toString().toLowerCase().includes(searchTermLower)) ||
-                                                          (item.empId &&
-                                                            item.empId.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.jobDesignation &&
+          item.jobDesignation.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.requirementId &&
+          item.requirementId.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.fullAddress &&
+          item.fullAddress.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.experienceYear &&
+          item.experienceYear.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.experienceMonth &&
+          item.experienceMonth.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.relevantExperience &&
+          item.relevantExperience.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.currentCTCLakh &&
+          item.currentCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.currentCTCThousand &&
+          item.currentCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.expectedCTCLakh &&
+          item.expectedCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.expectedCTCThousand &&
+          item.expectedCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.yearOfPassing &&
+          item.yearOfPassing.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.extraCertification &&
+          item.extraCertification.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.holdingAnyOffer &&
+          item.holdingAnyOffer.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.offerLetterMsg &&
+          item.offerLetterMsg.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.noticePeriod &&
+          item.noticePeriod.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.msgForTeamLeader &&
+          item.msgForTeamLeader.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.availabilityForInterview &&
+          item.availabilityForInterview.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.interviewTime &&
+          item.interviewTime.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.finalStatus &&
+          item.finalStatus.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.dateOfBirth &&
+          item.dateOfBirth.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.gender &&
+          item.gender.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.qualification &&
+          item.qualification.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.incentive &&
+          item.incentive.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.candidateId &&
+          item.candidateId.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.empId &&
+          item.empId.toString().toLowerCase().includes(searchTermLower)) ||
         (item.selectYesOrNo &&
           item.selectYesOrNo.toLowerCase().includes(searchTermLower))
       );
@@ -274,7 +274,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   // changed this function sahil karnekar date : 22-10-2024
   const filterData = () => {
     let filteredData = [...callingList];
-  
+
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
         filteredData = filteredData.filter((item) => {
@@ -287,16 +287,16 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     });
     setFilteredCallingList(filteredData);
   };
- // updated this function sahil karnekar date : 22-10-2024
- const handleFilterSelect = (key, value) => {
-  setSelectedFilters((prev) => ({
-    ...prev,
-    [key]: prev[key].includes(value)
-      ? prev[key].filter((item) => item !== value.toLowerCase())
-      : [...prev[key], value.toLowerCase()], // store filter values in lowercase
-  }));
-};
-  
+  // updated this function sahil karnekar date : 22-10-2024
+  const handleFilterSelect = (key, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [key]: prev[key].includes(value)
+        ? prev[key].filter((item) => item !== value.toLowerCase())
+        : [...prev[key], value.toLowerCase()], // store filter values in lowercase
+    }));
+  };
+
 
   const handleSort = (criteria) => {
     if (criteria === sortCriteria) {
@@ -312,7 +312,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     setShowFilterSection(!showFilterSection);
   };
 
-//  filter problem solved updated by sahil karnekar date 21-10-2024 complete  handleFilterOptionClick method
+  //  filter problem solved updated by sahil karnekar date 21-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
     if (activeFilterOption === key) {
       setActiveFilterOption(null);
@@ -323,7 +323,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
       const newSelectedFilters = { ...prev };
       if (key in newSelectedFilters) {
       } else {
-        newSelectedFilters[key] = []; 
+        newSelectedFilters[key] = [];
       }
       return newSelectedFilters;
     });
@@ -418,7 +418,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
       toast.error("Please select at least one Candidate to proceed.");
     }
   };
-  
+
   const handleShare = async () => {
     if (userType === "TeamLeader") {
       if (selectedRecruiters.recruiterId === "") {
@@ -428,11 +428,11 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
         setErrorForShare("");
       }
     }
-  
+
     setIsDataSending(true);
     let url = `${API_BASE_URL}/share-candidate-data/${employeeId}/${userType}`;
     let requestData;
-  
+
     if (
       userType === "TeamLeader" &&
       selectedRecruiters.recruiterId !== "" &&
@@ -441,7 +441,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
       requestData = {
         employeeId: parseInt(selectedRecruiters.recruiterId),
         candidateIds: selectedRows,
-         jobRole : "Recruiters"
+        jobRole: "Recruiters"
       };
     } else if (userType === "Manager") {
       requestData = {
@@ -454,7 +454,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
         newManagerId: parseInt(newSelectedManager.newManagerId),
       };
     }
-  
+
     try {
       const requestOptions = {
         method: "PUT",
@@ -463,23 +463,23 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
         },
         body: JSON.stringify(requestData),
       };
-  
+
       const response = await fetch(url, requestOptions);
-  
+
       if (!response.ok) {
         setIsDataSending(false);
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-  
+
       // If response is OK, proceed with success operations
       setIsDataSending(false);
       toast.success("Candidates forwarded successfully!");
       fetchSelectedCandidateData(currentPage, pageSize);
-        // onSuccessAdd(true); commented by arshad on 13-01-2025
+      // onSuccessAdd(true); commented by arshad on 13-01-2025
       setShowForwardPopup(false);
       setShowShareButton(true);
       setSelectedRows([]);
-  
+
       setSelectedRecruiters({
         index: "",
         recruiterId: "",
@@ -504,15 +504,15 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     } catch (error) {
       setIsDataSending(false);
       setShowForwardPopup(false);
-  
+
       // Log the error for debugging
       console.error("Error while forwarding candidates:", error);
-  
+
       // Display a more user-friendly error message
       toast.error("Error while forwarding candidates. Please try again.");
     }
   };
-  
+
   //akash_pawar_SelectedCandidate_ShareFunctionality_18/07_486
 
   //Name:-Akash Pawar Component:-SelectedCandidate Subcategory:-ResumeViewButton(added) start LineNo:-322 Date:-02/07
@@ -711,7 +711,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     hidePopup();
   };
 
-  
+
   const calculateWidth = () => {
     const baseWidth = 250;
     const increment = 10;
@@ -719,15 +719,15 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
   };
 
- // added by sahil karnekar date 4-12-2024
- const handlePageChange = (page) => {
-  setCurrentPage(page);
-};
+  // added by sahil karnekar date 4-12-2024
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
-const handleSizeChange = (current, size) => {
-  setPageSize(size); // Update the page size
-  setCurrentPage(1); // Reset to the first page after page size changes
-};
+  const handleSizeChange = (current, size) => {
+    setPageSize(size); // Update the page size
+    setCurrentPage(1); // Reset to the first page after page size changes
+  };
 
   //Swapnil_Rokade_SelectedCandidate_columnsToInclude_columnsToExclude_17/07/2024//
 
@@ -736,26 +736,26 @@ const handleSizeChange = (current, size) => {
   };
   return (
     <div className="App-after">
-{/* updated by sahil karnekar date 17-12-2024 */}
-{
-  !selectedCandidateId && (
+      {/* updated by sahil karnekar date 17-12-2024 */}
+      {
+        !selectedCandidateId && (
 
-    <>
-       <div className="search">
-                {/* line 689 added by sahil karnekar date 24-10-2024 */}
+          <>
+            <div className="search">
+              {/* line 689 added by sahil karnekar date 24-10-2024 */}
               <div style={{ display: "flex", alignItems: "center" }}>
                 <i
                   className="fa-solid fa-magnifying-glass"
-                 
+
                   style={{ margin: "10px", width: "auto", fontSize: "15px" }}
                 ></i>
                 {/* line 698 to 708 added by sahil karnekar date 24-10-2024 */}
-     
+
                 <div
-                    className="search-input-div"
-                    style={{ width: `${calculateWidth()}px` }}
-                  >
-                    <div className="forxmarkdiv">
+                  className="search-input-div"
+                  style={{ width: `${calculateWidth()}px` }}
+                >
+                  <div className="forxmarkdiv">
                     <input
                       type="text"
                       className="search-input removeBorderForSearchInput"
@@ -763,161 +763,161 @@ const handleSizeChange = (current, size) => {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    { searchTerm && (
+                    {searchTerm && (
                       <div className="svgimagesetinInput">
-                    <svg onClick={(()=>setSearchTerm(""))} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
-                    </div>
+                        <svg onClick={(() => setSearchTerm(""))} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" /></svg>
+                      </div>
                     )}
-                    
-                    </div>
-                  </div>
-      
-              </div>
-                <h5 style={{ color: "grey", textAlign: "center" }}>
-                  Selected Candidates {" "}
-                </h5>
 
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "5px",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: "10px",
-                  }}
-                >
-                  <div>
-                     {(userType === 'Manager' || userType === 'TeamLeader') && (
+                  </div>
+                </div>
+
+              </div>
+              <h5 style={{ color: "grey", textAlign: "center" }}>
+                Selected Candidates {" "}
+              </h5>
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: "5px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "10px",
+                }}
+              >
+                <div>
+                  {(userType === 'Manager' || userType === 'TeamLeader') && (
                     <button className="lineUp-share-btn" onClick={showPopup}>
-                    Create Excel
+                      Create Excel
                     </button>
-                     )}
-                    {showExportConfirmation && (
-                      <div className="popup-containers">
-                        <p className="confirmation-texts">
-                          Are you sure you want to generate the Excel file?
-                        </p>
+                  )}
+                  {showExportConfirmation && (
+                    <div className="popup-containers">
+                      <p className="confirmation-texts">
+                        Are you sure you want to generate the Excel file?
+                      </p>
+                      <button
+                        onClick={confirmExport}
+                        className="buttoncss-ctn"
+                      >
+                        Yes
+                      </button>
+                      <button
+                        onClick={cancelExport}
+                        className="buttoncss-ctn"
+                      >
+                        No
+                      </button>
+                    </div>
+                  )}
+                </div>
+                {userType !== "Recruiters" && (
+                  <div>
+                    {showShareButton ? (
+                      <button
+                        className="lineUp-Filter-btn"
+                        onClick={() => setShowShareButton(false)}
+                      >
+                        Share
+                      </button>
+                    ) : (
+                      <div style={{ display: "flex", gap: "5px" }}>
                         <button
-                          onClick={confirmExport}
-                          className="buttoncss-ctn"
+                          className="lineUp-Filter-btn"
+                          onClick={() => {
+                            setShowShareButton(true);
+                            setSelectedRows([]);
+                            setAllSelected(false);
+                          }}
                         >
-                          Yes
+                          close
                         </button>
+                        {/* akash_pawar_SelectedCandidate_ShareFunctionality_18/07_604 */}
+                        {userType === "TeamLeader" && (
+                          <button
+                            className="lineUp-share-btn"
+                            onClick={handleSelectAll}
+                          >
+                            {allSelected ? "Deselect All" : "Select All"}
+                          </button>
+                        )}
+                        {/* akash_pawar_SelectedCandidate_ShareFunctionality_18/07_609 */}
                         <button
-                          onClick={cancelExport}
-                          className="buttoncss-ctn"
+                          className="lineUp-Filter-btn"
+                          onClick={forwardSelectedCandidate}
                         >
-                          No
+                          Forward
                         </button>
                       </div>
                     )}
                   </div>
-                  {userType !== "Recruiters" && (
-                    <div>
-                      {showShareButton ? (
-                        <button
-                          className="lineUp-Filter-btn"
-                          onClick={() => setShowShareButton(false)}
-                        >
-                          Share
-                        </button>
-                      ) : (
-                        <div style={{ display: "flex", gap: "5px" }}>
-                          <button
-                            className="lineUp-Filter-btn"
-                            onClick={() => {
-                              setShowShareButton(true);
-                              setSelectedRows([]);
-                              setAllSelected(false);
-                            }}
-                          >
-                            close
-                          </button>
-                          {/* akash_pawar_SelectedCandidate_ShareFunctionality_18/07_604 */}
-                          {userType === "TeamLeader" && (
-                            <button
-                        className="lineUp-share-btn"
-                              onClick={handleSelectAll}
-                            >
-                              {allSelected ? "Deselect All" : "Select All"}
-                            </button>
-                          )}
-                          {/* akash_pawar_SelectedCandidate_ShareFunctionality_18/07_609 */}
-                          <button
-                            className="lineUp-Filter-btn"
-                            onClick={forwardSelectedCandidate}
-                          >
-                            Forward
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  <button
-                    className="lineUp-Filter-btn"
-                    onClick={toggleFilterSection}
-                  >
-                    Filter <i className="fa-solid fa-filter"></i>
-                  </button>
-                </div>
-              </div>
-
-              {/* line 795 to 844 added by sahil karnekar date 22-10-2024 */}
-<div className="filter-dropdowns">
-   {/* updated this filter section by sahil karnekar date 22-10-2024 */}
-   {showFilterSection && (
-  <div className="filter-section">
-    {limitedOptions.map(([optionKey, optionLabel]) => {
-      const uniqueValues = Array.from(
-        new Set(
-          callingList
-            .map((item) => item[optionKey]?.toString().toLowerCase())
-            .filter((value) => value && value !== '-' && !(optionKey === 'alternateNumber' && value === '0'))
-        )
-      );
-
-      return (
-        <div key={optionKey} className="filter-option">
-          <button
-            className="white-Btn"
-            onClick={() => handleFilterOptionClick(optionKey)}
-          >
-            {optionLabel}
-            <span className="filter-icon">&#x25bc;</span>
-          </button>
-
-          {activeFilterOption === optionKey && (
-            <div className="city-filter">
-              <div className="optionDiv">
-                {uniqueValues.length > 0 ? (
-                  uniqueValues.map((value) => (
-                    <label key={value} className="selfcalling-filter-value">
-                      <input
-                        type="checkbox"
-                        checked={selectedFilters[optionKey]?.includes(value) || false}
-                        onChange={() => handleFilterSelect(optionKey, value)}
-                        style={{ marginRight: '5px' }}
-                      />
-                      {value}
-                    </label>
-                  ))
-                ) : (
-                  <div>No values</div>
                 )}
+                <button
+                  className="lineUp-Filter-btn"
+                  onClick={toggleFilterSection}
+                >
+                  Filter <i className="fa-solid fa-filter"></i>
+                </button>
               </div>
             </div>
-          )}
-        </div>
-      );
-    })}
-  </div>
-)}
-</div>
-{/* updated by sahil karnekar date 17-12-2024 */}
-    </>
 
-  )
-}
+            {/* line 795 to 844 added by sahil karnekar date 22-10-2024 */}
+            <div className="filter-dropdowns">
+              {/* updated this filter section by sahil karnekar date 22-10-2024 */}
+              {showFilterSection && (
+                <div className="filter-section">
+                  {limitedOptions.map(([optionKey, optionLabel]) => {
+                    const uniqueValues = Array.from(
+                      new Set(
+                        callingList
+                          .map((item) => item[optionKey]?.toString().toLowerCase())
+                          .filter((value) => value && value !== '-' && !(optionKey === 'alternateNumber' && value === '0'))
+                      )
+                    );
+
+                    return (
+                      <div key={optionKey} className="filter-option">
+                        <button
+                          className="white-Btn"
+                          onClick={() => handleFilterOptionClick(optionKey)}
+                        >
+                          {optionLabel}
+                          <span className="filter-icon">&#x25bc;</span>
+                        </button>
+
+                        {activeFilterOption === optionKey && (
+                          <div className="city-filter">
+                            <div className="optionDiv">
+                              {uniqueValues.length > 0 ? (
+                                uniqueValues.map((value) => (
+                                  <label key={value} className="selfcalling-filter-value">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedFilters[optionKey]?.includes(value) || false}
+                                      onChange={() => handleFilterSelect(optionKey, value)}
+                                      style={{ marginRight: '5px' }}
+                                    />
+                                    {value}
+                                  </label>
+                                ))
+                              ) : (
+                                <div>No values</div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            {/* updated by sahil karnekar date 17-12-2024 */}
+          </>
+
+        )
+      }
 
       {loading ? (
         <div className="register">
@@ -944,14 +944,14 @@ const handleSizeChange = (current, size) => {
                           />
                         </th>
                       ) : null}
-                     <th className="attendanceheading">Sr No.</th>
+                      <th className="attendanceheading">Sr No.</th>
                       <th className="attendanceheading">Candidate Id</th>
 
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("date")}
                       >
-                       Added Date Time
+                        Added Date Time
                       </th>
                       <th
                         className="attendanceheading"
@@ -1037,23 +1037,23 @@ const handleSizeChange = (current, size) => {
 
 
                         ) : null}
-  <td
+                        <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {calculateRowIndex(index)}
+                          {calculateRowIndex(index)}
                           <div className="tooltip">
                             <span className="tooltiptext">{calculateRowIndex(index)}</span>
                           </div>
                         </td>
 
-<td
-  className="tabledata"
-  onMouseOver={handleMouseOver}
-  onMouseOut={handleMouseOut}
->
-{highlightText(item.candidateId.toString().toLowerCase() || "", searchTerm)}
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(item.candidateId.toString().toLowerCase() || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1062,30 +1062,30 @@ const handleSizeChange = (current, size) => {
                               )}
                             </span>
                           </div>
-</td>
+                        </td>
 
-<td
-  className="tabledata"
-  onMouseOver={handleMouseOver}
-  onMouseOut={handleMouseOut}
->
-{ highlightText(item.date || "", searchTerm)  } - {item.candidateAddedTime || "-"}
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(item.date || "", searchTerm)} - {item.candidateAddedTime || "-"}
                           <div className="tooltip">
                             <span className="tooltiptext">{highlightText(
-                                item.date.toString().toLowerCase() || "",
-                                searchTerm
-                              )}  - {" "}  {item.candidateAddedTime}</span>
+                              item.date.toString().toLowerCase() || "",
+                              searchTerm
+                            )}  - {" "}  {item.candidateAddedTime}</span>
                           </div>
-</td>
+                        </td>
 
 
 
-<td
-  className="tabledata"
-  onMouseOver={handleMouseOver}
-  onMouseOut={handleMouseOut}
->
-{highlightText(item.recruiterName || "", searchTerm)}
+                        <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(item.recruiterName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1094,13 +1094,13 @@ const handleSizeChange = (current, size) => {
                               )}
                             </span>
                           </div>
-</td>
+                        </td>
                         <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.candidateName || "", searchTerm)}
+                          {highlightText(item.candidateName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1130,7 +1130,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                        {highlightText(item.contactNumber || "", searchTerm)}
+                          {highlightText(item.contactNumber || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1145,7 +1145,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.alternateNumber || "", searchTerm)}
+                          {highlightText(item.alternateNumber || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1160,7 +1160,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                        {highlightText(item.sourceName || "", searchTerm)}
+                          {highlightText(item.sourceName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1205,7 +1205,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.requirementCompany || "", searchTerm)}
+                          {highlightText(item.requirementCompany || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1220,7 +1220,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.communicationRating || "", searchTerm)}
+                          {highlightText(item.communicationRating || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1235,7 +1235,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.currentLocation || "", searchTerm)}
+                          {highlightText(item.currentLocation || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1250,7 +1250,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.fullAddress || "", searchTerm)}
+                          {highlightText(item.fullAddress || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1261,11 +1261,11 @@ const handleSizeChange = (current, size) => {
                           </div>
                         </td>
                         <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                     {highlightText(item.callingFeedback || "", searchTerm)}
+                          className="tabledata "
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(item.callingFeedback || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1274,13 +1274,13 @@ const handleSizeChange = (current, size) => {
                               )}
                             </span>
                           </div>
-                    </td>
-                    <td
-                      className="tabledata "
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                       {highlightText(item.feedBack || "", searchTerm)}
+                        </td>
+                        <td
+                          className="tabledata "
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(item.feedBack || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1289,7 +1289,7 @@ const handleSizeChange = (current, size) => {
                               )}
                             </span>
                           </div>
-                    </td>
+                        </td>
                         <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
@@ -1310,7 +1310,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.selectYesOrNo || "", searchTerm)}
+                          {highlightText(item.selectYesOrNo || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1326,7 +1326,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.companyName || "", searchTerm)}
+                          {highlightText(item.companyName || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1366,31 +1366,31 @@ const handleSizeChange = (current, size) => {
                             </span>
                           </div>
                         </td>
-                        
+
                         <td className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}>
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
 
-                            {item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand
-                            <div className="tooltip">
-                              <span className="tooltiptext">{item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand</span>
-                            </div>
-                          </td>
+                          {item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.currentCTCLakh} {" "} Lakh {item.currentCTCThousand}   {" "} Thousand</span>
+                          </div>
+                        </td>
 
-                          <td className="tabledata" onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}>
-                            {item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand} {" "} Thousand
-                            <div className="tooltip">
-                              <span className="tooltiptext">{item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand}  {" "} Thousand</span>
-                            </div>
-                          </td>
+                        <td className="tabledata" onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}>
+                          {item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand} {" "} Thousand
+                          <div className="tooltip">
+                            <span className="tooltiptext">{item.expectedCTCLakh}  {" "} Lakh {item.expectedCTCThousand}  {" "} Thousand</span>
+                          </div>
+                        </td>
 
                         <td
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.dateOfBirth || "", searchTerm)}
+                          {highlightText(item.dateOfBirth || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1405,7 +1405,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                            {highlightText(item.gender || "", searchTerm)}
+                          {highlightText(item.gender || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1420,7 +1420,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.qualification || "", searchTerm)}
+                          {highlightText(item.qualification || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1435,7 +1435,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.yearOfPassing || "", searchTerm)}
+                          {highlightText(item.yearOfPassing || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1450,7 +1450,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                             {highlightText(item.extraCertification || "", searchTerm)}
+                          {highlightText(item.extraCertification || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1465,7 +1465,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                            {highlightText(item.holdingAnyOffer || "", searchTerm)}
+                          {highlightText(item.holdingAnyOffer || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1480,7 +1480,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                         {highlightText(item.offerLetterMsg || "", searchTerm)}
+                          {highlightText(item.offerLetterMsg || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1490,12 +1490,12 @@ const handleSizeChange = (current, size) => {
                             </span>
                           </div>
                         </td>
-                        
+
 
                         {/* Name:-Akash Pawar Component:-SelectedCandidate
                   Subcategory:-ResumeViewButton(added) start LineNo:-953
                   Date:-02/07 */}
-                         <td className="tabledata">
+                        <td className="tabledata">
                           <button
                             onClick={() => openResumeModal(item.resume)}
                             style={{ background: "none", border: "none" }}
@@ -1517,7 +1517,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                            {highlightText(item.noticePeriod || "", searchTerm)}
+                          {highlightText(item.noticePeriod || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1532,7 +1532,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                             {highlightText(item.msgForTeamLeader || "", searchTerm)}
+                          {highlightText(item.msgForTeamLeader || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1571,7 +1571,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.finalStatus || "", searchTerm)}
+                          {highlightText(item.finalStatus || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1586,7 +1586,7 @@ const handleSizeChange = (current, size) => {
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
-                           {highlightText(item.empId.toString().toLowerCase() || "", searchTerm)}
+                          {highlightText(item.empId.toString().toLowerCase() || "", searchTerm)}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
@@ -1598,33 +1598,33 @@ const handleSizeChange = (current, size) => {
                         </td>
 
                         {(userType === 'TeamLeader' || userType === 'Manager') && (
-                            <td
-                              className="tabledata"
-                              onMouseOver={handleMouseOver}
-                              onMouseOut={handleMouseOut}
-                            >
-                              {highlightText(item.teamLeaderId.toString().toLowerCase() || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.teamLeaderId.toString().toLowerCase() || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
-                            </td>
-                          )}
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {highlightText(item.teamLeaderId.toString().toLowerCase() || "", searchTerm)}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(
+                                  item.teamLeaderId.toString().toLowerCase() || "",
+                                  searchTerm
+                                )}
+                              </span>
+                            </div>
+                          </td>
+                        )}
 
                         <td className="tabledata ">
-                          <button    className="table-icon-div">
-                          <i
-                            onClick={() => viewPage(item.candidateId,item.requirementId)}
-                            className="fa-regular fa-pen-to-square"
+                          <button className="table-icon-div">
+                            <i
+                              onClick={() => viewPage(item.candidateId, item.requirementId)}
+                              className="fa-regular fa-pen-to-square"
 
-                          ></i>
+                            ></i>
 
                           </button>
-                         
+
                         </td>
                       </tr>
                     ))}
@@ -1863,8 +1863,8 @@ const handleSizeChange = (current, size) => {
                                               htmlFor={recruiters.employeeId}
                                             >
                                               <input
-                                              // line 1678 added by sahil karnekar date 24-10-2024
-                                              style={{width:"auto"}}
+                                                // line 1678 added by sahil karnekar date 24-10-2024
+                                                style={{ width: "auto" }}
                                                 type="radio"
                                                 id={recruiters.employeeId}
                                                 name="recruiter"
@@ -1896,9 +1896,9 @@ const handleSizeChange = (current, size) => {
                           {/* akash_pawar_SelectedCandidate_ShareFunctionality_18/07_1523 */}
                         </Modal.Body>
                         {
-                         errorForShare && (
-                          <div style={{textAlign:"center", color:"red"}}>{errorForShare}</div>
-                         )
+                          errorForShare && (
+                            <div style={{ textAlign: "center", color: "red" }}>{errorForShare}</div>
+                          )
                         }
                         <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
                           <button
@@ -1954,20 +1954,20 @@ const handleSizeChange = (current, size) => {
           Subcategory:-ResumeModel(added) End LineNo:-1184 Date:-02/07 */}
               </div>
               <div className="search-count-last-div">
-            Total Results : {totalRecords}
-          </div>
-        <Pagination
-        current={currentPage}
-        total={totalRecords}
-        pageSize={pageSize}
-        showSizeChanger
-        showQuickJumper 
-        onShowSizeChange={handleSizeChange}
-        onChange={handlePageChange}
-        style={{
-          justifyContent: 'center',
-        }}
-      />
+                Total Results : {totalRecords}
+              </div>
+              <Pagination
+                current={currentPage}
+                total={totalRecords}
+                pageSize={pageSize}
+                showSizeChanger
+                showQuickJumper
+                onShowSizeChange={handleSizeChange}
+                onChange={handlePageChange}
+                style={{
+                  justifyContent: 'center',
+                }}
+              />
             </>
           ) : (
             <AfterSelection
@@ -1985,7 +1985,7 @@ const handleSizeChange = (current, size) => {
           <Loader size={50} color="#ffb281" />
         </div>
       )}
-    
+
     </div>
   );
 };

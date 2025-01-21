@@ -14,7 +14,7 @@ import Loader from "../EmployeeSection/loader";
 import { Avatar, Card, List, Modal, Skeleton } from "antd";
 import { getUserImageFromApiForReport } from "./getUserImageFromApiForReport";
 
-const MonthReport = ({loginEmployeeName}) => {
+const MonthReport = ({ loginEmployeeName }) => {
   const { userType } = useParams();
   const { employeeId } = useParams();
   const [reportDataDatewise, setReportDataDatewise] = useState(null);
@@ -37,19 +37,19 @@ const MonthReport = ({loginEmployeeName}) => {
   const [managersList, setManagersList] = useState([]);
   const [teamLeadersList, setTeamLeadersList] = useState([]);
   const [recruitersList, setRecruitersList] = useState([]);
-  
+
   const handleDisplayManagers = async () => {
     if (userType === "SuperUser") {
       const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
       setManagersList(response.data);
       setDisplayManagers(true);
-    } else if ( userType === "Manager"){
+    } else if (userType === "Manager") {
       const response = await axios.get(
         `${API_BASE_URL}/tl-namesIds/${employeeId}`
       );
       setTeamLeadersList(response.data);
       setDisplayTeamLeaders(true)
-    }else if ( userType === "TeamLeader"){
+    } else if (userType === "TeamLeader") {
       const response = await axios.get(
         `${API_BASE_URL}/employeeId-names/${employeeId}`
       );
@@ -71,6 +71,7 @@ const MonthReport = ({loginEmployeeName}) => {
 
   const handleOpenDownArrowContent = async (managerid) => {
     setSelectedIds([]);
+setAllImagesForTeamLeaders([]);
     try {
       const response = await axios.get(
         `${API_BASE_URL}/tl-namesIds/${managerid}`
@@ -85,6 +86,7 @@ const MonthReport = ({loginEmployeeName}) => {
 
   const handleOpenDownArrowContentForRecruiters = async (teamLeaderId) => {
     setSelectedIds([]);
+    setAllImagesForRecruiters([]);
     const response = await axios.get(
       `${API_BASE_URL}/employeeId-names/${teamLeaderId}`
     );
@@ -246,7 +248,6 @@ const MonthReport = ({loginEmployeeName}) => {
 
 
   const [allImagesForRecruiters, setAllImagesForRecruiters] = useState([]); // Initialize as an object
-const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
   useEffect(() => {
     const fetchAllImagesForRecruiters = async () => {
       const images = await Promise.all(
@@ -255,11 +256,12 @@ const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
         })
       );
       setAllImagesForRecruiters(images); // Set the array of image URLs
+     
     };
-  
+
     fetchAllImagesForRecruiters();
-    setFetchRecruitersImges(false);
   }, [recruitersList]);
+  console.log(allImagesForRecruiters);
 
   const [allImagesForTeamLeaders, setAllImagesForTeamLeaders] = useState([]); // Initialize as an object
 
@@ -272,7 +274,7 @@ const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
       );
       setAllImagesForTeamLeaders(images); // Set the array of image URLs
     };
-  
+
     fetchAllImagesForTeamLeaders();
   }, [teamLeadersList]);
 
@@ -287,10 +289,10 @@ const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
       );
       setAllImagesForManagers(images); // Set the array of image URLs
     };
-  
+
     fetchAllImagesForManagers();
   }, [managersList]);
-  
+
   return (
     <>
       <div className="listofButtons11">
@@ -317,9 +319,8 @@ const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
           ].map((report, index) => (
             <div
               key={report.id}
-              className={`typeofReportSubDiv ${
-                activeButton === report.id ? "active" : ""
-              }`}
+              className={`typeofReportSubDiv ${activeButton === report.id ? "active" : ""
+                }`}
               onClick={() => handleOpenSelectDate(report.id)}
             >
               <div className="subdiviconandtext">
@@ -478,7 +479,7 @@ const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
                     renderItem={(item, index) => (
                       <List.Item>
                         <input
-                        className="managersTeamRecruitersInputMargin"
+                          className="managersTeamRecruitersInputMargin"
                           type="checkbox"
                           checked={
                             selectedRole === "Manager" &&
@@ -494,12 +495,16 @@ const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
                         />
                         <List.Item.Meta
                           avatar={
+                            allImagesForManagers.length  === 0 ? (
+                              <Skeleton.Avatar active />
+                            ): (
                             <Avatar
                               src={
-                                allImagesForManagers.length > 0 ? 
-                                allImagesForManagers[index] !== null ? allImagesForManagers[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                                allImagesForManagers.length > 0 ?
+                                  allImagesForManagers[index] !== null ? allImagesForManagers[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
                               }
                             />
+                            )
                           }
                           title={item.managerName}
                         />
@@ -539,7 +544,7 @@ const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
                         renderItem={(teamLeader, index) => (
                           <List.Item>
                             <input
-                            className="managersTeamRecruitersInputMargin"
+                              className="managersTeamRecruitersInputMargin"
                               type="checkbox"
                               checked={
                                 selectedRole === "TeamLeader" &&
@@ -555,12 +560,16 @@ const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
                             />
                             <List.Item.Meta
                               avatar={
+                                allImagesForTeamLeaders.length === 0 ?(
+                                  <Skeleton.Avatar active />
+                                ): (
                                 <Avatar
                                   src={
-                                    allImagesForTeamLeaders.length > 0 ? 
-                                    allImagesForTeamLeaders[index] !== null ? allImagesForTeamLeaders[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                                    allImagesForTeamLeaders.length > 0 ?
+                                      allImagesForTeamLeaders[index] !== null ? allImagesForTeamLeaders[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
                                   }
                                 />
+                                )
                               }
                               title={teamLeader.teamLeaderName}
                             />
@@ -604,7 +613,7 @@ const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
                         renderItem={(recruiter, index) => (
                           <List.Item>
                             <input
-                            className="managersTeamRecruitersInputMargin"
+                              className="managersTeamRecruitersInputMargin"
                               type="checkbox"
                               checked={
                                 selectedRole === "Recruiters" &&
@@ -620,17 +629,19 @@ const [fetchRecruitersImages, setFetchRecruitersImges] = useState(true);
                             />
                             <List.Item.Meta
                               avatar={
-                                // <Skeleton.Avatar loading={fetchRecruitersImages} active >
-                                <Avatar
-                                  src={
-                                    // recruiter.profileImage
-                                    //   ? recruiter.profileImage
-                                    //   : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
-                                    allImagesForRecruiters.length > 0 ? 
-                                    allImagesForRecruiters[index] !== null ? allImagesForRecruiters[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
-                                  }
-                                />
-                                // </Skeleton.Avatar>
+                                allImagesForRecruiters.length === 0 ? (
+                <Skeleton.Avatar active />
+              ) : (
+                                  <Avatar
+                                    src={
+                                      allImagesForRecruiters.length > 0
+                                        ? allImagesForRecruiters[index] !== null
+                                          ? allImagesForRecruiters[index]
+                                          : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                                        : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                                    }
+                                  />
+                                  )
                               }
                               title={recruiter.employeeName}
                             />

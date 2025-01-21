@@ -202,7 +202,7 @@ const UpdateSelfCalling = ({
       if (
         !callingTracker.lineUp.expectedCTCLakh &&
         !callingTracker.lineUp.expectedCTCThousand
-      ) {
+      ) {1
         newErrors.expectedCTCLakh = "Expected CTC is required";
         newErrors.expectedCTCLakhStar = "*";
       }
@@ -249,6 +249,8 @@ const UpdateSelfCalling = ({
       );
       const data = await response.json();
       setCallingTracker(data);
+      console.log(data);
+      
       if (data.lineUp.resume !== "") {
         setResumeUploaded(true);
       }
@@ -763,7 +765,7 @@ const UpdateSelfCalling = ({
         incentive: callingTracker.incentive,
         alternateNumber: callingTracker.alternateNumber,
         currentLocation: callingTracker.currentLocation,
-        fullAddress: userType,
+        fullAddress: callingTracker.fullAddress,
         communicationRating: callingTracker.communicationRating,
         selectYesOrNo: callingTracker.selectYesOrNo,
         callingFeedback: callingTracker.callingFeedback,
