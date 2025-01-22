@@ -7,12 +7,13 @@ import Button from "react-bootstrap/Button";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { toast } from "react-toastify";
-import { Avatar, Card, List, Pagination } from "antd";
+import { Avatar, Card, List, Pagination, Skeleton } from "antd";
 import axios from "axios";
 import { highlightText } from "./HighlightTextHandlerFunc";
 import FilterData from "../helper/filterData";
 import convertToDocumentLink from "../helper/convertToDocumentLink";
 import limitedOptions from "../helper/limitedOptions";
+import { getUserImageFromApiForReport } from "../Reports/getUserImageFromApiForReport";
 // SwapnilRokade_ShortListedCandidates_ModifyFilters_11/07
 
 const ShortListedCandidates = ({
@@ -372,6 +373,7 @@ const ShortListedCandidates = ({
 
   const handleOpenDownArrowContentForRecruiters = async (teamLeaderId) => {
     setSelectedIds([]);
+   setAllImagesForRecruiters([]);
     const response = await axios.get(
       `${API_BASE_URL}/employeeId-names/${teamLeaderId}`
     );
@@ -380,6 +382,42 @@ const ShortListedCandidates = ({
     setDisplayRecruiters(true);
   };
 
+  console.log(
+    recruitersList
+  );
+  
+ const [allImagesForRecruiters, setAllImagesForRecruiters] = useState([]); // Initialize as an object
+  useEffect(() => {
+    const fetchAllImagesForRecruiters = async () => {
+      const images = await Promise.all(
+        recruitersList.map(async (message) => {
+          return await getUserImageFromApiForReport(message.employeeId, message.jobRole);
+        })
+      );
+      setAllImagesForRecruiters(images); // Set the array of image URLs
+     
+    };
+
+    fetchAllImagesForRecruiters();
+  }, [recruitersList]);
+
+  const [allImagesForTeamLeaders, setAllImagesForTeamLeaders] = useState([]); // Initialize as an object
+
+  useEffect(() => {
+    const fetchAllImagesForTeamLeaders = async () => {
+      const images = await Promise.all(
+        teamLeadersList.map(async (message) => {
+          return await getUserImageFromApiForReport(message.teamLeaderId, message.jobRole);
+        })
+      );
+      setAllImagesForTeamLeaders(images); // Set the array of image URLs
+    };
+
+    fetchAllImagesForTeamLeaders();
+  }, [teamLeadersList]);
+
+  console.log(allImagesForTeamLeaders);
+  
   const renderCard = (title, list) => (
     <Card
       hoverable
@@ -409,18 +447,33 @@ const ShortListedCandidates = ({
                 setSelectedEmployeeId(item.employeeId || item.teamLeaderId);
               }}
             />
-            <List.Item.Meta
-              avatar={
-                <Avatar
-                  src={
-                    item.profileImage
-                      ? item.profileImage
-                      : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
-                  }
-                />
-              }
-              title={item.employeeName || item.teamLeaderName}
-            />  
+           <List.Item.Meta
+  avatar={
+    (() => {
+      // Determine which image array to use based on title
+      const images =
+        title === "Recruiters"
+          ? allImagesForRecruiters
+          : title === "Team Leaders"
+          ? allImagesForTeamLeaders
+          : [];
+
+      // Determine the image source or fallback URL
+      const avatarSrc =
+        images.length > 0 && images[index]
+          ? images[index]
+          : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`;
+
+      // Render Avatar or Skeleton based on image array length
+      return images.length === 0 ? (
+        <Skeleton.Avatar active />
+      ) : (
+        <Avatar src={avatarSrc} />
+      );
+    })()
+  }
+  title={item.employeeName || item.teamLeaderName}
+/>
             {
               title !== "Recruiters"  && (
                 <svg
