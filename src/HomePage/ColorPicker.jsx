@@ -4,7 +4,7 @@ import { WhatsAppOutlined } from "@ant-design/icons";
 
 const ColorPicker = ({ onColorApplied , setShowColor}) => {
   const [bgColor, setBgColor] = useState("");
-  
+  const selectedColorHighlight = localStorage.getItem("selectedColor");
   useEffect(() => {
     const savedColor = localStorage.getItem("selectedColor");
     if (savedColor) {
@@ -303,13 +303,13 @@ colors.forEach(({ variable, value }) => {
         "#ff6666", "#ff4d4d", "gray", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#27374D","#27374D",
         "#9DB2BF","white","white","#c80036","#27374D","#27374D"
       ],
-      "#3C4B5E": [
-        "#3C4B5E", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
-        "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "white",
-        "gray", "#f0f3f5", "#ff4d4d", "#9db2bf", "#ffffff", "#677382", "white", "#ffffff", "#27374D", "#e60000",
-        "#ff6666", "#ff4d4d", "gray", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#27374D","#27374D",
-        "#9DB2BF","white","white","#c80036","#3C4B5E","#3C4B5E"
-      ],
+      // "#3C4B5E": [
+      //   "#3C4B5E", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
+      //   "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "white",
+      //   "gray", "#f0f3f5", "#ff4d4d", "#9db2bf", "#ffffff", "#677382", "white", "#ffffff", "#27374D", "#e60000",
+      //   "#ff6666", "#ff4d4d", "gray", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#27374D","#27374D",
+      //   "#9DB2BF","white","white","#c80036","#3C4B5E","#3C4B5E"
+      // ],
       "#769FCD": [
         "#769FCD", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
@@ -345,13 +345,13 @@ colors.forEach(({ variable, value }) => {
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#323232","#27374D",
         "#7F7F7F", "white","white","#c80036","black","#191304"
       ],
-      "#4A62BA": [
-        "#4A62BA", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
-        "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
-        "gray", "#f2f2f2", "#ff4d4d", "#CBDCEB", "black", "#608BC1", "white", "black", "#ffffff", "#e60000",
-        "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#4A62BA","#27374D",
-        "#CBDCEB", "white","white","#c80036","black","#4A62BA"
-      ],
+      // "#4A62BA": [
+      //   "#4A62BA", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
+      //   "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
+      //   "gray", "#f2f2f2", "#ff4d4d", "#CBDCEB", "black", "#608BC1", "white", "black", "#ffffff", "#e60000",
+      //   "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#4A62BA","#27374D",
+      //   "#CBDCEB", "white","white","#c80036","black","#4A62BA"
+      // ],
       "#545F54": [
         "#545F54", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "white",
@@ -366,34 +366,34 @@ colors.forEach(({ variable, value }) => {
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#b3b2b3","#27374D",
         "#b3b2b3", "white","white","#c80036","#413F42","#413F42"
       ],
-      "#5b585c": [
-        "#5b585c", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
-        "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
-        "gray", "#e6e5e6", "#ff4d4d", "#D9D8D9", "black", "#8D8B8D", "white", "black", "#ffffff", "#e60000",
-        "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#b3b2b3","#27374D",
-        "#D9D8D9", "white","white","#c80036","#5b585c","#5b585c"
-      ],
-      "#393e46": [
-        "#393e46", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
-        "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
-        "gray", "#e6e5e6", "#ff4d4d", "#D9D8D9", "black", "#5b6370", "white", "black", "#ffffff", "#e60000",
-        "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#c3c5c7","#27374D",
-        "#c3c5c7", "white","white","#c80036","#393e46","#393e46"
-      ],
-      "#4C5158": [
-        "#4C5158", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
-        "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
-        "gray", "#e6e5e6", "#ff4d4d", "#D9D8D9", "black", "#74777D", "white", "black", "#ffffff", "#e60000",
-        "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#D9D8D9","#27374D",
-        "#D9D8D9", "white","white","#c80036","#4C5158","#4C5158"
-      ],
-      "#FFE3E3": [
-        "#FFE3E3", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
-        "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
-        "gray", "#e6e5e6", "#ff4d4d", "#ffe3e3", "black", "#FEF9F2", "black", "black", "#ffffff", "#e60000",
-        "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#ffe3e3","#27374D",
-        "#ffe3e3", "black","black","#c80036","white","#FFE3E3"
-      ],
+      // "#5b585c": [
+      //   "#5b585c", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
+      //   "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
+      //   "gray", "#e6e5e6", "#ff4d4d", "#D9D8D9", "black", "#8D8B8D", "white", "black", "#ffffff", "#e60000",
+      //   "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#b3b2b3","#27374D",
+      //   "#D9D8D9", "white","white","#c80036","#5b585c","#5b585c"
+      // ],
+      // "#393e46": [
+      //   "#393e46", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
+      //   "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
+      //   "gray", "#e6e5e6", "#ff4d4d", "#D9D8D9", "black", "#5b6370", "white", "black", "#ffffff", "#e60000",
+      //   "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#c3c5c7","#27374D",
+      //   "#c3c5c7", "white","white","#c80036","#393e46","#393e46"
+      // ],
+      // "#4C5158": [
+      //   "#4C5158", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
+      //   "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
+      //   "gray", "#e6e5e6", "#ff4d4d", "#D9D8D9", "black", "#74777D", "white", "black", "#ffffff", "#e60000",
+      //   "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#D9D8D9","#27374D",
+      //   "#D9D8D9", "white","white","#c80036","#4C5158","#4C5158"
+      // ],
+      // "#FFE3E3": [
+      //   "#FFE3E3", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
+      //   "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
+      //   "gray", "#e6e5e6", "#ff4d4d", "#ffe3e3", "black", "#FEF9F2", "black", "black", "#ffffff", "#e60000",
+      //   "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#ffe3e3","#27374D",
+      //   "#ffe3e3", "black","black","#c80036","white","#FFE3E3"
+      // ],
       "#1F4529": [
         "#1F4529", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
@@ -401,13 +401,13 @@ colors.forEach(({ variable, value }) => {
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#b8d0ae","#27374D",
         "#b8d0ae", "white","white","#c80036","#1F4529","#1F4529"
       ],
-      "#987D9A": [
-        "#987D9A", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
-        "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "white",
-        "gray", "#e6e5e6", "#ff4d4d", "#BB9AB1", "white", "#BB9AB1", "white", "black", "#ffffff", "#e60000",
-        "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#BB9AB1","#27374D",
-        "#BB9AB1", "white","white","#c80036","#987D9A","#987D9A"
-      ],
+      // "#987D9A": [
+      //   "#987D9A", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
+      //   "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "white",
+      //   "gray", "#e6e5e6", "#ff4d4d", "#BB9AB1", "white", "#BB9AB1", "white", "black", "#ffffff", "#e60000",
+      //   "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#BB9AB1","#27374D",
+      //   "#BB9AB1", "white","white","#c80036","#987D9A","#987D9A"
+      // ],
       "#A59D84": [
         "#A59D84", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
@@ -422,17 +422,17 @@ colors.forEach(({ variable, value }) => {
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#EAD8C0","#27374D",
         "#EAD8C0", "white" ,"white","#c80036","#A79277", "#A79277"
       ],
-      "#e0ccff": [
-        //0            //1     //2          //3        //4        //5        //6        //7        //8        //9
-        "#d0aaff", "#b780ff", "#9d56ff", "#7a2eff", "#5a00e6", "#d0aaff", "#b780ff", "#9d56ff", "#7a2eff", "#5a00e6",
-        //10        //11        //12     //13      //14      //15        //16        //17      //18        //19
-        "green", "#b780ff", "#ffffff", "#c299ff", "#5a00e6", "#d0aaff", "#b780ff", "black", "#7a2eff", "black",
-        //20         //21       //22      //23      //24      //25        //26        //27      //28        //29
-        "gray", "#efe6ff", "#9d56ff", "#7a2eff", "#ffffff", "#e0ccff", "#9d56ff", "black", "#be99ff", "#5a00e6",
-        //30          //31       //32      //33      //34      //35        //36        //37    //38      //39
-        "#b780ff", "#9d56ff", "#7a2eff", "#5a00e6", "#d0aaff", "#b780ff", "#9d56ff", "#5a00e6","#e0ccff","black",
-        "#e0ccff","white","black","#c80036","white","#e0ccff"
-      ], 
+      // "#e0ccff": [
+      //   //0            //1     //2          //3        //4        //5        //6        //7        //8        //9
+      //   "#d0aaff", "#b780ff", "#9d56ff", "#7a2eff", "#5a00e6", "#d0aaff", "#b780ff", "#9d56ff", "#7a2eff", "#5a00e6",
+      //   //10        //11        //12     //13      //14      //15        //16        //17      //18        //19
+      //   "green", "#b780ff", "#ffffff", "#c299ff", "#5a00e6", "#d0aaff", "#b780ff", "black", "#7a2eff", "black",
+      //   //20         //21       //22      //23      //24      //25        //26        //27      //28        //29
+      //   "gray", "#efe6ff", "#9d56ff", "#7a2eff", "#ffffff", "#e0ccff", "#9d56ff", "black", "#be99ff", "#5a00e6",
+      //   //30          //31       //32      //33      //34      //35        //36        //37    //38      //39
+      //   "#b780ff", "#9d56ff", "#7a2eff", "#5a00e6", "#d0aaff", "#b780ff", "#9d56ff", "#5a00e6","#e0ccff","black",
+      //   "#e0ccff","white","black","#c80036","white","#e0ccff"
+      // ], 
       "#ece5dd": [
         "#81C784", "#388E3C", "#33d633", "#00cc00", "#00b300", "#99e699", "#66e066", "#33d633", "#00cc00", "#00b300",
         "green", "#66e066", "#f0f2f5", "#ffffff", "#00b300", "#99e699", "#54656f", "#33d633", "#00cc00", "black",
@@ -444,8 +444,8 @@ colors.forEach(({ variable, value }) => {
   
   console.log(colorMapping);
   
-  const gridSize = 10;
-  const boxSize = 30;
+  const gridSize = 6;
+  const boxSize = 40;
 
   const handleClose = () => {
     setShowColor(false); 
@@ -471,11 +471,20 @@ colors.forEach(({ variable, value }) => {
                 height: boxSize,
                 backgroundColor: `${color}`,
                 cursor: "pointer",
-                display: "flex",
+                display: "grid",
                 justifyContent: "center",
+                alignContent:"center",
+                border :    selectedColorHighlight && selectedColorHighlight === color && "1px solid black"
               }}
               
-            >{
+            >
+              {
+                selectedColorHighlight && selectedColorHighlight === color && (
+                  
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg>
+                )
+              }
+              {
               color === "#ece5dd" ? (
 <>
 <WhatsAppOutlined

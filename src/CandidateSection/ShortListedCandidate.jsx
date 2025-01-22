@@ -420,7 +420,7 @@ const ShortListedCandidates = ({
                 />
               }
               title={item.employeeName || item.teamLeaderName}
-            />
+            />        
             <svg
               onClick={() =>
                 handleOpenDownArrowContentForRecruiters(

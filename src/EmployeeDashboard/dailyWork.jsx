@@ -1337,7 +1337,7 @@ borderColor:"#cccccc"
    >
      <Meta
        avatar={<Avatar src={
-       allImages[reversedIndex]
+       allImages[reversedIndex] ? allImages[reversedIndex] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${reversedIndex}`
     }
         size="large"
        />}
