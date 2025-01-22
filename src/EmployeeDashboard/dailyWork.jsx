@@ -514,7 +514,7 @@ function DailyWork({
 
       setTime({ hours: 0, minutes: 0, seconds: 0 });
       setData({ archived: 0, pending: 10 });
-      console.log("Logged out successfully. in daily work");
+      console.log("Logged out successfully. in daily work last");
     } catch (error) {
       console.error("Error logging out:", error);
     }

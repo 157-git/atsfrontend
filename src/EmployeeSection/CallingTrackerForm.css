@@ -681,8 +681,8 @@ strong {
   margin-top: 10px;
 }
 .sal-cal-th {
-  color: var(--sidebar-txt);
-  background-color: var(--Bg-color) !important;
+  color: var(--table-header-txt);
+  background-color: var(--table-header-bg) !important;
 }
 
 .loader-overlay {

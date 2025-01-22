@@ -2433,22 +2433,15 @@ const CallingTrackerForm = ({
                     <select
                       name="selectYesOrNo"
                       value={callingTracker.selectYesOrNo}
-                      onChange={handleChange}
-                    >
+                      onChange={handleChange}>
                       <option value="Yet To Confirm">Yet To Confirm</option>
                       <option value="Interested">Interested</option>
-                      <option value="Interested, will confirm later">
-                        Interested, will confirm later
-                      </option>
                       <option value="Not Interested">Not Interested</option>
-                      <option value=" Interested But Not Eligible">
-                        Interested But Not Eligible
-                      </option>
-                      <option value="Eligible">Eligible</option>
+                      <option value="Interested, will confirm later">Interested, will confirm later</option>
+                      <option value="Interested But Not Eligible">Interested But Not Eligible</option>
+                      <option value="Not Eligible But Interested">Eligible But Not Interested</option>
                       <option value="Not Eligible">Not Eligible</option>
-                      <option value="Not Eligible But Interested">
-                        Not Eligible But Interested
-                      </option>
+                      <option value="Not Eligibel Not Interested">Not Eligibel Not Interested</option>
                     </select>
                   </div>
 
@@ -2480,7 +2473,7 @@ const CallingTrackerForm = ({
                         <option value="">Select</option>
                         <option value="Yet To Confirm">Yet To Confirm</option>
                         <option value="Interview Schedule">
-                          Interview Schedule
+                          Interview Schedule Request
                         </option>
                         <option value="Attending After Some time">
                           Attending After Some time
@@ -2503,7 +2496,7 @@ const CallingTrackerForm = ({
               </div>
 
               <div className="calling-tracker-field">
-                <label>Interview Slots</label>
+                <label>Available Slots</label>
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
                     {/* line number 1825 to 1851 added by sahil karnekar date : 15-10-2024 */}
@@ -2513,22 +2506,24 @@ const CallingTrackerForm = ({
                       name="availabilityForInterview"
                       value={lineUpData.availabilityForInterview}
                       onChange={(e) => {
-                        const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
 
-                        if (e.target.value < today) {
-                          seterrorInterviewSlot(
-                            "Interview Slot Should be Next Date From Today"
-                          );
-                        } else {
-                          seterrorInterviewSlot(""); // Clear error message if the date is valid
-                        }
+                        //Arshad Comment This On 21-10-2025
+                        // const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
+                        // if (e.target.value < today) {
+                        //   seterrorInterviewSlot(
+                        //     "Interview Slot Should be Next Date From Today"
+                        //   );
+                        // } else {
+                        //   seterrorInterviewSlot(""); // Clear error message if the date is valid
+                        // }
 
                         setLineUpData({
                           ...lineUpData,
                           availabilityForInterview: e.target.value,
                         });
                       }}
-                      min={new Date().toISOString().split("T")[0]} // Allow today and future dates
+                      //Arshad Comment This On 21-10-2025
+                      // min={new Date().toISOString().split("T")[0]} // Allow today and future dates
                     />
                     {errorInterviewSlot && (
                       <div className="error-message">{errorInterviewSlot}</div>

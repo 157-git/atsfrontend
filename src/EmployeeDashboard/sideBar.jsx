@@ -120,126 +120,20 @@ function Sidebar({
     // document.documentElement.style.setProperty("--filter-color", color);
   };
 
-  //Arshad Commente this code, dont remove
-  const handleLogoutLocal = () => {
-    console.log("Logout clicked 01");
-    const logoutTime = new Date().toLocaleTimeString("en-IN");
-    console.log(logoutTime);
-
-    temproryLogout();
-    onLogout(logoutTime);
-
-    localStorage.removeItem("selectedColor");
-    localStorage.removeItem("bgColor");
-    localStorage.removeItem("buttonColor");
-    localStorage.removeItem("hoverColor");
-    localStorage.removeItem("hover-effect");
-
-    const colors = [
-      { variable: "--primary-bg-color" },
-      { variable: "--secondary-bg-color" },
-      { variable: "--ternary-bg-color" },
-      { variable: "--primary-txt-color" },
-      { variable: "--secondary-txt-color" },
-      { variable: "--disable-txt-color" },
-      { variable: "--error-txt-color" },
-      { variable: "--success-txt-color" },
-      { variable: "--link-txt-color" },
-      { variable: "--icon-color" },
-      { variable: "--active-icon" },
-      { variable: "--disable-icons" },
-      { variable: "--primary-button-bg" },
-      { variable: "--primary-button-hover" },
-      { variable: "--secondary-button-bg" },
-      { variable: "--secondary-button-hover" },
-      { variable: "--button-txt-color" },
-      { variable: "--button-txt-hover-color" },
-      { variable: "--table-bg-color" },
-      { variable: "--table-header-txt" },
-      { variable: "--table-body-txt" },
-      { variable: "--table-row-hover" },
-      { variable: "--table-row-selected" },
-      { variable: "--tooltip-bg" },
-      { variable: "--tooltip-txt" },
-      { variable: "--sidebar-bg" },
-      { variable: "--sidebar-txt" },
-      { variable: "--sidebar-txt-hover" },
-      { variable: "--sidebar-active-item-bg" },
-      { variable: "--sidebar-submenu-bg" },
-      { variable: "--icons-txt-hover" },
-      { variable: "--card-or-button-hover-bg" },
-      { variable: "--primary-border" },
-      { variable: "--hover-border" },
-      { variable: "--overlay-bg" },
-      { variable: "--modal-bg" },
-      { variable: "--modal-txt" },
-      { variable: "--accent-color-1" },
-      { variable: "--accent-color-2" },
-      { variable: "--filter-button-txt" },
-    ];
-
-    // Loop through and clear localStorage for each variable
-    colors.forEach(({ variable }) => {
-      localStorage.removeItem(variable);
-    });
-
-    localStorage.setItem("--sidebar-bg", "#ffe5b5");
-
-    // Set default styles
-    document.documentElement.style.setProperty("--Bg-color", "#ffe5b5");
-    document.documentElement.style.setProperty("--button-color", "#ffcb9b");
-    document.documentElement.style.setProperty("--button-hover-color", "white");
-    document.documentElement.style.setProperty("--text-color", "gray");
-    document.documentElement.style.setProperty("--text-hover-color", "#ffb281");
-    document.documentElement.style.setProperty("--heading-text-color", "gray");
-    document.documentElement.style.setProperty(
-      "--button-hover-text-color",
-      "#ffb281"
-    );
-    document.documentElement.style.setProperty("--hover-effect", "#ffcb9b");
-    document.documentElement.style.setProperty("--filter-color", "#ffcb9b");
-    document.documentElement.style.setProperty("-dailyWork-btn", "#ffcb9b");
-
-    document.documentElement.style.setProperty(
-      "--primary-button-bg",
-      "#ffcb9b"
-    );
-    document.documentElement.style.setProperty(
-      "--primary-button-hover",
-      "white"
-    );
-    document.documentElement.style.setProperty("--button-txt-color", "white");
-    document.documentElement.style.setProperty(
-      "--button-txt-hover-color",
-      "#ffb281"
-    );
-    document.documentElement.style.setProperty("--active-icon", "green");
-    document.documentElement.style.setProperty("--table-header-txt", "gray");
-    document.documentElement.style.setProperty("--table-body-txt", "gray");
-    document.documentElement.style.setProperty("--table-header-txt", "gray");
-    document.documentElement.style.setProperty("--table-row-hover", "#e6e6e6");
-    document.documentElement.style.setProperty("--tooltip-bg", "#ffe5b5");
-    document.documentElement.style.setProperty("--tooltip-txt", "gray");
-    document.documentElement.style.setProperty("--sidebar-bg", "#ffe5b5");
-    document.documentElement.style.setProperty("--sidebar-txt", "gray");
-    document.documentElement.style.setProperty("--sidebar-txt-hover", "gray");
-    document.documentElement.style.setProperty(
-      "--sidebar-active-item-bg",
-      "#ffcb9b"
-    );
-    document.documentElement.style.setProperty("--primary-border", "gray");
-    document.documentElement.style.setProperty(
-      "--filter-button-txt",
-      "#ffe5b5"
-    );
-    document.documentElement.style.setProperty("--accent-color-2", "#ffe5b5");
-  };
-
   // establishing socket for emmiting event
   useEffect(() => {
     const newSocket = getSocket();
     setSocket(newSocket);
   }, []);
+
+    //Arshad Commente this code, dont remove
+    const handleLogoutLocal = () => {
+      console.log("Logout clicked 01");
+      const logoutTime = new Date().toLocaleTimeString("en-IN");
+      console.log(logoutTime);
+      temproryLogout();
+      onLogout(logoutTime);
+    };  
 
   const temproryLogout = async () => {
     console.log("Logout clicked in Logout clicked 02");
@@ -249,7 +143,7 @@ function Sidebar({
         case "SuperUser":
           requestBody = {
             employeeId: employeeId,
-            userType:"SuperUser",
+            userType: "SuperUser",
             employeeName: loginEmployeeName,
             logoutDateAndTime: getFormattedDateTime(),
           };
@@ -257,7 +151,7 @@ function Sidebar({
         case "Manager":
           requestBody = {
             employeeId: employeeId,
-            userType:"Manager",
+            userType: "Manager",
             employeeName: loginEmployeeName,
             logoutDateAndTime: getFormattedDateTime(),
           };
@@ -265,7 +159,7 @@ function Sidebar({
         case "TeamLeader":
           requestBody = {
             employeeId: employeeId,
-            userType:"TeamLeader",
+            userType: "TeamLeader",
             employeeName: loginEmployeeName,
             logoutDateAndTime: getFormattedDateTime(),
           };
@@ -273,7 +167,7 @@ function Sidebar({
         case "Recruiters":
           requestBody = {
             employeeId: employeeId,
-            userType:"Recruiters",
+            userType: "Recruiters",
             employeeName: loginEmployeeName,
             logoutDateAndTime: getFormattedDateTime(),
           };
@@ -282,6 +176,7 @@ function Sidebar({
           console.error("Invalid user type");
           return;
       }
+      
       const response = await axios.post(
         `${API_BASE_URL}/user-logout-157/${userType}`,
         requestBody
@@ -295,15 +190,17 @@ function Sidebar({
         console.log(
           "Logout Successfully And Status Updated Successfully.. In Successfully Emit "
         );
+        navigate(`/login/${userType}`, { replace: true });
       } else {
         console.warn(
           "Socket is not defined or emit is not a function. Skipping emit  Without Emit"
         );
+        navigate(`/login/${userType}`, { replace: true });
       }
       console.log(
         "Logout Successfully And Status Updated Successfully.. in Side "
       );
-      navigate(`/login/${userType}`, { replace: true });
+     
     } catch (error) {
       console.error("Error during logout:", error);
     }
@@ -560,7 +457,12 @@ function Sidebar({
         {/* Swapnil_SideBar_responsiveAccordingToScreen_161to162_02/07 */}
         <div className="head-sidebar">
           <div className="sidebar-menu-btn" onClick={toggleSidebar}>
-            <i className="fa-solid fa-chevron-left"></i>
+            <i
+              className="fa-solid fa-chevron-left"
+              style={{
+                color: "black",
+              }}
+            ></i>
           </div>
           <div className="nav">
             <div className="sidebar-menu">
@@ -2014,7 +1916,7 @@ function Sidebar({
                 }}
               >
                 <button onClick={handleLogoutLocal} className="buttoncss">
-                  Yes
+                  Yes 009
                 </button>
 
                 <button

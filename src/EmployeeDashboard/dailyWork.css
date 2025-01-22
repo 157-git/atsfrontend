@@ -155,7 +155,7 @@
 
 .user-details p {
   font-size: 18px;
-  color: var(--sidebar-txt);
+  color: var(--profile-txt);
   font-weight: 400;
 }
 
@@ -424,6 +424,12 @@
 .mainNotDiv {
   max-height: 75vh;
   overflow-y: scroll;
+}
+.notificationIconBackgroundProperties{
+  background-color: var(--notification-icon-background);
+}
+.forbackgroundcolortobadge{
+color: var(--notification-badge-background);
 }
 
 

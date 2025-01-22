@@ -102,7 +102,7 @@
 }
 
 .PI-attendancerows-head {
-  background-color: var(--Bg-color);
+  background-color: var(--table-header-bg);
   color: var(--);
   /* font-weight: 100; */
   text-align: center;
