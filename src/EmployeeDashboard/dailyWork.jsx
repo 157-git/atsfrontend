@@ -1033,7 +1033,9 @@ function DailyWork({
                 : interviewResponse === "Rejected"
                 ? `Your candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId} Please review and plan accordingly.`
                 : `Your candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId} on ${message.candidate.nextInterviewDate} at ${message.candidate.nextInterviewTiming}.`,
-          };
+               // chaange this 
+            time: `${message.candidate.commentForTl}`,
+              };
         } else {
           return {
             title: "Interview Update",
@@ -1045,7 +1047,9 @@ function DailyWork({
                 : interviewResponse === "Rejected"
                 ? `Candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId} Please review and plan accordingly.`
                 : `Candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId} on ${message.candidate.nextInterviewDate} at ${message.candidate.nextInterviewTiming}.`,
-          };
+                // we will change this letter
+            time: `${message.candidate.commentForTl}`,
+              };
         }
 
       case "add_job_description":
@@ -1314,14 +1318,16 @@ function DailyWork({
     renderItem={(message, index) => {
       const reversedIndex = messages.length - 1 - index;
       return (
-      <Badge.Ribbon text={getTitleDescription(message).time ? extractTimeOnly(getTitleDescription(message).time) : "" }
+      <Badge.Ribbon
+      
+      text={getTitleDescription(message).time ? extractTimeOnly(getTitleDescription(message).time) : "" }
       style={{
         top: "auto", // Remove the default top position
         bottom: 4, // Position at the bottom
 
       }}
       placement="end" // Optional: Keeps ribbon at the starting edge
-      color="#7e7ee7"
+   color='var(--notification-ribben-color)'
       >
      <Card
      style={{ marginBottom: '10px', 

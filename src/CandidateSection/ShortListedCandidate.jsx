@@ -120,12 +120,27 @@ const ShortListedCandidates = ({
     }
   };
 
+  // const handleSelectAll = () => {
+  //   if (allSelected) {
+  //     setSelectedRows([]);
+  //   } else {
+  //     const allRowIds = shortListedData.map((item) => item.candidateId);
+  //     setSelectedRows(allRowIds);
+  //   }
+  //   setAllSelected(!allSelected);
+  // };
+
+ // Pranjali Raut_handleSelectAll (20-01-25)
   const handleSelectAll = () => {
     if (allSelected) {
-      setSelectedRows([]);
+      // Deselect all rows
+      setSelectedRows((prevSelectedRows) => 
+        prevSelectedRows.filter((id) => !shortListedData.map((item) => item.candidateId).includes(id))
+      );
     } else {
+      // Select all rows on the current page
       const allRowIds = shortListedData.map((item) => item.candidateId);
-      setSelectedRows(allRowIds);
+      setSelectedRows((prevSelectedRows) => [...new Set([...prevSelectedRows, ...allRowIds])]);
     }
     setAllSelected(!allSelected);
   };
@@ -288,7 +303,7 @@ const ShortListedCandidates = ({
         : [...prev[key], value.toLowerCase()], // store filter values in lowercase
     }));
   };
-
+  console.log(selectedRows);
   const toggleFilterSection = () => {
     setShowSearchBar(false);
     setShowFilterSection(!showFilterSection);
@@ -637,14 +652,25 @@ const ShortListedCandidates = ({
                         {(!showShareButton && userType === "TeamLeader") ||
                         (!showShareButton && userType === "Manager") ? (
                           <th className="attendanceheading">
-                            <input
+                            
+                            {/* <input
                               type="checkbox"
                               onChange={handleSelectAll}
                               checked={
                                 selectedRows.length === shortListedData.length
                               }
                               name="selectAll"
-                            />
+                            /> */}
+
+{/* updatesd shortListeddata by Pranjali Raut data 20-01-2025 */}
+<input
+                                type="checkbox"
+                                onChange={handleSelectAll}
+                                checked={
+                                  shortListedData.every((row) => selectedRows.includes(row.candidateId))
+                                }
+                                name="selectAll"
+                              />
                           </th>
                         ) : null}
                         <th className="attendanceheading">Sr No.</th>

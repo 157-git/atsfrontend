@@ -79,6 +79,7 @@ const handleSetDefaultColor = () => {
     { variable: "--notification-icon-background" },
     { variable: "--notification-badge-background" },
     { variable: "--notification-icon-color" },
+    { variable: "--notification-ribben-color" },
   ];
 
   // Loop through and clear localStorage for each variable
@@ -124,6 +125,7 @@ const handleSetDefaultColor = () => {
   document.documentElement.style.setProperty("--notification-icon-background", "black");
   document.documentElement.style.setProperty("--notification-badge-background", "red");
   document.documentElement.style.setProperty("--notification-icon-color", "gray");
+  document.documentElement.style.setProperty("--notification-ribben-color", "#ffe5b5");
 
 
 
@@ -208,6 +210,7 @@ const profileTxt = colorMapping[color][41];
 const notificationIconBackground = colorMapping[color][42];
 const notificationBadgeBackground = colorMapping[color][43];
 const notificationIconColor = colorMapping[color][44];
+const notificationRibbenColor = colorMapping[color][45];
 
 
     // const mainBg = colorMapping[color][5];
@@ -264,6 +267,7 @@ const colors = [
   { variable: "--notification-icon-background", value: notificationIconBackground },
   { variable: "--notification-badge-background", value: notificationBadgeBackground },
   { variable: "--notification-icon-color", value: notificationIconColor },
+  { variable: "--notification-ribben-color", value: notificationRibbenColor },
 ];
 
 // Set CSS variables dynamically
@@ -297,126 +301,126 @@ colors.forEach(({ variable, value }) => {
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "#27374D", "#9DB2BF", "white",
         "gray", "#f0f3f5", "#ff4d4d", "#9db2bf", "#ffffff", "#526D82", "white", "#ffffff", "#27374D", "#e60000",
         "#ff6666", "#ff4d4d", "gray", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#27374D","#27374D",
-        "#9DB2BF","white","white","#c80036","#27374D"
+        "#9DB2BF","white","white","#c80036","#27374D","#27374D"
       ],
       "#3C4B5E": [
         "#3C4B5E", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "white",
         "gray", "#f0f3f5", "#ff4d4d", "#9db2bf", "#ffffff", "#677382", "white", "#ffffff", "#27374D", "#e60000",
         "#ff6666", "#ff4d4d", "gray", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#27374D","#27374D",
-        "#9DB2BF","white","white","#c80036","#3C4B5E"
+        "#9DB2BF","white","white","#c80036","#3C4B5E","#3C4B5E"
       ],
       "#769FCD": [
         "#769FCD", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#f0f3f5", "#ff4d4d", "#D6E6F2", "black", "#B9D7EA", "black", "black", "#ffffff", "#e60000",
-        "#ff6666", "#ff4d4d", "#769FCD", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#27374D","#27374D",
-        "#D6E6F2", "#ffffff","white","#c80036","#769FCD"
+        "#ff6666", "#ff4d4d", "#769FCD", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#769FCD","#27374D",
+        "#D6E6F2", "#ffffff","white","#c80036","#769FCD","#769FCD"
       ],
       "#493628": [
         "#493628", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#f6f2ef", "#ff4d4d", "#D6C0B3", "black", "#AB886D", "white", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#493628","#27374D",
-        "#D6C0B3", "#ffffff", "white","#c80036","#493628"
+        "#D6C0B3", "#ffffff", "white","#c80036","#493628","#493628"
       ],
       "#F6BF9F": [
         "#F6BF9F", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#f6f2ef", "#ff4d4d", "#FDF2EB", "black", "#FADFCF", "black", "black", "#ffffff", "#e60000",
-        "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#493628","#27374D",
-        "#FDF2EB", "black","white","#c80036","#F6BF9F"
+        "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#F6BF9F","#27374D",
+        "#FDF2EB", "black","white","#c80036","#F6BF9F","#F6BF9F"
       ],
       "#6F325B": [
         "#6F325B", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#f6f2ef", "#ff4d4d", "#C9B2C1", "black", "#936684", "white", "black", "#ffffff", "#e60000",
-        "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#6F325B","#27374D",
-        "#C9B2C1", "white","white","#c80036","#6F325B"
+        "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#936684","#27374D",
+        "#C9B2C1", "white","white","#c80036","#6F325B","#6F325B"
       ],
       "#191304": [
         "#191304", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "white",
         "gray", "#f2f2f2", "#ff4d4d", "#7F7F7F", "white", "#323232", "white", "black", "#ffffff", "#e60000",
-        "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#191304","#27374D",
-        "#7F7F7F", "white","white","#c80036","black"
+        "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#323232","#27374D",
+        "#7F7F7F", "white","white","#c80036","black","#191304"
       ],
       "#4A62BA": [
         "#4A62BA", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#f2f2f2", "#ff4d4d", "#CBDCEB", "black", "#608BC1", "white", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#4A62BA","#27374D",
-        "#CBDCEB", "white","white","#c80036","black"
+        "#CBDCEB", "white","white","#c80036","black","#4A62BA"
       ],
       "#545F54": [
         "#545F54", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "white",
         "gray", "#e4e7e4", "#ff4d4d", "#A9BFA8", "white", "#A9BFA8", "white", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#A9BFA8","#27374D",
-        "#A9BFA8", "white","white","#c80036","#545F54"
+        "#A9BFA8", "white","white","#c80036","#545F54","#545F54"
       ],
       "#413F42": [
         "#413F42", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#e6e5e6", "#ff4d4d", "#b3b2b3", "black", "#686469", "white", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#b3b2b3","#27374D",
-        "#b3b2b3", "white","white","#c80036","#413F42"
+        "#b3b2b3", "white","white","#c80036","#413F42","#413F42"
       ],
       "#5b585c": [
         "#5b585c", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#e6e5e6", "#ff4d4d", "#D9D8D9", "black", "#8D8B8D", "white", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#b3b2b3","#27374D",
-        "#D9D8D9", "white","white","#c80036","#5b585c"
+        "#D9D8D9", "white","white","#c80036","#5b585c","#5b585c"
       ],
       "#393e46": [
         "#393e46", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#e6e5e6", "#ff4d4d", "#D9D8D9", "black", "#5b6370", "white", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#c3c5c7","#27374D",
-        "#c3c5c7", "white","white","#c80036","#393e46"
+        "#c3c5c7", "white","white","#c80036","#393e46","#393e46"
       ],
       "#4C5158": [
         "#4C5158", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#e6e5e6", "#ff4d4d", "#D9D8D9", "black", "#74777D", "white", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#D9D8D9","#27374D",
-        "#D9D8D9", "white","white","#c80036","#4C5158"
+        "#D9D8D9", "white","white","#c80036","#4C5158","#4C5158"
       ],
       "#FFE3E3": [
         "#FFE3E3", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#e6e5e6", "#ff4d4d", "#ffe3e3", "black", "#FEF9F2", "black", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#ffe3e3","#27374D",
-        "#ffe3e3", "black","black","#c80036","white"
+        "#ffe3e3", "black","black","#c80036","white","#FFE3E3"
       ],
       "#1F4529": [
         "#1F4529", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#e6e5e6", "#ff4d4d", "#b8d0ae", "black", "#47663B", "white", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#b8d0ae","#27374D",
-        "#b8d0ae", "white","white","#c80036","#1F4529"
+        "#b8d0ae", "white","white","#c80036","#1F4529","#1F4529"
       ],
       "#987D9A": [
         "#987D9A", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "white",
         "gray", "#e6e5e6", "#ff4d4d", "#BB9AB1", "white", "#BB9AB1", "white", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#BB9AB1","#27374D",
-        "#BB9AB1", "white","white","#c80036","#987D9A"
+        "#BB9AB1", "white","white","#c80036","#987D9A","#987D9A"
       ],
       "#A59D84": [
         "#A59D84", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#e6e5e6", "#ff4d4d", "#C1BAA1", "black", "#C1BAA1", "black", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#C1BAA1","#27374D",
-        "#C1BAA1", "white","white","#c80036","#A59D84"
+        "#C1BAA1", "white","white","#c80036","#A59D84","#A59D84"
       ],
       "#A79277": [
         "#A79277", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#e6e5e6", "#ff4d4d", "#EAD8C0", "black", "#D1BB9E", "black", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#EAD8C0","#27374D",
-        "#EAD8C0", "white" ,"white","#c80036","#A79277"
+        "#EAD8C0", "white" ,"white","#c80036","#A79277", "#A79277"
       ],
       "#e0ccff": [
         //0            //1     //2          //3        //4        //5        //6        //7        //8        //9
@@ -427,14 +431,14 @@ colors.forEach(({ variable, value }) => {
         "gray", "#efe6ff", "#9d56ff", "#7a2eff", "#ffffff", "#e0ccff", "#9d56ff", "black", "#be99ff", "#5a00e6",
         //30          //31       //32      //33      //34      //35        //36        //37    //38      //39
         "#b780ff", "#9d56ff", "#7a2eff", "#5a00e6", "#d0aaff", "#b780ff", "#9d56ff", "#5a00e6","#e0ccff","black",
-        "#e0ccff","white","black","#c80036","white"
+        "#e0ccff","white","black","#c80036","white","#e0ccff"
       ], 
       "#ece5dd": [
         "#81C784", "#388E3C", "#33d633", "#00cc00", "#00b300", "#99e699", "#66e066", "#33d633", "#00cc00", "#00b300",
         "green", "#66e066", "#f0f2f5", "#ffffff", "#00b300", "#99e699", "#54656f", "#33d633", "#00cc00", "black",
-        "gray", "#dcf8c6", "#33d633", "#128c7e", "#ffffff", "#f0f2f5", "black", "#99e699", "#128c7e", "#00b300",
+        "gray", "#dcf8c6", "#33d633", "#128c7e", "#ffffff", "#f0f2f5", "black", "white", "#128c7e", "#00b300",
         "#66e066", "#33d633", "#00cc00", "#00b300", "#99e699", "#66e066", "#33d633", "#00b300","#ffffff","#128c7e",
-        "#ece5dd","black","#0b141a1a","#25D366","white"
+        "#ece5dd","black","#0b141a1a","#25D366","white","#25d366"
       ],
     };
   

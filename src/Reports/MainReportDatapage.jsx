@@ -13,6 +13,7 @@ import { data } from "autoprefixer";
 import Loader from "../EmployeeSection/loader";
 import { Avatar, Card, List, Modal, Skeleton } from "antd";
 import { getUserImageFromApiForReport } from "./getUserImageFromApiForReport";
+import { DownOutlined, UsergroupAddOutlined } from '@ant-design/icons';
 
 const MonthReport = ({ loginEmployeeName }) => {
   const { userType } = useParams();
@@ -358,7 +359,8 @@ setAllImagesForTeamLeaders([]);
           <div className="histry-date-div">
             {displayMoreButton && (
               <button className="daily-tr-btn" onClick={handleDisplayManagers}>
-                Select More Users
+                <UsergroupAddOutlined />
+               <DownOutlined />
               </button>
             )}
 

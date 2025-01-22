@@ -8,6 +8,7 @@ import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { useParams } from "react-router-dom";
 import { getSocket } from "../EmployeeDashboard/socket";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
 
 // SwapnilRokade_UpdateResponseFrom_addedProcessImprovmentEvaluatorFunctionalityStoringInterviweResponse_08_to_486_29/07/2024
 const UpdateResponseFrom = ({
@@ -143,7 +144,8 @@ const UpdateResponseFrom = ({
         userType: userType,
         interviewRound: formData.interviewRound,
         interviewResponse: formData.interviewResponse || "", // Fallback to empty string if not set
-        commentForTl: formData.commentForTl || "",
+        // we will change this letter
+        commentForTl: getFormattedDateTime(),
         responseUpdatedDate: formData.responseUpdatedDate || formatDateToIST(new Date()),
         nextInterviewDate: formData.nextInterviewDate || "",
         nextInterviewTiming: formData.nextInterviewTiming || "",
