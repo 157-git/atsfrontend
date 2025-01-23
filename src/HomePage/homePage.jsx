@@ -13,6 +13,12 @@ const HomePage = () => {
   const [bgColor, setBgColor] = useState("#ffcb9b");
 
   useEffect(() => {
+    // Clear all local storage values
+    localStorage.clear();
+    console.log("Local storage cleared.");
+  }, []);
+
+  useEffect(() => {
     const savedColor = localStorage.getItem("selectedColor");
     if (savedColor) {
       setBgColor(savedColor);

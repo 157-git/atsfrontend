@@ -142,6 +142,7 @@ function Sidebar({
       switch (`${userType}`) {
         case "SuperUser":
           requestBody = {
+            superUserId:employeeId,
             employeeId: employeeId,
             userType: "SuperUser",
             employeeName: loginEmployeeName,
@@ -150,6 +151,7 @@ function Sidebar({
           break;
         case "Manager":
           requestBody = {
+            managerId: employeeId,
             employeeId: employeeId,
             userType: "Manager",
             employeeName: loginEmployeeName,
@@ -158,6 +160,7 @@ function Sidebar({
           break;
         case "TeamLeader":
           requestBody = {
+            teamLeaderId: employeeId,
             employeeId: employeeId,
             userType: "TeamLeader",
             employeeName: loginEmployeeName,

@@ -120,24 +120,23 @@ function DailyWork({
 
       if (response.data.profileImage) {
         try {
-        const byteCharacters = atob(response.data.profileImage);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
+          const byteCharacters = atob(response.data.profileImage);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          const blob = new Blob([byteArray], { type: "image/jpeg" });
+          const url = URL.createObjectURL(blob);
+          setProfileImage(url);
+          return () => URL.revokeObjectURL(url);
+        } catch (decodeError) {
+          console.error("Error decoding profile image:", decodeError);
+          setProfileImage(dummyUserImg); // Fallback to dummy image on decode error
         }
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: "image/jpeg" });
-        const url = URL.createObjectURL(blob);
-        setProfileImage(url);
-        return () => URL.revokeObjectURL(url);
-      } catch (decodeError) {
-        console.error("Error decoding profile image:", decodeError);
-        setProfileImage(dummyUserImg); // Fallback to dummy image on decode error
+      } else {
+        setProfileImage(dummyUserImg); // Fallback to dummy image if no profile image
       }
-      
-    } else {
-      setProfileImage(dummyUserImg); // Fallback to dummy image if no profile image
-    }
     } catch (error) {
       console.error("Error fetching employee details:", error);
       setProfileImage(dummyUserImg);
@@ -1049,6 +1048,8 @@ function DailyWork({
                 : interviewResponse === "Rejected"
                 ? `Your candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId} Please review and plan accordingly.`
                 : `Your candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId} on ${message.candidate.nextInterviewDate} at ${message.candidate.nextInterviewTiming}.`,
+            // chaange this
+            time: `${message.candidate.commentForTl}`,
           };
         } else {
           return {
@@ -1061,6 +1062,8 @@ function DailyWork({
                 : interviewResponse === "Rejected"
                 ? `Candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId} Please review and plan accordingly.`
                 : `Candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId} on ${message.candidate.nextInterviewDate} at ${message.candidate.nextInterviewTiming}.`,
+            // we will change this letter
+            time: `${message.candidate.commentForTl}`,
           };
         }
 
@@ -1213,7 +1216,7 @@ function DailyWork({
       <a href="#">
         <div className="head" onClick={profilePageLink}>
           <div className="user-img">
-          <img src={profileImage || dummyUserImg} alt="Profile" />
+            <img src={profileImage || dummyUserImg} alt="Profile" />
           </div>
           <div className="user-details">
             <p>
@@ -1338,7 +1341,7 @@ function DailyWork({
                                 bottom: 4, // Position at the bottom
                               }}
                               placement="end" // Optional: Keeps ribbon at the starting edge
-                              color="#7e7ee7"
+                              color="var(--notification-ribben-color)"
                             >
                               <Card
                                 style={{
@@ -1350,7 +1353,11 @@ function DailyWork({
                                 <Meta
                                   avatar={
                                     <Avatar
-                                      src={allImages[reversedIndex]}
+                                      src={
+                                        allImages[reversedIndex]
+                                          ? allImages[reversedIndex]
+                                          : `https://api.dicebear.com/7.x/miniavs/svg?seed=${reversedIndex}`
+                                      }
                                       size="large"
                                     />
                                   }

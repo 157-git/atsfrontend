@@ -58,6 +58,7 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
   useEffect(() => {
     fetchRequirementOptions();
   }, [employeeId]);
+console.log(requirementOptions);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -116,6 +117,7 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
       setLoading(false);
       return;
     }
+console.log("running 0");
 
     try {
       const response = await axios.post(`${API_BASE_URL}/save-interview-data`, {
@@ -140,6 +142,7 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
       console.log("Response:", response.data);
       setLoading(true);
       toast.success("Interview Question Added Successfully...");
+console.log("running 1");
 
       setFormData({
         candidateId: "",
@@ -160,6 +163,7 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
         responseGiven: "",
         comment: "",
       });
+console.log("running 2");
 
       setNewCandidateData({
         candidateId: "",
@@ -167,7 +171,11 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
         candidateInterview: "",
         candidateInterviewTime: "",
       });
+      console.log("running 3");
+      
       setInterviewData(initialInterviewDataState);
+      console.log("running 4");
+      
       setShowReminder(false);
       setShowAdditionalFields(false);
       setShowNoFields(false);
@@ -179,6 +187,7 @@ const InterviewForm = ({ toggleAllInterviewResponse }) => {
       setLoading(false);
     }
   };
+console.log(formData);
 
   // Fetch available job requirements for dropdown
   const fetchRequirementOptions = async () => {

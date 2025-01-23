@@ -184,7 +184,7 @@ const CallingTrackerForm = ({
     if (!callingTracker.requirementId) {
       errors.requirementId = "Please Select Job Id";
     }
-    if (!callingTracker.candidateName) {
+    if (!callingTracker.candidateName || callingTracker.candidateName.trim() === "") {
       errors.candidateName = "Candidate Name is required";
     }
     if (!callingTracker.contactNumber) {
@@ -2473,7 +2473,7 @@ const CallingTrackerForm = ({
                         <option value="">Select</option>
                         <option value="Yet To Confirm">Yet To Confirm</option>
                         <option value="Interview Schedule">
-                          Interview Schedule Request
+                        Available For Interview
                         </option>
                         <option value="Attending After Some time">
                           Attending After Some time
