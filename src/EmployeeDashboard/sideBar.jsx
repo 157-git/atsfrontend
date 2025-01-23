@@ -1919,7 +1919,7 @@ function Sidebar({
                 }}
               >
                 <button onClick={handleLogoutLocal} className="buttoncss">
-                  Yes 009
+                  Yes
                 </button>
 
                 <button
