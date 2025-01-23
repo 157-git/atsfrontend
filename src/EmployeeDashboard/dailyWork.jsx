@@ -1310,7 +1310,9 @@ function DailyWork({
                 style={{ marginRight: "10px" }}
                 onClick={toggleNotificationBox}
               >
-                <Badge count={messages.length}>
+                <Badge 
+                color="var(--notification-badge-background)"
+                count={messages.length}>
                   <Avatar shape="square" icon={<BellOutlined />} />
                 </Badge>
               </div>
