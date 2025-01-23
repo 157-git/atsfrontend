@@ -769,8 +769,9 @@ const UpdateSelfCalling = ({
         communicationRating: callingTracker.communicationRating,
         selectYesOrNo: callingTracker.selectYesOrNo,
         callingFeedback: callingTracker.callingFeedback,
+        jobRole : callingTracker.jobRole,
         employee: {
-          employeeId: employeeId, // Include only employeeId
+          employeeId: callingTracker.employeeId,
         },
         lineUp: {
           companyName: callingTracker.lineUp.companyName,
@@ -2311,14 +2312,15 @@ const UpdateSelfCalling = ({
                       callingTracker?.lineUp.availabilityForInterview || ""
                     }
                     onChange={(e) => {
-                      const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
+                      //Arshad Comment This On 21-10-2025
+                      // const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
 
-                      if (e.target.value < today) {
-                        seterrorInterviewSlot(
-                          "Interview Slot Should be Next Date From Today"
-                        );
-                      } else {
-                        seterrorInterviewSlot(""); // Clear error message if the date is valid
+                      // if (e.target.value < today) {
+                      //   seterrorInterviewSlot(
+                      //     "Interview Slot Should be Next Date From Today"
+                      //   );
+                      // } else {
+                      //   seterrorInterviewSlot(""); // Clear error message if the date is valid
 
                         setCallingTracker((prevState) => ({
                           ...prevState,
@@ -2327,10 +2329,11 @@ const UpdateSelfCalling = ({
                             availabilityForInterview: e.target.value,
                           },
                         }));
-                      }
+                      // }
                     }}
                     // line 1831 changed updated by sahil karnekar date 21-10-2024
-                    min={new Date().toISOString().split("T")[0]} // Allow today and future dates
+                    //Arshad Comment This On 21-10-2025
+                    // min={new Date().toISOString().split("T")[0]} // Allow today and future dates
                     className="update-calling-tracker-two-input"
                   />
 

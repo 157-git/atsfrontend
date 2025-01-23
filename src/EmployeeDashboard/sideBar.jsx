@@ -120,22 +120,20 @@ function Sidebar({
     // document.documentElement.style.setProperty("--filter-color", color);
   };
 
-  //Arshad Commente this code, dont remove
-  const handleLogoutLocal = () => {
-    console.log("Logout clicked 01");
-    const logoutTime = new Date().toLocaleTimeString("en-IN");
-    console.log(logoutTime);
-
-    temproryLogout();
-    onLogout(logoutTime);
-
-  };
-
   // establishing socket for emmiting event
   useEffect(() => {
     const newSocket = getSocket();
     setSocket(newSocket);
   }, []);
+
+    //Arshad Commente this code, dont remove
+    const handleLogoutLocal = () => {
+      console.log("Logout clicked 01");
+      const logoutTime = new Date().toLocaleTimeString("en-IN");
+      console.log(logoutTime);
+      temproryLogout();
+      onLogout(logoutTime);
+    };  
 
   const temproryLogout = async () => {
     console.log("Logout clicked in Logout clicked 02");
@@ -146,7 +144,7 @@ function Sidebar({
           requestBody = {
             superUserId:employeeId,
             employeeId: employeeId,
-            userType:"SuperUser",
+            userType: "SuperUser",
             employeeName: loginEmployeeName,
             logoutDateAndTime: getFormattedDateTime(),
           };
@@ -155,7 +153,7 @@ function Sidebar({
           requestBody = {
             managerId: employeeId,
             employeeId: employeeId,
-            userType:"Manager",
+            userType: "Manager",
             employeeName: loginEmployeeName,
             logoutDateAndTime: getFormattedDateTime(),
           };
@@ -164,7 +162,7 @@ function Sidebar({
           requestBody = {
             teamLeaderId: employeeId,
             employeeId: employeeId,
-            userType:"TeamLeader",
+            userType: "TeamLeader",
             employeeName: loginEmployeeName,
             logoutDateAndTime: getFormattedDateTime(),
           };
@@ -172,7 +170,7 @@ function Sidebar({
         case "Recruiters":
           requestBody = {
             employeeId: employeeId,
-            userType:"Recruiters",
+            userType: "Recruiters",
             employeeName: loginEmployeeName,
             logoutDateAndTime: getFormattedDateTime(),
           };
@@ -181,6 +179,7 @@ function Sidebar({
           console.error("Invalid user type");
           return;
       }
+      
       const response = await axios.post(
         `${API_BASE_URL}/user-logout-157/${userType}`,
         requestBody
@@ -204,11 +203,7 @@ function Sidebar({
       console.log(
         "Logout Successfully And Status Updated Successfully.. in Side "
       );
-
-      // if (socket.connected) {
-      //   socket.disconnect();
-      // }
-      // navigate(`/login/${userType}`, { replace: true });
+     
     } catch (error) {
       console.error("Error during logout:", error);
     }
@@ -465,10 +460,11 @@ function Sidebar({
         {/* Swapnil_SideBar_responsiveAccordingToScreen_161to162_02/07 */}
         <div className="head-sidebar">
           <div className="sidebar-menu-btn" onClick={toggleSidebar}>
-            <i className="fa-solid fa-chevron-left"
-            style={{
-              color:"black"
-            }}
+            <i
+              className="fa-solid fa-chevron-left"
+              style={{
+                color: "black",
+              }}
             ></i>
           </div>
           <div className="nav">
@@ -1923,7 +1919,7 @@ function Sidebar({
                 }}
               >
                 <button onClick={handleLogoutLocal} className="buttoncss">
-                  Yes
+                  Yes 009
                 </button>
 
                 <button

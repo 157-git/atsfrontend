@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "../EmployeeDashboard/dailyWork.css";
 import Profile from "../photos/profileImg.webp";
+import dummyUserImg from "../photos/DummyUserImg.png";
 import logoutImg from "../photos/download.jpeg";
 import { Modal } from "react-bootstrap";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
@@ -81,7 +82,7 @@ function DailyWork({
   const [messagesContext, contextHolder] = notification.useNotification({
     stack: true
       ? {
-          threshold : 1,
+          threshold: 1,
         }
       : false,
   });
@@ -104,30 +105,41 @@ function DailyWork({
       const response = await axios.get(
         `${API_BASE_URL}/fetch-profile-details/${employeeId}/${userType}`
       );
+
       setEmployeeData(response.data);
       if (response.data) {
         saveUserDetails(response.data.name);
       }
+
       onCurrentEmployeeJobRoleSet(response.data.jobRole);
       const emailSender = {
         senderName: response.data.name,
         senderMail: response.data.officialMail,
       };
       emailSenderInformation(emailSender);
+
       if (response.data.profileImage) {
-        const byteCharacters = atob(response.data.profileImage);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        try {
+          const byteCharacters = atob(response.data.profileImage);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          const blob = new Blob([byteArray], { type: "image/jpeg" });
+          const url = URL.createObjectURL(blob);
+          setProfileImage(url);
+          return () => URL.revokeObjectURL(url);
+        } catch (decodeError) {
+          console.error("Error decoding profile image:", decodeError);
+          setProfileImage(dummyUserImg); // Fallback to dummy image on decode error
         }
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: "image/jpeg" });
-        const url = URL.createObjectURL(blob);
-        setProfileImage(url);
-        return () => URL.revokeObjectURL(url);
+      } else {
+        setProfileImage(dummyUserImg); // Fallback to dummy image if no profile image
       }
     } catch (error) {
       console.error("Error fetching employee details:", error);
+      setProfileImage(dummyUserImg);
     }
   };
 
@@ -225,8 +237,11 @@ function DailyWork({
             formData
           );
 
-         console.log("Data going to API (formData):", JSON.stringify(formData, null, 2));
-       
+          console.log(
+            "Data going to API (formData):",
+            JSON.stringify(formData, null, 2)
+          );
+
           if (response.data) {
             fetchCurrentEmployerWorkId();
           }
@@ -498,7 +513,7 @@ function DailyWork({
 
       setTime({ hours: 0, minutes: 0, seconds: 0 });
       setData({ archived: 0, pending: 10 });
-      console.log("Logged out successfully. in daily work");
+      console.log("Logged out successfully. in daily work last");
     } catch (error) {
       console.error("Error logging out:", error);
     }
@@ -883,10 +898,10 @@ function DailyWork({
 
         console.log("running this");
 
-        console.log( " employeeCheck ---" + employeeCheck);
-        console.log( " interviewResponse --- "+ interviewResponse);
-        console.log( "Round --- " +round);
-        console.log( "Job Id " + jobId);
+        console.log(" employeeCheck ---" + employeeCheck);
+        console.log(" interviewResponse --- " + interviewResponse);
+        console.log("Round --- " + round);
+        console.log("Job Id " + jobId);
 
         if (employeeCheck) {
           console.log("running first");
@@ -1033,9 +1048,9 @@ function DailyWork({
                 : interviewResponse === "Rejected"
                 ? `Your candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId} Please review and plan accordingly.`
                 : `Your candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId} on ${message.candidate.nextInterviewDate} at ${message.candidate.nextInterviewTiming}.`,
-               // chaange this 
+            // chaange this
             time: `${message.candidate.commentForTl}`,
-              };
+          };
         } else {
           return {
             title: "Interview Update",
@@ -1047,9 +1062,9 @@ function DailyWork({
                 : interviewResponse === "Rejected"
                 ? `Candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId} Please review and plan accordingly.`
                 : `Candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId} on ${message.candidate.nextInterviewDate} at ${message.candidate.nextInterviewTiming}.`,
-                // we will change this letter
+            // we will change this letter
             time: `${message.candidate.commentForTl}`,
-              };
+          };
         }
 
       case "add_job_description":
@@ -1184,12 +1199,15 @@ function DailyWork({
     const fetchAllImages = async () => {
       const images = await Promise.all(
         messages.map(async (message) => {
-          return await getUserImageFromApi(message.candidate.employeeId, message.candidate.userType);
+          return await getUserImageFromApi(
+            message.candidate.employeeId,
+            message.candidate.userType
+          );
         })
       );
       setAllImages(images); // Set the array of image URLs
     };
-  
+
     fetchAllImages();
   }, [messages]);
 
@@ -1198,7 +1216,7 @@ function DailyWork({
       <a href="#">
         <div className="head" onClick={profilePageLink}>
           <div className="user-img">
-            <img src={profileImage} alt="Profile" />
+            <img src={profileImage || dummyUserImg} alt="Profile" />
           </div>
           <div className="user-details">
             <p>
@@ -1292,16 +1310,8 @@ function DailyWork({
                 style={{ marginRight: "10px" }}
                 onClick={toggleNotificationBox}
               >
-                <Badge 
-                color="var(--notification-badge-background)"
-                count={messages.length}>
-                  <Avatar shape="square" icon={<BellOutlined
-                  style={{
-                    color:"var(--notification-icon-color)"
-                  }}
-                  />}
-            className="notificationIconBackgroundProperties"
-                  />
+                <Badge count={messages.length}>
+                  <Avatar shape="square" icon={<BellOutlined />} />
                 </Badge>
               </div>
             </div>
@@ -1313,48 +1323,55 @@ function DailyWork({
                   {messages.length > 0 ? (
                     <>
                       <List
-    itemLayout="horizontal"
-    dataSource={[...messages].reverse()}
-    renderItem={(message, index) => {
-      const reversedIndex = messages.length - 1 - index;
-      return (
-      <Badge.Ribbon
-      
-      text={getTitleDescription(message).time ? extractTimeOnly(getTitleDescription(message).time) : "" }
-      style={{
-        top: "auto", // Remove the default top position
-        bottom: 4, // Position at the bottom
-
-      }}
-      placement="end" // Optional: Keeps ribbon at the starting edge
-   color='var(--notification-ribben-color)'
-      >
-     <Card
-     style={{ marginBottom: '10px', 
-      // borderColor:"var(--primary-border)"
-borderColor:"#cccccc"
-     }}
-   >
-     <Meta
-       avatar={<Avatar src={
-       allImages[reversedIndex] ? allImages[reversedIndex] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${reversedIndex}`
-    }
-        size="large"
-       />}
-
-       title={
-        getTitleDescription(message).title
-      }
-      description={
-        getTitleDescription(message).desc
-      }
-     />
-   </Card>
-   </Badge.Ribbon>
-                  )
-    }}
-  />
-      </>
+                        itemLayout="horizontal"
+                        dataSource={[...messages].reverse()}
+                        renderItem={(message, index) => {
+                          const reversedIndex = messages.length - 1 - index;
+                          return (
+                            <Badge.Ribbon
+                              text={
+                                getTitleDescription(message).time
+                                  ? extractTimeOnly(
+                                      getTitleDescription(message).time
+                                    )
+                                  : ""
+                              }
+                              style={{
+                                top: "auto", // Remove the default top position
+                                bottom: 4, // Position at the bottom
+                              }}
+                              placement="end" // Optional: Keeps ribbon at the starting edge
+                              color="var(--notification-ribben-color)"
+                            >
+                              <Card
+                                style={{
+                                  marginBottom: "10px",
+                                  // borderColor:"var(--primary-border)"
+                                  borderColor: "#cccccc",
+                                }}
+                              >
+                                <Meta
+                                  avatar={
+                                    <Avatar
+                                      src={
+                                        allImages[reversedIndex]
+                                          ? allImages[reversedIndex]
+                                          : `https://api.dicebear.com/7.x/miniavs/svg?seed=${reversedIndex}`
+                                      }
+                                      size="large"
+                                    />
+                                  }
+                                  title={getTitleDescription(message).title}
+                                  description={
+                                    getTitleDescription(message).desc
+                                  }
+                                />
+                              </Card>
+                            </Badge.Ribbon>
+                          );
+                        }}
+                      />
+                    </>
                   ) : (
                     <p>No Notifications</p>
                   )}

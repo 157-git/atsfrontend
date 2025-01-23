@@ -7,6 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import "../EmployeeSection/employeeProfile.css";
 import TeamDetails from "../TeamDetails/teamDetails";
 import { API_BASE_URL } from "../api/api";
+import dummyUserImg from "../photos/DummyUserImg.png";
 
 const EmployeeProfileData = ({
   onClose,
@@ -59,6 +60,7 @@ const EmployeeProfileData = ({
         console.log(data);
         setEmployeeData(data);
         if (data.profileImage) {
+          try {
           const byteCharacters = atob(data.profileImage);
           const byteNumbers = new Array(byteCharacters.length);
           for (let i = 0; i < byteCharacters.length; i++) {
@@ -69,7 +71,14 @@ const EmployeeProfileData = ({
 
           const url = URL.createObjectURL(blob);
           setProfileImage(url);
-        }
+        } catch (decodeError) {
+                console.error("Error decoding profile image:", decodeError);
+                setProfileImage(dummyUserImg); // Fallback to dummy image on decode error
+        } 
+      } else {
+              setProfileImage(dummyUserImg); // Fallback to dummy image if no profile image
+      }
+        
         if (data.resumeFile) {
           const byteCharacters = atob(data.resumeFile);
           const byteNumbers = new Array(byteCharacters.length);
@@ -517,7 +526,10 @@ const EmployeeProfileData = ({
   return (
     <div className="employee-profile-card">
       {employeeData != null ? (
-        <Modal.Dialog style={{ padding: "10px", margin: "10px" }}>
+        <Modal.Dialog 
+        style={{ padding: "10px", margin: "10px",
+          width: "530px",
+        }}>
           <Modal.Header
             style={{
               backgroundColor: "#f2f2f2",
@@ -527,7 +539,7 @@ const EmployeeProfileData = ({
               paddingRight:"5px",
               }}
           >
-            <span style={{ fontWeight: "bold",fontSize:"18px" }}>Employee Profile</span>
+            <span style={{fontWeight: "bold",fontSize:"18px" }}>Employee Profile</span>
             <button
               onClick={onClose}
               style={{
@@ -554,7 +566,7 @@ const EmployeeProfileData = ({
             }}
           >
             <div className="profile-card-img">
-              <img src={profileImage} width={"150px"} />
+              <img src={profileImage || dummyUserImg} className="employee-profile-img" />
             </div>
             <div>
               <p className="m-1" style={{ color: "gray" }}>

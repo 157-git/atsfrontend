@@ -349,8 +349,20 @@ padding-left: 15px;
 
 .profile-card-img{
   height: 200px;
+  width: 190px;
   align-items: center;
   display: flex;
+  justify-content: center;
+  object-fit: cover;
+}
+
+.employee-profile-img{
+  height: 200px;
+  width: 190px; 
+  /* border: 1px solid red; */
+  border-radius: 2px;
+  mix-blend-mode: multiply; /* Blends the image with the background */
+  background-color: white; 
 }
 
 

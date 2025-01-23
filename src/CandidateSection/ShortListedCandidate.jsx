@@ -350,6 +350,7 @@ const ShortListedCandidates = ({
     handleDisplayManagers();
   }, []);
 
+  
   const handleDisplayManagers = async () => {
     if (userType === "SuperUser") {
       const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
