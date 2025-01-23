@@ -8,8 +8,11 @@ const ColorPicker = ({ onColorApplied , setShowColor}) => {
   useEffect(() => {
     const savedColor = localStorage.getItem("selectedColor");
     if (savedColor) {
-      setBgColor(savedColor);
-      applyColor(savedColor);
+      if (savedColor in colorMapping) {
+        setBgColor(savedColor);
+        applyColor(savedColor);
+      }
+   
     }
   }, []);
 
