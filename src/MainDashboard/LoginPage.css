@@ -17,8 +17,16 @@
     position: relative;
 }
 
-
-
+.captchainputboxclass{
+    width: 30px;
+    border: 1px solid black;
+}
+.alignbuttoncenter{
+    align-content: center;
+}
+.inputForCaptcha{
+    border: 1px solid black;
+}
 .main-login-container {
     position: absolute;
     top: 0;

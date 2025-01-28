@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -100,13 +100,56 @@ const LoginSignup = ({ onLogin }) => {
       }
     }
   };
+ // CAPTCHA State
+ const [captcha, setCaptcha] = useState("");
+ const [userCaptcha, setUserCaptcha] = useState("");
+ const [captchaError, setCaptchaError] = useState("");
 
+ const canvasRef = useRef(null);
+
+ // Generate a random CAPTCHA
+ const generateCaptcha = () => {
+   const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();  // Random 6 character string
+   setCaptcha(randomString);
+   setCaptchaError("");
+ };
+
+   //Abhijit Mehakar
+ //12/12/2024
+ //CAPCHA
+
+ // Draw CAPTCHA on canvas
+ const drawCaptcha = () => {
+   const canvas = canvasRef.current;
+   if (canvas) {
+     const ctx = canvas.getContext("2d");
+     ctx.clearRect(0, 0, canvas.width, canvas.height); 
+     ctx.font = "30px Arial";
+     ctx.fillStyle = "#000";
+     ctx.fillText(captcha, 10, 30); // Draw CAPTCHA text
+   }
+ };
+
+ useEffect(() => {
+   generateCaptcha(); // Generate a new CAPTCHA on mount or user type change
+ }, [userType]);
+
+ useEffect(() => {
+   drawCaptcha(); // Redraw CAPTCHA after it changes
+ }, [captcha]);
   // handle submit method for authenticate user by username and password from line num 53 to line num 77
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!employeeId || !password) {
       setError("Please fill in both fields before submitting.");
       return;
+    }
+
+    if (userCaptcha !== captcha) {
+      setCaptchaError("Incorrect CAPTCHA. Please try again.");
+      return;
+    } else if (userCaptcha === captcha){
+      setCaptchaError("");
     }
 
     try {
@@ -253,6 +296,10 @@ const LoginSignup = ({ onLogin }) => {
     setDisplayForcefullyLogoutForm(true);
   };
 
+const handleRefreshCaptch = () =>{
+  generateCaptcha();
+}
+
   return (
     <div className="main-body">
       <div className="main-login-container">
@@ -374,6 +421,27 @@ const LoginSignup = ({ onLogin }) => {
                     </span>
                   </div>
                 )}
+
+
+  <div className="input-group">
+                  <label className="label">CAPTCHA:</label>
+                  <div className="captcha-box">
+                    <canvas
+                    onClick={handleRefreshCaptch}
+                    ref={canvasRef} width="150" height="50" />
+                    <input
+                    
+                      type="text"
+                      value={userCaptcha}
+                      onChange={(e) => setUserCaptcha(e.target.value)}
+                      className="inputForCaptcha"
+                required
+                    />
+                  </div>
+                  {captchaError && <p className="error">{captchaError}</p>}
+                </div>
+
+
                 <button
                   className="login-button"
                   type="submit"
