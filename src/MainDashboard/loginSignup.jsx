@@ -129,7 +129,7 @@ const LoginSignup = ({ onLogin }) => {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Set font properties
-    ctx.font = "30px Arial";
+    ctx.font = "30px 'Pacifico', cursive";
     ctx.fillStyle = "#000";
 
     // Measure text width to center it
