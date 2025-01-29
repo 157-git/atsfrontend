@@ -337,7 +337,6 @@ function DailyWork({
       const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
         .toString()
         .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-
       console.log(`Total work time: ${formattedTime}`);
       return formattedTime;
     } catch (error) {
@@ -487,7 +486,7 @@ function DailyWork({
         dailyArchived: data.archived,
         dailyPending: data.pending,
         logoutTime: logoutTimestamp,
-        totalHoursWork,
+        totalHoursWork:totalHoursWork,
         dailyHours: breaks,
         dayPresentStatus: present,
         lateMark,
