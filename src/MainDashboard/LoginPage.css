@@ -27,6 +27,9 @@
 .inputForCaptcha{
     border: 1px solid black;
 }
+.captcha-box{
+    width: 100%;
+}
 .main-login-container {
     position: absolute;
     top: 0;

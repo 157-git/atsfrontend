@@ -120,15 +120,28 @@ const LoginSignup = ({ onLogin }) => {
 
  // Draw CAPTCHA on canvas
  const drawCaptcha = () => {
-   const canvas = canvasRef.current;
-   if (canvas) {
-     const ctx = canvas.getContext("2d");
-     ctx.clearRect(0, 0, canvas.width, canvas.height); 
-     ctx.font = "30px Arial";
-     ctx.fillStyle = "#000";
-     ctx.fillText(captcha, 10, 30); // Draw CAPTCHA text
-   }
- };
+  const canvas = canvasRef.current;
+  if (canvas) {
+    const ctx = canvas.getContext("2d");
+    
+    // Set background color
+    ctx.fillStyle = "#d9d9d9";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Set font properties
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "#000";
+
+    // Measure text width to center it
+    const textWidth = ctx.measureText(captcha).width;
+    const textX = (canvas.width - textWidth) / 2; // Center horizontally
+    const textY = canvas.height / 2 + 10; // Adjust to center vertically
+
+    // Draw CAPTCHA text
+    ctx.fillText(captcha, textX, textY);
+  }
+};
+
 
  useEffect(() => {
    generateCaptcha(); // Generate a new CAPTCHA on mount or user type change
@@ -424,19 +437,29 @@ const handleRefreshCaptch = () =>{
 
 
   <div className="input-group">
-                  <label className="label">CAPTCHA:</label>
                   <div className="captcha-box">
                     <canvas
-                    onClick={handleRefreshCaptch}
-                    ref={canvasRef} width="150" height="50" />
-                    <input
+                    style={{
+                      borderRadius:"15px",
+                      height:"30px",
+                      width:"100%",
+                      marginBottom:"10px"
                     
+                    }}
+                    onClick={handleRefreshCaptch}
+                    ref={canvasRef} width="250" height="50" />
+                      <div className="input-groups">
+                    <i className="fas fa-user"></i>
+                    <input
                       type="text"
+                      placeholder="Enter Captcha"
+                      className="loginpage-form-control"
                       value={userCaptcha}
                       onChange={(e) => setUserCaptcha(e.target.value)}
-                      className="inputForCaptcha"
-                required
+                      style={{ paddingLeft: "30px" }}
+                      required
                     />
+                  </div>
                   </div>
                   {captchaError && <p className="error">{captchaError}</p>}
                 </div>
