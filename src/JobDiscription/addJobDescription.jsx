@@ -109,8 +109,17 @@ const AddJobDescription = ({loginEmployeeName}) => {
     }
     return error;
   };
+  // added by sahil karnekar date 23-01-2025
+  const [displayHybridInput, setDisplayHybridInput] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+if (name === "jobType" && value === "Hybrid") {
+  setDisplayHybridInput(true)
+}else if (name === "jobType" && value !== "Hybrid") {
+  setDisplayHybridInput(false)
+}
+
     // Apply validation for numeric position field
     if (name === "position" && !/^\d*$/.test(value)) {
       return; // Do not update state if the value is not numeric
@@ -297,7 +306,17 @@ const AddJobDescription = ({loginEmployeeName}) => {
       setLoading(false);
     }
   };
-
+  // added by sahil karnekar date 23-01-2025
+const [hybridInputState, setHybridInputState] = useState("");
+  const handleChangeHybrid = (e)=>{
+    const value = e.target.value;
+    setHybridInputState(value);
+    setFormData((prevData) => ({
+      ...prevData,
+      ["jobType"]: value,
+    }));
+  }
+console.log(formData);
 
   return (
     <div>
@@ -465,12 +484,32 @@ const AddJobDescription = ({loginEmployeeName}) => {
                             value={formData.jobType}
                             onChange={handleChange}
                           >
-                            <option value="">Select Job Type</option>
+                            {/* added by sahil karnekar date 23-01-2025 */}
+                            <option value="">{displayHybridInput ? (formData.jobRole !== "Full-Time" && formData.jobRole !== "Part-Time" && formData.jobRole !== "Contract" && formData.jobRole !== "Internship" && formData.jobRole !== "On-Site" && formData.jobRole !== "Remote") && "Hybrid" : "Select Job Type"}</option>
                             <option value="Full-Time">Full-Time</option>
                             <option value="Part-Time">Part-Time</option>
                             <option value="Contract">Contract</option>
                             <option value="Internship">Internship</option>
+                            <option value="On-Site">On-Site</option>
+                            <option value="Remote">Remote</option>
+                            <option value="Hybrid">Hybrid</option>
                           </select>
+                          {
+                          displayHybridInput && (
+
+                            <div className="hybridInputDiv">
+                               <input
+                            type="text"
+                            name="hybridInput"
+                            value={hybridInputState}
+                            onChange={handleChangeHybrid}
+                            placeholder="Enter WorkPlace"
+
+                          />
+                            </div>
+
+                          )
+                          }
                           {errors.jobType && <div className="setStarAsError">{errors.jobType}</div>}
                         </div>
                       </div>

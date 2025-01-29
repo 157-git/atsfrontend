@@ -337,7 +337,6 @@ function DailyWork({
       const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
         .toString()
         .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-
       console.log(`Total work time: ${formattedTime}`);
       return formattedTime;
     } catch (error) {
@@ -487,7 +486,7 @@ function DailyWork({
         dailyArchived: data.archived,
         dailyPending: data.pending,
         logoutTime: logoutTimestamp,
-        totalHoursWork,
+        totalHoursWork:totalHoursWork,
         dailyHours: breaks,
         dayPresentStatus: present,
         lateMark,
@@ -1159,7 +1158,7 @@ function DailyWork({
     messagesContext.info({
       message: description.title,
       description: description.desc,
-      duration: 3,
+      duration: 0,
       placement: "bottomRight",
     });
   };
@@ -1310,7 +1309,9 @@ function DailyWork({
                 style={{ marginRight: "10px" }}
                 onClick={toggleNotificationBox}
               >
-                <Badge count={messages.length}>
+                <Badge 
+                color="var(--notification-badge-background)"
+                count={messages.length}>
                   <Avatar shape="square" icon={<BellOutlined />} />
                 </Badge>
               </div>

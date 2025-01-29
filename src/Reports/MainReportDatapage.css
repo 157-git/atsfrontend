@@ -1029,7 +1029,7 @@ color: grey;
 .typeofReportSubDiv.active {
   background-color: var(--sidebar-active-item-bg); /* Example: Highlight the active button */
   border: 2px solid var(--primary-border); /* Example: Add border to the active button */
-  color: white;
+  color: var(--button-txt-color);
 }
 .buttonsForManagerAndHideAll{
   display: flex;

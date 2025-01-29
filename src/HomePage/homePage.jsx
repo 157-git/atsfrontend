@@ -12,11 +12,12 @@ const HomePage = () => {
   const [showColor, setShowColor] = useState(false);
   const [bgColor, setBgColor] = useState("#ffcb9b");
 
-  useEffect(() => {
-    // Clear all local storage values
-    localStorage.clear();
-    console.log("Local storage cleared.");
-  }, []);
+  // commented by sahil karnekar date 23-01-2025
+  // useEffect(() => {
+  //   // Clear all local storage values
+  //   localStorage.clear();
+  //   console.log("Local storage cleared.");
+  // }, []);
 
   useEffect(() => {
     const savedColor = localStorage.getItem("selectedColor");

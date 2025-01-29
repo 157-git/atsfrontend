@@ -354,7 +354,7 @@ body {
     margin: 10px;
     text-align: center;
     cursor: pointer;
-    border: none; 
+    border: 1px solid var(--primary-border); 
   }
 
   .Find-Candidate{

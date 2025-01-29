@@ -504,6 +504,8 @@ const CallingTrackerForm = ({
       } else if (userType === "TeamLeader") {
         dataToUpdate.callingTracker.teamLeader = { teamLeaderId: employeeId };
       }
+      console.log(dataToUpdate);
+      
       const response = await axios.post(
         `${API_BASE_URL}/calling-tracker/${employeeId}/${userType}`,
         dataToUpdate,
