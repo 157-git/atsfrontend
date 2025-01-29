@@ -449,7 +449,7 @@ const handleRefreshCaptch = () =>{
                     onClick={handleRefreshCaptch}
                     ref={canvasRef} width="250" height="50" />
                       <div className="input-groups">
-                    <i className="fas fa-user"></i>
+                    
                     <input
                       type="text"
                       placeholder="Enter Captcha"
