@@ -14,6 +14,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import ForceLogout from "../LoginPage/ForceLogout";
 import { initializeSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
+import { SyncOutlined } from "@ant-design/icons";
 //  sahil karnekar Worked on : - date 27 sep 2024
 // Sahil Karnekar Added line num 8 to line num 77
 const LoginSignup = ({ onLogin }) => {
@@ -310,8 +311,25 @@ const LoginSignup = ({ onLogin }) => {
   };
 
   const handleRefreshCaptch = () => {
+    const refreshIcon = document.getElementsByClassName('anticon-sync');
+  
+    if (refreshIcon.length > 0) {
+      // Apply rotation animation
+      refreshIcon[0].style.transition = "transform 0.5s ease-in-out";
+      refreshIcon[0].style.transform = "rotate(180deg)";
+    }
+  
+    // Generate a new CAPTCHA
     generateCaptcha();
-  }
+  
+    setTimeout(() => {
+      if (refreshIcon.length > 0) {
+        refreshIcon[0].style.transition = "";
+      refreshIcon[0].style.transform = "";
+      }
+    }, 500); // Reset after animation completes
+  };
+  
 
   return (
     <div className="main-body">
@@ -436,17 +454,27 @@ const LoginSignup = ({ onLogin }) => {
 
                   <div className="input-group">
                     <div className="captcha-box">
+                      <div className="displayCaptchaFlex">
                       <canvas
                         id="newCanvasIdForTester"
                         style={{
                           borderRadius: "15px",
                           height: "30px",
                           width: "100%",
-                          marginBottom: "10px"
+                          marginBottom: "10px",
+                          marginRight:"10px"
 
                         }}
                         onClick={handleRefreshCaptch}
-                        ref={canvasRef} width="250" height="50" />
+                        ref={canvasRef} width="250" height="50"  />
+                        <SyncOutlined 
+                        style={{
+                          marginBottom:"10px",
+                        }}
+                        onClick={handleRefreshCaptch}
+                        />
+                      </div>
+                    
                       <div className="input-groups">
                         <i class="fa-solid fa-robot"></i>
                         <input

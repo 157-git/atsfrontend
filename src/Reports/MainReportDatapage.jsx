@@ -41,20 +41,28 @@ const MonthReport = ({ loginEmployeeName }) => {
 
   const handleDisplayManagers = async () => {
     if (userType === "SuperUser") {
+      setDisplayBigSkeletonForManagers(true);
       const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
       setManagersList(response.data);
+      setDisplayBigSkeletonForManagers(false);
       setDisplayManagers(true);
     } else if (userType === "Manager") {
+      setDisplayBigSkeletonForTeamLeaders(true);
       const response = await axios.get(
         `${API_BASE_URL}/tl-namesIds/${employeeId}`
       );
+     
       setTeamLeadersList(response.data);
+      setDisplayBigSkeletonForTeamLeaders(false);
       setDisplayTeamLeaders(true)
     } else if (userType === "TeamLeader") {
+      setDisplayBigSkeletonForRecruiters(true);
       const response = await axios.get(
         `${API_BASE_URL}/employeeId-names/${employeeId}`
       );
+     
       setRecruitersList(response.data);
+      setDisplayBigSkeletonForRecruiters(false);
       setDisplayRecruiters(true);
     }
     setDisplayModalContainer(true);
@@ -71,13 +79,16 @@ const MonthReport = ({ loginEmployeeName }) => {
   };
 
   const handleOpenDownArrowContent = async (managerid) => {
+    setDisplayTeamLeaders(false);
     setSelectedIds([]);
 setAllImagesForTeamLeaders([]);
     try {
+      setDisplayBigSkeletonForTeamLeaders(true);
       const response = await axios.get(
         `${API_BASE_URL}/tl-namesIds/${managerid}`
       );
       setTeamLeadersList(response.data);
+      setDisplayBigSkeletonForTeamLeaders(false);
       setDisplayTeamLeaders(true);
       setDisplayRecruiters(false);
     } catch (error) {
@@ -86,13 +97,15 @@ setAllImagesForTeamLeaders([]);
   };
 
   const handleOpenDownArrowContentForRecruiters = async (teamLeaderId) => {
+    setDisplayRecruiters(false);
     setSelectedIds([]);
     setAllImagesForRecruiters([]);
+    setDisplayBigSkeletonForRecruiters(true);
     const response = await axios.get(
       `${API_BASE_URL}/employeeId-names/${teamLeaderId}`
     );
     setRecruitersList(response.data);
-    console.log(response.data);
+    setDisplayBigSkeletonForRecruiters(false);
     setDisplayRecruiters(true);
   };
 
@@ -171,6 +184,9 @@ setAllImagesForTeamLeaders([]);
   const [customEndDate, setCustomEndDate] = useState("");
   const [startDate1, setStartDate1] = useState("");
   const [endDate1, setEndDate1] = useState("");
+  const [displayBigSkeletonForRecruiters, setDisplayBigSkeletonForRecruiters] = useState(false);
+  const [displayBigSkeletonForTeamLeaders, setDisplayBigSkeletonForTeamLeaders] = useState(false);
+  const [displayBigSkeletonForManagers, setDisplayBigSkeletonForManagers] = useState(false);
 
   const calculateDateRange = (option) => {
     const today = new Date();
@@ -206,6 +222,7 @@ setAllImagesForTeamLeaders([]);
 
   const handleOptionChange = (event) => {
     const value = event.target.value;
+    setDisplayModalContainer(true);
     setSelectedOption(value);
     if (value === "custom") {
       setShowCustomDiv(true);
@@ -464,7 +481,7 @@ setAllImagesForTeamLeaders([]);
             onCancel={handleCancel}
           >
             <div className="mainForLists">
-              {displayManagers && (
+              {displayManagers ? (
                 <Card
                   hoverable
                   style={{
@@ -526,8 +543,19 @@ setAllImagesForTeamLeaders([]);
                     )}
                   />
                 </Card>
-              )}
-              {displayTeamLeaders && (
+              )
+              : displayBigSkeletonForManagers && (
+                <Skeleton.Node
+            active={true}
+            style={{
+              width: 300,
+              height:"65vh"
+            }}
+          />
+              )
+              
+              }
+              {displayTeamLeaders ? (
                 <>
                   {
                     <Card
@@ -595,9 +623,20 @@ setAllImagesForTeamLeaders([]);
                     </Card>
                   }
                 </>
-              )}
+              )
+              : displayBigSkeletonForTeamLeaders && (
+                <Skeleton.Node
+            active={true}
+            style={{
+              width: 300,
+              height:"65vh"
+            }}
+          />
+              )
+              
+              }
 
-              {displayRecruiters && (
+              {displayRecruiters ? (
                 <>
                   {
                     <Card
@@ -653,7 +692,17 @@ setAllImagesForTeamLeaders([]);
                     </Card>
                   }
                 </>
-              )}
+              )
+            : displayBigSkeletonForRecruiters && (
+              <Skeleton.Node
+          active={true}
+          style={{
+            width: 300,
+            height:"65vh"
+          }}
+        />
+            )
+            }
 
             </div>
           </Modal>

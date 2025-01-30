@@ -385,6 +385,17 @@ const JobListing = ({ loginEmployeeName }) => {
     return `Posted on ${timeValue} ${formattedTimeUnit} ago`;
   };
 
+
+  const [expandedSkills, setExpandedSkills] = useState({});
+
+const toggleSkillExpansion = (requirementId) => {
+  setExpandedSkills((prev) => ({
+    ...prev,
+    [requirementId]: !prev[requirementId], // Toggle the state
+  }));
+};
+
+
   return (
     <>
       {!showAddJobDiscriptionNew ? (
@@ -514,9 +525,33 @@ const JobListing = ({ loginEmployeeName }) => {
                         {item.experience}
                       </div>
                       <div className="job-skills">
-                        <i className="fas fa-tags"></i>
-                        {item.skills}
-                      </div>
+  <i className="fas fa-tags"></i>
+  {expandedSkills[item.requirementId] ? (
+    <>
+      {item.skills}{" "}
+      <span
+        style={{ color: "blue", cursor: "pointer", fontWeight: "bold" }}
+        onClick={() => toggleSkillExpansion(item.requirementId)}
+      >
+        Close
+      </span>
+    </>
+  ) : (
+    <>
+      {item.skills.length > 40 ? item.skills.substring(0, 40) + "" : item.skills}
+      {item.skills.length > 40 && (
+        <span
+          style={{ color: "blue", cursor: "pointer", fontWeight: "bold" }}
+          onClick={() => toggleSkillExpansion(item.requirementId)}
+        >
+          {/* &#8226; &#8226; &#8226; &#8226; */}
+          .......
+        </span>
+      )}
+    </>
+  )}
+</div>
+
                     </div>
 
                     <div className="jd-card-right-div">

@@ -491,6 +491,9 @@ const AfterSelection = ({
                           </label>
 
                           <input
+                          style={{
+                            flexGrow:"0"
+                          }}
                             type="file"
                             className="after-file-input"
                             onChange={handleAdharCardUpload}
@@ -513,6 +516,9 @@ const AfterSelection = ({
                             Pan Card:
                           </label>
                           <input
+                           style={{
+                            flexGrow:"0"
+                          }}
                             type="file"
                             className="after-file-input"
                             onChange={handlePanCardUpload}
@@ -538,6 +544,9 @@ const AfterSelection = ({
                             Driving License:
                           </label>
                           <input
+                           style={{
+                            flexGrow:"0"
+                          }}
                             className="after-file-input"
                             type="file"
                             onChange={handleDrivingLicenseUpload}
@@ -560,6 +569,9 @@ const AfterSelection = ({
                             Degree Marksheet:
                           </label>
                           <input
+                           style={{
+                            flexGrow:"0"
+                          }}
                             type="file"
                             name=""
                             onChange={handleDegreeMarksheetUpload}
@@ -582,6 +594,9 @@ const AfterSelection = ({
                             HSC Marksheet:
                           </label>
                           <input
+                           style={{
+                            flexGrow:"0"
+                          }}
                             type="file"
                             name=""
                             onChange={handleHSCMarksheetUpload}
@@ -604,6 +619,9 @@ const AfterSelection = ({
                             SSC Marksheet:
                           </label>
                           <input
+                           style={{
+                            flexGrow:"0"
+                          }}
                             type="file"
                             onChange={handleSSCMarksheetUpload}
                             name=""

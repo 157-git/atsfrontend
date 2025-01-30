@@ -256,19 +256,18 @@ const CallingTrackerForm = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target || e;
-    // sahil karnekar line 249 to 274
+  
+  // Rajlaxmi Jagadale Added Email Validation Date-24-01-25 line263 to 312
     if (name === "candidateEmail") {
-      const emailPattern =
-        /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
-      if (/\s/.test(value)) {
-        return;
-      }
-      setCallingTracker({ ...callingTracker, [name]: value });
-      if (value !== "" && !emailPattern.test(value)) {
+      const trimmedEmail = value.replace(/\s/g, '');
+  
+      setCallingTracker({ ...callingTracker, [name]: trimmedEmail });
+  
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (trimmedEmail !== "" && !emailPattern.test(trimmedEmail)) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          [name]:
-            "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).",
+          [name]:  "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).",
         }));
       } else {
         setErrors((prevErrors) => ({
@@ -278,6 +277,28 @@ const CallingTrackerForm = ({
       }
       return;
     }
+  // sahil karnekar line 249 to 274
+    // if (name === "candidateEmail") {
+    //   const emailPattern =
+    //     /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+    //   if (/\s/.test(value)) {
+    //     return;
+    //   }
+    //   setCallingTracker({ ...callingTracker, [name]: value });
+    //   if (value !== "" && !emailPattern.test(value)) {
+    //     setErrors((prevErrors) => ({
+    //       ...prevErrors,
+    //       [name]:
+    //         "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).",
+    //     }));
+    //   } else {
+    //     setErrors((prevErrors) => ({
+    //       ...prevErrors,
+    //       [name]: "",
+    //     }));
+    //   }
+    //   return;
+    // }
     if (
       (name === "contactNumber" ||
         name === "alternateNumber" ||
@@ -1502,25 +1523,24 @@ const CallingTrackerForm = ({
                 </div>
               </div>
 
-              <div className="calling-tracker-field">
-                <label>Education</label>
-                <div className="calling-tracker-two-input-container">
-                  {/* sahil karnekar line 966 to 1442 */}
-                  <div className="calling-tracker-two-input">
-                    {/* this line added by sahil date 22-10-2024 */}
-                    <div className="setRequiredStarDiv">
-                      <input
-                        list="educationListDropDown"
-                        name="qualification"
-                        type="text"
-                        value={lineUpData.qualification}
-                        onChange={handleEducationChange}
-                        placeholder="Search...."
-                        //  {/* this line added by sahil date 22-10-2024 */}
-                        style={{ width: "inherit" }}
-                      />
-
-                      <datalist id="educationListDropDown">
+                  {/* Rajlaxmi Jagadale Some Changes of that field (YOP) Date 24-01-2225 */}
+                  <div className="calling-tracker-field">
+  <label>Education</label>
+  <div className="calling-tracker-two-input-container">
+{/* sahil karnekar line 966 to 1442 */}
+    <div className="calling-tracker-two-input">
+      <div className="setRequiredStarDiv">
+        <input
+          list="educationListDropDown"
+          name="qualification"
+          type="text"
+          value={lineUpData.qualification}
+          onChange={handleEducationChange}
+          placeholder="Search...."
+           //  {/* this line added by sahil date 22-10-2024 */}
+          style={{ width: "inherit" }}
+        />
+<datalist id="educationListDropDown">
                         <option value="">Select</option>
                         <option value="Other">Other</option>
                         <option value="10th">10th</option>
@@ -1931,78 +1951,64 @@ const CallingTrackerForm = ({
                           Diploma in Artificial Intelligence
                         </option>
                       </datalist>
+                      
                       {/* sahil karnekar */}
                       {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" &&
-                        !lineUpData.qualification && (
-                          <span className="requiredFieldStar">*</span>
-                        )}
-                    </div>
 
-                    {errors.qualification && (
-                      <div className="error-message error-two-input-box">
-                        {errors.qualification}
-                      </div>
-                    )}
-                  </div>
-                  {/* sahil karnekar line 1376 to 1420 */}
-                  <input
-                    type="text"
-                    min="1947"
-                    name="yearOfPassing"
-                    placeholder="YOP"
-                    value={lineUpData.yearOfPassing}
-                    onChange={(e) => {
-                      const value = e.target.value;
+        {callingTracker.selectYesOrNo === "Interested" &&
+          !lineUpData.qualification && (
+            <span className="requiredFieldStar">*</span>
+          )}
+      </div>
+      {errors.qualification && (
+        <div className="error-message error-two-input-box">
+          {errors.qualification}
+        </div>
+      )}
+    </div>
+    {/* Rajlaxmi Jagadle Added New div YOP */}
 
-                      // Check if the input is empty and clear the error
-                      const dateforYearOfPassout = new Date();
-                      let yearOfPassout =
-                        dateforYearOfPassout.getFullYear() + 2;
-                      if (value === "") {
-                        setErrorForYOP("");
-                      } else if (value < 1947 || value > yearOfPassout) {
-                        setErrorForYOP(
-                          "YOP Should be between 1947 and " + yearOfPassout
-                        );
-                      } else {
-                        setErrorForYOP("");
-                      }
+    <div className="calling-tracker-two-input">
+      <div className="setRequiredStarDiv">
+        {/* sahil karnekar line 1376 to 1420 */}
+        <input
+          type="text"
+          min="1947"
+          name="yearOfPassing"
+          placeholder="YOP"
+          value={lineUpData.yearOfPassing}
+          onChange={(e) => {
+            const value = e.target.value;
+            const currentYear = new Date().getFullYear();
+            const maxYear = currentYear + 2;
 
-                      // Only allow 0 to 4 digits input
-                      if (/^\d{0,4}$/.test(value)) {
-                        const year = parseInt(value, 10);
+            if (value === "") {
+              setErrorForYOP("");
+            } else if (value < 1947 || value > maxYear) {
+              setErrorForYOP(`YOP should be between 1947 and ${maxYear}`);
+            } else {
+              setErrorForYOP("");
+            }
 
-                        if (value.length === 4) {
-                          // Trigger validation after 4 digits are entered
-                          if (year > yearOfPassout) {
-                            alert("Cannot enter year above " + yearOfPassout);
-                          } else if (year < 1947) {
-                            alert("Cannot enter year below 1947");
-                          } else {
-                            // Update the value if it's valid (between 1947 and yearOfPassout)
-                            setLineUpData({
-                              ...lineUpData,
-                              yearOfPassing: value,
-                            });
-                          }
-                        } else {
-                          // Allow typing but no validation until 4 digits are entered
-                          setLineUpData({
-                            ...lineUpData,
-                            yearOfPassing: value,
-                          });
-                        }
-                      }
-                    }}
-                    className="calling-tracker-two-input"
-                  />
-                  {/* sahil karnekar  line 1443 to 1446 */}
-                  {errorForYOP && (
-                    <span className="error-message">{errorForYOP}</span>
-                  )}
-                </div>
-              </div>
+            if (/^\d{0,4}$/.test(value)) {
+              setLineUpData({ ...lineUpData, yearOfPassing: value });
+            }
+          }}
+          style={{ width: "inherit" }}
+        />
+        {callingTracker.selectYesOrNo === "Interested" &&
+          !lineUpData.yearOfPassing && (
+            <span className="requiredFieldStar">*</span>
+          )}
+      </div>
+      {errorForYOP && (
+        <div className="error-message error-two-input-box">
+          {errorForYOP}
+        </div>
+      )}
+    </div>
+  </div>
+</div>
 
               {/* -------------- */}
             </div>

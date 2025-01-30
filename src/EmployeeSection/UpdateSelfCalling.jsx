@@ -471,8 +471,10 @@ const UpdateSelfCalling = ({
         }
       }
       if (name === "candidateEmail") {
-        const emailPattern =
-          /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+        // const emailPattern =
+        //   /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+          // Rajlaxmi Jagadale Added Email Validation Date-24-01-25 line263 to 312
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (value === "") {
           newErrors.candidateEmail = "Candidate Email is required";
           newErrors.candidateEmailStar = "*";

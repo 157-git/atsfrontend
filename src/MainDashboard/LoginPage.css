@@ -5,7 +5,10 @@
     padding: 0;
     font-family: Arial, sans-serif;
 }
-
+.displayCaptchaFlex{
+    display: flex;
+  
+}
 /* General Styles */
 .main-body {
     background-color: var(--Bg-color);
