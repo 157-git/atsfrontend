@@ -251,17 +251,32 @@ const CallingList = ({
     return null;
   };
 
-  const handleSelectAll = () => {
-    console.log(selectedRows);
+ // Pranjali Raut_handleSelectAll (20-01-25)
+ const handleSelectAll = () => {
+  if (allSelected) {
+    // Deselect all rows
+    setSelectedRows((prevSelectedRows) => 
+      prevSelectedRows.filter((id) => !filteredCallingList.map((item) => item.candidateId).includes(id))
+    );
+  } else {
+    // Select all rows on the current page
+    const allRowIds = filteredCallingList.map((item) => item.candidateId);
+    setSelectedRows((prevSelectedRows) => [...new Set([...prevSelectedRows, ...allRowIds])]);
+  }
+  setAllSelected(!allSelected);
+};
+
+  // const handleSelectAll = () => {
+  //   console.log(selectedRows);
     
-    if (allSelected) {
-      setSelectedRows([]);
-    } else {
-      const allRowIds = filteredCallingList.map((item) => item.candidateId);
-      setSelectedRows(allRowIds);
-    }
-    setAllSelected(!allSelected);
-  };
+  //   if (allSelected) {
+  //     setSelectedRows([]);
+  //   } else {
+  //     const allRowIds = filteredCallingList.map((item) => item.candidateId);
+  //     setSelectedRows(allRowIds);
+  //   }
+  //   setAllSelected(!allSelected);
+  // };
 
   const handleSelectRow = (candidateId) => {
     setSelectedRows((prevSelectedRows) => {
@@ -847,14 +862,23 @@ const CallingList = ({
                     {!showShareButton && userType === "TeamLeader" ||
                      !showShareButton && userType === "Manager" ? (
                       <th className="attendanceheading">
-                        <input
+                        {/* updatesd shortListeddata by Pranjali Raut data 20-01-2025 */}
+<input
+                                type="checkbox"
+                                onChange={handleSelectAll}
+                                checked={
+                                  filteredCallingList.every((row) => selectedRows.includes(row.candidateId))
+                                }
+                                name="selectAll"
+                              />
+                        {/* <input
                           type="checkbox"
                           onChange={handleSelectAll}
                           checked={
                             selectedRows.length === filteredCallingList.length
                           }
                           name="selectAll"
-                        />
+                        /> */}
                       </th>
                     ) : null}
 

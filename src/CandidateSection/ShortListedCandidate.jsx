@@ -237,10 +237,11 @@ const ShortListedCandidates = ({
 
   useEffect(() => {
     const filtered = FilterData(shortListedData, searchTerm);
+    console.log(filtered);
+    
     setFilteredShortListed(filtered);
     setSearchCount(filtered.length);
-  }, [selectedFilters]);
-
+  }, [searchTerm, shortListedData]);
   //  filter problem solved updated by sahil karnekar date 23-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
     if (activeFilterOption === key) {

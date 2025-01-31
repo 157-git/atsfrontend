@@ -14,6 +14,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import ForceLogout from "../LoginPage/ForceLogout";
 import { initializeSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
+import { SyncOutlined } from "@ant-design/icons";
 //  sahil karnekar Worked on : - date 27 sep 2024
 // Sahil Karnekar Added line num 8 to line num 77
 const LoginSignup = ({ onLogin }) => {
@@ -100,56 +101,56 @@ const LoginSignup = ({ onLogin }) => {
       }
     }
   };
- // CAPTCHA State
- const [captcha, setCaptcha] = useState("");
- const [userCaptcha, setUserCaptcha] = useState("");
- const [captchaError, setCaptchaError] = useState("");
+  // CAPTCHA State
+  const [captcha, setCaptcha] = useState("");
+  const [userCaptcha, setUserCaptcha] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
 
- const canvasRef = useRef(null);
+  const canvasRef = useRef(null);
 
- // Generate a random CAPTCHA
- const generateCaptcha = () => {
-   const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();  // Random 6 character string
-   setCaptcha(randomString);
-   setCaptchaError("");
- };
+  // Generate a random CAPTCHA
+  const generateCaptcha = () => {
+    const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();  // Random 6 character string
+    setCaptcha(randomString);
+    setCaptchaError("");
+  };
 
-   //Abhijit Mehakar
- //12/12/2024
- //CAPCHA
+  //Abhijit Mehakar
+  //12/12/2024
+  //CAPCHA
 
- // Draw CAPTCHA on canvas
- const drawCaptcha = () => {
-  const canvas = canvasRef.current;
-  if (canvas) {
-    const ctx = canvas.getContext("2d");
-    
-    // Set background color
-    ctx.fillStyle = "#d9d9d9";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // Draw CAPTCHA on canvas
+  const drawCaptcha = () => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
 
-    // Set font properties
-    ctx.font = "30px 'Pacifico', cursive";
-    ctx.fillStyle = "#000";
+      // Set background color
+      ctx.fillStyle = "#d9d9d9";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Measure text width to center it
-    const textWidth = ctx.measureText(captcha).width;
-    const textX = (canvas.width - textWidth) / 2; // Center horizontally
-    const textY = canvas.height / 2 + 10; // Adjust to center vertically
+      // Set font properties
+      ctx.font = "30px 'Pacifico', cursive";
+      ctx.fillStyle = "#000";
 
-    // Draw CAPTCHA text
-    ctx.fillText(captcha, textX, textY);
-  }
-};
+      // Measure text width to center it
+      const textWidth = ctx.measureText(captcha).width;
+      const textX = (canvas.width - textWidth) / 2; // Center horizontally
+      const textY = canvas.height / 2 + 10; // Adjust to center vertically
+
+      // Draw CAPTCHA text
+      ctx.fillText(captcha, textX, textY);
+    }
+  };
 
 
- useEffect(() => {
-   generateCaptcha(); // Generate a new CAPTCHA on mount or user type change
- }, [userType]);
+  useEffect(() => {
+    generateCaptcha(); // Generate a new CAPTCHA on mount or user type change
+  }, [userType]);
 
- useEffect(() => {
-   drawCaptcha(); // Redraw CAPTCHA after it changes
- }, [captcha]);
+  useEffect(() => {
+    drawCaptcha(); // Redraw CAPTCHA after it changes
+  }, [captcha]);
   // handle submit method for authenticate user by username and password from line num 53 to line num 77
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -161,7 +162,7 @@ const LoginSignup = ({ onLogin }) => {
     if (userCaptcha !== captcha) {
       setCaptchaError("Incorrect CAPTCHA. Please try again.");
       return;
-    } else if (userCaptcha === captcha){
+    } else if (userCaptcha === captcha) {
       setCaptchaError("");
     }
 
@@ -205,9 +206,9 @@ const LoginSignup = ({ onLogin }) => {
           const newSocket = initializeSocket(loginResponse.data.employeeId, userType);
 
           const emitData = {
-            employeeName:  loginResponse.data.employeeName,
+            employeeName: loginResponse.data.employeeName,
             loginTime: getFormattedDateTime(),
-            employeeId:loginResponse.data.employeeId,
+            employeeId: loginResponse.data.employeeId,
             userType: userType,
           }
           console.log("Emit Data:", emitData);
@@ -309,9 +310,26 @@ const LoginSignup = ({ onLogin }) => {
     setDisplayForcefullyLogoutForm(true);
   };
 
-const handleRefreshCaptch = () =>{
-  generateCaptcha();
-}
+  const handleRefreshCaptch = () => {
+    const refreshIcon = document.getElementsByClassName('anticon-sync');
+  
+    if (refreshIcon.length > 0) {
+      // Apply rotation animation
+      refreshIcon[0].style.transition = "transform 0.5s ease-in-out";
+      refreshIcon[0].style.transform = "rotate(180deg)";
+    }
+  
+    // Generate a new CAPTCHA
+    generateCaptcha();
+  
+    setTimeout(() => {
+      if (refreshIcon.length > 0) {
+        refreshIcon[0].style.transition = "";
+      refreshIcon[0].style.transform = "";
+      }
+    }, 500); // Reset after animation completes
+  };
+  
 
   return (
     <div className="main-body">
@@ -319,9 +337,8 @@ const handleRefreshCaptch = () =>{
         <div className="main-loginpage-clouds"></div>
         {/* updated by sahil karnekar date 2-12-2024 */}
         <div
-          className={`container22 justify-center align-center ${
-            showForgotPassword ? "full-width" : ""
-          }`}
+          className={`container22 justify-center align-center ${showForgotPassword ? "full-width" : ""
+            }`}
         >
           {!showForgotPassword && (
             <div className="left-panel" data-aos="fade-right">
@@ -329,159 +346,169 @@ const handleRefreshCaptch = () =>{
             </div>
           )}
           <div
-            className={`${
-              showForgotPassword ? "full-width-panel" : "right-panel"
-            }`}
+            className={`${showForgotPassword ? "full-width-panel" : "right-panel"
+              }`}
             data-aos="fade-left"
           >
             {showForgotPassword ? (
               <ForgotPasswordForms userType={userType} />
             ) : // added by sahil karnekar date 2-12-2024
-            displayForcefullyLogoutForm ? (
-              <ForceLogout userType={userType} />
-            ) : (
-              <form onSubmit={handleSubmit}>
-                {/* Arshad Attar  , Added inline CSS For Headers As per requirement on 27-11-2024 */}
-                {userType === "Recruiters" && (
-                  <h2 style={{ color: "gray", fontWeight: "bold" }}>
-                    Recruiter
-                  </h2>
-                )}
-                {userType === "TeamLeader" && (
-                  <h2 style={{ color: "gray", fontWeight: "bold" }}>
-                    Team Leader
-                  </h2>
-                )}
-                {userType === "Manager" && (
-                  <h2 style={{ color: "gray", fontWeight: "bold" }}>Manager</h2>
-                )}
-                {userType === "SuperUser" && (
-                  <h2 style={{ color: "gray", fontWeight: "bold" }}>
-                    Super User
-                  </h2>
-                )}
-                <div className="input-groups">
-                  <i className="fas fa-user"></i>
-                  <input
-                    type="text"
-                    id="loginpage-employeeId"
-                    name="employeeId"
-                    placeholder="User name"
-                    className="loginpage-form-control"
-                    value={employeeId}
-                    onChange={handleChange}
-                    style={{ paddingLeft: "30px" }}
-                  />
-                </div>
-                <div className="input-groups" hidden>
-                  <i className="fas fa-briefcase"></i>
-                  <input
-                    type="text"
-                    id="loginpage-userType"
-                    name="userType"
-                    placeholder="User Type"
-                    className="loginpage-form-control"
-                  />
-                </div>
-                <div className="input-groups">
-                  <i className="fas fa-lock"></i>
-                  <input
-                    type={passwordVisible ? "text" : "password"}
-                    id="loginpage-password"
-                    name="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={handleChange}
-                    className="loginpage-form-control"
-                    style={{ paddingLeft: "30px" }}
-                  />
-                  <FontAwesomeIcon
-                    icon={passwordVisible ? faEyeSlash : faEye}
-                    onClick={() => setPasswordVisible((prev) => !prev)}
-                    style={{
-                      position: "absolute",
-                      right: "10px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      cursor: "pointer",
-                      color: "gray",
-                    }}
-                  />
-                </div>
-
-                <div className="loginpage-error">{error}</div>
-
-                {displayPaymentLink && (
-                  <div className="acc-create-div">
-                    <span
-                      className="account-create-span"
-                      type="button"
-                      onClick={handleNavigatePaymentLink}
-                    >
-                      Payment Link
-                    </span>
-                  </div>
-                )}
-                {/* added by sahil karnekar date 2-12-2024 */}
-                {displayForcefullyLogout && (
-                  <div className="acc-create-div">
-                    <span
-                      className="account-create-span"
-                      type="button"
-                      onClick={handleDisplayForcefullyLogoutForm}
-                    >
-                      Forcefully Logout
-                    </span>
-                  </div>
-                )}
-
-
-  <div className="input-group">
-                  <div className="captcha-box">
-                    <canvas
-                    style={{
-                      borderRadius:"15px",
-                      height:"30px",
-                      width:"100%",
-                      marginBottom:"10px"
-                    
-                    }}
-                    onClick={handleRefreshCaptch}
-                    ref={canvasRef} width="250" height="50" />
-                      <div className="input-groups">
-                      <i class="fa-solid fa-robot"></i>
+              displayForcefullyLogoutForm ? (
+                <ForceLogout userType={userType} />
+              ) : (
+                <form onSubmit={handleSubmit}>
+                  {/* Arshad Attar  , Added inline CSS For Headers As per requirement on 27-11-2024 */}
+                  {userType === "Recruiters" && (
+                    <h2 style={{ color: "gray", fontWeight: "bold" }}>
+                      Recruiter
+                    </h2>
+                  )}
+                  {userType === "TeamLeader" && (
+                    <h2 style={{ color: "gray", fontWeight: "bold" }}>
+                      Team Leader
+                    </h2>
+                  )}
+                  {userType === "Manager" && (
+                    <h2 style={{ color: "gray", fontWeight: "bold" }}>Manager</h2>
+                  )}
+                  {userType === "SuperUser" && (
+                    <h2 style={{ color: "gray", fontWeight: "bold" }}>
+                      Super User
+                    </h2>
+                  )}
+                  <div className="input-groups">
+                    <i className="fas fa-user"></i>
                     <input
                       type="text"
-                      placeholder="Enter Captcha"
+                      id="loginpage-employeeId"
+                      name="employeeId"
+                      placeholder="User name"
                       className="loginpage-form-control"
-                      value={userCaptcha}
-                      onChange={(e) => setUserCaptcha(e.target.value)}
+                      value={employeeId}
+                      onChange={handleChange}
                       style={{ paddingLeft: "30px" }}
-                      required
                     />
                   </div>
+                  <div className="input-groups" hidden>
+                    <i className="fas fa-briefcase"></i>
+                    <input
+                      type="text"
+                      id="loginpage-userType"
+                      name="userType"
+                      placeholder="User Type"
+                      className="loginpage-form-control"
+                    />
                   </div>
-                  {captchaError && <p className="error">{captchaError}</p>}
-                </div>
+                  <div className="input-groups">
+                    <i className="fas fa-lock"></i>
+                    <input
+                      type={passwordVisible ? "text" : "password"}
+                      id="loginpage-password"
+                      name="password"
+                      placeholder="Password"
+                      value={password}
+                      onChange={handleChange}
+                      className="loginpage-form-control"
+                      style={{ paddingLeft: "30px" }}
+                    />
+                    <FontAwesomeIcon
+                      icon={passwordVisible ? faEyeSlash : faEye}
+                      onClick={() => setPasswordVisible((prev) => !prev)}
+                      style={{
+                        position: "absolute",
+                        right: "10px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        cursor: "pointer",
+                        color: "gray",
+                      }}
+                    />
+                  </div>
+
+                  <div className="loginpage-error">{error}</div>
+
+                  {displayPaymentLink && (
+                    <div className="acc-create-div">
+                      <span
+                        className="account-create-span"
+                        type="button"
+                        onClick={handleNavigatePaymentLink}
+                      >
+                        Payment Link
+                      </span>
+                    </div>
+                  )}
+                  {/* added by sahil karnekar date 2-12-2024 */}
+                  {displayForcefullyLogout && (
+                    <div className="acc-create-div">
+                      <span
+                        className="account-create-span"
+                        type="button"
+                        onClick={handleDisplayForcefullyLogoutForm}
+                      >
+                        Forcefully Logout
+                      </span>
+                    </div>
+                  )}
 
 
-                <button
-                  className="login-button"
-                  type="submit"
-                  data-aos="fade-top"
-                >
-                  Login
-                </button>
-                <div className="acc-create-div">
-                  <span
-                    className="account-create-span"
-                    onClick={() => setShowForgotPassword(true)}
+                  <div className="input-group">
+                    <div className="captcha-box">
+                      <div className="displayCaptchaFlex">
+                      <canvas
+                        id="newCanvasIdForTester"
+                        style={{
+                          borderRadius: "15px",
+                          height: "30px",
+                          width: "100%",
+                          marginBottom: "10px",
+                          marginRight:"10px"
+
+                        }}
+                        onClick={handleRefreshCaptch}
+                        ref={canvasRef} width="250" height="50"  />
+                        <SyncOutlined 
+                        style={{
+                          marginBottom:"10px",
+                        }}
+                        onClick={handleRefreshCaptch}
+                        />
+                      </div>
+                    
+                      <div className="input-groups">
+                        <i class="fa-solid fa-robot"></i>
+                        <input
+                          type="text"
+                          placeholder="Enter Captcha"
+                          className="loginpage-form-control"
+                          value={userCaptcha}
+                          onChange={(e) => setUserCaptcha(e.target.value)}
+                          style={{ paddingLeft: "30px" }}
+                          required
+                        />
+                      </div>
+                    </div>
+                    {captchaError && <p className="error">{captchaError}</p>}
+                  </div>
+
+
+                  <button
+                    className="login-button"
+                    type="submit"
+                    data-aos="fade-top"
                   >
-                    Forgot password ?
-                  </span>
-                </div>
-              </form>
-            )}
+                    Login
+                  </button>
+                  <div className="acc-create-div">
+                    <span
+                      className="account-create-span"
+                      onClick={() => setShowForgotPassword(true)}
+                    >
+                      Forgot password ?
+                    </span>
+                  </div>
+                </form>
+              )}
           </div>
         </div>
       </div>

@@ -71,7 +71,32 @@ const ShareDescription = ({ Descriptions }) => {
       console.error("Error generating image:", error);
     }
   };
-
+  const [downloadingImg, setDownloadImg] = useState(false);
+  const generateAndDownloadImage = async () => {
+    setDownloadImg(true);
+    try {
+      const input = document.getElementById("job-description-share");
+      const canvas = await html2canvas(input, { scale: 2, logging: true });
+  
+      // Convert canvas to image URL
+      const imgData = canvas.toDataURL("image/png");
+  
+      // Create a temporary anchor element for downloading
+      const link = document.createElement("a");
+      link.href = imgData;
+      link.download = "job_description.png"; // File name for the download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link); // Cleanup
+    } catch (error) {
+      console.error("Error generating and downloading image:", error);
+      setDownloadImg(false);
+    }
+    finally{
+      setDownloadImg(false);
+    }
+  };
+  
   const handleInputChange = (e, field) => {
     setData({
       ...data,
@@ -350,11 +375,18 @@ const ShareDescription = ({ Descriptions }) => {
           </div>
         </section>
       </div>
+      <div className="setDisplayFlextShareJd">
       <section className="apply-section-share">
         <button className="apply-button-share" onClick={generateAndShareImage}>
           Share Job Description
         </button>
       </section>
+      <section className="apply-section-share">
+        <button className="apply-button-share" onClick={generateAndDownloadImage}>
+          Download Job Description
+        </button>
+      </section>
+      </div>
     </main>
   );
 };

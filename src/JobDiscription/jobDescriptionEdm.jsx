@@ -126,7 +126,31 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
       [field]: e.target.value, // Update the specific field
     });
   };
-
+  const [downloadingImg, setDownloadImg] = useState(false);
+  const generateAndDownloadVideo = async () => {
+    setDownloadImg(true);
+    try {
+      const input = document.getElementById("shareEMD");
+      const canvas = await html2canvas(input, { scale: 2, logging: true });
+  
+      // Convert canvas to image URL
+      const imgData = canvas.toDataURL("image/png");
+  
+      // Create a temporary anchor element for downloading
+      const link = document.createElement("a");
+      link.href = imgData;
+      link.download = "job_description.png"; // File name for the download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link); // Cleanup
+    } catch (error) {
+      console.error("Error generating and downloading image:", error);
+      setDownloadImg(false);
+    }
+    finally{
+      setDownloadImg(false);
+    }
+  };
   if (!voiceLoaded) {
     return <div>Loading voices...</div>;
   }
@@ -213,6 +237,12 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
               onClick={generateAndShareVideo}
             >
               Share Job Description
+            </button>
+            <button
+              className="apply-button-share"
+              onClick={generateAndDownloadVideo}
+            >
+              Download Job Description
             </button>
             <button
              onClick={closeJobDescrptionShare}

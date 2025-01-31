@@ -115,7 +115,31 @@ function ShareEDM({ Descriptions, onShareEdm }) {
       element.innerText = ""; // Clear the text
     }
   };
-
+  const [downloadingImg, setDownloadImg] = useState(false);
+  const generateAndDownloadEdmImage = async () => {
+    setDownloadImg(true);
+    try {
+      const input = document.getElementById("shareEMD");
+      const canvas = await html2canvas(input, { scale: 2, logging: true });
+  
+      // Convert canvas to image URL
+      const imgData = canvas.toDataURL("image/png");
+  
+      // Create a temporary anchor element for downloading
+      const link = document.createElement("a");
+      link.href = imgData;
+      link.download = "job_description.png"; // File name for the download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link); // Cleanup
+    } catch (error) {
+      console.error("Error generating and downloading image:", error);
+      setDownloadImg(false);
+    }
+    finally{
+      setDownloadImg(false);
+    }
+  };
   return (
     <div>
       {data && (
@@ -382,14 +406,18 @@ function ShareEDM({ Descriptions, onShareEdm }) {
                 </div>
               </div>
             </div>
-            <section className="apply-section-share">
-              <button
-                className="apply-button-share"
-                onClick={generateAndShareEDMImage}
-              >
-                Share Job Description
-              </button>
-            </section>
+            <div className="setDisplayFlextShareJd">
+      <section className="apply-section-share">
+        <button className="apply-button-share" onClick={generateAndShareEDMImage}>
+          Share Job Description
+        </button>
+      </section>
+      <section className="apply-section-share">
+        <button className="apply-button-share" onClick={generateAndDownloadEdmImage}>
+          Download Job Description
+        </button>
+      </section>
+      </div>
           </div>
         </div>
       )}

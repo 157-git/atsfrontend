@@ -328,14 +328,14 @@ const JobListing = ({ loginEmployeeName }) => {
 
       (item.employeeName = loginEmployeeName),
         (item.jdAddedDate = getFormattedDateTime());
-        const emitItem = {
-          ...item,
-          employeeId:employeeId,
-          userType: userType,
-        }
+      const emitItem = {
+        ...item,
+        employeeId: employeeId,
+        userType: userType,
+      };
 
-        console.log(emitItem);
-        
+      console.log(emitItem);
+
       socket.emit("delete_job_description", emitItem);
     } catch (error) {
       toast.error(`Failed to delete JD: ${error.message}`);
@@ -383,6 +383,15 @@ const JobListing = ({ loginEmployeeName }) => {
 
     const formattedTimeUnit = timeValue > 1 ? `${timeUnit}s` : timeUnit;
     return `Posted on ${timeValue} ${formattedTimeUnit} ago`;
+  };
+
+  const [expandedSkills, setExpandedSkills] = useState({});
+
+  const toggleSkillExpansion = (requirementId) => {
+    setExpandedSkills((prev) => ({
+      ...prev,
+      [requirementId]: !prev[requirementId], // Toggle the state
+    }));
   };
 
   return (
@@ -515,59 +524,93 @@ const JobListing = ({ loginEmployeeName }) => {
                       </div>
                       <div className="job-skills">
                         <i className="fas fa-tags"></i>
-                        {item.skills}
+                        {expandedSkills[item.requirementId] ? (
+                          <>
+                            {item.skills}{" "}
+                            <span
+                              style={{
+                                color: "blue",
+                                cursor: "pointer",
+                                fontWeight: "bold",
+                              }}
+                              onClick={() =>
+                                toggleSkillExpansion(item.requirementId)
+                              }
+                            >
+                              Close
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            {item.skills.length > 50
+                              ? item.skills.substring(0, 50) + ""
+                              : item.skills}
+                            {item.skills.length > 50 && (
+                              <span
+                                style={{
+                                  color: "black",
+                                  cursor: "pointer",
+                                  fontWeight: "bold",
+                                }}
+                                onClick={() =>
+                                  toggleSkillExpansion(item.requirementId)
+                                }
+                              >
+                                {/* &#8226; &#8226; &#8226; &#8226; */}
+                                ....
+                              </span>
+                            )}
+                          </>
+                        )}
                       </div>
                     </div>
 
                     <div className="jd-card-right-div">
                       <div className="job-active-status">
-                        {item.jdStatus === "Active" && (
+                        {item.jdStatus === "Active" &&
+                        item.holdStatus === "Hold" ? (
                           <div
                             className="job-skills"
                             style={{
-                              color:
-                                item.jdStatus === "Active" ? "green" : "red",
+                              color: "red",
                               fontWeight: "bold",
                               fontSize: "16px",
                             }}
                           >
-                            <i className="fa-solid fa-chart-line"></i>
+                            <i className="fa-solid fa-chart-line"></i> On{" "}
+                            {item.holdStatus}
+                          </div>
+                        ) : item.jdStatus === "Active" ? (
+                          <div
+                            className="job-skills"
+                            style={{
+                              color: "green",
+                              fontWeight: "bold",
+                              fontSize: "16px",
+                            }}
+                          >
+                            <i className="fa-solid fa-chart-line"></i>{" "}
                             {item.jdStatus}
                           </div>
-                        )}
+                        ) : item.jdStatus === "Inactive" ? (
+                          <div
+                            className="job-skills"
+                            style={{
+                              color: "red",
+                              fontWeight: "bold",
+                              fontSize: "16px",
+                            }}
+                          >
+                            <i className="fa-solid fa-chart-line"></i>{" "}
+                            {item.jdStatus}
+                          </div>
+                        ) : null}
                       </div>
 
                       <div className="job-incentive">
                         <i className="fa-solid fa-indian-rupee-sign"></i>{" "}
                         {item.incentive}
                       </div>
-                    </div>
-                  </div>
-
-                  <div className="staus-msg-div">
-                    <div>
-                      {item.jdStatus === "Inactive" && (
-                        <div
-                          style={{
-                            color: item.jdStatus === "Active" ? "green" : "red",
-                            fontWeight: "bold",
-                            fontSize: "14px",
-                          }}
-                        >
-                          Currently This JD is {item.jdStatus}
-                        </div>
-                      )}
-                    </div>
-
-                    <div>
-                      {item.holdStatus === "Hold" && (
-                        <div
-                          className="job-skills"
-                          style={{ color: "red", fontWeight: "bold" }}
-                        >
-                          This JD is currently on {item.holdStatus}
-                        </div>
-                      )}
                     </div>
                   </div>
 
