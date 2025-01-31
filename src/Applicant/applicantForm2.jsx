@@ -33,6 +33,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 import CryptoJS from "crypto-js";
 import { getSocket } from "../EmployeeDashboard/socket";
+import Loader from "../EmployeeSection/loader";
 
 function ApplicantForm2({ loginEmployeeName }) {
   //Arshad Attar Added This Code On 12-12-2024
@@ -45,16 +46,17 @@ function ApplicantForm2({ loginEmployeeName }) {
   // Decryption logic
   const decodeParams = (encrypted) => {
     try {
-      const base64 = encrypted.replace(/[^a-zA-Z0-9]/g, "");
-      const decodedBase64 = atob(base64);
+      const decodedBase64 = atob(encrypted);
       const bytes = CryptoJS.AES.decrypt(decodedBase64, secretKey);
       const decrypted = bytes.toString(CryptoJS.enc.Utf8);
       const [id, type] = decrypted.split(":");
+
       if (!id || !type) throw new Error("Invalid decrypted data");
-      return { employeeId: id, userType: type };
+
+      return { employeeId: parseInt(id, 10), userType: type };
     } catch (error) {
       console.error("Decryption failed:", error);
-      return { employeeId: null, userType: null }; // Fallback if decryption fails
+      return { employeeId: null, userType: null }; // Fallback in case of error
     }
   };
 
@@ -151,22 +153,20 @@ function ApplicantForm2({ loginEmployeeName }) {
   const handleChange = (e) => {
     const { name, files, value } = e.target;
 
-    // Clear the error for the specific field when typing
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: undefined,
     }));
 
     if (name === "lineUp.resume" && files.length > 0) {
-      const maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
+      const maxFileSize = 5 * 1024 * 1024;
 
-      // File size validation
       if (files[0].size > maxFileSize) {
         setErrors((prevErrors) => ({
           ...prevErrors,
           [name]: "File size should not exceed 5MB",
         }));
-        return; // Stop further processing
+        return;
       }
 
       setResumeSelected(true);
@@ -176,7 +176,6 @@ function ApplicantForm2({ loginEmployeeName }) {
       setPhotoSelected(true);
     }
 
-    // File handling logic
     if (files && files.length > 0) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -282,14 +281,14 @@ function ApplicantForm2({ loginEmployeeName }) {
     ];
 
     let isFormValid = true;
-    const newErrors = {};
+    let newErrors = {};
 
     requiredFields.forEach((field) => {
-      const value = field.includes(".")
+      let value = field.includes(".")
         ? getNestedValue(formData, field)
         : formData[field];
 
-      const error = validateField(field, value || "");
+      let error = validateField(field, value || "");
       if (error) {
         newErrors[field] = error;
         isFormValid = false;
@@ -351,9 +350,7 @@ function ApplicantForm2({ loginEmployeeName }) {
           },
         }
       );
-
       console.log("Form submitted successfully:", response.data);
-      // socket.emit("save_applicant_data", updatedFormData);
       setIsSubmitted(true);
       navigator("/thank-you");
       setTimeout(() => {
@@ -365,6 +362,7 @@ function ApplicantForm2({ loginEmployeeName }) {
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("Failed to submit details");
+      setLoading(false);
     } finally {
       setLoading(false);
     }
@@ -386,44 +384,44 @@ function ApplicantForm2({ loginEmployeeName }) {
 
       case "lineUp.extraCertification":
         if (!value.trim()) {
-          error = "Enter Your Certification Deatils";
-        } else if (/[^a-zA-Z\s]/.test(value)) {
-          error = "Only Alphabets Allow";
-        } else if (value.length > 100) {
-          error = "Company name cannot exceed 100 characters.";
+          error = "Enter Your Certification Details";
+        } else if (value.trim().split(/\s+/).length > 100) {
+          error = "Certificate details should be within 100 words";
+        } else {
+          error = "";
         }
+        break;
 
         break;
       case "contactNumber":
         if (!value.trim()) {
           error = "Enter Your Contact Number";
         } else if (!/^\d{6,16}$/.test(value)) {
-          // Allow 6 to 11 digits
-          error = "Contact Number must be between 6 and 11 digits.";
+          error = "Contact Number must be between 6 and 16 digits.";
         }
         break;
 
-      case "lineUp.dateOfBirth":
-        if (!value.trim()) {
-          error = "Enter Your Birth Date";
-        } else {
-          const dob = new Date(value);
-          const today = new Date();
-          let age = today.getFullYear() - dob.getFullYear(); // Changed from const to let
-          const month = today.getMonth() - dob.getMonth();
-
-          if (month < 0 || (month === 0 && today.getDate() < dob.getDate())) {
-            age--; // Now valid because 'age' is a let
+        case "lineUp.dateOfBirth":
+          if (!value.trim()) {
+            error = "Enter Your Birth Date";
+          } else {
+            const dob = new Date(value);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear(); // Changed from const to let
+            const month = today.getMonth() - dob.getMonth();
+  
+            if (month < 0 || (month === 0 && today.getDate() < dob.getDate())) {
+              age--; // Now valid because 'age' is a let
+            }
+  
+            if (age < 18) {
+              error = "You must be at least 18 years old to apply.";
+            } else if (isNaN(dob.getTime())) {
+              // Improved validation for invalid date
+              error = "Enter a valid Birth Date";
+            }
           }
-
-          if (age < 18) {
-            error = "You must be at least 18 years old to apply.";
-          } else if (isNaN(dob.getTime())) {
-            // Improved validation for invalid date
-            error = "Enter a valid Birth Date";
-          }
-        }
-        break;
+          break;
 
       case "candidateEmail":
         if (!value.trim()) {
@@ -449,11 +447,9 @@ function ApplicantForm2({ loginEmployeeName }) {
 
       case "currentLocation":
         if (!value.trim()) {
-          error = "Enter Your Job Designation";
-        } else if (!/^[a-zA-Z\s]+$/.test(value)) {
-          error = "Job designation must contain only letters and spaces.";
+          error = "Enter Your Location";
         } else if (value.length > 100) {
-          error = "Job designation cannot exceed 100 characters.";
+          error = "Location cannot exceed 100 characters.";
         }
         break;
 
@@ -493,8 +489,6 @@ function ApplicantForm2({ loginEmployeeName }) {
       case "lineUp.qualification":
         if (!value.trim()) {
           error = "Enter Your Qualification";
-        } else if (!/^[a-zA-Z\s]+$/.test(value)) {
-          error = "Only Alphabets and Spaces are allowed";
         } else if (value.length > 100) {
           error = "Company name cannot exceed 100 characters.";
         }
@@ -533,7 +527,6 @@ function ApplicantForm2({ loginEmployeeName }) {
           error = "Please select whether you are holding any offer.";
         }
         break;
-
       case "task":
         if (!value.trim()) {
           error = "You can only provide up to 200 words";
@@ -544,9 +537,9 @@ function ApplicantForm2({ loginEmployeeName }) {
 
       case "lineUp.experienceYear":
         if (!value.trim()) {
-          error = "Experience Month is required.";
-        } else if (value < 0 || value > 11) {
-          error = "Month must be between 0 and 11.";
+          error = "Experience Year is required.";
+        } else if (value < 0 || value > 12) {
+          error = "Month must be between 0 and 12.";
         }
         break;
 
@@ -579,24 +572,23 @@ function ApplicantForm2({ loginEmployeeName }) {
 
       case "lineUp.preferredLocation":
         if (!value.trim()) {
-          error = "Enter Your Location";
-        } else if (/[^a-zA-Z\s]/.test(value)) {
+          error = "Enter Your Preferred Location";
+        } else if (!/^[a-zA-Z0-9\s,.'-]*$/.test(value)) {
           error = "Only Alphabets and Spaces are allowed";
         }
         break;
 
       case "lineUp.noticePeriod":
         if (!value.trim()) {
-          error = "Enter Your Contact Number";
-        } else if (!/^\d{2,5}$/.test(value)) {
-          // Allow 6 to 11 digits
-          error = "Notice Period must  be 2 or 5 digits.";
+          error = "Enter Your Notice Period";
+        } else if (!/^[a-zA-Z0-9\s,.'-]*$/.test(value)) {
+          error = "Invalid Notice Period";
         }
         break;
       case "lineUp.availabilityForInterview":
         const today = new Date().toISOString().split("T")[0];
         if (!value.trim()) {
-          error = "Enter your available date.";
+          error = "Enter your available date for Interview ";
         } else if (new Date(value) < new Date(today)) {
           error = " Please select today's date or a future date.";
         }
@@ -615,28 +607,6 @@ function ApplicantForm2({ loginEmployeeName }) {
           error = "Select Gender";
         }
         break;
-      // case "lineUp.companyName":
-      //   if (!value.trim()) {
-      //     error = "Enter The Company Name";
-      //   } else if (/[^a-zA-Z\s]/.test(value)) {
-      //     error = "Only Alphabets and Spaces are allowed";
-      //   }
-      //   break;
-      // case "lineUp.offersalary":
-      //   if (!value.trim()) {
-      //     error = "Only Accepted Numbers.";
-      //   }a
-      //   break;
-      // case "lineUp.offerdetails":
-      //   if (!value.trim()) {
-      //     error = "Enter The Offer details.";
-      //   } else if (/[^a-zA-Z\s]/.test(value)) {
-      //     error = "Only Alphabets and Spaces are allowed.";
-      //   } else if (value.split(/\s+/).length > 200) {
-      //     error = "Offer details cannot exceed 200 words.";
-      //   }
-      //   break;
-
       default:
         break;
     }
@@ -1024,8 +994,8 @@ function ApplicantForm2({ loginEmployeeName }) {
                   onInput={(e) => {
                     // Ensure the input value is between 0 and 12
                     let monthValue = e.target.value;
-                    if (monthValue > 12) {
-                      e.target.value = 12;
+                    if (monthValue > 11) {
+                      e.target.value = 11;
                     } else if (monthValue < 0) {
                       e.target.value = 0;
                     }
@@ -1355,6 +1325,11 @@ function ApplicantForm2({ loginEmployeeName }) {
           {loading ? "Submitting..." : "Submit"}
         </button>
       </div>
+      {loading && (
+        <div className="SCE_Loading_Animation">
+          <Loader size={50} color="#ffb281" />
+        </div>
+      )}
       <br />
     </div>
   );

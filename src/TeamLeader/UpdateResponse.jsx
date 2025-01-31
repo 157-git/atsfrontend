@@ -86,7 +86,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
   const fetchUpdateResponseList = async (page, size) => {
     try {
       const res = await fetch(
-        `${API_BASE_URL}/update-candidate-data/${employeeId}/${userType}?searchTerm=${filterValue}&page=${page}&size=${size}`
+        `${API_BASE_URL}/update-response-data/${employeeId}/${userType}?searchTerm=${filterValue}&page=${page}&size=${size}`
       );
       const data = await res.json();
 
@@ -946,7 +946,8 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
             </>
           ) : (
             <>
-              <Modal
+           <div className="update-response-table">
+           <Modal
                 show={showUpdateResponseForm}
                 onHide={closeUpdateForm}
                 size="xl"
@@ -967,6 +968,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                   </div>
                 </Modal.Body>
               </Modal>
+           </div>
             </>
           )}
         </>

@@ -7,45 +7,25 @@ const ShareLink = ({ toggleResumeLink }) => {
   const { employeeId, userType } = useParams();
   const [copyMessage, setCopyMessage] = useState("");
 
-
-  // // Encoding logic to obscure employeeId, userType, and add randomness
-  // const encodeParams = (id, type) => {
-  //   const randomString = Math.random().toString(36).substring(2, 8); // Random 6-character string
-  //   const timestamp = Date.now(); // Current timestamp
-  //   const combinedString = `${id}:${type}:${randomString}:${timestamp}`;
-  //   const encoded = btoa(combinedString); // Base64 encoding
-  //   return encoded;
-  // };
-
-  // // Decoding logic (for use when the form is accessed)
-  // const decodeParams = (encoded) => {
-  //   const decoded = atob(encoded);
-  //   const [id, type] = decoded.split(":"); // Use only the first two parts
-  //   return { id, type };
-  // };
-
-
   // updated code for strong encryption according to requirments
  // exposing directly in file just for testing and normal use purpose, please set this secreat key in env file while deploying on server
   const secretKey = "157industries_pvt_ltd"; // Use a consistent key across components
 
-  // Encryption logic
-  const encryptParams = (id, type) => {
-    try {
-      const data = `${id}:${type}`;
-      const encrypted = CryptoJS.AES.encrypt(data, secretKey).toString();
-      const base64 = btoa(encrypted);
-      const alphanumeric = base64.replace(/[^a-zA-Z0-9]/g, '');
-      return alphanumeric;
-    } catch (error) {
-      console.error("Encryption failed:", error);
-      return null;
-    }
-  };
-  
+// Encryption logic
+const encryptParams = (id, type) => {
+  try {
+    const data = `${id}:${type}`;
+    const encrypted = CryptoJS.AES.encrypt(data, secretKey).toString();
+    return btoa(encrypted); // Convert to base64 for URL safety
+  } catch (error) {
+    console.error("Encryption failed:", error);
+    return null;
+  }
+};
 
-  const encodedParams = encryptParams(employeeId, userType);
-  const shareUrl = `http://rg.157careers.in/157industries/${encodedParams}/candidate-form`;
+// Generate encodedParams for secure URL
+const encodedParams = encryptParams(employeeId, userType);
+const shareUrl = `https://rg.157careers.in/157-careers/${encodedParams}/applicant-form`;
 
   // Share using Web Share API
   const handleShareLink = async () => {

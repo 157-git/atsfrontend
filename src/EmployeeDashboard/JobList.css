@@ -672,3 +672,8 @@ flex-direction: row;
 .action-joblist-options div:hover {
   background-color: #f0f0f0; /* Highlight on hover */
 }
+
+/* Arshad Attar Added CSS 31-01-2025 */
+.job-active-status{
+  width: 100px;
+}

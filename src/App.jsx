@@ -157,7 +157,7 @@ const App = () => {
           ></Route>
 
           <Route
-            path="/157industries/:encodedParams/candidate-form"
+            path="/157-careers/:encodedParams/applicant-form"
             element={<ApplicantForm2 loginEmployeeName={loginEmployeeName} />}
           ></Route>
           <Route
