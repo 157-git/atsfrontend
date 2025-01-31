@@ -79,9 +79,10 @@ const AddJobDescription = ({loginEmployeeName}) => {
     // Update `jdAddedDate` only once on mount
     setFormData((prevFormData) => ({
       ...prevFormData,
-      jdAddedDate: getFormattedDateTime(),
+      jdAddedDate: formatDate(),
     }));
   }, []); 
+
   // Empty dependency array to run only once
   // Validate specific field
   // line 75 to  167 added by sahil karnekar date 3-12-2024

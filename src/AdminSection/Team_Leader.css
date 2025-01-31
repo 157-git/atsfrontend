@@ -8,7 +8,6 @@
 .filter-dropdowns {
   display: flex;
   flex-wrap: wrap;
-
 }
 
 .filter-dropdown {
@@ -176,10 +175,10 @@
 }
 
 .attendancerows {
-
   color:var(--text-color);
   height: 30px;
 }
+
 .attendancerows:hover {
   background-color: #f2f2f2;
 }

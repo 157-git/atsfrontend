@@ -35,6 +35,7 @@ const UpdateResponseFrom = ({
     responseUpdatedDate: "",
     nextInterviewDate: "",
     nextInterviewTiming: "",
+    interviewerName:"",
     requirementId,
     callingTracker: { candidateId: candidateId },
   };
@@ -276,7 +277,7 @@ const UpdateResponseFrom = ({
   };
 
   return (
-    <div className="p-6 bg-white shadow-md rounded-lg max-w-full">
+    <div className="update-response-modal" >
       <div className="mb-4">
         <h6 className="text-lg font-semibold">
           {data.length > 0 ? "Update Interview Response" : "Schedule Interview"}
@@ -316,11 +317,15 @@ const UpdateResponseFrom = ({
                   Update Date
                 </th>
                 <th className="p-2 font-semibold text-xs sm:text-base">
+                Interviewer Name
+                </th>
+                <th className="p-2 font-semibold text-xs sm:text-base">
                   Interview Date
                 </th>
                 <th className="p-2 font-semibold text-xs sm:text-base">
                   Interview Time
                 </th>
+              
               </tr>
             </thead>
             <tbody>
@@ -433,6 +438,21 @@ const UpdateResponseFrom = ({
                   <td className="p-2">
                     <input
                       className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
+                      type="text"
+                      name="interviewerName"
+                      placeholder="Enter Name"
+                      value={response.interviewerName}
+                      onChange={handleInputChange}
+                      disabled={index < data.length - 1}
+                      style={{
+                        boxShadow: `1px 1px 4px var(--Bg-color)`,
+                        lineHeight: "1",
+                      }}
+                    />
+                  </td>
+                  <td className="p-2">
+                    <input
+                      className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
                       type="date"
                       name="nextInterviewDate"
                       value={response.nextInterviewDate}
@@ -458,6 +478,7 @@ const UpdateResponseFrom = ({
                       }}
                     />
                   </td>
+                
                 </tr>
               ))}
               <tr className="border-b">
@@ -615,6 +636,20 @@ const UpdateResponseFrom = ({
                   )}
                 </td>
                 <td className="p-2">
+                    <input
+                      className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
+                      type="text"
+                      name="interviewerName"
+                      value={formData.interviewerName}
+                      onChange={handleInputChange}
+                      placeholder="Enter Name"
+                      style={{
+                        boxShadow: `1px 1px 4px var(--Bg-color)`,
+                        lineHeight: "1",
+                      }}
+                    />
+                  </td>
+                <td className="p-2">
                   <input
                     className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
                     type="date"
@@ -640,6 +675,7 @@ const UpdateResponseFrom = ({
                     }}
                   />
                 </td>
+                
               </tr>
             </tbody>
           </table>
