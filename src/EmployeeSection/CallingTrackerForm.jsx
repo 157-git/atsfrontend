@@ -12,7 +12,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../EmployeeSection/CallingTrackerForm.css";
 import { toast } from "react-toastify";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import Confetti from "react-confetti";
 // import ClipLoader from "react-spinners/ClipLoader";
 import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker";
@@ -20,10 +20,11 @@ import InterviewPreviousQuestion from "./interviewPreviousQuestion";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
 // this libraries added by sahil karnekar date 21-10-2024
-import { TimePicker } from "antd";
+import { Button, Progress, TimePicker, Upload } from "antd";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSocket } from "../EmployeeDashboard/socket";
+import { UploadOutlined } from "@ant-design/icons";
 
 const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
@@ -115,13 +116,17 @@ const CallingTrackerForm = ({
   const [errorForResumeUrl, setErrorForResumeUrl] = useState("");
   // creating state for socket
   const [socket, setSocket] = useState(null);
-
+  const [resumeFileName, setResumeFileName] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [displayProgress, setDisplayProgress] = useState(false);
   useEffect(() => {
     fetchRequirementOptions();
   }, [employeeId]);
 
   useEffect(() => {
     if (initialData) {
+      console.log(initialData);
+      
       const updatedCallingTracker = { ...initialCallingTrackerState };
       const updatedLineUpData = { ...initialLineUpState };
 
@@ -136,6 +141,13 @@ const CallingTrackerForm = ({
           updatedCallingTracker[key] = ensureStringValue(initialData[key]);
         } else if (updatedLineUpData.hasOwnProperty(key)) {
           updatedLineUpData[key] = ensureStringValue(initialData[key]);
+        }
+        if (initialData.fileName !== "") {
+          setResumeFileName(initialData.fileName);
+          setDisplayProgress(true);
+          setUploadProgress(100);
+          setResumeUploaded(true);
+          
         }
       });
 
@@ -790,9 +802,6 @@ const CallingTrackerForm = ({
     const file = event.target.files[0];
     if (!file) return;
 
-    // Show processing toast
-    const toastId = toast.loading("Uploading resume, please wait...");
-
     // Create form data
     const formData = new FormData();
     formData.append("files", file);
@@ -813,23 +822,8 @@ const CallingTrackerForm = ({
 
       const data = await response.json();
       setResumeResponse(data);
-      // Update toast to success
-      toast.update(toastId, {
-        render: "Resume Uploaded and Data Autofilled Successfully!",
-        type: "success",
-        isLoading: false,
-        autoClose: 3000, // Automatically close after 3 seconds
-      });
     } catch (error) {
       console.error("Error uploading file:", error);
-
-      // Update toast to show error
-      toast.update(toastId, {
-        render: "Failed to upload resume. Please try again.",
-        type: "error",
-        isLoading: false,
-        autoClose: 3000,
-      });
     }
   };
 
@@ -899,14 +893,23 @@ const CallingTrackerForm = ({
     }
   };
 
+ 
+
   // this fucntion is made by sahil karnekar on date 25-11-2024
   const handleResumeUploadBoth = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (file) {
-      await handleUploadAndSetData(e);
 
+    setUploadProgress(0); // Start progress
+
+    if (file) {
+      for (let i = 20; i <= 80; i += 20) {
+        setUploadProgress(i);
+        await new Promise((resolve) => setTimeout(resolve, 300)); // Simulated delay
+      }
+      await handleUploadAndSetData(e);
+      setUploadProgress(100); // Mark upload as complete
       setResumeUploaded(true);
 
       setErrorForResumeUrl("");
@@ -943,15 +946,6 @@ const CallingTrackerForm = ({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resumeUrl, setResumeUrl] = useState(null);
-
-  useEffect(() => {
-    if (lineUpData.resume.length !== 0) {
-      setErrorForResumeUrl("Please Click on EYE Button to View Resume");
-    }
-    if (initialData !== null && initialData.resume !== "") {
-      setErrorForResumeUrl("Please Click on EYE Button to View Resume");
-    }
-  }, [])
 
   return (
     <div className="calling-tracker-main">
@@ -996,7 +990,11 @@ const CallingTrackerForm = ({
           <div className="calling-tracker-form">
             {/* this code line 744 to 766 added by sahil karnekar 30-10-2024 */}
             <div className="calling-tracker-row-white">
-              <div className="calling-tracker-field">
+              <div className="calling-tracker-field"
+              style={{
+                justifyContent:"center"
+              }}
+              >
                 <div
                   className="calling-tracker-field-sub-div"
                   style={{
@@ -1005,8 +1003,7 @@ const CallingTrackerForm = ({
                     justifyContent: "center",
                   }}
                 >
-                  This field used for autofetch data, Please verify before
-                  submitting 👉
+                  Great talent won't wait - add them now, hire the best 👉
                 </div>
               </div>
               <div className="calling-tracker-field">
@@ -1026,15 +1023,52 @@ const CallingTrackerForm = ({
                   <div
                     style={{
                       display: "flex",
+                      justifyContent:"space-between"
                     }}
                   >
-                    <input
+                    {/* <input
                       type="file"
                       name="resume"
                       onChange={handleResumeUploadBoth}
                       accept=".pdf,.doc,.docx"
                       className="plain-input"
-                    />
+                    /> */}
+
+<div className="uploadantdc"
+style={{
+  width:"75%"
+}}>
+<Upload
+  accept=".pdf,.doc,.docx"
+  showUploadList={false} // Hide file preview list
+  beforeUpload={async (file) => {
+    setDisplayProgress(false);
+setResumeFileName(file.name);
+setDisplayProgress(true);
+    setUploadProgress(0);
+    console.log(file);
+    
+    // Create a synthetic event to match input file event structure
+    const syntheticEvent = { target: { files: [file] } };
+
+    // Call handleResumeUploadBoth function
+    await handleResumeUploadBoth(syntheticEvent);
+    return false; // Prevent automatic upload
+  }}
+>
+  <Button
+  icon={<UploadOutlined />}>{resumeFileName.length > 10
+    ? `${resumeFileName.substring(0, 20)}...`
+    : resumeFileName || "Click to Upload"}</Button>
+</Upload>
+{
+  displayProgress && (
+<Progress percent={uploadProgress} />
+  )
+}
+
+</div>
+
                     {resumeUploaded && (
                       <FontAwesomeIcon
                         icon={faCheckCircle}
@@ -1049,7 +1083,11 @@ const CallingTrackerForm = ({
                     {errors.resume && (
                       <div className="error-message">{errors.resume}</div>
                     )}
-                    <p className="calling-tracker-popup-open-btn">
+                    <p className="calling-tracker-popup-open-btn"
+                    style={{
+                      maxHeight:"30px"
+                    }}
+                    >
                       <i
                         className="fas fa-eye"
                         onClick={() => {
@@ -1105,7 +1143,11 @@ const CallingTrackerForm = ({
               </div>
               <div className="calling-tracker-field">
                 <label>Recruiter Name</label>
-                <div className="calling-tracker-two-input-container">
+                <div className="calling-tracker-two-input-container"
+                style={{
+                  justifyContent:"space-between"
+                }}
+                >
                   <div className="calling-tracker-two-input">
                     <input
                       type="text"
@@ -1116,7 +1158,11 @@ const CallingTrackerForm = ({
                       className="plain-input"
                     />
                   </div>
-                  <div className="calling-tracker-two-input">
+                  <div className="calling-tracker-two-input"
+                  style={{
+                    width:"auto"
+                  }}
+                  >
                     <button
                       type="button"
                       onClick={handleShow}
