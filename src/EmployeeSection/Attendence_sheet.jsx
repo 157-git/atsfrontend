@@ -335,12 +335,15 @@ const Attendance = ({loginEmployeeName,onCloseIncentive}) => {
   };
 
   const fetchEmployeeCount = async (ids, role) => {
-    try {
-      const response = await axios.get(
-        `${API_BASE_URL}/head-count/${role}/${ids}`
-      );
-      setEmployeeCount(response.data);
-    } catch (error) {}
+    if (userType !== "Recruiters") {
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/head-count/${role}/${ids}`
+        );
+        setEmployeeCount(response.data);
+      } catch (error) {}
+    }
+ 
   };
 
   useEffect(() => {
