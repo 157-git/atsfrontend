@@ -151,9 +151,16 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
 
   const calculateTimeDifference = (start, end) => {
     if (!start || !end) return "N/A";
+  
     try {
       const startDate = parseISO(start);
       const endDate = parseISO(end);
+  
+      // Check if parsed dates are valid
+      if (isNaN(startDate) || isNaN(endDate)) {
+        return "Invalid date";
+      }
+  
       const duration = intervalToDuration({ start: startDate, end: endDate });
       return formatDuration(duration, {
         format: ["days", "hours", "minutes", "seconds"],
@@ -162,6 +169,7 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
       return "Invalid date";
     }
   };
+  
 
   const handleViewClick = (roundsList) => {
     setSelectedRounds(roundsList);
