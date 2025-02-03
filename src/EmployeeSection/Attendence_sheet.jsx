@@ -22,6 +22,8 @@ import "../EmployeeSection/Attendence_sheet.css";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
+import { Avatar, Checkbox, Divider, Tag } from "antd";
+import { getUserImageFromApiForReport } from "../Reports/getUserImageFromApiForReport";
 
 const Attendance = ({loginEmployeeName,onCloseIncentive}) => {
   const { employeeId, userType } = useParams();
@@ -547,20 +549,64 @@ const handleFilterOptionClick = (key) => {
   }
 };
 
+
+const [allImagesForManagers, setAllImagesForManagers] = useState([]); // Initialize as an object
+const [allImagesForTeamLeaders, setAllImagesForTeamLeaders] = useState([]); // Initialize as an object
+const [allImagesForRecruiters, setAllImagesForRecruiters] = useState([]); // Initialize as an object
+  useEffect(() => {
+    const fetchAllImagesForManagers = async () => {
+      const images = await Promise.all(
+        managers.map(async (manager) => {
+          return await getUserImageFromApiForReport(manager.managerId, manager.jobRole);
+        })
+      );
+      setAllImagesForManagers(images); // Set the array of image URLs
+    };
+
+    fetchAllImagesForManagers();
+  }, [managers]);
+  useEffect(() => {
+    const fetchAllImagesForTeamLeaders = async () => {
+      const images = await Promise.all(
+        teamLeaders.map(async (teamLeader) => {
+          return await getUserImageFromApiForReport(teamLeader.teamLeaderId, teamLeader.jobRole);
+        })
+      );
+      setAllImagesForTeamLeaders(images); // Set the array of image URLs
+    };
+
+    fetchAllImagesForTeamLeaders();
+  }, [teamLeaders]);
+  useEffect(() => {
+    const fetchAllImagesForRecruiters = async () => {
+      const images = await Promise.all(
+        recruiters.map(async (recruiter) => {
+          return await getUserImageFromApiForReport(recruiter.employeeId, recruiter.jobRole);
+        })
+      );
+      setAllImagesForRecruiters(images); // Set the array of image URLs
+    };
+
+    fetchAllImagesForRecruiters();
+  }, [managers]);
+
 // Arshad Attar Work On Fillter 09-10-2024 ( Start line 518 )
 
   const renderManagers = () => {
-    return managers.map((manager) => (
+    return managers.map((manager, index) => (
       <div key={manager.managerId} className="dropdown-section">
         <div className="PI-dropdown-row">
-          <input
-            type="checkbox"
-            checked={selectedManagers.some(
+        <Checkbox checked={selectedManagers.some(
               (item) => item.managerId === manager.managerId
             )}
-            onChange={() => handleManagerCheckboxChange(manager)}
-          />
-          <label
+            onChange={() => handleManagerCheckboxChange(manager)}></Checkbox>
+            <Avatar
+                                         src={
+                                           allImagesForManagers.length > 0 ?
+                                             allImagesForManagers[index] !== null ? allImagesForManagers[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                                         }
+                                       />
+                <label
             className="clickable-label"
             onClick={() => toggleManagerExpand(manager.managerId)}
           >
@@ -573,27 +619,33 @@ const handleFilterOptionClick = (key) => {
               }`}
             ></i>
           </label>
+   
         </div>
+        <Divider />
         {expandedManagerId === manager.managerId && (
           <div className="PI-dropdown-column ">
             {renderTeamLeaders(manager.managerId)}
           </div>
         )}
       </div>
+      
     ));
   };
 
   const renderTeamLeaders = (managerId) => {
-    return teamLeaders.map((teamLeader) => (
+    return teamLeaders.map((teamLeader, index) => (
       <div key={teamLeader.teamLeaderId} className="PI-dropdown-section">
         <div className="PI-dropdown-row">
-          <input
-            type="checkbox"
-            checked={selectedTeamLeaders.some(
+        <Checkbox checked={selectedTeamLeaders.some(
               (item) => item.teamLeaderId === teamLeader.teamLeaderId
             )}
-            onChange={() => handleTeamLeaderCheckboxChange(teamLeader)}
-          />
+            onChange={() => handleTeamLeaderCheckboxChange(teamLeader)}></Checkbox>
+             <Avatar
+                                         src={
+                                           allImagesForTeamLeaders.length > 0 ?
+                                           allImagesForTeamLeaders[index] !== null ? allImagesForTeamLeaders[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                                         }
+                                       />
           <label
             className="clickable-label"
             onClick={() => toggleTeamLeaderExpand(teamLeader.teamLeaderId)}
@@ -608,6 +660,7 @@ const handleFilterOptionClick = (key) => {
             ></i>
           </label>
         </div>
+        <Divider />
         {expandedTeamLeaderId === teamLeader.teamLeaderId && (
           <div className="PI-dropdown-column ">{renderRecruiters()}</div>
         )}
@@ -616,17 +669,24 @@ const handleFilterOptionClick = (key) => {
   };
 
   const renderRecruiters = () => {
-    return recruiters.map((recruiter) => (
+    return recruiters.map((recruiter, index) => (
+      <>
       <div key={recruiter.employeeId} className="PI-dropdown-row">
-        <input
-          type="checkbox"
-          checked={selectedRecruiters.some(
+        <Checkbox checked={selectedRecruiters.some(
             (item) => item.recruiterId === recruiter.employeeId
           )}
-          onChange={() => handleRecruiterCheckboxChange(recruiter)}
-        />
+          onChange={() => handleRecruiterCheckboxChange(recruiter)}></Checkbox>
+          <Avatar
+                                         src={
+                                          allImagesForRecruiters.length > 0 ?
+                                          allImagesForRecruiters[index] !== null ? allImagesForRecruiters[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                                         }
+                                       />
         <label>{recruiter.employeeName}</label>
+       
       </div>
+       <Divider />
+       </>
     ));
   };
 
@@ -677,7 +737,7 @@ const handleFilterOptionClick = (key) => {
                 ></i>
               </div>
               {dropdownOpen && (
-                <div className="PI-dropdown-content">
+                <div className="PI-dropdown-content newClassForTeendanceDropDoen">
                   {userType === "SuperUser" && renderManagers()}
                   {userType === "Manager" && renderTeamLeaders(employeeId)}
                   {userType === "TeamLeader" && renderRecruiters(employeeId)}

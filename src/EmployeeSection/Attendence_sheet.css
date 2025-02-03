@@ -445,7 +445,10 @@ html::-webkit-scrollbar {
   z-index: 10;
   /* border: 1px solid black; */
 }
-
+.newClassForTeendanceDropDoen{
+  margin-left: 0;
+  border: 1px solid gray;
+}
 .PI-dropdown-section {
   margin-bottom: 5px;
   padding-left: 10px; /* Indent each hierarchy level */
