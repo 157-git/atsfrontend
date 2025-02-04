@@ -193,13 +193,15 @@ const UpdateResponseFrom = ({
 
 
         if (data.length === 0) {
+          console.log(formData.interviewRound);
+          console.log(formData.interviewResponse);
           const additionalData = {
-            mailResponse: formatDateToIST(currentDateTime),
+            mailResponse: currentDateTime,
             interviewRoundsList: [
               {
-                interviewRound: "shortListed For Technical Round",
-                roundResponse: "shortListed For Technical Round",
-                time: formatDateToIST(currentDateTime),
+                interviewRound: formData.interviewRound,
+                roundResponse: formData.interviewResponse,
+                time: currentDateTime,
                 diffBTNRoundToNextRound: 0,
               },
             ],
@@ -220,11 +222,14 @@ const UpdateResponseFrom = ({
             setSubmited(false);
           }
         } else {
+          console.log(formData.interviewRound);
+          console.log(formData.interviewResponse);
+          
           const additionalData = {
             interviewRoundsList: [
               {
-                interviewRound: firstResponse.interviewRound,
-                roundResponse: firstResponse.interviewResponse,
+                interviewRound: formData.interviewRound,
+                roundResponse: formData.interviewResponse,
                 time: currentDateTime,
                 diffBTNRoundToNextRound: difference,
               },
@@ -284,11 +289,16 @@ const UpdateResponseFrom = ({
         </h6>
       </div>
       {/* line 222 to 233 updated by sahil karnekar date 14-11-2024 */}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}
+      style={{
+          overflowX:"scroll"
+      }}
+      >
         <div
           className="overflow-x-auto"
           style={{
             width: "fit-content",
+          
           }}
         >
           <table className="min-w-full border-collapse table-auto">

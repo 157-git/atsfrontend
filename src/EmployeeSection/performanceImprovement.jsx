@@ -6,6 +6,7 @@ import {
   formatDuration,
   intervalToDuration,
   differenceInSeconds,
+  addDays,
 } from "date-fns";
 import {
   startOfMonth,
@@ -23,6 +24,7 @@ import { API_BASE_URL } from "../api/api";
 // this loader is imported by sahil karnekar date 24-10-2024
 import Loader from "./loader";
 import PerformanceMeter from "./performanceMeter";
+import { convertNewDateToFormattedDateTime } from "../TeamLeader/convertNewDateToFormattedDateTime";
 
 const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   const { employeeId, userType } = useParams();
@@ -170,6 +172,9 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
     }
   };
   
+  const calculateFormFillingDuration =()=>{
+    
+  }
 
   const handleViewClick = (roundsList) => {
     setSelectedRounds(roundsList);
@@ -193,7 +198,7 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   };
 
   const processes = [
-    "Candidate Form Filling Duration",
+    "Candidate Form Filling Duration (5 Minutes/Form)",
     "Added to Line Up",
     "Candidate Information Mail Sent To Client",
     "Mail Response From Client",
@@ -284,6 +289,8 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   }, [selectedManagers, selectedTeamLeaders]);
 
   const fetchJobIds = async (ids, startDate, endDate, role) => {
+    console.log(ids, startDate, endDate, role);
+    
     try {
       const response = await axios.get(
         `${API_BASE_URL}/performance-jobIds?empIds=${ids}&startDate=${startDate}&endDate=${endDate}&jobRole=${role}`
@@ -380,6 +387,7 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
           ]
     );
   };
+console.log(processes);
 
   const toggleManagerExpand = (managerId) => {
     setExpandedManagerId(expandedManagerId === managerId ? null : managerId);
@@ -405,7 +413,7 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
     switch (selectedRange) {
       case "currentMonth":
         start = startOfMonth(today);
-        end = today;
+        end = addDays(today, 1);
         break;
       case "lastMonth":
         start = startOfMonth(subMonths(today, 1));
@@ -444,6 +452,62 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
     const date = new Date(event.target.value);
     setCustomEndDate(event.target.value);
     setEndDate(format(endOfDay(date), "yyyy-MM-dd"));
+  };
+
+  const getTotalMinutes = (timeString) => {
+    let hours = 0, minutes = 0;
+  
+    const hourMatch = timeString.match(/(\d+)\s*hour/);
+    const minuteMatch = timeString.match(/(\d+)\s*minute/);
+  
+    if (hourMatch) hours = parseInt(hourMatch[1]);
+    if (minuteMatch) minutes = parseInt(minuteMatch[1]);
+  
+    return hours * 60 + minutes;
+  };
+  
+  const getTimeDifference = (data) => {
+    const totalMinutes1 = getTotalMinutes(sumTimeDurations(data)); // Convert sumTimeDurations result into minutes
+    const totalMinutes2 = getTotalMinutes(convertMinutesToHours(data.length * 5)); // Convert convertMinutesToHours result into minutes
+  
+    const difference = Math.abs(totalMinutes1 - totalMinutes2); // Ensure positive difference
+  
+    return convertMinutesToHours(difference); // Convert back to hours and minutes
+  };
+  
+  const sumTimeDurations = (timeStrings) => {
+    let totalMinutes = 0;
+    let totalSeconds = 0;
+  
+    timeStrings.forEach((timeStr) => {
+      let hours = 0, minutes = 0, seconds = 0;
+  
+      const hourMatch = timeStr.candidateFormFillingDuration.match(/(\d+)\s*hour/);
+      const minuteMatch = timeStr.candidateFormFillingDuration.match(/(\d+)\s*minute/);
+      const secondMatch = timeStr.candidateFormFillingDuration.match(/(\d+)\s*second/);
+  
+      if (hourMatch) hours = parseInt(hourMatch[1]);
+      if (minuteMatch) minutes = parseInt(minuteMatch[1]);
+      if (secondMatch) seconds = parseInt(secondMatch[1]);
+  
+      totalMinutes += hours * 60 + minutes;
+      totalSeconds += seconds;
+    });
+  
+    // Convert extra seconds into minutes
+    totalMinutes += Math.floor(totalSeconds / 60);
+    const remainingSeconds = totalSeconds % 60;
+  
+    const finalHours = Math.floor(totalMinutes / 60);
+    const finalMinutes = totalMinutes % 60;
+  
+    return `${finalHours} hours and ${finalMinutes} minutes`;
+  };
+
+  const convertMinutesToHours = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return hours > 0 ? `${hours} hours and ${remainingMinutes} minutes` : `${remainingMinutes} minutes`;
   };
 
   const handleGetFilteredData = async () => {
@@ -505,6 +569,12 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
       role = userType;
     }
 
+    console.log(ids);
+    console.log(role);
+    console.log(startDate);
+    console.log(endDate);    
+    console.log(jobId);    
+
     try {
       const response = await axios.get(
         `${API_BASE_URL}/fetch-process-timings`,
@@ -529,6 +599,7 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
       setIsLoading(false); // Stop the loader after the process is done
     }
   };
+console.log(data);
 
   const uniqueClientDetails = clientDetails.reduce((acc, current) => {
     const x = acc.find((item) => item.requirementId === current.requirementId);
@@ -973,12 +1044,12 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
                 <td className="PIE-timetrackertabledata">
                   {item.candidateFormFillingDuration}
                 </td>
-                <td className="PIE-timetrackertabledata">{item.lineup}</td>
+                <td className="PIE-timetrackertabledata">{convertNewDateToFormattedDateTime(item.lineup)}</td>
                 <td className="PIE-timetrackertabledata">
                   {calculateTimeDifference(item?.lineup, item?.mailToClient)}
                 </td>
                 <td className="PIE-timetrackertabledata">
-                  {item.mailToClient}
+                  {convertNewDateToFormattedDateTime(item.mailToClient)}
                 </td>
                 <td className="PIE-timetrackertabledata">
                   {calculateTimeDifference(
@@ -987,10 +1058,14 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
                   )}
                 </td>
                 <td className="PIE-timetrackertabledata">
-                  {item.mailResponse}
+                  {convertNewDateToFormattedDateTime(item.mailResponse)}
                 </td>
                 <td className="PIE-timetrackertabledata">
                   {item.diffBetweenMailResponseAndFirstInterview}
+                  {calculateTimeDifference(
+                    item?.mailResponse,
+                    item && item.interviewRoundsList.length > 0 && item.interviewRoundsList[1] && item.interviewRoundsList[1].time && (item.interviewRoundsList[1].time)
+                  )}
                 </td>
                 <td className="PIE-timetrackertabledata">
                   <button
@@ -1005,28 +1080,29 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
                   </button>
                 </td>
                 <td className="PIE-timetrackertabledata">
-                  {item.totalInterviewTime}
+                  {/* {item.totalInterviewTime} */}
+                  {calculateTotalInterviewTime(item.interviewRoundsList)}
                 </td>
                 <td className="PIE-timetrackertabledata">
                   {item.diffBetweenInterviewAndDocument}
                 </td>
                 <td className="PIE-timetrackertabledata">
-                  {item.sendingDocument}
+                  {convertNewDateToFormattedDateTime(item.sendingDocument)}
                 </td>
                 <td className="PIE-timetrackertabledata">
                   {item.diffBetweenDocumentAndLetter}
                 </td>
-                <td className="timetrackertabledata">{item.issuingLetter}</td>
+                <td className="timetrackertabledata">{convertNewDateToFormattedDateTime(item.issuingLetter)}</td>
                 <td className="PIE-timetrackertabledata">
                   {item.diffBetweenLetterAndResponse}
                 </td>
                 <td className="PIE-timetrackertabledata">
-                  {item.letterResponseUpdating}
+                  {convertNewDateToFormattedDateTime(item.letterResponseUpdating)}
                 </td>
                 <td className="PIE-timetrackertabledata">
                   {item.diffBetweenResponseAndJoining}
                 </td>
-                <td className="timetrackertabledata">{item.joiningProcess}</td>
+                <td className="timetrackertabledata">{convertNewDateToFormattedDateTime(item.joiningProcess)}</td>
                 <td className="PIE-timetrackertabledata">
                   {item.diffBetweenJoiningAndJoinDate}
                 </td>
@@ -1056,12 +1132,12 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
                 <tr key={index}>
                   <td className="PIE-timetrackertabledata">{index + 1}</td>
                   <td className="PIE-timetrackertabledata">{process}</td>
-                  <td className="PIE-timetrackertabledata"></td>
+                  <td className="PIE-timetrackertabledata">{index === 0 && convertMinutesToHours(data.length * 5)}</td>
                   <td className="PIE-timetrackertabledata">
-                    {formFillingTotal}
+                    {index === 0 && sumTimeDurations(data)}
                   </td>
                   <td className="PIE-timetrackertabledata">
-                    {formFillingTotal}
+                  {index === 0 && getTimeDifference(data)}
                   </td>
                 </tr>
               ))}
@@ -1088,8 +1164,8 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
             <tbody>
               {selectedRounds.map((round, index) => (
                 <tr key={index}>
-                  <td>{round.round}</td>
-                  <td>{round.time}</td>
+                  <td>{round.response}</td>
+                  <td>{convertNewDateToFormattedDateTime(round.time)}</td>
                 </tr>
               ))}
             </tbody>
