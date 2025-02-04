@@ -1,4 +1,5 @@
 import axios from "axios";
+
 // export const API_BASE_URL = "https://rg.157careers.in/api/ats/157industries";
 // export const CHAT_BASE_URL = "http://rg.157careers.in";
 

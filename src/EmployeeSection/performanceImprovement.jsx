@@ -198,7 +198,7 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   };
 
   const processes = [
-    "Candidate Form Filling Duration",
+    "Candidate Form Filling Duration (5 Minutes/Form)",
     "Added to Line Up",
     "Candidate Information Mail Sent To Client",
     "Mail Response From Client",
