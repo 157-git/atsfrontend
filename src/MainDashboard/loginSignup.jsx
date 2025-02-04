@@ -504,7 +504,7 @@ const LoginSignup = ({ onLogin }) => {
                       className="account-create-span"
                       onClick={() => setShowForgotPassword(true)}
                     >
-                      Forgot password ?
+                      Forgot password ? ?
                     </span>
                   </div>
                 </form>
