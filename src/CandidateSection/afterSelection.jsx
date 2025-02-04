@@ -58,6 +58,7 @@ const AfterSelection = ({
   const [joiningDate, setJoiningDate] = useState();
   const [dateAfter90days, setDateAfter90days] = useState(null);
   const [remainingDays, setRemainingDays] = useState(null);
+  const [offerLatterIssuedStatus, setOfferLatterIssuedStatus] = useState("");
 
   const { userType } = useParams();
 
@@ -171,7 +172,7 @@ const AfterSelection = ({
     setAdharCardUploaded(file);
     try {
       const additionalData = {
-        sendingDocument: formatDateToIST(new Date()),
+        sendingDocument: new Date(),
       };
       console.log(additionalData);
       const response1 = await axios.put(
@@ -240,12 +241,47 @@ const AfterSelection = ({
     }
   };
 
+  const handleOfferLetterIssuedChange = async (e) => {
+    const offerLetterIssued = e.target.value;
+    setOfferLatterIssuedStatus(offerLetterIssued);
+    if (offerLetterIssued === "yes") {
+      try {
+        const additionalData = {
+          issueOfferLetter: new Date(),
+        };
+        console.log(additionalData);
+        const response1 = await axios.put(
+          `${API_BASE_URL}/update-performance/${performanceId}`,
+          additionalData
+        );
+        console.log("Second API Response:", response1.data);
+      } catch (error) {
+        console.log(error);
+      }
+    } else if(offerLetterIssued === "no"){
+      try {
+        const additionalData = {
+          issueOfferLetter: "N/A",
+        };
+        console.log(additionalData);
+        const response1 = await axios.put(
+          `${API_BASE_URL}/update-performance/${performanceId}`,
+          additionalData
+        );
+        console.log("Second API Response:", response1.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  
+  };
+
   const handleOfferLetterAcceptedChange = async (e) => {
     const accepted = e.target.value;
     setOfferLetterAccepted(accepted);
     try {
       const additionalData = {
-        issueOfferLetter: new Date(),
+        letterResponse: new Date(),
       };
       console.log(additionalData);
       const response1 = await axios.put(
@@ -641,7 +677,31 @@ const AfterSelection = ({
                       </div>
 
                       <div className="after-document-fisrt">
-                        <div className="after-mail-div">
+
+                      <div className="after-mail-div">
+                          <div className="after-lable-div">
+                            <label
+                              htmlFor="offerLetterReceived"
+                              className="after-label"
+                            >
+                              Offer Letter Issued:
+                            </label>
+                          </div>
+
+                          <select
+                            id="offerLetterReceived"
+                            className="after-select"
+                            value={offerLatterIssuedStatus}
+                            onChange={handleOfferLetterIssuedChange}
+                          >
+                            <option value="">Select Option</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
+                        </div>
+
+
+                        {/* <div className="after-mail-div">
                           <div className="after-lable-div">
                             <label
                               htmlFor="offerLetterReceived"
@@ -661,7 +721,7 @@ const AfterSelection = ({
                             <option value="yes">Yes</option>
                             <option value="no">No</option>
                           </select>
-                        </div>
+                        </div> */}
                         <div className="after-mail-div">
                           <div className="after-lable-div">
                             <label
