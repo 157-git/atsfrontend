@@ -303,3 +303,7 @@
     /* border: 1px solid green; */
     padding: 5px;
   }
+.fixPerformanceprocesstable100{
+  width: 100%;
+  overflow-x: scroll;
+}

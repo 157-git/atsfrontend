@@ -1069,7 +1069,7 @@ setDisplayProgress(true);
 
 </div>
 
-                    {resumeUploaded && (
+                    {/* {resumeUploaded && (
                       <FontAwesomeIcon
                         icon={faCheckCircle}
                         style={{
@@ -1079,7 +1079,7 @@ setDisplayProgress(true);
                           fontSize: "22px",
                         }}
                       />
-                    )}
+                    )} */}
                     {errors.resume && (
                       <div className="error-message">{errors.resume}</div>
                     )}
@@ -1345,7 +1345,7 @@ setDisplayProgress(true);
                   <div className="calling-tracker-two-input">
                     <input
                       placeholder="Your Incentive"
-                      value={callingTracker.incentive}
+                      value={callingTracker.incentive || "0"}
                       type="text"
                       onChange={handleIncentiveChange}
                     />
