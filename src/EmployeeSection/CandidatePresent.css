@@ -1,0 +1,138 @@
+/* Rajlaxmi Jagadale Create that Duplicate-candidate Date 04-02-2025 */
+
+.candidate-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f7fa;
+    padding-top: 10px;
+  }
+
+  .candidate-form {
+    display: flex;
+    position: relative;  
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    width: 60%;
+    background-color: #f4f7fa;
+    padding-right: 10px;    
+    box-sizing: border-box;
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: black;
+  }
+  
+  .candidate-image-container {
+    flex: 1;
+    display: flex;
+    padding-left: 25px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    align-items: center;
+}
+
+.candidate-image {
+    width: 75%; 
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    
+}
+  
+  .candidate-details {
+    flex: 3;
+    padding-top: 10px;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .candidate-info {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Arial', sans-serif;
+    line-height: 3px;
+  }
+  
+  .candidate-name {
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .recruiter-name {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 5px;
+  }
+  
+  .candidate-description {
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0;
+    padding-top: 7px;
+  }
+  
+  .candidate-description b {
+    color: #333;
+  }
+  
+  .candidate-status {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 2px;
+  }
+  
+  .job-info {
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0;
+  }
+  
+  .job-info b {
+    color: #333;
+  }
+  .status-green {
+    color: green;
+  }
+  
+  .status-orange {
+    color: orange;
+  }
+  
+  .status-red {
+    color: red;
+  }
+  
+  .status-yellow {
+    color: yellow;
+  }
+  
+  @media (max-width: 768px) {
+    .candidate-form {
+      flex-direction: column;
+      padding: 15px;
+    }
+  
+    .candidate-image-container, .candidate-details {
+      padding: 10px;
+    }
+  
+    .candidate-name {
+      font-size: 22px;
+    }
+  
+    .candidate-status {
+      font-size: 14px;
+    }
+  }
+  

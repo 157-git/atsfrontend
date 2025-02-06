@@ -33,6 +33,9 @@ const convertTimeToSeconds = (timeString) => {
 export  const subtractTimeDurations = (time1, time2) => {
     const seconds1 = convertTimeToSeconds(time1);
     const seconds2 = convertTimeToSeconds(time2);
+    if (seconds2 === 0) {
+      return "0";
+    }
   
     const difference = seconds1 - seconds2;
     

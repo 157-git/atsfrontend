@@ -17,7 +17,7 @@ export const removeLeadingZeros = (timeString) => {
     }
   }
 
-  let result = filteredParts.length > 0 ? filteredParts.join(", ") : "0 seconds";
+  let result = filteredParts.length > 0 ? filteredParts.join(", ") : "";
   
   return isNegative ? `- ${result}` : result;
   };
@@ -33,7 +33,7 @@ export const removeLeadingZeros = (timeString) => {
       }
     }
   
-    let result = filteredParts.length > 0 ? filteredParts.join(", ") : "0 seconds";
+    let result = filteredParts.length > 0 ? filteredParts.join(", ") : "";
     
     return isNegative ? `- ${result}` : result; // Add '-' back if originally negative
   };

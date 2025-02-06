@@ -25,6 +25,7 @@ import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { UploadOutlined } from "@ant-design/icons";
+import CandidatePresentComponent from "./CandidatePresentComponent";
 
 const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
@@ -119,6 +120,12 @@ const CallingTrackerForm = ({
   const [resumeFileName, setResumeFileName] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
   const [displayProgress, setDisplayProgress] = useState(false);
+  const [candidateData, setCandidateData] = useState(null);
+  const [isFormVisible, setIsFormVisible] = useState(false);
+
+  const handleCloseForm = () => {
+    setIsFormVisible(false);
+  };
   useEffect(() => {
     fetchRequirementOptions();
   }, [employeeId]);
@@ -265,7 +272,20 @@ const CallingTrackerForm = ({
     }
     return errors;
   };
-
+  const handleBlurEmailChange = async () => {
+    if (callingTracker.candidateEmail) {
+      try {
+        const response = await axios.get(`http://192.168.1.42:9090/api/ats/157industries/duplicate-candidates/${callingTracker.candidateEmail}`);
+       const data = response.data;
+        setCandidateData(data);
+        setIsFormVisible(true);
+        console.log("API Response:", response.data);
+      } catch (error) {
+        console.error("API Error:", error);
+      }
+    }
+  };
+  
   const handleChange = (e) => {
     const { name, value } = e.target || e;
   
@@ -976,6 +996,7 @@ const CallingTrackerForm = ({
 
       <section className="calling-tracker-submain">
         {loading && <Loader />}
+        {isFormVisible && <CandidatePresentComponent candidateData={candidateData} onClose={handleCloseForm} />}
         <form onSubmit={handleSubmit}>
           {showConfetti && (
             <Confetti
@@ -1205,14 +1226,25 @@ setDisplayProgress(true);
                 <div className="calling-tracker-field-sub-div">
                   {/* this line added by sahil date 22-10-2024 */}
                   <div className="setRequiredStarDiv">
-                    <input
+                    {/* <input
                       type="email"
                       name="candidateEmail"
                       value={callingTracker.candidateEmail}
                       onChange={handleChange}
                       className={`plain-input`}
                       placeholder="Enter Candidate Email"
-                    />
+                    /> */}
+
+<input
+  type="email"
+  name="candidateEmail"
+  value={callingTracker.candidateEmail}
+  onChange={handleChange}
+  onBlur={handleBlurEmailChange} // Calls API when the user leaves the field
+  className="plain-input"
+  placeholder="Enter Candidate Email"
+/>
+
                     {/* this line added by sahil date 22-10-2024 */}
                     {!callingTracker.candidateEmail && (
                       <span className="requiredFieldStar">*</span>
