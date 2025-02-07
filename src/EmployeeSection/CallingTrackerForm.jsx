@@ -275,7 +275,7 @@ const CallingTrackerForm = ({
   const handleBlurEmailChange = async () => {
     if (callingTracker.candidateEmail) {
       try {
-        const response = await axios.get(`http://192.168.1.42:9090/api/ats/157industries/duplicate-candidates/${callingTracker.candidateEmail}`);
+        const response = await axios.get(`${API_BASE_URL}/duplicate-candidates/${callingTracker.candidateEmail}`);
        const data = response.data;
         setCandidateData(data);
         setIsFormVisible(true);
