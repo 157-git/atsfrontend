@@ -87,33 +87,42 @@ const CandidatePresentComponent = ({ candidateData, onClose }) => {
   return (
     <div className="candidate-form-container">
       <div className="candidate-form">
-        <button className="close-button" onClick={onClose}>
-          <FontAwesomeIcon icon={faTimes} />
-        </button>
-
-        <div className="candidate-image-container">
-          <img src={candidateImage} alt="Candidate" className="candidate-image" />
+        <div style={{
+          width:"100px"
+        }}>
+          <img src={candidateImage} alt="Candidate" className="candidate-image"
+          style={{
+            width:"90px"
+          }}
+          />
         </div>
 
         <div className="candidate-details">
           {candidateData ? (
             <div className="candidate-info">
               <h2 className="candidate-name">Name: {candidateData.candidateName}</h2>
-              <h3 className="recruiter-name">Recruiter Name: {candidateData.recruiterName}</h3><br />
+              <h4 className="recruiter-name">Recruiter Name: {candidateData.recruiterName}</h4>
               <p className="candidate-description">{getStatusMessage()}</p>
               <div className="job-info">
-                <p><b>Job ID:</b> {candidateData.requirementId}</p>
-                <p><b>Company:</b> {candidateData.requirementCompany}</p>
-                <p><b>Designation:</b> {candidateData.jobDesignation}</p>
+                <div className="compdesdiv1">
+                <p className="paragraphWidth50"><b>Job ID:</b> {candidateData.requirementId}</p>
+                <p className="paragraphWidth50"><b>Company:</b> {candidateData.requirementCompany}</p>
+             </div>
               </div>
-              <p className={`candidate-status ${getStatusClass(candidateData.finalStatus)}`}>
+              <div className="compdesdiv1">
+              <p className="paragraphWidth50"><b>Designation:</b> {candidateData.jobDesignation}</p>
+              <p className={`candidate-status ${getStatusClass(candidateData.finalStatus)} paragraphWidth50`}>
                 <b>Final Status:</b> {candidateData.finalStatus}
               </p>
+              </div>
             </div>
           ) : (
             <p>Loading Data...</p>
           )}
         </div>
+        <button className="close-buttonPresentForm" onClick={onClose}>
+          <FontAwesomeIcon icon={faTimes} />
+        </button>
       </div>
     </div>
   );

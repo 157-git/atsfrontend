@@ -7,19 +7,25 @@ export const removeLeadingZeros = (timeString) => {
   };
 
   export const cleanTimeStringSpaces = (timeString) => {
-    let isNegative = timeString.startsWith("-"); // Check if the time is negative
-  let parts = timeString.replace("-", "").trim().split(" ").map(part => part.trim());
-
-  let filteredParts = [];
-  for (let i = 0; i < parts.length; i += 2) {
-    if (parts[i] !== "0") {
-      filteredParts.push(parts[i] + " " + parts[i + 1]);
+    try {
+      let isNegative = timeString.startsWith("-"); // Check if the time is negative
+      let parts = timeString.replace("-", "").trim().split(" ").map(part => part.trim());
+    
+      let filteredParts = [];
+      for (let i = 0; i < parts.length; i += 2) {
+        if (parts[i] !== "0") {
+          filteredParts.push(parts[i] + " " + parts[i + 1]);
+        }
+      }
+    
+      let result = filteredParts.length > 0 ? filteredParts.join(", ") : "";
+      
+      return isNegative ? `- ${result}` : result;
+    } catch (error) {
+      console.log(error);
+      
     }
-  }
 
-  let result = filteredParts.length > 0 ? filteredParts.join(", ") : "";
-  
-  return isNegative ? `- ${result}` : result;
   };
 
   export const cleanTimeStringPlusMinus = (timeString) => {

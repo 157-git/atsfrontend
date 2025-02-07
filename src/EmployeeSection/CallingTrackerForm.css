@@ -249,6 +249,15 @@
   font-size: 1em;
 }
 
+
+.customprogressForCallingTracker .ant-progress-outer .ant-progress-text .anticon-check-circle{
+  width: 10px;
+}
+.sameascontactnumbersize{
+  font-size: 14px;
+  margin-left: 5px;
+  color: green;
+}
 .buttons {
   display: flex;
   flex-direction: row;

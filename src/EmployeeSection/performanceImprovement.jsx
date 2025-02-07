@@ -516,15 +516,21 @@ console.log(processes);
   };
 
   const getTotalMinutes = (timeString) => {
-    let hours = 0, minutes = 0;
+    try {
+      let hours = 0, minutes = 0;
   
-    const hourMatch = timeString.match(/(\d+)\s*hour/);
-    const minuteMatch = timeString.match(/(\d+)\s*minute/);
+      const hourMatch = timeString.match(/(\d+)\s*hour/);
+      const minuteMatch = timeString.match(/(\d+)\s*minute/);
+    
+      if (hourMatch) hours = parseInt(hourMatch[1]);
+      if (minuteMatch) minutes = parseInt(minuteMatch[1]);
+    
+      return hours * 60 + minutes;
+    } catch (error) {
+      console.log(error);
+      
+    }
   
-    if (hourMatch) hours = parseInt(hourMatch[1]);
-    if (minuteMatch) minutes = parseInt(minuteMatch[1]);
-  
-    return hours * 60 + minutes;
   };
   
   const getTimeDifference = (data) => {
@@ -540,32 +546,38 @@ console.log(processes);
   
   
   const sumTimeDurations = (timeStrings) => {
-    let totalMinutes = 0;
-    let totalSeconds = 0;
+    try {
+      let totalMinutes = 0;
+      let totalSeconds = 0;
+    
+      timeStrings.forEach((timeStr) => {
+        let hours = 0, minutes = 0, seconds = 0;
+    
+        const hourMatch = timeStr.candidateFormFillingDuration !== null && timeStr.candidateFormFillingDuration.match(/(\d+)\s*hour/);
+        const minuteMatch =timeStr.candidateFormFillingDuration !== null && timeStr.candidateFormFillingDuration.match(/(\d+)\s*minute/);
+        const secondMatch =timeStr.candidateFormFillingDuration !== null && timeStr.candidateFormFillingDuration.match(/(\d+)\s*second/);
+    
+        if (hourMatch) hours = parseInt(hourMatch[1]);
+        if (minuteMatch) minutes = parseInt(minuteMatch[1]);
+        if (secondMatch) seconds = parseInt(secondMatch[1]);
+    
+        totalMinutes += hours * 60 + minutes;
+        totalSeconds += seconds;
+      });
+    
+      // Convert extra seconds into minutes
+      totalMinutes += Math.floor(totalSeconds / 60);
+      const remainingSeconds = totalSeconds % 60;
+    
+      const finalHours = Math.floor(totalMinutes / 60);
+      const finalMinutes = totalMinutes % 60;
+    
+      return `${finalHours} hours ${finalMinutes} minutes`;
+    } catch (error) {
+      console.log(error);
+      
+    }
   
-    timeStrings.forEach((timeStr) => {
-      let hours = 0, minutes = 0, seconds = 0;
-  
-      const hourMatch = timeStr.candidateFormFillingDuration.match(/(\d+)\s*hour/);
-      const minuteMatch = timeStr.candidateFormFillingDuration.match(/(\d+)\s*minute/);
-      const secondMatch = timeStr.candidateFormFillingDuration.match(/(\d+)\s*second/);
-  
-      if (hourMatch) hours = parseInt(hourMatch[1]);
-      if (minuteMatch) minutes = parseInt(minuteMatch[1]);
-      if (secondMatch) seconds = parseInt(secondMatch[1]);
-  
-      totalMinutes += hours * 60 + minutes;
-      totalSeconds += seconds;
-    });
-  
-    // Convert extra seconds into minutes
-    totalMinutes += Math.floor(totalSeconds / 60);
-    const remainingSeconds = totalSeconds % 60;
-  
-    const finalHours = Math.floor(totalMinutes / 60);
-    const finalMinutes = totalMinutes % 60;
-  
-    return `${finalHours} hours ${finalMinutes} minutes`;
   };
 
   const convertMinutesToHours = (minutes) => {
@@ -852,7 +864,7 @@ console.log(spentTime);
         borderWidth: 1,
       },
       {
-        label: "Performance (Minutes)",
+        label: `Performance (Minutes)`,
         data: performanceChart,
         backgroundColor: performanceChart.map(value => 
           value < 0 ? "rgba(255, 0, 0, 0.6)" : "rgba(30, 202, 111, 0.6)"
@@ -1405,7 +1417,7 @@ console.log(spentTime);
         </div>
 
 
-        <Bar data={chartData} options={options} />;
+        <Bar data={chartData} options={options} />
 
         {/* <div>
           <PerformanceMeter></PerformanceMeter>

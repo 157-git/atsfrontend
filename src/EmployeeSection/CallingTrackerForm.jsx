@@ -26,6 +26,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { UploadOutlined } from "@ant-design/icons";
 import CandidatePresentComponent from "./CandidatePresentComponent";
+import uploadingResumeGif from "../assets/uploadingResumeMotion.gif"; 
+import uploadingResumeStatic from "../assets/uploadStaticPngFile.png"; 
 
 const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
@@ -36,6 +38,7 @@ const CallingTrackerForm = ({
   const { employeeId,userType } = useParams();
   const [submited, setSubmited] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [uploadingResumeNewState, setUploadingResumeNewState] = useState(false);
 
   // sahil karnekar line 33 to 38 date 15-10-2024
   const today = new Date();
@@ -842,8 +845,11 @@ const CallingTrackerForm = ({
 
       const data = await response.json();
       setResumeResponse(data);
+  
     } catch (error) {
       console.error("Error uploading file:", error);
+    }finally{
+      setUploadingResumeNewState(false);
     }
   };
 
@@ -912,8 +918,24 @@ const CallingTrackerForm = ({
       setIsOtherLocationSelected(false); // No additional input needed
     }
   };
-
- 
+const [displaySameAsContactField, setDisplaySameAsContactField] = useState(false);
+const handleDisplaySameAsContactText = () => {
+  console.log("working");
+  console.log(callingTracker.contactNumber);
+  
+  
+  if (callingTracker.contactNumber !== "") {
+    setDisplaySameAsContactField(true);
+  }
+  
+  if (callingTracker.contactNumber === undefined) {
+    console.log("Please Select Contact number First");
+    setDisplaySameAsContactField(false);
+  }
+};
+const copyContactNumber = ()=>{
+  callingTracker.alternateNumber = callingTracker.contactNumber;
+}
 
   // this fucntion is made by sahil karnekar on date 25-11-2024
   const handleResumeUploadBoth = async (e) => {
@@ -931,7 +953,7 @@ const CallingTrackerForm = ({
       await handleUploadAndSetData(e);
       setUploadProgress(100); // Mark upload as complete
       setResumeUploaded(true);
-
+      setUploadingResumeNewState(false);
       setErrorForResumeUrl("");
 
       const reader = new FileReader();
@@ -1057,34 +1079,40 @@ const CallingTrackerForm = ({
 
 <div className="uploadantdc"
 style={{
-  width:"75%"
+  width:"60%"
 }}>
 <Upload
   accept=".pdf,.doc,.docx"
   showUploadList={false} // Hide file preview list
   beforeUpload={async (file) => {
-    setDisplayProgress(false);
-setResumeFileName(file.name);
-setDisplayProgress(true);
-    setUploadProgress(0);
-    console.log(file);
-    
-    // Create a synthetic event to match input file event structure
-    const syntheticEvent = { target: { files: [file] } };
+      setUploadingResumeNewState(true);
+      setDisplayProgress(false);
+  setResumeFileName(file.name);
+  setDisplayProgress(true);
+      setUploadProgress(0);
+      console.log(file);
+      
+      // Create a synthetic event to match input file event structure
+      const syntheticEvent = { target: { files: [file] } };
+  
+      // Call handleResumeUploadBoth function
+      await handleResumeUploadBoth(syntheticEvent);
 
-    // Call handleResumeUploadBoth function
-    await handleResumeUploadBoth(syntheticEvent);
+      setUploadingResumeNewState(false);
+
+   
+ 
     return false; // Prevent automatic upload
   }}
 >
   <Button
-  icon={<UploadOutlined />}>{resumeFileName.length > 10
-    ? `${resumeFileName.substring(0, 20)}...`
-    : resumeFileName || "Click to Upload"}</Button>
+  icon={uploadingResumeNewState ? <img src={uploadingResumeGif} alt="Uploading" style={{ width: 20, height: 20 }} /> : <img src={uploadingResumeStatic} alt="Static" style={{ width: 20, height: 20 }} />}>{resumeFileName.length > 10
+    ? `${resumeFileName.substring(0, 15)}...`
+    : resumeFileName || "Upload Resume"}</Button>
 </Upload>
 {
   displayProgress && (
-<Progress percent={uploadProgress} />
+<Progress percent={uploadProgress} strokeWidth={4} size="small" className="customprogressForCallingTracker"/>
   )
 }
 
@@ -1106,7 +1134,9 @@ setDisplayProgress(true);
                     )}
                     <p className="calling-tracker-popup-open-btn"
                     style={{
-                      maxHeight:"30px"
+                      maxHeight:"30px",
+                      width:"76px",
+                      textAlign:"center"
                     }}
                     >
                       <i
@@ -1287,19 +1317,47 @@ setDisplayProgress(true);
               </div>
               <div className="calling-tracker-field">
                 <label>Whatsapp Number</label>
-                <div className="calling-tracker-field-sub-div">
+                <div className="calling-tracker-field-sub-div"
+                onClick={handleDisplaySameAsContactText}
+                >
                   <PhoneInput
                     placeholder="Enter phone number"
                     name="alternateNumber"
                     className="plain-input"
                     value={callingTracker.alternateNumber}
-                    onChange={(value) =>
-                      handlePhoneNumberChange(value, "alternateNumber")
+                    
+                    onChange={(value) =>{
+                      setDisplaySameAsContactField(false);
+                      handlePhoneNumberChange(value, "alternateNumber");
+                    }
+                     
                     }
                     defaultCountry="IN"
                     // sahil karnekar line 732
                     maxLength={20}
+                    
                   />
+                  {
+                    displaySameAsContactField && (
+                      <div className="inputsameascontact">
+                     <input 
+  type="checkbox" 
+  name="copyContactNumber" 
+  onChange={(e) => {
+    if (e.target.checked) {
+      if (callingTracker.contactNumber) {
+      callingTracker.alternateNumber = callingTracker.contactNumber;
+      }
+    } else {
+      callingTracker.alternateNumber = "";
+    }
+  }} 
+/>
+<span className="sameascontactnumbersize" >Same As Contact Number</span>
+
+</div>
+                    )
+                  }
                 </div>
               </div>
             </div>
@@ -1316,7 +1374,7 @@ setDisplayProgress(true);
                       value={callingTracker.sourceName}
                       onChange={handleChange}
                     >
-                      <option value="">Select Source Name</option>
+                      <option value="" disabled>Select Source Name</option>
                       <option value="LinkedIn">linkedIn</option>
                       <option value="Naukri">Naukri</option>
                       <option value="Indeed">Indeed </option>
