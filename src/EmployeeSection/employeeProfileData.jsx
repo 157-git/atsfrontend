@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import "../EmployeeSection/employeeProfile.css";
-import TeamDetails from "../TeamDetails/teamDetails";
 import { API_BASE_URL } from "../api/api";
 import dummyUserImg from "../photos/DummyUserImg.png";
 
@@ -17,7 +16,6 @@ const EmployeeProfileData = ({
 }) => {
   const [viewMoreProfileShow, setViewMoreProfileShow] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [profileImage, setProfileImage] = useState(null);
   const [pdfSrc, setPdfSrc] = useState(null);
   const [employeeData, setEmployeeData] = useState(null);
