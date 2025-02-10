@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import Modal from "react-bootstrap/Modal";
+import { Modal as BootstrapModal } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, Chart } from "chart.js";
 
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -37,6 +38,7 @@ import { convertMinutesToTimeFormat } from "./convertMinutesToTimeFormat";
 import { cleanTimeStringPlusMinus, cleanTimeStringSpaces, removeLeadingZeros } from "./removeLeadingZeros";
 import { convertTimeStringToMinutes } from "./convertTimeStringToMinutes";
 import { convertTimeStringsToMinutesForChart } from "./convertTimeStringsToMinutesForChart";
+import { Button, Modal } from "antd";
 
 const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   const { employeeId, userType } = useParams();
@@ -48,7 +50,7 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [clientDetails, setClientDetails] = useState([]);
-  const [selectedJobId, setSelectedJobId] = useState("");
+  const [selectedJobId, setSelectedJobId] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [managers, setManagers] = useState([]);
   const [teamLeaders, setTeamLeaders] = useState([]);
@@ -62,6 +64,7 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   const transformedDataRef = useRef(false);
   // this state is added by sahil karnekar date 24-10-2024
   const [isLoading, setIsLoading] = useState(false);
+console.log(selectedJobId);
 
   useEffect(() => {
     if (data.length > 0 && !transformedDataRef.current) {
@@ -624,8 +627,13 @@ console.log(processes);
     // Prepare parameters for the API call
     let ids;
     let role;
-    const jobId = selectedJobId?.requirementId; // Use optional chaining for safety
-
+  
+    
+    const jobId = selectedJobId.length > 0 
+    ? selectedJobId.map(job => job.requirementId).join(",") 
+    : "";
+ console.log(jobId);
+ 
     if (selectedManagers.length > 0) {
       ids = selectedManagers.map((manager) => manager.managerId).join(",");
       role = selectedManagers[0].managerJobRole;
@@ -644,7 +652,13 @@ console.log(processes);
       ids = employeeId;
       role = userType;
     }
+    console.log(ids, role, startDate, endDate, jobId);
     try {
+     
+      console.log("Executing 1");
+      console.log(jobId);
+      
+      
       const response = await axios.get(
         `${API_BASE_URL}/fetch-process-timings`,
         {
@@ -653,14 +667,18 @@ console.log(processes);
             jobRole: role,
             startDate: startDate,
             endDate: endDate,
-            jobId: jobId,
+            jobIds: jobId,
           },
         }
       );
+console.log("Executing 2");
 
       const jsonData = response.data;
+      console.log("Executing 2");
       setData(jsonData);
+      console.log("Executing 2");
       calculateFormFillingTotal(jsonData);
+      console.log("Executing 2");
     } catch (error) {
       console.error(error); // Log error for debugging
       toast.error("Something Went Wrong");
@@ -782,62 +800,71 @@ console.log(data);
 
   const labels = processes;
   // Required Time Data
+  // const requiredTime = processes.map((_, index) => {
+  //   if (index === 0) return data.length * 5;
+  //   if (index === 1) return data.length * 60;
+  //   if ([2, 4, 5, 6, 7, 8].includes(index)) return data.length * 1440;
+  //   if (index === 3) return data.length * 10080;
+  //   return 0;
+  // });
+
   const requiredTime = processes.map((_, index) => {
-    if (index === 0) return data.length * 5;
-    if (index === 1) return data.length * 60;
-    if ([2, 4, 5, 6, 7, 8].includes(index)) return data.length * 1440;
-    if (index === 3) return data.length * 10080;
+    if (index === 0) return (data.length * 5) / 43200;
+    if (index === 1) return (data.length * 60) / 43200;
+    if ([2, 4, 5, 6, 7, 8].includes(index)) return (data.length * 1440) / 43200;
+    if (index === 3) return (data.length * 10080) / 43200;
     return 0;
   });
+  
 
   // Spent Time Data
   const spentTime = processes.map((_, index) => {
-    if (index === 0) return sumTimeDurations(data);
-    if (index === 1) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionAddedToMail"));
-    if (index === 2) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailToMailRes"));
-    if (index === 3) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailResToInterviewProcess"));
-    if (index === 4) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionInterviewProcessToDocumentSent"));
-    if (index === 5) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionDocumentSentToOfferLetterSendToCandidate"));
-    if (index === 6) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterSendToCandidateToOfferLetterResponseFromCandidate"));
-    if (index === 7) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterResponseFromCandidateToJoiningResponseFromCandidate"));
-    if (index === 8) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionJoiningResponseFromCandidateToJoinDate"));
+    if (index === 0) return sumTimeDurations(data)/ 43200;
+    if (index === 1) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionAddedToMail"))/ 43200;
+    if (index === 2) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailToMailRes"))/ 43200;
+    if (index === 3) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailResToInterviewProcess"))/ 43200;
+    if (index === 4) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionInterviewProcessToDocumentSent"))/ 43200;
+    if (index === 5) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionDocumentSentToOfferLetterSendToCandidate"))/ 43200;
+    if (index === 6) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterSendToCandidateToOfferLetterResponseFromCandidate"))/ 43200;
+    if (index === 7) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterResponseFromCandidateToJoiningResponseFromCandidate"))/ 43200;
+    if (index === 8) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionJoiningResponseFromCandidateToJoinDate"))/ 43200;
     return 0;
   });
   const performanceChart = processes.map((_, index)=>{
 
-    if (index === 0) return getTimeDifference(data);
+    if (index === 0) return getTimeDifference(data)/ 43200;
     if (index === 1) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
       convertMinutesToTimeFormat(data.length * 60),
       calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionAddedToMail")
-    )));
+    )))/ 43200;
     if (index === 2) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
       convertMinutesToTimeFormat(data.length * 1440),
       calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailToMailRes")
-    )));
+    )))/ 43200;
     if (index === 3) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
       convertMinutesToTimeFormat(data.length * 10080),
       calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailResToInterviewProcess")
-    )));
+    )))/ 43200;
     if (index === 4) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
       convertMinutesToTimeFormat(data.length * 1440),
       calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionInterviewProcessToDocumentSent")
-    )));
+    )))/ 43200;
     if (index === 5) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
       convertMinutesToTimeFormat(data.length * 1440),
       calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionDocumentSentToOfferLetterSendToCandidate")
-    )));
+    )))/ 43200;
     if (index === 6) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
       convertMinutesToTimeFormat(data.length * 1440),
       calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterSendToCandidateToOfferLetterResponseFromCandidate")
-    )));
+    )))/ 43200;
     if (index === 7) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
       convertMinutesToTimeFormat(data.length * 1440),
       calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterResponseFromCandidateToJoiningResponseFromCandidate")
-    )));
+    )))/ 43200;
     if (index === 8) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
       convertMinutesToTimeFormat(data.length * 1440),
       calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionJoiningResponseFromCandidateToJoinDate")
-    )));
+    )))/ 43200;
     return 0;
   })
 
@@ -850,21 +877,21 @@ console.log(spentTime);
     labels,
     datasets: [
       {
-        label: "Required Time (Minutes)",
+        label: "Required Time (Months)",
         data: requiredTime,
         backgroundColor: "rgba(54, 162, 235, 0.6)",
         borderColor: "rgba(54, 162, 235, 1)",
         borderWidth: 1,
       },
       {
-        label: "Spent Time (Minutes)",
+        label: "Spent Time (Months)",
         data: spentTime,
         backgroundColor: "rgba(255, 99, 132, 0.6)",
         borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 1,
       },
       {
-        label: `Performance (Minutes)`,
+        label: `Performance (Months)`,
         data: performanceChart,
         backgroundColor: performanceChart.map(value => 
           value < 0 ? "rgba(255, 0, 0, 0.6)" : "rgba(30, 202, 111, 0.6)"
@@ -877,11 +904,39 @@ console.log(spentTime);
     ],
   };
 
+  // const options = {
+  //   responsive: true,
+  //   plugins: {
+  //     legend: {
+  //       position: "top",
+  //     },
+  //     title: {
+  //       display: true,
+  //       text: "Time Tracker - Required vs Spent Time",
+  //     },
+  //   },
+  //   scales: {
+  //     y: {
+  //       beginAtZero: true,
+  //     },
+  //   },
+  // };
+
   const options = {
     responsive: true,
     plugins: {
       legend: {
         position: "top",
+        labels: {
+          generateLabels: (chart) => {
+            const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+  
+            return labels.map((label, index) => ({
+              ...label,
+              fillStyle: index === 2 ? "linear-gradient(90deg, rgba(44,218,35,1) 29%, rgba(231,10,25,1) 69%);" : label.fillStyle, // Change color of legend 3
+            }));
+          },
+        },
       },
       title: {
         display: true,
@@ -894,7 +949,28 @@ console.log(spentTime);
       },
     },
   };
+  
 
+
+  const [isModalOpen1, setIsModalOpen1] = useState(false);
+  const showModal1 = () => {
+    setIsModalOpen1(true);
+  };
+  const handleOk = () => {
+    handleGetFilteredData();
+    setIsModalOpen1(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen1(false);
+  };
+
+  const handleCheckboxChangeForJobIdsForPerformance = (event, item) => {
+    if (event.target.checked) {
+      setSelectedJobId([...selectedJobId, item]); // Add item if checked
+    } else {
+      setSelectedJobId(selectedJobId.filter((i) => i.requirementId !== item.requirementId)); // Remove item if unchecked
+    }
+  };
 
   return (
     <div className="PIE-App">
@@ -1104,7 +1180,28 @@ console.log(spentTime);
             )}
           </div>
           <div className="PIE-job-filter">
-            <select
+            
+          <Button type="primary" onClick={showModal1}>
+        Select Job Ids
+      </Button>
+      <Modal title="Select Job Ids" open={isModalOpen1} onOk={handleOk} onCancel={handleCancel}>
+    <div className="selectJobIdsForPerformance">
+    {sortedUniqueClientDetails.map((item) => (
+        <label key={item.requirementId} style={{ display: "block" }}>
+          <input
+            type="checkbox"
+            value={JSON.stringify(item)}
+            checked={selectedJobId.some((i) => i.requirementId === item.requirementId)}
+            onChange={(e) => handleCheckboxChangeForJobIdsForPerformance(e, item)}
+          />
+          {item.requirementId} : {item.companyName}
+        </label>
+      ))}
+
+    </div>
+      </Modal>
+
+            {/* <select
               className="PIE-job-filter-options"
               onChange={handleJobIdChange}
             >
@@ -1114,29 +1211,32 @@ console.log(spentTime);
                   {item.requirementId} : {item.companyName}
                 </option>
               ))}
-            </select>
-
-            {selectedJobId && (
-              <div className="PIE-client-desg-role">
-                <p>
-                  <strong>Client Name:</strong> {selectedJobId.companyName}
-                </p>
-                {/* <br /> */}
-                <p>
-                  <strong>Designation:</strong> {selectedJobId.designation}
-                </p>
-              </div>
-            )}
+            </select> */}
+ <div className="PIE-client-desg-role">
+            { selectedJobId.length > 0 && selectedJobId.map((compItem, index)=>(
+ <>
+ <div>
+  <p>
+    <strong>{index+1}.  Client Name:</strong> {compItem.companyName}
+  </p>
+  {/* <br /> */}
+  <p>
+    <strong>Designation:</strong> {compItem.designation}
+  </p>
+  </div>
+</>
+            ))}
+            </div>
           </div>
           {/* this code is updated by sahil karnekar date 24-10-2024 */}
           <div className="PIE-Apply-Filter-Btn">
-            <button
+            {/* <button
               onClick={handleGetFilteredData}
               className="PIE-filter-Btn"
               disabled={isLoading}
             >
               {isLoading ? <Loader /> : "Get Data"}
-            </button>
+            </button> */}
             <button className="PIE-filter-Btn" onClick={onCloseIncentive}>
               {" "}
               Back
@@ -1424,11 +1524,11 @@ console.log(spentTime);
         </div> */}
       </div>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Interview Rounds</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+      <BootstrapModal show={showModal} onHide={() => setShowModal(false)}>
+        <BootstrapModal.Header closeButton>
+          <BootstrapModal.Title>Interview Rounds</BootstrapModal.Title>
+        </BootstrapModal.Header>
+        <BootstrapModal.Body>
           <table className="table table-bordered">
             <thead>
               <tr>
@@ -1446,13 +1546,13 @@ console.log(spentTime);
             </tbody>
           </table>
           <h4>Total Interview Time: {totalInterviewTime}</h4>
-        </Modal.Body>
-        <Modal.Footer>
+        </BootstrapModal.Body>
+        <BootstrapModal.Footer>
           <button className="btn btn-dark" onClick={() => setShowModal(false)}>
             Close
           </button>
-        </Modal.Footer>
-      </Modal>
+        </BootstrapModal.Footer>
+      </BootstrapModal>
     </div>
   );
 };

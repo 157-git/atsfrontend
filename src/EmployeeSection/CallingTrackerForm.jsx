@@ -20,7 +20,7 @@ import InterviewPreviousQuestion from "./interviewPreviousQuestion";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
 // this libraries added by sahil karnekar date 21-10-2024
-import { Button, Progress, TimePicker, Upload } from "antd";
+import { Button, Progress, Rate, TimePicker, Upload } from "antd";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSocket } from "../EmployeeDashboard/socket";
@@ -57,7 +57,7 @@ const CallingTrackerForm = ({
     requirementCompany: "",
     sourceName: "",
     contactNumber: "",
-    incentive: "0.0",
+    incentive: "",
     alternateNumber: "",
     currentLocation: "",
     fullAddress: "",
@@ -295,6 +295,15 @@ const handleSourceNameOthers = (e)=>{
 callingTracker.sourceName = value;
 setErrors((prevErrors) => ({ ...prevErrors, ["sourceName"]: "" }));
 }
+
+const handleRatingsChange = (value) => {
+  setCallingTracker((prev) => ({
+    ...prev,
+    communicationRating: value,
+  }));
+  setErrors((prevErrors) => ({ ...prevErrors, ["communicationRating"]: "" }));
+};
+
 
   const handleChange = (e) => {
     const { name, value } = e.target || e;
@@ -1443,7 +1452,7 @@ onChange={handleSourceNameOthers}
                         onChange={handleRequirementChange}
                         style={{ width: "inherit" }}
                       >
-                        <option value="">Select Job Id</option>
+                        <option value="" disabled>Select Job Id</option>
                         {requirementOptions.map((option) => (
                           <option
                             key={option.requirementId}
@@ -1468,8 +1477,9 @@ onChange={handleSourceNameOthers}
                   </div>
                   <div className="calling-tracker-two-input">
                     <input
+                    className="nighlightincentivesinputnew"
                       placeholder="Your Incentive"
-                      value={callingTracker.incentive || "0"}
+                      value={callingTracker.incentive}
                       type="text"
                       onChange={handleIncentiveChange}
                     />
@@ -1515,7 +1525,9 @@ onChange={handleSourceNameOthers}
                         onChange={handleLocationChange}
                         style={{ width: "200px" }}
                       >
-                        <option value="" style={{ color: "gray" }}>
+                        <option value="" style={{ color: "gray" }}
+                        disabled
+                        >
                           Select Location
                         </option>
                         <option value="Pune City">Pune City</option>
@@ -1578,7 +1590,7 @@ onChange={handleSourceNameOthers}
                       value={callingTracker.callingFeedback}
                       onChange={handleChange}
                     >
-                      <option value="">Feedback</option>
+                      <option value="" disabled>Feedback</option>
                       <option value="Call Done">Call Done</option>
                       <option value="Asked for Call Back">
                         Asked for Call Back
@@ -2423,14 +2435,18 @@ onChange={handleSourceNameOthers}
                 <div className="calling-tracker-field-sub-div">
                   {/* this line added by sahil date 22-10-2024 */}
                   <div className="setRequiredStarDiv">
-                    <input
+                    {/* <input
                       type="text"
                       name="communicationRating"
                       value={callingTracker.communicationRating}
                       onChange={handleChange}
                       className="plain-input"
                       placeholder="Communication Rating"
-                    />
+                    /> */}
+
+<Rate value={callingTracker.communicationRating} onChange={handleRatingsChange} 
+
+/>
                     {/* this line added by sahil date 22-10-2024 */}
                     {callingTracker.selectYesOrNo === "Interested" &&
                       !callingTracker.communicationRating && (
@@ -2549,7 +2565,7 @@ onChange={handleSourceNameOthers}
                         onChange={handleLineUpChange}
                         style={{ width: "200px" }}
                       >
-                        <option value="">Select</option>
+                        <option value="" disabled>Select</option>
                         <option value="Yes">Yes</option>
                         <option value="No">No</option>
                       </select>
@@ -2648,7 +2664,7 @@ onChange={handleSourceNameOthers}
                           }
                         }}
                       >
-                        <option value="">Select</option>
+                        <option value="" disabled>Select</option>
                         <option value="Yet To Confirm">Yet To Confirm</option>
                         <option value="Interview Schedule">
                         Available For Interview

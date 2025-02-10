@@ -819,3 +819,9 @@ padding-right: 8px;
   overflow-y: scroll;
   max-height: 240px;
 }
+.nighlightincentivesinputnew{
+  color: black;
+  font-weight: bold;
+  border: 1px dashed black;
+  /* background-color: rgb(244, 244, 5) */
+}
