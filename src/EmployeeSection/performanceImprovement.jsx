@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useParams } from "react-router-dom";
+import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
+
+// Register Chart.js components
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
 import {
   parseISO,
   formatDuration,
@@ -25,6 +31,12 @@ import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
 import PerformanceMeter from "./performanceMeter";
 import { convertNewDateToFormattedDateTime } from "../TeamLeader/convertNewDateToFormattedDateTime";
+import { calculateTotalTimeDifferenceAndAdditionForTimeDifferences } from "./calculateTotalTimeDifferenceAndAdditionForTimeDifferences";
+import { subtractTimeDurations } from "./subtractTimeDurations";
+import { convertMinutesToTimeFormat } from "./convertMinutesToTimeFormat";
+import { cleanTimeStringPlusMinus, cleanTimeStringSpaces, removeLeadingZeros } from "./removeLeadingZeros";
+import { convertTimeStringToMinutes } from "./convertTimeStringToMinutes";
+import { convertTimeStringsToMinutesForChart } from "./convertTimeStringsToMinutesForChart";
 
 const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   const { employeeId, userType } = useParams();
@@ -153,7 +165,6 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
 
   const calculateTimeDifference = (start, end) => {
     if (!start || !end) return "N/A";
-  
     try {
       const startDate = parseISO(start);
       const endDate = parseISO(end);
@@ -168,13 +179,11 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
         format: ["days", "hours", "minutes", "seconds"],
       });
     } catch (error) {
+      console.log(error);
+      
       return "Invalid date";
     }
   };
-  
-  const calculateFormFillingDuration =()=>{
-    
-  }
 
   const handleViewClick = (roundsList) => {
     setSelectedRounds(roundsList);
@@ -184,6 +193,9 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   };
 
   const calculateTotalInterviewTime = (roundsList) => {
+
+    try {
+      
     let totalSeconds = 0;
     for (let i = 1; i < roundsList.length; i++) {
       const start = parseISO(roundsList[i - 1].time);
@@ -195,11 +207,53 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
     return formatDuration(duration, {
       format: ["days", "hours", "minutes", "seconds"],
     });
+    } catch (error) {
+      console.log(error);
+      
+    }
+
   };
+
+
+  // const calculateTotalInterviewTime = (roundsList) => {
+  //   roundsList = 0;
+  //   try {
+  //     if (!roundsList || roundsList.length < 2) return "0 seconds";
+  
+  //     let totalSeconds = 0;
+  
+  //     for (let i = 1; i < roundsList.length; i++) {
+  //       if (!roundsList[i - 1].time || !roundsList[i].time) continue; // Skip invalid times
+  
+  //       const start = parseISO(roundsList[i - 1].time);
+  //       const end = parseISO(roundsList[i].time);
+  
+  //       if (isNaN(start) || isNaN(end)) continue; // Skip if dates are invalid
+  
+  //       const diff = differenceInSeconds(end, start);
+  //       totalSeconds += diff;
+  //     }
+  
+  //     if (totalSeconds === 0) return "0 seconds";
+  
+  //     const duration = intervalToDuration({
+  //       start: new Date(0),
+  //       end: new Date(totalSeconds * 1000),
+  //     });
+  
+  //     return formatDuration(duration, {
+  //       format: ["days", "hours", "minutes", "seconds"],
+  //     });
+  
+  //   } catch (error) {
+  //     console.error("Error in calculateTotalInterviewTime:", error);
+  //     return "0 seconds";
+  //   }
+  // };
 
   const processes = [
     "Candidate Form Filling Duration (5 Minutes/Form)",
-    "Added to Line Up",
+    // "Added to Line Up",
     "Candidate Information Mail Sent To Client",
     "Mail Response From Client",
     "Candidate Interview Process",
@@ -262,6 +316,10 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   }, []);
 
   const fetchEmployeeCount = async (ids, role) => {
+    console.log(ids);
+    console.log(role);
+    
+    
     try {
       const response = await axios.get(
         `${API_BASE_URL}/head-count/${role}/${ids}`
@@ -290,17 +348,20 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
 
   const fetchJobIds = async (ids, startDate, endDate, role) => {
     console.log(ids, startDate, endDate, role);
-    
-    try {
-      const response = await axios.get(
-        `${API_BASE_URL}/performance-jobIds?empIds=${ids}&startDate=${startDate}&endDate=${endDate}&jobRole=${role}`
-      );
-      setClientDetails(response.data);
-    } catch (error) {
-      console.error("Error fetching job IDs:", error);
+    if (!ids || !startDate ||  !endDate || !role) {
+      return;
+    }else{
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/performance-jobIds?empIds=${ids}&startDate=${startDate}&endDate=${endDate}&jobRole=${role}`
+        );
+        setClientDetails(response.data);
+      } catch (error) {
+        console.error("Error fetching job IDs:", error);
+      }
     }
+   
   };
-
   useEffect(() => {
     let ids;
     let role;
@@ -455,53 +516,68 @@ console.log(processes);
   };
 
   const getTotalMinutes = (timeString) => {
-    let hours = 0, minutes = 0;
+    try {
+      let hours = 0, minutes = 0;
   
-    const hourMatch = timeString.match(/(\d+)\s*hour/);
-    const minuteMatch = timeString.match(/(\d+)\s*minute/);
+      const hourMatch = timeString.match(/(\d+)\s*hour/);
+      const minuteMatch = timeString.match(/(\d+)\s*minute/);
+    
+      if (hourMatch) hours = parseInt(hourMatch[1]);
+      if (minuteMatch) minutes = parseInt(minuteMatch[1]);
+    
+      return hours * 60 + minutes;
+    } catch (error) {
+      console.log(error);
+      
+    }
   
-    if (hourMatch) hours = parseInt(hourMatch[1]);
-    if (minuteMatch) minutes = parseInt(minuteMatch[1]);
-  
-    return hours * 60 + minutes;
   };
   
   const getTimeDifference = (data) => {
     const totalMinutes1 = getTotalMinutes(sumTimeDurations(data)); // Convert sumTimeDurations result into minutes
     const totalMinutes2 = getTotalMinutes(convertMinutesToHours(data.length * 5)); // Convert convertMinutesToHours result into minutes
+  console.log(totalMinutes1, totalMinutes2);
   
-    const difference = Math.abs(totalMinutes1 - totalMinutes2); // Ensure positive difference
+    const difference = totalMinutes2 - totalMinutes1; // Keep the difference with its sign
   
-    return convertMinutesToHours(difference); // Convert back to hours and minutes
+    const formattedDifference = convertMinutesToHours(Math.abs(difference)); // Convert to readable format
+    return difference < 0 ? `-${formattedDifference}` : formattedDifference; // Add '-' if negative
   };
   
+  
   const sumTimeDurations = (timeStrings) => {
-    let totalMinutes = 0;
-    let totalSeconds = 0;
+    try {
+      let totalMinutes = 0;
+      let totalSeconds = 0;
+    
+      timeStrings.forEach((timeStr) => {
+        let hours = 0, minutes = 0, seconds = 0;
+    
+        const hourMatch = timeStr.candidateFormFillingDuration !== null && timeStr.candidateFormFillingDuration.match(/(\d+)\s*hour/);
+        const minuteMatch =timeStr.candidateFormFillingDuration !== null && timeStr.candidateFormFillingDuration.match(/(\d+)\s*minute/);
+        const secondMatch =timeStr.candidateFormFillingDuration !== null && timeStr.candidateFormFillingDuration.match(/(\d+)\s*second/);
+    
+        if (hourMatch) hours = parseInt(hourMatch[1]);
+        if (minuteMatch) minutes = parseInt(minuteMatch[1]);
+        if (secondMatch) seconds = parseInt(secondMatch[1]);
+    
+        totalMinutes += hours * 60 + minutes;
+        totalSeconds += seconds;
+      });
+    
+      // Convert extra seconds into minutes
+      totalMinutes += Math.floor(totalSeconds / 60);
+      const remainingSeconds = totalSeconds % 60;
+    
+      const finalHours = Math.floor(totalMinutes / 60);
+      const finalMinutes = totalMinutes % 60;
+    
+      return `${finalHours} hours ${finalMinutes} minutes`;
+    } catch (error) {
+      console.log(error);
+      
+    }
   
-    timeStrings.forEach((timeStr) => {
-      let hours = 0, minutes = 0, seconds = 0;
-  
-      const hourMatch = timeStr.candidateFormFillingDuration.match(/(\d+)\s*hour/);
-      const minuteMatch = timeStr.candidateFormFillingDuration.match(/(\d+)\s*minute/);
-      const secondMatch = timeStr.candidateFormFillingDuration.match(/(\d+)\s*second/);
-  
-      if (hourMatch) hours = parseInt(hourMatch[1]);
-      if (minuteMatch) minutes = parseInt(minuteMatch[1]);
-      if (secondMatch) seconds = parseInt(secondMatch[1]);
-  
-      totalMinutes += hours * 60 + minutes;
-      totalSeconds += seconds;
-    });
-  
-    // Convert extra seconds into minutes
-    totalMinutes += Math.floor(totalSeconds / 60);
-    const remainingSeconds = totalSeconds % 60;
-  
-    const finalHours = Math.floor(totalMinutes / 60);
-    const finalMinutes = totalMinutes % 60;
-  
-    return `${finalHours} hours and ${finalMinutes} minutes`;
   };
 
   const convertMinutesToHours = (minutes) => {
@@ -568,13 +644,6 @@ console.log(processes);
       ids = employeeId;
       role = userType;
     }
-
-    console.log(ids);
-    console.log(role);
-    console.log(startDate);
-    console.log(endDate);    
-    console.log(jobId);    
-
     try {
       const response = await axios.get(
         `${API_BASE_URL}/fetch-process-timings`,
@@ -709,6 +778,123 @@ console.log(data);
       </div>
     ));
   };
+
+
+  const labels = processes;
+  // Required Time Data
+  const requiredTime = processes.map((_, index) => {
+    if (index === 0) return data.length * 5;
+    if (index === 1) return data.length * 60;
+    if ([2, 4, 5, 6, 7, 8].includes(index)) return data.length * 1440;
+    if (index === 3) return data.length * 10080;
+    return 0;
+  });
+
+  // Spent Time Data
+  const spentTime = processes.map((_, index) => {
+    if (index === 0) return sumTimeDurations(data);
+    if (index === 1) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionAddedToMail"));
+    if (index === 2) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailToMailRes"));
+    if (index === 3) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailResToInterviewProcess"));
+    if (index === 4) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionInterviewProcessToDocumentSent"));
+    if (index === 5) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionDocumentSentToOfferLetterSendToCandidate"));
+    if (index === 6) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterSendToCandidateToOfferLetterResponseFromCandidate"));
+    if (index === 7) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterResponseFromCandidateToJoiningResponseFromCandidate"));
+    if (index === 8) return convertTimeStringToMinutes(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionJoiningResponseFromCandidateToJoinDate"));
+    return 0;
+  });
+  const performanceChart = processes.map((_, index)=>{
+
+    if (index === 0) return getTimeDifference(data);
+    if (index === 1) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
+      convertMinutesToTimeFormat(data.length * 60),
+      calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionAddedToMail")
+    )));
+    if (index === 2) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
+      convertMinutesToTimeFormat(data.length * 1440),
+      calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailToMailRes")
+    )));
+    if (index === 3) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
+      convertMinutesToTimeFormat(data.length * 10080),
+      calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailResToInterviewProcess")
+    )));
+    if (index === 4) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
+      convertMinutesToTimeFormat(data.length * 1440),
+      calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionInterviewProcessToDocumentSent")
+    )));
+    if (index === 5) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
+      convertMinutesToTimeFormat(data.length * 1440),
+      calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionDocumentSentToOfferLetterSendToCandidate")
+    )));
+    if (index === 6) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
+      convertMinutesToTimeFormat(data.length * 1440),
+      calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterSendToCandidateToOfferLetterResponseFromCandidate")
+    )));
+    if (index === 7) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
+      convertMinutesToTimeFormat(data.length * 1440),
+      calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterResponseFromCandidateToJoiningResponseFromCandidate")
+    )));
+    if (index === 8) return convertTimeStringsToMinutesForChart(cleanTimeStringPlusMinus(subtractTimeDurations(
+      convertMinutesToTimeFormat(data.length * 1440),
+      calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionJoiningResponseFromCandidateToJoinDate")
+    )));
+    return 0;
+  })
+
+console.log(performanceChart);
+
+
+console.log(spentTime);
+
+  const chartData = {
+    labels,
+    datasets: [
+      {
+        label: "Required Time (Minutes)",
+        data: requiredTime,
+        backgroundColor: "rgba(54, 162, 235, 0.6)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Spent Time (Minutes)",
+        data: spentTime,
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: `Performance (Minutes)`,
+        data: performanceChart,
+        backgroundColor: performanceChart.map(value => 
+          value < 0 ? "rgba(255, 0, 0, 0.6)" : "rgba(30, 202, 111, 0.6)"
+        ),
+        borderColor: performanceChart.map(value => 
+          value < 0 ? "rgb(255, 99, 99)" : "rgb(99, 255, 130)"
+        ),
+        borderWidth: 1,
+      }      
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Time Tracker - Required vs Spent Time",
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
+
 
   return (
     <div className="PIE-App">
@@ -1044,9 +1230,9 @@ console.log(data);
                 <td className="PIE-timetrackertabledata">
                   {item.candidateFormFillingDuration}
                 </td>
-                <td className="PIE-timetrackertabledata">{convertNewDateToFormattedDateTime(item.lineup)}</td>
+                <td className="PIE-timetrackertabledata">{convertNewDateToFormattedDateTime(item.callingTacker)}</td>
                 <td className="PIE-timetrackertabledata">
-                  {calculateTimeDifference(item?.lineup, item?.mailToClient)}
+                  {calculateTimeDifference(item?.callingTacker, item?.mailToClient)}
                 </td>
                 <td className="PIE-timetrackertabledata">
                   {convertNewDateToFormattedDateTime(item.mailToClient)}
@@ -1080,8 +1266,8 @@ console.log(data);
                   </button>
                 </td>
                 <td className="PIE-timetrackertabledata">
-                  {/* {item.totalInterviewTime} */}
-                  {calculateTotalInterviewTime(item.interviewRoundsList)}
+                  {item.totalInterviewTime}
+                  {/* {calculateTotalInterviewTime(item.interviewRoundsList)} */}
                 </td>
                 <td className="PIE-timetrackertabledata">
                   {item.diffBetweenInterviewAndDocument}
@@ -1117,7 +1303,7 @@ console.log(data);
       </div>
 
       <div className="procees-time-table">
-        <div>
+        <div className="fixPerformanceprocesstable100">
           <h5 className="text-secondary">Process Time Table</h5>
           <table className="PIE-timetrackertable">
             <thead>
@@ -1132,18 +1318,107 @@ console.log(data);
                 <tr key={index}>
                   <td className="PIE-timetrackertabledata">{index + 1}</td>
                   <td className="PIE-timetrackertabledata">{process}</td>
-                  <td className="PIE-timetrackertabledata">{index === 0 && convertMinutesToHours(data.length * 5)}</td>
                   <td className="PIE-timetrackertabledata">
-                    {index === 0 && sumTimeDurations(data)}
+                    {(index === 0 )  && cleanTimeStringSpaces(convertMinutesToTimeFormat(data.length * 5))}
+                    {(index === 1 ) && cleanTimeStringSpaces(convertMinutesToTimeFormat(data.length * 60))}
+                    {(index === 2 || index === 4 || index === 5 || index === 6 || index === 7 || index === 8) && cleanTimeStringSpaces(convertMinutesToTimeFormat(data.length * 1440))}
+                    {(index === 3 ) && cleanTimeStringSpaces(convertMinutesToTimeFormat(data.length * 10080))}
                   </td>
                   <td className="PIE-timetrackertabledata">
-                  {index === 0 && getTimeDifference(data)}
+                    {(index === 0 ) && cleanTimeStringSpaces(sumTimeDurations(data))}
+                   {index === 1 && removeLeadingZeros(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionAddedToMail"))}
+                   {(index === 2) && removeLeadingZeros(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailToMailRes"))}
+                   {(index === 3) && removeLeadingZeros(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailResToInterviewProcess"))}
+                   {(index === 4) && removeLeadingZeros(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionInterviewProcessToDocumentSent"))}
+                   {(index === 5) && removeLeadingZeros(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionDocumentSentToOfferLetterSendToCandidate"))}
+                   {(index === 6) && removeLeadingZeros(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterSendToCandidateToOfferLetterResponseFromCandidate"))}
+                   {(index === 7) && removeLeadingZeros(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterResponseFromCandidateToJoiningResponseFromCandidate"))}
+                   {(index === 8) && removeLeadingZeros(calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionJoiningResponseFromCandidateToJoinDate"))}
                   </td>
+                <td
+  className="PIE-timetrackertabledata"
+  style={{
+    color:
+      (index === 1 && subtractTimeDurations(
+        convertMinutesToTimeFormat(data.length * 60),
+        calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionAddedToMail")
+      ).startsWith("-")) ||
+      (index === 2 && subtractTimeDurations(
+        convertMinutesToTimeFormat(data.length * 1440),
+        calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailToMailRes")
+      ).startsWith("-")) ||
+      (index === 3 && subtractTimeDurations(
+        convertMinutesToTimeFormat(data.length * 10080),
+        calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailResToInterviewProcess")
+      ).startsWith("-")) ||
+      (index === 4 && subtractTimeDurations(
+        convertMinutesToTimeFormat(data.length * 1440),
+        calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionInterviewProcessToDocumentSent")
+      ).startsWith("-")) ||
+      (index === 5 && subtractTimeDurations(
+        convertMinutesToTimeFormat(data.length * 1440),
+        calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionDocumentSentToOfferLetterSendToCandidate")
+      ).startsWith("-")) ||
+      (index === 6 && subtractTimeDurations(
+        convertMinutesToTimeFormat(data.length * 1440),
+        calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterSendToCandidateToOfferLetterResponseFromCandidate")
+      ).startsWith("-")) ||
+      (index === 7 && subtractTimeDurations(
+        convertMinutesToTimeFormat(data.length * 1440),
+        calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterResponseFromCandidateToJoiningResponseFromCandidate")
+      ).startsWith("-")) ||
+      (index === 8 && subtractTimeDurations(
+        convertMinutesToTimeFormat(data.length * 1440),
+        calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionJoiningResponseFromCandidateToJoinDate")
+      ).startsWith("-"))
+        ? "red"
+        : "green",
+  }}
+>
+  {(index === 0) && getTimeDifference(data)}
+  {(index === 1) && cleanTimeStringPlusMinus(subtractTimeDurations(
+    convertMinutesToTimeFormat(data.length * 60),
+    calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionAddedToMail")
+  ))}
+  {(index === 2) && cleanTimeStringPlusMinus(subtractTimeDurations(
+    convertMinutesToTimeFormat(data.length * 1440),
+    calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailToMailRes")
+  ))}
+  {(index === 3) && cleanTimeStringPlusMinus(subtractTimeDurations(
+    convertMinutesToTimeFormat(data.length * 10080),
+    calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionMailResToInterviewProcess")
+  ))}
+  {(index === 4) && cleanTimeStringPlusMinus(subtractTimeDurations(
+    convertMinutesToTimeFormat(data.length * 1440),
+    calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionInterviewProcessToDocumentSent")
+  ))}
+  {(index === 5) && cleanTimeStringPlusMinus(subtractTimeDurations(
+    convertMinutesToTimeFormat(data.length * 1440),
+    calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionDocumentSentToOfferLetterSendToCandidate")
+  ))}
+  {(index === 6) && cleanTimeStringPlusMinus(subtractTimeDurations(
+    convertMinutesToTimeFormat(data.length * 1440),
+    calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterSendToCandidateToOfferLetterResponseFromCandidate")
+  ))}
+  {(index === 7) && cleanTimeStringPlusMinus(subtractTimeDurations(
+    convertMinutesToTimeFormat(data.length * 1440),
+    calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionOfferLetterResponseFromCandidateToJoiningResponseFromCandidate")
+  ))}
+  {(index === 8) && cleanTimeStringPlusMinus(subtractTimeDurations(
+    convertMinutesToTimeFormat(data.length * 1440),
+    calculateTotalTimeDifferenceAndAdditionForTimeDifferences(data, "additionJoiningResponseFromCandidateToJoinDate")
+  ))}
+</td>
+
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+
+
+        <Bar data={chartData} options={options} />
+
         {/* <div>
           <PerformanceMeter></PerformanceMeter>
         </div> */}

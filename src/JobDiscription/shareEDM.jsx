@@ -119,6 +119,21 @@ function ShareEDM({ Descriptions, onShareEdm }) {
   const generateAndDownloadEdmImage = async () => {
     setDownloadImg(true);
     try {
+      const inputH3_1 = document.getElementById("extraField1");
+      const inputH3_2 = document.getElementById("extraField2");
+      const inputH3_3 = document.getElementById("extraField3");
+      const extraF1 = inputH3_1.innerHTML;
+      const extraF2 = inputH3_2.innerHTML;
+      const extraF3 = inputH3_3.innerHTML;
+      if (extraF1 === "Enter Extra Data Field 1...") {
+        inputH3_1.style.display = "none";
+      }
+      if (extraF2 === "Enter Extra Data Field 2...") {
+        inputH3_2.style.display = "none";
+      }
+      if (extraF3 === "Enter Extra Data Field 3...") {
+        inputH3_3.style.display = "none";
+      }
       const input = document.getElementById("shareEMD");
       const canvas = await html2canvas(input, { scale: 2, logging: true });
   
@@ -132,12 +147,20 @@ function ShareEDM({ Descriptions, onShareEdm }) {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link); // Cleanup
+
+       // line 77 to 85 added by sahil karnekar date 30-10-2024
+       inputH3_1.style.display = "block";
+       inputH3_2.style.display = "block";
+       inputH3_3.style.display = "block";
     } catch (error) {
       console.error("Error generating and downloading image:", error);
       setDownloadImg(false);
     }
     finally{
       setDownloadImg(false);
+      inputH3_1.style.display = "block";
+      inputH3_2.style.display = "block";
+      inputH3_3.style.display = "block";
     }
   };
   return (
