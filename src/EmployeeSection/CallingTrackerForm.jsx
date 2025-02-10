@@ -39,6 +39,7 @@ const CallingTrackerForm = ({
   const [submited, setSubmited] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [uploadingResumeNewState, setUploadingResumeNewState] = useState(false);
+  const [displaySourceOthersInput, setDisplaySourceOthersInput] = useState(false);
 
   // sahil karnekar line 33 to 38 date 15-10-2024
   const today = new Date();
@@ -212,7 +213,7 @@ const CallingTrackerForm = ({
     if (!callingTracker.contactNumber) {
       errors.contactNumber = "Contact Number is required";
     }
-    if (!callingTracker.sourceName) {
+    if (!callingTracker.sourceName || callingTracker.sourceName === "others") {
       errors.sourceName = "Source Name is required";
     }
     // this validation added by sahil karnekar date 21-10-2024 line 187 to 195
@@ -289,10 +290,22 @@ const CallingTrackerForm = ({
     }
   };
   
+const handleSourceNameOthers = (e)=>{
+  const {name, value} = e.target;
+callingTracker.sourceName = value;
+setErrors((prevErrors) => ({ ...prevErrors, ["sourceName"]: "" }));
+}
+
   const handleChange = (e) => {
     const { name, value } = e.target || e;
   
   // Rajlaxmi Jagadale Added Email Validation Date-24-01-25 line263 to 312
+  if (name === "sourceName" && value === "others") {
+    setDisplaySourceOthersInput(true);
+  }else if (name === "sourceName" && value !== "others"){
+    setDisplaySourceOthersInput(false);
+  }
+
     if (name === "candidateEmail") {
       const trimmedEmail = value.replace(/\s/g, '');
   
@@ -1371,7 +1384,18 @@ style={{
                     <select
                       className={`plain-input`}
                       name="sourceName"
-                      value={callingTracker.sourceName}
+                      value={
+                        (callingTracker.sourceName === "" ||
+                         callingTracker.sourceName === "LinkedIn"  || 
+                         callingTracker.sourceName === "Naukri" || 
+                         callingTracker.sourceName === "Indeed" || 
+                         callingTracker.sourceName === "Times" ||
+                         callingTracker.sourceName === "Social Media" ||
+                         callingTracker.sourceName === "Company Page" ||
+                         callingTracker.sourceName === "Excel" || 
+                         callingTracker.sourceName === "Friends" || 
+                         callingTracker.sourceName === "others" ) ? callingTracker.sourceName : "others"
+                        }
                       onChange={handleChange}
                     >
                       <option value="" disabled>Select Source Name</option>
@@ -1385,8 +1409,18 @@ style={{
                       <option value="Friends">Friends</option>
                       <option value="others">Others</option>
                     </select>
+
+{
+  displaySourceOthersInput && (
+<input type="text" name="sourceNameOthers" id="" placeholder="Enter Source Name" 
+onChange={handleSourceNameOthers}
+/>
+  )
+}
+
+
                     {/* this line added by sahil date 22-10-2024 */}
-                    {!callingTracker.sourceName && (
+                    {((!callingTracker.sourceName) || (callingTracker.sourceName === "others")) && (
                       <span className="requiredFieldStar">*</span>
                     )}
                   </div>
