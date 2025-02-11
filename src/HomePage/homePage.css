@@ -259,7 +259,7 @@
   transform: translateY(-40px);
 }
 .taglineDesc{
-  color: darkgray;
+  color: #4c5a67;
     font-size: 26px;
     font-weight: bold;
 }
@@ -322,8 +322,8 @@
     text-align: center;
     height: 100vh;
     align-content: center;
-    /* background-image: linear-gradient(270deg, white, #cccccc); */
-    background-color: white;
+    background-image: linear-gradient(270deg, white, #cccccc);
+    /* background-color: white; */
     /* margin-right: 330px; */
     /* margin-top: 220px; */
   }

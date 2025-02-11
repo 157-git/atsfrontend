@@ -904,39 +904,11 @@ console.log(spentTime);
     ],
   };
 
-  // const options = {
-  //   responsive: true,
-  //   plugins: {
-  //     legend: {
-  //       position: "top",
-  //     },
-  //     title: {
-  //       display: true,
-  //       text: "Time Tracker - Required vs Spent Time",
-  //     },
-  //   },
-  //   scales: {
-  //     y: {
-  //       beginAtZero: true,
-  //     },
-  //   },
-  // };
-
   const options = {
     responsive: true,
     plugins: {
       legend: {
         position: "top",
-        labels: {
-          generateLabels: (chart) => {
-            const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
-  
-            return labels.map((label, index) => ({
-              ...label,
-              fillStyle: index === 2 ? "linear-gradient(90deg, rgba(44,218,35,1) 29%, rgba(231,10,25,1) 69%);" : label.fillStyle, // Change color of legend 3
-            }));
-          },
-        },
       },
       title: {
         display: true,
@@ -949,6 +921,34 @@ console.log(spentTime);
       },
     },
   };
+
+  // const options = {
+  //   responsive: true,
+  //   plugins: {
+  //     legend: {
+  //       position: "top",
+  //       labels: {
+  //         generateLabels: (chart) => {
+  //           const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+  
+  //           return labels.map((label, index) => ({
+  //             ...label,
+  //             fillStyle: index === 2 ? "linear-gradient(90deg, rgba(44,218,35,1) 29%, rgba(231,10,25,1) 69%);" : label.fillStyle, // Change color of legend 3
+  //           }));
+  //         },
+  //       },
+  //     },
+  //     title: {
+  //       display: true,
+  //       text: "Time Tracker - Required vs Spent Time",
+  //     },
+  //   },
+  //   scales: {
+  //     y: {
+  //       beginAtZero: true,
+  //     },
+  //   },
+  // };
   
 
 
