@@ -289,3 +289,6 @@ strong {
 .setDisplayFlexForUpdateForm{
   display: flex;
 }
+.setwidthandmarginforratings{
+  width: 50%;
+}

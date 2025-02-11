@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./invoicePdf.css";
-import logo from "../LogoImages/LoginImge.jpg";
+import logo from "../assets/rgLogo.png";
 import { format, parseISO } from "date-fns";
 import { API_BASE_URL } from "../api/api";
 

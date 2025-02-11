@@ -20,7 +20,7 @@ import InterviewPreviousQuestion from "./interviewPreviousQuestion";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
 // this libraries added by sahil karnekar date 21-10-2024
-import { Button, Progress, Rate, TimePicker, Upload } from "antd";
+import { Button, Flex, Progress, Rate, TimePicker, Upload } from "antd";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSocket } from "../EmployeeDashboard/socket";
@@ -40,6 +40,7 @@ const CallingTrackerForm = ({
   const [showConfetti, setShowConfetti] = useState(false);
   const [uploadingResumeNewState, setUploadingResumeNewState] = useState(false);
   const [displaySourceOthersInput, setDisplaySourceOthersInput] = useState(false);
+  const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
 
   // sahil karnekar line 33 to 38 date 15-10-2024
   const today = new Date();
@@ -302,6 +303,15 @@ const handleRatingsChange = (value) => {
     communicationRating: value,
   }));
   setErrors((prevErrors) => ({ ...prevErrors, ["communicationRating"]: "" }));
+};
+const handleRatingsChange1 = (event) => {
+  const { name, value } = event.target;
+
+  setCallingTracker((prevState) => ({
+    ...prevState,
+    [name]: value, // Updates the selected rating
+  }));
+  setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
 };
 
 
@@ -1231,7 +1241,7 @@ style={{
                       className="plain-input"
                     />
                   </div>
-                  <div className="calling-tracker-two-input"
+                  <div className="calling-tracker-two-input newpaddingrightinputforhelp"
                   style={{
                     width:"auto"
                   }}
@@ -2314,6 +2324,7 @@ onChange={handleSourceNameOthers}
                         //  {/* this line added by sahil date 22-10-2024 */}
                         style={{ width: "inherit" }}
                       />
+                      {/* <span>Years</span> */}
                       {/* sahil karnekar line 1523 to 1527 */}
                       {/* this line added by sahil date 22-10-2024 */}
                       {callingTracker.selectYesOrNo === "Interested" &&
@@ -2444,9 +2455,30 @@ onChange={handleSourceNameOthers}
                       placeholder="Communication Rating"
                     /> */}
 
-<Rate value={callingTracker.communicationRating} onChange={handleRatingsChange} 
+{/* <Rate
+tooltips={desc} value={callingTracker.communicationRating} 
+ onChange={handleRatingsChange} 
+ allowHalf
+/> */}
 
-/>
+<select
+  className="plain-input setwidthandmarginforratings"
+  name="callingFeedback"
+  value={callingTracker.callingFeedback}
+  onChange={handleRatingsChange1}
+>
+  <option value="">Select Rating</option>
+  {[...Array(10)].map((_, index) => {
+    const rating = (index + 1) * 0.5; 
+    return (
+      <option key={rating} value={`${rating}`}>
+        {rating.toFixed(1)}
+      </option>
+    );
+  })}
+</select>
+<span className="ml-5">Out Of 5</span>
+
                     {/* this line added by sahil date 22-10-2024 */}
                     {callingTracker.selectYesOrNo === "Interested" &&
                       !callingTracker.communicationRating && (
@@ -2464,7 +2496,7 @@ onChange={handleSourceNameOthers}
 
             <div className="calling-tracker-row-gray">
               <div className="calling-tracker-field">
-                <label>Current CTC(LPA)</label>
+                <label>Current CTC (LPA)</label>
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
                     {/* this line added by sahil date 22-10-2024 */}
@@ -2585,7 +2617,7 @@ onChange={handleSourceNameOthers}
                     <input
                       type="text"
                       name="offerLetterMsg"
-                      placeholder="Letter Message"
+                      placeholder="Offer Letter Message"
                       value={lineUpData.offerLetterMsg}
                       // onChange={handleLineUpChange}
                       onChange={(e) =>

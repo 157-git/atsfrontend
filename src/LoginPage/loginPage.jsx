@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./loginPage.css";
-import LoginImage from "../LogoImages/LoginImge.jpg";
+import LoginImage from "../assets/rgLogo.png";
 import { getPasswordFromDB } from "../api/api";
 import ForgotPasswordForm from "./ForgotPasswordForm"; // Import the ForgotPasswordForm component
 import JobList from "../EmployeeDashboard/JobList";

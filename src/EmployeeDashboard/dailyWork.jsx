@@ -16,6 +16,7 @@ import { setProfileImageFromRedux } from "../EmployeeDashboard/employeeSlice.jsx
 import { Avatar, Badge, notification, List, Card } from "antd";
 import { BellOutlined, CloseOutlined, ClearOutlined } from "@ant-design/icons";
 import { initializeSocket } from "./socket.jsx";
+import notificationIcon from "../assets/notificationicon.png"
 import Meta from "antd/es/card/Meta.js";
 //SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
 
@@ -1312,7 +1313,11 @@ function DailyWork({
                 <Badge 
                 color="var(--notification-badge-background)"
                 count={messages.length}>
-                  <Avatar shape="square" icon={<BellOutlined />} />
+                  <Avatar shape="square" icon={
+                    <BellOutlined />
+                
+                } />
+                {/* <img src={notificationIcon} alt="" /> */}
                 </Badge>
               </div>
             </div>

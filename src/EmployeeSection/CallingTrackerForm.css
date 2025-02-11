@@ -825,3 +825,9 @@ padding-right: 8px;
   border: 1px dashed black;
   /* background-color: rgb(244, 244, 5) */
 }
+.uploadantdc{
+  line-height: 0.1;
+}
+.newpaddingrightinputforhelp{
+  margin-right: 3px;
+}
