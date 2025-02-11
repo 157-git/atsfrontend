@@ -823,6 +823,7 @@ padding-right: 8px;
   color: black;
   font-weight: bold;
   border: 1px dashed black;
+  height: 24px;
   /* background-color: rgb(244, 244, 5) */
 }
 .uploadantdc{
@@ -830,4 +831,19 @@ padding-right: 8px;
 }
 .newpaddingrightinputforhelp{
   margin-right: 3px;
+}
+.addtrnaslateproptospan{
+  transform: translateX(-50px);
+}
+.addtrnaslateproptospanForMonths{
+  transform: translateX(-60px);
+}
+.wrapdivforctcs{
+  display: flex;
+}
+.setDisplayBlockForctcs{
+  display: block;
+}
+.newhightforincentivesdiv{
+  height: 18px;
 }
