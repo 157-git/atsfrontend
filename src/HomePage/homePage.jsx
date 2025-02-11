@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "../HomePage/homePage.css";
-import clouds from "../LogoImages/clouds.png";
+// import clouds from "../LogoImages/clouds.png";
 import world from "../LogoImages/world-select-new.svg";
 import developerjob from "../LogoImages/developerjob.svg";
 import { Link } from "react-router-dom";
 import { Modal } from "react-bootstrap";
 import ColorPicker from "./ColorPicker";
+import siteLogo from "../assets/rgLogo.png"
 
 const HomePage = () => {
   // the showColor implemented instead of choose color by sahil karnekar date 14-11-2024
@@ -56,28 +57,9 @@ const HomePage = () => {
         }}
       >
         <div className="landing-content">
-          <h1
-            style={{
-              fontFamily: "sans-serif",
-              fontWeight: "700",
-              fontSize: "50px",
-              marginTop: "140px",
-              marginRight: "20px",
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "inherit",
-                fontWeight: "600",
-                fontSize: "25px",
-                color: "#c40b0b",
-              }}
-            >
-              Sky's the limit, If you have
-            </span>
-          </h1>
-          <div style={{ width: "50%", margin: "auto" }}>
-            <h1
+         
+          <div className="langingcontentsecond">
+            {/* <h1
               style={{
                 fontFamily: "inherit",
                 fontWeight: "600",
@@ -88,8 +70,15 @@ const HomePage = () => {
               }}
             >
               Recruiter's Gear
-            </h1>
-            <div
+            </h1> */}
+            <div className="maindivlandingpage">
+            <div className="siteLogoDivFlex">
+            <img src={siteLogo} alt=''
+           className="logoimagelandingpage"
+            />
+            </div>
+
+            {/* <div
               className="landingbtn"
               style={{
                 display: "flex",
@@ -99,11 +88,21 @@ const HomePage = () => {
                 paddingRight: "80px",
                 paddingTop: "20px",
               }}
-            >
+            > */}
+            <div className="linkdiv">
             <Link to="/Main-Dashboard">
                 <button className="main-homepage-btn">Let's begin</button>
               </Link>
             </div>
+            <div className="tagline">
+              <p className="taglineDesc">Like a superhero needs their suit, you  need Recruiter’s Gear to boost hiring power!</p>
+            </div>
+            
+            {/* </div> */}
+            </div>
+           
+           
+          
           </div>
           <div
             className="Choose-color-container"
