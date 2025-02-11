@@ -1,114 +1,159 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../api/api";
+import "./interviewPreviousQuestion.css";
 
 const InterviewPreviousQuestion = () => {
-  // State to manage user input and API data
-  const [jobId, setJobId] = useState(""); // For storing the entered Job ID
-  const [interviewData, setInterviewData] = useState(null); // For storing fetched interview data
+  const [requirementOptions, setRequirementOptions] = useState([]); // Requirement dropdown options
+  const [selectedRequirement, setSelectedRequirement] = useState(""); // Selected RequirementId
+  const [interviewDetails, setInterviewDetails] = useState([]); // List of interview details
+  const [selectedInterviewDetailsId, setSelectedInterviewDetailsId] =
+    useState(""); // Selected InterviewDetailsId
+  const [questions, setQuestions] = useState([]); // Interview questions list
   const [loading, setLoading] = useState(false); // Loading state
-  const [error, setError] = useState(""); // Error state
+  const [error, setError] = useState(""); // Error message
 
-  //Arshad Attar Added This New Function On 19-11-2024 According to new Backend Logic, 
-  // Fetch interview data based on jobId
-  const fetchInterviewData = async (id) => {
-    setLoading(true);
-    setError(""); 
-  
+  useEffect(() => {
+    fetchRequirementOptions();
+  }, []);
+
+  const fetchRequirementOptions = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/interview-questions/${id}`);
-  
-      if (response.status === 200) {
-        // Successfully fetched data
-        setInterviewData(response.data); // Set the fetched interview data
-      } else if (response.status === 404) {
-        // Data not foundIn
-        setError(response.data || `Interview Questions not found for Job ID : -  ${id}`);
-        setInterviewData([]); // Clear any existing data
-      }
+      const response = await axios.get(`${API_BASE_URL}/company-details`);
+      setRequirementOptions(response.data);
+      console.log("Requirement options:", response.data);
     } catch (error) {
-      // Handle errors returned by the backend or network errors
-      const backendErrorMessage = error.response?.data || `An error occurred while fetching data for Job ID: ${id}`;
-      setError(backendErrorMessage);
-    } finally {
-      setLoading(false); // Ensure loading is stopped after the fetch attempt
+      console.error("Error fetching requirement options:", error);
     }
   };
-  
-  
 
-  // Handle change in jobId input field
-  const handleJobIdChange = (e) => {
-    const value = e.target.value;
-    setJobId(value); // Update the jobId state
+  const fetchInterviewDetails = async (requirementId) => {
+    setLoading(true);
+    setError("");
 
-    if (value) {
-      fetchInterviewData(value); // Fetch data if jobId is entered
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/get-interview-details/${requirementId}`
+      );
+      if (response.status === 200) {
+        setInterviewDetails(response.data); // Store interview details
+        setQuestions([]); // Clear previous questions
+      } else {
+        setError(
+          `No interview details found for Requirement ID: ${requirementId}`
+        );
+        setInterviewDetails([]);
+      }
+    } catch (error) {
+      setError(
+        `Error fetching interview details: ${
+          error.response?.data || error.message
+        }`
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRequirementChange = (e) => {
+    const selectedId = e.target.value;
+    setSelectedRequirement(selectedId);
+
+    setSelectedInterviewDetailsId("");
+    setQuestions([]);
+
+    setInterviewDetails([]);
+
+    if (selectedId) {
+      fetchInterviewDetails(selectedId);
+    }
+  };
+
+  const handleInterviewDetailsChange = (e) => {
+    const selectedId = e.target.value;
+    setSelectedInterviewDetailsId(selectedId);
+    const selectedInterview = interviewDetails.find(
+      (item) => item.interviewDetailsId === Number(selectedId)
+    );
+    if (selectedInterview) {
+      setQuestions(selectedInterview.interviewQuestion);
     } else {
-      setInterviewData(null); // Reset interview data if jobId is cleared
+      setQuestions([]);
     }
   };
 
   return (
-    <div>
-      <div className="previousQuestion">
-        <h5>Previous Question</h5>
-        <div className="form-group">
-          {/* <label htmlFor="jobId">Job Id</label> */}
-          <input
-            type="text"
-            id="jobId"
-            className="form-control"
-            placeholder="Enter Job Id"
-            value={jobId}
-            onChange={handleJobIdChange} // Handle jobId change
-          />
+    <div className="previousQuestion">
+      <div className="Previous-Questions-Header">
+        <h5>Previous Questions</h5>
+      </div>
+
+      <div className="interview-previous-question-main-div">
+        <div className="question-form-group">
+          <label>Select Job ID</label>
+          <select
+            value={selectedRequirement}
+            onChange={handleRequirementChange}
+            style={{ width: "100%" }}
+          >
+            <option value="">Select Job Id</option>
+            {requirementOptions.map((option) => (
+              <option key={option.requirementId} value={option.requirementId}>
+                {option.requirementId} - {option.designation}
+              </option>
+            ))}
+          </select>
         </div>
 
-        {/* Display loading state */}
-        {loading && <p>Loading...</p>}
-
-        {/* Display error message if there's an error */}
-        {error && <p style={{ color: "red" }}>{error}</p>}
-
-        {/* Display the interview details if data is available */}
-        {interviewData && (
-          <>
-            <div className="interview-name-div">
-              <p className="card-content"><strong>Interviewer : - </strong>{`${interviewData.interviewerName}`}</p>
-              <p className="card-content"><strong>Duration :- </strong>{`${interviewData.interviewDuration}`}</p>
-            </div>
-
-            <div className="question-card-main-div">
-            <div className="question-card">
-              <h2 className="question-card-title">Asked Questions</h2>
-              {interviewData.askedQuestions && interviewData.askedQuestions.length > 0 ? (
-                interviewData.askedQuestions.map((question, index) => (
-                  <p key={index} className="card-content">
-                    Q.{index + 1} : {question}
-                  </p>
-                ))
-              ) : (
-                <p>No asked questions available.</p>
-              )}
-            </div>
-            <div className="question-card">
-              <h2 className="question-card-title">Unanswered Questions</h2>
-              {interviewData.unansweredQuestions && interviewData.unansweredQuestions.length > 0 ? (
-                interviewData.unansweredQuestions.map((question, index) => (
-                  <p key={index} className="card-content">
-                    Q.{index + 1}: {question}
-                  </p>
-                ))
-              ) : (
-                <p>No unanswered questions available.</p>
-              )}
-            </div>
-            </div>
-
-          </>
-        )}
+        <div className="question-form-group">
+          <label>Select Interview Round</label>
+          <select
+            value={selectedInterviewDetailsId}
+            onChange={handleInterviewDetailsChange}
+            style={{ width: "100%" }}
+          >
+            <option value="">Select Interview Round</option>
+            {interviewDetails.map((interview) => (
+              <option
+                key={interview.interviewDetailsId}
+                value={interview.interviewDetailsId}
+              >
+                {interview.interviewRound} ({interview.questionAddedDate})
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
+
+      {loading && <p>Loading...</p>}
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {questions.length > 0 && (
+        <div className="interview-previous-question-table-main-div">
+          <table className="interview-previous-question-table">
+            <thead>
+              <tr className="interview-previous-question-table-header">
+                <th>Question No</th>
+                <th>Questions</th>
+                <th>Answer Reference</th>
+              </tr>
+            </thead>
+            <tbody>
+              {questions.map((question, index) => (
+                <tr
+                  key={question.questionsId}
+                  className="interview-previous-question-table-row"
+                >
+                  <td>{index + 1}</td>
+                  <td>{question.interviewQuestions}</td>
+                  <td>{question.questionsReference}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

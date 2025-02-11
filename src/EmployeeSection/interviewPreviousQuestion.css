@@ -1,0 +1,126 @@
+.previousQuestion {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  height: 100%;
+}
+
+.interview-previous-question-main-div {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  justify-content: space-around;
+  margin-bottom: 15px;
+}
+
+.Previous-Questions-Header {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+}
+
+.Previous-Questions-Header h5 {
+  font-weight: bold;
+}
+
+.question-form-group {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.question-form-group label {
+  white-space: nowrap;
+}
+
+.question-form-group select {
+  width: 100%;
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+  outline: none;
+  transition: border-color 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.question-form-group select:hover {
+  border-color: #007bff;
+}
+
+.question-form-group select:focus {
+  border-color: #0056b3;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.question-form-group select:disabled {
+  background-color: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.question-form-group select option {
+  font-size: 14px;
+  padding: 10px;
+  background-color: #fff;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .question-form-group select {
+    font-size: 16px;
+    padding: 12px;
+  }
+}
+
+.interview-previous-question-table-main-div {
+  width: 100%;
+  max-height: 400px;
+  overflow-y: auto;
+  align-items: center;
+  border-radius: 2px;
+}
+
+.interview-previous-question-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.interview-previous-question-table thead {
+  position: sticky;
+  top: 0;
+  background-color: var(--table-header-bg);
+  color: var(--table-header-color);
+  z-index: 10;
+}
+
+.interview-previous-question-table-header {
+  font-weight: bold;
+  text-align: left;
+}
+
+.interview-previous-question-table-header th {
+  padding: 5px;
+  padding-left: 5px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.interview-previous-question-table td {
+  padding: 5px;
+  padding-left: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .interview-previous-question-table td,
+  .interview-previous-question-table th {
+    font-size: 14px;
+    padding: 8px;
+  }
+}

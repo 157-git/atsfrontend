@@ -26,8 +26,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { UploadOutlined } from "@ant-design/icons";
 import CandidatePresentComponent from "./CandidatePresentComponent";
-import uploadingResumeGif from "../assets/uploadingResumeMotion.gif"; 
-import uploadingResumeStatic from "../assets/uploadStaticPngFile.png"; 
+import uploadingResumeGif from "../assets/uploadingResumeMotion.gif";
+import uploadingResumeStatic from "../assets/uploadStaticPngFile.png";
+import startPointImg from "../photos/start-line.png";
+import endpointImg from "../photos/finish.png";
 
 const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
@@ -35,7 +37,7 @@ const CallingTrackerForm = ({
   loginEmployeeName,
   onsuccessfulDataUpdation,
 }) => {
-  const { employeeId,userType } = useParams();
+  const { employeeId, userType } = useParams();
   const [submited, setSubmited] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [uploadingResumeNewState, setUploadingResumeNewState] = useState(false);
@@ -63,7 +65,7 @@ const CallingTrackerForm = ({
     communicationRating: "",
     selectYesOrNo: "Yet To Confirm",
     callingFeedback: "",
-    employeeId:employeeId,
+    employeeId: employeeId,
     userType: userType,
   };
 
@@ -129,14 +131,15 @@ const CallingTrackerForm = ({
   const handleCloseForm = () => {
     setIsFormVisible(false);
   };
-  useEffect(() => {
-    fetchRequirementOptions();
-  }, [employeeId]);
+
+    useEffect(() => {
+      fetchRequirementOptions();
+    }, [employeeId]);
 
   useEffect(() => {
     if (initialData) {
       console.log(initialData);
-      
+
       const updatedCallingTracker = { ...initialCallingTrackerState };
       const updatedLineUpData = { ...initialLineUpState };
 
@@ -157,7 +160,6 @@ const CallingTrackerForm = ({
           setDisplayProgress(true);
           setUploadProgress(100);
           setResumeUploaded(true);
-          
         }
       });
 
@@ -191,6 +193,7 @@ const CallingTrackerForm = ({
 
   const ensureStringValue = (value) =>
     value !== undefined && value !== null ? String(value) : "";
+
   const fetchRequirementOptions = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/company-details`);
@@ -206,7 +209,10 @@ const CallingTrackerForm = ({
     if (!callingTracker.requirementId) {
       errors.requirementId = "Please Select Job Id";
     }
-    if (!callingTracker.candidateName || callingTracker.candidateName.trim() === "") {
+    if (
+      !callingTracker.candidateName ||
+      callingTracker.candidateName.trim() === ""
+    ) {
       errors.candidateName = "Candidate Name is required";
     }
     if (!callingTracker.contactNumber) {
@@ -278,8 +284,10 @@ const CallingTrackerForm = ({
   const handleBlurEmailChange = async () => {
     if (callingTracker.candidateEmail) {
       try {
-        const response = await axios.get(`${API_BASE_URL}/duplicate-candidates/${callingTracker.candidateEmail}`);
-       const data = response.data;
+        const response = await axios.get(
+          `${API_BASE_URL}/duplicate-candidates/${callingTracker.candidateEmail}`
+        );
+        const data = response.data;
         setCandidateData(data);
         setIsFormVisible(true);
         console.log("API Response:", response.data);
@@ -288,21 +296,22 @@ const CallingTrackerForm = ({
       }
     }
   };
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target || e;
-  
-  // Rajlaxmi Jagadale Added Email Validation Date-24-01-25 line263 to 312
+
+    // Rajlaxmi Jagadale Added Email Validation Date-24-01-25 line263 to 312
     if (name === "candidateEmail") {
-      const trimmedEmail = value.replace(/\s/g, '');
-  
+      const trimmedEmail = value.replace(/\s/g, "");
+
       setCallingTracker({ ...callingTracker, [name]: trimmedEmail });
-  
+
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (trimmedEmail !== "" && !emailPattern.test(trimmedEmail)) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          [name]:  "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).",
+          [name]:
+            "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).",
         }));
       } else {
         setErrors((prevErrors) => ({
@@ -312,7 +321,7 @@ const CallingTrackerForm = ({
       }
       return;
     }
-  // sahil karnekar line 249 to 274
+    // sahil karnekar line 249 to 274
     // if (name === "candidateEmail") {
     //   const emailPattern =
     //     /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
@@ -561,7 +570,7 @@ const CallingTrackerForm = ({
         dataToUpdate.callingTracker.teamLeader = { teamLeaderId: employeeId };
       }
       console.log(dataToUpdate);
-      
+
       const response = await axios.post(
         `${API_BASE_URL}/calling-tracker/${employeeId}/${userType}`,
         dataToUpdate,
@@ -577,13 +586,14 @@ const CallingTrackerForm = ({
         const year = now.getFullYear();
         const month = now.getMonth() + 1; // Months are 0-based in JavaScript
         const day = now.getDate();
-        
+
         const hours = now.getHours();
         const minutes = now.getMinutes();
-        const period = hours >= 12 ? 'PM' : 'AM';
-        const formattedHours = hours > 12 ? hours - 12 : hours === 0 ? 12 : hours;
+        const period = hours >= 12 ? "PM" : "AM";
+        const formattedHours =
+          hours > 12 ? hours - 12 : hours === 0 ? 12 : hours;
         const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-      
+
         const formattedDate = `${year}-${month}-${day}`;
         return `Date: ${formattedDate}, Time: ${formattedHours}:${formattedMinutes} ${period}`;
       };
@@ -592,10 +602,8 @@ const CallingTrackerForm = ({
         candidateAddedTime: getFormattedDateTime(),
       };
       if (callingTracker.selectYesOrNo === "Interested") {
-        socket.emit("add_candidate",  updatedCallingTracker );
+        socket.emit("add_candidate", updatedCallingTracker);
       }
-
-
 
       if (response.status === 200 || response.status === 201) {
         //Arshad Attar Added this function to add data from excel and Resume data base and
@@ -845,10 +853,9 @@ const CallingTrackerForm = ({
 
       const data = await response.json();
       setResumeResponse(data);
-  
     } catch (error) {
       console.error("Error uploading file:", error);
-    }finally{
+    } finally {
       setUploadingResumeNewState(false);
     }
   };
@@ -918,30 +925,29 @@ const CallingTrackerForm = ({
       setIsOtherLocationSelected(false); // No additional input needed
     }
   };
-const [displaySameAsContactField, setDisplaySameAsContactField] = useState(false);
-const handleDisplaySameAsContactText = () => {
-  console.log("working");
-  console.log(callingTracker.contactNumber);
-  
-  
-  if (callingTracker.contactNumber !== "") {
-    setDisplaySameAsContactField(true);
-  }
-  
-  if (callingTracker.contactNumber === undefined) {
-    console.log("Please Select Contact number First");
-    setDisplaySameAsContactField(false);
-  }
-};
-const copyContactNumber = ()=>{
-  callingTracker.alternateNumber = callingTracker.contactNumber;
-}
+  const [displaySameAsContactField, setDisplaySameAsContactField] =
+    useState(false);
+  const handleDisplaySameAsContactText = () => {
+    console.log("working");
+    console.log(callingTracker.contactNumber);
+
+    if (callingTracker.contactNumber !== "") {
+      setDisplaySameAsContactField(true);
+    }
+
+    if (callingTracker.contactNumber === undefined) {
+      console.log("Please Select Contact number First");
+      setDisplaySameAsContactField(false);
+    }
+  };
+  const copyContactNumber = () => {
+    callingTracker.alternateNumber = callingTracker.contactNumber;
+  };
 
   // this fucntion is made by sahil karnekar on date 25-11-2024
   const handleResumeUploadBoth = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
 
     setUploadProgress(0); // Start progress
 
@@ -1018,7 +1024,12 @@ const copyContactNumber = ()=>{
 
       <section className="calling-tracker-submain">
         {loading && <Loader />}
-        {isFormVisible && <CandidatePresentComponent candidateData={candidateData} onClose={handleCloseForm} />}
+        {isFormVisible && (
+          <CandidatePresentComponent
+            candidateData={candidateData}
+            onClose={handleCloseForm}
+          />
+        )}
         <form onSubmit={handleSubmit}>
           {showConfetti && (
             <Confetti
@@ -1033,10 +1044,11 @@ const copyContactNumber = ()=>{
           <div className="calling-tracker-form">
             {/* this code line 744 to 766 added by sahil karnekar 30-10-2024 */}
             <div className="calling-tracker-row-white">
-              <div className="calling-tracker-field"
-              style={{
-                justifyContent:"center"
-              }}
+              <div
+                className="calling-tracker-field"
+                style={{
+                  justifyContent: "center",
+                }}
               >
                 <div
                   className="calling-tracker-field-sub-div"
@@ -1066,7 +1078,7 @@ const copyContactNumber = ()=>{
                   <div
                     style={{
                       display: "flex",
-                      justifyContent:"space-between"
+                      justifyContent: "space-between",
                     }}
                   >
                     {/* <input
@@ -1077,46 +1089,65 @@ const copyContactNumber = ()=>{
                       className="plain-input"
                     /> */}
 
-<div className="uploadantdc"
-style={{
-  width:"60%"
-}}>
-<Upload
-  accept=".pdf,.doc,.docx"
-  showUploadList={false} // Hide file preview list
-  beforeUpload={async (file) => {
-      setUploadingResumeNewState(true);
-      setDisplayProgress(false);
-  setResumeFileName(file.name);
-  setDisplayProgress(true);
-      setUploadProgress(0);
-      console.log(file);
-      
-      // Create a synthetic event to match input file event structure
-      const syntheticEvent = { target: { files: [file] } };
-  
-      // Call handleResumeUploadBoth function
-      await handleResumeUploadBoth(syntheticEvent);
+                    <div
+                      className="uploadantdc"
+                      style={{
+                        width: "60%",
+                      }}
+                    >
+                      <Upload
+                        accept=".pdf,.doc,.docx"
+                        showUploadList={false} // Hide file preview list
+                        beforeUpload={async (file) => {
+                          setUploadingResumeNewState(true);
+                          setDisplayProgress(false);
+                          setResumeFileName(file.name);
+                          setDisplayProgress(true);
+                          setUploadProgress(0);
+                          console.log(file);
 
-      setUploadingResumeNewState(false);
+                          // Create a synthetic event to match input file event structure
+                          const syntheticEvent = { target: { files: [file] } };
 
-   
- 
-    return false; // Prevent automatic upload
-  }}
->
-  <Button
-  icon={uploadingResumeNewState ? <img src={uploadingResumeGif} alt="Uploading" style={{ width: 20, height: 20 }} /> : <img src={uploadingResumeStatic} alt="Static" style={{ width: 20, height: 20 }} />}>{resumeFileName.length > 10
-    ? `${resumeFileName.substring(0, 15)}...`
-    : resumeFileName || "Upload Resume"}</Button>
-</Upload>
-{
-  displayProgress && (
-<Progress percent={uploadProgress} strokeWidth={4} size="small" className="customprogressForCallingTracker"/>
-  )
-}
+                          // Call handleResumeUploadBoth function
+                          await handleResumeUploadBoth(syntheticEvent);
 
-</div>
+                          setUploadingResumeNewState(false);
+
+                          return false; // Prevent automatic upload
+                        }}
+                      >
+                        <Button
+                          icon={
+                            uploadingResumeNewState ? (
+                              <img
+                                src={uploadingResumeGif}
+                                alt="Uploading"
+                                style={{ width: 20, height: 20 }}
+                              />
+                            ) : (
+                              <img
+                                src={uploadingResumeStatic}
+                                alt="Static"
+                                style={{ width: 20, height: 20 }}
+                              />
+                            )
+                          }
+                        >
+                          {resumeFileName.length > 10
+                            ? `${resumeFileName.substring(0, 15)}...`
+                            : resumeFileName || "Upload Resume"}
+                        </Button>
+                      </Upload>
+                      {displayProgress && (
+                        <Progress
+                          percent={uploadProgress}
+                          strokeWidth={4}
+                          size="small"
+                          className="customprogressForCallingTracker"
+                        />
+                      )}
+                    </div>
 
                     {/* {resumeUploaded && (
                       <FontAwesomeIcon
@@ -1132,18 +1163,21 @@ style={{
                     {errors.resume && (
                       <div className="error-message">{errors.resume}</div>
                     )}
-                    <p className="calling-tracker-popup-open-btn"
-                    style={{
-                      maxHeight:"30px",
-                      width:"76px",
-                      textAlign:"center"
-                    }}
+                    <p
+                      className="calling-tracker-popup-open-btn"
+                      style={{
+                        maxHeight: "30px",
+                        width: "76px",
+                        textAlign: "center",
+                      }}
                     >
                       <i
                         className="fas fa-eye"
                         onClick={() => {
                           if (!resumeUploaded) {
-                            setErrorForResumeUrl("Please upload a resume first.");
+                            setErrorForResumeUrl(
+                              "Please upload a resume first."
+                            );
                           }
                           if (resumeUrl) {
                             setIsModalOpen(true);
@@ -1163,10 +1197,12 @@ style={{
                       style={{
                         color: "green",
                       }}
-                      className="error-message">{errorForResumeUrl}</div>
+                      className="error-message"
+                    >
+                      {errorForResumeUrl}
+                    </div>
                   )}
                 </div>
-
               </div>
             </div>
             <div className="calling-tracker-row-gray">
@@ -1194,10 +1230,11 @@ style={{
               </div>
               <div className="calling-tracker-field">
                 <label>Recruiter Name</label>
-                <div className="calling-tracker-two-input-container"
-                style={{
-                  justifyContent:"space-between"
-                }}
+                <div
+                  className="calling-tracker-two-input-container"
+                  style={{
+                    justifyContent: "space-between",
+                  }}
                 >
                   <div className="calling-tracker-two-input">
                     <input
@@ -1209,10 +1246,11 @@ style={{
                       className="plain-input"
                     />
                   </div>
-                  <div className="calling-tracker-two-input"
-                  style={{
-                    width:"auto"
-                  }}
+                  <div
+                    className="calling-tracker-two-input"
+                    style={{
+                      width: "auto",
+                    }}
                   >
                     <button
                       type="button"
@@ -1265,15 +1303,15 @@ style={{
                       placeholder="Enter Candidate Email"
                     /> */}
 
-<input
-  type="email"
-  name="candidateEmail"
-  value={callingTracker.candidateEmail}
-  onChange={handleChange}
-  onBlur={handleBlurEmailChange} // Calls API when the user leaves the field
-  className="plain-input"
-  placeholder="Enter Candidate Email"
-/>
+                    <input
+                      type="email"
+                      name="candidateEmail"
+                      value={callingTracker.candidateEmail}
+                      onChange={handleChange}
+                      onBlur={handleBlurEmailChange} // Calls API when the user leaves the field
+                      className="plain-input"
+                      placeholder="Enter Candidate Email"
+                    />
 
                     {/* this line added by sahil date 22-10-2024 */}
                     {!callingTracker.candidateEmail && (
@@ -1317,47 +1355,44 @@ style={{
               </div>
               <div className="calling-tracker-field">
                 <label>Whatsapp Number</label>
-                <div className="calling-tracker-field-sub-div"
-                onClick={handleDisplaySameAsContactText}
+                <div
+                  className="calling-tracker-field-sub-div"
+                  onClick={handleDisplaySameAsContactText}
                 >
                   <PhoneInput
                     placeholder="Enter phone number"
                     name="alternateNumber"
                     className="plain-input"
                     value={callingTracker.alternateNumber}
-                    
-                    onChange={(value) =>{
+                    onChange={(value) => {
                       setDisplaySameAsContactField(false);
                       handlePhoneNumberChange(value, "alternateNumber");
-                    }
-                     
-                    }
+                    }}
                     defaultCountry="IN"
                     // sahil karnekar line 732
                     maxLength={20}
-                    
                   />
-                  {
-                    displaySameAsContactField && (
-                      <div className="inputsameascontact">
-                     <input 
-  type="checkbox" 
-  name="copyContactNumber" 
-  onChange={(e) => {
-    if (e.target.checked) {
-      if (callingTracker.contactNumber) {
-      callingTracker.alternateNumber = callingTracker.contactNumber;
-      }
-    } else {
-      callingTracker.alternateNumber = "";
-    }
-  }} 
-/>
-<span className="sameascontactnumbersize" >Same As Contact Number</span>
-
-</div>
-                    )
-                  }
+                  {displaySameAsContactField && (
+                    <div className="inputsameascontact">
+                      <input
+                        type="checkbox"
+                        name="copyContactNumber"
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            if (callingTracker.contactNumber) {
+                              callingTracker.alternateNumber =
+                                callingTracker.contactNumber;
+                            }
+                          } else {
+                            callingTracker.alternateNumber = "";
+                          }
+                        }}
+                      />
+                      <span className="sameascontactnumbersize">
+                        Same As Contact Number
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1374,7 +1409,9 @@ style={{
                       value={callingTracker.sourceName}
                       onChange={handleChange}
                     >
-                      <option value="" disabled>Select Source Name</option>
+                      <option value="" disabled>
+                        Select Source Name
+                      </option>
                       <option value="LinkedIn">linkedIn</option>
                       <option value="Naukri">Naukri</option>
                       <option value="Indeed">Indeed </option>
@@ -1422,10 +1459,10 @@ style={{
 
                       {/* this line added by sahil date 22-10-2024 */}
                       {!callingTracker.requirementId && (
-                          <span className="requiredFieldStar">*</span>
-                        )}
+                        <span className="requiredFieldStar">*</span>
+                      )}
                     </div>
-                    
+
                     {errors.requirementId && (
                       <div className="error-message">
                         {errors.requirementId}
@@ -1659,24 +1696,24 @@ style={{
                 </div>
               </div>
 
-                  {/* Rajlaxmi Jagadale Some Changes of that field (YOP) Date 24-01-2225 */}
-                  <div className="calling-tracker-field">
-  <label>Education</label>
-  <div className="calling-tracker-two-input-container">
-{/* sahil karnekar line 966 to 1442 */}
-    <div className="calling-tracker-two-input">
-      <div className="setRequiredStarDiv">
-        <input
-          list="educationListDropDown"
-          name="qualification"
-          type="text"
-          value={lineUpData.qualification}
-          onChange={handleEducationChange}
-          placeholder="Search...."
-           //  {/* this line added by sahil date 22-10-2024 */}
-          style={{ width: "inherit" }}
-        />
-<datalist id="educationListDropDown">
+              {/* Rajlaxmi Jagadale Some Changes of that field (YOP) Date 24-01-2225 */}
+              <div className="calling-tracker-field">
+                <label>Education</label>
+                <div className="calling-tracker-two-input-container">
+                  {/* sahil karnekar line 966 to 1442 */}
+                  <div className="calling-tracker-two-input">
+                    <div className="setRequiredStarDiv">
+                      <input
+                        list="educationListDropDown"
+                        name="qualification"
+                        type="text"
+                        value={lineUpData.qualification}
+                        onChange={handleEducationChange}
+                        placeholder="Search...."
+                        //  {/* this line added by sahil date 22-10-2024 */}
+                        style={{ width: "inherit" }}
+                      />
+                      <datalist id="educationListDropDown">
                         <option value="">Select</option>
                         <option value="Other">Other</option>
                         <option value="10th">10th</option>
@@ -2087,64 +2124,69 @@ style={{
                           Diploma in Artificial Intelligence
                         </option>
                       </datalist>
-                      
+
                       {/* sahil karnekar */}
                       {/* this line added by sahil date 22-10-2024 */}
 
-        {callingTracker.selectYesOrNo === "Interested" &&
-          !lineUpData.qualification && (
-            <span className="requiredFieldStar">*</span>
-          )}
-      </div>
-      {errors.qualification && (
-        <div className="error-message error-two-input-box">
-          {errors.qualification}
-        </div>
-      )}
-    </div>
-    {/* Rajlaxmi Jagadle Added New div YOP */}
+                      {callingTracker.selectYesOrNo === "Interested" &&
+                        !lineUpData.qualification && (
+                          <span className="requiredFieldStar">*</span>
+                        )}
+                    </div>
+                    {errors.qualification && (
+                      <div className="error-message error-two-input-box">
+                        {errors.qualification}
+                      </div>
+                    )}
+                  </div>
+                  {/* Rajlaxmi Jagadle Added New div YOP */}
 
-    <div className="calling-tracker-two-input">
-      <div className="setRequiredStarDiv">
-        {/* sahil karnekar line 1376 to 1420 */}
-        <input
-          type="text"
-          min="1947"
-          name="yearOfPassing"
-          placeholder="YOP"
-          value={lineUpData.yearOfPassing}
-          onChange={(e) => {
-            const value = e.target.value;
-            const currentYear = new Date().getFullYear();
-            const maxYear = currentYear + 2;
+                  <div className="calling-tracker-two-input">
+                    <div className="setRequiredStarDiv">
+                      {/* sahil karnekar line 1376 to 1420 */}
+                      <input
+                        type="text"
+                        min="1947"
+                        name="yearOfPassing"
+                        placeholder="YOP"
+                        value={lineUpData.yearOfPassing}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          const currentYear = new Date().getFullYear();
+                          const maxYear = currentYear + 2;
 
-            if (value === "") {
-              setErrorForYOP("");
-            } else if (value < 1947 || value > maxYear) {
-              setErrorForYOP(`YOP should be between 1947 and ${maxYear}`);
-            } else {
-              setErrorForYOP("");
-            }
+                          if (value === "") {
+                            setErrorForYOP("");
+                          } else if (value < 1947 || value > maxYear) {
+                            setErrorForYOP(
+                              `YOP should be between 1947 and ${maxYear}`
+                            );
+                          } else {
+                            setErrorForYOP("");
+                          }
 
-            if (/^\d{0,4}$/.test(value)) {
-              setLineUpData({ ...lineUpData, yearOfPassing: value });
-            }
-          }}
-          style={{ width: "inherit" }}
-        />
-        {callingTracker.selectYesOrNo === "Interested" &&
-          !lineUpData.yearOfPassing && (
-            <span className="requiredFieldStar">*</span>
-          )}
-      </div>
-      {errorForYOP && (
-        <div className="error-message error-two-input-box">
-          {errorForYOP}
-        </div>
-      )}
-    </div>
-  </div>
-</div>
+                          if (/^\d{0,4}$/.test(value)) {
+                            setLineUpData({
+                              ...lineUpData,
+                              yearOfPassing: value,
+                            });
+                          }
+                        }}
+                        style={{ width: "inherit" }}
+                      />
+                      {callingTracker.selectYesOrNo === "Interested" &&
+                        !lineUpData.yearOfPassing && (
+                          <span className="requiredFieldStar">*</span>
+                        )}
+                    </div>
+                    {errorForYOP && (
+                      <div className="error-message error-two-input-box">
+                        {errorForYOP}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
 
               {/* -------------- */}
             </div>
@@ -2296,7 +2338,7 @@ style={{
                         // line number 1563 added by sahil karnekar date : 15-10-2024
                         min="0"
                         max="11"
-                      //  {/* this line added by sahil date 22-10-2024 */}
+                        //  {/* this line added by sahil date 22-10-2024 */}
                       />
                       {/* sahil karnekar line 1542 to 1546 */}
                       {/* this line added by sahil date 22-10-2024 */}
@@ -2577,15 +2619,24 @@ style={{
                     <select
                       name="selectYesOrNo"
                       value={callingTracker.selectYesOrNo}
-                      onChange={handleChange}>
+                      onChange={handleChange}
+                    >
                       <option value="Yet To Confirm">Yet To Confirm</option>
                       <option value="Interested">Interested</option>
                       <option value="Not Interested">Not Interested</option>
-                      <option value="Interested, will confirm later">Interested, will confirm later</option>
-                      <option value="Interested But Not Eligible">Interested But Not Eligible</option>
-                      <option value="Not Eligible But Interested">Eligible But Not Interested</option>
+                      <option value="Interested, will confirm later">
+                        Interested, will confirm later
+                      </option>
+                      <option value="Interested But Not Eligible">
+                        Interested But Not Eligible
+                      </option>
+                      <option value="Not Eligible But Interested">
+                        Eligible But Not Interested
+                      </option>
                       <option value="Not Eligible">Not Eligible</option>
-                      <option value="Not Eligibel Not Interested">Not Eligibel Not Interested</option>
+                      <option value="Not Eligibel Not Interested">
+                        Not Eligibel Not Interested
+                      </option>
                     </select>
                   </div>
 
@@ -2617,7 +2668,7 @@ style={{
                         <option value="">Select</option>
                         <option value="Yet To Confirm">Yet To Confirm</option>
                         <option value="Interview Schedule">
-                        Available For Interview
+                          Available For Interview
                         </option>
                         <option value="Attending After Some time">
                           Attending After Some time
@@ -2650,7 +2701,6 @@ style={{
                       name="availabilityForInterview"
                       value={lineUpData.availabilityForInterview}
                       onChange={(e) => {
-
                         //Arshad Comment This On 21-10-2025
                         // const today = new Date().toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
                         // if (e.target.value < today) {
@@ -2888,24 +2938,35 @@ const ModalComponent = ({
     // Handle tens and ones, keeping "and" for readability when needed
     if (tensAndOnes) {
       if (result) result += "and ";
-      result += `${tensAndOnes}`;
+      result += `${tensAndOnes} Indian Rupees `;
     }
 
     return result.trim();
   };
 
-  // Update expectedCTC in words after calculation
   useEffect(() => {
     if (expectedHike) {
       const currentCTCNum =
-        parseFloat(currentCTCInLakhState) * 100000 +
-        parseFloat(currentCTCInThousandState) * 1000;
-      const expectedHikeNum = parseFloat(expectedHike);
-      const expectedCTCNum =
-        currentCTCNum + (currentCTCNum * expectedHikeNum) / 100;
+        (parseFloat(currentCTCInLakhState) || 0) * 100000 +
+        (parseFloat(currentCTCInThousandState) || 0) * 1000;
 
-      // Update expectedCTC with formatted words
+      const expectedHikeNum = parseFloat(expectedHike) || 0;
+      const hikeAmount = (currentCTCNum * expectedHikeNum) / 100;
+      const expectedCTCNum = currentCTCNum + hikeAmount;
+
       setExpectedCTC(formatNumberToWords(expectedCTCNum));
+
+      setCalculationSteps(`
+        Salary Calculation 
+        1. Current CTC: - ${currentCTCInLakhState} Lakh   ${currentCTCInThousandState} Thousand 
+        2. Hike Percentage : -  ${expectedHikeNum}%
+        3. Hike Amount: - (Current CTC * Hike %) / 100
+              = (${currentCTCNum} * ${expectedHikeNum}) / 100 = ₹ ${hikeAmount.toLocaleString()}
+        4. Expected CTC:  Current CTC + Hike Amount
+              = ₹ ${currentCTCNum.toLocaleString()} + ₹ ${hikeAmount.toLocaleString()} =  ₹ ${expectedCTCNum.toLocaleString()}
+       
+              Total Expected CTC  ${formatNumberToWords(expectedCTCNum)}
+      `);
     }
   }, [expectedHike, currentCTCInLakhState, currentCTCInThousandState]);
 
@@ -2919,21 +2980,35 @@ const ModalComponent = ({
       const lakhValue = parseFloat(expectedCTCLakh) || 0;
       const thousandValue = parseFloat(expectedCTCThousand) || 0;
       const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
-      // this lines updated by sahil karnekar date 25-10-2024
+
+      const currentLakhValue = parseFloat(currentCTCInLakhState1) || 0;
+      const currentThousandValue = parseFloat(currentCTCInThousandState1) || 0;
       const currentCTCNum =
-        parseFloat(currentCTCInLakhState1) * 100000 +
-        parseFloat(currentCTCInThousandState1) * 1000;
-      const hikePercentage =
-        ((combinedCTC - currentCTCNum) / currentCTCNum) * 100;
+        currentLakhValue * 100000 + currentThousandValue * 1000;
+
+      let hikePercentage = 0;
+      if (currentCTCNum > 0) {
+        hikePercentage = ((combinedCTC - currentCTCNum) / currentCTCNum) * 100;
+      }
+
       setCalculatedHike(hikePercentage.toFixed(2));
+
+      setCalculationSteps(`
+         Salary Calculation 
+
+        1. Current CTC: ${currentCTCInLakhState1} Lakh  ${currentCTCInThousandState1} Thousand
+        2. Expected CTC:  ${expectedCTCLakh} Lakh  ${expectedCTCThousand} Thousand
+        3. Hike Calculation: Hike %  ((Expected CTC - Current CTC) / Current CTC) * 100
+           = (${combinedCTC} - ${currentCTCNum}) / ${currentCTCNum} * 100
+
+        Total Hike Percentage: ${hikePercentage.toFixed(2)} %
+      `);
     }
-    // this line is updated by sahil karnekar date 25-10-2024
   }, [
     expectedCTCLakh,
     expectedCTCThousand,
     currentCTCInLakhState1,
     currentCTCInThousandState1,
-    calculatedHike,
   ]);
 
   const handleNumericChange = (setter) => (event) => {
@@ -2944,29 +3019,118 @@ const ModalComponent = ({
     setter(value); // Update state if value is numeric
   };
 
+  const [isLakhFocused, setIsLakhFocused] = useState(false);
+  const [isThousandFocused, setIsThousandFocused] = useState(false);
+  const [isExpectedLakhFocused, setIsExpectedLakhFocused] = useState(false);
+  const [isExpectedThousandFocused, setIsExpectedThousandFocused] =
+    useState(false);
+  const [isLakhFocused1, setIsLakhFocused1] = useState(false);
+  const [isThousandFocused1, setIsThousandFocused1] = useState(false);
+
+  const handleLakhChange = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, ""); // Allow only numbers
+    setCurrentCTCInLakhState(value);
+  };
+  const handleLakhFocus = () => {
+    setIsLakhFocused(true);
+  };
+  const handleLakhBlur = () => {
+    setIsLakhFocused(false);
+  };
+
+  const handleThousandChange = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, ""); // Allow only numbers
+    setCurrentCTCInThousandState(value);
+  };
+  const handleThousandFocus = () => {
+    setIsThousandFocused(true);
+  };
+  const handleThousandBlur = () => {
+    setIsThousandFocused(false);
+  };
+
+  const handleLakhChange1 = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, ""); // Allow only numbers
+    setCurrentCTCInLakhState1(value);
+  };
+  const handleLakhFocus1 = () => {
+    setIsLakhFocused1(true);
+  };
+  const handleLakhBlur1 = () => {
+    setIsLakhFocused1(false);
+  };
+  const handleThousandChange1 = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, ""); // Allow only numbers
+    setCurrentCTCInThousandState1(value);
+  };
+  const handleThousandFocus1 = () => {
+    setIsThousandFocused1(true);
+  };
+  const handleThousandBlur1 = () => {
+    setIsThousandFocused1(false);
+  };
+  const handleExpectedLakhChange = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, ""); // Allow only numbers
+    setExpectedCTCLakh(value);
+    onUpdateExpectedCTCLakh(value);
+  };
+  const handleExpectedLakhFocus = () => {
+    setIsExpectedLakhFocused(true);
+  };
+  const handleExpectedLakhBlur = () => {
+    setIsExpectedLakhFocused(false);
+  };
+
+  const handleExpectedThousandChange = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, ""); // Allow only numbers
+    setExpectedCTCThousand(value);
+    onUpdateExpectedCTCThousand(value);
+  };
+  const handleExpectedThousandFocus = () => {
+    setIsExpectedThousandFocused(true);
+  };
+  const handleExpectedThousandBlur = () => {
+    setIsExpectedThousandFocused(false);
+  };
+
+  const [isHikeFocused, setIsHikeFocused] = useState(false);
+
+  const handleHikeFocus = () => {
+    setIsHikeFocused(true);
+  };
+
+  const handleHikeBlur = () => {
+    setIsHikeFocused(false);
+  };
+
+  const [calculationSteps, setCalculationSteps] = useState("");
+
   return (
     <Modal size="xl" centered show={show} onHide={handleClose}>
-      <Modal.Body className="p-0">
+      <Modal.Body className="calling-tracker-modal">
         <div className="calling-tracker-popup">
           <div className="calling-tracker-popup-sidebar">
             <p
-              className={`sidebar-item ${activeField === "distance" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "distance" ? "active" : ""
+              }`}
               onClick={() => setActiveField("distance")}
             >
               Distance Calculation
             </p>
             <p
-              className={`sidebar-item ${activeField === "salary" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "salary" ? "active" : ""
+              }`}
               onClick={() => setActiveField("salary")}
             >
               Salary Calculation
             </p>
 
             <p
-              className={`sidebar-item ${activeField === "previousQuestion" ? "active" : ""
-                }`}
+              className={`sidebar-item ${
+                activeField === "previousQuestion" ? "active" : ""
+              }`}
               onClick={() => setActiveField("previousQuestion")}
             >
               Previous Question
@@ -2975,40 +3139,47 @@ const ModalComponent = ({
           <div className="calling-tracker-popup-dashboard">
             {activeField === "distance" && (
               <div className="distance-calculation">
-                <h5>Distance Calculation</h5>
-                <div className="form-group">
-                  <label htmlFor="origin">Origin</label>
-                  <input
-                    type="text"
-                    id="origin"
-                    className="form-control"
-                    placeholder="Enter origin"
-                    value={origin}
-                    onChange={(e) => setOrigin(e.target.value)}
-                  />
+                <div className="distance-calculation-top-div">
+                  <div className="help-form-group">
+                    <label htmlFor="origin">Origin</label>
+                    <img src={startPointImg} className="start-Point-Img" />
+                    <input
+                      type="text"
+                      id="origin"
+                      className="help-form-control"
+                      placeholder="Enter origin"
+                      value={origin}
+                      onChange={(e) => setOrigin(e.target.value)}
+                    />
+                  </div>
+                  <div className="help-form-group">
+                    <label htmlFor="destination">Destination</label>
+                    <img src={endpointImg} className="start-Point-Img" />
+                    <input
+                      type="text"
+                      id="destination"
+                      className="help-form-control"
+                      placeholder="Enter destination"
+                      value={destination}
+                      onChange={(e) => setDestination(e.target.value)}
+                    />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label htmlFor="destination">Destination</label>
-                  <input
-                    type="text"
-                    id="destination"
-                    className="form-control"
-                    placeholder="Enter destination"
-                    value={destination}
-                    onChange={(e) => setDestination(e.target.value)}
-                  />
-                </div>
-                {origin && destination && (
+                <div className="distance-calculation-bottom-div">
                   <iframe
                     title="Google Maps"
                     width="100%"
                     height="450"
                     frameBorder="0"
                     style={{ border: 0 }}
-                    src={`https://maps.google.com/maps?q=${origin}+to+${destination}&output=embed`}
+                    src={
+                      origin && destination
+                        ? `https://maps.google.com/maps?q=${origin}+to+${destination}&output=embed`
+                        : "https://maps.google.com/maps?q=India&output=embed"
+                    }
                     allowFullScreen
                   ></iframe>
-                )}
+                </div>
               </div>
             )}
             {activeField === "salary" && (
@@ -3016,7 +3187,7 @@ const ModalComponent = ({
                 <table className="table table-bordered text-secondary">
                   <thead>
                     <tr>
-                      <th className="sal-cal-th">Current Salary</th>
+                      <th className="sal-cal-th">Current Salary 01</th>
                       <th className="sal-cal-th">Hike (%)</th>
                       <th className="sal-cal-th">Calculated Expected CTC</th>
                     </tr>
@@ -3024,107 +3195,79 @@ const ModalComponent = ({
                   <tbody>
                     <tr>
                       <td className="text-secondary">
-                        <div className="form-group">
-                          {/* <label htmlFor="currentCTCLakh"></label> */}
-                          <div
-                            style={{
-                              position: "relative",
-                              marginBottom: "4px",
-                            }}
-                          >
+                        <div className="help-salary-top-div">
+                          <div className="help-salary-input-div">
                             <input
                               type="text"
                               id="currentCTCLakh"
-                              maxLength="2"
-                              pattern="\d*"
-                              inputMode="numeric"
-                              className="form-control"
-                              placeholder="Enter current CTC in lakh"
-                              // line number 2286 to 2372 changed by sahil karnekar date 25-10-2024
-                              value={currentCTCInLakhState}
-                              onChange={handleNumericChange(
-                                setCurrentCTCInLakhState
-                              )}
+                              className="help-form-control"
+                              placeholder="Enter current CTC in Lakh"
+                              value={
+                                isLakhFocused
+                                  ? currentCTCInLakhState
+                                  : currentCTCInLakhState
+                                  ? `${currentCTCInLakhState} Lakh`
+                                  : ""
+                              }
+                              onChange={handleLakhChange}
+                              onFocus={handleLakhFocus}
+                              onBlur={handleLakhBlur}
                             />
-                            {currentCTCInLakhState && (
-                              <span
-                                style={{
-                                  position: "absolute",
-                                  right: "10px", // Adjust for spacing between the text and input edge
-                                  top: "50%",
-                                  transform: "translateY(-50%)",
-                                  pointerEvents: "none", // Ensure the span doesn't block input events
-                                }}
-                              >
-                                Lakh
-                              </span>
-                            )}
                           </div>
-                          <div style={{ position: "relative" }}>
+
+                          <div className="help-salary-input-div">
                             <input
                               type="text"
-                              id="currentCTCLakh"
+                              id="currentCTCThousand"
                               maxLength="2"
                               pattern="\d*"
                               inputMode="numeric"
-                              className="form-control"
+                              className="help-form-control"
                               placeholder="Enter current CTC in Thousand"
-                              value={currentCTCInThousandState}
-                              onChange={handleNumericChange(
-                                setCurrentCTCInThousandState
-                              )}
+                              value={
+                                isThousandFocused
+                                  ? currentCTCInThousandState
+                                  : currentCTCInThousandState
+                                  ? `${currentCTCInThousandState} Thousand`
+                                  : ""
+                              }
+                              onChange={handleThousandChange}
+                              onFocus={handleThousandFocus}
+                              onBlur={handleThousandBlur}
                             />
-                            {currentCTCInThousandState && (
-                              <span
-                                style={{
-                                  position: "absolute",
-                                  right: "10px", // Adjust for spacing between the text and input edge
-                                  top: "50%",
-                                  transform: "translateY(-50%)",
-                                  pointerEvents: "none", // Ensure the span doesn't block input events
-                                }}
-                              >
-                                Thousand
-                              </span>
-                            )}
                           </div>
                         </div>
                       </td>
                       <td className="text-secondary">
-                        <div className="form-group">
-                          {/* <label htmlFor="expectedHike">Hike (%)</label> */}
-                          <div style={{ position: "relative" }}>
+                        <div className="help-salary-top-div">
+                          <div className="help-salary-input-div">
                             <input
                               type="text"
                               id="expectedHike"
                               maxLength="3"
                               pattern="\d*"
                               inputMode="numeric"
-                              className="form-control"
+                              className="help-form-control"
                               placeholder="Enter expected hike percentage"
-                              value={expectedHike}
+                              value={
+                                isHikeFocused
+                                  ? expectedHike
+                                  : expectedHike
+                                  ? `${expectedHike}%`
+                                  : ""
+                              }
                               onChange={handleNumericChange(setExpectedHike)}
+                              onFocus={handleHikeFocus}
+                              onBlur={handleHikeBlur}
                             />
-                            {expectedHike && (
-                              <span
-                                style={{
-                                  position: "absolute",
-                                  right: "10px", // Adjust for spacing between the text and input edge
-                                  top: "50%",
-                                  transform: "translateY(-50%)",
-                                  pointerEvents: "none", // Ensure the span doesn't block input events
-                                }}
-                              >
-                                %
-                              </span>
-                            )}
                           </div>
                         </div>
                       </td>
                       <td className="text-secondary">
                         <input
+                          placeholder="Result..."
                           type="text"
-                          className="form-control"
+                          className="help-form-control"
                           readOnly
                           value={expectedCTC}
                         />
@@ -3132,6 +3275,7 @@ const ModalComponent = ({
                     </tr>
                   </tbody>
                 </table>
+
                 <table className="table table-bordered">
                   <thead>
                     <tr>
@@ -3143,147 +3287,96 @@ const ModalComponent = ({
                   <tbody>
                     <tr>
                       <td className="text-secondary">
-                        <div className="form-group">
-                          {/* <label htmlFor="currentCTCLakh"></label> */}
-                          <div
-                            style={{
-                              position: "relative",
-                              marginBottom: "4px",
-                            }}
-                          >
+                        <div className="help-salary-top-div">
+                          <div className="help-salary-input-div">
                             <input
                               type="text"
                               id="currentCTCLakh"
                               maxLength="2"
                               pattern="\d*"
                               inputMode="numeric"
-                              className="form-control"
-                              placeholder="Enter current CTC in lakh"
-                              // line number 2286 to 2372 changed by sahil karnekar date 25-10-2024
-                              value={currentCTCInLakhState1}
-                              onChange={handleNumericChange(
-                                setCurrentCTCInLakhState1
-                              )}
+                              className="help-form-control"
+                              placeholder="Enter current CTC in Lakh"
+                              value={
+                                isLakhFocused1
+                                  ? currentCTCInLakhState1
+                                  : currentCTCInLakhState1
+                                  ? `${currentCTCInLakhState1} Lakh`
+                                  : ""
+                              }
+                              onChange={handleLakhChange1}
+                              onFocus={handleLakhFocus1}
+                              onBlur={handleLakhBlur1}
                             />
-                            {currentCTCInLakhState1 && (
-                              <span
-                                style={{
-                                  position: "absolute",
-                                  right: "10px", // Adjust for spacing between the text and input edge
-                                  top: "50%",
-                                  transform: "translateY(-50%)",
-                                  pointerEvents: "none", // Ensure the span doesn't block input events
-                                }}
-                              >
-                                Lakh
-                              </span>
-                            )}
                           </div>
-                          <div style={{ position: "relative" }}>
+
+                          <div className="help-salary-input-div">
                             <input
                               type="text"
-                              id="currentCTCLakh"
+                              id="currentCTCThousand"
                               maxLength="2"
                               pattern="\d*"
                               inputMode="numeric"
-                              className="form-control"
+                              className="help-form-control"
                               placeholder="Enter current CTC in Thousand"
-                              value={currentCTCInThousandState1}
-                              onChange={handleNumericChange(
-                                setCurrentCTCInThousandState1
-                              )}
+                              value={
+                                isThousandFocused1
+                                  ? currentCTCInThousandState1
+                                  : currentCTCInThousandState1
+                                  ? `${currentCTCInThousandState1} Thousand`
+                                  : ""
+                              }
+                              onChange={handleThousandChange1}
+                              onFocus={handleThousandFocus1}
+                              onBlur={handleThousandBlur1}
                             />
-                            {currentCTCInThousandState1 && (
-                              <span
-                                style={{
-                                  position: "absolute",
-                                  right: "10px", // Adjust for spacing between the text and input edge
-                                  top: "50%",
-                                  transform: "translateY(-50%)",
-                                  pointerEvents: "none", // Ensure the span doesn't block input events
-                                }}
-                              >
-                                Thousand
-                              </span>
-                            )}
                           </div>
                         </div>
                       </td>
                       <td className="text-secondary">
-                        <div>
-                          <div className="form-group">
-                            {/* <label htmlFor="expectedCTCLakh">Lakh</label> */}
-                            <div style={{ position: "relative" }}>
-                              <input
-                                type="text"
-                                id="expectedCTCLakh"
-                                className="form-control"
-                                placeholder="Enter expected CTC in lakh"
-                                maxLength="2"
-                                pattern="\d*"
-                                inputMode="numeric"
-                                value={expectedCTCLakh}
-                                onChange={(e) => {
-                                  const value = e.target.value;
-                                  if (!/^\d*$/.test(value)) {
-                                    return; // Prevent update if value is not numeric
-                                  }
-                                  setExpectedCTCLakh(value);
-                                  onUpdateExpectedCTCLakh(value);
-                                }}
-                              />
-
-                              {expectedCTCLakh && (
-                                <span
-                                  style={{
-                                    position: "absolute",
-                                    right: "10px", // Adjust for spacing between the text and input edge
-                                    top: "50%",
-                                    transform: "translateY(-50%)",
-                                    pointerEvents: "none", // Ensure the span doesn't block input events
-                                  }}
-                                >
-                                  Lakh
-                                </span>
-                              )}
-                            </div>
+                        <div className="help-salary-top-div">
+                          <div className="help-salary-input-div">
+                            <input
+                              type="text"
+                              id="expectedCTCLakh"
+                              className="help-form-control"
+                              placeholder="Enter expected CTC in Lakh"
+                              maxLength="2"
+                              pattern="\d*"
+                              inputMode="numeric"
+                              value={
+                                isExpectedLakhFocused
+                                  ? expectedCTCLakh
+                                  : expectedCTCLakh
+                                  ? `${expectedCTCLakh} Lakh`
+                                  : ""
+                              }
+                              onChange={handleExpectedLakhChange}
+                              onFocus={handleExpectedLakhFocus}
+                              onBlur={handleExpectedLakhBlur}
+                            />
                           </div>
-                          <div className="form-group">
-                            {/* <label htmlFor="expectedCTCThousand">
-                             Thousand
-                           </label> */}
-                            <div style={{ position: "relative" }}>
+                          <div className="help-salary-top-div">
+                            <div className="help-salary-input-div">
                               <input
                                 type="text"
                                 id="expectedCTCThousand"
-                                className="form-control"
-                                placeholder="Enter expected CTC in thousand"
+                                className="help-form-control"
+                                placeholder="Enter expected CTC in Thousand"
                                 maxLength="2"
                                 pattern="\d*"
                                 inputMode="numeric"
-                                value={expectedCTCThousand}
-                                onChange={(e) => {
-                                  const value = e.target.value;
-                                  if (!/^\d*$/.test(value)) {
-                                    return; // Prevent update if value is not numeric
-                                  }
-                                  setExpectedCTCThousand(value);
-                                  onUpdateExpectedCTCThousand(value);
-                                }}
+                                value={
+                                  isExpectedThousandFocused
+                                    ? expectedCTCThousand
+                                    : expectedCTCThousand
+                                    ? `${expectedCTCThousand} Thousand`
+                                    : ""
+                                }
+                                onChange={handleExpectedThousandChange}
+                                onFocus={handleExpectedThousandFocus}
+                                onBlur={handleExpectedThousandBlur}
                               />
-                              {expectedCTCThousand && (
-                                <span
-                                  style={{
-                                    position: "absolute",
-                                    right: "10px", // Adjust for spacing between the text and input edge
-                                    top: "50%",
-                                    transform: "translateY(-50%)",
-                                    pointerEvents: "none", // Ensure the span doesn't block input events
-                                  }}
-                                >
-                                  Thousand
-                                </span>
-                              )}
                             </div>
                           </div>
                         </div>
@@ -3291,7 +3384,7 @@ const ModalComponent = ({
                       <td className="text-secondary">
                         <input
                           type="text"
-                          className="form-control"
+                          className="help-form-control"
                           readOnly
                           value={
                             calculatedHike && !isNaN(calculatedHike)
@@ -3303,11 +3396,21 @@ const ModalComponent = ({
                     </tr>
                   </tbody>
                 </table>
+                <div className="salary-calculation-bottom-div">
+                  {calculationSteps.split("\n").map((step, index) => (
+                    <p
+                      key={index}
+                      style={{ fontWeight: "600", paddingLeft: "20px" }}
+                    >
+                      {step}
+                    </p>
+                  ))}
+                </div>
               </div>
             )}
             {activeField === "historyTracker" && (
               <div className="history-Tracker">
-                <div className="form-group">
+                <div className="help-form-group">
                   <CandidateHistoryTracker />
                 </div>
               </div>
