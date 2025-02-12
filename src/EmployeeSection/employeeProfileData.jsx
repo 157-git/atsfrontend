@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 import { useParams } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../EmployeeSection/employeeProfile.css";
 import { API_BASE_URL } from "../api/api";
 import dummyUserImg from "../photos/DummyUserImg.png";
@@ -19,11 +21,10 @@ const EmployeeProfileData = ({
   const [profileImage, setProfileImage] = useState(null);
   const [pdfSrc, setPdfSrc] = useState(null);
   const [employeeData, setEmployeeData] = useState(null);
-  const { employeeId } = useParams();
-  const { userType } = useParams();
+  const { employeeId, userType } = useParams();
 
   const [value, setValue] = useState(0); //Arshad Attar Added This Line :- 17-10-2024
-  const targetValue = 45; //Arshad Attar Added This Line :- 17-10-2024
+  const targetValue = 55; //Arshad Attar Added This Line :- 17-10-2024
 
   //Arshad Attar Added This code  :- 17-10-2024
   //Line Start 33
@@ -59,24 +60,24 @@ const EmployeeProfileData = ({
         setEmployeeData(data);
         if (data.profileImage) {
           try {
-          const byteCharacters = atob(data.profileImage);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-          }
-          const byteArray = new Uint8Array(byteNumbers);
-          const blob = new Blob([byteArray], { type: "image/jpeg" });
+            const byteCharacters = atob(data.profileImage);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+              byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: "image/jpeg" });
 
-          const url = URL.createObjectURL(blob);
-          setProfileImage(url);
-        } catch (decodeError) {
-                console.error("Error decoding profile image:", decodeError);
-                setProfileImage(dummyUserImg); // Fallback to dummy image on decode error
-        } 
-      } else {
-              setProfileImage(dummyUserImg); // Fallback to dummy image if no profile image
-      }
-        
+            const url = URL.createObjectURL(blob);
+            setProfileImage(url);
+          } catch (decodeError) {
+            console.error("Error decoding profile image:", decodeError);
+            setProfileImage(dummyUserImg); // Fallback to dummy image on decode error
+          }
+        } else {
+          setProfileImage(dummyUserImg); // Fallback to dummy image if no profile image
+        }
+
         if (data.resumeFile) {
           const byteCharacters = atob(data.resumeFile);
           const byteNumbers = new Array(byteCharacters.length);
@@ -93,17 +94,17 @@ const EmployeeProfileData = ({
 
           return () => URL.revokeObjectURL(url);
         }
-        return () => URL.revokeObjectURL(url);
+        //return () => URL.revokeObjectURL(url);
       })
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  const handleEditProfile = () => {
-    history.push({
-      pathname: "/edit-employee", // replace with your AddEmployee component route
-      state: { employeeData }, // pass employeeData as state
-    });
-  };
+  // const handleEditProfile = () => {
+  //   history.push({
+  //     pathname: "/edit-employee", // replace with your AddEmployee component route
+  //     state: { employeeData }, // pass employeeData as state
+  //   });
+  // };
 
   const goBackToDashBoard = (e) => {
     e.preventDefault();
@@ -118,6 +119,8 @@ const EmployeeProfileData = ({
     setViewMoreProfileShow(false);
     window.close(); // Closes the current window
   };
+
+  // Rajlaxmi Jagadale Changes Field Name and close button,resume some Changes date 10-02-2025
 
   if (viewMoreProfileShow)
     return (
@@ -225,16 +228,15 @@ const EmployeeProfileData = ({
                     <b>Present Address : </b>
                     {employeeData.presentAddress}
                   </p>
-                  <p className="m-1">
-                    <b>Perks : </b>
-                    {employeeData.perks}
-                  </p>
                 </div>
               </div>
             </div>
 
             <div className="employee-profile-scrollsection">
               <div className="employee-profile-performance-indicator">
+                <button className="close-btn" onClick={onClose}>
+                  <FontAwesomeIcon icon={faXmark} />
+                </button>
                 <h1>
                   <b>Performance Indicator</b>
                 </h1>
@@ -301,10 +303,7 @@ const EmployeeProfileData = ({
                     </>
                   )}
                   {/* <div className="profile-back-button"> */}
-                  <button onClick={onClose}>
-                    Close
-                    <i className="fas fa-times"></i>
-                  </button>
+
                   {/* </div> */}
                 </div>
               </div>
@@ -313,26 +312,21 @@ const EmployeeProfileData = ({
 
                 <div className="employee-profile-emergency-details">
                   <h1>
-                    <b>Emergency Details</b>
+                    <b>Emergency Contact Details</b>
                   </h1>
                   <ul>
                     <li>
-                      Emergency Contact Person :{" "}
-                      {employeeData.emergencyContactPerson}
+                      Contact Person : {employeeData.emergencyContactPerson}
                     </li>
+                    <li>Contact Number : {employeeData.emergencyContactNo}</li>
                     <li>
-                      Emergency Contact Number :{" "}
-                      {employeeData.emergencyContactNo}
-                    </li>
-                    <li>
-                      Emergency Contact Relation :{" "}
-                      {employeeData.emergencyPersonRelation}
+                      Contact Relation : {employeeData.emergencyPersonRelation}
                     </li>
                   </ul>
                 </div>
                 <div className="employee-profile-education-details">
                   <h1>
-                    <b>Education Qualification</b>
+                    <b>Education</b>
                   </h1>
                   <ul>
                     <li>Qualifications : {employeeData.qualification}</li>
@@ -345,7 +339,7 @@ const EmployeeProfileData = ({
                     <b>Previous Company</b>
                   </h1>
                   <ul>
-                    <li>Previous Company Name : {employeeData.lastCompany}</li>
+                    <li>Name : {employeeData.lastCompany}</li>
                     <li>Last Working Date : {employeeData.workingDate}</li>
                     <li>
                       Reason For Leaving : {employeeData.reasonForLeaving}
@@ -360,13 +354,9 @@ const EmployeeProfileData = ({
                     <b>Reporting Manager</b>
                   </h1>
                   <ul>
+                    <li>Name : {employeeData.reportingPersonName}</li>
                     <li>
-                      Reporting Manager Name :{" "}
-                      {employeeData.reportingPersonName}
-                    </li>
-                    <li>
-                      Reporting Manager Designation :{" "}
-                      {employeeData.reportingPersonDesignation}
+                      Designation : {employeeData.reportingPersonDesignation}
                     </li>
                   </ul>
                 </div>
@@ -461,13 +451,13 @@ const EmployeeProfileData = ({
                       </a>
                     </li>
                     <li>
-                      Facebook :{" "}
+                      Company LinkedIn Page:{" "}
                       <a href={`${employeeData.faceBookURL}`} target="_blank">
                         {employeeData.faceBookURL}
                       </a>
                     </li>
                     <li>
-                      Twitter :{" "}
+                      Whatsapp Broadcast Channel:{" "}
                       <a href={`${employeeData.twitterURl}`} target="_blank">
                         {employeeData.twitterURL}
                       </a>
@@ -500,14 +490,19 @@ const EmployeeProfileData = ({
                     display: "flex",
                     gap: "10px",
                     alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
-                  <iframe
-                    src={pdfSrc}
-                    width="100%"
-                    height="600px"
-                    title="PDF Viewer"
-                  ></iframe>
+                  {pdfSrc ? (
+                    <iframe
+                      src={pdfSrc}
+                      width="100%"
+                      height="600px"
+                      title="PDF Viewer"
+                    ></iframe>
+                  ) : (
+                    <div>No file available</div>
+                  )}
                 </Modal.Body>
                 <Modal.Footer>
                   <button onClick={closeModal} variant="secondary">
@@ -524,20 +519,21 @@ const EmployeeProfileData = ({
   return (
     <div className="employee-profile-card">
       {employeeData != null ? (
-        <Modal.Dialog 
-        style={{ padding: "10px", margin: "10px",
-          width: "530px",
-        }}>
+        <Modal.Dialog
+          style={{ padding: "10px", margin: "10px", width: "530px" }}
+        >
           <Modal.Header
             style={{
               backgroundColor: "#f2f2f2",
               display: "flex",
               justifyContent: "space-between",
-              alignItems: "center", 
-              paddingRight:"5px",
-              }}
+              alignItems: "center",
+              paddingRight: "5px",
+            }}
           >
-            <span style={{fontWeight: "bold",fontSize:"18px" }}>Employee Profile</span>
+            <span style={{ fontWeight: "bold", fontSize: "18px" }}>
+              Employee Profile
+            </span>
             <button
               onClick={onClose}
               style={{
@@ -545,26 +541,29 @@ const EmployeeProfileData = ({
                 background: "none",
                 border: "none",
                 cursor: "pointer",
-                fontSize:"30px",
-                width:"40px"
+                fontSize: "30px",
+                width: "40px",
               }}
               className="close-profile-popup-btn"
             >
-              <i className="fa-solid fa-xmark" style={{fontSize:"25px"}}></i>
+              <i className="fa-solid fa-xmark" style={{ fontSize: "25px" }}></i>
             </button>
           </Modal.Header>
 
           <Modal.Body
             style={{
               display: "flex",
-              gap: "10px",  
+              gap: "10px",
               alignItems: "center",
               backgroundColor: "#f2f2f2",
               color: "gray",
             }}
           >
             <div className="profile-card-img">
-              <img src={profileImage || dummyUserImg} className="employee-profile-img" />
+              <img
+                src={profileImage || dummyUserImg}
+                className="employee-profile-img"
+              />
             </div>
             <div>
               <p className="m-1" style={{ color: "gray" }}>
@@ -599,7 +598,7 @@ const EmployeeProfileData = ({
               onClick={viewMoreProfile}
               className="display-more-profile-btn daily-tr-btn"
             >
-              More
+              View More
             </button>
           </Modal.Footer>
         </Modal.Dialog>

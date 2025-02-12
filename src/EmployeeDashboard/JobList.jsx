@@ -9,9 +9,11 @@ import { API_BASE_URL } from "../api/api";
 import ShareEDM from "../JobDiscription/shareEDM";
 import UpdateJobDescription from "../JobDiscription/UpdateJobDescription";
 import { toast } from "react-toastify";
-import axios from "../api/api";
+import axios from "axios";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPencil, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 // SwapnilRokade_JobListing_filter_option__18/07
 
@@ -75,6 +77,7 @@ const JobListing = ({ loginEmployeeName }) => {
     fetch(`${API_BASE_URL}/all-job-descriptions`)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         const sortedData = data.sort(
           (a, b) => b.requirementId - a.requirementId
         );
@@ -85,6 +88,7 @@ const JobListing = ({ loginEmployeeName }) => {
     // sahil karnekar line 65 date : 10-10-2024
   }, [showAddJobDiscriptionNew]);
 
+  // Rajlaxmi Jagadale checkbox Work(Active,Inactive,Unhold,Hold)date 28-01-2025/29-01-2025 line 94 to 147
   useEffect(() => {
     handleFilter();
   }, [searchQuery, selectedFilters, jobDescriptions]);
@@ -103,11 +107,27 @@ const JobListing = ({ loginEmployeeName }) => {
     });
 
     Object.entries(selectedFilters).forEach(([option, values]) => {
+      console.log(option, values);
+
       if (values.length > 0) {
         if (option === "requirementId") {
           filtereddata = filtereddata.filter((item) =>
             values.some((value) =>
               item[option]?.toString().toLowerCase().includes(value)
+            )
+          );
+        } else if (option === "jdStatus") {
+          filtereddata = filtereddata.filter((item) =>
+            values.some(
+              (value) =>
+                item[option]?.toString().toLowerCase() === value.toLowerCase()
+            )
+          );
+        } else if (option === "holdStatus") {
+          filtereddata = filtereddata.filter((item) =>
+            values.some(
+              (value) =>
+                item[option]?.toString().toLowerCase() === value.toLowerCase()
             )
           );
         } else {
@@ -124,7 +144,7 @@ const JobListing = ({ loginEmployeeName }) => {
     });
     setFilteredJobDescriptions(filtereddata);
   };
-
+  console.log(selectedFilters);
   const handleFilterSelect = (option, value) => {
     setSelectedFilters((prev) => {
       const updatedFilters = { ...prev };
@@ -149,10 +169,15 @@ const JobListing = ({ loginEmployeeName }) => {
     fetchShortListedData(); // Corrected from fetchRejectedData to fetchShortListedData
   };
 
+  // Rajlaxmi Jagadale (Experience year data) date29-01-25 line 176 to222
   const handleInputSearch = (event) => {
     const { name, value } = event.target;
     setSearchQuery((prevQuery) => ({ ...prevQuery, [name]: value }));
   };
+
+  useEffect(() => {
+    handleFilter();
+  }, [searchQuery]);
 
   useEffect(() => {
     const options = Object.keys(jobDescriptions[0] || {}).filter((key) =>
@@ -163,21 +188,39 @@ const JobListing = ({ loginEmployeeName }) => {
 
   const handleFilter = () => {
     const filtered = jobDescriptions.filter((job) => {
-      return (
-        (job.designation &&
-          job.designation
-            .toLowerCase()
-            .includes(searchQuery.designation.toLowerCase())) ||
-        (job.location &&
-          job.location
-            .toLowerCase()
-            .includes(searchQuery.location.toLowerCase())) ||
-        (job.experience &&
-          job.experience
-            .toLowerCase()
-            .includes(searchQuery.experience.toLowerCase()))
-      );
+      const designationMatch = searchQuery.designation
+        ? job.designation
+            ?.toLowerCase()
+            .includes(searchQuery.designation.toLowerCase())
+        : true;
+
+      const locationMatch = searchQuery.location
+        ? job.location
+            ?.toLowerCase()
+            .includes(searchQuery.location.toLowerCase())
+        : true;
+
+      let experienceMatch = true;
+      if (searchQuery.experience) {
+        const expQuery = searchQuery.experience.trim();
+        const numericQuery = parseInt(expQuery);
+        if (!isNaN(numericQuery)) {
+          if (expQuery.includes("+")) {
+            experienceMatch = parseInt(job.experience) >= numericQuery;
+          } else if (expQuery.includes("to")) {
+            const range = expQuery.split(" to ").map(Number);
+            experienceMatch =
+              parseInt(job.experience) >= range[0] &&
+              parseInt(job.experience) <= range[1];
+          } else {
+            experienceMatch = parseInt(job.experience) === numericQuery;
+          }
+        }
+      }
+
+      return designationMatch && locationMatch && experienceMatch;
     });
+
     setFilteredJobDescriptions(filtered);
   };
 
@@ -260,7 +303,15 @@ const JobListing = ({ loginEmployeeName }) => {
 
   // Arshad Attar Added Code From Here 28-10-2024
   const handleToggleDropdown = (id) => {
-    setOpenDropdownId((prevId) => (prevId === id ? null : id));
+    if (openDropdownId === id) {
+      setOpenDropdownId(null); // If the clicked dropdown is already open, close it
+    } else {
+      setOpenDropdownId(id); // Open the clicked dropdown
+    }
+  };
+
+  const handleCloseDropdown = () => {
+    setOpenDropdownId(null); // Close the dropdown
   };
 
   const handleToggleStatus = async (jdId, currentStatus, type) => {
@@ -342,6 +393,19 @@ const JobListing = ({ loginEmployeeName }) => {
     }
   };
 
+  // Rajlaxmi Jagadale Added This Code Date 11-02-2025
+  const [showFilters, setShowFilters] = useState(false);
+  const isFilterSelected = (option) => {
+    return selectedFilters[option] && selectedFilters[option].length > 0;
+  };
+  const countSelectedValues = (option) => {
+    return selectedFilters[option] ? selectedFilters[option].length : 0;
+  };
+
+  const handleClearAll = () => {
+    setSelectedFilters({});
+  };
+
   const formatTimeDifference = (dateString) => {
     const date = new Date(dateString);
     const currentDate = new Date();
@@ -385,15 +449,6 @@ const JobListing = ({ loginEmployeeName }) => {
     return `Posted on ${timeValue} ${formattedTimeUnit} ago`;
   };
 
-  const [expandedSkills, setExpandedSkills] = useState({});
-
-  const toggleSkillExpansion = (requirementId) => {
-    setExpandedSkills((prev) => ({
-      ...prev,
-      [requirementId]: !prev[requirementId], // Toggle the state
-    }));
-  };
-
   return (
     <>
       {!showAddJobDiscriptionNew ? (
@@ -434,68 +489,85 @@ const JobListing = ({ loginEmployeeName }) => {
                     <div> Search </div>
                   </span>
                 </button>
+
+                {/* Rajalxmi Jagadale Update code line 495/560 Date 11-02-2025 */}
               </div>
+              <button
+                className="daily-tr-btns"
+                onClick={() => setShowFilters(!showFilters)}
+                style={{whiteSpace: "nowrap",gap: "10px"}}
+              >
+                View Filters 
+              </button>
             </div>
 
-            <div className="jd-filter-section">
-              <div className="jd-filter-options-container">
-                {filterOptions.map((option) => {
-                  const uniqueValues = Array.from(
-                    // line 321 updated by sahil karnekar date 23-10-2024
-                    new Set(
-                      jobDescriptions.map((item) =>
-                        item[option]?.toString().toLowerCase().trim()
+            {showFilters && (
+              <div className="jd-filter-section">
+                <div className="jd-filter-options-container">
+                  {filterOptions.map((option) => {
+                    const uniqueValues = Array.from(
+                      new Set(
+                        jobDescriptions.map((item) =>
+                          item[option]?.toString().toLowerCase().trim()
+                        )
                       )
-                    )
-                  );
-                  return (
-                    <div key={option} className="filter-option">
-                      <button
-                        className="white-Btn"
-                        onClick={() => handleFilterOptionClick(option)}
-                      >
-                        {/* this line numeber 319 is added by sahil karnekar for saparating the word if it is in PascalCase naming convention */}
-                        {formatOption(option)}{" "}
-                        {/* Call the formatting function here */}
-                        <span className="filter-icon">&#x25bc;</span>
-                      </button>
-                      {activeFilterOption === option && (
-                        <div className="city-filter">
-                          <div className="optionDiv">
-                            {uniqueValues.map(
-                              (value) =>
-                                // line 338 added by sahil karnekar date 23-10-2024
-                                value !== "" &&
-                                value !== undefined &&
-                                value !== null && (
-                                  <label
-                                    key={value}
-                                    className="selfcalling-filter-value"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      checked={
-                                        selectedFilters[option]?.includes(
-                                          value
-                                        ) || false
-                                      }
-                                      onChange={() =>
-                                        handleFilterSelect(option, value)
-                                      }
-                                    />
-                                    {value}
-                                  </label>
-                                  // line 350 added by sahil karnekar date : 23-10-2024
-                                )
-                            )}
+                    );
+                    return (
+                      <div key={option} className="filter-option">
+                        <button
+                          className={`white-Btn ${
+                            isFilterSelected(option) ? "selected-filter" : ""
+                          }`}
+                          onClick={() => handleFilterOptionClick(option)}
+                        >
+                          {formatOption(option)}
+                          {/* Display the count of selected values next to the filter name */}
+                          {isFilterSelected(option) && (
+                            <span className="selected-count">
+                              ({countSelectedValues(option)})
+                            </span>
+                          )}
+                          <span className="filter-icon">&#x25bc;</span>
+                        </button>
+                        {activeFilterOption === option && (
+                          <div className="city-filter">
+                            <div className="optionDiv">
+                              {uniqueValues.map(
+                                (value) =>
+                                  value !== "" &&
+                                  value !== undefined &&
+                                  value !== null && (
+                                    <label
+                                      key={value}
+                                      className="selfcalling-filter-value"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={
+                                          selectedFilters[option]?.includes(
+                                            value
+                                          ) || false
+                                        }
+                                        onChange={() =>
+                                          handleFilterSelect(option, value)
+                                        }
+                                      />
+                                      {value}
+                                    </label>
+                                  )
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                        )}
+                      </div>
+                    );
+                  })}
+                  <button  className="daily-tr-btns" onClick={handleClearAll}>
+                    Clear Filters
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {!showViewMore && (
@@ -524,87 +596,25 @@ const JobListing = ({ loginEmployeeName }) => {
                       </div>
                       <div className="job-skills">
                         <i className="fas fa-tags"></i>
-                        {expandedSkills[item.requirementId] ? (
-                          <>
-                            {item.skills}{" "}
-                            <span
-                              style={{
-                                color: "blue",
-                                cursor: "pointer",
-                                fontWeight: "bold",
-                              }}
-                              onClick={() =>
-                                toggleSkillExpansion(item.requirementId)
-                              }
-                            >
-                              Close
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            {item.skills.length > 50
-                              ? item.skills.substring(0, 50) + ""
-                              : item.skills}
-                            {item.skills.length > 50 && (
-                              <span
-                                style={{
-                                  color: "black",
-                                  cursor: "pointer",
-                                  fontWeight: "bold",
-                                }}
-                                onClick={() =>
-                                  toggleSkillExpansion(item.requirementId)
-                                }
-                              >
-                                {/* &#8226; &#8226; &#8226; &#8226; */}
-                                ....
-                              </span>
-                            )}
-                          </>
-                        )}
+                        {item.skills}
                       </div>
                     </div>
 
                     <div className="jd-card-right-div">
                       <div className="job-active-status">
-                        {item.jdStatus === "Active" &&
-                        item.holdStatus === "Hold" ? (
+                        {item.jdStatus === "Active" && (
                           <div
-                            className="job-skills"
                             style={{
-                              color: "red",
+                              color:
+                                item.jdStatus === "Active" ? "green" : "red",
                               fontWeight: "bold",
                               fontSize: "16px",
                             }}
                           >
-                            <i className="fa-solid fa-chart-line"></i> On{" "}
-                            {item.holdStatus}
-                          </div>
-                        ) : item.jdStatus === "Active" ? (
-                          <div
-                            className="job-skills"
-                            style={{
-                              color: "green",
-                              fontWeight: "bold",
-                              fontSize: "16px",
-                            }}
-                          >
-                            <i className="fa-solid fa-chart-line"></i>{" "}
+                            <i className="fa-solid fa-chart-line"></i>
                             {item.jdStatus}
                           </div>
-                        ) : item.jdStatus === "Inactive" ? (
-                          <div
-                            className="job-skills"
-                            style={{
-                              color: "red",
-                              fontWeight: "bold",
-                              fontSize: "16px",
-                            }}
-                          >
-                            <i className="fa-solid fa-chart-line"></i>{" "}
-                            {item.jdStatus}
-                          </div>
-                        ) : null}
+                        )}
                       </div>
 
                       <div className="job-incentive">
@@ -614,13 +624,40 @@ const JobListing = ({ loginEmployeeName }) => {
                     </div>
                   </div>
 
+                  <div className="staus-msg-div">
+                    <div>
+                      {item.jdStatus === "Inactive" && (
+                        <div
+                          style={{
+                            color: item.jdStatus === "Active" ? "green" : "red",
+                            fontWeight: "bold",
+                            fontSize: "14px",
+                          }}
+                        >
+                          Currently This JD is {item.jdStatus}
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      {item.holdStatus === "Hold" && (
+                        <div
+                          className="job-skills"
+                          style={{ color: "red", fontWeight: "bold" }}
+                        >
+                          This JD is currently on {item.holdStatus}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
                   <div className="job-actions">
                     <div className="jd-date-main-div">
                       <div className="jd-added-date">
                         <TimeDifference date={item.jdAddedDate} />
                       </div>
                     </div>
-
+                    {/* Rajlaxmi Jagadale Updated This code Date 11-02-2025 line 652/714 */}
                     <div className="jd-action-main-div">
                       {userType === "Manager" || userType === "TeamLeader" ? (
                         <div className="jd-edit-hold-div">
@@ -631,9 +668,12 @@ const JobListing = ({ loginEmployeeName }) => {
                             }
                           >
                             {openDropdownId === item.requirementId ? (
-                              <i className="fa-solid fa-xmark"></i>
+                              <FontAwesomeIcon
+                                icon={faXmark}
+                                onClick={handleCloseDropdown}
+                              />
                             ) : (
-                              <i className="fa-solid fa-pencil"></i>
+                              <FontAwesomeIcon icon={faPencil} />
                             )}
                           </button>
 

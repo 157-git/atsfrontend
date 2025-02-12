@@ -8,12 +8,13 @@ import axios from "axios";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 // SwapnilRokade_AfterSelection_addedProcessImprovmentEvaluatorFunctionalityStoringInterviweResponse_08_to_386_29/07/2024
-const AfterSelection = ({
+const AfterSelection = ({ 
   candidateId,
   employeeId,
   requirementId,
   prevtime,
   onReturn,
+  loginEmployeeName,
 }) => {
   useEffect(() => {
     console.log("Received Props:", { candidateId, employeeId, requirementId });
@@ -28,6 +29,7 @@ const AfterSelection = ({
   const [offerLetterAccepted, setOfferLetterAccepted] = useState("");
   const [joinStatus, setJoinStatus] = useState("");
   const [joinDate, setJoinDate] = useState("");
+  const [comment, setComment] = useState("");
   const [joinReason, setJoinReason] = useState("");
   const [isActiveInquiry, setIsActiveInquiry] = useState(false);
   const [callDate, setCallDate] = useState("");
@@ -65,7 +67,7 @@ const AfterSelection = ({
   useEffect(() => {
     const fetchData = async () => {
       await fetchCandidateData();
-      await fetchCandidateTableData();
+      // await fetchCandidateTableData();
       await fetchJoinDate();
     };
     fetchData();
@@ -150,23 +152,33 @@ const AfterSelection = ({
       console.log(error);
     }
   };
+  
 
-  const fetchCandidateTableData = async () => {
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/fetch-after-selection?candidateId=${candidateId}&employeeId=${employeeId}&requirementId=${requirementId}`
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+  useEffect(() => {
+    const fetchCandidateTableData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/fetch-after-selection?candidateId=${candidateId}&employeeId=${employeeId}&requirementId=${requirementId}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch candidate data");
+        }
+        const data = await response.json();
+        setShortListedData(data);
+      } catch (error) {
+        toast.error("An error occurred while fetching the data");
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
-      const data = await response.json();
-      setShortListedData(data);
-    } catch (error) {
-      console.error("Failed to fetch candidate data:", error);
-    }
-  };
+    };
 
-  // console.log(shortListedData);
+    fetchCandidateTableData();
+  }, [candidateId, employeeId, requirementId]);
+
+
+
   const handleAdharCardUpload = async (e) => {
     const file = e.target.files[0];
     setAdharCardUploaded(file);
@@ -388,6 +400,8 @@ const AfterSelection = ({
   const JoininghandleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+   const dataUpdatedBy = `${loginEmployeeName} ( ${userType} )`;
+
     const formData = new FormData();
     formData.append("employeeId", employeeId);
     formData.append("candidateId", candidateId);
@@ -410,6 +424,9 @@ const AfterSelection = ({
     formData.append("joinStatus", joinStatus);
     formData.append("reasonForNotJoin", reasonForNotJoin || "");
     formData.append("joinDate", joinDate);
+    formData.append("dataUpdatedBy", dataUpdatedBy); 
+    formData.append("comment",comment)
+    
     try {
       const response = await fetch(`${API_BASE_URL}/save-join-data`, {
         method: "POST",
@@ -803,9 +820,10 @@ const AfterSelection = ({
                           <input
                             type="text"
                             className="after-input"
-                            id="joinReason"
-                            value={joinReason}
-                            onChange={(e) => setJoinReason(e.target.value)}
+                            placeholder="Enter Comment..."
+                            id="comment"
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
                           />
                         </div>
                       </div>
@@ -1014,7 +1032,7 @@ const AfterSelection = ({
                             </tr>
                           ))}
                           <tr className="attendancerows">
-                            <td className="tabledata">😊</td>
+                            <td className="tabledata">-</td>
                             <input
                               type="text"
                               hidden

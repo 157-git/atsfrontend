@@ -878,10 +878,17 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                       </th>
                       <th className="attendanceheading">Interview Time</th> */}
                       <th className="attendanceheading">Interview Status</th>
-                      <th className="attendanceheading">Employee ID</th>
+                      <th className="attendanceheading">Employee Id</th>
 
+                      {userType === "TeamLeader" && (
+                        <>
+                          <th className="attendanceheading">Team Leader Id</th>
+                        </>
+                      )}
                       {userType === "Manager" && (
-                        <th className="attendanceheading">Team Leader Id</th>
+                        <>
+                          <th className="attendanceheading">Team Leader Id</th>
+                        </>
                       )}
                       <th className="attendanceheading">Action</th>
                     </tr>
@@ -1460,45 +1467,55 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
                             </span>
                           </div>
                         </td>
+
                         <td
-                          className="tabledata "
+                          className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                         >
                           {highlightText(
-                            item.empId.toString().toLowerCase() || "",
+                            item.empId === 0
+                              ? "-"
+                              : item.empId.toString().toLowerCase() || "",
                             searchTerm
                           )}
                           <div className="tooltip">
                             <span className="tooltiptext">
                               {highlightText(
-                                item.empId.toString().toLowerCase() || "",
+                                item.empId === 0
+                                  ? "-"
+                                  : item.empId.toString().toLowerCase() || "",
                                 searchTerm
                               )}
                             </span>
                           </div>
                         </td>
 
-                        {userType === "Manager" && (
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {highlightText(
-                              item.teamLeaderId.toString().toLowerCase() || "",
-                              searchTerm
-                            )}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {highlightText(
-                                  item.teamLeaderId.toString().toLowerCase() ||
-                                    "",
-                                  searchTerm
-                                )}
-                              </span>
-                            </div>
-                          </td>
+                        {(userType === "Manager" ||
+                          userType === "TeamLeader") && (
+                          <>
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {highlightText(
+                                item.teamLeaderId.toString().toLowerCase() ||
+                                  "",
+                                searchTerm
+                              )}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    item.teamLeaderId
+                                      .toString()
+                                      .toLowerCase() || "",
+                                    searchTerm
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+                          </>
                         )}
 
                         <td className="tabledata ">
@@ -1622,6 +1639,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
               requirementId={selectedRequirementId}
               prevtime={clickedTime}
               onReturn={handleReturn}
+              loginEmployeeName={loginEmployeeName}
             />
           )}
         </>

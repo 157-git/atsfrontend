@@ -839,7 +839,6 @@ strong {
 .start-Point-Img {
   width: 35px;
   height: 35px;
-  /* border: 1px solid gray; */
 }
 
 .help-salary-input {
@@ -847,13 +846,12 @@ strong {
 }
 
 .help-salary-input-div{
-  /* border: 1px solid red;  */
   gap: 20px;
-  /* position: relative; */
 }
 
-
-/* .salary-calculation-bottom-div{
-  border: 1px solid gray;
-  height: 200px
-} */
+ 
+.nighlightincentivesinputnew{
+  color: black;
+  font-weight: bold;
+  border: 1px dashed black;
+}

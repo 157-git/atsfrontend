@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./shareEDM.css";
-import profileImage from "../LogoImages/157careers_logo_LinkedIn.jpeg";
+import profileImage from "../assets/rgLogo.png";
 import { useParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";

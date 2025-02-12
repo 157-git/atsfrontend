@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import html2canvas from "html2canvas";
-import profileImage from '../LogoImages/157logo.jpeg';
+import profileImage from '../assets/rgLogo.png';
 import { API_BASE_URL } from "../api/api";
 import "./jobDescriptionEdm.css"
 

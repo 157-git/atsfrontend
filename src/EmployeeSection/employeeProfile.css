@@ -53,7 +53,7 @@
 .close-profile-popup-btn:hover {
   background-color: white;
   color: #ffcb9b;
-  border: #f2f2f2;  
+  border: #f2f2f2;
   border: 1px solid var(--text-hover-color);
 }
 
@@ -176,7 +176,7 @@
   overflow-y: hidden;
   background-color: #f2f2f2;
 }
-.emp-profile-details-subdiv{
+.emp-profile-details-subdiv {
   background-color: #f2f2f2;
   width: auto;
   height: 10px;
@@ -250,35 +250,33 @@
   align-items: center;
 }
 
-
-  .emp-pro-data-average {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color:  #FAD4B7;
-    width: 25%;
-    color: black;
-    font-size: 16px;
-  }
-  .emp-pro-data-good {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #FDFDCD;
-    width: 25%;
-    color: black;
-    font-size: 16px;
-  }
-  .emp-pro-data-best {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #C8E6C9 ;
-    width: 25%;
-    color: black;
-    font-size: 16px;
-  }
-
+.emp-pro-data-average {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fad4b7;
+  width: 25%;
+  color: black;
+  font-size: 16px;
+}
+.emp-pro-data-good {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fdfdcd;
+  width: 25%;
+  color: black;
+  font-size: 16px;
+}
+.emp-pro-data-best {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #c8e6c9;
+  width: 25%;
+  color: black;
+  font-size: 16px;
+}
 
 .indicator-123 {
   font-size: 50px;
@@ -304,10 +302,9 @@
   color: var(--text-hover-color);
 }
 
-
 /* -------------------------------------
 Arshad Added Css line 337 to  */
-.employee-profile-card{
+.employee-profile-card {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -321,34 +318,34 @@ Arshad Added Css line 337 to  */
   padding: 10px;
 }
 
-.modal-content{
+.modal-content {
   /* margin: 20px; */
   border-radius: 5px;
   /* width: 1100px;  */
 }
 
-.modal-header{
- padding-left: 20px;
- padding-top: 10px;
+.modal-header {
+  padding-left: 20px;
+  padding-top: 10px;
 }
 
-.modal-body{
-align-items: center;
-padding-left: 15px;
+.modal-body {
+  align-items: center;
+  padding-left: 15px;
 }
 
-.newHegightSetForAlignment{
+.newHegightSetForAlignment {
   height: 400px;
   overflow-y: scroll;
 }
 
-.modal-footer{
+.modal-footer {
   padding-right: 5px;
   padding-bottom: 10px;
   gap: 5px;
 }
 
-.profile-card-img{
+.profile-card-img {
   height: 200px;
   width: 190px;
   align-items: center;
@@ -357,16 +354,14 @@ padding-left: 15px;
   object-fit: cover;
 }
 
-.employee-profile-img{
+.employee-profile-img {
   height: 200px;
-  width: 190px; 
+  width: 190px;
   /* border: 1px solid red; */
   border-radius: 2px;
   mix-blend-mode: multiply; /* Blends the image with the background */
-  background-color: white; 
+  background-color: white;
 }
-
-
 
 /* Arshad added This CSS 17-10-2024 */
 
@@ -376,7 +371,7 @@ padding-left: 15px;
   border-radius: 25px;
   overflow: hidden;
   /* border: 1px solid black; */
-  position: relative; 
+  position: relative;
 }
 
 .emp-pro-data-progress-bar-inner {
@@ -395,13 +390,11 @@ padding-left: 15px;
   font-size: 16px;
 }
 
-
-
 .emp-pro-data-poor {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #F7C6C7;
+  background-color: #f7c6c7;
   width: 25%;
   color: black;
   font-size: 16px;
@@ -413,5 +406,18 @@ padding-left: 15px;
   top: -20px; /* Adjust as needed to position the arrow above the progress bar */
   font-size: 30px; /* Can use any size or even replace with an icon */
   color: rgb(28, 206, 28);
-  transition: left 0.3s ease;  /* Smooth transition */
+  transition: left 0.3s ease; /* Smooth transition */
+}
+
+.close-btn {
+  cursor: pointer;
+  font-size: 40px;
+  padding: 10px;
+  border: none;
+  border-radius: 0;
+  color: black;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
