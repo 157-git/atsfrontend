@@ -310,9 +310,9 @@ const CallingTrackerForm = ({
 
     setCallingTracker((prevState) => ({
       ...prevState,
-      [name]: value, // Updates the selected rating
+      communicationRating: value, // Updates the selected rating
     }));
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+    setErrors((prevErrors) => ({ ...prevErrors, ["communicationRating"]: "" }));
   };
 
 
@@ -737,7 +737,6 @@ const CallingTrackerForm = ({
       }
     }
   };
-console.log(lineUpData);
 
   //Arshad Attar Added This , Now Resume will added Proper in data base.  18-10-2024
   //Start Line 451
@@ -1388,7 +1387,6 @@ console.log(lineUpData);
                           }}
                         />
                         <span className="sameascontactnumbersize" >Same As Contact Number</span>
-
                       </div>
                     )
                   }
@@ -2476,7 +2474,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                     <select
                       className="plain-input setwidthandmarginforratings"
                       name="callingFeedback"
-                      value={callingTracker.callingFeedback}
+                      value={callingTracker.communicationRating}
                       onChange={handleRatingsChange1}
                     >
                       <option value="">Select Rating</option>

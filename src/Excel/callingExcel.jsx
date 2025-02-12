@@ -567,7 +567,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
             onClick={displayCandidateForm}
             toggleSection={toggleSection}
             loginEmployeeName={loginEmployeeName}
-            viewsSearchTerm={viewsSearchTerm}
+            // viewsSearchTerm={viewsSearchTerm}
             // this line added by sahil karnekar line 302
           />
         )}
@@ -586,7 +586,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
             onCloseTable={() => setActiveTable("")}
             onActionClick={handleActionClick} // Pass the handler to the table component
             loginEmployeeName={loginEmployeeName}
-            viewsSearchTerm={viewsSearchTerm}
+            // viewsSearchTerm={viewsSearchTerm}
           />
         )}
       </div>

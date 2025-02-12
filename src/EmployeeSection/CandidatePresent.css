@@ -99,9 +99,13 @@ justify-content: center;
   width: 50%;
   max-height: 40px;
   overflow: scroll;
+  align-content: center;
 }
-.applyfontsizeforpresent{
-
+.imgandwarningdiv{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
 }
 
 

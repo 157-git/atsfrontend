@@ -8,10 +8,10 @@
   font-size: 16px;
   border-radius: 15px;
   height: 30px;
-  color: white;
+  color: var(--button-txt-color);
   padding-left: 15px;
   padding-right: 15px;
-  background: var(--button-color);
+  background: var(--primary-button-bg);
   border: 1px solid gray;
   cursor: pointer;
   margin-bottom: 10px;
@@ -26,8 +26,8 @@
 .View-Interview-History:hover,
 .FollowUp-History:hover,
 .master-sheet-filterbtn:hover {
-  background-color: var(--button-hover-color);
-  color: var(--text-hover-color);
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
   opacity: 0.8;
 }
 
