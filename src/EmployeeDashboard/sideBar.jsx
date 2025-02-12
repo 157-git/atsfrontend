@@ -304,10 +304,12 @@ function Sidebar({
     };
     return subMenuMap[buttonKey] || null;
   };
-
+  console.log(activeSubMenu);
+  
   const toggleSubMenu = (subMenuKey) => (e) => {
     e.preventDefault();
     setActiveSubMenu(activeSubMenu === subMenuKey ? null : subMenuKey);
+    setActiveButton(subMenuKey);
   };
 
   const toggleSidebar = () => {
@@ -365,6 +367,8 @@ function Sidebar({
     if (callback) callback(e);
   };
 
+
+
   const isCandidateSectionActive = [
     "selfCalling",
     "lineUp",
@@ -375,13 +379,55 @@ function Sidebar({
     "EmployeeMasterSheet",
   ].includes(activeButton);
   const isJobDescriptionActive = [
-    "Jobdiscription",
+    "Jobdescription",
     "addJobDescription",
+  ].includes(activeButton);
+  const isTeamLeaderActive = [
+    "TeamLeader-section",
+    "sendCandidate",
+    "updateResponse",
+    "sharedProfiles",
+    "payRoll",
+    "questionPaper",
+    "scheduleinterview",
+    "addRecruiter",
+    "employeeDetails"
+  ].includes(activeButton);
+  const isManagerActive = [
+    "admin-section",
+    "sendCandidate",
+    "updateResponse",
+    "sharedProfiles",
+    "payRoll",
+    "scheduleinterview",
+    "billing",
+    "invoice",
+    "assignC",
+  "managerTeamD",
+   "addTeamLeader",
+   "addCompany",
+   "capex"
+  ].includes(activeButton);
+  const isSuperUserActive = [
+    "admin-section",
+    "sendCandidate",
+    "updateResponse",
+    "sharedProfiles",
+    "payRoll",
+    "scheduleinterview",
+    "billing",
+    "invoice",
+    "assignC",
+  "managerTeamD",
+   "addTeamLeader",
+   "addCompany",
+   "capex"
   ].includes(activeButton);
   const isadminactive = ["teamleader", "addJobDescription"].includes(
     activeButton
   );
-
+  console.log(activeButton);
+  console.log(isCandidateSectionActive);
   useEffect(() => {
     if (window.innerWidth <= 980) {
       setIsActive(false);
@@ -556,6 +602,7 @@ function Sidebar({
                           : ""
                       }`}
                       onClick={toggleSubMenu("candidate")}
+                
                     >
                       <a href="#">
                         <i className="fa-solid fa-users"></i>
@@ -750,6 +797,7 @@ function Sidebar({
                       ? "Complete payment to access this feature"
                       : ""
                   }
+                
                 >
                   <a
                     href="#"
@@ -763,7 +811,8 @@ function Sidebar({
                   >
                     <i className="fa-solid fa-pen-to-square"></i>
                     <span className="sidebar-text">Job Description</span>
-                    <i className="arrow ph-bold ph-caret-down"></i>
+                    {/* <i className="arrow ph-bold ph-caret-down"></i> */}
+                    <i className="arrow ph-bold ph-caret-down newArrowForJd"></i>
                   </a>
 
                   <ul
@@ -878,10 +927,18 @@ function Sidebar({
                   <>
                     {userType != "Recruiters" && userType != "Vendor" ? (
                       <li
-                        className={
-                          activeButton === "TeamLeader-section" ? "active" : ""
-                        }
+                      
+                        className=
+                        {`${
+                          activeSubMenu === "TeamLeader-section" || isTeamLeaderActive
+                            ? "active"
+                            : ""
+                        }`}
+                        // {
+                        //   activeButton === "TeamLeader-section" || isTeamLeaderActive ? "active" : ""
+                        // }
                         onClick={toggleSubMenu("TeamLeader-section")}
+                 
                       >
                         <a href="#">
                           <i className="fa-solid fa-users"></i>
@@ -1038,8 +1095,15 @@ function Sidebar({
 
                 {userType === "Manager" ? (
                   <li
-                    className={activeButton === "admin-section" ? "active" : ""}
+                  className=
+                        {`${
+                          activeSubMenu === "admin-section" || isManagerActive
+                            ? "active"
+                            : ""
+                        }`}
+            
                     onClick={toggleSubMenu("admin-section")}
+               
                   >
                     <a href="#">
                       <i className="fa-solid fa-computer"></i>
@@ -1300,6 +1364,12 @@ function Sidebar({
                 {/* Arshad Attar Added New Cement button Logic as per, Subscription Status- On 28-11-2024 Start Line- 1166 to 12000 */}
                 {userType === "SuperUser" ? (
                   <li
+                  className=
+                        {`${
+                          activeSubMenu === "SuperUser" || isSuperUserActive
+                            ? "active"
+                            : ""
+                        }`}
                     onClick={
                       paymentMade
                         ? handleButtonClick(
@@ -1317,6 +1387,7 @@ function Sidebar({
                         ? "Complete payment to access this feature"
                         : ""
                     }
+       
                   >
                     <a
                       href="#"
@@ -1478,6 +1549,7 @@ function Sidebar({
                   <li
                     className={activeSubMenu === "database" ? "active" : ""}
                     onClick={toggleSubMenu("database")}
+              
                   >
                     <a href="#">
                       <i className="fa-solid fa-database"></i>
@@ -1617,6 +1689,7 @@ function Sidebar({
                   <li
                     className={activeSubMenu === "portal" ? "active" : ""}
                     onClick={toggleSubMenu("portal")}
+           
                   >
                     <a href="#">
                       <i className="fa-brands fa-linkedin"></i>
@@ -1782,6 +1855,7 @@ function Sidebar({
                   <li
                     className={activeSubMenu === "help" ? "active" : ""}
                     onClick={toggleSubMenu("help")}
+             
                   >
                     <a href="#">
                       <i className="fa-regular fa-circle-question"></i>

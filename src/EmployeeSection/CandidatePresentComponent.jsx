@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "../EmployeeSection/CandidatePresent.css";
 import dummyImage from "../EmployeeSection/dummy.jpg"; 
+import warningImg from "../assets/warning.png";
 
 const CandidatePresentComponent = ({ candidateData, onClose }) => {
     const [candidateImage, setCandidateImage] = useState(dummyImage);
@@ -86,9 +87,12 @@ const CandidatePresentComponent = ({ candidateData, onClose }) => {
 
   return (
     <div className="candidate-form-container">
+     
       <div className="candidate-form">
+        
         <div style={{
-          width:"100px"
+          width:"100px",
+          alignContent:"center"
         }}>
           <img src={candidateImage} alt="Candidate" className="candidate-image"
           style={{
@@ -98,6 +102,10 @@ const CandidatePresentComponent = ({ candidateData, onClose }) => {
         </div>
 
         <div className="candidate-details">
+        <div className="imgandwarningdiv">
+        <img src={warningImg} alt=''/>
+        <div>Duplicate Candidate</div>
+      </div>
           {candidateData ? (
             <div className="candidate-info">
               <h2 className="candidate-name">Name: {candidateData.candidateName}</h2>

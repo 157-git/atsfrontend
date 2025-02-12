@@ -319,9 +319,9 @@ const CallingTrackerForm = ({
 
     setCallingTracker((prevState) => ({
       ...prevState,
-      [name]: value, // Updates the selected rating
+      communicationRating: value, // Updates the selected rating
     }));
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+    setErrors((prevErrors) => ({ ...prevErrors, ["communicationRating"]: "" }));
   };
 
   const handleChange = (e) => {
@@ -721,8 +721,6 @@ const CallingTrackerForm = ({
       }
     }
   };
-  console.log(lineUpData);
-
   //Arshad Attar Added This , Now Resume will added Proper in data base.  18-10-2024
   //Start Line 451
   const handleResumeFileChange = (e) => {
@@ -1240,7 +1238,7 @@ const CallingTrackerForm = ({
                       className="plain-input"
                     />
                   </div>
-                 
+
                   <div
                     className="calling-tracker-two-input newpaddingrightinputforhelp"
                     style={{
@@ -1350,7 +1348,7 @@ const CallingTrackerForm = ({
               </div>
               <div className="calling-tracker-field">
                 <label>Whatsapp Number</label>
-              
+
                 <div
                   className="calling-tracker-field-sub-div"
                   onClick={handleDisplaySameAsContactText}
@@ -2184,7 +2182,6 @@ const CallingTrackerForm = ({
                           if (value === "") {
                             setErrorForYOP("");
                           } else if (value < 1947 || value > maxYear) {
-                           
                             setErrorForYOP(
                               `YOP should be between 1947 and ${maxYear}`
                             );
@@ -2193,7 +2190,6 @@ const CallingTrackerForm = ({
                           }
 
                           if (/^\d{0,4}$/.test(value)) {
-                           
                             setLineUpData({
                               ...lineUpData,
                               yearOfPassing: value,
@@ -2215,7 +2211,6 @@ const CallingTrackerForm = ({
                   </div>
                 </div>
               </div>
-
             </div>
             <div className="calling-tracker-row-white">
               <div className="calling-tracker-field">
@@ -2485,7 +2480,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                     <select
                       className="plain-input setwidthandmarginforratings"
                       name="callingFeedback"
-                      value={callingTracker.callingFeedback}
+                      value={callingTracker.communicationRating}
                       onChange={handleRatingsChange1}
                     >
                       <option value="">Select Rating</option>
@@ -2761,7 +2756,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                           Available For Interview
                         </option>
                         <option value=" Confirmed, but will be available later">
-                        Confirmed, but will be available later.
+                          Confirmed, but will be available later.
                         </option>
                       </select>
                       {/* this line added by sahil date 22-10-2024 */}

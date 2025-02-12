@@ -55,7 +55,7 @@
   .accordion-header {
     cursor: pointer;
     padding: 10px;
-    background-color: var(--hover-effect);
+    background-color: var(--Bg-color);
     font-size: 18px;
 }
 .accordion-title {
