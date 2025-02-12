@@ -7,8 +7,9 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
+
 // SwapnilRokade_AfterSelection_addedProcessImprovmentEvaluatorFunctionalityStoringInterviweResponse_08_to_386_29/07/2024
-const AfterSelection = ({ 
+const AfterSelection = ({
   candidateId,
   employeeId,
   requirementId,
@@ -65,13 +66,14 @@ const AfterSelection = ({
   const { userType } = useParams();
 
   useEffect(() => {
+    console.log("2nddd useEffect ");
     const fetchData = async () => {
       await fetchCandidateData();
       // await fetchCandidateTableData();
       await fetchJoinDate();
     };
     fetchData();
-    JoininghandleSubmit();
+    // JoininghandleSubmit();
     fetchPerformaceId();
   }, [candidateId]);
 
@@ -152,7 +154,6 @@ const AfterSelection = ({
       console.log(error);
     }
   };
-  
 
   useEffect(() => {
     const fetchCandidateTableData = async () => {
@@ -177,8 +178,6 @@ const AfterSelection = ({
     fetchCandidateTableData();
   }, [candidateId, employeeId, requirementId]);
 
-
-
   const handleAdharCardUpload = async (e) => {
     const file = e.target.files[0];
     setAdharCardUploaded(file);
@@ -197,38 +196,38 @@ const AfterSelection = ({
     }
   };
 
-  const handlePanCardUpload = (e) => {
-    const file = e.target.files[0];
-    setPanCardUploaded(file);
-  };
+  // const handlePanCardUpload = (e) => {
+  //   const file = e.target.files[0];
+  //   setPanCardUploaded(file);
+  // };
 
-  const handleDrivingLicenseUpload = (e) => {
-    const file = e.target.files[0];
-    setDrivingLicenseUploaded(file);
-  };
-  const handleDegreeMarksheetUpload = (e) => {
-    const file = e.target.files[0];
-    setDegreeMarksheetUploaded(file);
-  };
-  const handleHSCMarksheetUpload = (e) => {
-    const file = e.target.files[0];
-    setHscMarksheetUploaded(file);
-  };
-  const handleSSCMarksheetUpload = (e) => {
-    const file = e.target.files[0];
-    setSscMarksheetUploaded(file);
-  };
+  // const handleDrivingLicenseUpload = (e) => {
+  //   const file = e.target.files[0];
+  //   setDrivingLicenseUploaded(file);
+  // };
+  // const handleDegreeMarksheetUpload = (e) => {
+  //   const file = e.target.files[0];
+  //   setDegreeMarksheetUploaded(file);
+  // };
+  // const handleHSCMarksheetUpload = (e) => {
+  //   const file = e.target.files[0];
+  //   setHscMarksheetUploaded(file);
+  // };
+  // const handleSSCMarksheetUpload = (e) => {
+  //   const file = e.target.files[0];
+  //   setSscMarksheetUploaded(file);
+  // };
 
-  const handleMailReceivedChange = (e) => {
-    const received = e.target.value;
-    setMailReceived(received);
+  // const handleMailReceivedChange = (e) => {
+  //   const received = e.target.value;
+  //   setMailReceived(received);
 
-    if (received === "received") {
-      setOfferLetterReceived("yes");
-    } else {
-      setOfferLetterReceived("");
-    }
-  };
+  //   if (received === "received") {
+  //     setOfferLetterReceived("yes");
+  //   } else {
+  //     setOfferLetterReceived("");
+  //   }
+  // };
 
   const handleOfferLetterReceivedChange = async (e) => {
     const received = e.target.value;
@@ -270,7 +269,7 @@ const AfterSelection = ({
       } catch (error) {
         console.log(error);
       }
-    } else if(offerLetterIssued === "no"){
+    } else if (offerLetterIssued === "no") {
       try {
         const additionalData = {
           issueOfferLetter: "N/A",
@@ -285,7 +284,6 @@ const AfterSelection = ({
         console.log(error);
       }
     }
-  
   };
 
   const handleOfferLetterAcceptedChange = async (e) => {
@@ -397,64 +395,64 @@ const AfterSelection = ({
     }
   };
 
-  const JoininghandleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-   const dataUpdatedBy = `${loginEmployeeName} ( ${userType} )`;
+  // const JoininghandleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //  const dataUpdatedBy = `${loginEmployeeName} ( ${userType} )`;
 
-    const formData = new FormData();
-    formData.append("employeeId", employeeId);
-    formData.append("candidateId", candidateId);
-    formData.append("requirementId", requirementId);
-    formData.append("mailReceived", mailReceived);
+  //   const formData = new FormData();
+  //   formData.append("employeeId", employeeId);
+  //   formData.append("candidateId", candidateId);
+  //   formData.append("requirementId", requirementId);
+  //   formData.append("mailReceived", mailReceived);
 
-    if (aadhaarCard) formData.append("aadhaarCard", aadhaarCard);
-    if (panCard) formData.append("panCard", panCard);
-    if (drivingLicense) formData.append("drivingLicense", drivingLicense);
-    if (degreeMarkSheet) formData.append("degreeMarkSheet", degreeMarkSheet);
-    if (hscMarkSheet) formData.append("hscMarkSheet", hscMarkSheet);
-    if (sscMarkSheet) formData.append("sscMarkSheet", sscMarkSheet);
+  //   if (aadhaarCard) formData.append("aadhaarCard", aadhaarCard);
+  //   if (panCard) formData.append("panCard", panCard);
+  //   if (drivingLicense) formData.append("drivingLicense", drivingLicense);
+  //   if (degreeMarkSheet) formData.append("degreeMarkSheet", degreeMarkSheet);
+  //   if (hscMarkSheet) formData.append("hscMarkSheet", hscMarkSheet);
+  //   if (sscMarkSheet) formData.append("sscMarkSheet", sscMarkSheet);
 
-    formData.append("offerLetterReceived", offerLetterReceived);
-    formData.append("offerLetterAccepted", offerLetterAccepted);
-    formData.append(
-      "reasonForRejectionOfferLetter",
-      reasonForRejectionOfferLetter || ""
-    );
-    formData.append("joinStatus", joinStatus);
-    formData.append("reasonForNotJoin", reasonForNotJoin || "");
-    formData.append("joinDate", joinDate);
-    formData.append("dataUpdatedBy", dataUpdatedBy); 
-    formData.append("comment",comment)
-    
-    try {
-      const response = await fetch(`${API_BASE_URL}/save-join-data`, {
-        method: "POST",
-        body: formData,
-      });
+  //   formData.append("offerLetterReceived", offerLetterReceived);
+  //   formData.append("offerLetterAccepted", offerLetterAccepted);
+  //   formData.append(
+  //     "reasonForRejectionOfferLetter",
+  //     reasonForRejectionOfferLetter || ""
+  //   );
+  //   formData.append("joinStatus", joinStatus);
+  //   formData.append("reasonForNotJoin", reasonForNotJoin || "");
+  //   formData.append("joinDate", joinDate);
+  //   formData.append("dataUpdatedBy", dataUpdatedBy);
+  //   formData.append("comment",comment)
 
-      if (response.ok) {
-        const result = await response.text();
-        if (result.includes("Data added successfully")) {
-          toast.success("Documents Added Successfully!"); // Success toast
-          clearForm(); // Clear the form after success
-          onReturn(); // Redirect or refresh the page
-        }
-      } else if (response.status === 409) {
-        toast.info("Documents have already been submitted for this candidate."); // Info toast for conflict
-      } else {
-        const errorText = await response.text(); // Get error message from response
-        toast.error(
-          `Error: ${errorText || "Something went wrong. Please try again."}`
-        ); // Display error toast
-      }
-    } catch (error) {
-      toast.error(`Failed to submit the form. Error: ${error.message}`); // Handle fetch errors
-      console.error("Failed to submit form:", error);
-    } finally {
-      setLoading(false); // Ensure loading spinner stops
-    }
-  };
+  //   try {
+  //     const response = await fetch(`${API_BASE_URL}/save-join-data`, {
+  //       method: "POST",
+  //       body: formData,
+  //     });
+
+  //     if (response.ok) {
+  //       const result = await response.text();
+  //       if (result.includes("Data added successfully")) {
+  //         toast.success("Documents Added Successfully!"); // Success toast
+  //         clearForm(); // Clear the form after success
+  //         onReturn(); // Redirect or refresh the page
+  //       }
+  //     } else if (response.status === 409) {
+  //       toast.info("Documents have already been submitted for this candidate."); // Info toast for conflict
+  //     } else {
+  //       const errorText = await response.text(); // Get error message from response
+  //       toast.error(
+  //         `Error: ${errorText || "Something went wrong. Please try again."}`
+  //       ); // Display error toast
+  //     }
+  //   } catch (error) {
+  //     toast.error(`Failed to submit the form. Error: ${error.message}`); // Handle fetch errors
+  //     console.error("Failed to submit form:", error);
+  //   } finally {
+  //     setLoading(false); // Ensure loading spinner stops
+  //   }
+  // };
 
   const clearForm = () => {
     setMailReceived("");
@@ -472,6 +470,253 @@ const AfterSelection = ({
     setJoinDate("");
   };
 
+  // const handleFileChange = (e) => {
+  //   const { name, files } = e.target;
+  //   if (name === "optionalDocuments") {
+  //     const newFiles = Array.from(files);
+  //     const uniqueFiles = newFiles.filter((file) => {
+  //       const isDuplicate = existingOptionalDocs.includes(file.name);
+  //       if (isDuplicate) {
+  //         console.log(`File "${file.name}" already exists and will be skipped`);
+  //       }
+  //       return !isDuplicate;
+  //     });
+
+  //     setDocuments((prev) => ({
+  //       ...prev,
+  //       optionalDocuments: Array.from(files),
+  //     }));
+  //   } else {
+  //     setDocuments((prev) => ({
+  //       ...prev,
+  //       [name]: files[0],
+  //     }));
+  //   }
+  // };
+
+  // =====================================================================================
+  // =====================================================================================
+
+  const [formData, setFormData] = useState({
+    employeeId: employeeId,
+    candidateId: candidateId,
+    requirementId: requirementId,
+    mailReceived: "",
+    offerLetterReceived: "",
+    offerLetterAccepted: "",
+    joinStatus: "",
+    reasonForNotJoin: "",
+    reasonForRejectionOfferLetter: "",
+    joiningType: "",
+    joinDate: "",
+    dataUpdatedBy: `${loginEmployeeName} (${userType})`,
+    comment: "",
+  });
+  const [documents, setDocuments] = useState({
+    aadhaarCard: null,
+    panCard: null,
+    drivingLicense: null,
+    degreeMarkSheet: null,
+    hscMarkSheet: null,
+    sscMarkSheet: null,
+    optionalDocuments: [],
+  });
+  const [error, setError] = useState(null);
+  const [recordExists, setRecordExists] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [existingOptionalDocs, setExistingOptionalDocs] = useState([]);
+
+  useEffect(() => {
+    fetchDetails();
+  }, []);
+
+  const fetchDetails = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/fetch-joining-details/${candidateId}`
+      );
+      if (!response.ok) {
+        if (response.status === 404) {
+          setRecordExists(false);
+          resetFormAndDocuments();
+        } else {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+      } else {
+        const data = await response.json();
+        if (data && Object.keys(data).length > 0) {
+          setRecordExists(true);
+          populateFormData(data);
+        } else {
+          setRecordExists(false);
+          resetFormAndDocuments();
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching details:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetFormAndDocuments = () => {
+    setFormData({
+      ...formData,
+      mailReceived: "",
+      offerLetterReceived: "",
+      offerLetterAccepted: "",
+      joinStatus: "",
+      reasonForNotJoin: "",
+      reasonForRejectionOfferLetter: "",
+      joiningType: "",
+      joinDate: "",
+    });
+    setDocuments({
+      aadhaarCard: null,
+      panCard: null,
+      drivingLicense: null,
+      degreeMarkSheet: null,
+      hscMarkSheet: null,
+      sscMarkSheet: null,
+      optionalDocuments: [],
+    });
+  };
+
+  const populateFormData = (data) => {
+    setFormData({
+      ...formData,
+      mailReceived: data.mailReceived || "",
+      offerLetterReceived: data.offerLetterReceived || "",
+      offerLetterAccepted: data.offerLetterAccepted || "",
+      joinStatus: data.joinStatus || "",
+      reasonForNotJoin: data.reasonForNotJoin || "",
+      reasonForRejectionOfferLetter: data.reasonForRejectionOfferLetter || "",
+      joiningType: data.joiningType || "",
+      joinDate: data.joinDate || "",
+    });
+    if (data.optionalDocuments && Array.isArray(data.optionalDocuments)) {
+      setExistingOptionalDocs(
+        data.optionalDocuments.map((doc) =>
+          typeof doc === "string" ? doc : doc.name
+        )
+      );
+    }
+    setDocuments({
+      aadhaarCard: data.aadhaarCard || null,
+      panCard: data.panCard || null,
+      drivingLicense: data.drivingLicense || null,
+      degreeMarkSheet: data.degreeMarkSheet || null,
+      hscMarkSheet: data.hscMarkSheet || null,
+      sscMarkSheet: data.sscMarkSheet || null,
+      optionalDocuments: data.optionalDocuments || [],
+    });
+  };
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    setDocuments((prev) => ({
+      ...prev,
+      [name]: name === "optionalDocuments" ? Array.from(files) : files[0],
+    }));
+  };
+
+  const handleSubmitJoiningDetails = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const formDataToSend = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      formDataToSend.append(key, value);
+    });
+
+    Object.entries(documents).forEach(([key, value]) => {
+      if (key === "optionalDocuments") {
+        Array.from(value).forEach((file) => {
+          if (!existingOptionalDocs.includes(file.name)) {
+            formDataToSend.append("optionalDocuments", file);
+          }
+        });
+      } else if (value) {
+        formDataToSend.append(key, value);
+      }
+    });
+
+    try {
+      const url = recordExists
+        ? `${API_BASE_URL}/update-documents/${candidateId}`
+        : `${API_BASE_URL}/save-join-data`;
+
+      const method = recordExists ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
+        body: formDataToSend,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.text();
+      setSuccessMessage(
+        recordExists
+          ? "Details updated successfully!"
+          : "Details Submitted successfully!"
+      );
+      setTimeout(() => setSuccessMessage(null), 3000);
+      await fetchDetails();
+    } catch (error) {
+      setError(error.message);
+      console.error("Error saving/updating data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const Message = ({ type, message }) => {
+    if (!message) return null;
+
+    const styles = {
+      success: {
+        backgroundColor: "#ecfdf5",
+        border: "1px solid #10b981",
+        color: "#059669",
+      },
+      error: {
+        backgroundColor: "#fee2e2",
+        border: "1px solid #ef4444",
+        color: "#dc2626",
+      },
+    };
+
+    return (
+      <div
+        style={{
+          ...styles[type],
+          borderRadius: "4px",
+          padding: "6px",
+          marginBottom: "5px",
+          marginTop: "5px",
+          fontSize: "12px",
+        }}
+      >
+        {message}
+      </div>
+    );
+  };
+
+  const [showSelectedPage, setShowSelectedPage] = useState(true);
+  const handleShowSelectedPage = () => {
+    console.log("-----------");
+    setShowSelectedPage(false);
+  };
   return (
     <div>
       {loading ? (
@@ -482,18 +727,23 @@ const AfterSelection = ({
         <>
           <div className="join-container">
             <div className="after-head">
-              <button
-                className="after-button"
-                onClick={() => setIsActiveInquiry(false)}
-              >
-                Joining Process
-              </button>
-              <button
-                className="after-button"
-                onClick={() => setIsActiveInquiry(true)}
-              >
-                Active Inquiry
-              </button>
+              <div>
+                <button
+                  className="after-button"
+                  onClick={() => setIsActiveInquiry(false)}
+                >
+                  Joining Process
+                </button>
+                <button
+                  className="after-button"
+                  onClick={() => setIsActiveInquiry(true)}
+                >
+                  Active Inquiry
+                </button>
+              </div>
+              <div className="join-close-icon" onClick={onReturn}>
+                &times;
+              </div>
             </div>
 
             {/* this small code updated by sahil karnekar date 24-10-2024 */}
@@ -502,11 +752,17 @@ const AfterSelection = ({
                 className="after-main-div"
                 style={{ width: "-webkit-fill-available" }}
               >
-                <form className="Join-form-data" onSubmit={JoininghandleSubmit}>
+                <form
+                  className="Join-form-data"
+                  onSubmit={handleSubmitJoiningDetails}
+                >
                   <div className="after-h3">
                     <h3>Joining Process </h3>
                   </div>
-
+                  {error && <Message type="error" message={error} />}
+                  {successMessage && (
+                    <Message type="success" message={successMessage} />
+                  )}
                   <div className="after-mail-div">
                     <label htmlFor="mailReceived" className="after-label">
                       Selection Mail Received:
@@ -514,8 +770,8 @@ const AfterSelection = ({
                     <select
                       className="after-select"
                       id="mailReceived"
-                      value={mailReceived}
-                      onChange={handleMailReceivedChange}
+                      value={formData.mailReceived}
+                      onChange={handleInputChange}
                     >
                       <option value="">Select Option</option>
                       <option className="as-nofilechosen" value="received">
@@ -542,24 +798,26 @@ const AfterSelection = ({
                           <label htmlFor="adharCard" className="after-label">
                             Aadhar Card:
                           </label>
-
                           <input
-                          style={{
-                            flexGrow:"0"
-                          }}
+                            style={{
+                              flexGrow: "0",
+                            }}
                             type="file"
                             className="after-file-input"
-                            onChange={handleAdharCardUpload}
-                            name=""
+                            name="aadhaarCard"
+                            onChange={handleFileChange}
                             id=""
-                          />
-                          {aadhaarCard && (
-                            <span>
-                              <img
-                                style={{ width: "20px" }}
-                                src={RightTick}
-                                alt=""
-                              />
+                          />{" "}
+                          {documents.aadhaarCard && (
+                            <span className="text-green-500">
+                              {" "}
+                              <span>
+                                <img
+                                  style={{ width: "20px" }}
+                                  src={RightTick}
+                                  alt=""
+                                />
+                              </span>
                             </span>
                           )}
                         </div>
@@ -569,22 +827,24 @@ const AfterSelection = ({
                             Pan Card:
                           </label>
                           <input
-                           style={{
-                            flexGrow:"0"
-                          }}
+                            style={{
+                              flexGrow: "0",
+                            }}
                             type="file"
                             className="after-file-input"
-                            onChange={handlePanCardUpload}
-                            name=""
+                            name="panCard"
+                            onChange={handleFileChange}
                             id=""
                           />
-                          {panCard && (
+                          {documents.panCard && (
                             <span>
-                              <img
-                                style={{ width: "20px", marginLeft: "10px" }}
-                                src={RightTick}
-                                alt=""
-                              />
+                              <span>
+                                <img
+                                  style={{ width: "20px", marginLeft: "10px" }}
+                                  src={RightTick}
+                                  alt=""
+                                />
+                              </span>
                             </span>
                           )}
                         </div>
@@ -597,22 +857,25 @@ const AfterSelection = ({
                             Driving License:
                           </label>
                           <input
-                           style={{
-                            flexGrow:"0"
-                          }}
+                            style={{
+                              flexGrow: "0",
+                            }}
                             className="after-file-input"
                             type="file"
-                            onChange={handleDrivingLicenseUpload}
-                            name=""
+                            name="drivingLicense"
+                            onChange={handleFileChange}
                             id=""
                           />
-                          {drivingLicense && (
+                          {documents.drivingLicense && (
                             <span>
-                              <img
-                                style={{ width: "20px", marginLeft: "10px" }}
-                                src={RightTick}
-                                alt=""
-                              />
+                              {" "}
+                              <span>
+                                <img
+                                  style={{ width: "20px", marginLeft: "10px" }}
+                                  src={RightTick}
+                                  alt=""
+                                />
+                              </span>
                             </span>
                           )}
                         </div>
@@ -622,22 +885,25 @@ const AfterSelection = ({
                             Degree Marksheet:
                           </label>
                           <input
-                           style={{
-                            flexGrow:"0"
-                          }}
+                            style={{
+                              flexGrow: "0",
+                            }}
                             type="file"
-                            name=""
-                            onChange={handleDegreeMarksheetUpload}
+                            name="degreeMarkSheet"
+                            onChange={handleFileChange}
                             className="after-file-input"
                             id=""
                           />
-                          {degreeMarkSheet && (
+                          {documents.degreeMarkSheet && (
                             <span>
-                              <img
-                                style={{ width: "20px", marginLeft: "10px" }}
-                                src={RightTick}
-                                alt=""
-                              />
+                              {" "}
+                              <span>
+                                <img
+                                  style={{ width: "20px", marginLeft: "10px" }}
+                                  src={RightTick}
+                                  alt=""
+                                />
+                              </span>
                             </span>
                           )}
                         </div>
@@ -647,16 +913,16 @@ const AfterSelection = ({
                             HSC Marksheet:
                           </label>
                           <input
-                           style={{
-                            flexGrow:"0"
-                          }}
+                            style={{
+                              flexGrow: "0",
+                            }}
                             type="file"
-                            name=""
-                            onChange={handleHSCMarksheetUpload}
+                            name="hscMarkSheet"
+                            onChange={handleFileChange}
                             className="after-file-input"
                             id=""
                           />
-                          {hscMarkSheet && (
+                          {documents.hscMarkSheet && (
                             <span>
                               <img
                                 style={{ width: "20px", marginLeft: "10px" }}
@@ -672,16 +938,41 @@ const AfterSelection = ({
                             SSC Marksheet:
                           </label>
                           <input
-                           style={{
-                            flexGrow:"0"
-                          }}
+                            style={{
+                              flexGrow: "0",
+                            }}
                             type="file"
-                            onChange={handleSSCMarksheetUpload}
-                            name=""
                             className="after-file-input"
+                            name="sscMarkSheet"
+                            onChange={handleFileChange}
                             id=""
                           />
-                          {sscMarkSheet && (
+                          {documents.sscMarkSheet && (
+                            <span>
+                              <img
+                                style={{ width: "20px", marginLeft: "10px" }}
+                                src={RightTick}
+                                alt=""
+                              />
+                            </span>
+                          )}
+                        </div>
+                        <div className="after-document-files">
+                          <label htmlFor="sscMarksheet" className="after-label">
+                            Optional Documents :
+                          </label>
+                          <input
+                            style={{
+                              flexGrow: "0",
+                            }}
+                            type="file"
+                            className="after-file-input"
+                            name="optionalDocuments"
+                            multiple
+                            onChange={handleFileChange}
+                            id=""
+                          />
+                          {documents.optionalDocuments && (
                             <span>
                               <img
                                 style={{ width: "20px", marginLeft: "10px" }}
@@ -694,8 +985,7 @@ const AfterSelection = ({
                       </div>
 
                       <div className="after-document-fisrt">
-
-                      <div className="after-mail-div">
+                        <div className="after-mail-div">
                           <div className="after-lable-div">
                             <label
                               htmlFor="offerLetterReceived"
@@ -708,15 +998,12 @@ const AfterSelection = ({
                           <select
                             id="offerLetterReceived"
                             className="after-select"
-                            value={offerLatterIssuedStatus}
-                            onChange={handleOfferLetterIssuedChange}
                           >
                             <option value="">Select Option</option>
                             <option value="yes">Yes</option>
                             <option value="no">No</option>
                           </select>
                         </div>
-
 
                         {/* <div className="after-mail-div">
                           <div className="after-lable-div">
@@ -752,8 +1039,9 @@ const AfterSelection = ({
                           <select
                             id="offerLetterAccepted"
                             className="after-select"
-                            value={offerLetterAccepted}
-                            onChange={handleOfferLetterAcceptedChange}
+                            name="offerLetterAccepted"
+                            value={formData.offerLetterAccepted}
+                            onChange={handleInputChange}
                           >
                             <option value="">Select Option</option>
                             <option value="accepted">Yes</option>
@@ -771,8 +1059,9 @@ const AfterSelection = ({
                           <select
                             id="joinStatus"
                             className="after-select"
-                            value={joinStatus}
-                            onChange={handleJoinStatusChange}
+                            name="joinStatus"
+                            value={formData.joinStatus}
+                            onChange={handleInputChange}
                           >
                             <option value="">Select Option</option>
                             <option value="Joining">Joining</option>
@@ -796,8 +1085,9 @@ const AfterSelection = ({
                             type="date"
                             className="after-input"
                             id="joinDate"
-                            value={joinDate}
-                            onChange={handleJoiningDateChange}
+                            name="joinDate"
+                            value={formData.joinDate}
+                            onChange={handleInputChange}
                           />
                         </div>
                         <div className="after-mail-div">
@@ -822,8 +1112,8 @@ const AfterSelection = ({
                             className="after-input"
                             placeholder="Enter Comment..."
                             id="comment"
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
+                            value={formData.comment}
+                            onChange={handleInputChange}
                           />
                         </div>
                       </div>
@@ -843,12 +1133,9 @@ const AfterSelection = ({
                       onChange={(e) => setJoinReason(e.target.value)}
                     />
                   </div>
-
-                  <br />
                   <button type="submit" className="after-button">
-                    Add Documents
+                    {recordExists ? "Update Documents" : "Add Documents"}
                   </button>
-                  <button className="after-button">Update Documents</button>
                   {showJoinSuccessMessage && (
                     <div className="alert alert-success" role="alert">
                       Data Added Successfully!
@@ -1156,12 +1443,6 @@ const AfterSelection = ({
             )}
           </div>
         </>
-      )}
-
-      {loading && (
-        <div className="ShareFunc_Loading_Animation">
-          <Loader />
-        </div>
       )}
     </div>
   );

@@ -38,7 +38,8 @@ import { convertMinutesToTimeFormat } from "./convertMinutesToTimeFormat";
 import { cleanTimeStringPlusMinus, cleanTimeStringSpaces, removeLeadingZeros } from "./removeLeadingZeros";
 import { convertTimeStringToMinutes } from "./convertTimeStringToMinutes";
 import { convertTimeStringsToMinutesForChart } from "./convertTimeStringsToMinutesForChart";
-import { Button, Modal } from "antd";
+import { Button, Modal, Pagination } from "antd";
+
 
 const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   const { employeeId, userType } = useParams();
@@ -65,6 +66,7 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   // this state is added by sahil karnekar date 24-10-2024
   const [isLoading, setIsLoading] = useState(false);
 console.log(selectedJobId);
+const chartRef = useRef(null);
 
   useEffect(() => {
     if (data.length > 0 && !transformedDataRef.current) {
@@ -971,6 +973,31 @@ console.log(spentTime);
       setSelectedJobId(selectedJobId.filter((i) => i.requirementId !== item.requirementId)); // Remove item if unchecked
     }
   };
+  const downloadChart = () => {
+    if (chartRef.current) {
+      const chartInstance = chartRef.current;
+      const imageUrl = chartInstance.toBase64Image(); // Convert chart to image
+      const link = document.createElement("a");
+      link.href = imageUrl;
+      link.download = "bar_chart.png"; // File name
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20); // Number of rows per page
+
+  // Calculate the range of data to show
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedData = data.slice(startIndex, endIndex);
+
+  const handleSizeChange = (current, size) => {
+    setPageSize(size); // Update the page size
+    setCurrentPage(1); // Reset to the first page after page size changes
+  };
 
   return (
     <div className="PIE-App">
@@ -1181,9 +1208,14 @@ console.log(spentTime);
           </div>
           <div className="PIE-job-filter">
             
-          <Button type="primary" onClick={showModal1}>
-        Select Job Ids
-      </Button>
+
+            <button className="PIE-filter-Btn" onClick={showModal1}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M222-200 80-342l56-56 85 85 170-170 56 57-225 226Zm0-320L80-662l56-56 85 85 170-170 56 57-225 226Zm298 240v-80h360v80H520Zm0-320v-80h360v80H520Z"/></svg>
+            Select Job Ids
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-360 280-560h400L480-360Z"/></svg>
+            </button>
+
+         
       <Modal title="Select Job Ids" open={isModalOpen1} onOk={handleOk} onCancel={handleCancel}>
     <div className="selectJobIdsForPerformance">
     {sortedUniqueClientDetails.map((item) => (
@@ -1215,7 +1247,7 @@ console.log(spentTime);
  <div className="PIE-client-desg-role">
             { selectedJobId.length > 0 && selectedJobId.map((compItem, index)=>(
  <>
- <div>
+ <div className="divlength100forperformancejoblist">
   <p>
     <strong>{index+1}.  Client Name:</strong> {compItem.companyName}
   </p>
@@ -1248,7 +1280,7 @@ console.log(spentTime);
       <div className="PIT-heading">
         <h5 className="text-secondary">Performance Table</h5>
       </div>
-      <div className="PIE-maintable">
+      <div className="PIE-maintable tablefixheigt">
         <table className="PIE-timetrackertable">
           <thead>
             <th className="PIE-timetrackertablehead">Sr No</th>
@@ -1309,7 +1341,7 @@ console.log(spentTime);
             <th className="PIE-timetrackertablehead">Over All Process Time</th>
           </thead>
           <tbody>
-            {data.map((item, index) => (
+            {paginatedData.map((item, index) => (
               <tr key={item.candidateId} className="PIE-timetrackertabledata">
                 <td className="PIE-timetrackertabledata">{index + 1}</td>
 
@@ -1401,6 +1433,19 @@ console.log(spentTime);
           </tbody>
         </table>
       </div>
+      <Pagination
+                      current={currentPage}
+                      total={data.length}
+                      pageSize={pageSize}
+                      showSizeChanger
+                      showQuickJumper
+                      onShowSizeChange={handleSizeChange}
+                      onChange={(page) => setCurrentPage(page)}
+                      style={{
+                        justifyContent: "center",
+                        marginBottom:"10px"
+                      }}
+                    />
 
       <div className="procees-time-table">
         <div className="fixPerformanceprocesstable100">
@@ -1517,8 +1562,18 @@ console.log(spentTime);
         </div>
 
 
-        <Bar data={chartData} options={options} />
+<div className="chartDownloaddiv">
+  <div className="buttondivforchart">
+  <button onClick={downloadChart} className="downloadbuttonforchartperformance PIE-filter-Btn">
+       <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/></svg>
+      </button>
+  </div>
 
+<Bar ref={chartRef} data={chartData} options={options}/>
+
+   
+</div>
+      
         {/* <div>
           <PerformanceMeter></PerformanceMeter>
         </div> */}

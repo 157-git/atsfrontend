@@ -127,12 +127,12 @@ const CallingExcelList = ({
     });
   };
 
-  useEffect(() => {
-    if (viewsSearchTerm) {
-      setSearchTerm(viewsSearchTerm); // Sync viewsSearchTerm to local searchTerm
-      filterData(); // Re-trigger data filtering
-    }
-  }, [viewsSearchTerm]);
+  // useEffect(() => {
+  //   if (viewsSearchTerm) {
+  //     setSearchTerm(viewsSearchTerm); // Sync viewsSearchTerm to local searchTerm
+  //     filterData(); // Re-trigger data filtering
+  //   }
+  // }, [viewsSearchTerm]);
 
   useEffect(() => {
     filterData();

@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./LoginPage.css";
-import LoginImage from "../LogoImages/LoginImge.jpg";
+import LoginImage from "../assets/rgLogo.png";
 import ForgotPasswordForms from "./empForgotPasswords";
 import { API_BASE_URL } from "../api/api";
 import axios from "../api/api";

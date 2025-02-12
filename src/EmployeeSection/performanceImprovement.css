@@ -7,12 +7,23 @@
   .PIE-maintable::-webkit-scrollbar{
     display: none;
   }
-  
+  .divlength100forperformancejoblist{
+    width: 100%;
+  }
   .PIE-timetrackertable{
     /* width: 100%; */
     border-collapse: collapse !important;
     margin-bottom: 20px;
     color:var(--text-color);
+  }
+  .buttondivforchart{
+    display: flex;
+    width: 100%;
+    justify-content: end;
+  }
+  .tablefixheigt{
+    max-height: 800px;
+    overflow-y: scroll;
   }
   .PIE-timetrackertabledata {
     border: 1px solid gray;

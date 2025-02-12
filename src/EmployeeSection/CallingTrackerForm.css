@@ -711,19 +711,20 @@ strong {
   background-color: var(--table-header-bg) !important;
 }
 
+/* Loader Old Css Arshad Commented This */
+/* 
 .loader-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Shadow effect like Bootstrap modal */
-
+  background: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  z-index: 1050; /* Make sure it appears above everything */
+  z-index: 1050; 
 }
 
 .loader-container {
@@ -758,7 +759,7 @@ strong {
 .loading-text {
   font-size: 1.5rem;
   color: #fff;
-}
+} */
 
 /* Arshad Attar Added This CSS 19-10-2024 */
 :where(.css-dev-only-do-not-override-1hpnbz2).ant-picker {
@@ -854,4 +855,27 @@ strong {
   color: black;
   font-weight: bold;
   border: 1px dashed black;
+  height: 24px;
+  /* background-color: rgb(244, 244, 5) */
+}
+.uploadantdc{
+  line-height: 0.1;
+}
+.newpaddingrightinputforhelp{
+  margin-right: 3px;
+}
+.addtrnaslateproptospan{
+  transform: translateX(-50px);
+}
+.addtrnaslateproptospanForMonths{
+  transform: translateX(-60px);
+}
+.wrapdivforctcs{
+  display: flex;
+}
+.setDisplayBlockForctcs{
+  display: block;
+}
+.newhightforincentivesdiv{
+  height: 18px;
 }

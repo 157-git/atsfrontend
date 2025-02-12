@@ -20,7 +20,7 @@ import InterviewPreviousQuestion from "./interviewPreviousQuestion";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
 // this libraries added by sahil karnekar date 21-10-2024
-import { Button, Progress, Rate, TimePicker, Upload } from "antd";
+import { Button, Flex, Progress, Rate, TimePicker, Upload } from "antd";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSocket } from "../EmployeeDashboard/socket";
@@ -30,6 +30,7 @@ import uploadingResumeGif from "../assets/uploadingResumeMotion.gif";
 import uploadingResumeStatic from "../assets/uploadStaticPngFile.png";
 import startPointImg from "../photos/start-line.png";
 import endpointImg from "../photos/finish.png";
+import { convertNumberToWords } from "./convertNumberToWords";
 
 const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
@@ -41,7 +42,9 @@ const CallingTrackerForm = ({
   const [submited, setSubmited] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [uploadingResumeNewState, setUploadingResumeNewState] = useState(false);
-  const [displaySourceOthersInput, setDisplaySourceOthersInput] = useState(false);
+  const [displaySourceOthersInput, setDisplaySourceOthersInput] =
+    useState(false);
+  const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 
   // sahil karnekar line 33 to 38 date 15-10-2024
   const today = new Date();
@@ -133,9 +136,9 @@ const CallingTrackerForm = ({
     setIsFormVisible(false);
   };
 
-    useEffect(() => {
-      fetchRequirementOptions();
-    }, [employeeId]);
+  useEffect(() => {
+    fetchRequirementOptions();
+  }, [employeeId]);
 
   useEffect(() => {
     if (initialData) {
@@ -297,37 +300,43 @@ const CallingTrackerForm = ({
       }
     }
   };
-  
-const handleSourceNameOthers = (e)=>{
-  const {name, value} = e.target;
-callingTracker.sourceName = value;
-setErrors((prevErrors) => ({ ...prevErrors, ["sourceName"]: "" }));
-}
 
-const handleRatingsChange = (value) => {
-  setCallingTracker((prev) => ({
-    ...prev,
-    communicationRating: value,
-  }));
-  setErrors((prevErrors) => ({ ...prevErrors, ["communicationRating"]: "" }));
-};
+  const handleSourceNameOthers = (e) => {
+    const { name, value } = e.target;
+    callingTracker.sourceName = value;
+    setErrors((prevErrors) => ({ ...prevErrors, ["sourceName"]: "" }));
+  };
 
+  const handleRatingsChange = (value) => {
+    setCallingTracker((prev) => ({
+      ...prev,
+      communicationRating: value,
+    }));
+    setErrors((prevErrors) => ({ ...prevErrors, ["communicationRating"]: "" }));
+  };
+  const handleRatingsChange1 = (event) => {
+    const { name, value } = event.target;
+
+    setCallingTracker((prevState) => ({
+      ...prevState,
+      [name]: value, // Updates the selected rating
+    }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target || e;
-  
-  // Rajlaxmi Jagadale Added Email Validation Date-24-01-25 line263 to 312
-  if (name === "sourceName" && value === "others") {
-    setDisplaySourceOthersInput(true);
-  }else if (name === "sourceName" && value !== "others"){
-    setDisplaySourceOthersInput(false);
-  }
+
+    // Rajlaxmi Jagadale Added Email Validation Date-24-01-25 line263 to 312
+    if (name === "sourceName" && value === "others") {
+      setDisplaySourceOthersInput(true);
+    } else if (name === "sourceName" && value !== "others") {
+      setDisplaySourceOthersInput(false);
+    }
 
     if (name === "candidateEmail") {
       const trimmedEmail = value.replace(/\s/g, "");
-
       setCallingTracker({ ...callingTracker, [name]: trimmedEmail });
-
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (trimmedEmail !== "" && !emailPattern.test(trimmedEmail)) {
         setErrors((prevErrors) => ({
@@ -343,28 +352,6 @@ const handleRatingsChange = (value) => {
       }
       return;
     }
-    // sahil karnekar line 249 to 274
-    // if (name === "candidateEmail") {
-    //   const emailPattern =
-    //     /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
-    //   if (/\s/.test(value)) {
-    //     return;
-    //   }
-    //   setCallingTracker({ ...callingTracker, [name]: value });
-    //   if (value !== "" && !emailPattern.test(value)) {
-    //     setErrors((prevErrors) => ({
-    //       ...prevErrors,
-    //       [name]:
-    //         "Invalid email format. Ensure proper structure (no spaces, valid characters, single @, valid domain).",
-    //     }));
-    //   } else {
-    //     setErrors((prevErrors) => ({
-    //       ...prevErrors,
-    //       [name]: "",
-    //     }));
-    //   }
-    //   return;
-    // }
     if (
       (name === "contactNumber" ||
         name === "alternateNumber" ||
@@ -734,6 +721,7 @@ const handleRatingsChange = (value) => {
       }
     }
   };
+  console.log(lineUpData);
 
   //Arshad Attar Added This , Now Resume will added Proper in data base.  18-10-2024
   //Start Line 451
@@ -952,7 +940,6 @@ const handleRatingsChange = (value) => {
   const handleDisplaySameAsContactText = () => {
     console.log("working");
     console.log(callingTracker.contactNumber);
-
     if (callingTracker.contactNumber !== "") {
       setDisplaySameAsContactField(true);
     }
@@ -1110,7 +1097,6 @@ const handleRatingsChange = (value) => {
                       accept=".pdf,.doc,.docx"
                       className="plain-input"
                     /> */}
-
                     <div
                       className="uploadantdc"
                       style={{
@@ -1127,15 +1113,11 @@ const handleRatingsChange = (value) => {
                           setDisplayProgress(true);
                           setUploadProgress(0);
                           console.log(file);
-
                           // Create a synthetic event to match input file event structure
                           const syntheticEvent = { target: { files: [file] } };
-
                           // Call handleResumeUploadBoth function
                           await handleResumeUploadBoth(syntheticEvent);
-
                           setUploadingResumeNewState(false);
-
                           return false; // Prevent automatic upload
                         }}
                       >
@@ -1171,20 +1153,10 @@ const handleRatingsChange = (value) => {
                       )}
                     </div>
 
-                    {/* {resumeUploaded && (
-                      <FontAwesomeIcon
-                        icon={faCheckCircle}
-                        style={{
-                          color: "green",
-                          marginLeft: "3px",
-                          marginTop: "5px",
-                          fontSize: "22px",
-                        }}
-                      />
-                    )} */}
                     {errors.resume && (
                       <div className="error-message">{errors.resume}</div>
                     )}
+
                     <p
                       className="calling-tracker-popup-open-btn"
                       style={{
@@ -1268,8 +1240,9 @@ const handleRatingsChange = (value) => {
                       className="plain-input"
                     />
                   </div>
+                 
                   <div
-                    className="calling-tracker-two-input"
+                    className="calling-tracker-two-input newpaddingrightinputforhelp"
                     style={{
                       width: "auto",
                     }}
@@ -1377,6 +1350,7 @@ const handleRatingsChange = (value) => {
               </div>
               <div className="calling-tracker-field">
                 <label>Whatsapp Number</label>
+              
                 <div
                   className="calling-tracker-field-sub-div"
                   onClick={handleDisplaySameAsContactText}
@@ -1429,17 +1403,19 @@ const handleRatingsChange = (value) => {
                       className={`plain-input`}
                       name="sourceName"
                       value={
-                        (callingTracker.sourceName === "" ||
-                         callingTracker.sourceName === "LinkedIn"  || 
-                         callingTracker.sourceName === "Naukri" || 
-                         callingTracker.sourceName === "Indeed" || 
-                         callingTracker.sourceName === "Times" ||
-                         callingTracker.sourceName === "Social Media" ||
-                         callingTracker.sourceName === "Company Page" ||
-                         callingTracker.sourceName === "Excel" || 
-                         callingTracker.sourceName === "Friends" || 
-                         callingTracker.sourceName === "others" ) ? callingTracker.sourceName : "others"
-                        }
+                        callingTracker.sourceName === "" ||
+                        callingTracker.sourceName === "LinkedIn" ||
+                        callingTracker.sourceName === "Naukri" ||
+                        callingTracker.sourceName === "Indeed" ||
+                        callingTracker.sourceName === "Times" ||
+                        callingTracker.sourceName === "Social Media" ||
+                        callingTracker.sourceName === "Company Page" ||
+                        callingTracker.sourceName === "Excel" ||
+                        callingTracker.sourceName === "Friends" ||
+                        callingTracker.sourceName === "others"
+                          ? callingTracker.sourceName
+                          : "others"
+                      }
                       onChange={handleChange}
                     >
                       <option value="" disabled>
@@ -1456,17 +1432,19 @@ const handleRatingsChange = (value) => {
                       <option value="others">Others</option>
                     </select>
 
-{
-  displaySourceOthersInput && (
-<input type="text" name="sourceNameOthers" id="" placeholder="Enter Source Name" 
-onChange={handleSourceNameOthers}
-/>
-  )
-}
-
+                    {displaySourceOthersInput && (
+                      <input
+                        type="text"
+                        name="sourceNameOthers"
+                        id=""
+                        placeholder="Enter Source Name"
+                        onChange={handleSourceNameOthers}
+                      />
+                    )}
 
                     {/* this line added by sahil date 22-10-2024 */}
-                    {((!callingTracker.sourceName) || (callingTracker.sourceName === "others")) && (
+                    {(!callingTracker.sourceName ||
+                      callingTracker.sourceName === "others") && (
                       <span className="requiredFieldStar">*</span>
                     )}
                   </div>
@@ -1489,7 +1467,9 @@ onChange={handleSourceNameOthers}
                         onChange={handleRequirementChange}
                         style={{ width: "inherit" }}
                       >
-                        <option value="" disabled>Select Job Id</option>
+                        <option value="" disabled>
+                          Select Job Id
+                        </option>
                         {requirementOptions.map((option) => (
                           <option
                             key={option.requirementId}
@@ -1512,9 +1492,9 @@ onChange={handleSourceNameOthers}
                       </div>
                     )}
                   </div>
-                  <div className="calling-tracker-two-input">
+                  <div className="calling-tracker-two-input newhightforincentivesdiv">
                     <input
-                    className="nighlightincentivesinputnew"
+                      className="nighlightincentivesinputnew"
                       placeholder="Your Incentive"
                       value={callingTracker.incentive}
                       type="text"
@@ -1562,9 +1542,7 @@ onChange={handleSourceNameOthers}
                         onChange={handleLocationChange}
                         style={{ width: "200px" }}
                       >
-                        <option value="" style={{ color: "gray" }}
-                        disabled
-                        >
+                        <option value="" style={{ color: "gray" }} disabled>
                           Select Location
                         </option>
                         <option value="Pune City">Pune City</option>
@@ -1627,7 +1605,9 @@ onChange={handleSourceNameOthers}
                       value={callingTracker.callingFeedback}
                       onChange={handleChange}
                     >
-                      <option value="" disabled>Feedback</option>
+                      <option value="" disabled>
+                        Feedback
+                      </option>
                       <option value="Call Done">Call Done</option>
                       <option value="Asked for Call Back">
                         Asked for Call Back
@@ -2204,6 +2184,7 @@ onChange={handleSourceNameOthers}
                           if (value === "") {
                             setErrorForYOP("");
                           } else if (value < 1947 || value > maxYear) {
+                           
                             setErrorForYOP(
                               `YOP should be between 1947 and ${maxYear}`
                             );
@@ -2212,6 +2193,7 @@ onChange={handleSourceNameOthers}
                           }
 
                           if (/^\d{0,4}$/.test(value)) {
+                           
                             setLineUpData({
                               ...lineUpData,
                               yearOfPassing: value,
@@ -2234,7 +2216,6 @@ onChange={handleSourceNameOthers}
                 </div>
               </div>
 
-              {/* -------------- */}
             </div>
             <div className="calling-tracker-row-white">
               <div className="calling-tracker-field">
@@ -2356,6 +2337,10 @@ onChange={handleSourceNameOthers}
                         //  {/* this line added by sahil date 22-10-2024 */}
                         style={{ width: "inherit" }}
                       />
+                      {lineUpData.experienceYear && (
+                        <span className="addtrnaslateproptospan">Years</span>
+                      )}
+
                       {/* sahil karnekar line 1523 to 1527 */}
                       {/* this line added by sahil date 22-10-2024 */}
                       {callingTracker.selectYesOrNo === "Interested" &&
@@ -2386,6 +2371,11 @@ onChange={handleSourceNameOthers}
                         max="11"
                         //  {/* this line added by sahil date 22-10-2024 */}
                       />
+                      {lineUpData.experienceMonth && (
+                        <span className="addtrnaslateproptospanForMonths">
+                          Months
+                        </span>
+                      )}
                       {/* sahil karnekar line 1542 to 1546 */}
                       {/* this line added by sahil date 22-10-2024 */}
                       {callingTracker.selectYesOrNo === "Interested" &&
@@ -2486,9 +2476,30 @@ onChange={handleSourceNameOthers}
                       placeholder="Communication Rating"
                     /> */}
 
-<Rate value={callingTracker.communicationRating} onChange={handleRatingsChange} 
+                    {/* <Rate
+tooltips={desc} value={callingTracker.communicationRating} 
+ onChange={handleRatingsChange} 
+ allowHalf
+/> */}
 
-/>
+                    <select
+                      className="plain-input setwidthandmarginforratings"
+                      name="callingFeedback"
+                      value={callingTracker.callingFeedback}
+                      onChange={handleRatingsChange1}
+                    >
+                      <option value="">Select Rating</option>
+                      {[...Array(10)].map((_, index) => {
+                        const rating = (index + 1) * 0.5;
+                        return (
+                          <option key={rating} value={`${rating}`}>
+                            {rating.toFixed(1)}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <span className="ml-5">Out Of 5</span>
+
                     {/* this line added by sahil date 22-10-2024 */}
                     {callingTracker.selectYesOrNo === "Interested" &&
                       !callingTracker.communicationRating && (
@@ -2506,89 +2517,111 @@ onChange={handleSourceNameOthers}
 
             <div className="calling-tracker-row-gray">
               <div className="calling-tracker-field">
-                <label>Current CTC(LPA)</label>
-                <div className="calling-tracker-two-input-container">
-                  <div className="calling-tracker-two-input">
-                    {/* this line added by sahil date 22-10-2024 */}
-                    <div className="setRequiredStarDiv">
+                <label>Current CTC (LPA)</label>
+                <div className="calling-tracker-two-input-container setDisplayBlockForctcs">
+                  <div className="wrapdivforctcs">
+                    <div className="calling-tracker-two-input">
+                      {/* this line added by sahil date 22-10-2024 */}
+                      <div className="setRequiredStarDiv">
+                        <input
+                          type="text"
+                          name="currentCTCLakh"
+                          value={lineUpData.currentCTCLakh}
+                          onChange={handleLineUpChange}
+                          placeholder="Lakh"
+                          maxLength="2"
+                          pattern="\d*"
+                          //  {/* this line added by sahil date 22-10-2024 */}
+                          style={{ width: "inherit" }}
+                        />
+                        {/* this line added by sahil date 22-10-2024 */}
+                        {callingTracker.selectYesOrNo === "Interested" &&
+                          !lineUpData.currentCTCLakh && (
+                            <span className="requiredFieldStar">*</span>
+                          )}
+                      </div>
+                      {errors.currentCTCLakh && (
+                        <div className="error-message error-two-input-box">
+                          {errors.currentCTCLakh}
+                        </div>
+                      )}
+                    </div>
+                    <div className="calling-tracker-two-input">
                       <input
                         type="text"
-                        name="currentCTCLakh"
-                        value={lineUpData.currentCTCLakh}
+                        name="currentCTCThousand"
+                        value={lineUpData.currentCTCThousand}
                         onChange={handleLineUpChange}
-                        placeholder="Lakh"
+                        placeholder="Thousand"
                         maxLength="2"
                         pattern="\d*"
-                        //  {/* this line added by sahil date 22-10-2024 */}
-                        style={{ width: "inherit" }}
+                        inputMode="numeric"
                       />
-                      {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" &&
-                        !lineUpData.currentCTCLakh && (
-                          <span className="requiredFieldStar">*</span>
-                        )}
                     </div>
-                    {errors.currentCTCLakh && (
-                      <div className="error-message error-two-input-box">
-                        {errors.currentCTCLakh}
-                      </div>
-                    )}
                   </div>
-                  <div className="calling-tracker-two-input">
-                    <input
-                      type="text"
-                      name="currentCTCThousand"
-                      value={lineUpData.currentCTCThousand}
-                      onChange={handleLineUpChange}
-                      placeholder="Thousand"
-                      maxLength="2"
-                      pattern="\d*"
-                      inputMode="numeric"
-                    />
-                  </div>
+                  {(lineUpData.currentCTCLakh ||
+                    lineUpData.currentCTCThousand) && (
+                    <span>
+                      {convertNumberToWords(
+                        lineUpData.currentCTCLakh,
+                        lineUpData.currentCTCThousand
+                      )}
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="calling-tracker-field">
                 <label>Expected CTC (LPA)</label>
-                <div className="calling-tracker-two-input-container">
-                  <div className="calling-tracker-two-input">
-                    {/* this line added by sahil date 22-10-2024 */}
-                    <div className="setRequiredStarDiv">
+                <div className="calling-tracker-two-input-container setDisplayBlockForctcs">
+                  <div className="wrapdivforctcs">
+                    <div className="calling-tracker-two-input">
+                      {/* this line added by sahil date 22-10-2024 */}
+                      <div className="setRequiredStarDiv">
+                        <input
+                          type="text"
+                          name="expectedCTCLakh"
+                          value={lineUpData.expectedCTCLakh}
+                          onChange={handleLineUpChange}
+                          placeholder="Lakh"
+                          maxLength="2"
+                          pattern="\d*"
+                          //  {/* this line added by sahil date 22-10-2024 */}
+                          style={{ width: "inherit" }}
+                        />
+                        {/* this line added by sahil date 22-10-2024 */}
+                        {callingTracker.selectYesOrNo === "Interested" &&
+                          !lineUpData.expectedCTCLakh && (
+                            <span className="requiredFieldStar">*</span>
+                          )}
+                      </div>
+                      {errors.expectedCTCLakh && (
+                        <div className="error-message error-two-input-box">
+                          {errors.expectedCTCLakh}
+                        </div>
+                      )}
+                    </div>
+                    <div className="calling-tracker-two-input">
                       <input
                         type="text"
-                        name="expectedCTCLakh"
-                        value={lineUpData.expectedCTCLakh}
+                        name="expectedCTCThousand"
+                        value={lineUpData.expectedCTCThousand}
                         onChange={handleLineUpChange}
-                        placeholder="Lakh"
+                        placeholder="Thousand"
                         maxLength="2"
                         pattern="\d*"
-                        //  {/* this line added by sahil date 22-10-2024 */}
-                        style={{ width: "inherit" }}
+                        inputMode="numeric"
                       />
-                      {/* this line added by sahil date 22-10-2024 */}
-                      {callingTracker.selectYesOrNo === "Interested" &&
-                        !lineUpData.expectedCTCLakh && (
-                          <span className="requiredFieldStar">*</span>
-                        )}
                     </div>
-                    {errors.expectedCTCLakh && (
-                      <div className="error-message error-two-input-box">
-                        {errors.expectedCTCLakh}
-                      </div>
-                    )}
                   </div>
-                  <div className="calling-tracker-two-input">
-                    <input
-                      type="text"
-                      name="expectedCTCThousand"
-                      value={lineUpData.expectedCTCThousand}
-                      onChange={handleLineUpChange}
-                      placeholder="Thousand"
-                      maxLength="2"
-                      pattern="\d*"
-                      inputMode="numeric"
-                    />
-                  </div>
+                  {(lineUpData.expectedCTCLakh ||
+                    lineUpData.expectedCTCThousand) && (
+                    <span>
+                      {convertNumberToWords(
+                        lineUpData.expectedCTCLakh,
+                        lineUpData.expectedCTCThousand
+                      )}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -2607,7 +2640,9 @@ onChange={handleSourceNameOthers}
                         onChange={handleLineUpChange}
                         style={{ width: "200px" }}
                       >
-                        <option value="" disabled>Select</option>
+                        <option value="" disabled>
+                          Select
+                        </option>
                         <option value="Yes">Yes</option>
                         <option value="No">No</option>
                       </select>
@@ -2627,7 +2662,7 @@ onChange={handleSourceNameOthers}
                     <input
                       type="text"
                       name="offerLetterMsg"
-                      placeholder="Letter Message"
+                      placeholder="Offer Letter Message"
                       value={lineUpData.offerLetterMsg}
                       // onChange={handleLineUpChange}
                       onChange={(e) =>
@@ -2715,13 +2750,18 @@ onChange={handleSourceNameOthers}
                           }
                         }}
                       >
-                        <option value="" disabled>Select</option>
+                        <option value="" disabled>
+                          Select
+                        </option>
                         <option value="Yet To Confirm">Yet To Confirm</option>
-                        <option value="Interview Schedule">
+                        {/* <option value="Interview Schedule">
+                          Available For Interview
+                        </option> */}
+                        <option value="Available For Interview">
                           Available For Interview
                         </option>
-                        <option value="Attending After Some time">
-                          Attending After Some time
+                        <option value=" Confirmed, but will be available later">
+                        Confirmed, but will be available later.
                         </option>
                       </select>
                       {/* this line added by sahil date 22-10-2024 */}
@@ -2800,22 +2840,22 @@ onChange={handleSourceNameOthers}
                   </div>
 
                   {/* <input
- type="text"
- name="interviewTime"
- placeholder="⏰(e.g 12:00 AM)"
- value={lineUpData.interviewTime}
- onChange={(e) =>
-   setLineUpData({
-     ...lineUpData,
-     interviewTime: e.target.value,
-   })
- }
- onFocus={(e) => (e.target.type = 'time')} // Change to time input on focus
- onBlur={(e) => {
-   if (!e.target.value) e.target.type = 'text'; // Revert to text input if no time is selected
- }}
+                    type="text"
+                    name="interviewTime"
+                    placeholder="⏰(e.g 12:00 AM)"
+                    value={lineUpData.interviewTime}
+                    onChange={(e) =>
+                      setLineUpData({
+                        ...lineUpData,
+                        interviewTime: e.target.value,
+                      })
+                    }
+                    onFocus={(e) => (e.target.type = 'time')} // Change to time input on focus
+                    onBlur={(e) => {
+                      if (!e.target.value) e.target.type = 'text'; // Revert to text input if no time is selected
+                    }}
 
-/> */}
+                    /> */}
                 </div>
               </div>
             </div>
