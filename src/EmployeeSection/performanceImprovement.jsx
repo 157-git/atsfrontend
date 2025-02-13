@@ -1398,8 +1398,8 @@ console.log(spentTime);
                   </button>
                 </td>
                 <td className="PIE-timetrackertabledata">
-                  {item.totalInterviewTime}
-                  {/* {calculateTotalInterviewTime(item.interviewRoundsList)} */}
+                  {/* {item.totalInterviewTime} */}
+                  {calculateTotalInterviewTime(item.interviewRoundsList)}
                 </td>
                 <td className="PIE-timetrackertabledata">
                   {item.diffBetweenInterviewAndDocument}
