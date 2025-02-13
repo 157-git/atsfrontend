@@ -9,6 +9,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
+import {Alert, Modal as AntdModal} from "antd";
 import Loader from "./loader";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import { elements } from "chart.js";
@@ -61,6 +62,7 @@ const CallingList = ({
   // this state is created by sahil karnekar date 24-10-2024
   const [errorForShare, setErrorForShare] = useState("");
   const [searchCount, setSearchCount] = useState(0);
+    const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
 
   const [selectedRecruiters, setSelectedRecruiters] = useState({
     index: "",
@@ -198,6 +200,12 @@ const CallingList = ({
     setFilteredCallingList(filteredData);
   };
 
+  const handleDisplayShareConfirmClick = ()=>{
+    setDisplayShareConfirm(true);
+  }
+const handleCancelcloseshare = ()=>{
+  setDisplayShareConfirm(false);
+}
   // updated this function sahil karnekar date : 22-10-2024
   const handleFilterSelect = (key, value) => {
     setSelectedFilters((prev) => ({
@@ -546,6 +554,8 @@ const CallingList = ({
     } catch (error) {
       setIsDataSending(false);
       console.error("Error while forwarding candidates:", error);
+    }finally{
+      setDisplayShareConfirm(false);
     }
   };
 
@@ -1719,7 +1729,10 @@ const CallingList = ({
                       </div>
 
                       <div className="custom-modal-footer">
-                        <button onClick={handleShare} className="daily-tr-btn">
+                      <AntdModal title="Share Data" open={displayShareConfirm} onOk={handleShare} onCancel={handleCancelcloseshare}>
+                          <Alert message="Are You Sure ? You Want To Send ?" type="info" showIcon />
+      </AntdModal>
+                        <button onClick={handleDisplayShareConfirmClick} className="daily-tr-btn">
                           Share
                         </button>
                         <button

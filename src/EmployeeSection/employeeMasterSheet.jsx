@@ -7,6 +7,7 @@ import "./EmployeeMasterSheet.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
+import {Alert, Modal as AntdModal} from "antd";
 import Loader from "../EmployeeSection/loader";
 import { Pagination } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
@@ -174,6 +175,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   // this states created by sahil karnekar  line 172 and 173 date 30-10-2024
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
 
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_39
   const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
@@ -315,7 +317,12 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
       }
     });
   };
-
+  const handleDisplayShareConfirmClick = ()=>{
+    setDisplayShareConfirm(true);
+  }
+const handleCancelcloseshare = ()=>{
+  setDisplayShareConfirm(false);
+}
 const forwardSelectedCandidate = (e) => {
     e.preventDefault();
     if (selectedRows.length >= 1) {
@@ -415,6 +422,8 @@ const forwardSelectedCandidate = (e) => {
       setShowForwardPopup(false);
       toast.error("Error while forwarding candidates:", error); //Swapnil Error&success message
       // Handle error scenarios or show error messages to the user
+    }finally{
+      setDisplayShareConfirm(false);
     }
   };
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_243
@@ -627,6 +636,7 @@ const forwardSelectedCandidate = (e) => {
   }, [applyFilters]);
 
   return (
+    <>
     <div className="calling-list-container">
       {loading ? (
         <div className="register">
@@ -1910,10 +1920,16 @@ const forwardSelectedCandidate = (e) => {
                 ))}
               </tbody>
             </table>
+            
             {showForwardPopup ? (
               <>
+                <AntdModal
+                className="newclassforantdAlignFront"
+                title="Share Data" open={displayShareConfirm} onOk={handleShare} onCancel={handleCancelcloseshare}>
+                                                                            <Alert message="Are You Sure ? You Want To Send ?" type="info" showIcon />
+                                                        </AntdModal>
                 <div
-                  className="bg-black bg-opacity-50 modal show"
+                  className="bg-black bg-opacity-50 modal show newclassforsendback"
                   style={{
                     display: "flex",
                     justifyContent: "center",
@@ -2170,9 +2186,11 @@ const forwardSelectedCandidate = (e) => {
                         {errorForShare}
                       </div>
                     )}
+                    
                     <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
+                       
                       <button
-                        onClick={handleShare}
+                        onClick={handleDisplayShareConfirmClick}
                         className="EmployeeMasterSheet-share-forward-popup-btn"
                       >
                         Share
@@ -2185,9 +2203,12 @@ const forwardSelectedCandidate = (e) => {
                       </button>
                     </Modal.Footer>
                   </Modal.Dialog>
+                  
                 </div>
+                
               </>
             ) : null}
+            
           </div>
 
           <div className="search-count-last-div">
@@ -2242,7 +2263,9 @@ const forwardSelectedCandidate = (e) => {
           )}
         </>
       )}
+      
     </div>
+    </>
   );
 };
 

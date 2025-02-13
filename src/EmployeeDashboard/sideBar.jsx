@@ -603,7 +603,7 @@ function Sidebar({
                     >
                       <a href="#">
                         <i className="fa-solid fa-users"></i>
-                        <span className="sidebar-text">Find Candidate</span>
+                        <span className="sidebar-text newoverlayontopcss">Find Candidate</span>
                         {successAddUpdateResponse ? (
                           <span className="text-xl font-bold text-red-600">
                             *

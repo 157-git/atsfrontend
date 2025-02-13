@@ -102,14 +102,21 @@ justify-content: center;
   align-content: center;
 }
 .imgandwarningdiv{
-  display: flex;
+  display: block;
   justify-content: center;
   align-items: center;
   height: fit-content;
+  margin-left: 2%;
 }
 
-
-  .status-green {
+.imagedivpresent{
+  display: flex;
+  justify-content: center;
+}
+.imagedivpresent img {
+  width: 100px;
+}
+  .status-green1 {
     color: green;
   }
   
