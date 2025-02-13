@@ -3272,7 +3272,7 @@ const ModalComponent = ({
                 <table className="table table-bordered text-secondary">
                   <thead>
                     <tr>
-                      <th className="sal-cal-th">Current Salary 01</th>
+                      <th className="sal-cal-th">Current Salary</th>
                       <th className="sal-cal-th">Hike (%)</th>
                       <th className="sal-cal-th">Calculated Expected CTC</th>
                     </tr>
