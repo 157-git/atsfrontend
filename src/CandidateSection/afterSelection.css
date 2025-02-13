@@ -36,22 +36,22 @@
 
 
 .after-button {
-  background-color: var(--button-hover-color);
-  color: var(--text-color);
+  background-color: var(--primary-button-bg);
+  color: var(--button-txt-color);
   border-radius: 15px;
   height: 40px;
   width: 280px;
   font-size: 18px;
   font-weight: bold;
   margin-left: 10px;
-  border: 1px solid gray;
+  border: 1px solid var(--primary-border);
   margin-top: 15px;
 }
 
 .after-button:hover {
 
-  background-color: var(--button-color);
-  color: var(--text-hover-color);
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
 
 }
 
@@ -71,7 +71,7 @@
 .after-mail-div:hover {
   border: 1px solid gray;
 
-  background-color: var(--button-hover-color);
+  background-color: var(--primary-button-bg);
 
   border-radius: 5px;
   width: 580px;
@@ -113,7 +113,7 @@
 
 .after-document-fisrt:hover {
 
-  background-color: var(--button-hover-color);
+  background-color: var(--Bg-color);
 
 }
 

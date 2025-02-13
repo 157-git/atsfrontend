@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
+import { updatePerformanceForAfterSelectionapi } from "./updatePerformanceForAfterSelectionapi";
 
 // SwapnilRokade_AfterSelection_addedProcessImprovmentEvaluatorFunctionalityStoringInterviweResponse_08_to_386_29/07/2024
 const AfterSelection = ({
@@ -624,6 +625,7 @@ const AfterSelection = ({
       ...prev,
       [name]: name === "optionalDocuments" ? Array.from(files) : files[0],
     }));
+    updatePerformanceForAfterSelectionapi({sendingDocument: new Date()}, performanceId);
   };
 
   const handleSubmitJoiningDetails = async (e) => {
@@ -647,7 +649,9 @@ const AfterSelection = ({
         formDataToSend.append(key, value);
       }
     });
-
+    formDataToSend.forEach((value, key) => {
+      console.log(key, value);
+    });
     try {
       const url = recordExists
         ? `${API_BASE_URL}/update-documents/${candidateId}`
@@ -998,6 +1002,7 @@ const AfterSelection = ({
                           <select
                             id="offerLetterReceived"
                             className="after-select"
+                            onChange={handleInputChange}
                           >
                             <option value="">Select Option</option>
                             <option value="yes">Yes</option>

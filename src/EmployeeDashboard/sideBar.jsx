@@ -304,7 +304,6 @@ function Sidebar({
     };
     return subMenuMap[buttonKey] || null;
   };
-  console.log(activeSubMenu);
   
   const toggleSubMenu = (subMenuKey) => (e) => {
     e.preventDefault();
@@ -426,8 +425,6 @@ function Sidebar({
   const isadminactive = ["teamleader", "addJobDescription"].includes(
     activeButton
   );
-  console.log(activeButton);
-  console.log(isCandidateSectionActive);
   useEffect(() => {
     if (window.innerWidth <= 980) {
       setIsActive(false);
