@@ -1,9 +1,9 @@
 .daily-tr-btns {
-  border: 1px solid gray;
+  border: 1px solid var(--primary-border);
   border-radius: 15px;
-  background-color: #ffcb9b;
+  background-color: var(--primary-button-bg);
   font-size: 16px;
-  color: white;
+  color: var(--button-txt-color);
   height: 30px;
   width: auto;
   padding-left: 15px;
@@ -15,11 +15,11 @@
 
 
 .white-Btn { 
-  border: 1px solid gray;
+  border: 1px solid var(--primary-border);
   border-radius: 15px;
-  background-color: white;
+  background-color: var(--primary-button-hover);
   font-size: 16px;
-  color: var(--filter-button-txt);
+  color: var(--button-txt-hover-color);
   height: 30px;
   width: auto;
   padding-left: 10px;

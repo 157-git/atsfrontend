@@ -987,7 +987,7 @@ console.log(spentTime);
   };
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20); // Number of rows per page
+  const [pageSize, setPageSize] = useState(10); // Number of rows per page
 
   // Calculate the range of data to show
   const startIndex = (currentPage - 1) * pageSize;

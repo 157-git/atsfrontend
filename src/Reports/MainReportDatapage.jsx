@@ -65,7 +65,7 @@ const MonthReport = ({ loginEmployeeName }) => {
       setDisplayBigSkeletonForRecruiters(false);
       setDisplayRecruiters(true);
     }
-    setDisplayModalContainer(true);
+    // setDisplayModalContainer(true);
   };
 
   const scrollLeft = () => {
@@ -222,11 +222,15 @@ setAllImagesForTeamLeaders([]);
 
   const handleOptionChange = (event) => {
     const value = event.target.value;
-    setDisplayModalContainer(true);
+    setSelectedRole("");
+    setSelectedIds([]);
+    // setDisplayModalContainer(true);
     setSelectedOption(value);
     if (value === "custom") {
+      setDisplayModalContainer(false);
       setShowCustomDiv(true);
     } else {
+      setDisplayModalContainer(true);
       setShowCustomDiv(false);
 
       // Calculate date range for predefined options and apply the changes
@@ -262,6 +266,7 @@ setAllImagesForTeamLeaders([]);
       startDate: start,
       endDate: end,
     });
+    setDisplayModalContainer(true);
   };
 
 

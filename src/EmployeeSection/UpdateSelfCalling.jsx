@@ -6,14 +6,17 @@ import "react-phone-number-input/style.css";
 import { FaCheckCircle } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-toastify";
+import uploadingResumeGif from "../assets/uploadingResumeMotion.gif";
 import "../EmployeeSection/UpdateSelfCalling.css";
 import { API_BASE_URL } from "../api/api";
 import { Button, Modal } from "react-bootstrap";
 import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker";
 // line 14 to 15 added by sahil karnekar date 17-10-2024
-import { TimePicker } from "antd";
+import { Progress, TimePicker, Upload } from "antd";
 import dayjs from "dayjs";
 import { getSocket } from "../EmployeeDashboard/socket";
+import uploadingResumeStatic from "../assets/uploadStaticPngFile.png";
+import { Button as ButtonAntd } from "antd";
 // this line added by sahil karnekar on date 14-01-2024
 
 const UpdateSelfCalling = ({
@@ -112,16 +115,15 @@ const UpdateSelfCalling = ({
   const [endpoint, setendPoint] = useState("");
   const [lineUpData, setLineUpData] = useState(initialLineUpState);
   const { userType } = useParams();
-  // this line added by sahil karnekar on date 14-01-2024
-  
-  
-// line 111 to 186 added by sahil karnekar date 17-10-2024
-
-
+  const [uploadingResumeNewState, setUploadingResumeNewState] = useState(false);
+  const [resumeFileName, setResumeFileName] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [displayProgress, setDisplayProgress] = useState(false);
   const [errors, setErrors] = useState({});
   const [errorForDOB, setErrorForDOB] = useState("");
   const [errorInterviewSlot, seterrorInterviewSlot] = useState("");
   const [socket, setSocket] = useState(null);
+  const [displaySourceOthersInput, setDisplaySourceOthersInput] = useState(false);
   // updated by sahil karnekar date 18-10-2024
   const today = new Date();
   const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
@@ -239,6 +241,9 @@ const UpdateSelfCalling = ({
       setCandidateFetched(true);
       const updatedCallingTracker = { ...initialCallingTrackerState };
       const updatedLineUpData = { ...initialLineUpState };
+      console.log(initialData.sourceName);
+   
+      
     }
   }, [initialData]);
 
@@ -250,9 +255,14 @@ const UpdateSelfCalling = ({
       const data = await response.json();
       setCallingTracker(data);
       console.log(data);
+      const validSources = ["LinkedIn", "Naukri", "Indeed", "Times", "Social Media", "Company Page", "Excel", "Friends"];
+      if (data.sourceName !== "" && !validSources.includes(data.sourceName)) {
+        setDisplaySourceOthersInput(true);
+      }
       
       if (data.lineUp.resume !== "") {
         setResumeUploaded(true);
+        setUploadProgress(100);
       }
       if (data.lineUp.resume === undefined) {
         setResumeUploaded(false);
@@ -278,6 +288,11 @@ const UpdateSelfCalling = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "sourceName" && value === "others") {
+      setDisplaySourceOthersInput(true);
+    } else if (name === "sourceName" && value !== "others") {
+      setDisplaySourceOthersInput(false);
+    }
     // added by sahil karnekar date 16-12-2024
     const isNotInterested =
       name === "selectYesOrNo"
@@ -368,6 +383,9 @@ const UpdateSelfCalling = ({
     // line 290 to 15 added by sahil karnekar date 17-10-2024
     validateRealTime(name, value, isNotInterested);
   };
+console.log(callingTracker.alternateNumber);
+console.log(callingTracker.contactNumber);
+
 
   const validateRealTime = (name, value, isNotInterested) => {
     setErrors((prevErrors) => {
@@ -622,7 +640,17 @@ const UpdateSelfCalling = ({
       return newErrors;
     });
   };
-
+  const [displaySameAsContactField, setDisplaySameAsContactField] =
+  useState(false);
+  const handleDisplaySameAsContactText = () => {
+    if (callingTracker.contactNumber !== "") {
+      setDisplaySameAsContactField(true);
+    }
+    if (callingTracker.contactNumber === undefined) {
+      console.log("Please Select Contact number First");
+      setDisplaySameAsContactField(false);
+    }
+  };
   const handleEducationChange = (e) => {
     const value = e.target.value;
 
@@ -892,7 +920,13 @@ const UpdateSelfCalling = ({
       }));
     }
   };
-
+  const handleSourceNameOthers = (e) => {
+    const { name, value } = e.target;
+    callingTracker.sourceName = value;
+    console.log(errors);
+    
+    setErrors((prevErrors) => ({ ...prevErrors, ["sourceName"]: "" }));
+  };
   const handleShow = () => {
     setShowModal(true);
   };
@@ -925,7 +959,13 @@ const UpdateSelfCalling = ({
     const file = e.target.files[0];
     if (!file) return;
 
+    setUploadProgress(0);
     if (file) {
+      for (let i = 20; i <= 80; i += 20) {
+        setUploadProgress(i);
+        await new Promise((resolve) => setTimeout(resolve, 300)); // Simulated delay
+      }
+      
       setResumeUploaded(true);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -948,6 +988,7 @@ const UpdateSelfCalling = ({
       };
       reader.readAsArrayBuffer(file);
     }
+    setUploadProgress(100);
   };
 
   return (
@@ -984,14 +1025,14 @@ const UpdateSelfCalling = ({
               className="update-calling-tracker-field"
               style={{ justifyContent: "center" }}
             >
-              Please verify before submitting 👉
+              Great talent won't wait - add them now, hire the best 👉
             </div>
             <div className="update-calling-tracker-field">
               <label>
                 Upload Resume
-                {resumeUploaded && (
+                {/* {resumeUploaded && (
                   <FaCheckCircle className="upload-success-icon" />
-                )}
+                )} */}
               </label>
               <div
                 className="update-calling-tracker-field-sub-div"
@@ -1002,17 +1043,77 @@ const UpdateSelfCalling = ({
                 <div
                   style={{
                     display: "flex",
+                    justifyContent:"space-between"
                   }}
                 >
-                  <input
+                  {/* <input
                     type="file"
                     name="resume"
                     onChange={handleResumeUploadBoth}
                     accept=".pdf,.doc,.docx"
                     className="plain-input"
-                  />
+                  /> */}
+
+<div
+                      className="uploadantdc"
+                      style={{
+                        width: "60%",
+                      }}
+                    >
+                      <Upload
+                        accept=".pdf,.doc,.docx"
+                        showUploadList={false} // Hide file preview list
+                        beforeUpload={async (file) => {
+                          setUploadingResumeNewState(true);
+                          setDisplayProgress(false);
+                          setResumeFileName(file.name);
+                          setDisplayProgress(true);
+                          setUploadProgress(0);
+                          console.log(file);
+                          // Create a synthetic event to match input file event structure
+                          const syntheticEvent = { target: { files: [file] } };
+                          // Call handleResumeUploadBoth function
+                          await handleResumeUploadBoth(syntheticEvent);
+                          setUploadingResumeNewState(false);
+                          return false; // Prevent automatic upload
+                        }}
+                      >
+                        <ButtonAntd
+                          icon={
+                            uploadingResumeNewState ? (
+                              <img
+                                src={uploadingResumeGif}
+                                alt="Uploading"
+                                style={{ width: 20, height: 20 }}
+                              />
+                            ) : (
+                              <img
+                                src={uploadingResumeStatic}
+                                alt="Static"
+                                style={{ width: 20, height: 20 }}
+                              />
+                            )
+                          }
+                        >
+                          {resumeUploaded ? resumeFileName.length > 10
+                            ? `${resumeFileName.substring(0, 15)}...`
+                            : resumeFileName || `${callingTracker.candidateName.substring(0, 15)}...` : "upload Resume" } 
+                        </ButtonAntd>
+                      </Upload>
+                      {(displayProgress || resumeUploaded) && (
+                        <Progress
+                          percent={uploadProgress}
+                          strokeWidth={4}
+                          size="small"
+                          className="customprogressForCallingTracker"
+                        />
+                      )}
+                    </div>
+
+
+
                   {resumeUploaded && (
-                    <div className="calling-tracker-popup-open-btn">
+                    <div className="calling-tracker-popup-open-btn newclassformakesameashelp">
                       <i
                         className="fas fa-eye"
                         onClick={() => {
@@ -1033,7 +1134,7 @@ const UpdateSelfCalling = ({
                     </div>
                   )}
                 </div>
-                {resumeUploaded && (
+                {/* {resumeUploaded && (
                   <div
                     style={{
                       fontSize: "10px",
@@ -1042,7 +1143,7 @@ const UpdateSelfCalling = ({
                   >
                     Please Click on the eye icon to view the resume
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           </div>
@@ -1073,7 +1174,8 @@ const UpdateSelfCalling = ({
             </div>
             <div className="update-calling-tracker-field">
               <label>Recruiter Name</label>
-              <div className="update-calling-tracker-field-sub-div">
+              <div className="update-calling-tracker-field-sub-div newsetforrightdiv">
+                <div className="helpsideinputdiv">
                 <input
                   type="text"
                   name="recruiterName"
@@ -1082,7 +1184,9 @@ const UpdateSelfCalling = ({
                   onChange={handleChange}
                   className="plain-input"
                 />
-                <div className="calling-tracker-two-input">
+                </div>
+               
+                <div className="calling-tracker-two-input newalignrightdivforhelp">
                   <button
                     type="button"
                     onClick={handleShow}
@@ -1176,7 +1280,9 @@ const UpdateSelfCalling = ({
             </div>
             <div className="update-calling-tracker-field">
               <label>Whatsapp Number</label>
-              <div className="update-calling-tracker-field-sub-div">
+              <div className="update-calling-tracker-field-sub-div"
+               onClick={handleDisplaySameAsContactText}>
+                <div className="newwrapperdivforwhatsapp">
                 <input
                   placeholder="Enter phone number"
                   name="alternateNumber"
@@ -1186,6 +1292,35 @@ const UpdateSelfCalling = ({
                   defaultCountry="IN"
                   maxLength={11}
                 />
+                 {displaySameAsContactField && (
+                    <div className="inputsameascontact">
+                      <input
+                        type="checkbox"
+                        name="copyContactNumber"
+                        checked={callingTracker.alternateNumber === callingTracker.contactNumber}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            if (callingTracker?.contactNumber) {
+                              setCallingTracker((prev) => ({
+                                ...prev,
+                                alternateNumber: prev.contactNumber,
+                              }));
+                            }
+                          } else {
+                            setCallingTracker((prev) => ({
+                              ...prev,
+                              alternateNumber: "",
+                            }));
+                          }
+                        }}
+                      />
+                      <span className="sameascontactnumbersize">
+                        Same As Contact Number
+                      </span>
+                    </div>
+                  )}
+                </div>
+               
               </div>
             </div>
           </div>
@@ -1199,11 +1334,24 @@ const UpdateSelfCalling = ({
                   <select
                     name="sourceName"
                     className={`plain-input`}
-                    value={callingTracker?.sourceName || ""}
+                    value={
+                      callingTracker.sourceName === "" ||
+                      callingTracker.sourceName === "LinkedIn" ||
+                      callingTracker.sourceName === "Naukri" ||
+                      callingTracker.sourceName === "Indeed" ||
+                      callingTracker.sourceName === "Times" ||
+                      callingTracker.sourceName === "Social Media" ||
+                      callingTracker.sourceName === "Company Page" ||
+                      callingTracker.sourceName === "Excel" ||
+                      callingTracker.sourceName === "Friends" ||
+                      callingTracker.sourceName === "others"
+                        ? callingTracker.sourceName
+                        : "others"
+                    }
                     onChange={handleChange}
                     // required={callingTracker.selectYesOrNo !== "Interested"}
                   >
-                    <option value="">Select Source Name</option>
+                    <option value="" disabled>Select Source Name</option>
                     <option value="LinkedIn">linkedIn</option>
                     <option value="Naukri">Naukri</option>
                     <option value="Indeed">Indeed </option>
@@ -1214,6 +1362,18 @@ const UpdateSelfCalling = ({
                     <option value="Friends">Friends</option>
                     <option value="others">others</option>
                   </select>
+
+                  {displaySourceOthersInput && (
+                      <input
+                        type="text"
+                        name="sourceNameOthers"
+                        id=""
+                        placeholder="Enter Source Name"
+                        value={callingTracker.sourceName !== "others" ? callingTracker.sourceName : callingTracker.sourceName === "others" && ""}
+                        onChange={handleSourceNameOthers}
+                      />
+                    )}
+
                   {/* line 782 to 825 added by sahil karnekar date 17-10-2024 */}
 
                   {errors.sourceNameStar && (
@@ -1343,12 +1503,13 @@ const UpdateSelfCalling = ({
                 <div className="setDisplayFlexForUpdateForm">
                   <select
                     //  required={callingTracker.selectYesOrNo === "Interested"}
+                  
                     className="plain-input"
                     name="callingFeedback"
                     value={callingTracker?.callingFeedback || ""}
                     onChange={handleChange}
                   >
-                    <option value="">Feedback</option>
+                    <option value=""   disabled>Feedback</option>
                     <option value="Call Done">Call Done</option>
                     <option value="Asked for Call Back">
                       Asked for Call Back
@@ -2047,7 +2208,7 @@ const UpdateSelfCalling = ({
               <label>Communication Rating </label>
               <div className="update-calling-tracker-field-sub-div setInputBlock">
                 <div className="setDisplayFlexForUpdateForm">
-                  <input
+                  {/* <input
                     type="text"
                     name="communicationRating"
                     value={callingTracker?.communicationRating || ""}
@@ -2055,7 +2216,43 @@ const UpdateSelfCalling = ({
                     className="plain-input"
                     placeholder="Enter Communication Rating"
                     // required={callingTracker.selectYesOrNo === "Interested"}
-                  />
+                  /> */}
+
+<select
+  className="plain-input setwidthandmarginforratings"
+  name="communicationRating"
+  value={callingTracker?.communicationRating || ""}
+  onChange={handleChange}
+>
+  <option value="">Select Rating</option>
+  {[...Array(10)].map((_, index) => {
+    const rating = (index + 1) * 0.5;
+
+    // Assign unique tags to each rating
+    const tags = [
+      "Very Poor",  // 0.5
+      "Poor",       // 1.0
+      "Below Average", // 1.5
+      "Average",    // 2.0
+      "Fair",       // 2.5
+      "Good",       // 3.0
+      "Very Good",  // 3.5
+      "Excellent",  // 4.0
+      "Outstanding",// 4.5
+      "Perfect"     // 5.0
+    ];
+
+    return (
+      <option key={rating} value={`${rating}`}>
+        {rating.toFixed(1)} - {tags[index]}
+      </option>
+    );
+  })}
+</select>
+
+                    <span className="ml-5">Out Of 5</span>
+
+
                   {errors.communicationRatingStar && (
                     <div className="error-message">
                       {errors.communicationRatingStar}

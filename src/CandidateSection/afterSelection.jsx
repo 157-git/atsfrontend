@@ -692,7 +692,7 @@ const AfterSelection = ({
 
                   <div className="after-documnet-main">
                     <div className="after-documnet-sub">
-                      <hr />
+                      {/* <hr /> */}
                       {/* this line is updated by sahil karnekar date 24-10-2024 */}
                       <div
                         className="after-document-fisrt"

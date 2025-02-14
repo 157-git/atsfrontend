@@ -292,3 +292,16 @@ strong {
 .setwidthandmarginforratings{
   width: 50%;
 }
+.newclassformakesameashelp{
+  width: 100px;
+  height: 30px;
+ text-align: center;
+}
+.newalignrightdivforhelp{
+  justify-content: right;
+  display: flex;
+  width: auto;
+}
+.newsetforrightdiv{
+  justify-content: space-between;
+}
