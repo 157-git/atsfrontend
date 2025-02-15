@@ -2477,22 +2477,38 @@ tooltips={desc} value={callingTracker.communicationRating}
  allowHalf
 /> */}
 
-                    <select
-                      className="plain-input setwidthandmarginforratings"
-                      name="callingFeedback"
-                      value={callingTracker.communicationRating}
-                      onChange={handleRatingsChange1}
-                    >
-                      <option value="">Select Rating</option>
-                      {[...Array(10)].map((_, index) => {
-                        const rating = (index + 1) * 0.5;
-                        return (
-                          <option key={rating} value={`${rating}`}>
-                            {rating.toFixed(1)}
-                          </option>
-                        );
-                      })}
-                    </select>
+<select
+  className="plain-input setwidthandmarginforratings"
+  name="callingFeedback"
+  value={callingTracker.communicationRating}
+  onChange={handleRatingsChange1}
+>
+  <option value="">Select Rating</option>
+  {[...Array(10)].map((_, index) => {
+    const rating = (index + 1) * 0.5;
+
+    // Assign unique tags to each rating
+    const tags = [
+      "Very Poor",  // 0.5
+      "Poor",       // 1.0
+      "Below Average", // 1.5
+      "Average",    // 2.0
+      "Fair",       // 2.5
+      "Good",       // 3.0
+      "Very Good",  // 3.5
+      "Excellent",  // 4.0
+      "Outstanding",// 4.5
+      "Perfect"     // 5.0
+    ];
+
+    return (
+      <option key={rating} value={`${rating}`}>
+        {rating.toFixed(1)} - {tags[index]}
+      </option>
+    );
+  })}
+</select>
+
                     <span className="ml-5">Out Of 5</span>
 
                     {/* this line added by sahil date 22-10-2024 */}

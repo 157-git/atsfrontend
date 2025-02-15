@@ -7,13 +7,14 @@ import Button from "react-bootstrap/Button";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { toast } from "react-toastify";
-import { Avatar, Card, List, Pagination, Skeleton } from "antd";
+import { Alert, Avatar, Card, List, Pagination, Skeleton } from "antd";
 import axios from "axios";
 import { highlightText } from "./HighlightTextHandlerFunc";
 import FilterData from "../helper/filterData";
 import convertToDocumentLink from "../helper/convertToDocumentLink";
 import limitedOptions from "../helper/limitedOptions";
 import { getUserImageFromApiForReport } from "../Reports/getUserImageFromApiForReport";
+import {Modal as AntdModal} from "antd";
 // SwapnilRokade_ShortListedCandidates_ModifyFilters_11/07
 
 const ShortListedCandidates = ({
@@ -55,6 +56,7 @@ const ShortListedCandidates = ({
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
 
   // updated by sahil karnekar date 17-12-2024
   const [triggerFetch, setTriggerFetch] = useState(false);
@@ -172,7 +174,12 @@ const ShortListedCandidates = ({
       toast.error("Please select at least one Candidate to proceed.");
     }
   };
-
+  const handleDisplayShareConfirmClick = ()=>{
+    setDisplayShareConfirm(true);
+  }
+const handleCancelcloseshare = ()=>{
+  setDisplayShareConfirm(false);
+}
   const handleShare = async () => {
     if (!selectedEmployeeId || selectedRows.length === 0) {
       toast.error("Please select a recruiter and at least one candidate.");
@@ -213,6 +220,8 @@ const ShortListedCandidates = ({
     } catch (error) {
       setIsDataSending(false);
       console.error("Error while forwarding candidates:", error);
+    }finally{
+      setDisplayShareConfirm(false);
     }
   };
 
@@ -1524,8 +1533,11 @@ const ShortListedCandidates = ({
                           </div>
 
                           <div className="custom-modal-footer">
+                          <AntdModal title="Share Data" open={displayShareConfirm} onOk={handleShare} onCancel={handleCancelcloseshare}>
+                          <Alert message="Are You Sure ? You Want To Send ?" type="info" showIcon />
+      </AntdModal>
                             <button
-                              onClick={handleShare}
+                              onClick={handleDisplayShareConfirmClick}
                               className="daily-tr-btn"
                             >
                               Share

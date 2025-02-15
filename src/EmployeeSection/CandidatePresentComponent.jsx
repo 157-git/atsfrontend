@@ -21,7 +21,7 @@ const CandidatePresentComponent = ({ candidateData, onClose }) => {
       case "Rejected":
         return "status-red";
       case "Selected":
-        return "status-green";
+        return "status-green1";
       case "Hold":
         return "status-orange";
       case "Pending":
@@ -79,7 +79,7 @@ const CandidatePresentComponent = ({ candidateData, onClose }) => {
       default:
         return (
           <strong>
-            Application status: <span className="status-green">{finalStatus}</span>. Added by {recruiterName} on {candidateAddedTime}.
+            Application status: <span className="status-green1">{finalStatus}</span>. Added by {recruiterName} on {candidateAddedTime}.
           </strong>
         );
     }
@@ -102,10 +102,6 @@ const CandidatePresentComponent = ({ candidateData, onClose }) => {
         </div>
 
         <div className="candidate-details">
-        <div className="imgandwarningdiv">
-        <img src={warningImg} alt=''/>
-        <div>Duplicate Candidate</div>
-      </div>
           {candidateData ? (
             <div className="candidate-info">
               <h2 className="candidate-name">Name: {candidateData.candidateName}</h2>
@@ -131,6 +127,18 @@ const CandidatePresentComponent = ({ candidateData, onClose }) => {
         <button className="close-buttonPresentForm" onClick={onClose}>
           <FontAwesomeIcon icon={faTimes} />
         </button>
+      </div>
+      <div className="imgandwarningdiv">
+        <div className="mainblockdiv">
+        <div className="centerdiv">
+          <div className="imagedivpresent">
+          <img src={warningImg} alt=''/>
+          </div>
+ 
+       
+        <div>Duplicate Candidate</div>
+        </div>
+        </div>
       </div>
     </div>
   );

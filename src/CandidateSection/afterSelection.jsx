@@ -139,6 +139,8 @@ const AfterSelection = ({
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
+      console.log(data);
+      
       setCandidateData(data); // Set state with the fetched data
     } catch (error) {
       console.error("Failed to fetch candidate data:", error);
@@ -167,6 +169,8 @@ const AfterSelection = ({
           throw new Error("Failed to fetch candidate data");
         }
         const data = await response.json();
+        console.log(data);
+        
         setShortListedData(data);
       } catch (error) {
         toast.error("An error occurred while fetching the data");
@@ -197,39 +201,7 @@ const AfterSelection = ({
     }
   };
 
-  // const handlePanCardUpload = (e) => {
-  //   const file = e.target.files[0];
-  //   setPanCardUploaded(file);
-  // };
-
-  // const handleDrivingLicenseUpload = (e) => {
-  //   const file = e.target.files[0];
-  //   setDrivingLicenseUploaded(file);
-  // };
-  // const handleDegreeMarksheetUpload = (e) => {
-  //   const file = e.target.files[0];
-  //   setDegreeMarksheetUploaded(file);
-  // };
-  // const handleHSCMarksheetUpload = (e) => {
-  //   const file = e.target.files[0];
-  //   setHscMarksheetUploaded(file);
-  // };
-  // const handleSSCMarksheetUpload = (e) => {
-  //   const file = e.target.files[0];
-  //   setSscMarksheetUploaded(file);
-  // };
-
-  // const handleMailReceivedChange = (e) => {
-  //   const received = e.target.value;
-  //   setMailReceived(received);
-
-  //   if (received === "received") {
-  //     setOfferLetterReceived("yes");
-  //   } else {
-  //     setOfferLetterReceived("");
-  //   }
-  // };
-
+  
   const handleOfferLetterReceivedChange = async (e) => {
     const received = e.target.value;
     setOfferLetterReceived(received);
@@ -396,65 +368,7 @@ const AfterSelection = ({
     }
   };
 
-  // const JoininghandleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //  const dataUpdatedBy = `${loginEmployeeName} ( ${userType} )`;
-
-  //   const formData = new FormData();
-  //   formData.append("employeeId", employeeId);
-  //   formData.append("candidateId", candidateId);
-  //   formData.append("requirementId", requirementId);
-  //   formData.append("mailReceived", mailReceived);
-
-  //   if (aadhaarCard) formData.append("aadhaarCard", aadhaarCard);
-  //   if (panCard) formData.append("panCard", panCard);
-  //   if (drivingLicense) formData.append("drivingLicense", drivingLicense);
-  //   if (degreeMarkSheet) formData.append("degreeMarkSheet", degreeMarkSheet);
-  //   if (hscMarkSheet) formData.append("hscMarkSheet", hscMarkSheet);
-  //   if (sscMarkSheet) formData.append("sscMarkSheet", sscMarkSheet);
-
-  //   formData.append("offerLetterReceived", offerLetterReceived);
-  //   formData.append("offerLetterAccepted", offerLetterAccepted);
-  //   formData.append(
-  //     "reasonForRejectionOfferLetter",
-  //     reasonForRejectionOfferLetter || ""
-  //   );
-  //   formData.append("joinStatus", joinStatus);
-  //   formData.append("reasonForNotJoin", reasonForNotJoin || "");
-  //   formData.append("joinDate", joinDate);
-  //   formData.append("dataUpdatedBy", dataUpdatedBy);
-  //   formData.append("comment",comment)
-
-  //   try {
-  //     const response = await fetch(`${API_BASE_URL}/save-join-data`, {
-  //       method: "POST",
-  //       body: formData,
-  //     });
-
-  //     if (response.ok) {
-  //       const result = await response.text();
-  //       if (result.includes("Data added successfully")) {
-  //         toast.success("Documents Added Successfully!"); // Success toast
-  //         clearForm(); // Clear the form after success
-  //         onReturn(); // Redirect or refresh the page
-  //       }
-  //     } else if (response.status === 409) {
-  //       toast.info("Documents have already been submitted for this candidate."); // Info toast for conflict
-  //     } else {
-  //       const errorText = await response.text(); // Get error message from response
-  //       toast.error(
-  //         `Error: ${errorText || "Something went wrong. Please try again."}`
-  //       ); // Display error toast
-  //     }
-  //   } catch (error) {
-  //     toast.error(`Failed to submit the form. Error: ${error.message}`); // Handle fetch errors
-  //     console.error("Failed to submit form:", error);
-  //   } finally {
-  //     setLoading(false); // Ensure loading spinner stops
-  //   }
-  // };
-
+ 
   const clearForm = () => {
     setMailReceived("");
     setAdharCardUploaded(null);
@@ -471,33 +385,7 @@ const AfterSelection = ({
     setJoinDate("");
   };
 
-  // const handleFileChange = (e) => {
-  //   const { name, files } = e.target;
-  //   if (name === "optionalDocuments") {
-  //     const newFiles = Array.from(files);
-  //     const uniqueFiles = newFiles.filter((file) => {
-  //       const isDuplicate = existingOptionalDocs.includes(file.name);
-  //       if (isDuplicate) {
-  //         console.log(`File "${file.name}" already exists and will be skipped`);
-  //       }
-  //       return !isDuplicate;
-  //     });
-
-  //     setDocuments((prev) => ({
-  //       ...prev,
-  //       optionalDocuments: Array.from(files),
-  //     }));
-  //   } else {
-  //     setDocuments((prev) => ({
-  //       ...prev,
-  //       [name]: files[0],
-  //     }));
-  //   }
-  // };
-
-  // =====================================================================================
-  // =====================================================================================
-
+ 
   const [formData, setFormData] = useState({
     employeeId: employeeId,
     candidateId: candidateId,
@@ -616,8 +504,20 @@ const AfterSelection = ({
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
+    console.log(id, value);
+    
     setFormData((prev) => ({ ...prev, [id]: value }));
-  };
+
+    if (["offerLetterReceived", "offerLetterAccepted", "joinStatus", "joinDate"].includes(id)) {
+        const updateData = 
+            id === "offerLetterReceived" ? { issueOfferLetter: new Date() } :
+            id === "offerLetterAccepted" ? { letterResponse: new Date() } :
+            id === "joinStatus" ? { joiningProcess: new Date() } :
+            id === "joinDate" ? { joinDate: value } : {}; // Use `value` instead of `formData.joinDate` to get the updated value
+
+        updatePerformanceForAfterSelectionapi(updateData, performanceId);
+    }
+};
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
@@ -792,7 +692,7 @@ const AfterSelection = ({
 
                   <div className="after-documnet-main">
                     <div className="after-documnet-sub">
-                      <hr />
+                      {/* <hr /> */}
                       {/* this line is updated by sahil karnekar date 24-10-2024 */}
                       <div
                         className="after-document-fisrt"
@@ -1002,6 +902,7 @@ const AfterSelection = ({
                           <select
                             id="offerLetterReceived"
                             className="after-select"
+                            value={formData.offerLetterReceived}
                             onChange={handleInputChange}
                           >
                             <option value="">Select Option</option>
@@ -1010,27 +911,7 @@ const AfterSelection = ({
                           </select>
                         </div>
 
-                        {/* <div className="after-mail-div">
-                          <div className="after-lable-div">
-                            <label
-                              htmlFor="offerLetterReceived"
-                              className="after-label"
-                            >
-                              Offer Letter Received:
-                            </label>
-                          </div>
-
-                          <select
-                            id="offerLetterReceived"
-                            className="after-select"
-                            value={offerLetterReceived}
-                            onChange={handleOfferLetterReceivedChange}
-                          >
-                            <option value="">Select Option</option>
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                          </select>
-                        </div> */}
+                        
                         <div className="after-mail-div">
                           <div className="after-lable-div">
                             <label
@@ -1429,11 +1310,7 @@ const AfterSelection = ({
                     )}
 
                     <center>
-                      {/* {inquiryFormSubmitted && (
-                    <div className="alert alert-success" role="alert">
-                      Follow Up Data Added successfully!
-                    </div>
-                  )} */}
+                     
                       <button
                         type="submit"
                         style={{ marginTop: "25px" }}

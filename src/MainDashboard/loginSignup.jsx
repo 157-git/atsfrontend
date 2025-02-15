@@ -476,7 +476,7 @@ const LoginSignup = ({ onLogin }) => {
                       </div>
                     
                       <div className="input-groups">
-                        <i class="fa-solid fa-robot"></i>
+                        <i className="fa-solid fa-robot"></i>
                         <input
                           type="text"
                           placeholder="Enter Captcha"

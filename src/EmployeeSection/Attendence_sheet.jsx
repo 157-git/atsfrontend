@@ -694,7 +694,7 @@ const [allImagesForRecruiters, setAllImagesForRecruiters] = useState([]); // Ini
     const achievementRate = (achieved / target) * 100;
 
     let status;
-    if (achievementRate > 80) {
+    if (achievementRate > 75) {
       status = "Green";
     } else if (achievementRate >= 61) {
       status = "Yellow";

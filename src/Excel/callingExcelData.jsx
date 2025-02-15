@@ -16,6 +16,7 @@ import limitedOptions from "../helper/limitedOptions";
 import FilterData from "../helper/filterData";
 import convertToDocumentLink from "../helper/convertToDocumentLink";
 import { Avatar, Card, List, Pagination } from "antd";
+import {Alert, Modal as AntdModal} from "antd";
 
 const CallingExcelList = ({
   updateState,
@@ -62,6 +63,7 @@ const CallingExcelList = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
   const [socket, setSocket] = useState(null);
+  const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
 
   const fetchUpdatedData = (page, size) => {
     fetch(
@@ -143,7 +145,12 @@ const CallingExcelList = ({
     setFilteredCallingList(filtered);
     setSearchCount(filtered.length);
   }, [searchTerm, callingList]);
-
+  const handleDisplayShareConfirmClick = ()=>{
+    setDisplayShareConfirm(true);
+  }
+const handleCancelcloseshare = ()=>{
+  setDisplayShareConfirm(false);
+}
   useEffect(() => {
     if (sortCriteria) {
       const sortedList = [...filteredCallingList].sort((a, b) => {
@@ -566,6 +573,8 @@ const CallingExcelList = ({
     } catch (error) {
       setIsDataSending(false);
       console.error("Error while forwarding candidates:", error);
+    }finally{
+      setDisplayShareConfirm(false);
     }
   };
 
@@ -1131,8 +1140,11 @@ const CallingExcelList = ({
                           </div>
 
                           <div className="custom-modal-footer">
+                             <AntdModal title="Share Data" open={displayShareConfirm} onOk={handleShare} onCancel={handleCancelcloseshare}>
+                                                      <Alert message="Are You Sure ? You Want To Send ?" type="info" showIcon />
+                                  </AntdModal>
                             <button
-                              onClick={handleShare}
+                              onClick={handleDisplayShareConfirmClick}
                               className="daily-tr-btn"
                             >
                               Share

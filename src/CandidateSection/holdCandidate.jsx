@@ -13,6 +13,7 @@ import FilterData from "../helper/filterData";
 import limitedOptions from "../helper/limitedOptions";
 import convertToDocumentLink from "../helper/convertToDocumentLink";
 import axios from "axios";
+import {Alert, Modal as AntdModal} from "antd";
 // added by sahil karnekar
 import { Avatar, Card, List, Pagination } from "antd";
 
@@ -59,6 +60,7 @@ const HoldCandidate = ({
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
 
   const fetchHoldCandidateData = async (page, size) => {
     try {
@@ -405,7 +407,12 @@ const HoldCandidate = ({
     XLSX.utils.book_append_sheet(wb, ws, "Hold List");
     XLSX.writeFile(wb, "Hold_list.xlsx");
   };
-
+  const handleDisplayShareConfirmClick = ()=>{
+    setDisplayShareConfirm(true);
+  }
+const handleCancelcloseshare = ()=>{
+  setDisplayShareConfirm(false);
+}
   const showPopup = () => {
     setShowExportConfirmation(true);
 
@@ -500,6 +507,8 @@ const HoldCandidate = ({
     } catch (error) {
       setIsDataSending(false);
       console.error("Error while forwarding candidates:", error);
+    }finally{
+      setDisplayShareConfirm(false);
     }
   };
 
@@ -1632,8 +1641,11 @@ const HoldCandidate = ({
                           </div>
 
                           <div className="custom-modal-footer">
+                             <AntdModal title="Share Data" open={displayShareConfirm} onOk={handleShare} onCancel={handleCancelcloseshare}>
+                                                      <Alert message="Are You Sure ? You Want To Send ?" type="info" showIcon />
+                                  </AntdModal>
                             <button
-                              onClick={handleShare}
+                              onClick={handleDisplayShareConfirmClick}
                               className="daily-tr-btn"
                             >
                               Share

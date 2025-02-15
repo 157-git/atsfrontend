@@ -18,6 +18,7 @@ import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
 import FilterData from "../helper/filterData";
 import convertToDocumentLink from "../helper/convertToDocumentLink";
 import { Avatar, Card, List, Pagination } from "antd";
+import {Alert, Modal as AntdModal} from "antd";
 {
   /* this line added by sahil date 22-10-2024 */
 }
@@ -56,6 +57,7 @@ const ResumeList = ({
   const [totalRecords, setTotalRecords] = useState(0);
   const [socket, setSocket] = useState(null);
     const [searchCount, setSearchCount] = useState(0);
+    const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
 
 
   const fetchData = async (page, size) => {
@@ -186,7 +188,12 @@ const ResumeList = ({
     XLSX.utils.book_append_sheet(wb, ws, "Resume List");
     XLSX.writeFile(wb, "ResumeList.xlsx");
   };
-
+  const handleDisplayShareConfirmClick = ()=>{
+    setDisplayShareConfirm(true);
+  }
+const handleCancelcloseshare = ()=>{
+  setDisplayShareConfirm(false);
+}
   const showPopup = () => {
     setShowExportConfirmation(true);
     document.querySelector(".calling-list-container").classList.add("blurred");
@@ -612,6 +619,8 @@ const forwardSelectedCandidate = (e) => {
     } catch (error) {
       setIsDataSending(false);
       console.error("Error while forwarding candidates:", error);
+    }finally{
+      setDisplayShareConfirm(false);
     }
   };
 
@@ -1350,8 +1359,11 @@ const forwardSelectedCandidate = (e) => {
                           </div>
 
                           <div className="custom-modal-footer">
+                             <AntdModal title="Share Data" open={displayShareConfirm} onOk={handleShare} onCancel={handleCancelcloseshare}>
+                                                                                  <Alert message="Are You Sure ? You Want To Send ?" type="info" showIcon />
+                                                              </AntdModal>
                             <button
-                              onClick={handleShare}
+                              onClick={handleDisplayShareConfirmClick}
                               className="daily-tr-btn"
                             >
                               Share
