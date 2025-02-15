@@ -492,16 +492,18 @@ const JobListing = ({ loginEmployeeName }) => {
 
                 {/* Rajalxmi Jagadale Update code line 495/560 Date 11-02-2025 */}
               </div>
-              <button
+
+          {/* //Arshad Comment This  button code on 14-02-2025 and [ {showFilters && ( ] condition */}
+              {/* <button
                 className="daily-tr-btns"
                 onClick={() => setShowFilters(!showFilters)}
                 style={{whiteSpace: "nowrap",gap: "10px"}}
               >
                 View Filters 
-              </button>
+              </button> */}
             </div>
 
-            {showFilters && (
+            {/* {showFilters && ( */}
               <div className="jd-filter-section">
                 <div className="jd-filter-options-container">
                   {filterOptions.map((option) => {
@@ -567,7 +569,7 @@ const JobListing = ({ loginEmployeeName }) => {
                   </button>
                 </div>
               </div>
-            )}
+            {/* )} */}
           </div>
 
           {!showViewMore && (

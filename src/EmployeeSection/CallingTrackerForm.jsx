@@ -2755,7 +2755,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                         <option value="Available For Interview">
                           Available For Interview
                         </option>
-                        <option value=" Confirmed, but will be available later">
+                        <option value="Confirmed, but will be available later">
                           Confirmed, but will be available later.
                         </option>
                       </select>

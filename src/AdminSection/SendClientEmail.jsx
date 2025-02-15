@@ -805,7 +805,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                   </th>
                   <th className="attendanceheading">Interview Time</th>
 
-                  <th className="attendanceheading">Interview Status</th>
+                  <th className="attendanceheading">Availabile Status</th>
                   <th
                     className="attendanceheading"
                     style={{ paddingLeft: "22px", paddingRight: "22px" }}
@@ -1425,7 +1425,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                               ? "sent"
                               : item.profileStatus === "Profile Rejected"
                               ? "rejected"
-                              : item.profileStatus === "Profile Selected"
+                              : item.profileStatus === "Profile Shortlisted"
                               ? "selected"
                               : item.profileStatus === "No Response"
                               ? "no-response"
@@ -1531,7 +1531,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                                   "Profile Rejected"
                                 ? "#FF6347" // Red
                                 : selectedCandidate.profileStatus ===
-                                  "Profile Selected"
+                                  "Profile Shortlisted"
                                 ? "#32CD32" // Green
                                 : selectedCandidate.profileStatus ===
                                   "No Response"
@@ -1559,7 +1559,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                           "Profile Pending",
                           "Profile Sent",
                           "Profile Rejected",
-                          "Profile Selected",
+                          "Profile Shortlisted",
                           "No Response",
                           "Profile On Hold",
                         ]

@@ -239,6 +239,12 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     employeeName,
     jobRole
   ) => {
+    console.log(candidateId + "candidateId ");
+    console.log(employeeId + " Employee Id");
+    console.log(requirementId + "Requirement Id");
+    console.log(candidateName + "Candidate Name");
+    console.log(employeeName + "Employee Name");
+
     setShowUpdateResponseID(candidateId);
     setShowEmployeeId(employeeId);
     setShowRequirementId(requirementId);
@@ -379,602 +385,626 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
   };
 
   return (
-    // SwapnilRokade_UpdateResponse_FilterAdded_7_to_504_10/07"
     <>
       <div className="calling-list-container">
-    <div className="TeamLead-main">
-      {loading ? (
-        <div className="register">
-          <Loader></Loader>
-        </div>
-      ) : (
-        <>
-          {!showUpdateResponseForm ? (
-            <>
-              <div className="TeamLead-main-filter-section">
-                <div className="TeamLead-main-filter-section-header">
-                  <div style={{ display: "flex" }}>
-                    <div className="search">
-                      <i className="fa-solid fa-magnifying-glass"></i>
-                    </div>
-
-                    <div
-                      className="TeamLead-main-filter-section-container"
-                      style={{ width: "100%" }}
-                    >
-                      <div
-                        className="search-input-div"
-                        style={{ width: `${calculateWidth()}px` }}
-                      >
-                        <div className="forxmarkdiv">
-                          <input
-                            type="text"
-                            className="search-input removeBorderForSearchInput"
-                            placeholder="Search here..."
-                            value={filterValue}
-                            onChange={(e) => setFilterValue(e.target.value)}
-                          />
-                          {filterValue && (
-                            <div className="svgimagesetinInput">
-                              <svg
-                                onClick={() => setFilterValue("")}
-                                xmlns="http://www.w3.org/2000/svg"
-                                height="24px"
-                                viewBox="0 -960 960 960"
-                                width="24px"
-                                fill="#000000"
-                              >
-                                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-                              </svg>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <h1 style={{ color: "gray" }}>Update Response</h1>
-                  </div>
-                  <div>
-                    <button
-                      className="lineUp-share-btn"
-                      onClick={() => {
-                        setShowFilterOptions(!showFilterOptions);
-                        setShowSearch(false);
-                      }}
-                    >
-                      Filter
-                    </button>
-                  </div>
-                </div>
-
-                <div className="filter-dropdowns">
-                  {showFilterOptions && (
-                    <div className="filter-section">
-                      {limitedOptions.map(([optionKey, optionLabel]) => {
-                        const uniqueValues = Array.from(
-                          new Set(
-                            callingList
-                              .map((item) => {
-                                const value = item[optionKey];
-                                // Ensure the value is a string before converting to lowercase
-                                return typeof value === "string"
-                                  ? value.toLowerCase()
-                                  : value;
-                              })
-                              .filter(
-                                (value) => value !== undefined && value !== null
-                              ) // Remove null or undefined values
-                          )
-                        );
-
-                        return (
-                          <div key={optionKey} className="filter-option">
-                            <button
-                              className="white-Btn"
-                              onClick={() => handleFilterOptionClick(optionKey)}
-                            >
-                              {optionLabel}
-                              <span className="filter-icon">&#x25bc;</span>
-                            </button>
-                            {activeFilterOption === optionKey && (
-                              <div className="city-filter">
-                                <div className="optionDiv">
-                                  {uniqueValues.filter(
-                                    (value) =>
-                                      value !== "" &&
-                                      value !== "-" &&
-                                      value !== undefined &&
-                                      !(
-                                        optionKey === "alternateNumber" &&
-                                        value === 0
-                                      )
-                                  ).length > 0 ? (
-                                    uniqueValues.map(
-                                      (value) =>
-                                        value !== "" &&
-                                        value !== "-" &&
-                                        value !== undefined &&
-                                        !(
-                                          optionKey === "alternateNumber" &&
-                                          value === 0
-                                        ) && (
-                                          <label
-                                            key={value}
-                                            className="selfcalling-filter-value"
-                                          >
-                                            <input
-                                              type="checkbox"
-                                              checked={
-                                                selectedFilters[
-                                                  optionKey
-                                                ]?.includes(value) || false
-                                              }
-                                              onChange={() =>
-                                                handleFilterSelect(
-                                                  optionKey,
-                                                  value
-                                                )
-                                              }
-                                              style={{ marginRight: "5px" }}
-                                            />
-                                            {value}
-                                          </label>
-                                        )
-                                    )
-                                  ) : (
-                                    <div>No values</div>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="attendanceTableData">
-                <table className="attendance-table">
-                  <thead>
-                    <tr className="attendancerows-head">
-                      <th className="attendanceheading">Sr No</th>
-                      <th className="attendanceheading">Candidate ID</th>
-                      <th className="attendanceheading">Candidate Name</th>
-                      <th className="attendanceheading">Candidate Email</th>
-                      <th className="attendanceheading">Contact Number</th>
-                      <th className="attendanceheading">Source Name</th>
-                      <th className="attendanceheading">Job Id</th>
-                      <th className="attendanceheading">Applying Company</th>
-                      <th className="attendanceheading">Job Designation</th>
-                      <th className="attendanceheading">Resume</th>
-                      <th className="attendanceheading">Comment for TL</th>
-                      <th className="attendanceheading">Last Status</th>
-                      <th className="attendanceheading">Interview Round</th>
-                      <th className="attendanceheading">Interview Response</th>
-                      <th className="attendanceheading">
-                        Response Updated Date
-                      </th>
-                      <th className="attendanceheading">Next Interview Date</th>
-                      <th className="attendanceheading">
-                        Next Interview Timing
-                      </th>
-                      <th className="attendanceheading">Employee ID</th>
-                      <th className="attendanceheading">Employee Name</th>
-                      <th className="attendanceheading">Employee Mail Id</th>
-                      <th className="attendanceheading">Employee Role</th>
-                      <th className="attendanceheading">Action</th>
-                    </tr>
-                  </thead>
-                  <>
-                    <tbody>
-                      {filteredCallingList.map((data, index) => (
-                        <tr key={index} className="attendancerows">
-                          <td
-                            className="tabledata "
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {calculateRowIndex(index)}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {calculateRowIndex(index)}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="tabledata">
-                            {highlightText(
-                              data.candidateId.toString().toLowerCase() || "",
-                              filterValue
-                            )}
-                          </td>
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {highlightText(
-                              data.candidateName || "",
-                              filterValue
-                            )}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {highlightText(
-                                  data.candidateName || "",
-                                  filterValue
-                                )}
-                              </span>
-                            </div>
-                          </td>
-
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {highlightText(
-                              data.candidateEmail || "",
-                              filterValue
-                            )}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {highlightText(
-                                  data.candidateEmail || "",
-                                  filterValue
-                                )}
-                              </span>
-                            </div>
-                          </td>
-
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {highlightText(
-                              data.contactNumber || "",
-                              filterValue
-                            )}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {highlightText(
-                                  data.contactNumber || "",
-                                  filterValue
-                                )}
-                              </span>
-                            </div>
-                          </td>
-
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {highlightText(data.sourceName || "", filterValue)}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {highlightText(
-                                  data.sourceName || "",
-                                  filterValue
-                                )}
-                              </span>
-                            </div>
-                          </td>
-
-                          <td className="tabledata">
-                            {highlightText(
-                              data.requirementId.toString().toLowerCase() || "",
-                              filterValue
-                            )}
-                          </td>
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {highlightText(
-                              data.requirementCompany || "",
-                              filterValue
-                            )}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {highlightText(
-                                  data.requirementCompany || "",
-                                  filterValue
-                                )}
-                              </span>
-                            </div>
-                          </td>
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {highlightText(
-                              data.jobDesignation || "",
-                              filterValue
-                            )}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {highlightText(
-                                  data.jobDesignation || "",
-                                  filterValue
-                                )}
-                              </span>
-                            </div>
-                          </td>
-
-                          <td className="tabledata">
-                            <button
-                              onClick={() => openResumeModal(data.resume)}
-                              style={{ background: "none", border: "none" }}
-                            >
-                              <i
-                                className="fas fa-eye"
-                                style={{
-                                  color: data.resume ? "green" : "inherit",
-                                }}
-                              ></i>
-                            </button>
-                          </td>
-
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {highlightText(
-                              data.commentForTL || "",
-                              filterValue
-                            )}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {highlightText(
-                                  data.commentForTL || "",
-                                  filterValue
-                                )}
-                              </span>
-                            </div>
-                          </td>
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {highlightText(data.finalStatus || "", filterValue)}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {highlightText(
-                                  data.finalStatus || "",
-                                  filterValue
-                                )}
-                              </span>
-                            </div>
-                          </td>
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {highlightText(
-                              data.interviewRound || "",
-                              filterValue
-                            )}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {highlightText(
-                                  data.interviewRound || "",
-                                  filterValue
-                                )}
-                              </span>
-                            </div>
-                          </td>
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {highlightText(
-                              data.interviewResponse || "",
-                              filterValue
-                            )}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {highlightText(
-                                  data.interviewResponse || "",
-                                  filterValue
-                                )}
-                              </span>
-                            </div>
-                          </td>
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {highlightText(
-                              data.responseUpdatedDate || "",
-                              filterValue
-                            )}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {highlightText(
-                                  data.responseUpdatedDate || "",
-                                  filterValue
-                                )}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="tabledata">
-                            {highlightText(
-                              data.nextInterviewDate.toString().toLowerCase() ||
-                                "",
-                              filterValue
-                            )}
-                          </td>
-                          <td className="tabledata">
-                            {highlightText(
-                              data.nextInterviewTiming
-                                .toString()
-                                .toLowerCase() || "",
-                              filterValue
-                            )}
-                          </td>
-                          <td className="tabledata">
-                            {highlightText(
-                              data.employeeId.toString().toLowerCase() || "",
-                              filterValue
-                            )}
-                          </td>
-
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {highlightText(
-                              data.employeeName || "",
-                              filterValue
-                            )}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {highlightText(
-                                  data.employeeName || "",
-                                  filterValue
-                                )}
-                              </span>
-                            </div>
-                          </td>
-
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {highlightText(
-                              data.officialMail || "",
-                              filterValue
-                            )}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {highlightText(
-                                  data.officialMail || "",
-                                  filterValue
-                                )}
-                              </span>
-                            </div>
-                          </td>
-
-                          <td
-                            className="tabledata"
-                            onMouseOver={handleMouseOver}
-                            onMouseOut={handleMouseOut}
-                          >
-                            {highlightText(data.jobRole || "", filterValue)}
-                            <div className="tooltip">
-                              <span className="tooltiptext">
-                                {highlightText(data.jobRole || "", filterValue)}
-                              </span>
-                            </div>
-                          </td>
-
-                          <td className=" TeamLead-main-table-td">
-                            <button
-                              className="lineUp-Filter-btn"
-                              onClick={() =>
-                                handleUpdateClick(
-                                  data.candidateId,
-                                  data.employeeId,
-                                  data.requirementId,
-                                  data.candidateName,
-                                  data.employeeName,
-                                  data.jobRole
-                                )
-                              }
-                            >
-                              Update
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </>
-                </table>
-              </div>
-              <div className="search-count-last-div">
-                Total Results : {totalRecords}
-              </div>
-              <Pagination
-                current={currentPage}
-                total={totalRecords}
-                pageSize={pageSize}
-                showSizeChanger
-                showQuickJumper
-                onShowSizeChange={handleSizeChange}
-                onChange={handlePageChange}
-                style={{
-                  justifyContent: "center",
-                }}
-              />
-              <Modal show={showResumeModal} onHide={closeResumeModal} size="md">
-                <Modal.Header closeButton>
-                  <Modal.Title>Resume</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  {selectedCandidateResume ? (
-                    <iframe
-                      src={convertToDocumentLink(
-                        selectedCandidateResume,
-                        "Resume.pdf"
-                      )}
-                      width="100%"
-                      height="550px"
-                      title="PDF Viewer"
-                    ></iframe>
-                  ) : (
-                    <p>No resume available</p>
-                  )}
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={closeResumeModal}>
-                    Close
-                  </Button>
-                </Modal.Footer>
-              </Modal>
-            </>
+        <div className="TeamLead-main">
+          {loading ? (
+            <div className="register">
+              <Loader></Loader>
+            </div>
           ) : (
             <>
-           <div className="update-response-table">
-           <Modal
-                show={showUpdateResponseForm}
-                onHide={closeUpdateForm}
-                size="xl"
-                centered
-              >
-                <Modal.Body>
-                  <div className="TeamLead-main-table-container">
-                    <UpdateResponseFrom
-                      candidateId={showUpdateResponseID}
-                      passedEmployeeId={showEmployeeId}
-                      requirementId={showRequirementId}
-                      candidateName={showCandidateName}
-                      employeeName={showEmployeeName}
-                      passedJobRole={showJobRole}
-                      onClose={closeUpdateForm}
-                      onSuccessAdd={onSuccessAdd}
-                    />
+              {!showUpdateResponseForm ? (
+                <>
+                  <div className="TeamLead-main-filter-section">
+                    <div className="TeamLead-main-filter-section-header">
+                      <div style={{ display: "flex" }}>
+                        <div className="search">
+                          <i className="fa-solid fa-magnifying-glass"></i>
+                        </div>
+
+                        <div
+                          className="TeamLead-main-filter-section-container"
+                          style={{ width: "80%" }}
+                        >
+                          <div
+                            className="search-input-div"
+                            style={{ width: `${calculateWidth()}px` }}
+                          >
+                            <div className="forxmarkdiv">
+                              <input
+                                type="text"
+                                className="search-input removeBorderForSearchInput"
+                                placeholder="Search here..."
+                                value={filterValue}
+                                onChange={(e) => setFilterValue(e.target.value)}
+                              />
+                              {filterValue && (
+                                <div className="svgimagesetinInput">
+                                  <svg
+                                    onClick={() => setFilterValue("")}
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    height="24px"
+                                    viewBox="0 -960 960 960"
+                                    width="24px"
+                                    fill="#000000"
+                                  >
+                                    <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                                  </svg>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div style={{ display: "flex",width:"90%",paddingLeft:"180px" }} >
+                        <h1 style={{ color: "gray" }}>Update Response</h1>
+                      </div>
+                      <div>
+                        <button
+                          className="lineUp-share-btn"
+                          onClick={() => {
+                            setShowFilterOptions(!showFilterOptions);
+                            setShowSearch(false);
+                          }}
+                        >
+                          Filter
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="filter-dropdowns">
+                      {showFilterOptions && (
+                        <div className="filter-section">
+                          {limitedOptions.map(([optionKey, optionLabel]) => {
+                            const uniqueValues = Array.from(
+                              new Set(
+                                callingList
+                                  .map((item) => {
+                                    const value = item[optionKey];
+                                    // Ensure the value is a string before converting to lowercase
+                                    return typeof value === "string"
+                                      ? value.toLowerCase()
+                                      : value;
+                                  })
+                                  .filter(
+                                    (value) =>
+                                      value !== undefined && value !== null
+                                  ) // Remove null or undefined values
+                              )
+                            );
+
+                            return (
+                              <div key={optionKey} className="filter-option">
+                                <button
+                                  className="white-Btn"
+                                  onClick={() =>
+                                    handleFilterOptionClick(optionKey)
+                                  }
+                                >
+                                  {optionLabel}
+                                  <span className="filter-icon">&#x25bc;</span>
+                                </button>
+                                {activeFilterOption === optionKey && (
+                                  <div className="city-filter">
+                                    <div className="optionDiv">
+                                      {uniqueValues.filter(
+                                        (value) =>
+                                          value !== "" &&
+                                          value !== "-" &&
+                                          value !== undefined &&
+                                          !(
+                                            optionKey === "alternateNumber" &&
+                                            value === 0
+                                          )
+                                      ).length > 0 ? (
+                                        uniqueValues.map(
+                                          (value) =>
+                                            value !== "" &&
+                                            value !== "-" &&
+                                            value !== undefined &&
+                                            !(
+                                              optionKey === "alternateNumber" &&
+                                              value === 0
+                                            ) && (
+                                              <label
+                                                key={value}
+                                                className="selfcalling-filter-value"
+                                              >
+                                                <input
+                                                  type="checkbox"
+                                                  checked={
+                                                    selectedFilters[
+                                                      optionKey
+                                                    ]?.includes(value) || false
+                                                  }
+                                                  onChange={() =>
+                                                    handleFilterSelect(
+                                                      optionKey,
+                                                      value
+                                                    )
+                                                  }
+                                                  style={{ marginRight: "5px" }}
+                                                />
+                                                {value}
+                                              </label>
+                                            )
+                                        )
+                                      ) : (
+                                        <div>No values</div>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </Modal.Body>
-              </Modal>
-           </div>
+
+                  <div className="attendanceTableData">
+                    <table className="attendance-table">
+                      <thead>
+                        <tr className="attendancerows-head">
+                          <th className="attendanceheading">Sr No</th>
+                          <th className="attendanceheading">Candidate ID</th>
+                          <th className="attendanceheading">Candidate Name</th>
+                          <th className="attendanceheading">Candidate Email</th>
+                          <th className="attendanceheading">Contact Number</th>
+                          <th className="attendanceheading">Source Name</th>
+                          <th className="attendanceheading">Job Id</th>
+                          <th className="attendanceheading">
+                            Applying Company
+                          </th>
+                          <th className="attendanceheading">Job Designation</th>
+                          <th className="attendanceheading">Resume</th>
+                          <th className="attendanceheading">Comment for TL</th>
+                          <th className="attendanceheading">Last Status</th>
+                          <th className="attendanceheading">Interview Round</th>
+                          <th className="attendanceheading">
+                            Interview Response
+                          </th>
+                          <th className="attendanceheading">
+                            Response Updated Date
+                          </th>
+                          <th className="attendanceheading">
+                            Next Interview Date
+                          </th>
+                          <th className="attendanceheading">
+                            Next Interview Timing
+                          </th>
+                          <th className="attendanceheading">Employee ID</th>
+                          <th className="attendanceheading">Employee Name</th>
+                          <th className="attendanceheading">
+                            Employee Mail Id
+                          </th>
+                          <th className="attendanceheading">Employee Role</th>
+                          <th className="attendanceheading">Action</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        {filteredCallingList.map((data, index) => (
+                          <tr key={index} className="attendancerows">
+                            <td
+                              className="tabledata "
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {calculateRowIndex(index)}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {calculateRowIndex(index)}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="tabledata">
+                              {highlightText(
+                                data.candidateId.toString().toLowerCase() || "",
+                                filterValue
+                              )}
+                            </td>
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {highlightText(
+                                data.candidateName || "",
+                                filterValue
+                              )}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    data.candidateName || "",
+                                    filterValue
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {highlightText(
+                                data.candidateEmail || "",
+                                filterValue
+                              )}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    data.candidateEmail || "",
+                                    filterValue
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {highlightText(
+                                data.contactNumber || "",
+                                filterValue
+                              )}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    data.contactNumber || "",
+                                    filterValue
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {highlightText(
+                                data.sourceName || "",
+                                filterValue
+                              )}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    data.sourceName || "",
+                                    filterValue
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+
+                            <td className="tabledata">
+                              {highlightText(
+                                data.requirementId.toString().toLowerCase() ||
+                                  "",
+                                filterValue
+                              )}
+                            </td>
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {highlightText(
+                                data.requirementCompany || "",
+                                filterValue
+                              )}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    data.requirementCompany || "",
+                                    filterValue
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {highlightText(
+                                data.jobDesignation || "",
+                                filterValue
+                              )}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    data.jobDesignation || "",
+                                    filterValue
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+
+                            <td className="tabledata">
+                              <button
+                                onClick={() => openResumeModal(data.resume)}
+                                style={{ background: "none", border: "none" }}
+                              >
+                                <i
+                                  className="fas fa-eye"
+                                  style={{
+                                    color: data.resume ? "green" : "inherit",
+                                  }}
+                                ></i>
+                              </button>
+                            </td>
+
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {highlightText(
+                                data.commentForTL || "",
+                                filterValue
+                              )}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    data.commentForTL || "",
+                                    filterValue
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {highlightText(
+                                data.finalStatus || "",
+                                filterValue
+                              )}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    data.finalStatus || "",
+                                    filterValue
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {highlightText(
+                                data.interviewRound || "",
+                                filterValue
+                              )}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    data.interviewRound || "",
+                                    filterValue
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {highlightText(
+                                data.interviewResponse || "",
+                                filterValue
+                              )}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    data.interviewResponse || "",
+                                    filterValue
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {highlightText(
+                                data.responseUpdatedDate || "",
+                                filterValue
+                              )}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    data.responseUpdatedDate || "",
+                                    filterValue
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="tabledata">
+                              {highlightText(
+                                data.nextInterviewDate
+                                  .toString()
+                                  .toLowerCase() || "",
+                                filterValue
+                              )}
+                            </td>
+                            <td className="tabledata">
+                              {highlightText(
+                                data.nextInterviewTiming
+                                  .toString()
+                                  .toLowerCase() || "",
+                                filterValue
+                              )}
+                            </td>
+                            <td className="tabledata">
+                              {highlightText(
+                                data.employeeId.toString().toLowerCase() || "",
+                                filterValue
+                              )}
+                            </td>
+
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {highlightText(
+                                data.employeeName || "",
+                                filterValue
+                              )}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    data.employeeName || "",
+                                    filterValue
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {highlightText(
+                                data.officialMail || "",
+                                filterValue
+                              )}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    data.officialMail || "",
+                                    filterValue
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+
+                            <td
+                              className="tabledata"
+                              onMouseOver={handleMouseOver}
+                              onMouseOut={handleMouseOut}
+                            >
+                              {highlightText(data.jobRole || "", filterValue)}
+                              <div className="tooltip">
+                                <span className="tooltiptext">
+                                  {highlightText(
+                                    data.jobRole || "",
+                                    filterValue
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+
+                            <td className="TeamLead-main-table-td">
+                              <button
+                                className="response-update-btn"
+                                onClick={() =>
+                                  handleUpdateClick(
+                                    data.candidateId,
+                                    data.employeeId,
+                                    data.requirementId,
+                                    data.candidateName,
+                                    data.employeeName,
+                                    data.jobRole
+                                  )
+                                }
+                              >
+                                Update
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="search-count-last-div">
+                    Total Results : {totalRecords}
+                  </div>
+                  <Pagination
+                    current={currentPage}
+                    total={totalRecords}
+                    pageSize={pageSize}
+                    showSizeChanger
+                    showQuickJumper
+                    onShowSizeChange={handleSizeChange}
+                    onChange={handlePageChange}
+                    style={{
+                      justifyContent: "center",
+                    }}
+                  />
+                  <Modal
+                    show={showResumeModal}
+                    onHide={closeResumeModal}
+                    size="md"
+                  >
+                    <Modal.Header closeButton>
+                      <Modal.Title>Resume</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      {selectedCandidateResume ? (
+                        <iframe
+                          src={convertToDocumentLink(
+                            selectedCandidateResume,
+                            "Resume.pdf"
+                          )}
+                          width="100%"
+                          height="550px"
+                          title="PDF Viewer"
+                        ></iframe>
+                      ) : (
+                        <p>No resume available</p>
+                      )}
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button variant="secondary" onClick={closeResumeModal}>
+                        Close
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                </>
+              ) : (
+                <>
+                  <div className="update-response-table">
+                    <Modal
+                      show={showUpdateResponseForm}
+                      onHide={closeUpdateForm}
+                      size="xl"
+                      centered
+                    >
+                      <Modal.Body>
+                        <div className="TeamLead-main-table-container">
+                          <UpdateResponseFrom
+                            candidateId={showUpdateResponseID}
+                            passedEmployeeId={showEmployeeId}
+                            requirementId={showRequirementId}
+                            candidateName={showCandidateName}
+                            employeeName={showEmployeeName}
+                            passedJobRole={showJobRole}
+                            onClose={closeUpdateForm}
+                            onSuccessAdd={onSuccessAdd}
+                          />
+                        </div>
+                      </Modal.Body>
+                    </Modal>
+                  </div>
+                </>
+              )}
             </>
           )}
-        </>
-      )}
-    </div>
-    </div>
+        </div>
+      </div>
     </>
   );
 };

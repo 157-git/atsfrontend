@@ -1073,7 +1073,7 @@ const AfterSelection = ({
                             <option value="Not Joined">Not Joined</option>
                             <option value="Joined">Joined</option>
                             <option value="Drop Out">Drop Out</option>
-                            <option value="Hold">Hold</option>
+                            <option value="Hold From Candidate">Hold From Candidate</option>
                             <option value="To Join">To Join</option>
                             <option value="No Show">No Show</option>
                           </select>
