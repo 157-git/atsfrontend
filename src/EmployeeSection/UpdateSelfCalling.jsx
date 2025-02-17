@@ -2453,19 +2453,21 @@ console.log(callingTracker.contactNumber);
                   onChange={handleChange}
                 >
                   <option value="Yet To Confirm">Yet To Confirm</option>
-                  <option value="Interested">Interested</option>
-                  <option value="Interested, will confirm later">
-                    Interested, will confirm later
-                  </option>
-                  <option value="Not Interested">Not Interested</option>
-                  <option value=" Interested But Not Eligible">
-                    Interested But Not Eligible
-                  </option>
-                  <option value="Eligible">Eligible</option>
-                  <option value="Not Eligible">Not Eligible</option>
-                  <option value="Not Eligible But Interested">
-                    Not Eligible But Interested
-                  </option>
+                      <option value="Interested">Interested</option>
+                      <option value="Not Interested">Not Interested</option>
+                      <option value="Interested, will confirm later">
+                        Interested, will confirm later
+                      </option>
+                      <option value="Interested But Not Eligible">
+                        Interested But Not Eligible
+                      </option>
+                      <option value="Not Eligible But Interested">
+                        Eligible But Not Interested
+                      </option>
+                      <option value="Not Eligible">Not Eligible</option>
+                      <option value="Not Eligibel Not Interested">
+                        Not Eligibel Not Interested
+                      </option>
                 </select>
 
                 <div
@@ -2482,14 +2484,19 @@ console.log(callingTracker.contactNumber);
                     onChange={handleChange}
                     // required={callingTracker.selectYesOrNo === "Interested"}
                   >
-                    <option value="">Select</option>
-                    <option value="Yet To Confirm">Yet To Confirm</option>
-                    <option value="Interview Schedule">
-                      Interview Schedule
-                    </option>
-                    <option value="Attending After Some time">
-                      Attending After Some time
-                    </option>
+                     <option value="" disabled>
+                          Select
+                        </option>
+                        <option value="Yet To Confirm">Yet To Confirm</option>
+                        {/* <option value="Interview Schedule">
+                          Available For Interview
+                        </option> */}
+                        <option value="Available For Interview">
+                          Available For Interview
+                        </option>
+                        <option value="Confirmed, but will be available later">
+                          Confirmed, but will be available later.
+                        </option>
                   </select>
                   {errors.finalStatus && (
                     <div className="error-message">{errors.finalStatus}</div>

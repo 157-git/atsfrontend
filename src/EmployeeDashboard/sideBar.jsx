@@ -978,7 +978,8 @@ function Sidebar({
                           >
                             <a href="#">
                               <span className="sidebar-text">
-                                Update Response
+                                Interview Feedback
+                                {/* Update Response */}
                               </span>
                             </a>
                           </li>
@@ -1141,7 +1142,8 @@ function Sidebar({
                         >
                           <a href="#">
                             <span className="sidebar-text">
-                              Update Response
+                              Interview Feedback
+                              {/* Update Response */}
                             </span>
                           </a>
                         </li>

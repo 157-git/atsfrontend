@@ -56,16 +56,6 @@ padding-top: 5px;
   text-align: center;
 }
 
-.TeamLead-main-table-td {
-  height: 30px;
-  border: 1px solid gray;
-  color:var(--text-color);
-
-  white-space: nowrap;
-  padding: 2px;
-  text-align: center;
-}
-
 /* UpdateResponse.css */
 .filter-container {
   display: flex;
@@ -125,3 +115,24 @@ padding-top: 5px;
   padding: 10px;
 }
 
+/* Arshad Attar Added This CSS On 13-02-2025 */
+.TeamLead-main-table-td {
+  height: 30px;
+  border: 1px solid gray;
+  color:var(--text-color);
+  white-space: nowrap;
+  padding: 2px;
+  text-align: center;
+  width:80px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.response-update-btn{
+  width:80px;
+  border-radius: 15px;
+  font-size: 15px;
+  background-color: var(--primary-button-bg);
+  color: var(--button-txt-color);
+  border: 1px solid var(--primary-border);
+}

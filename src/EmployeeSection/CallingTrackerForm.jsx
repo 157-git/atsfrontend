@@ -2771,7 +2771,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                         <option value="Available For Interview">
                           Available For Interview
                         </option>
-                        <option value=" Confirmed, but will be available later">
+                        <option value="Confirmed, but will be available later">
                           Confirmed, but will be available later.
                         </option>
                       </select>
@@ -3288,7 +3288,7 @@ const ModalComponent = ({
                 <table className="table table-bordered text-secondary">
                   <thead>
                     <tr>
-                      <th className="sal-cal-th">Current Salary 01</th>
+                      <th className="sal-cal-th">Current Salary</th>
                       <th className="sal-cal-th">Hike (%)</th>
                       <th className="sal-cal-th">Calculated Expected CTC</th>
                     </tr>
