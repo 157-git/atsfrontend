@@ -644,7 +644,7 @@ const forwardSelectedCandidate = (e) => {
         </div>
       ) : (
         <>
-          <div className="search">
+          <div className="search newaddforalignheaderofemployeermastersheet">
             {/* line 590 to 610 added by sahil karnekar date 30-10-2024 */}
             <div style={{ display: "flex", alignItems: "center" }}>
               <i

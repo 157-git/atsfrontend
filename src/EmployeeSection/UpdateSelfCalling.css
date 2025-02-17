@@ -301,7 +301,41 @@ strong {
   justify-content: right;
   display: flex;
   width: auto;
+  padding: 0;
 }
 .newsetforrightdiv{
   justify-content: space-between;
+}
+.wrappedSourcenamediv{
+width: 90%;
+  display: flex;
+  justify-content: space-between;
+}
+.marginleftforothers{
+  margin-left: 10px;
+}
+.setDisplayblockfornumtoword{
+  display: block;
+}
+.displayflexfornumtoword{
+  display: flex;
+}
+.newwidthforthisdiv{
+  width: 69%;
+}
+.newhightforincentivesdivUpdateForm{
+  width: 80%;
+}
+.newwidthforselectfinalstatus{
+  width: 85%;
+}
+.intresteddiv{
+  width: 50%;
+}
+.newwidthforintrestedselecttag{
+  width: 89%;
+}
+.ForEYEButtonInUpdate{
+  align-content: center;
+  height: 32px;
 }

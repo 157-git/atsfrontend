@@ -20,6 +20,9 @@
   position: relative;
 
 }
+.newaddforalignheaderofemployeermastersheet{
+  margin-top: 5px;
+}
 .newclassforsendback{
   position: relative;
   z-index: 1;

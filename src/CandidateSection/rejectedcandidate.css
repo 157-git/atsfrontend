@@ -63,7 +63,7 @@
     background: var(--primary-button-bg);
     border: 1px solid var(--primary-border);
     cursor: pointer;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
 }
 .rejectedcan-Filter-btn:hover,.rejectedcan-share-close-btn:hover,.rejectedcan-share-btn:hover,.rejectedcan-share-select-btn:hover,.rejectedcan-forward-btn:hover,.rejectedcan-share-forward-popup-btn:hover,.rejectedcan-close-forward-popup-btn:hover{
   background-color: var(--primary-button-hover);
