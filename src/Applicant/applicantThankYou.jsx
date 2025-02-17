@@ -23,12 +23,15 @@ function ThankYouPage() {
   return (
     <div className="thank-you-container">
       <div className="thank-you-content">
+      <h1 className="heading">Thank You for applying!</h1>
+
+        
+        <div className="thank-you-message">
         <div className="green-tick">
           {/* Font Awesome Green Check */}
-          <FontAwesomeIcon icon={faCheckCircle} style={{ color: 'green', fontSize: '100px' }} />
+          <FontAwesomeIcon icon={faCheckCircle} style={{ color: 'green', fontSize: '80px' }} />
+
         </div>
-        <div className="thank-you-message">
-          <h1>Thank You for applying!</h1>
           <p>We sincerely appreciate your interest and the time you’ve taken to complete the form.</p>
           <p>Our team will review your application, and we will be in touch with you soon.</p>
           <p>Wishing you the very best in your journey!</p>
@@ -39,4 +42,3 @@ function ThankYouPage() {
 }
 
 export default ThankYouPage;
-

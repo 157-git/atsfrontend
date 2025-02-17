@@ -3,30 +3,37 @@
 
 /* Main container styling */
 .form-container-December {
-  background-color: #ffe5b5;
+  background: #1d3a5d; /* Top color */
+  background-image: linear-gradient(to bottom, #1d3a5d 5%, #a7b8d4 0%);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
   padding-top: 10px;
-}
-
-/* Heading styling */
-#applicant-form-heading {
-  text-align: center;
-  font-size: 24px;
-  margin-bottom: 10px;
-  font-family: "Roboto", sans-serif;
-  font-weight: bold;
-}
-
-.applicant-form-hr {
-  width: 90%;
+  /* border: 2px solid red; */
 }
 
 /* Form styling */
 .applicant-form-December {
   display: flex;
   flex-direction: column;
+  /* border: 2px solid red; */
+  padding-top: 20px;
+  /* margin-top: 20px; */
+}
+
+/*  */
+/* Heading styling */
+#applicant-form-heading {
+  text-align: center;
+  font-size: 24px;
+  /* margin-bottom: 10px; */
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  color: white;
+}
+
+.applicant-form-hr {
+  width: 90%;
 }
 
 /* Form grid styling */
@@ -51,15 +58,31 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
+  /* border: 1px solid white; */
 }
 
 /* Label styling */
 .form-group-December label {
   font-weight: bold;
-  color: #333;
+  font-size: 15px;
   font-family: "Roboto", sans-serif;
+  color: black;
 }
 
+.certificate-item-December {
+  /* border: 1px solid black; */
+  display: flex;
+}
+
+.certificate-inputs-December-sub-div{
+  /* border: 1px solid red; */
+  display: flex;
+}
+
+.certificate-buttons-December-button-div{
+  /* border: 1px solid blue; */
+  display: flex;
+}
 /* Input with icon container */
 .input-with-icon-December {
   position: relative;
@@ -70,15 +93,39 @@
 /* Input styling */
 .input-with-icon-December input {
   width: 100%;
-  padding: 10px 10px 10px 40px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 10px 10px 10px 30px;
+  border: 1px solid #1d3a5d;
+  border-radius: 10px;
   outline: none;
-  background-color: #fff;
+  background-color: #f7f9fc;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
   font-family: "Roboto", sans-serif;
+  color: black;
 }
 
+.input-with-icon-December-add-new {
+  /* border: 1px solid red; */
+  display: flex;
+  align-items: center;
+}
+
+.remove-btn {
+  margin-left: 20px;
+  border: 1px solid #1d3a5d;
+  border-radius: 4px;
+  outline: none;
+  background-color: #f7f9fc;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Roboto", sans-serif;
+  color: black;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.remove-btn-icon {
+  font-size: 17px;
+  cursor: pointer;
+}
 /* Input icon styling */
 .input-icon-December {
   position: absolute;
@@ -104,7 +151,7 @@ input[type="file"] {
 
 .click-December button {
   padding: 10px 20px;
-  background-color: #ffcb9b;
+  background-color: #1d3a5d;
   color: #fff;
   border: 1px solid gray;
   border-radius: 15px;
@@ -117,10 +164,11 @@ input[type="file"] {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 3.5%;
 }
 
 .click-December button:hover {
-  background-color: white;
+  background-color: linear-gradient(to bottom right, #1d3a5d 2%, #f7f9fc);
   color: gray;
 }
 
@@ -130,7 +178,236 @@ input[type="file"] {
 }
 
 /* Error-Message Colour Rajalxmi Jagadale 10-01-2025 */
-.error{
-  color: red;
-  font-size:13px;
+.error {
+  color: darkred;
+  font-size: 14px;
+}
+.form-textfield {
+  border: 2px solid #1d3a5d;
+  border-radius: 10px;
+}
+
+.add-btn {
+  color: black;
+  height: 35px;
+  width: 10%;
+  margin-left: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.input-with-icon-December input {
+  margin-right: 10px;
+}
+
+.disability-dropdown label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.disability-dropdown select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 10px;
+  border: 1px solid #1d3a5d;
+}
+
+.input-with-icon-December input[type="file"] {
+  width: 100%;
+  padding: 10px 10px 10px 30px;
+  border: 1px solid #1d3a5d;
+  border-radius: 10px;
+  outline: none;
+  background-color: #f7f9fc;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Roboto", sans-serif;
+}
+
+#input-with-icon-December-certificates{
+  width: 50%;
+}
+/* For large screens (max-width: 1200px) */
+@media (max-width: 1200px) {
+  .form-grid-December {
+    gap: 15px;
+    padding: 5px;
+  }
+
+  .form-column-December {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .input-with-icon-December input {
+    padding-left: 35px;
+  }
+
+  .click-December button {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+}
+
+/* For tablets and smaller laptops (max-width: 992px) */
+@media (max-width: 992px) {
+  .form-grid-December {
+    flex-direction: column;
+  }
+
+  .form-column-December {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .click-December button {
+    width: 80%;
+    margin: 10px auto;
+  }
+}
+
+/* For mobile screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .form-grid-December {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .form-column-December {
+    width: 100%;
+  }
+
+  .input-with-icon-December input {
+    width: 100%;
+    padding-left: 35px;
+  }
+
+  .click-December button {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .form-container-December {
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+  }
+}
+
+/* For small mobile screens (max-width: 500px) */
+@media (max-width: 500px) {
+  .form-grid-December {
+    flex-direction: column;
+    margin-top: 15px;
+  }
+  #input-with-icon-December-certificates{
+    width: 100%;
+   /* border: 1px solid green; */
+  }
+  .input-with-icon-December {
+    gap: 4px;
+    padding:2px;
+  }
+  .form-group-December label {
+    font-size: 10px;
+  }
+
+  .input-with-icon-December input {
+    padding-left: 35px;
+    /* width: 360px; */
+  }
+
+  .certificate-item-December {
+ 
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: center;
+  }
+
+  .certificate-inputs-December-sub-div{
+    display: flex;
+    flex-direction: column;
+  }
+  .certificate-buttons-December-button-div{
+    /* border: 1px solid blue; */
+    height: 80px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .click-December button {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .applicant-form-December{
+   margin-top: 10px;
+   padding-bottom: 10px;
+
+  }
+
+  .form-container-December {
+    background: #1d3a5d;
+    background-image: linear-gradient(to bottom, #1d3a5d 3%, #a7b8d4 0%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    padding-top: 10px;
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+  }
+
+  .add-fields-container {
+    display: block;
+    margin-top: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-grid-December {
+    flex-direction: column;
+  }
+
+  .form-column-December {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .input-with-icon-December input {
+    margin-right: 0;
+  }
+
+  .form-container-December {
+    background: #1d3a5d;
+    background-image: linear-gradient(to bottom, #1d3a5d 3%, #a7b8d4 0%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    padding-top: 10px;
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+  }
+}
+
+.inputfield {
+  width: 100%;
+  padding: 10px 10px 10px 40px;
+  border: 1px solid #1d3a5d;
+  border-radius: 10px;
+  outline: none;
+  background-color: #f7f9fc;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Roboto", sans-serif;
+}
+.input-icon-Decembers {
+  position: absolute;
+  left: 10px;
+  font-size: 16px;
+  color: #666;
+  margin-top: 30px;
 }
