@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import { getSocket } from "../EmployeeDashboard/socket";
 import uploadingResumeStatic from "../assets/uploadStaticPngFile.png";
 import { Button as ButtonAntd } from "antd";
+import { convertNumberToWords } from "./convertNumberToWords";
 // this line added by sahil karnekar on date 14-01-2024
 
 const UpdateSelfCalling = ({
@@ -246,6 +247,7 @@ const UpdateSelfCalling = ({
       
     }
   }, [initialData]);
+console.log(errors);
 
   const fetchCandidateData = async (candidateId) => {
     try {
@@ -263,6 +265,7 @@ const UpdateSelfCalling = ({
       if (data.lineUp.resume !== "") {
         setResumeUploaded(true);
         setUploadProgress(100);
+        setResumeFileName(`${data.candidateName}_${data.designation}_Resume.pdf`);
       }
       if (data.lineUp.resume === undefined) {
         setResumeUploaded(false);
@@ -870,6 +873,7 @@ console.log(callingTracker.contactNumber);
       toast.error(`Error updating data: ${error.message}`);
     }
   };
+console.log(callingTracker);
 
   const handleRequirementChange = (e) => {
     const { value } = e.target;
@@ -924,8 +928,12 @@ console.log(callingTracker.contactNumber);
     const { name, value } = e.target;
     callingTracker.sourceName = value;
     console.log(errors);
+
+    const isNotInterested =
+    callingTracker.selectYesOrNo !== "Interested" ? true : false;
+
+    validateRealTime(name, value, isNotInterested);
     
-    setErrors((prevErrors) => ({ ...prevErrors, ["sourceName"]: "" }));
   };
   const handleShow = () => {
     setShowModal(true);
@@ -1113,7 +1121,7 @@ console.log(callingTracker.contactNumber);
 
 
                   {resumeUploaded && (
-                    <div className="calling-tracker-popup-open-btn newclassformakesameashelp">
+                    <div className="calling-tracker-popup-open-btn newclassformakesameashelp ForEYEButtonInUpdate">
                       <i
                         className="fas fa-eye"
                         onClick={() => {
@@ -1331,6 +1339,7 @@ console.log(callingTracker.contactNumber);
               {/* line 761 to 770 added by sahil karnekar date 17-10-2024 */}
               <div className="update-calling-tracker-field-sub-div setInputBlock">
                 <div className="setDisplayFlexForUpdateForm">
+                  <div className="wrappedSourcenamediv">
                   <select
                     name="sourceName"
                     className={`plain-input`}
@@ -1365,14 +1374,16 @@ console.log(callingTracker.contactNumber);
 
                   {displaySourceOthersInput && (
                       <input
+                      className="marginleftforothers"
                         type="text"
-                        name="sourceNameOthers"
+                        name="sourceName"
                         id=""
                         placeholder="Enter Source Name"
                         value={callingTracker.sourceName !== "others" ? callingTracker.sourceName : callingTracker.sourceName === "others" && ""}
                         onChange={handleSourceNameOthers}
                       />
                     )}
+                  </div>
 
                   {/* line 782 to 825 added by sahil karnekar date 17-10-2024 */}
 
@@ -1420,14 +1431,24 @@ console.log(callingTracker.contactNumber);
                   )}
                 </div>
                 <div>
-                  <input
+                  {/* <input
                     placeholder=" Your Incentive"
                     value={callingTracker?.incentive || ""}
                     readOnly
                     className="update-calling-tracker-two-input"
                     type="text"
                     style={{ width: "100%" }}
-                  />
+           
+                  /> */}
+                   <div className="calling-tracker-two-input newhightforincentivesdivUpdateForm">
+                    <input
+                      className="nighlightincentivesinputnew"
+                      placeholder="Your Incentive"
+                      value={callingTracker?.incentive || ""}
+                      type="text"
+                      readOnly
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -2136,6 +2157,9 @@ console.log(callingTracker.contactNumber);
                       placeholder="Years"
                       maxLength="2"
                     />
+                      {callingTracker.lineUp.experienceYear && (
+                        <span className="addtrnaslateproptospan">Years</span>
+                      )}
                     {errors.experienceYearStar && (
                       <div className="error-message">
                         {errors.experienceYearStar}
@@ -2147,7 +2171,7 @@ console.log(callingTracker.contactNumber);
                   )}
                 </div>
 
-                <div className="calling-tracker-two-input">
+                <div className="calling-tracker-two-input newwidthforthisdiv">
                   <div className="setDisplayFlexForUpdateForm">
                     <input
                       style={{ width: "95%" }}
@@ -2160,6 +2184,9 @@ console.log(callingTracker.contactNumber);
                       min="0"
                       max="11"
                     />
+                     {callingTracker.lineUp.experienceMonth && (
+                        <span className="addtrnaslateproptospanForMonths">Months</span>
+                      )}
                     {errors.experienceMonthStar && (
                       <div className="error-message">
                         {errors.experienceMonthStar}
@@ -2269,8 +2296,11 @@ console.log(callingTracker.contactNumber);
           </div>
           <div className="update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
-              <label>Current CTC(LPA)</label>
-              <div className="update-calling-tracker-two-input-container">
+              <label>Current CTC (LPA)</label>
+              <div className="update-calling-tracker-two-input-container setDisplayblockfornumtoword">
+                <div className="displayflexfornumtoword">
+                  
+             
                 <div>
                   <div className="setDisplayFlexForUpdateForm">
                     <input
@@ -2294,6 +2324,7 @@ console.log(callingTracker.contactNumber);
                   {errors.currentCTCLakh && (
                     <div className="error-message">{errors.currentCTCLakh}</div>
                   )}
+                  
                 </div>
                 <div>
                   <input
@@ -2309,11 +2340,30 @@ console.log(callingTracker.contactNumber);
                     inputMode="numeric"
                   />
                 </div>
+
+                </div>
+
+                <div className="convertnumtowordstext">
+  {(callingTracker.lineUp.currentCTCLakh > 0 || callingTracker.lineUp.currentCTCThousand > 0) && (
+    <span>
+      {convertNumberToWords(
+        callingTracker.lineUp.currentCTCLakh,
+        callingTracker.lineUp.currentCTCThousand
+      )}
+    </span>
+  )}
+</div>
+
+
               </div>
+              
+              
             </div>
+            
             <div className="update-calling-tracker-field">
               <label>Expected CTC (LPA)</label>
-              <div className="update-calling-tracker-two-input-container">
+              <div className="update-calling-tracker-two-input-container setDisplayblockfornumtoword">
+              <div className="displayflexfornumtoword">
                 <div>
                   <div className="setDisplayFlexForUpdateForm">
                     <input
@@ -2354,6 +2404,19 @@ console.log(callingTracker.contactNumber);
                     inputMode="numeric"
                   />
                 </div>
+</div>
+
+<div className="convertnumtowordstext">
+  {(callingTracker.lineUp.expectedCTCLakh > 0 || callingTracker.lineUp.expectedCTCThousand > 0) && (
+    <span>
+      {convertNumberToWords(
+        callingTracker.lineUp.expectedCTCLakh,
+        callingTracker.lineUp.expectedCTCThousand
+      )}
+    </span>
+  )}
+</div>
+
               </div>
             </div>
           </div>
@@ -2445,8 +2508,9 @@ console.log(callingTracker.contactNumber);
                   justifyContent: "space-between",
                 }}
               >
+                <div className="intresteddiv">
                 <select
-                  className="update-calling-tracker-two-input"
+                  className="update-calling-tracker-two-input newwidthforintrestedselecttag"
                   name="selectYesOrNo"
                   placeholder="Candidate Interested"
                   value={callingTracker?.selectYesOrNo}
@@ -2469,10 +2533,12 @@ console.log(callingTracker.contactNumber);
                         Not Eligibel Not Interested
                       </option>
                 </select>
+                </div>
+               
 
                 <div
                   style={{
-                    marginRight: "10%",
+                    width:"100%"
                   }}
                 >
                   {/* line 1784 added by sahil karnekar date 21-10-2024 */}
@@ -2482,6 +2548,7 @@ console.log(callingTracker.contactNumber);
                     name="lineUp.finalStatus"
                     value={callingTracker?.lineUp.finalStatus}
                     onChange={handleChange}
+                    className="newwidthforselectfinalstatus"
                     // required={callingTracker.selectYesOrNo === "Interested"}
                   >
                      <option value="" disabled>

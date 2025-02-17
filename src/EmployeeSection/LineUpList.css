@@ -59,7 +59,7 @@
   padding-left: 15px;
   padding-right: 15px;
   cursor: pointer;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   background-color: var(--primary-button-bg);
   color: var(--button-txt-color);
   border: 1px solid var(--primary-border);

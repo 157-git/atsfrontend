@@ -492,7 +492,7 @@ const UpdateResponseFrom = ({
                 </tr>
               ))}
               <tr className="border-b">
-                <td className="p-2 text-xs sm:text-base"></td>
+                <td className="p-2 text-xs sm:text-base">{data.length +1}</td>
                 {data.length > 0 ? (
                   <td className="p-2">
                     <select

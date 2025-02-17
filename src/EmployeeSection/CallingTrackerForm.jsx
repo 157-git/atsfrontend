@@ -1454,7 +1454,7 @@ const CallingTrackerForm = ({
 
               <div className="calling-tracker-field">
                 <label>Job Id</label>
-                <div className="calling-tracker-two-input-container">
+                <div className="calling-tracker-two-input-container newalignstyleforincentivesandjdid">
                   <div className="calling-tracker-two-input">
                     {/* this line added by sahil date 22-10-2024 */}
                     <div className="setRequiredStarDiv">
@@ -1497,6 +1497,7 @@ const CallingTrackerForm = ({
                       value={callingTracker.incentive}
                       type="text"
                       onChange={handleIncentiveChange}
+                      readOnly
                     />
                   </div>
                 </div>
