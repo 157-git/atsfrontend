@@ -25,7 +25,7 @@ const encryptParams = (id, type) => {
 
 // Generate encodedParams for secure URL
 const encodedParams = encryptParams(employeeId, userType);
-const shareUrl = `http://localhost:3000/157-careers/${encodedParams}/applicant-form`;
+const shareUrl = `http://rg.157careers.in/157-careers/${encodedParams}/applicant-form`;
 
   // Share using Web Share API
   const handleShareLink = async () => {

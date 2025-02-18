@@ -20,7 +20,7 @@ import InterviewPreviousQuestion from "./interviewPreviousQuestion";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
 // this libraries added by sahil karnekar date 21-10-2024
-import { Button, Flex, Progress, Rate, TimePicker, Upload } from "antd";
+import { Button, Flex, message, notification, Progress, Rate, TimePicker, Upload } from "antd";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSocket } from "../EmployeeDashboard/socket";
@@ -131,6 +131,8 @@ const CallingTrackerForm = ({
   const [displayProgress, setDisplayProgress] = useState(false);
   const [candidateData, setCandidateData] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [isConfirmationPending, setIsConfirmationPending] = useState(false);
+const [displayCallingRemarkOthersInput, setDisplayCallingRemarkOthersInput] = useState(false);
 
   const handleCloseForm = () => {
     setIsFormVisible(false);
@@ -142,7 +144,6 @@ const CallingTrackerForm = ({
 
   useEffect(() => {
     if (initialData) {
-      console.log(initialData);
 
       const updatedCallingTracker = { ...initialCallingTrackerState };
       const updatedLineUpData = { ...initialLineUpState };
@@ -236,7 +237,7 @@ const CallingTrackerForm = ({
     } else {
       delete errors.candidateEmail;
     }
-    if (!callingTracker.callingFeedback) {
+    if (!callingTracker.callingFeedback || callingTracker.callingFeedback === "others") {
       errors.callingFeedback = "Calling Feedback is required";
     }
     return errors;
@@ -294,19 +295,23 @@ const CallingTrackerForm = ({
         const data = response.data;
         setCandidateData(data);
         setIsFormVisible(true);
-        console.log("API Response:", response.data);
       } catch (error) {
         console.error("API Error:", error);
       }
     }
   };
+console.log(errors);
 
   const handleSourceNameOthers = (e) => {
     const { name, value } = e.target;
     callingTracker.sourceName = value;
     setErrors((prevErrors) => ({ ...prevErrors, ["sourceName"]: "" }));
   };
-
+const handleCallingFeedBackOthers = (e)=>{
+  const { name, value } = e.target;
+  callingTracker.callingFeedback = value;
+  setErrors((prevErrors) => ({ ...prevErrors, ["callingFeedback"]: "" }));
+}
   const handleRatingsChange = (value) => {
     setCallingTracker((prev) => ({
       ...prev,
@@ -332,6 +337,12 @@ const CallingTrackerForm = ({
       setDisplaySourceOthersInput(true);
     } else if (name === "sourceName" && value !== "others") {
       setDisplaySourceOthersInput(false);
+    }
+
+    if (name === "callingFeedback" && value === "others") {
+      setDisplayCallingRemarkOthersInput(true);
+    }else if(name === "callingFeedback" && value !== "others"){
+      setDisplayCallingRemarkOthersInput(false);
     }
 
     if (name === "candidateEmail") {
@@ -373,7 +384,7 @@ const CallingTrackerForm = ({
     setCallingTracker({ ...callingTracker, [name]: value });
     if (!startTime) {
       setStartTime(Date.now());
-      console.log("timmer Start");
+
     }
     if (name === "fullAddress") {
       setStartPoint(value);
@@ -491,6 +502,10 @@ const CallingTrackerForm = ({
   const handleSubmit = async (e) => {
     setShowConfirmation(false);
     e.preventDefault();
+    if (isConfirmationPending) {
+      message.error("Please confirm overwrite before proceeding.");
+      return;
+    }
 
     if (errorForYOP !== "") {
       setErrorForYOP("Please select a valid year of passing.");
@@ -528,9 +543,7 @@ const CallingTrackerForm = ({
       const timeTaken = (endTime - startTime) / 1000; // Time in seconds
       const minutes = Math.floor(timeTaken / 60);
       const seconds = Math.floor(timeTaken % 60);
-      console.log(
-        `Time taken to fill the form: ${minutes} minutes and ${seconds} seconds`
-      );
+
       formFillingTime = `${minutes} minutes and ${seconds} seconds`;
     }
 
@@ -578,7 +591,6 @@ const CallingTrackerForm = ({
       } else if (userType === "TeamLeader") {
         dataToUpdate.callingTracker.teamLeader = { teamLeaderId: employeeId };
       }
-      console.log(dataToUpdate);
 
       const response = await axios.post(
         `${API_BASE_URL}/calling-tracker/${employeeId}/${userType}`,
@@ -644,15 +656,13 @@ const CallingTrackerForm = ({
       setSubmited(false);
       setLoading(false);
       if (error.response) {
-        console.log("Error Response:", error.response);
         toast.error(
           "Error: " + error.response.data.message || "An error occurred"
         );
       } else if (error.request) {
-        console.log("Error Request 09 --- :", error.request);
         toast.error("No response received from the server");
       } else {
-        console.log("Error Message  09 --- :", error.message);
+
         toast.error("An error occurred: " + error.message);
       }
     } finally {
@@ -669,9 +679,7 @@ const CallingTrackerForm = ({
       );
 
       if (response.status === 200 || response.status === 204) {
-        console.log(
-          `Data with candidateId ${candidateId} deleted successfully.`
-        );
+
         // toast.success("Candidate Data Transfered Succefully...");
       } else {
         console.warn(`Unexpected response status: ${response.status}`);
@@ -700,9 +708,7 @@ const CallingTrackerForm = ({
       );
 
       if (response.status === 200 || response.status === 204) {
-        console.log(
-          `Data with candidateId ${candidateId} deleted successfully.`
-        );
+
         // toast.success("Candidate Data Transfered Succefully...");
       } else {
         console.warn(`Unexpected response status: ${response.status}`);
@@ -836,7 +842,7 @@ const CallingTrackerForm = ({
   };
 
   // line 612 to 727 added by sahil karnekar upload resume and autofill date 30-10-2024
-
+  let tempData ;
   const handleUploadAndSetData = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -860,7 +866,9 @@ const CallingTrackerForm = ({
       }
 
       const data = await response.json();
-      setResumeResponse(data);
+    tempData = data;
+    setResumeResponse(data);
+     
     } catch (error) {
       console.error("Error uploading file:", error);
     } finally {
@@ -906,44 +914,113 @@ const CallingTrackerForm = ({
     return gender === "Male" || gender === "Female" ? gender : "";
   };
 
-  const setResumeResponse = (data) => {
-    // Set common fields
-    setCallingTracker((prevState) => ({
-      ...prevState,
-      candidateName: data.candidateName,
-      candidateEmail: data.candidateEmail,
-      currentLocation: data.currentLocation,
-      contactNumber: `${data.contactNumber}`,
-    }));
-    setLineUpData((prevState) => ({
-      ...prevState,
-      extraCertification: data.extraCertification,
-      relevantExperience: data.relevantExperience,
-      companyName: data.companyName,
-      dateOfBirth: formatDateString(data.dateOfBirth),
-      gender: validateGender(data.gender),
-      qualification: data.qualification,
-      resume: data.resume,
-    }));
 
-    // Check if currentLocation matches a predefined option
-    if (!predefinedLocations.includes(data.currentLocation)) {
-      setIsOtherLocationSelected(true); // Show the "Other" input field
+  // const setResumeResponse = (data) => {
+  //   // Set common fields
+  //   setCallingTracker((prevState) => ({
+  //     ...prevState,
+  //     candidateName: data.candidateName,
+  //     candidateEmail: data.candidateEmail,
+  //     currentLocation: data.currentLocation,
+  //     contactNumber: `${data.contactNumber}`,
+  //   }));
+  //   setLineUpData((prevState) => ({
+  //     ...prevState,
+  //     extraCertification: data.extraCertification,
+  //     relevantExperience: data.relevantExperience,
+  //     companyName: data.companyName,
+  //     dateOfBirth: formatDateString(data.dateOfBirth),
+  //     gender: validateGender(data.gender),
+  //     qualification: data.qualification,
+  //     resume: data.resume,
+  //   }));
+
+  //   // Check if currentLocation matches a predefined option
+  //   if (!predefinedLocations.includes(data.currentLocation)) {
+  //     setIsOtherLocationSelected(true); // Show the "Other" input field
+  //   } else {
+  //     setIsOtherLocationSelected(false); // No additional input needed
+  //   }
+  // };
+
+
+  const setResumeResponse = (data) => {
+    // Fields to check in existing state
+    const hasExistingData =
+      callingTracker.candidateName !== "" ||
+      callingTracker.candidateEmail !== "" ||
+      callingTracker.currentLocation !== "" ||
+      callingTracker.contactNumber !== "" ||
+      lineUpData.extraCertification !== "" ||
+      lineUpData.relevantExperience !== "" ||
+      lineUpData.companyName !== "" ||
+      lineUpData.dateOfBirth !== "" ||
+      lineUpData.gender !== "" ||
+      lineUpData.qualification !== "" 
+      // lineUpData.resume;
+
+    const updateFields = () => {
+      setCallingTracker((prevState) => ({
+        ...prevState,
+        candidateName: data.candidateName,
+        candidateEmail: data.candidateEmail,
+        currentLocation: data.currentLocation,
+        contactNumber: `${data.contactNumber}`,
+      }));
+      setLineUpData((prevState) => ({
+        ...prevState,
+        extraCertification: data.extraCertification,
+        relevantExperience: data.relevantExperience,
+        companyName: data.companyName,
+        dateOfBirth: formatDateString(data.dateOfBirth),
+        gender: validateGender(data.gender),
+        qualification: data.qualification,
+        // resume: data.resume,
+      }));
+  
+      // Check if currentLocation matches a predefined option
+      if (!predefinedLocations.includes(data.currentLocation)) {
+        setIsOtherLocationSelected(true);
+      } else {
+        setIsOtherLocationSelected(false);
+      }
+      setIsConfirmationPending(false);
+    };
+  
+    if (hasExistingData) {
+      // Show confirmation notification
+      setIsConfirmationPending(true);
+      notification.open({
+        message: "Confirm Overwrite",
+        description: "Existing data will be replaced. Do you want to proceed?",
+        duration: 0, // Keep open until user decides
+        btn: (
+          <div style={{ display: "flex", gap: "10px" }}>
+            <Button type="primary" onClick={() => { 
+              setIsConfirmationPending(false);
+              updateFields();
+              notification.destroy();
+            }}>
+              Yes
+            </Button>
+            <Button onClick={() => notification.destroy()}>No</Button>
+          </div>
+        ),
+      });
     } else {
-      setIsOtherLocationSelected(false); // No additional input needed
+      // Directly update fields if no existing data
+      updateFields();
     }
   };
   const [displaySameAsContactField, setDisplaySameAsContactField] =
     useState(false);
   const handleDisplaySameAsContactText = () => {
-    console.log("working");
-    console.log(callingTracker.contactNumber);
+
     if (callingTracker.contactNumber !== "") {
       setDisplaySameAsContactField(true);
     }
 
     if (callingTracker.contactNumber === undefined) {
-      console.log("Please Select Contact number First");
       setDisplaySameAsContactField(false);
     }
   };
@@ -1432,11 +1509,13 @@ const CallingTrackerForm = ({
 
                     {displaySourceOthersInput && (
                       <input
+                      className="applyborderforinputs"
                         type="text"
                         name="sourceNameOthers"
                         id=""
                         placeholder="Enter Source Name"
                         onChange={handleSourceNameOthers}
+                        maxLength={50}
                       />
                     )}
 
@@ -1601,7 +1680,20 @@ const CallingTrackerForm = ({
                     <select
                       className="plain-input"
                       name="callingFeedback"
-                      value={callingTracker.callingFeedback}
+                      // value={callingTracker.callingFeedback}
+                      value={
+                        callingTracker.callingFeedback === "" ||
+                        callingTracker.callingFeedback === "Call Done" ||
+                        callingTracker.callingFeedback === "Asked for Call Back" ||
+                        callingTracker.callingFeedback === "No Answer" ||
+                        callingTracker.callingFeedback === "Network Issue" ||
+                        callingTracker.callingFeedback === "Invalid Number" ||
+                        callingTracker.callingFeedback === "Need to call back" ||
+                        callingTracker.callingFeedback === "Do not call again" ||
+                        callingTracker.callingFeedback === "others"
+                          ? callingTracker.callingFeedback
+                          : "others"
+                      }
                       onChange={handleChange}
                     >
                       <option value="" disabled>
@@ -1623,10 +1715,27 @@ const CallingTrackerForm = ({
                       <option value="Do not call again">
                         Do not call again
                       </option>
+                      <option value="others">
+                        Others
+                      </option>
                       {/* <option value="Other">Other</option> */}
                     </select>
+                    {displayCallingRemarkOthersInput && (
+                      <input
+                      className="applyborderforinputs"
+                        type="text"
+                        name="callingFeedbackOthers"
+                        id=""
+                        placeholder="Enter Calling Feedback"
+                        onChange={handleCallingFeedBackOthers}
+                        maxLength={50}
+                      />
+                    )}
                     {/* this line added by sahil date 22-10-2024 */}
-                    {!callingTracker.callingFeedback && (
+                
+                    {(!callingTracker.callingFeedback ||
+                      callingTracker.callingFeedback === "others"
+                    ) && (
                       <span className="requiredFieldStar">*</span>
                     )}
                   </div>
@@ -2170,6 +2279,7 @@ const CallingTrackerForm = ({
                     <div className="setRequiredStarDiv">
                       {/* sahil karnekar line 1376 to 1420 */}
                       <input
+                       className="applyborderforinputs"
                         type="text"
                         min="1947"
                         name="yearOfPassing"
@@ -2324,6 +2434,7 @@ const CallingTrackerForm = ({
                     {/* this line added by sahil date 22-10-2024 */}
                     <div className="setRequiredStarDiv">
                       <input
+                       className="applyborderforinputs"
                         type="text"
                         name="experienceYear"
                         value={lineUpData.experienceYear}
@@ -2355,6 +2466,7 @@ const CallingTrackerForm = ({
                     {/* this line added by sahil date 22-10-2024 */}
                     <div className="setRequiredStarDiv">
                       <input
+                       className="applyborderforinputs"
                         type="text"
                         name="experienceMonth"
                         value={lineUpData.experienceMonth}
@@ -2536,6 +2648,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                       {/* this line added by sahil date 22-10-2024 */}
                       <div className="setRequiredStarDiv">
                         <input
+                        className="applyborderforinputs"
                           type="text"
                           name="currentCTCLakh"
                           value={lineUpData.currentCTCLakh}
@@ -2560,6 +2673,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                     </div>
                     <div className="calling-tracker-two-input">
                       <input
+                       className="applyborderforinputs"
                         type="text"
                         name="currentCTCThousand"
                         value={lineUpData.currentCTCThousand}
@@ -2590,6 +2704,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                       {/* this line added by sahil date 22-10-2024 */}
                       <div className="setRequiredStarDiv">
                         <input
+                         className="applyborderforinputs"
                           type="text"
                           name="expectedCTCLakh"
                           value={lineUpData.expectedCTCLakh}
@@ -2614,6 +2729,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                     </div>
                     <div className="calling-tracker-two-input">
                       <input
+                       className="applyborderforinputs"
                         type="text"
                         name="expectedCTCThousand"
                         value={lineUpData.expectedCTCThousand}
@@ -2674,7 +2790,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                     <input
                       type="text"
                       name="offerLetterMsg"
-                      placeholder="Offer Letter Message"
+                      placeholder="Offer Letter Mes.."
                       value={lineUpData.offerLetterMsg}
                       // onChange={handleLineUpChange}
                       onChange={(e) =>
@@ -2731,8 +2847,8 @@ tooltips={desc} value={callingTracker.communicationRating}
                         Eligible But Not Interested
                       </option>
                       <option value="Not Eligible">Not Eligible</option>
-                      <option value="Not Eligibel Not Interested">
-                        Not Eligibel Not Interested
+                      <option value="Not Eligible Not Interested">
+                        Not Eligible Not Interested
                       </option>
                     </select>
                   </div>
