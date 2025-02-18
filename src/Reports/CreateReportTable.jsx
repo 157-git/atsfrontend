@@ -888,11 +888,6 @@ setLineUpDataReport(true);
                        </td>
                      ))}
                    </table>
-                           <div>
-                     <PieChart data={reportDataDatewise} userName={userName} finalStartDatePropState={finalStartDatePropState} finalEndDatePropState={finalEndDatePropState} />
-                    
-                   </div>
-         
                    <div className="shortlisted-candidates-css">
                      {LineUpDataReport && (
                        <ShortListedCandidates
@@ -900,6 +895,12 @@ setLineUpDataReport(true);
                        />
                      )}
                    </div>
+                           <div>
+                     <PieChart data={reportDataDatewise} userName={userName} finalStartDatePropState={finalStartDatePropState} finalEndDatePropState={finalEndDatePropState} />
+                    
+                   </div>
+         
+                   
                  </div>
                </div>
              </div>

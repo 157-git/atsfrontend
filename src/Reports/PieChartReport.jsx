@@ -99,7 +99,7 @@ const PieChart = ({
             <Pie className="newsahilcanvas" data={chartData} />
           </div>
 
-          <div className="newIndexDiv">
+          {/* <div className="newIndexDiv">
             <ul className="newUlListDisplayGrid">
               {categories.map((category, index) => (
                 <li key={index} className="listOfIndex">
@@ -116,7 +116,7 @@ const PieChart = ({
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

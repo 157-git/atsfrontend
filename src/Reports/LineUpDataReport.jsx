@@ -3,15 +3,44 @@
 
          import React, { useState, useEffect } from 'react';
          import "../Reports/LineUpDataReport.css";
+import FilterComponent from '../HandlerFunctions/FilterComponent';
          
          const ShortListedCandidates=({filteredLineUpItems})=>{
-
+            const [filteredData, setFilteredData] = useState(filteredLineUpItems);
+             const [filters, setFilters] = useState({});
             console.log(filteredLineUpItems);
             
          
-             
+             // Function to filter data based on selected filters
+  useEffect(() => {
+    let filtered = [...filteredLineUpItems];
+
+    Object.keys(filters).forEach((key) => {
+      if (filters[key].length > 0) {
+        filtered = filtered.filter((item) =>
+          filters[key].some((value) =>
+            item[key]?.toString().toLowerCase().includes(value.toString().toLowerCase())
+          )
+        );
+      }
+    });
+
+    setFilteredData(filtered);
+  }, [filters, filteredLineUpItems]);
+
+  const handleDataFromAppliedFillters =(filtersFromComp)=>{
+    setFilters(filtersFromComp);
+  }
+  const [showFilterSection, setShowFilterSection] = useState(false);
+  const toggleFilterSection = () => {
+    setShowFilterSection(!showFilterSection);
+  };
+
+
              return(
                  <div className="calling-list-container">
+               
+                   
                      <div className="search">
                      <i
                        className="fa-solid fa-magnifying-glass"
@@ -33,9 +62,28 @@
                          }}
                          >
                            
-         
+                           <button
+                className="lineUp-Filter-btn"
+                onClick={toggleFilterSection}
+              >
+                Filter <i className="fa-solid fa-filter"></i>
+              </button>
+            
                          </div>
+                         
                      </div>
+
+<div className="filter-dropdowns">
+    <div className="filter-section">
+    {
+                showFilterSection && (
+                    <FilterComponent data={filteredLineUpItems} appliedFillters={handleDataFromAppliedFillters}/>
+                )
+              }
+    </div>
+</div>
+
+
                      <div className="attendanceTableData">
                      <table id='shortlisted-table-id' className='attendance-table'>
                          <thead>
@@ -66,7 +114,7 @@
                          </thead>
                          <tbody>
                                     
-                             {filteredLineUpItems.map(((item,index) =>(
+                             {filteredData.map(((item,index) =>(
                                  <tr key={item.id} className='attendancerows'>
                                      <td className="tabledata ">{index +1}</td>
                                      <td className="tabledata ">{item.candidateId}</td>
