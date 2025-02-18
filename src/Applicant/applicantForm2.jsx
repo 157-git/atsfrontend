@@ -790,7 +790,7 @@ function ApplicantForm2({ loginEmployeeName }) {
           <div className="form-grid-December">
             <div className="form-column-December">
               <div className="form-group-December">
-                <label>Full Name</label>
+                <label>Full name</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faUser}
@@ -798,7 +798,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   />
                   <input
                     type="text"
-                    placeholder="Full Name"
+                    placeholder="Enter full name"
                     name="candidateName"
                     id="candidateName"
                     value={formData.candidateName}
@@ -814,7 +814,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Contact Number</label>
+                <label>Contact number</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faPhone}
@@ -822,7 +822,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   />
                   <input
                     type="number"
-                    placeholder="Contact Number"
+                    placeholder="Enter contact number"
                     name="contactNumber"
                     id="contactNumber"
                     value={formData.contactNumber}
@@ -838,7 +838,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Email Address</label>
+                <label>Email address</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faMailBulk}
@@ -847,7 +847,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   <input
                     type="email"
                     name="candidateEmail"
-                    placeholder="Candidate Email"
+                    placeholder="Enter email Id"
                     id="candidateEmail"
                     value={formData.candidateEmail}
                     onChange={handleChange}
@@ -862,7 +862,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Current Salary(LPA)</label>
+                <label>Current salary (LPA)</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faSackDollar}
@@ -919,7 +919,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Expected Salary(LPA)</label>
+                <label>Expected salary (LPA)</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faMoneyCheck}
@@ -1000,7 +1000,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Job Designation</label>
+                <label>Job designation</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faUserTie}
@@ -1024,7 +1024,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Current Location</label>
+                <label>Current location</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faLocation}
@@ -1032,7 +1032,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   />
                   <input
                     type="text"
-                    placeholder="Current Location"
+                    placeholder="Current location"
                     name="currentLocation"
                     id="currentLocation"
                     value={formData.currentLocation}
@@ -1049,7 +1049,7 @@ function ApplicantForm2({ loginEmployeeName }) {
 
             <div className="form-column-December">
               <div className="form-group-December">
-                <label>Preferred Location</label>
+                <label>Preferred location</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faLocationPin}
@@ -1059,7 +1059,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                     type="text"
                     name="lineUp.preferredLocation"
                     id="lineUp.preferredLocation"
-                    placeholder="Preferred Location"
+                    placeholder="Preferred location"
                     value={formData.lineUp.preferredLocation}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
@@ -1074,7 +1074,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Notice Period(Days)</label>
+                <label>Notice period (Days)</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faHourglassHalf}
@@ -1083,7 +1083,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   <input
                     type="text"
                     name="lineUp.noticePeriod"
-                    placeholder="Notice Period In Days"
+                    placeholder="Notice period in days"
                     value={formData.lineUp.noticePeriod}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
@@ -1096,7 +1096,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Availability For Interview</label>
+                <label>Availability for interview</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faCalendar}
@@ -1120,7 +1120,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Expected Joining Date</label>
+                <label>Expected joining date</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faClock}
@@ -1143,7 +1143,7 @@ function ApplicantForm2({ loginEmployeeName }) {
             )} */}
               </div>
               <div className="form-group-December">
-                <label>Total Experience (Years)</label>
+                <label>Total experience (Years)</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faKeyboard}
@@ -1151,7 +1151,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   />
                   <input
                     type="number"
-                    placeholder="Total Experience (Years)"
+                    placeholder="Total experience (Years)"
                     name="lineUp.experienceYear"
                     id="lineUp.experienceYear"
                     value={formData.lineUp.experienceYear}
@@ -1196,7 +1196,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Relevant Experience</label>
+                <label>Relevant experience</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faBriefcase}
@@ -1204,7 +1204,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   />
                   <input
                     type="number"
-                    placeholder="Relevant Experience"
+                    placeholder="Relevant experience"
                     name="lineUp.relevantExperience"
                     id="lineUp.relevantExperience"
                     value={formData.lineUp.relevantExperience}
@@ -1340,7 +1340,7 @@ function ApplicantForm2({ loginEmployeeName }) {
             <div className="form-column-December">
               <div className="form-group-December">
                 <div className="form-December-certificate">
-                  <label>Have You Done Any Courses And Certificates?</label>
+                  <label>Have you done any courses and certificates ? </label>
                   {formData.lineUp.certificates.map((cert, index) => (
                     <div key={index} className="certificate-item-December">
                       <div className="certificate-inputs-December-sub-div">
@@ -1352,13 +1352,16 @@ function ApplicantForm2({ loginEmployeeName }) {
                           <input
                             type="text"
                             name={`lineUp.certificates[${index}].certificateName`}
-                            placeholder="Certificate Name"
+                            placeholder="Certificate name"
                             value={cert.certificateName}
                             onChange={handleChange}
                             ref={(el) => (inputRefs.current[index * 2] = el)}
                           />
                         </div>
-                        <div className="input-with-icon-December" id="input-with-icon-December-certificates">
+                        <div
+                          className="input-with-icon-December"
+                          id="input-with-icon-December-certificates"
+                        >
                           <FontAwesomeIcon
                             icon={faUpload}
                             className="input-icon-December"
@@ -1403,7 +1406,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>BirthDate </label>
+                <label>Date of birth</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faBirthdayCake}
@@ -1427,7 +1430,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label> Upload Resume</label>
+                <label> Upload resume</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faUpload}
@@ -1454,7 +1457,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Upload Photo</label>
+                <label>Upload photo</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faPhotoFilm}
@@ -1482,7 +1485,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Are You Holding Any Offer?</label>
+                <label>Are you holding any offer ? </label>
                 <div className="radio-group">
                   <FormControlLabel
                     control={
@@ -1521,7 +1524,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               {formData.lineUp.holdingAnyOffer && (
                 <div className="offer-details">
                   <div className="form-group-December">
-                    <label>Company Name</label>
+                    <label>Company name</label>
                     <div className="input-with-icon-December">
                       <FontAwesomeIcon
                         icon={faIndustry}
@@ -1549,7 +1552,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   <br></br>
 
                   <div className="form-group-December">
-                    <label>Offer Salary (LPA)</label>
+                    <label>Offer salary (LPA)</label>
                     <div className="input-with-icon-December">
                       <FontAwesomeIcon
                         icon={faWallet}
@@ -1578,7 +1581,7 @@ function ApplicantForm2({ loginEmployeeName }) {
 
                   <div className="form-group-December">
                     <div className="negotiation">
-                      <label>Are You Ready To Negotiation?</label>
+                      <label>Are you ready to negotiation ? </label>
                       <div className="radio-group">
                         <FormControlLabel
                           control={
@@ -1624,7 +1627,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   <br></br>
 
                   <div className="form-group-December">
-                    <label>Offer Details</label>
+                    <label>Offer details</label>
                     <textarea
                       name="lineUp.offerdetails"
                       placeholder="Details about the offer"
@@ -1644,8 +1647,8 @@ function ApplicantForm2({ loginEmployeeName }) {
               )}
 
               <div className="input-with-icon-December">
-                <div className="form-group-December" style={{width:"400px" }}>
-                  <label>Do you have a WhatsApp number?</label>
+                <div className="form-group-December" style={{ width: "400px" }}>
+                  <label>Do you have a WhatsApp number ? </label>
                   <div className="radio-group">
                     <FormControlLabel
                       control={
@@ -1683,7 +1686,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   {/* Conditionally render the WhatsApp number input field when 'Yes' is selected */}
                   {whatsappSelected && (
                     <div className="form-group-December">
-                      <label>WhatsApp Number:</label>
+                      <label>WhatsApp number:</label>
                       <div className="input-with-icon-December">
                         <FontAwesomeIcon
                           icon={faPhone}
