@@ -2279,6 +2279,7 @@ const handleCallingFeedBackOthers = (e)=>{
                     <div className="setRequiredStarDiv">
                       {/* sahil karnekar line 1376 to 1420 */}
                       <input
+                       className="applyborderforinputs"
                         type="text"
                         min="1947"
                         name="yearOfPassing"
