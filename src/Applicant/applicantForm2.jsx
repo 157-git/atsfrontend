@@ -754,9 +754,9 @@ function ApplicantForm2({ loginEmployeeName }) {
 
       case "lineUp.relevantExperience":
         if (!stringValue) {
-          error = "Enter Your Relevant Experience";
-        } else if (!/^[0-9]+(\.[0-9]+)?$/.test(value)) {
-          error = "Only numbers are allowed";
+          error = "Enter Relevant Experience";
+        } else if (!/^[a-zA-Z0-9\s,.'-]*$/.test(value)) {
+          error = "Enter Relevant Experience";
         }
         break;
 
@@ -1203,7 +1203,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                     className="input-icon-December"
                   />
                   <input
-                    type="number"
+                    type="text"
                     placeholder="Relevant experience"
                     name="lineUp.relevantExperience"
                     id="lineUp.relevantExperience"

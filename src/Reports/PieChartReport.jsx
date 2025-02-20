@@ -62,7 +62,7 @@ const PieChart = ({
   };
   return (
     <>
-      <div className="mainChartContainer" id="divToPrint">
+      <div className="mainChartContainer setwidthacordingtoadjustchartsclass" id="divToPrint">
         <div className="tablecont">
           <div className="tabledivmain">
             <div className="infodiv">

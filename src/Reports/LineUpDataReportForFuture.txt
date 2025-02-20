@@ -1,10 +1,50 @@
-/* Name:-Prachi Parab Component:-Line Up Data Report data page 
+ /* Name:-Prachi Parab Component:-Line Up Data Report data page 
          End LineNo:-4 to 124 Date:-05/07 */
+
          import React, { useState, useEffect } from 'react';
          import "../Reports/LineUpDataReport.css";
+import FilterComponent from '../HandlerFunctions/FilterComponent';
+import { Bar } from 'react-chartjs-2';
 
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
+
+// Register necessary Chart.js components
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
          
          const ShortListedCandidates=({filteredLineUpItems})=>{
+            const [filteredData, setFilteredData] = useState(filteredLineUpItems);
+             const [filters, setFilters] = useState({});
+            console.log(filteredLineUpItems);
+            
+         
+             // Function to filter data based on selected filters
+  useEffect(() => {
+    let filtered = [...filteredLineUpItems];
+
+    console.log(filters);
+    
+    Object.keys(filters).forEach((key) => {
+      if (filters[key].length > 0) {
+        filtered = filtered.filter((item) =>
+          filters[key].some((value) =>
+            item[key]?.toString().toLowerCase().includes(value.toString().toLowerCase())
+          )
+        );
+      }
+    });
+
+    setFilteredData(filtered);
+  }, [filters, filteredLineUpItems]);
+
+  const handleDataFromAppliedFillters =(filtersFromComp)=>{
+    
+    setFilters(filtersFromComp);
+  }
+  const [showFilterSection, setShowFilterSection] = useState(false);
+
+  const toggleFilterSection = () => {
+    setShowFilterSection(!showFilterSection);
+  };
 
 
              return(
@@ -22,7 +62,37 @@
                              Shortlisted Candidate
                          </h5>
          
+                         {/* <div
+                         style={{
+                             display:"flex",
+                             gap:"5px",
+                             justifyContent:"center",
+                             alignItems:"center",
+                             paddingBottom:"5px",
+                         }}
+                         >
+                           
+                           <button
+                className="lineUp-Filter-btn"
+                onClick={toggleFilterSection}
+              >
+                Filter <i className="fa-solid fa-filter"></i>
+              </button>
+            
+                         </div> */}
+                         
                      </div>
+
+{/* <div className="filter-dropdowns">
+    <div className="filter-section">
+    {
+                showFilterSection && (
+                    <FilterComponent data={filteredLineUpItems} appliedFillters={handleDataFromAppliedFillters}/>
+                )
+              }
+    </div>
+</div> */}
+
 
                      <div className="attendanceTableData">
                      <table id='shortlisted-table-id' className='attendance-table'>
@@ -54,7 +124,7 @@
                          </thead>
                          <tbody>
                                     
-                             {filteredLineUpItems.map(((item,index) =>(
+                             {filteredData.map(((item,index) =>(
                                  <tr key={item.id} className='attendancerows'>
                                      <td className="tabledata ">{index +1}</td>
                                      <td className="tabledata ">{item.candidateId}</td>
@@ -87,6 +157,8 @@
          
                      </table>
                      </div>
+
+                   
          
                  </div>
              )

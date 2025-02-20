@@ -242,4 +242,25 @@
           background: var(--primary-button-hover);
           color: var(--button-txt-hover-color);
         }
-      
+      .setdisplayflext{
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+      .displaycenterbuttons{
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+
+      }
+      .setmarginforchartbuttons{
+margin-right: 10px;
+      }
+      .generatechartbuttondiv{
+        display: flex;
+        justify-content: right;
+      }
+      .minimizeheighclass{
+        height: fit-content;
+        max-height: 90vh;
+      }

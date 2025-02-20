@@ -27,47 +27,46 @@ const UpdateResponseFrom = ({
   const [errors, setErrors] = useState({});
   const [performanceId, setPerformanceId] = useState();
 
- const [formData, setFormData] = useState(() => {
-  let baseFormData = {
-    interviewRound: "",
-    interviewResponse: "",
-    commentForTl: "",
-    responseUpdatedDate: "",
-    nextInterviewDate: "",
-    nextInterviewTiming: "",
-    interviewerName:"",
-    requirementId,
-    callingTracker: { candidateId: candidateId },
-  };
+  const [formData, setFormData] = useState(() => {
+    let baseFormData = {
+      interviewRound: "",
+      interviewResponse: "",
+      commentForTl: "",
+      responseUpdatedDate: "",
+      nextInterviewDate: "",
+      nextInterviewTiming: "",
+      interviewerName: "",
+      requirementId,
+      callingTracker: { candidateId: candidateId },
+    };
 
-   if (passedJobRole === "Recruiters") {
-    console.log( " passedJobRole In Recruiters " + passedJobRole);
-    baseFormData = {
-      ...baseFormData,
-      employee: { employeeId: passedEmployeeId },
-      teamLeader: null, 
-      manager:null
-    };
-  } else if (passedJobRole === "TeamLeader") {
-    console.log( " passedJobRole In TeamLeader " + passedJobRole);
-    baseFormData = {
-      ...baseFormData,
-      teamLeader: { teamLeaderId: passedEmployeeId },
-      employee: null, 
-      manager:null
-    };
-  } else if (passedJobRole == "Manager"){
-    console.log( " passedJobRole In Manager " + passedJobRole);
-    baseFormData = {
-      ...baseFormData,
-      manager:{ managerId: passedEmployeeId },
-      teamLeader: null,
-      employee: null, 
-      
-    };
-  }
-  return baseFormData;
-});
+    if (passedJobRole === "Recruiters") {
+      console.log(" passedJobRole In Recruiters " + passedJobRole);
+      baseFormData = {
+        ...baseFormData,
+        employee: { employeeId: passedEmployeeId },
+        teamLeader: null,
+        manager: null,
+      };
+    } else if (passedJobRole === "TeamLeader") {
+      console.log(" passedJobRole In TeamLeader " + passedJobRole);
+      baseFormData = {
+        ...baseFormData,
+        teamLeader: { teamLeaderId: passedEmployeeId },
+        employee: null,
+        manager: null,
+      };
+    } else if (passedJobRole == "Manager") {
+      console.log(" passedJobRole In Manager " + passedJobRole);
+      baseFormData = {
+        ...baseFormData,
+        manager: { managerId: passedEmployeeId },
+        teamLeader: null,
+        employee: null,
+      };
+    }
+    return baseFormData;
+  });
 
   useEffect(() => {
     fetchDataToUpdate();
@@ -152,15 +151,16 @@ const UpdateResponseFrom = ({
         }
       }
 
-       // Create the new object to emit
-       const emitObject = {
-        employeeId:employeeId,
+      // Create the new object to emit
+      const emitObject = {
+        employeeId: employeeId,
         userType: userType,
         interviewRound: formData.interviewRound,
         interviewResponse: formData.interviewResponse || "", // Fallback to empty string if not set
         // we will change this letter
         commentForTl: getFormattedDateTime(),
-        responseUpdatedDate: formData.responseUpdatedDate || formatDateToIST(new Date()),
+        responseUpdatedDate:
+          formData.responseUpdatedDate || formatDateToIST(new Date()),
         nextInterviewDate: formData.nextInterviewDate || "",
         nextInterviewTiming: formData.nextInterviewTiming || "",
         requirementId: formData.requirementId || "",
@@ -183,7 +183,7 @@ const UpdateResponseFrom = ({
         console.log("Emit object --- :", emitObject);
         socket.emit("interview_schedule", emitObject);
         const firstResponse = response.data;
-        console.log(firstResponse); 
+        console.log(firstResponse);
 
         const responseUpdatedDateStr = firstResponse.responseUpdatedDate;
         const responseUpdatedDate = new Date(responseUpdatedDateStr);
@@ -203,7 +203,6 @@ const UpdateResponseFrom = ({
           (absoluteTimeDifference % (1000 * 60 * 60)) / (1000 * 60)
         );
         const difference = `${daysDifference} days, ${hoursDifference} hours, and ${minutesDifference} minutes.`;
-
 
         if (data.length === 0) {
           console.log(formData.interviewRound);
@@ -237,7 +236,7 @@ const UpdateResponseFrom = ({
         } else {
           console.log(formData.interviewRound);
           console.log(formData.interviewResponse);
-          
+
           const additionalData = {
             interviewRoundsList: [
               {
@@ -295,23 +294,23 @@ const UpdateResponseFrom = ({
   };
 
   return (
-    <div className="update-response-modal" >
+    <div className="update-response-modal">
       <div className="mb-4">
         <h6 className="text-lg font-semibold">
           {data.length > 0 ? "Update Interview Response" : "Schedule Interview"}
         </h6>
       </div>
       {/* line 222 to 233 updated by sahil karnekar date 14-11-2024 */}
-      <form onSubmit={handleSubmit}
-      style={{
-          overflowX:"scroll"
-      }}
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          overflowX: "scroll",
+        }}
       >
         <div
           className="overflow-x-auto"
           style={{
             width: "fit-content",
-          
           }}
         >
           <table className="min-w-full border-collapse table-auto">
@@ -333,14 +332,14 @@ const UpdateResponseFrom = ({
                   </th>
                 )}
 
-<th className="p-2 font-semibold whitespace-nowrap">
-  Comment for TL
-</th>
+                <th className="p-2 font-semibold whitespace-nowrap">
+                  Comment for TL
+                </th>
                 <th className="p-2 font-semibold whitespace-nowrap">
                   Update Date
                 </th>
                 <th className="p-2 font-semibold whitespace-nowrap">
-                Interviewer Name
+                  Interviewer Name
                 </th>
                 <th className="p-2 font-semibold whitespace-nowrap">
                   Interview Date
@@ -348,7 +347,6 @@ const UpdateResponseFrom = ({
                 <th className="p-2 font-semibold whitespace-nowrap">
                   Interview Time
                 </th>
-              
               </tr>
             </thead>
             <tbody>
@@ -426,7 +424,6 @@ const UpdateResponseFrom = ({
                       <option value="Selected">Selected</option>
                       <option value="Rejected">Rejected</option>
                       <option value="Hold">Hold</option>
-                      
                     </select>
                   </td>
                   <td className="p-2">
@@ -501,11 +498,10 @@ const UpdateResponseFrom = ({
                       }}
                     />
                   </td>
-                
                 </tr>
               ))}
               <tr className="border-b">
-                <td className="p-2 text-xs sm:text-base">{data.length +1}</td>
+                <td className="p-2 text-xs sm:text-base">{data.length + 1}</td>
                 {data.length > 0 ? (
                   <td className="p-2">
                     <select
@@ -544,7 +540,6 @@ const UpdateResponseFrom = ({
                       <option value="Selected">Selected</option>
                       <option value="Rejected">Rejected</option>
                       <option value="Hold">Hold</option>
-                   
                     </select>
                     {errors.interviewRound && (
                       <div className="error-message">
@@ -576,7 +571,6 @@ const UpdateResponseFrom = ({
                       <option value="Selected">Selected</option>
                       <option value="Rejected">Rejected</option>
                       <option value="Hold">Hold</option>
-                      
                     </select>
                     {errors.interviewRound && (
                       <div className="error-message">
@@ -617,7 +611,6 @@ const UpdateResponseFrom = ({
                       <option value="Selected">Selected</option>
                       <option value="Rejected">Rejected</option>
                       <option value="Hold">Hold</option>
-                     
                     </select>
                     {errors.interviewResponse && (
                       <div className="error-message">
@@ -659,19 +652,19 @@ const UpdateResponseFrom = ({
                   )}
                 </td>
                 <td className="p-2">
-                    <input
-                      className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
-                      type="text"
-                      name="interviewerName"
-                      value={formData.interviewerName}
-                      onChange={handleInputChange}
-                      placeholder="Enter Name"
-                      style={{
-                        boxShadow: `1px 1px 4px var(--Bg-color)`,
-                        lineHeight: "1",
-                      }}
-                    />
-                  </td>
+                  <input
+                    className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
+                    type="text"
+                    name="interviewerName"
+                    value={formData.interviewerName}
+                    onChange={handleInputChange}
+                    placeholder="Enter Name"
+                    style={{
+                      boxShadow: `1px 1px 4px var(--Bg-color)`,
+                      lineHeight: "1",
+                    }}
+                  />
+                </td>
                 <td className="p-2">
                   <input
                     className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
@@ -698,7 +691,6 @@ const UpdateResponseFrom = ({
                     }}
                   />
                 </td>
-                
               </tr>
             </tbody>
           </table>

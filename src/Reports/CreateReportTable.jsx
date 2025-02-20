@@ -17,6 +17,8 @@ import { PDFDocument } from "pdf-lib";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import Loader from "../EmployeeSection/loader";
+import BarChartReportComponent from "./BarChartReportComponent";
+import ChartFilterComponent from "./chartFilterComponent";
 
 const LineUpDataDummy = [
   {
@@ -635,6 +637,14 @@ const Attendance = ({
   finalEndDatePropState,
   loginEmployeeName,
 }) => {
+  console.log(
+    selectedIdsProp,
+    selectedJobRole,
+    finalStartDatePropState,
+    finalEndDatePropState,
+    loginEmployeeName
+  );
+
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -643,6 +653,8 @@ const Attendance = ({
   const [FilterLineUpItems, setFilterLineUpItems] = useState("selected");
   const [filterDataCategory, setfilterDataCategory] = useState();
   const { userType } = useParams();
+  const [displayChartFilterCompo, setDisplayChartFilterComp] = useState(false);
+  const [displayBarChartComp, setDisplayBarChartComp] = useState(false);
   // Prachi
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState("");
@@ -811,17 +823,27 @@ const Attendance = ({
   console.log(newIdsString);
 
   const handleFilterDataInterview = async (category) => {
-    const response = await axios.get(
+    console.log(category);
+
+    console.log(
       `${API_BASE_URL}/candidate-category/${category}/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`
     );
-    console.log(
+
+    const response = await axios.get(
       `${API_BASE_URL}/candidate-category/${category}/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`
     );
 
     console.log(response.data);
     setNewData(response.data);
     setLineUpDataReport(true);
+    setDisplayChartFilterComp(true);
   };
+  const handlesetShowChartProp = (showchartprop) => {
+    setDisplayBarChartComp(showchartprop);
+  };
+  const [selectedSubCategoriesFromProp, setSelectedSubCategoriesFromProp] =
+    useState([]);
+  const handleSetSelectedSubCategoriesProp = () => {};
 
   return (
     <div className="report-App-after">
@@ -847,8 +869,8 @@ const Attendance = ({
 
           <div className="btnShareAndDownload">
             {/* <button className="shareDownloadbtn" onClick={handleRadioChange}>
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m640-280-57-56 184-184-184-184 57-56 240 240-240 240ZM80-200v-160q0-83 58.5-141.5T280-560h247L383-704l57-56 240 240-240 240-57-56 144-144H280q-50 0-85 35t-35 85v160H80Z"/></svg>
-                     </button> */}
+                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m640-280-57-56 184-184-184-184 57-56 240 240-240 240ZM80-200v-160q0-83 58.5-141.5T280-560h247L383-704l57-56 240 240-240 240-57-56 144-144H280q-50 0-85 35t-35 85v160H80Z"/></svg>
+                              </button> */}
             <button className="shareDownloadbtn" onClick={handleDownloadPdf}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -887,29 +909,56 @@ const Attendance = ({
               <td
                 className="tabledata"
                 key={index}
-                onClick={() => handleFilterDataInterview(reportData.category)}
+                onClick={() =>
+                  handleFilterDataInterview(reportData?.category?.split(" ")[0])
+                }
               >
                 {reportData.count}
                 &nbsp;{" "}
                 <i class="fa fa-caret-down" aria-hidden="true">
                   {" "}
                 </i>
-                {/* {reportData.category} */}
               </td>
             ))}
           </table>
-          <div className="shortlisted-candidates-css">
-            {LineUpDataReport && (
-              <ShortListedCandidates filteredLineUpItems={newData} />
+          <div className="newdivformakechartsflex">
+            <div className="shortlisted-candidates-css">
+              {LineUpDataReport && (
+                <ShortListedCandidates filteredLineUpItems={newData} />
+              )}
+            </div>
+            {displayChartFilterCompo && (
+              <div className="filterschartdiv">
+                <ChartFilterComponent
+                  filteredLineUpItems={newData}
+                  setShowChartPropFromFilterComp={handlesetShowChartProp}
+                  setSelectedSubCategoriesProp={
+                    handleSetSelectedSubCategoriesProp
+                  }
+                />
+              </div>
             )}
-          </div>
-          <div>
-            <PieChart
-              data={reportDataDatewise}
-              userName={userName}
-              finalStartDatePropState={finalStartDatePropState}
-              finalEndDatePropState={finalEndDatePropState}
-            />
+
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                overflowX: "scroll",
+              }}
+            >
+              <PieChart
+                data={reportDataDatewise}
+                userName={userName}
+                finalStartDatePropState={finalStartDatePropState}
+                finalEndDatePropState={finalEndDatePropState}
+              />
+              {displayBarChartComp && (
+                <BarChartReportComponent
+                  filteredLineUpItems={newData}
+                  showChart={displayBarChartComp}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>
