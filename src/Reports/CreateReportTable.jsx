@@ -830,10 +830,7 @@ useEffect(()=>{
                console.error('Error creating and merging PDF:', error);
                setLoading(false);
              }
-           };
-
-          
-                   
+           };         
            const closeModal = () => {
              // Clear the PDF URL and close the modal
              setPdfUrl("");

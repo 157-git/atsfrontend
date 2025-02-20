@@ -155,9 +155,6 @@ setAllImagesForTeamLeaders([]);
     setFinalStartDatePropState(startDate);
     setFinalEndDatePropState(endDate);
 
-    // API Call
-    console.log(`${API_BASE_URL}/report-count/${userIdForApi}/${role}/${startDate}/${endDate}`);
-    
     try {
       const response = await axios.get(
         `${API_BASE_URL}/report-count/${userIdForApi}/${role}/${startDate}/${endDate}`

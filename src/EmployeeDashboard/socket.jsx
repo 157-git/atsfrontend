@@ -1,18 +1,18 @@
+import { io } from "socket.io-client";
+import { CHAT_BASE_URL } from "../api/api";
 
-  import { io } from "socket.io-client";
-  import { CHAT_BASE_URL } from "../api/api";
+let socket;
 
-  let socket;
+export const initializeSocket = (userId, userType) => {
+  const query = { userId, role: userType };
 
-  export const initializeSocket = (userId, userType) => {
-    const query = { userId, role: userType };
+  socket = io(`${CHAT_BASE_URL}:9092`, {
+    query
+  });
+  return socket;
+};
 
-    // const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-    // socket = io(`${protocol}://rg.157careers.in:9092`, { query});
-    
-    socket = io(`${CHAT_BASE_URL}:9092`, { query});
+export const getSocket = () => socket;
 
-    return socket;
-  };
-
-  export const getSocket = () => socket;
+// const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+// socket = io(`${protocol}://rg.157careers.in:9092`, { query});

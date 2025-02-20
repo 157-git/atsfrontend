@@ -5,46 +5,45 @@ import { API_BASE_URL } from "../api/api";
 // line 6 added by sahil karnekar date 23-10-2024
 import { toast } from "react-toastify";
 
-
+/* NotePad from line 01 to 244 Updated on 12-02-2025 By Krishna Kulkarni */
 const NotePad = () => {
   const [message, setMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState(false);
   const [notePadData, setNotePadData] = useState([]);
   const [editMessageId, setEditMessageId] = useState(null);
   const [error, setError] = useState(null);
-  const [isOverflowing, setIsOverflowing] = useState(false);
-  // state is added by sahil karnekar date 23-10-2024
-  const [requiredError , setRequiredError] = useState("");
+  const [requiredError, setRequiredError] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchNotePadData();
   }, []);
-  const { employeeId } = useParams();
 
-  // line 25 to 31 updated by sahil karnekar date 23-10-2024
+  const { employeeId,userType } = useParams();
   const now = new Date();
   const Date1 = new Date().toISOString().slice(0, 10);
-  const time = now.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true, // 12-hour format
+  const time = now.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
   });
   const timeDate = Date1 + " " + time;
 
   const saveMessage = async (e) => {
     e.preventDefault();
-// line 37 to 42 added by sahil karnekar date 23-10-2024
+    // line 37 to 42 added by sahil karnekar date 23-10-2024
     if (message.trim() === "") {
       setRequiredError("Please Enter Your Note ⚠️");
       return;
-    }else if(message){
+    } else if (message) {
       setRequiredError("");
     }
 
     const noteData = {
-      employeeId,
       message,
       timeDate,
+      employeeId : employeeId,
+      jobRole : userType
     };
     try {
       let url = editMessageId
@@ -69,7 +68,7 @@ const NotePad = () => {
         // line 70 to 73 added by sahil karnekar date 23-10-2024
         if (editMessageId) {
           toast.success("Note updated successfully!");
-          document.getElementById("editModal").style.display = "none"
+          document.getElementById("editModal").style.display = "none";
         }
       } else {
         throw new Error("Failed to save note");
@@ -82,15 +81,13 @@ const NotePad = () => {
 
   const fetchNotePadData = async () => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/notesData`
-      );
+      const response = await fetch(`${API_BASE_URL}/notesData/${employeeId}/${userType}`);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
       setNotePadData(data);
-      setError(null); // Reset error state on successful fetch
+      setError(null);
     } catch (error) {
       console.error("Failed to fetch NotePad data:", error);
       setError("Failed to fetch NotePad data. Please try again later.");
@@ -129,54 +126,25 @@ const NotePad = () => {
         }
       );
       if (response.ok) {
-        // Update notePadData by removing the deleted note
         setNotePadData(
           notePadData.filter((note) => note.messageId !== messageId)
         );
-        // Show success message or perform any other action upon successful deletion
-        console.log("Note deleted successfully");
       } else {
         throw new Error("Failed to delete note");
       }
     } catch (error) {
       console.error("Failed to delete note:", error);
-      // Show error message or perform any other action upon failed deletion
       setError("Failed to delete note. Please try again later.");
-    }
-  };
-  // To handle tooltip
-
-  const handleMouseOver = (event) => {
-    const tableData = event.currentTarget;
-    const tooltip = tableData.querySelector(".tooltip");
-    const tooltiptext = tableData.querySelector(".tooltiptext");
-
-    if (tooltip && tooltiptext) {
-      const textOverflowing =
-        tableData.offsetWidth < tableData.scrollWidth ||
-        tableData.offsetHeight < tableData.scrollHeight;
-      if (textOverflowing) {
-        const rect = tableData.getBoundingClientRect();
-        tooltip.style.top = `${rect.top - 10}px`;
-        tooltip.style.left = `${rect.left + rect.width / 100}px`;
-        tooltip.style.visibility = "visible";
-      } else {
-        tooltip.style.visibility = "hidden";
-      }
-    }
-  };
-
-  const handleMouseOut = (event) => {
-    const tooltip = event.currentTarget.querySelector(".tooltip");
-    if (tooltip) {
-      tooltip.style.visibility = "hidden";
     }
   };
 
   return (
-    <div className="note-container">
+    <div className="note-container ndewcontenerstyle">
       <div className="note-pad-form">
-        <form className="note-form-div" onSubmit={saveMessage}>
+        <form
+          className="note-form-div newmarginremoveform"
+          onSubmit={saveMessage}
+        >
           <textarea
             className="note-pad-text"
             placeholder="Enter your comment here........."
@@ -185,89 +153,73 @@ const NotePad = () => {
             cols="30"
             rows="10"
           ></textarea>
-
           {successMessage && (
-            <div className="notepad-alert-success" role="alert">
+            <div className="notepad-alert-success">
               Your Note Saved Successfully 😊!
             </div>
           )}
-          {/* line 195 to 199 added by sahil karnekar date 23-10-2024 */}
-          {(message === "") && (
-            <div className="notepad-alert-success" role="alert">
-              {requiredError}
-            </div>
+          {message === "" && (
+            <div className="notepad-alert-success">{requiredError}</div>
           )}
-          {error && (
-            <div className="alert alert-danger" role="alert">
-              {error}
-            </div>
-          )}
+          {error && <div className="alert alert-danger">{error}</div>}
           <button className="note-submit-btn" type="submit">
             Save Comment
           </button>
         </form>
       </div>
-      <div className="notePadData">
-        <div>
-          {notePadData.length > 0 ? (
-            <table className="notepad-table-data">
-              <thead className="table-heading-rows">
-                <tr className="table-heading-rows-data">
-                  <th>Sr.No</th>
-                  <th>Message</th>
-                  <th>Time & Date</th>
-                  <th>Edit</th>
-                  <th>Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {notePadData.map((note, index) => (
-                  <tr key={index}>
-                    {/* line 227 updated by sahil karnekar date 23-10-2024 */}
-                    <td>{index+1}</td>
-                    <td
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                      className="tabledata"
-                    >
-                      {note.message}
-                      <div
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                        className="tooltip"
-                      >
-                        <span className="tooltiptext">{note.message}</span>
-                      </div>
-                    </td>
-                    <td>{note.timeDate}</td>
-                    <td>
-                      <button
-                        className="note-submit-btn"
-                        onClick={() => updateMessage(note.messageId)}
-                      >
-                        Edit
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        className="note-submit-btn"
-                        onClick={() => deleteMessage(note.messageId)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p
-            // this p tag updated by sahil karnekar date 23-10-2024
-            style={{textAlign: "center",fontWeight:"500"}}
-            >No notes available.</p>
-          )}
-        </div>
+      <div className="table-containe newstylingfortable1">
+        <table className="notepad-table-data">
+          <thead>
+            <tr>
+              <th>Sr.No</th>
+              <th>Message</th>
+              <th>Time & Date</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {notePadData.map((note, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{note.message}</td>
+                <td>{note.timeDate}</td>
+                <td>
+                  <button
+                    className="note-submit-btn"
+                    id="edit-btn"
+                    onClick={() => updateMessage(note.messageId)}
+                  >
+                    <i className="fas fa-pencil-alt"></i>
+                  </button>
+                </td>
+                <td>
+                  <button
+                    className="note-submit-btn"
+                    id="dlt-btn"
+                    onClick={() => deleteMessage(note.messageId)}
+                  >
+                    <i className="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={() => setIsModalOpen(false)}>
+              &times;
+            </span>
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            ></textarea>
+          </div>
+        </div>
+      )}
       <div id="editModal" className="notepad-modal">
         <div className="notepad-modal-content">
           <span
@@ -285,10 +237,10 @@ const NotePad = () => {
               cols="200"
               rows="10"
               // line 288 added by sahil karnekar date 23-10-2024
-              style={{width: "-webkit-fill-available"}}
+              style={{ width: "-webkit-fill-available" }}
             ></textarea>
             <button type="submit" className="note-submit-btn">
-              Save Changes
+              Update Changes
             </button>
           </form>
         </div>

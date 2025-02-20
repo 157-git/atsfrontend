@@ -30,8 +30,6 @@
 
 .form-select-div {
   height: 600px;
-  padding: 10px;
-  margin: 10px;
 }
 
 
@@ -200,10 +198,7 @@
   overflow-wrap: break-word; /* Break content properly */
 }
 
-#table-row {
-  border-collapse: collapse; /* Remove gaps between table cells */
-  word-break: break-word; /* Ensure text breaks if too long */
-}
+
 
 /* Arshad Attar Added This CSS ON 13-02-2025 */
 .after-head {

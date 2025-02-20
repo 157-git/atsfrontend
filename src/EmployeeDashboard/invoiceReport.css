@@ -84,7 +84,7 @@
 .filter-dropdown:hover .dropdown-content {
   display: block;
   width: 100%;
-  z-index: 99999999999999999;
+  /* z-index: 99999999999999999; */
 }
 
 /* Style the checkbox input */

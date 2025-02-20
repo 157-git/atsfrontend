@@ -1,6 +1,5 @@
- /* Name:-Prachi Parab Component:-Line Up Data Report data page 
+/* Name:-Prachi Parab Component:-Line Up Data Report data page 
          End LineNo:-4 to 124 Date:-05/07 */
-
          import React, { useState, useEffect } from 'react';
          import "../Reports/LineUpDataReport.css";
 

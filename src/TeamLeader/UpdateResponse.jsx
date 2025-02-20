@@ -89,14 +89,12 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
         `${API_BASE_URL}/update-response-data/${employeeId}/${userType}?searchTerm=${filterValue}&page=${page}&size=${size}`
       );
       const data = await res.json();
-
       setCallingList(data.content);
       setFilteredCallingList(data.content);
       setUpdateResponseList(data.content);
       setSearchCount(data.length);
       setTotalRecords(data.totalElements);
       setFormClosed(false);
-
       // setLoading(false);
       setLoading(false);
     } catch (err) {
@@ -231,6 +229,8 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     setShowResumeModal(false);
   };
 
+  console.log(filteredCallingList);
+
   const handleUpdateClick = (
     candidateId,
     employeeId,
@@ -244,6 +244,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     console.log(requirementId + "Requirement Id");
     console.log(candidateName + "Candidate Name");
     console.log(employeeName + "Employee Name");
+    console.log(jobRole + "jobRole ");
 
     setShowUpdateResponseID(candidateId);
     setShowEmployeeId(employeeId);
@@ -437,7 +438,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           </div>
                         </div>
                       </div>
-                      <div style={{ display: "flex",width:"90%",paddingLeft:"180px" }} >
+                      <div
+                        style={{
+                          display: "flex",
+                          width: "90%",
+                          paddingLeft: "180px",
+                        }}
+                      >
                         <h1 style={{ color: "gray" }}>Update Response</h1>
                       </div>
                       <div>
