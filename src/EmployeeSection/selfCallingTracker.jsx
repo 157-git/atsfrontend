@@ -29,7 +29,7 @@ const CallingList = ({
   fromCallingList,
 }) => {
   const [callingList, setCallingList] = useState([]);
-  const { employeeId } = useParams();
+  const { employeeId,userType } = useParams();
   const employeeIdnew = parseInt(employeeId);
 
   const [showUpdateCallingTracker, setShowUpdateCallingTracker] =
@@ -70,7 +70,6 @@ const CallingList = ({
     recruiterJobRole: "",
   });
 
-  const { userType } = useParams();
   // added by sahil karnekar date 4-12-2024
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);

@@ -41,16 +41,29 @@ const UpdateResponseFrom = ({
   };
 
    if (passedJobRole === "Recruiters") {
+    console.log( " passedJobRole In Recruiters " + passedJobRole);
     baseFormData = {
       ...baseFormData,
       employee: { employeeId: passedEmployeeId },
       teamLeader: null, 
+      manager:null
     };
   } else if (passedJobRole === "TeamLeader") {
+    console.log( " passedJobRole In TeamLeader " + passedJobRole);
     baseFormData = {
       ...baseFormData,
       teamLeader: { teamLeaderId: passedEmployeeId },
       employee: null, 
+      manager:null
+    };
+  } else if (passedJobRole == "Manager"){
+    console.log( " passedJobRole In Manager " + passedJobRole);
+    baseFormData = {
+      ...baseFormData,
+      manager:{ managerId: passedEmployeeId },
+      teamLeader: null,
+      employee: null, 
+      
     };
   }
   return baseFormData;
@@ -310,29 +323,29 @@ const UpdateResponseFrom = ({
               }}
             >
               <tr>
-                <th className="p-2 font-semibold text-xs sm:text-base">No</th>
-                <th className="p-2 font-semibold text-xs sm:text-base">
+                <th className="p-2 font-semibold whitespace-nowrap">No</th>
+                <th className="p-2 font-semibold whitespace-nowrap">
                   Interview Round
                 </th>
                 {data.length > 0 && (
-                  <th className="p-2 font-semibold text-xs sm:text-base">
+                  <th className="p-2 font-semibold whitespace-nowrap">
                     Interview Response
                   </th>
                 )}
 
-                <th className="p-2 font-semibold text-xs sm:text-base">
-                  Comment for TL
-                </th>
-                <th className="p-2 font-semibold text-xs sm:text-base">
+<th className="p-2 font-semibold whitespace-nowrap">
+  Comment for TL
+</th>
+                <th className="p-2 font-semibold whitespace-nowrap">
                   Update Date
                 </th>
-                <th className="p-2 font-semibold text-xs sm:text-base">
+                <th className="p-2 font-semibold whitespace-nowrap">
                 Interviewer Name
                 </th>
-                <th className="p-2 font-semibold text-xs sm:text-base">
+                <th className="p-2 font-semibold whitespace-nowrap">
                   Interview Date
                 </th>
-                <th className="p-2 font-semibold text-xs sm:text-base">
+                <th className="p-2 font-semibold whitespace-nowrap">
                   Interview Time
                 </th>
               
@@ -371,7 +384,7 @@ const UpdateResponseFrom = ({
                       <option value="Shortlisted For L1 Round">L1 Round</option>
                       <option value="Shortlisted For L2 Round">L2 Round</option>
                       <option value="Shortlisted For L3 Round">L3 Round</option>
-                      {/* lines added by sahil karnekar this lines added in all the selectors  */}
+                      <option value="Back Out">Back Out</option>
                       <option value="Selected">Selected</option>
                       <option value="Rejected">Rejected</option>
                       <option value="Hold">Hold</option>

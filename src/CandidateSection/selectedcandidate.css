@@ -48,12 +48,13 @@
     position: sticky;
     
   }
-  tr{
+
+  /* tr{
     margin-right: 10px;
-    /* width: 1500px; */
     border: 1px solid gray;
     white-space: nowrap;
   }
+   */
   .selected-candidate-table .selectedcandidaterows:hover {
     background-color: #F2F2F2; 
   }

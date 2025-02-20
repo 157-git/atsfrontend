@@ -140,7 +140,7 @@ const AfterSelection = ({
       }
       const data = await response.json();
       console.log(data);
-      
+
       setCandidateData(data); // Set state with the fetched data
     } catch (error) {
       console.error("Failed to fetch candidate data:", error);
@@ -170,7 +170,7 @@ const AfterSelection = ({
         }
         const data = await response.json();
         console.log(data);
-        
+
         setShortListedData(data);
       } catch (error) {
         toast.error("An error occurred while fetching the data");
@@ -201,7 +201,6 @@ const AfterSelection = ({
     }
   };
 
-  
   const handleOfferLetterReceivedChange = async (e) => {
     const received = e.target.value;
     setOfferLetterReceived(received);
@@ -368,7 +367,6 @@ const AfterSelection = ({
     }
   };
 
- 
   const clearForm = () => {
     setMailReceived("");
     setAdharCardUploaded(null);
@@ -385,7 +383,6 @@ const AfterSelection = ({
     setJoinDate("");
   };
 
- 
   const [formData, setFormData] = useState({
     employeeId: employeeId,
     candidateId: candidateId,
@@ -505,19 +502,31 @@ const AfterSelection = ({
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     console.log(id, value);
-    
+
     setFormData((prev) => ({ ...prev, [id]: value }));
 
-    if (["offerLetterReceived", "offerLetterAccepted", "joinStatus", "joinDate"].includes(id)) {
-        const updateData = 
-            id === "offerLetterReceived" ? { issueOfferLetter: new Date() } :
-            id === "offerLetterAccepted" ? { letterResponse: new Date() } :
-            id === "joinStatus" ? { joiningProcess: new Date() } :
-            id === "joinDate" ? { joinDate: value } : {}; // Use `value` instead of `formData.joinDate` to get the updated value
+    if (
+      [
+        "offerLetterReceived",
+        "offerLetterAccepted",
+        "joinStatus",
+        "joinDate",
+      ].includes(id)
+    ) {
+      const updateData =
+        id === "offerLetterReceived"
+          ? { issueOfferLetter: new Date() }
+          : id === "offerLetterAccepted"
+          ? { letterResponse: new Date() }
+          : id === "joinStatus"
+          ? { joiningProcess: new Date() }
+          : id === "joinDate"
+          ? { joinDate: value }
+          : {}; // Use `value` instead of `formData.joinDate` to get the updated value
 
-        updatePerformanceForAfterSelectionapi(updateData, performanceId);
+      updatePerformanceForAfterSelectionapi(updateData, performanceId);
     }
-};
+  };
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
@@ -525,7 +534,10 @@ const AfterSelection = ({
       ...prev,
       [name]: name === "optionalDocuments" ? Array.from(files) : files[0],
     }));
-    updatePerformanceForAfterSelectionapi({sendingDocument: new Date()}, performanceId);
+    updatePerformanceForAfterSelectionapi(
+      { sendingDocument: new Date() },
+      performanceId
+    );
   };
 
   const handleSubmitJoiningDetails = async (e) => {
@@ -911,7 +923,6 @@ const AfterSelection = ({
                           </select>
                         </div>
 
-                        
                         <div className="after-mail-div">
                           <div className="after-lable-div">
                             <label
@@ -954,7 +965,9 @@ const AfterSelection = ({
                             <option value="Not Joined">Not Joined</option>
                             <option value="Joined">Joined</option>
                             <option value="Drop Out">Drop Out</option>
-                            <option value="Hold From Candidate">Hold From Candidate</option>
+                            <option value="Hold From Candidate">
+                              Hold From Candidate
+                            </option>
                             <option value="To Join">To Join</option>
                             <option value="No Show">No Show</option>
                           </select>
@@ -1040,16 +1053,16 @@ const AfterSelection = ({
                       >
                         <tbody className="table-group-divider">
                           <tr id="table-row">
-                            <th scope="col"> Recruiter Name:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap"> Recruiter Name:</th>
                             <td className="inquiry-table-td">
                               {candidateData.recruiterName}
                             </td>
-                            <th scope="col">Candidate Name:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">Candidate Name:</th>
                             <td className="inquiry-table-td">
                               {" "}
                               {candidateData.candidateName}
                             </td>
-                            <th scope="col"> Email:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap"> Email:</th>
                             <td className="inquiry-table-td">
                               {" "}
                               {candidateData.candidateEmail}
@@ -1057,16 +1070,16 @@ const AfterSelection = ({
                           </tr>
 
                           <tr id="table-row">
-                            <th scope="col"> Date of Birth:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap"> Date of Birth:</th>
                             <td className="inquiry-table-td">
                               {candidateData.lineUp.dateOfBirth}
                             </td>
-                            <th scope="col">Placed Company:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">Placed Company:</th>
                             <td className="inquiry-table-td">
                               {" "}
                               {candidateData.requirementCompany}
                             </td>
-                            <th scope="col"> Location:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap"> Location:</th>
                             <td className="inquiry-table-td">
                               {" "}
                               {candidateData.currentLocation}
@@ -1074,33 +1087,33 @@ const AfterSelection = ({
                           </tr>
 
                           <tr id="table-row">
-                            <th scope="col">Gender</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">Gender</th>
                             <td className="inquiry-table-td">
                               {candidateData.lineUp.gender}
                             </td>
-                            <th scope="col">Total Experience:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">Total Experience:</th>
                             <td className="inquiry-table-td">
                               {" "}
                               {candidateData.experienceYear} Year{" "}
                               {candidateData.experienceMonth} Month{" "}
                             </td>
-                            <th scope="col">Source Name :</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">Source Name :</th>
                             <td className="inquiry-table-td">
                               {candidateData.sourceName}
                             </td>
                           </tr>
 
                           <tr id="table-row">
-                            <th scope="col">Position:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">Position:</th>
                             <td className="inquiry-table-td">
                               {candidateData.jobDesignation}
                             </td>
-                            <th scope="col">Contact Number:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">Contact Number:</th>
                             <td className="inquiry-table-td">
                               {" "}
                               {candidateData.contactNumber}{" "}
                             </td>
-                            <th scope="col"> Alternate Number:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap"> Alternate Number:</th>
                             <td className="inquiry-table-td">
                               {" "}
                               {candidateData.alternateNumber}
@@ -1115,14 +1128,14 @@ const AfterSelection = ({
                               {joiningDate ? joiningDate : "Fetching..."}
                             </td>
 
-                            <th scope="col">Date After 90 Days :</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">Date After 90 Days :</th>
                             <td className="inquiry-table-td">
                               {dateAfter90days
                                 ? dateAfter90days
                                 : "Calculating..."}
                             </td>
 
-                            <th scope="col">Days Remaining :</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">Days Remaining :</th>
                             <td
                               className="inquiry-table-td"
                               style={{
@@ -1310,7 +1323,6 @@ const AfterSelection = ({
                     )}
 
                     <center>
-                     
                       <button
                         type="submit"
                         style={{ marginTop: "25px" }}
