@@ -17,6 +17,8 @@ import { PDFDocument } from 'pdf-lib';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import Loader from "../EmployeeSection/loader";
+import BarChartReportComponent from "./BarChartReportComponent";
+import ChartFilterComponent from "./chartFilterComponent";
          
          const LineUpDataDummy = [
            {
@@ -628,6 +630,8 @@ import Loader from "../EmployeeSection/loader";
          ];
          
          const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole,finalStartDatePropState,finalEndDatePropState, loginEmployeeName }) => {
+          console.log(selectedIdsProp, selectedJobRole,finalStartDatePropState,finalEndDatePropState, loginEmployeeName);
+          
            const [attendanceData, setAttendanceData] = useState([]);
            const [loading, setLoading] = useState(false);
            const [error, setError] = useState(null);
@@ -636,6 +640,8 @@ import Loader from "../EmployeeSection/loader";
            const [FilterLineUpItems, setFilterLineUpItems] = useState("selected");
            const [filterDataCategory, setfilterDataCategory] = useState();
            const {userType} = useParams();
+           const [displayChartFilterCompo, setDisplayChartFilterComp]=useState(false);
+           const [displayBarChartComp, setDisplayBarChartComp] = useState(false);
            // Prachi
            const [modalIsOpen, setModalIsOpen] = useState(false);
            const [pdfUrl, setPdfUrl] = useState("");
@@ -805,14 +811,21 @@ console.log(newIdsString);
 
 
          const handleFilterDataInterview = async(category)=>{
+          console.log(category);
+          
+          console.log(`${API_BASE_URL}/candidate-category/${category}/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`);
+          
 const response = await axios.get(`${API_BASE_URL}/candidate-category/${category}/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`);
-console.log(`${API_BASE_URL}/candidate-category/${category}/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`);
+
 
 console.log(response.data);
 setNewData(response.data);
 setLineUpDataReport(true);
+setDisplayChartFilterComp(true);
          }
-
+const handlesetShowChartProp = (showchartprop)=>{
+  setDisplayBarChartComp(showchartprop);
+}
          
            return (
              <div className="report-App-after"
@@ -879,15 +892,15 @@ setLineUpDataReport(true);
                      </thead>
          
                      {reportDataDatewise.map((reportData, index) => (
-                       <td className="tabledata" key={index} onClick={()=>handleFilterDataInterview(reportData.category)}>
+                       <td className="tabledata" key={index} onClick={()=>handleFilterDataInterview(reportData?.category?.split(" ")[0])}>
                           {reportData.count}
                          &nbsp; <i class="fa fa-caret-down" aria-hidden="true"> </i>
-                          
-                          {/* {reportData.category} */}
+                        
          
                        </td>
                      ))}
                    </table>
+                   <div className="newdivformakechartsflex">
                    <div className="shortlisted-candidates-css">
                      {LineUpDataReport && (
                        <ShortListedCandidates
@@ -895,10 +908,31 @@ setLineUpDataReport(true);
                        />
                      )}
                    </div>
-                           <div>
+                   {
+                    displayChartFilterCompo && (
+                      <div className="filterschartdiv">
+                      <ChartFilterComponent filteredLineUpItems={newData} setShowChartPropFromFilterComp={handlesetShowChartProp}/>
+                     </div>
+                    )
+                   }
+                 
+                           <div style={{
+                            display:"flex",
+                            width:"100%",
+                            overflowX:"scroll"
+                           }}>
                      <PieChart data={reportDataDatewise} userName={userName} finalStartDatePropState={finalStartDatePropState} finalEndDatePropState={finalEndDatePropState} />
+                    {
+                      displayBarChartComp && (
+<BarChartReportComponent filteredLineUpItems={newData}
+showChart={displayBarChartComp}
+/>
+                      )
+                    }
                     
                    </div>
+                   </div>
+                 
          
                    
                  </div>
