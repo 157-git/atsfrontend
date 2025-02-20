@@ -8,24 +8,21 @@
          const ShortListedCandidates=({filteredLineUpItems})=>{
 
 
-             return(
-                 <div className="calling-list-container">
-               
-                   
-                     <div className="search">
-                     <i
-                       className="fa-solid fa-magnifying-glass"
-                     //   onClick={() => setShowSearchBar(!showSearchBar)}
-                       style={{ margin: "10px", width: "auto", fontSize: "15px" }}
-                     ></i>
-         
-                         <h5 style={{color:"gray",paddingTop:"5px"}}>
-                             Shortlisted Candidate
-                         </h5>
-         
-                     </div>
 
-                     <div className="attendanceTableData">
+             return(
+                 <div className="calling-list-container"
+                 style={{
+                    height:"fit-content"
+                 }}
+                 >
+
+                     <div className="attendanceTableData"
+                     style={{
+                        height:"fit-content",
+                        maxHeight:"50vh",
+    overflow:"scroll"
+                     }}
+                     >
                      <table id='shortlisted-table-id' className='attendance-table'>
                          <thead>
                              <tr className='attencerows-head'>
@@ -88,6 +85,9 @@
          
                      </table>
                      </div>
+
+
+                   
          
                  </div>
              )

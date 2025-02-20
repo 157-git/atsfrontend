@@ -62,37 +62,8 @@ const PieChart = ({
   };
   return (
     <>
-      <div className="mainChartContainer setwidthacordingtoadjustchartsclass" id="divToPrint">
-        <div className="tablecont">
-          <div className="tabledivmain">
-            <div className="infodiv">
-              <p>{userName}</p>
-              <p>{currentDate}</p>
-              <p>
-                This Report Data Is Generated From {finalStartDatePropState} to{" "}
-                {finalEndDatePropState}
-              </p>
-            </div>
-            <table className="textAlignCenterForTableOfReport">
-              <thead>
-                <tr>
-                  <td className="forborderfortds widthSetForTds">Categories</td>
-                  <td className="widthSetForTds">Counts</td>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => (
-                  <tr>
-                    <td className="forborderfortds widthSetForTds">
-                      {item.category}
-                    </td>
-                    <td className="widthSetForTds">{item.count}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div className="mainChartContainer setwidthacordingtoadjustchartsclass" >
+      
 
         <div className="subdivforcharts">
           <div className="piecontainer">

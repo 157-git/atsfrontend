@@ -156,6 +156,8 @@ setAllImagesForTeamLeaders([]);
     setFinalEndDatePropState(endDate);
 
     // API Call
+    console.log(`${API_BASE_URL}/report-count/${userIdForApi}/${role}/${startDate}/${endDate}`);
+    
     try {
       const response = await axios.get(
         `${API_BASE_URL}/report-count/${userIdForApi}/${role}/${startDate}/${endDate}`
@@ -165,7 +167,6 @@ setAllImagesForTeamLeaders([]);
       setOpenReport(true);
     } catch (error) {
       console.error("Error fetching report data:", error);
-      // Provide user feedback here (e.g., toast)
     }
 
     setLoading(false);

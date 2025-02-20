@@ -17,8 +17,11 @@ import { PDFDocument } from 'pdf-lib';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import Loader from "../EmployeeSection/loader";
-import BarChartReportComponent from "./BarChartReportComponent";
-import ChartFilterComponent from "./chartFilterComponent";
+import BarChartComponent from "./BarChartComponent";
+import FilterComponent from "./FilterComponent";
+import { separateBySpace } from "../HandlerFunctions/separateBySpace";
+import PrintTableComp from "./PrintTableComp";
+import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
          
          const LineUpDataDummy = [
            {
@@ -640,8 +643,6 @@ import ChartFilterComponent from "./chartFilterComponent";
            const [FilterLineUpItems, setFilterLineUpItems] = useState("selected");
            const [filterDataCategory, setfilterDataCategory] = useState();
            const {userType} = useParams();
-           const [displayChartFilterCompo, setDisplayChartFilterComp]=useState(false);
-           const [displayBarChartComp, setDisplayBarChartComp] = useState(false);
            // Prachi
            const [modalIsOpen, setModalIsOpen] = useState(false);
            const [pdfUrl, setPdfUrl] = useState("");
@@ -742,12 +743,34 @@ useEffect(()=>{
            const handleDownloadPdf = async () => {
             setLoading(true);
              try {
+
+              
+              
+
+              const setDisplayBlockNewChartPrint = document.getElementsByClassName('setDisplayBlockNewChartPrint');
+              if (setDisplayBlockNewChartPrint.length > 0) {
+  
+                setDisplayBlockNewChartPrint[0].style.display = 'block';
+              }
+
+              const newclassforalignitemscenter = document.getElementsByClassName('newclassforalignitemscenter');
+              if (newclassforalignitemscenter.length > 0) {
+  
+                newclassforalignitemscenter[0].style.alignItems = 'end';
+              }
+
+              const forcharborderpage = document.getElementsByClassName('setchartsdiplayflex');
+              if (forcharborderpage.length > 0) {
+  
+                forcharborderpage[0].style.border = '2px solid black';
+                forcharborderpage[0].style.padding = '10px';
+              }
           
               const forPieWidthContainer = document.getElementsByClassName('mainChartContainer');
               if (forPieWidthContainer.length > 0) {
                 // forPieWidthContainer[0].style.display = 'block';
                 forPieWidthContainer[0].style.width = 'fit-content';
-                forPieWidthContainer[0].style.border = '2px solid black';
+                // forPieWidthContainer[0].style.border = '2px solid black';
                 forPieWidthContainer[0].style.padding = '10px';
               }
               const forPieWidthContainer1 = document.getElementsByClassName('tabledivmain');
@@ -778,15 +801,28 @@ useEffect(()=>{
               pdf.save("document.pdf");
                // Open the modal (if necessary)
 
+               if (forcharborderpage.length > 0) {
+  
+                forcharborderpage[0].style.border = 'none';
+                forcharborderpage[0].style.padding = 'none';
+              }
+              if (newclassforalignitemscenter.length > 0) {
+  
+                newclassforalignitemscenter[0].style.alignItems = 'center';
+              }
      if (forPieWidthContainer.length > 0) {
-      forPieWidthContainer[0].style.width = '100%';
-      forPieWidthContainer[0].style.border = 'none';
+      forPieWidthContainer[0].style.width = '50%';
+      // forPieWidthContainer[0].style.border = 'none';
       forPieWidthContainer[0].style.padding = 'none';
               }
               if (forPieWidthContainer1.length > 0) {
                 // forPieWidthContainer[0].style.display = 'block';
                 forPieWidthContainer1[0].style.display = 'none';
                
+              }
+              if (setDisplayBlockNewChartPrint.length > 0) {
+  
+                setDisplayBlockNewChartPrint[0].style.display = 'flex';
               }
                setModalIsOpen(true);
                setLoading(false);
@@ -809,23 +845,31 @@ console.log(selectedIdsProp);
 const newIdsString = selectedIdsProp.join(",");
 console.log(newIdsString);
 
+const [displaycreatechartbtn, setdisplaycreatechartbtn] = useState(false);
 
          const handleFilterDataInterview = async(category)=>{
           console.log(category);
           
-          console.log(`${API_BASE_URL}/candidate-category/${category}/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`);
-          
-const response = await axios.get(`${API_BASE_URL}/candidate-category/${category}/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`);
-
+        
+const response = await axios.get(`${API_BASE_URL}/candidate-category/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`, {
+  params: {
+    status: category,
+  },
+});
 
 console.log(response.data);
 setNewData(response.data);
 setLineUpDataReport(true);
-setDisplayChartFilterComp(true);
+setdisplaycreatechartbtn(true);
          }
-const handlesetShowChartProp = (showchartprop)=>{
-  setDisplayBarChartComp(showchartprop);
-}
+         const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubCategories, setSelectedSubCategories] = useState([]);
+         const handleFilterChange = (category, subCategories) => {
+          setSelectedCategory(category);
+          setSelectedSubCategories(subCategories);
+        };
+        console.log(reportDataDatewise);
+        
          
            return (
              <div className="report-App-after"
@@ -870,29 +914,22 @@ const handlesetShowChartProp = (showchartprop)=>{
                      </button>
               </div>
          
-                   <table className="report-attendance-table">
+         <div className="tabaledivforreport">
+         <table className="report-attendance-table">
                      <thead>
                        <tr className="attendancerows-head">
-                         <th className="attendanceheading">Selected</th>
-                         <th className="attendanceheading">Rejected</th>
-                         <th className="attendanceheading">LineUP</th>
-                         <th className="attendanceheading">Hold</th>
-                         <th className="attendanceheading">Dropout</th>
-                         <th className="attendanceheading">Join</th>
-                         <th className="attendanceheading">Not Join</th>
-                         <th className="attendanceheading">No Show</th>
-                         <th className="attendanceheading">Yet to Show</th>
-                         <th className="attendanceheading">Active</th>
-                         <th className="attendanceheading">Inactive</th>
-                         <th className="attendanceheading">L1</th>
-                  
-                         <th className="attendanceheading">L2</th>
-                         <th className="attendanceheading">L3</th>
+                        {
+                          reportDataDatewise.map((reportData, index)=>(
+<th key={index} className="attendanceheading">{separateBySpace(reportData.category)}</th>
+                          ))
+                        }
+                         
+                     
                        </tr>
                      </thead>
          
                      {reportDataDatewise.map((reportData, index) => (
-                       <td className="tabledata" key={index} onClick={()=>handleFilterDataInterview(reportData?.category?.split(" ")[0])}>
+                       <td className="tabledata" key={index} onClick={()=>handleFilterDataInterview(reportData?.category)}>
                           {reportData.count}
                          &nbsp; <i class="fa fa-caret-down" aria-hidden="true"> </i>
                         
@@ -900,6 +937,8 @@ const handlesetShowChartProp = (showchartprop)=>{
                        </td>
                      ))}
                    </table>
+         </div>
+                
                    <div className="newdivformakechartsflex">
                    <div className="shortlisted-candidates-css">
                      {LineUpDataReport && (
@@ -909,32 +948,24 @@ const handlesetShowChartProp = (showchartprop)=>{
                      )}
                    </div>
                    {
-                    displayChartFilterCompo && (
-                      <div className="filterschartdiv">
-                      <ChartFilterComponent filteredLineUpItems={newData} setShowChartPropFromFilterComp={handlesetShowChartProp}/>
-                     </div>
+                    displaycreatechartbtn && (
+<FilterComponent filteredLineUpItems={newData} onFilterChange={handleFilterChange} />
                     )
                    }
-                 
-                           <div style={{
-                            display:"flex",
-                            width:"100%",
-                            overflowX:"scroll"
-                           }}>
-                     <PieChart data={reportDataDatewise} userName={userName} finalStartDatePropState={finalStartDatePropState} finalEndDatePropState={finalEndDatePropState} />
-                    {
-                      displayBarChartComp && (
-<BarChartReportComponent filteredLineUpItems={newData}
-showChart={displayBarChartComp}
-/>
-                      )
-                    }
-                    
-                   </div>
-                   </div>
-                 
-         
                    
+                           <div className="setchartsdiplayflex" id="divToPrint">
+                           <PrintTableComp userName={userName} currentDate={getFormattedDateTime()} finalStartDatePropState={finalStartDatePropState} finalEndDatePropState={finalEndDatePropState} data={reportDataDatewise}/>
+                           <div className="setDisplayBlockNewChartPrint">
+                           <PieChart data={reportDataDatewise} userName={userName} finalStartDatePropState={finalStartDatePropState} finalEndDatePropState={finalEndDatePropState} />
+                    <BarChartComponent 
+                    selectedCategory={selectedCategory}
+                    selectedSubCategories={selectedSubCategories}
+                    filteredLineUpItems={newData}
+                    />
+                           </div>
+                     
+                   </div>
+                   </div>
                  </div>
                </div>
              </div>

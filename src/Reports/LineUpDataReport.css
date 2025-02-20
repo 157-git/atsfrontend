@@ -264,3 +264,10 @@ margin-right: 10px;
         height: fit-content;
         max-height: 90vh;
       }
+ .newclassforalignitemscenter{
+  display: flex;
+  align-items: center;
+ }
+ .newsetPositionrelative{
+margin-top: 10px;
+ }

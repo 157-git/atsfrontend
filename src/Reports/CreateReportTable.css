@@ -237,3 +237,15 @@
       .shareDownloadbtn{
         margin-right: 10px;
       }
+      .setchartsdiplayflex{
+        display: flex;
+        width: 100%;
+      }
+      .tabaledivforreport{
+        width: 100%;
+        overflow-x: scroll;
+        padding-bottom: 20px;
+      }
+      .setDisplayBlockNewChartPrint{
+        display: flex;
+      }

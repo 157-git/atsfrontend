@@ -82,8 +82,6 @@
 }
 .subdivforcharts{
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 50px;
 }
 .forborderfortds{
 border-right: 1px solid black;
@@ -117,4 +115,11 @@ border-right: 1px solid black;
 }
 .setwidthacordingtoadjustchartsclass{
   width: 50%;
+}
+.newsetPositionrelative{
+  position: relative;
+}
+.newsahilcanvas{
+  width: 500px;
+  height: 450px;
 }
