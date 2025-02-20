@@ -1,0 +1,15 @@
+.newcityfilter{
+    padding: 10px;
+}
+.newOptionDiv{
+    padding: 0;
+}
+.newFilterOptionReusable{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+.newinputclassmargin{
+    margin-right: 10px;
+}

@@ -1616,7 +1616,10 @@ const handleCallingFeedBackOthers = (e)=>{
                     <div className="setRequiredStarDiv">
                       <select
                         name="currentLocation"
-                        value={callingTracker.currentLocation}
+                        value={callingTracker.currentLocation === "Pune City" ?
+                          callingTracker.currentLocation : callingTracker.currentLocation === "PCMC" ?
+                          callingTracker.currentLocation : ""
+                        }
                         onChange={handleLocationChange}
                         style={{ width: "200px" }}
                       >
@@ -1658,6 +1661,7 @@ const handleCallingFeedBackOthers = (e)=>{
                   </div>
                   <div className="calling-tracker-two-input">
                     <input
+                     className="applyborderforinputs"
                       type="text"
                       name="fullAddress"
                       placeholder="Full Address"
@@ -1838,6 +1842,7 @@ const handleCallingFeedBackOthers = (e)=>{
                   <div className="calling-tracker-two-input">
                     <div className="setRequiredStarDiv">
                       <input
+                      className="applyborderforinputs"
                         list="educationListDropDown"
                         name="qualification"
                         type="text"

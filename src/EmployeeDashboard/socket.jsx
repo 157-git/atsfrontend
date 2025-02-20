@@ -8,7 +8,6 @@
     const query = { userId, role: userType };
 
     socket = io(`${CHAT_BASE_URL}:9092`, {
-      path: "/socket.io/", 
       query
     });
     return socket;

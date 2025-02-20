@@ -898,6 +898,11 @@ const Attendance = ({
               </td>
             ))}
           </table>
+          <div className="shortlisted-candidates-css">
+            {LineUpDataReport && (
+              <ShortListedCandidates filteredLineUpItems={newData} />
+            )}
+          </div>
           <div>
             <PieChart
               data={reportDataDatewise}
@@ -905,12 +910,6 @@ const Attendance = ({
               finalStartDatePropState={finalStartDatePropState}
               finalEndDatePropState={finalEndDatePropState}
             />
-          </div>
-
-          <div className="shortlisted-candidates-css">
-            {LineUpDataReport && (
-              <ShortListedCandidates filteredLineUpItems={newData} />
-            )}
           </div>
         </div>
       </div>

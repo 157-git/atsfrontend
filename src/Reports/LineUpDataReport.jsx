@@ -1,108 +1,154 @@
 /* Name:-Prachi Parab Component:-Line Up Data Report data page 
          End LineNo:-4 to 124 Date:-05/07 */
+         import React, { useState, useEffect } from 'react';
+         import "../Reports/LineUpDataReport.css";
+import FilterComponent from '../HandlerFunctions/FilterComponent';
+         
+         const ShortListedCandidates=({filteredLineUpItems})=>{
+            const [filteredData, setFilteredData] = useState(filteredLineUpItems);
+             const [filters, setFilters] = useState({});
+            console.log(filteredLineUpItems);
+            
+         
+             // Function to filter data based on selected filters
+  useEffect(() => {
+    let filtered = [...filteredLineUpItems];
 
-import React, { useState, useEffect } from "react";
-import "../Reports/LineUpDataReport.css";
+    Object.keys(filters).forEach((key) => {
+      if (filters[key].length > 0) {
+        filtered = filtered.filter((item) =>
+          filters[key].some((value) =>
+            item[key]?.toString().toLowerCase().includes(value.toString().toLowerCase())
+          )
+        );
+      }
+    });
 
-const ShortListedCandidates = ({ filteredLineUpItems }) => {
-  console.log(filteredLineUpItems);
+    setFilteredData(filtered);
+  }, [filters, filteredLineUpItems]);
 
-  return (
-    <div className="calling-list-container">
-      <div className="search">
-        <i
-          className="fa-solid fa-magnifying-glass"
-          //   onClick={() => setShowSearchBar(!showSearchBar)}
-          style={{ margin: "10px", width: "auto", fontSize: "15px" }}
-        ></i>
+  const handleDataFromAppliedFillters =(filtersFromComp)=>{
+    setFilters(filtersFromComp);
+  }
+  const [showFilterSection, setShowFilterSection] = useState(false);
+  const toggleFilterSection = () => {
+    setShowFilterSection(!showFilterSection);
+  };
 
-        <h5 style={{ color: "gray", paddingTop: "5px" }}>
-          Shortlisted Candidate
-        </h5>
 
-        <div
-          style={{
-            display: "flex",
-            gap: "5px",
-            justifyContent: "center",
-            alignItems: "center",
-            paddingBottom: "5px",
-          }}
-        ></div>
-      </div>
-      <div className="attendanceTableData">
-        <table id="shortlisted-table-id" className="attendance-table">
-          <thead>
-            <tr className="attencerows-head">
-              <th className="attendanceheading"> No.</th>
-              <th className="attendanceheading">Candidate's Id</th>
-              <th className="attendanceheading">Added Date Time</th>
-              <th className="attendanceheading">Recruiter's Name</th>
-              <th className="attendanceheading">Candidate's Name</th>
-              <th className="attendanceheading">Candidate's Email</th>
-              <th className="attendanceheading">Contact Number</th>
-              <th className="attendanceheading">Source Name</th>
-              <th className="attendanceheading">Job Designation</th>
-              <th className="attendanceheading">Job Id</th>
-              <th className="attendanceheading">Applying Company</th>
-              <th className="attendanceheading">Current Location</th>
-              <th className="attendanceheading">Interested or Not</th>
-              <th className="attendanceheading">Current Company</th>
-              <th className="attendanceheading">Total Experience</th>
-              <th className="attendanceheading">Current CTC</th>
-              <th className="attendanceheading">Expected CTC</th>
-              <th className="attendanceheading">Holding Any Offe</th>
-              <th className="attendanceheading">Notice Period</th>
-              <th className="attendanceheading">Availability For Interview</th>
-              <th className="attendanceheading">Interview Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredLineUpItems.map((item, index) => (
-              <tr key={item.id} className="attendancerows">
-                <td className="tabledata ">{index + 1}</td>
-                <td className="tabledata ">{item.candidateId}</td>
-                <td className="tabledata ">{item.candidateAddedTime}</td>
-                <td className="tabledata ">{item.recruiterName}</td>
-                <td className="tabledata ">{item.candidateName}</td>
-                <td className="tabledata ">{item.candidateEmail}</td>
-                <td className="tabledata ">{item.contactNumber}</td>
-                <td className="tabledata ">{item.sourceName}</td>
-                <td className="tabledata ">{item.jobDesignation}</td>
-                <td className="tabledata ">{item.requirementId}</td>
-                <td className="tabledata ">{item.requirementCompany}</td>
-                <td className="tabledata ">{item.currentLocation}</td>
-                <td className="tabledata ">{item.selectYesOrNo}</td>
-                <td className="tabledata ">{item.companyName}</td>
-                <td className="tabledata ">
-                  {item.experienceYear +
-                    "Years" +
-                    item.experienceYear +
-                    "Months"}
-                </td>
-                <td className="tabledata ">
-                  {item.currentCTCLakh +
-                    "Lakh" +
-                    item.currentCTCThousand +
-                    "Thousand"}
-                </td>
-                <td className="tabledata ">
-                  {item.expectedCTCLakh +
-                    "Lakh" +
-                    item.expectedCTCThousand +
-                    "Thousand"}
-                </td>
-                <td className="tabledata ">{item.holdingAnyOffer}</td>
-                <td className="tabledata ">{item.noticePeriod}</td>
-                <td className="tabledata ">{item.availabilityForInterview}</td>
-                <td className="tabledata ">{item.finalStatus}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+             return(
+                 <div className="calling-list-container">
+               
+                   
+                     <div className="search">
+                     <i
+                       className="fa-solid fa-magnifying-glass"
+                     //   onClick={() => setShowSearchBar(!showSearchBar)}
+                       style={{ margin: "10px", width: "auto", fontSize: "15px" }}
+                     ></i>
+         
+                         <h5 style={{color:"gray",paddingTop:"5px"}}>
+                             Shortlisted Candidate
+                         </h5>
+         
+                         <div
+                         style={{
+                             display:"flex",
+                             gap:"5px",
+                             justifyContent:"center",
+                             alignItems:"center",
+                             paddingBottom:"5px",
+                         }}
+                         >
+                           
+                           <button
+                className="lineUp-Filter-btn"
+                onClick={toggleFilterSection}
+              >
+                Filter <i className="fa-solid fa-filter"></i>
+              </button>
+            
+                         </div>
+                         
+                     </div>
+
+<div className="filter-dropdowns">
+    <div className="filter-section">
+    {
+                showFilterSection && (
+                    <FilterComponent data={filteredLineUpItems} appliedFillters={handleDataFromAppliedFillters}/>
+                )
+              }
     </div>
-  );
-};
+</div>
 
-export default ShortListedCandidates;
+
+                     <div className="attendanceTableData">
+                     <table id='shortlisted-table-id' className='attendance-table'>
+                         <thead>
+                             <tr className='attencerows-head'>
+                                 <th className="attendanceheading"> No.</th>
+                         <th className="attendanceheading">Candidate's Id</th>
+                         <th className="attendanceheading">Added Date Time</th>
+                         <th className="attendanceheading">Recruiter's Name</th>
+                         <th className="attendanceheading">Candidate's Name</th>
+                         <th className="attendanceheading">Candidate's Email</th>
+                         <th className="attendanceheading">Contact Number</th>
+                         <th className="attendanceheading">Source Name</th>
+                         <th className="attendanceheading">Job Designation</th>
+                         <th className="attendanceheading">Job Id</th>
+                         <th className="attendanceheading">Applying Company</th>
+                         <th className="attendanceheading">Current Location</th>
+                         <th className="attendanceheading">Interested or Not</th>
+                         <th className="attendanceheading">Current Company</th>
+                         <th className="attendanceheading">Total Experience</th>
+                         <th className="attendanceheading">Current CTC</th>
+                         <th className="attendanceheading">Expected CTC</th>
+                         <th className="attendanceheading">Holding Any Offe</th>
+                         <th className="attendanceheading">Notice Period</th>
+                         <th className="attendanceheading">Availability For Interview</th>
+                         <th className="attendanceheading">Interview Status</th>
+                        
+                             </tr>
+                         </thead>
+                         <tbody>
+                                    
+                             {filteredData.map(((item,index) =>(
+                                 <tr key={item.id} className='attendancerows'>
+                                     <td className="tabledata ">{index +1}</td>
+                                     <td className="tabledata ">{item.candidateId}</td>
+                                     <td className="tabledata ">{item.candidateAddedTime}</td>
+                                     <td className="tabledata ">{item.recruiterName}</td>
+                                     <td className="tabledata ">{item.candidateName}</td>
+                                     <td className="tabledata ">{item.candidateEmail}</td>
+                                     <td className="tabledata ">{item.contactNumber}</td>
+                                     <td className="tabledata ">{item.sourceName}</td>
+                                     <td className="tabledata ">{item.jobDesignation}</td>
+                                     <td className="tabledata ">{item.requirementId}</td>
+                                     <td className="tabledata ">{item.requirementCompany}</td> 
+                                     <td className="tabledata ">{item.currentLocation}</td>
+                                     <td className="tabledata ">{item.selectYesOrNo}</td>  
+                                     <td className="tabledata ">{item.companyName}</td>
+                                     <td className="tabledata ">{item.experienceYear +"Years" +item.experienceYear + "Months" }</td>
+                                     <td className="tabledata ">{item.currentCTCLakh +"Lakh" +item.currentCTCThousand + "Thousand" }</td>
+                                     <td className="tabledata ">{item.expectedCTCLakh +"Lakh" +item.expectedCTCThousand + "Thousand" }</td>
+                                     <td className="tabledata ">{item.holdingAnyOffer}</td> 
+                                     <td className="tabledata ">{item.noticePeriod}</td>
+                                     <td className="tabledata ">{item.availabilityForInterview}</td>  
+                                     <td className="tabledata ">{item.finalStatus}</td>
+         
+                                     
+                                 </tr>
+                             )))}
+         
+                         </tbody>
+         
+         
+                     </table>
+                     </div>
+         
+                 </div>
+             )
+         };
+         
+         export default ShortListedCandidates;
