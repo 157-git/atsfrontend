@@ -51,22 +51,55 @@ const getRandomColor = () => {
 const truncateLabel = (label) => label.length > 10 ? label.substring(0, 10) + "..." : label;
 
 const chartData = {
-    labels: selectedSubCategories.map(truncateLabel), // Truncate labels if longer than 10 characters
-    datasets: [
-      {
-        label: `Number of Candidates ${selectedStatusCategory} by ${selectedCategory}`,
-        data: selectedSubCategories.map(subCat =>
-          filteredLineUpItems.filter(item => item[categories[selectedCategory]] === subCat).length
-        ),
-        backgroundColor: barColors, // Assign unique colors
+  labels: selectedSubCategories.map(truncateLabel), // Labels for x-axis
+  datasets: [
+    {
+      label: `Number of Candidates ${selectedStatusCategory} by ${selectedCategory}`,
+      data: selectedSubCategories.map(subCat =>
+        filteredLineUpItems.filter(item => item[categories[selectedCategory]] === subCat).length
+      ),
+      backgroundColor: barColors, // Assign unique colors for each bar
+    },
+  ],
+};
+
+const chartOptions = {
+  plugins: {
+    legend: {
+      display: true,
+      labels: {
+        generateLabels: (chart) => {
+          const dataset = chart.data.datasets[0];
+          return dataset.data.map((value, index) => {
+            const isHidden = !chart.isDatasetVisible(0) || !chart.getDataVisibility(index);
+            return {
+              text: isHidden ? `~~${selectedSubCategories[index]}~~` : selectedSubCategories[index], // Fake strikethrough
+              fillStyle: dataset.backgroundColor[index],
+              hidden: dataset.data[index] === 0, // Hide legend if no data
+              index,
+              fontColor: isHidden ? "gray" : "black", // Gray out hidden legends
+            };
+          });
+        },
       },
-    ],
-  };
+      onClick: (e, legendItem, legend) => {
+        const index = legendItem.index;
+        legend.chart.toggleDataVisibility(index);
+        legend.chart.update();
+      },
+    },
+    title: {
+      display: true,
+      text: `Number of Candidates ${selectedStatusCategory} by ${selectedCategory}`,
+    },
+  },
+};
+
 
   return (
     <div className='setwidthacordingtoadjustchartsclass newclassforalignitemscenter'>
       {selectedCategory && selectedSubCategories.length > 0 && (
-        <Bar data={chartData} />
+        <Bar data={chartData} options={chartOptions}/>
       )}
     </div>
   );

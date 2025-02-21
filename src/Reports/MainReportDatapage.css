@@ -1027,7 +1027,7 @@ color: grey;
   display: flex;
 }
 .typeofReportSubDiv.active {
-  background-color: var(--sidebar-active-item-bg); /* Example: Highlight the active button */
+  background-color: var(--active-button1-bg); /* Example: Highlight the active button */
   border: 2px solid var(--primary-border); /* Example: Add border to the active button */
   color: var(--button-txt-color);
 }
@@ -1048,4 +1048,15 @@ color: grey;
 }
 .managersTeamRecruitersInputMargin{
   margin-right: 8px;
+}
+.right {
+  margin-left: 10px;
+}
+.newbarchartclassforsetstyles{
+  width: 450px;
+  height: 450px;
+}
+.legend-strikethrough {
+  text-decoration: line-through;
+  color: gray !important;
 }

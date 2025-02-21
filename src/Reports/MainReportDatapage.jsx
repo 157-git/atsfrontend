@@ -40,6 +40,7 @@ const MonthReport = ({ loginEmployeeName }) => {
   const [recruitersList, setRecruitersList] = useState([]);
 
   const handleDisplayManagers = async () => {
+    setDisplayModalContainer(true);
     if (userType === "SuperUser") {
       setDisplayBigSkeletonForManagers(true);
       const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
@@ -220,6 +221,8 @@ setAllImagesForTeamLeaders([]);
 
   const handleOptionChange = (event) => {
     const value = event.target.value;
+    console.log(value);
+    
     setSelectedRole("");
     setSelectedIds([]);
     // setDisplayModalContainer(true);
@@ -241,8 +244,11 @@ setAllImagesForTeamLeaders([]);
       setStartDate1(startDate.toISOString().split("T")[0]);
       setEndDate1(endDate.toISOString().split("T")[0]);
     }
-    handleDisplayManagers();
-    setDisplayMoreButton(true);
+    if (value !== "custom") {
+      handleDisplayManagers();
+      setDisplayMoreButton(true);
+    }
+  
   };
 
   const handleCustomStartDateChange = (event) => {
@@ -333,10 +339,10 @@ setAllImagesForTeamLeaders([]);
             { id: 1, label: "Candidate Report" },
             { id: 2, label: "Invoice Report" },
             { id: 3, label: "Recruiters Report" },
-            { id: 4, label: "Candidate Report" },
-            { id: 5, label: "Candidate Report" },
-            { id: 6, label: "Candidate Report" },
-            { id: 7, label: "Candidate Report" },
+            // { id: 4, label: "Candidate Report" },
+            // { id: 5, label: "Candidate Report" },
+            // { id: 6, label: "Candidate Report" },
+            // { id: 7, label: "Candidate Report" },
           ].map((report, index) => (
             <div
               key={report.id}
@@ -384,7 +390,11 @@ setAllImagesForTeamLeaders([]);
               </button>
             )}
 
-            <label className="PI-radio-label">
+            <label className="PI-radio-label"
+            style={{
+              backgroundColor: selectedOption === "Current Month" && "var(--active-button1-bg)"
+            }}
+            >
               <input
                 type="radio"
                 value="Current Month"
@@ -395,7 +405,11 @@ setAllImagesForTeamLeaders([]);
               />
               Current Month
             </label>
-            <label className="PI-radio-label">
+            <label className="PI-radio-label"
+             style={{
+              backgroundColor: selectedOption === "Last Month" && "var(--active-button1-bg)"
+            }}
+            >
               <input
                 type="radio"
                 value="Last Month"
@@ -406,7 +420,11 @@ setAllImagesForTeamLeaders([]);
               />
               Last Month
             </label>
-            <label className="PI-radio-label">
+            <label className="PI-radio-label"
+            style={{
+              backgroundColor: selectedOption === "Last 3 Months" && "var(--active-button1-bg)"
+            }}
+            >
               <input
                 type="radio"
                 value="Last 3 Months"
@@ -417,7 +435,11 @@ setAllImagesForTeamLeaders([]);
               />
               Last 3 Months
             </label>
-            <label className="PI-radio-label">
+            <label className="PI-radio-label"
+            style={{
+              backgroundColor: selectedOption === "Last 6 Months" && "var(--active-button1-bg)"
+            }}
+            >
               <input
                 type="radio"
                 value="Last 6 Months"
@@ -428,7 +450,11 @@ setAllImagesForTeamLeaders([]);
               />
               Last 6 Months
             </label>
-            <label className="PI-radio-label">
+            <label className="PI-radio-label"
+            style={{
+              backgroundColor: selectedOption === "Last 1 Year" && "var(--active-button1-bg)"
+            }}
+            >
               <input
                 type="radio"
                 value="Last 1 Year"
@@ -439,7 +465,11 @@ setAllImagesForTeamLeaders([]);
               />
               Last 1 Year
             </label>
-            <label className="PI-radio-label">
+            <label className="PI-radio-label"
+            style={{
+              backgroundColor: selectedOption === "custom" && "var(--active-button1-bg)"
+            }}
+            >
               <input
                 type="radio"
                 value="custom"

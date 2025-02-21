@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from 'antd';
+import { BarChartOutlined } from '@ant-design/icons';
 
 const FilterComponent = ({ filteredLineUpItems, onFilterChange }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -58,7 +59,7 @@ const FilterComponent = ({ filteredLineUpItems, onFilterChange }) => {
   return (
     <div className='newsetPositionrelative'>
       <button className="lineUp-Filter-btn" onClick={() => setDisplaySelectCategories(!displaySelectCategories)}>
-        Create Chart <i className="fa-solid fa-filter"></i>
+        Create Chart <BarChartOutlined />
       </button>
 
       {displaySelectCategories && (
