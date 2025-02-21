@@ -84,14 +84,18 @@
   display: flex;
 }
 .forborderfortds{
+  border: 1px solid black;
 border-right: 1px solid black;
 }
 .textAlignCenterForTableOfReport{
   text-align: center;
+
 }
 .widthSetForTds{
   width: 200px;
   padding-bottom: 5px;
+  border: 1px solid black;
+  border-right: 1px solid black;
 }
 .piecontainer{
   width: 500px;

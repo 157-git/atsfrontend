@@ -823,6 +823,7 @@ useEffect(()=>{
               if (setDisplayBlockNewChartPrint.length > 0) {
   
                 setDisplayBlockNewChartPrint[0].style.display = 'flex';
+                setDisplayBlockNewChartPrint[0].style.width = '100%';
               }
                setModalIsOpen(true);
                setLoading(false);
@@ -843,21 +844,32 @@ const newIdsString = selectedIdsProp.join(",");
 console.log(newIdsString);
 
 const [displaycreatechartbtn, setdisplaycreatechartbtn] = useState(false);
-
+const [statusCategory, setStatusCategory] =useState("");
          const handleFilterDataInterview = async(category)=>{
-          console.log(category);
+          setLoading(true);
+          try {
+            console.log(category);
           
         
-const response = await axios.get(`${API_BASE_URL}/candidate-category/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`, {
-  params: {
-    status: category,
-  },
-});
-
-console.log(response.data);
-setNewData(response.data);
-setLineUpDataReport(true);
-setdisplaycreatechartbtn(true);
+            const response = await axios.get(`${API_BASE_URL}/candidate-category/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`, {
+              params: {
+                status: category,
+              },
+            });
+            
+            setStatusCategory(category);
+            
+            console.log(response.data);
+            setNewData(response.data);
+            setLineUpDataReport(true);
+            setdisplaycreatechartbtn(true);
+          } catch (error) {
+            console.log(error);
+            
+          }finally{
+setLoading(false);
+          }
+         
          }
          const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
@@ -872,6 +884,7 @@ setdisplaycreatechartbtn(true);
              <div className="report-App-after"
             
              >
+            
               {
                 loading && (
                   <Loader/>
@@ -958,6 +971,7 @@ setdisplaycreatechartbtn(true);
                     selectedCategory={selectedCategory}
                     selectedSubCategories={selectedSubCategories}
                     filteredLineUpItems={newData}
+                    selectedStatusCategory={statusCategory}
                     />
                            </div>
                      

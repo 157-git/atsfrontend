@@ -6,7 +6,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 // Register necessary Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const BarChartComponent = ({ selectedCategory, selectedSubCategories, filteredLineUpItems }) => {
+const BarChartComponent = ({ selectedCategory, selectedSubCategories, filteredLineUpItems, selectedStatusCategory }) => {
   const categories = {
     "Source Name": "sourceName",
     "Job Designation": "jobDesignation",
@@ -54,7 +54,7 @@ const chartData = {
     labels: selectedSubCategories.map(truncateLabel), // Truncate labels if longer than 10 characters
     datasets: [
       {
-        label: `Number of Candidates by ${selectedCategory}`,
+        label: `Number of Candidates ${selectedStatusCategory} by ${selectedCategory}`,
         data: selectedSubCategories.map(subCat =>
           filteredLineUpItems.filter(item => item[categories[selectedCategory]] === subCat).length
         ),
