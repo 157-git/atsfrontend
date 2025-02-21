@@ -87,7 +87,6 @@ const applySavedColors = () => {
       if (value) {
         document.documentElement.style.setProperty(variable, value); // Set CSS variable
       }
-      // console.log(variable, value);
     });
   }
 
@@ -125,7 +124,6 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-
           <Route path="/follow-up/:candidateId" element={<AfterSelection />} />
           <Route
             path="/admin-login"
@@ -157,9 +155,10 @@ const App = () => {
           ></Route>
 
           <Route
-            path="/157-careers/:encodedParams/applicant-form"
+            path="/job-application-form/:encodedParams"
             element={<ApplicantForm2 loginEmployeeName={loginEmployeeName} />}
           ></Route>
+
           <Route
             path="/thank-you"
             element={<ThankYouPage></ThankYouPage>}

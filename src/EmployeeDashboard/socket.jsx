@@ -7,7 +7,7 @@ export const initializeSocket = (userId, userType) => {
   const query = { userId, role: userType };
 
   socket = io(`${CHAT_BASE_URL}:9092`, {
-    query
+    query,
   });
   return socket;
 };

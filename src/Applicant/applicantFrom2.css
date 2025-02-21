@@ -5,7 +5,7 @@
 .form-container-December {
   background: #1d3a5d; /* Top color */
   background-image: linear-gradient(to bottom, #1d3a5d 5%, #a7b8d4 0%);
-  border-radius: 10px;
+  /* border-radius: 10px; */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
   padding-top: 10px;
