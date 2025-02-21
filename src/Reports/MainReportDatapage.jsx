@@ -164,7 +164,6 @@ setAllImagesForTeamLeaders([]);
       setOpenReport(true);
     } catch (error) {
       console.error("Error fetching report data:", error);
-      // Provide user feedback here (e.g., toast)
     }
 
     setLoading(false);

@@ -82,18 +82,20 @@
 }
 .subdivforcharts{
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 50px;
 }
 .forborderfortds{
+  border: 1px solid black;
 border-right: 1px solid black;
 }
 .textAlignCenterForTableOfReport{
   text-align: center;
+
 }
 .widthSetForTds{
   width: 200px;
   padding-bottom: 5px;
+  border: 1px solid black;
+  border-right: 1px solid black;
 }
 .piecontainer{
   width: 500px;
@@ -117,4 +119,11 @@ border-right: 1px solid black;
 }
 .setwidthacordingtoadjustchartsclass{
   width: 50%;
+}
+.newsetPositionrelative{
+  position: relative;
+}
+.newsahilcanvas{
+  width: 500px;
+  height: 450px;
 }

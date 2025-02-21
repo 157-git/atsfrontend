@@ -1223,7 +1223,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               <div className="form-group-December">
                 <div className="gender">
                   <label>Gender</label>
-                  <div className="radio-group">
+                  <div className="radio-group" id="genderid">
                     <FormControlLabel
                       control={
                         <Radio
@@ -1266,7 +1266,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               <div className="form-group-December">
                 <div className="disability">
                   <label>Disability</label>
-                  <div className="radio-group">
+                  <div className="radio-group" id="disabilityId">
                     <FormControlLabel
                       control={
                         <Radio
@@ -1486,7 +1486,7 @@ function ApplicantForm2({ loginEmployeeName }) {
 
               <div className="form-group-December">
                 <label>Are you holding any offer ? </label>
-                <div className="radio-group">
+                <div className="radio-group" id="holdinganyoffer">
                   <FormControlLabel
                     control={
                       <Radio
@@ -1649,7 +1649,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               <div className="input-with-icon-December">
                 <div className="form-group-December" style={{ width: "400px" }}>
                   <label>Do you have a WhatsApp number ? </label>
-                  <div className="radio-group">
+                  <div className="radio-group" id="whatsappnumberid">
                     <FormControlLabel
                       control={
                         <Radio
