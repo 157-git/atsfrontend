@@ -8,24 +8,24 @@ const ShareLink = ({ toggleResumeLink }) => {
   const [copyMessage, setCopyMessage] = useState("");
 
   // updated code for strong encryption according to requirments
- // exposing directly in file just for testing and normal use purpose, please set this secreat key in env file while deploying on server
+  // exposing directly in file just for testing and normal use purpose, please set this secreat key in env file while deploying on server
   const secretKey = "157industries_pvt_ltd"; // Use a consistent key across components
 
-// Encryption logic
-const encryptParams = (id, type) => {
-  try {
-    const data = `${id}:${type}`;
-    const encrypted = CryptoJS.AES.encrypt(data, secretKey).toString();
-    return btoa(encrypted); // Convert to base64 for URL safety
-  } catch (error) {
-    console.error("Encryption failed:", error);
-    return null;
-  }
-};
+  // Encryption logic
+  const encryptParams = (id, type) => {
+    try {
+      const data = `${id}:${type}`;
+      const encrypted = CryptoJS.AES.encrypt(data, secretKey).toString();
+      return btoa(encrypted); // Convert to base64 for URL safety
+    } catch (error) {
+      console.error("Encryption failed:", error);
+      return null;
+    }
+  };
 
-// Generate encodedParams for secure URL
-const encodedParams = encryptParams(employeeId, userType);
-const shareUrl = `https://rg.157careers.in/157-careers/${encodedParams}/applicant-form`;
+  // Generate encodedParams for secure URL
+  const encodedParams = encryptParams(employeeId, userType);
+  const shareUrl = `https://rg.157careers.in/job-application-form/${encodedParams}`;
 
   // Share using Web Share API
   const handleShareLink = async () => {
@@ -90,11 +90,14 @@ const shareUrl = `https://rg.157careers.in/157-careers/${encodedParams}/applican
           </button>
         </div>
         <span style={{ color: "black", fontSize: "14px" }}>
-          Share this link with the candidate so they can fill in their information through the link.
+          Share this link with the candidate so they can fill in their
+          information through the link.
         </span>
         {copyMessage && (
           <div className="copyMessage">
-            <span style={{ color: "green", fontSize: "14px" }}>{copyMessage}</span>
+            <span style={{ color: "green", fontSize: "14px" }}>
+              {copyMessage}
+            </span>
           </div>
         )}
       </div>
