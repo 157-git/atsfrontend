@@ -78,6 +78,9 @@ const applySavedColors = () => {
     { variable: "--notification-icon-color" },
     { variable: "--notification-ribben-color" },
     { variable: "--active-button1-bg" },
+    { variable: "--selected-form-bg" },
+
+    
   ];
 
   if (bgColor)

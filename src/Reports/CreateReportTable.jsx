@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../Reports/CreateReportTable.css";
 import ShortListedCandidates from "./LineUpDataReport";
+import downloadAnime from "../assets/downloadanimated.gif"
 
 import PdfModal from "./pdfModal";
 import { createPdf } from "./pdfUtils";
@@ -23,6 +24,7 @@ import { separateBySpace } from "../HandlerFunctions/separateBySpace";
 import PrintTableComp from "./PrintTableComp";
 import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
+import { Tag } from "antd";
 
 const LineUpDataDummy = [
   {
@@ -633,7 +635,7 @@ const datadistributed = [
   { status: "No show Candidate", CandidateCount: LineUpnoshowCount },
 ];
 
-const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole, finalStartDatePropState, finalEndDatePropState, loginEmployeeName }) => {
+const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole, finalStartDatePropState, finalEndDatePropState, loginEmployeeName, selectedRole, selectedIds }) => {
   console.log(selectedIdsProp, selectedJobRole, finalStartDatePropState, finalEndDatePropState, loginEmployeeName);
 
   const [attendanceData, setAttendanceData] = useState([]);
@@ -885,10 +887,10 @@ const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole, fina
       console.log(category);
 
 
-      const response = await axios.get(`${API_BASE_URL}/candidate-category/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`, {
-        params: {
-          status: category,
-        },
+      const response = await axios.get(`${API_BASE_URL}/candidate-category/${category}/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`, {
+        // params: {
+        //   status: category,
+        // },
       });
 
       setStatusCategory(category);
@@ -965,11 +967,22 @@ const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole, fina
             {/* <button className="shareDownloadbtn" onClick={handleRadioChange}>
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m640-280-57-56 184-184-184-184 57-56 240 240-240 240ZM80-200v-160q0-83 58.5-141.5T280-560h247L383-704l57-56 240 240-240 240-57-56 144-144H280q-50 0-85 35t-35 85v160H80Z"/></svg>
                      </button> */}
+                     { (selectedJobRole && selectedIds) && (
+ <p><span className="newClassNameForMakeBold">Selected Role : </span><Tag color="#87d068">{selectedRole && selectedRole}</Tag> <span className="newClassNameForMakeBold">Count : </span><Tag color="#2db7f5">{selectedIds && selectedIds.length}</Tag> </p>
+                     )
+
+                     }
+                     {
+                 ( (selectedRole && (selectedRole)) && (selectedIds && (selectedIds.length > 0) ) ) &&( 
             <button className="shareDownloadbtn" onClick={handleDownloadPdf}>
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" /></svg>
+              <img className="downloadAnimeImg" src={downloadAnime} alt='Download'/>
             </button>
+                 )
+                }
           </div>
 
+          {
+                 ( (selectedRole && (selectedRole)) && (selectedIds && (selectedIds.length > 0) ) ) &&(
           <div className="tabaledivforreport">
             <table className="report-attendance-table">
               <thead>
@@ -994,6 +1007,8 @@ const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole, fina
               ))}
             </table>
           </div>
+                 )
+                }
 
           {
                 displaycreatechartbtn && (
@@ -1015,7 +1030,12 @@ const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole, fina
             <div className="setchartsdiplayflex" id="divToPrint">
               <PrintTableComp userName={userName} currentDate={getFormattedDateTime()} finalStartDatePropState={finalStartDatePropState} finalEndDatePropState={finalEndDatePropState} data={reportDataDatewise} />
               <div className="setDisplayBlockNewChartPrint">
-                <PieChart data={reportDataDatewise} userName={userName} finalStartDatePropState={finalStartDatePropState} finalEndDatePropState={finalEndDatePropState} />
+                {
+                 ( (selectedRole && (selectedRole)) && (selectedIds && (selectedIds.length > 0) ) ) &&(
+                    <PieChart data={reportDataDatewise} userName={userName} finalStartDatePropState={finalStartDatePropState} finalEndDatePropState={finalEndDatePropState} />
+                  )
+                }
+               
                 <BarChartComponent
                   selectedCategory={selectedCategory}
                   selectedSubCategories={selectedSubCategories}

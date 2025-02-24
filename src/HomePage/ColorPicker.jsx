@@ -84,6 +84,7 @@ const handleSetDefaultColor = () => {
     { variable: "--notification-icon-color" },
     { variable: "--notification-ribben-color" },
     { variable: "--active-button1-bg" },
+    { variable: "--selected-form-bg" },
     
   ];
 
@@ -132,6 +133,7 @@ const handleSetDefaultColor = () => {
   document.documentElement.style.setProperty("--notification-icon-color", "gray");
   document.documentElement.style.setProperty("--notification-ribben-color", "#ffe5b5");
   document.documentElement.style.setProperty("--active-button1-bg", "#ffe5b5");
+  document.documentElement.style.setProperty("--selected-form-bg", "#ffe5b5");
 
 
 
@@ -218,6 +220,7 @@ const notificationBadgeBackground = colorMapping[color][43];
 const notificationIconColor = colorMapping[color][44];
 const notificationRibbenColor = colorMapping[color][45];
 const activeButton1BackgroundColor = colorMapping[color][46];
+const selectedComponentFormBackground = colorMapping[color][47];
 
 
     // const mainBg = colorMapping[color][5];
@@ -276,6 +279,7 @@ const colors = [
   { variable: "--notification-icon-color", value: notificationIconColor },
   { variable: "--notification-ribben-color", value: notificationRibbenColor },
   { variable: "--active-button1-bg", value: activeButton1BackgroundColor },
+  { variable: "--selected-form-bg", value: selectedComponentFormBackground },
 ];
 
 // Set CSS variables dynamically
@@ -302,14 +306,14 @@ colors.forEach(({ variable, value }) => {
     // E1 is Secondary Background
 
 
-        //Whatspp       
+        
     
       "#27374D": [
         "#27374D", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "#27374D", "#9DB2BF", "white",
         "gray", "#f0f3f5", "#ff4d4d", "#9db2bf", "#ffffff", "#526D82", "white", "#ffffff", "#27374D", "#e60000",
         "#ff6666", "#ff4d4d", "gray", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#27374D","#27374D",
-        "#9DB2BF","white","white","#c80036","#27374D","#27374D","#eef2f6"
+        "#9DB2BF","white","white","#c80036","#27374D","#27374D","#eef2f6","#eef2f6"
       ],
       // "#3C4B5E": [
       //   "#3C4B5E", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
@@ -323,35 +327,35 @@ colors.forEach(({ variable, value }) => {
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#f0f3f5", "#ff4d4d", "#D6E6F2", "black", "#B9D7EA", "black", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#769FCD", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#769FCD","#27374D",
-        "#D6E6F2", "#ffffff","white","#c80036","#769FCD","#769FCD","#ecf2f8"
+        "#D6E6F2", "#ffffff","white","#c80036","#769FCD","#769FCD","#ecf2f8","#dae5f1"
       ],
       "#493628": [
         "#493628", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#f6f2ef", "#ff4d4d", "#D6C0B3", "black", "#AB886D", "white", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#493628","#27374D",
-        "#D6C0B3", "#ffffff", "white","#c80036","#493628","#493628","#f6f2ef"
+        "#D6C0B3", "#ffffff", "white","#c80036","#493628","#493628","#f6f2ef","#f6f2ef"
       ],
       "#F6BF9F": [
         "#F6BF9F", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#f6f2ef", "#ff4d4d", "#FDF2EB", "black", "#FADFCF", "black", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#F6BF9F","#27374D",
-        "#FDF2EB", "black","white","#c80036","#F6BF9F","#F6BF9F","#fdefe8"
+        "#FDF2EB", "black","white","#c80036","#F6BF9F","#F6BF9F","#fdefe8","#fdefe8"
       ],
       "#6F325B": [
         "#6F325B", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#f6f2ef", "#ff4d4d", "#C9B2C1", "black", "#936684", "white", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#936684","#27374D",
-        "#C9B2C1", "white","white","#c80036","#6F325B","#6F325B","#f7edf4"
+        "#C9B2C1", "white","white","#c80036","#6F325B","#6F325B","#f7edf4","#f7edf4"
       ],
       "#191304": [
         "#191304", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "white",
         "gray", "#f2f2f2", "#ff4d4d", "#7F7F7F", "white", "#323232", "white", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#323232","#27374D",
-        "#7F7F7F", "white","white","#c80036","black","#191304","#fbf6e9"
+        "#7F7F7F", "white","white","#c80036","black","#191304","#fbf6e9","#fbf6e9"
       ],
       // "#4A62BA": [
       //   "#4A62BA", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
@@ -365,14 +369,14 @@ colors.forEach(({ variable, value }) => {
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "white",
         "gray", "#e4e7e4", "#ff4d4d", "#A9BFA8", "white", "#A9BFA8", "white", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#A9BFA8","#27374D",
-        "#A9BFA8", "white","white","#c80036","#545F54","#545F54","#f1f3f1"
+        "#A9BFA8", "white","white","#c80036","#545F54","#545F54","#f1f3f1","#f1f3f1"
       ],
       "#413F42": [
         "#413F42", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#e6e5e6", "#ff4d4d", "#b3b2b3", "black", "#686469", "white", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#b3b2b3","#27374D",
-        "#b3b2b3", "white","white","#c80036","#413F42","#413F42","#f2f2f3"
+        "#b3b2b3", "white","white","#c80036","#413F42","#413F42","#f2f2f3","#e6e5e6"
       ],
       // "#5b585c": [
       //   "#5b585c", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
@@ -407,7 +411,7 @@ colors.forEach(({ variable, value }) => {
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#e6e5e6", "#ff4d4d", "#b8d0ae", "black", "#47663B", "white", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#b8d0ae","#27374D",
-        "#b8d0ae", "white","white","#c80036","#1F4529","#1F4529","#edf7f0"
+        "#b8d0ae", "white","white","#c80036","#1F4529","#1F4529","#edf7f0","#edf7f0"
       ],
       // "#987D9A": [
       //   "#987D9A", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
@@ -421,14 +425,14 @@ colors.forEach(({ variable, value }) => {
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#e6e5e6", "#ff4d4d", "#C1BAA1", "black", "#C1BAA1", "black", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#C1BAA1","#27374D",
-        "#C1BAA1", "white","white","#c80036","#A59D84","#A59D84","#f4f3f0"
+        "#C1BAA1", "white","white","#c80036","#A59D84","#A59D84","#f4f3f0","#e9e7e2"
       ],
       "#A79277": [
         "#A79277", "#ff6666", "#ff4d4d", "#ff3333", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#ff3333", "#e60000",
         "#ffb3b3", "#ff6666", "#ffffff", "#ffffff", "#e60000", "#ff8080", "darkgray", "darkgray", "#9DB2BF", "black",
         "gray", "#e6e5e6", "#ff4d4d", "#EAD8C0", "black", "#D1BB9E", "black", "black", "#ffffff", "#e60000",
         "#ff6666", "#ff4d4d", "#493628", "#e60000", "#ff8080", "#ff6666", "#ff4d4d", "#e60000","#EAD8C0","#27374D",
-        "#EAD8C0", "white" ,"white","#c80036","#A79277", "#A79277","#f5f3f0"
+        "#EAD8C0", "white" ,"white","#c80036","#A79277", "#A79277","#f5f3f0","#f5f3f0"
       ],
       // "#e0ccff": [
       //   //0            //1     //2          //3        //4        //5        //6        //7        //8        //9
@@ -446,7 +450,7 @@ colors.forEach(({ variable, value }) => {
         "green", "#66e066", "#f0f2f5", "#ffffff", "#00b300", "#99e699", "#54656f", "#33d633", "#00cc00", "black",
         "gray", "#dcf8c6", "#33d633", "#128c7e", "#ffffff", "#f0f2f5", "black", "white", "#128c7e", "#00b300",
         "#66e066", "#33d633", "#00cc00", "#00b300", "#99e699", "#66e066", "#33d633", "#00b300","#ffffff","#128c7e",
-        "#ece5dd","black","#0b141a1a","#25D366","white","#25d366","#e6ffee"
+        "#ece5dd","black","#0b141a1a","#25D366","white","#25d366","#e6ffee","#ece5dd"
       ],
     };
   
@@ -511,7 +515,10 @@ style={{
         </div>
 
         <div className="defult-color-div">
-        <button className="daily-tr-btn" onClick={handleSetDefaultColor}>
+        <button className="daily-tr-btn" 
+        // onClick={handleSetDefaultColor}
+        onClick={() => handleColorClick("#27374D")}
+        >
         Set Default Color
         </button>
         <button className="daily-tr-btn" onClick={handleClose}>

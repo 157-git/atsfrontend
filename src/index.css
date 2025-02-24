@@ -40,6 +40,7 @@
   --notification-icon-color : gray;
   --notification-ribben-color:#ffe5b5;
   --active-button1-bg : #ffe5b5;
+  --selected-form-bg: #ffe5b5;
 }
 
 .accordion {

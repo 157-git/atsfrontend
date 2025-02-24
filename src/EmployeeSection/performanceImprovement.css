@@ -318,3 +318,12 @@
   width: 100%;
   overflow-x: scroll;
 }
+.fixperformanceclientsection{
+  display: block;
+  height: 40vh;
+  overflow-y: scroll;
+}
+.selectJobIdsForPerformance{
+  height: 50vh;
+  overflow-y: scroll;
+}
