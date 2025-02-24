@@ -331,6 +331,16 @@ const handleCallingFeedBackOthers = (e)=>{
   const handleChange = (e) => {
     const { name, value } = e.target || e;
 
+    if (name === "selectYesOrNo" && value !== "Interested") {
+      setLineUpData((prevData) => ({
+        ...prevData,
+        finalStatus: "",
+        availabilityForInterview: "",
+        interviewTime: "",
+      }));
+    }
+    
+
     // Rajlaxmi Jagadale Added Email Validation Date-24-01-25 line263 to 312
     if (name === "sourceName" && value === "others") {
       setDisplaySourceOthersInput(true);
