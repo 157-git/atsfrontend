@@ -34,6 +34,13 @@ const Attendance = ({
   selectedRole,
   selectedIds,
 }) => {
+  console.log(
+    selectedIdsProp,
+    selectedJobRole,
+    finalStartDatePropState,
+    finalEndDatePropState,
+    loginEmployeeName
+  );
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -124,9 +131,9 @@ const Attendance = ({
         "newclassforsethightbar"
       );
       if (newclassforsethightbar.length > 0) {
-        // forPieWidthContainer[0].style.display = 'block';
-        // newclassforsethightbar[0].style.width = "490px";
-        // newclassforsethightbar[0].style.height = "490px";
+        //   // forPieWidthContainer[0].style.display = 'block';
+        //   newclassforsethightbar[0].style.width = '490px';
+        newclassforsethightbar[0].style.height = "420px";
       }
 
       const input = document.getElementById("divToPrint");
@@ -197,6 +204,7 @@ const Attendance = ({
       setLoading(false);
     }
   };
+
   const closeModal = () => {
     // Clear the PDF URL and close the modal
     setPdfUrl("");
