@@ -300,7 +300,6 @@ const [displayCallingRemarkOthersInput, setDisplayCallingRemarkOthersInput] = us
       }
     }
   };
-console.log(errors);
 
   const handleSourceNameOthers = (e) => {
     const { name, value } = e.target;
@@ -331,6 +330,16 @@ const handleCallingFeedBackOthers = (e)=>{
 
   const handleChange = (e) => {
     const { name, value } = e.target || e;
+
+    if (name === "selectYesOrNo" && value !== "Interested") {
+      setLineUpData((prevData) => ({
+        ...prevData,
+        finalStatus: "",
+        availabilityForInterview: "",
+        interviewTime: "",
+      }));
+    }
+    
 
     // Rajlaxmi Jagadale Added Email Validation Date-24-01-25 line263 to 312
     if (name === "sourceName" && value === "others") {
@@ -464,6 +473,15 @@ const handleCallingFeedBackOthers = (e)=>{
           ...prevErrors,
           experienceMonth: "Experience in months cannot exceed 11.",
         }));
+    
+        // Clear error after 4 seconds
+        setTimeout(() => {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            experienceMonth: "",
+          }));
+        }, 2000);
+        
         return;
       } else {
         setErrors((prevErrors) => ({
@@ -472,6 +490,7 @@ const handleCallingFeedBackOthers = (e)=>{
         }));
       }
     }
+    
 
     if (name === "currentCTCLakh" || name === "currentCTCThousand") {
       const lakhValue = parseFloat(updatedLineUpData.currentCTCLakh) || 0;
@@ -652,6 +671,7 @@ const handleCallingFeedBackOthers = (e)=>{
         setCallingTracker(initialCallingTrackerState);
         setLineUpData(initialLineUpState);
       }
+      setIsFormVisible(false);
     } catch (error) {
       setSubmited(false);
       setLoading(false);
@@ -1498,7 +1518,7 @@ const handleCallingFeedBackOthers = (e)=>{
                       </option>
                       <option value="LinkedIn">linkedIn</option>
                       <option value="Naukri">Naukri</option>
-                      <option value="Indeed">Indeed </option>
+                      <option value="Indeed">Indeed</option>
                       <option value="Times">Times</option>
                       <option value="Social Media">Social Media</option>
                       <option value="Company Page">Company Page</option>
@@ -2597,7 +2617,7 @@ tooltips={desc} value={callingTracker.communicationRating}
 
 <select
   className="plain-input setwidthandmarginforratings"
-  name="callingFeedback"
+  name="communicationRating"
   value={callingTracker.communicationRating}
   onChange={handleRatingsChange1}
 >

@@ -21,8 +21,9 @@ const PieChart = ({
   useEffect(() => {
     setCurrentDate(getFormattedDateTime());
   }, []);
-  const categories = data.map((item) => item.category);
-  const counts = data.map((item) => item.count);
+  const filteredData = data.filter(item => item.category !== "TotalCandidates");
+  const categories = filteredData.map((item) => item.category);
+  const counts = filteredData.map((item) => item.count);
 
   const predefinedColors = [
     "rgba(160, 82, 45, 0.7)",
@@ -60,6 +61,17 @@ const PieChart = ({
       },
     ],
   };
+
+
+  const options = {
+    plugins: {
+      title: {
+        display: true,
+        text: "Count Tracker - Candidates Categories vs Count",
+      },
+    },
+
+  };
   return (
     <>
       <div className="mainChartContainer setwidthacordingtoadjustchartsclass" >
@@ -67,7 +79,7 @@ const PieChart = ({
 
         <div className="subdivforcharts">
           <div className="piecontainer">
-            <Pie className="newsahilcanvas" data={chartData} />
+            <Pie className="newsahilcanvas" data={chartData} options={options}/>
           </div>
 
           {/* <div className="newIndexDiv">
@@ -94,3 +106,4 @@ const PieChart = ({
   );
 };
 export default PieChart;
+

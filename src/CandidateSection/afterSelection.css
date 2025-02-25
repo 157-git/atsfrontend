@@ -111,7 +111,7 @@
 
 .after-document-fisrt:hover {
 
-  background-color: var(--Bg-color);
+  background-color: var(--selected-form-bg);
 
 }
 
@@ -125,7 +125,7 @@
 
 .after-documnet-sub:hover {
 
-  background-color: var(--Bg-color);
+  background-color: var(--selected-form-bg);
 
 }
 

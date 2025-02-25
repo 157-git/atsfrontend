@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "../ResumeData/shareLink.css";
 import CryptoJS from "crypto-js";
+import { Tag } from "antd";
 
 const ShareLink = ({ toggleResumeLink }) => {
   const { employeeId, userType } = useParams();
@@ -80,7 +81,9 @@ const ShareLink = ({ toggleResumeLink }) => {
   return (
     <div className="shareLink-mainDiv">
       <div className="shareLink-share-btn-Div">
-        <h1>Share Link To Candidate</h1>
+        <h1 style={{
+          color:"var(--sidebar-txt)"
+        }}>Share Link To Candidate</h1>
         <div className="share-copy-div">
           <button className="shareLink-share-btn" onClick={handleShareLink}>
             Share 🔗
@@ -89,25 +92,25 @@ const ShareLink = ({ toggleResumeLink }) => {
             Copy Link 🔗
           </button>
         </div>
-        <span style={{ color: "black", fontSize: "14px" }}>
+        <span style={{ color: "var(--sidebar-txt)", fontSize: "14px" }}>
           Share this link with the candidate so they can fill in their
           information through the link.
         </span>
         {copyMessage && (
           <div className="copyMessage">
-            <span style={{ color: "green", fontSize: "14px" }}>
-              {copyMessage}
-            </span>
+            <Tag color="#87d068">{copyMessage}</Tag>
           </div>
         )}
       </div>
 
       <div className="shareLink-view-btn-Div">
-        <h1>Resume Builder</h1>
+      <h1 style={{
+          color:"var(--sidebar-txt)"
+        }} >Resume Builder</h1>
         <button className="shareLink-view-btn" onClick={toggleResumeLink}>
           Create
         </button>
-        <span style={{ color: "black", fontSize: "14px" }}>
+        <span style={{ color: "var(--sidebar-txt)", fontSize: "14px" }}>
           If the candidate doesn't have a resume, they can create one here.
         </span>
       </div>

@@ -432,6 +432,8 @@ function ApplicantForm2({ loginEmployeeName }) {
   const startYear = 2003;
   const calendarStartDate = new Date(startYear, 0, 1);
   const calendarStartDateString = calendarStartDate.toISOString().split("T")[0];
+  console.log(calendarStartDateString);
+  
 
   const handleFileChange = async (e, index) => {
     const file = e.target.files[0]; // Get the uploaded file
@@ -1420,7 +1422,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                     value={formData.lineUp.dateOfBirth}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
-                    min={calendarStartDateString}
+                    // min={calendarStartDateString}
                     max={minDateString}
                   />
                 </div>

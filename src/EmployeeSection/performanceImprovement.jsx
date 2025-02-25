@@ -958,9 +958,11 @@ console.log(spentTime);
   const showModal1 = () => {
     setIsModalOpen1(true);
   };
+  const [displayAllThingsOfPerformance, setDisplayAllThingsOfPerformance] = useState(false);
   const handleOk = () => {
     handleGetFilteredData();
     setIsModalOpen1(false);
+    setDisplayAllThingsOfPerformance(true);
   };
   const handleCancel = () => {
     setIsModalOpen1(false);
@@ -1225,6 +1227,9 @@ console.log(spentTime);
             value={JSON.stringify(item)}
             checked={selectedJobId.some((i) => i.requirementId === item.requirementId)}
             onChange={(e) => handleCheckboxChangeForJobIdsForPerformance(e, item)}
+            style={{
+               marginRight:"10px"
+            }}
           />
           {item.requirementId} : {item.companyName}
         </label>
@@ -1244,7 +1249,7 @@ console.log(spentTime);
                 </option>
               ))}
             </select> */}
- <div className="PIE-client-desg-role">
+ <div className="PIE-client-desg-role fixperformanceclientsection">
             { selectedJobId.length > 0 && selectedJobId.map((compItem, index)=>(
  <>
  <div className="divlength100forperformancejoblist">
@@ -1277,7 +1282,10 @@ console.log(spentTime);
         </div>
       </div>
 
-      <div className="PIT-heading">
+{
+  displayAllThingsOfPerformance && (
+<>
+<div className="PIT-heading">
         <h5 className="text-secondary">Performance Table</h5>
       </div>
       <div className="PIE-maintable tablefixheigt">
@@ -1578,6 +1586,10 @@ console.log(spentTime);
           <PerformanceMeter></PerformanceMeter>
         </div> */}
       </div>
+</>
+  )
+}
+    
 
       <BootstrapModal show={showModal} onHide={() => setShowModal(false)}>
         <BootstrapModal.Header closeButton>

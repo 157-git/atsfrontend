@@ -5,6 +5,9 @@ const PrintTableComp = ({userName, currentDate, finalStartDatePropState, finalEn
      <div className="tablecont">
              <div className="tabledivmain">
                <div className="infodiv">
+                <p style={{
+                  color:"blue"
+                }}>CANDIDATE REPORT</p>
                  <p>{userName}</p>
                  <p>{currentDate}</p>
                  <p>

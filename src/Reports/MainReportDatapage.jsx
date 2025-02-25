@@ -13,7 +13,7 @@ import { data } from "autoprefixer";
 import Loader from "../EmployeeSection/loader";
 import { Avatar, Card, List, Modal, Skeleton } from "antd";
 import { getUserImageFromApiForReport } from "./getUserImageFromApiForReport";
-import { DownOutlined, UsergroupAddOutlined } from '@ant-design/icons';
+import { ClearOutlined, DownOutlined, UsergroupAddOutlined } from '@ant-design/icons';
 
 const MonthReport = ({ loginEmployeeName }) => {
   const { userType } = useParams();
@@ -38,8 +38,33 @@ const MonthReport = ({ loginEmployeeName }) => {
   const [managersList, setManagersList] = useState([]);
   const [teamLeadersList, setTeamLeadersList] = useState([]);
   const [recruitersList, setRecruitersList] = useState([]);
+  const [activeManager, setActiveManager] = useState(null); // Tracks active manager dropdown
+  const [activeTeamLeader, setActiveTeamLeader] = useState(null); // Tracks active team leader dropdown
+  const [managerToTeamLeaders, setManagerToTeamLeaders] = useState({}); // Maps managerId to teamLeaderIds
+const [teamLeaderToRecruiters, setTeamLeaderToRecruiters] = useState({}); // Maps teamLeaderId to recruiterIds
+
+  const toggleManager = (managerId) => {
+    if (activeManager === managerId) {
+      // If the same manager is clicked again, reverse the rotation
+      setActiveManager(null);
+    } else {
+      // Rotate the new manager's icon and reverse the previous one
+      setActiveManager(managerId);
+    }
+  };
+
+  const toggleTeamLeader = (teamLeaderId) => {
+    if (activeTeamLeader === teamLeaderId) {
+      // If the same team leader is clicked again, reverse the rotation
+      setActiveTeamLeader(null);
+    } else {
+      // Rotate the new team leader's icon and reverse the previous one
+      setActiveTeamLeader(teamLeaderId);
+    }
+  };
 
   const handleDisplayManagers = async () => {
+    setDisplayModalContainer(true);
     if (userType === "SuperUser") {
       setDisplayBigSkeletonForManagers(true);
       const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
@@ -51,7 +76,7 @@ const MonthReport = ({ loginEmployeeName }) => {
       const response = await axios.get(
         `${API_BASE_URL}/tl-namesIds/${employeeId}`
       );
-     
+
       setTeamLeadersList(response.data);
       setDisplayBigSkeletonForTeamLeaders(false);
       setDisplayTeamLeaders(true)
@@ -60,7 +85,7 @@ const MonthReport = ({ loginEmployeeName }) => {
       const response = await axios.get(
         `${API_BASE_URL}/employeeId-names/${employeeId}`
       );
-     
+
       setRecruitersList(response.data);
       setDisplayBigSkeletonForRecruiters(false);
       setDisplayRecruiters(true);
@@ -77,17 +102,22 @@ const MonthReport = ({ loginEmployeeName }) => {
     const container = document.querySelector(".typesOfReportDiv");
     container.scrollBy({ left: 300, behavior: "smooth" });
   };
+  console.log(selectedIds);
 
   const handleOpenDownArrowContent = async (managerid) => {
     setDisplayTeamLeaders(false);
-    setSelectedIds([]);
-setAllImagesForTeamLeaders([]);
+    // setSelectedIds([]);
+    setAllImagesForTeamLeaders([]);
     try {
       setDisplayBigSkeletonForTeamLeaders(true);
       const response = await axios.get(
         `${API_BASE_URL}/tl-namesIds/${managerid}`
       );
       setTeamLeadersList(response.data);
+      setManagerToTeamLeaders((prev) => ({
+        ...prev,
+        [managerid]: response.data.map((tl) => tl.teamLeaderId), // Map manager to team leaders
+      }));
       setDisplayBigSkeletonForTeamLeaders(false);
       setDisplayTeamLeaders(true);
       setDisplayRecruiters(false);
@@ -98,15 +128,30 @@ setAllImagesForTeamLeaders([]);
 
   const handleOpenDownArrowContentForRecruiters = async (teamLeaderId) => {
     setDisplayRecruiters(false);
-    setSelectedIds([]);
+    // setSelectedIds([]);
     setAllImagesForRecruiters([]);
     setDisplayBigSkeletonForRecruiters(true);
     const response = await axios.get(
       `${API_BASE_URL}/employeeId-names/${teamLeaderId}`
     );
     setRecruitersList(response.data);
+    setTeamLeaderToRecruiters((prev) => ({
+      ...prev,
+      [teamLeaderId]: response.data.map((recruiter) => recruiter.employeeId), // Map team leader to recruiters
+    }));
     setDisplayBigSkeletonForRecruiters(false);
     setDisplayRecruiters(true);
+  };
+
+  const hasSelectedChildren = (parentId, parentType) => {
+    if (parentType === "Manager") {
+      const teamLeaderIds = managerToTeamLeaders[parentId] || [];
+      return teamLeaderIds.some((tlId) => selectedIds.includes(tlId));
+    } else if (parentType === "TeamLeader") {
+      const recruiterIds = teamLeaderToRecruiters[parentId] || [];
+      return recruiterIds.some((recruiterId) => selectedIds.includes(recruiterId));
+    }
+    return false;
   };
 
   const handleOk = () => {
@@ -117,6 +162,7 @@ setAllImagesForTeamLeaders([]);
   };
 
   const handleCheckboxChange = async (role, id, completeValueObject) => {
+
     setLoading(true);
 
     // Determine updated IDs manually
@@ -142,12 +188,8 @@ setAllImagesForTeamLeaders([]);
       setDisplayRecruiters(false);
     }
 
-    // Log the complete value object
-    console.log("Complete Value Object:", completeValueObject);
-
     // Prepare API call
     const userIdForApi = updatedIds.join(",");
-    console.log("Selected IDs for API:", userIdForApi);
 
     // Date handling
     const startDate = showCustomDiv ? customStartDate : startDate1;
@@ -159,7 +201,6 @@ setAllImagesForTeamLeaders([]);
       const response = await axios.get(
         `${API_BASE_URL}/report-count/${userIdForApi}/${role}/${startDate}/${endDate}`
       );
-      console.log("API Response:", response.data);
       setReportDataDatewise(response.data);
       setOpenReport(true);
     } catch (error) {
@@ -218,32 +259,65 @@ setAllImagesForTeamLeaders([]);
     return { startDate, endDate };
   };
 
-  const handleOptionChange = (event) => {
+  const handleOptionChange = async (event) => {
     const value = event.target.value;
-    setSelectedRole("");
-    setSelectedIds([]);
-    // setDisplayModalContainer(true);
+
     setSelectedOption(value);
+
     if (value === "custom") {
       setDisplayModalContainer(false);
       setShowCustomDiv(true);
-    } else {
+      return;
+    }
+
+    if (selectedRole === "" && selectedIds.length === 0) {
       setDisplayModalContainer(true);
       setShowCustomDiv(false);
-
-      // Calculate date range for predefined options and apply the changes
-      const { startDate, endDate } = calculateDateRange(value);
-      console.log("Date Range Applied:", {
-        startDate: startDate.toISOString().split("T")[0],
-        endDate: endDate.toISOString().split("T")[0],
-      });
-
-      setStartDate1(startDate.toISOString().split("T")[0]);
-      setEndDate1(endDate.toISOString().split("T")[0]);
+      handleDisplayManagers();
+      setDisplayMoreButton(true);
+    } else {
+      setDisplayModalContainer(false);
     }
-    handleDisplayManagers();
-    setDisplayMoreButton(true);
+
+    // Calculate date range for predefined options
+    const { startDate, endDate } = calculateDateRange(value);
+    if (!startDate || !endDate) {
+      console.error("Invalid date range calculated.");
+      return;
+    }
+
+    const formattedStartDate = startDate.toISOString().split("T")[0];
+    const formattedEndDate = endDate.toISOString().split("T")[0];
+
+    setStartDate1(formattedStartDate);
+    setEndDate1(formattedEndDate);
+
+    // API Call when role and IDs are selected
+    if (selectedRole !== "" && selectedIds.length !== 0) {
+      setLoading(true);
+
+      const finalStartDate = showCustomDiv ? customStartDate : formattedStartDate;
+      const finalEndDate = showCustomDiv ? customEndDate : formattedEndDate;
+
+      setFinalStartDatePropState(finalStartDate);
+      setFinalEndDatePropState(finalEndDate);
+
+      const userIdForApi = selectedIds.join(",");
+
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/report-count/${userIdForApi}/${selectedRole}/${finalStartDate}/${finalEndDate}`
+        );
+        setReportDataDatewise(response.data);
+        setOpenReport(true);
+      } catch (error) {
+        console.error("Error fetching report data:", error);
+      } finally {
+        setLoading(false); // Ensures loading is disabled even if API fails
+      }
+    }
   };
+
 
   const handleCustomStartDateChange = (event) => {
     setCustomStartDate(event.target.value);
@@ -260,10 +334,6 @@ setAllImagesForTeamLeaders([]);
   };
 
   const applyCustomDateRange = (start, end) => {
-    console.log("Custom Date Range Applied:", {
-      startDate: start,
-      endDate: end,
-    });
     setDisplayModalContainer(true);
   };
 
@@ -277,12 +347,11 @@ setAllImagesForTeamLeaders([]);
         })
       );
       setAllImagesForRecruiters(images); // Set the array of image URLs
-     
+
     };
 
     fetchAllImagesForRecruiters();
   }, [recruitersList]);
-  console.log(allImagesForRecruiters);
 
   const [allImagesForTeamLeaders, setAllImagesForTeamLeaders] = useState([]); // Initialize as an object
 
@@ -314,6 +383,13 @@ setAllImagesForTeamLeaders([]);
     fetchAllImagesForManagers();
   }, [managersList]);
 
+  const handleClearSelection = (userType) => {
+    if (userType) {
+      setSelectedRole("");
+      setSelectedIds([]);
+    }
+  }
+
   return (
     <>
       <div className="listofButtons11">
@@ -333,10 +409,10 @@ setAllImagesForTeamLeaders([]);
             { id: 1, label: "Candidate Report" },
             { id: 2, label: "Invoice Report" },
             { id: 3, label: "Recruiters Report" },
-            { id: 4, label: "Candidate Report" },
-            { id: 5, label: "Candidate Report" },
-            { id: 6, label: "Candidate Report" },
-            { id: 7, label: "Candidate Report" },
+            // { id: 4, label: "Candidate Report" },
+            // { id: 5, label: "Candidate Report" },
+            // { id: 6, label: "Candidate Report" },
+            // { id: 7, label: "Candidate Report" },
           ].map((report, index) => (
             <div
               key={report.id}
@@ -374,17 +450,26 @@ setAllImagesForTeamLeaders([]);
         </button>
       </div>
 
+
       {openSelectDate && (
         <div className="tracker-date-report-option">
           <div className="histry-date-div">
             {displayMoreButton && (
-              <button className="daily-tr-btn" onClick={handleDisplayManagers}>
-                <UsergroupAddOutlined />
-               <DownOutlined />
-              </button>
+             <button
+             className={`daily-tr-btn ${selectedIds.length > 0 ? "newclassforhighlightbutton" : ""}`}
+             onClick={handleDisplayManagers}
+           >
+             <UsergroupAddOutlined />
+             <DownOutlined />
+           </button>
+           
             )}
 
-            <label className="PI-radio-label">
+            <label className="PI-radio-label"
+              style={{
+                backgroundColor: selectedOption === "Current Month" && "var(--active-button1-bg)"
+              }}
+            >
               <input
                 type="radio"
                 value="Current Month"
@@ -395,7 +480,11 @@ setAllImagesForTeamLeaders([]);
               />
               Current Month
             </label>
-            <label className="PI-radio-label">
+            <label className="PI-radio-label"
+              style={{
+                backgroundColor: selectedOption === "Last Month" && "var(--active-button1-bg)"
+              }}
+            >
               <input
                 type="radio"
                 value="Last Month"
@@ -406,7 +495,11 @@ setAllImagesForTeamLeaders([]);
               />
               Last Month
             </label>
-            <label className="PI-radio-label">
+            <label className="PI-radio-label"
+              style={{
+                backgroundColor: selectedOption === "Last 3 Months" && "var(--active-button1-bg)"
+              }}
+            >
               <input
                 type="radio"
                 value="Last 3 Months"
@@ -417,7 +510,11 @@ setAllImagesForTeamLeaders([]);
               />
               Last 3 Months
             </label>
-            <label className="PI-radio-label">
+            <label className="PI-radio-label"
+              style={{
+                backgroundColor: selectedOption === "Last 6 Months" && "var(--active-button1-bg)"
+              }}
+            >
               <input
                 type="radio"
                 value="Last 6 Months"
@@ -428,7 +525,11 @@ setAllImagesForTeamLeaders([]);
               />
               Last 6 Months
             </label>
-            <label className="PI-radio-label">
+            <label className="PI-radio-label"
+              style={{
+                backgroundColor: selectedOption === "Last 1 Year" && "var(--active-button1-bg)"
+              }}
+            >
               <input
                 type="radio"
                 value="Last 1 Year"
@@ -439,7 +540,11 @@ setAllImagesForTeamLeaders([]);
               />
               Last 1 Year
             </label>
-            <label className="PI-radio-label">
+            <label className="PI-radio-label"
+              style={{
+                backgroundColor: selectedOption === "custom" && "var(--active-button1-bg)"
+              }}
+            >
               <input
                 type="radio"
                 value="custom"
@@ -493,13 +598,31 @@ setAllImagesForTeamLeaders([]);
                     height: "65vh",
                     overflowY: "scroll",
                   }}
-                  title={"Managers"}
+                  title={
+                    selectedRole === "Manager" && selectedIds.length > 0 ? ( // Conditional rendering
+                      <div className="newclearbuttonaddclass">
+                        <span>Managers</span>
+                        <button
+                          className="clearbuttonReport"
+                          onClick={() => handleClearSelection("Managers")}
+                        >
+                          <ClearOutlined className="newcolorforclearicon" />
+                        </button>
+                      </div>
+                    ) : (
+                      "Managers"
+                    )
+                  }
                 >
                   <List
                     itemLayout="horizontal"
                     dataSource={managersList}
                     renderItem={(item, index) => (
-                      <List.Item>
+                      <List.Item
+                      className={
+                        hasSelectedChildren(item.managerId, "Manager") ? "highlight-item" : ""
+                      }
+                      >
                         <input
                           className="managersTeamRecruitersInputMargin"
                           type="checkbox"
@@ -517,28 +640,30 @@ setAllImagesForTeamLeaders([]);
                         />
                         <List.Item.Meta
                           avatar={
-                            allImagesForManagers.length  === 0 ? (
+                            allImagesForManagers.length === 0 ? (
                               <Skeleton.Avatar active />
-                            ): (
-                            <Avatar
-                              src={
-                                allImagesForManagers.length > 0 ?
-                                  allImagesForManagers[index] !== null ? allImagesForManagers[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
-                              }
-                            />
+                            ) : (
+                              <Avatar
+                                src={
+                                  allImagesForManagers.length > 0 ?
+                                    allImagesForManagers[index] !== null ? allImagesForManagers[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                                }
+                              />
                             )
                           }
                           title={item.managerName}
                         />
                         <svg
-                          onClick={(e) =>
-                            handleOpenDownArrowContent(item.managerId)
-                          }
+                          onClick={(e) => {
+                            handleOpenDownArrowContent(item.managerId); // Your existing logic
+                            toggleManager(item.managerId); // Toggle rotation
+                          }}
                           xmlns="http://www.w3.org/2000/svg"
                           height="24px"
                           viewBox="0 -960 960 960"
                           width="24px"
                           fill="#000000"
+                          className={activeManager === item.managerId ? "rotate-icon" : ""} // Apply rotation class
                         >
                           <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
                         </svg>
@@ -547,16 +672,16 @@ setAllImagesForTeamLeaders([]);
                   />
                 </Card>
               )
-              : displayBigSkeletonForManagers && (
-                <Skeleton.Node
-            active={true}
-            style={{
-              width: 300,
-              height:"65vh"
-            }}
-          />
-              )
-              
+                : displayBigSkeletonForManagers && (
+                  <Skeleton.Node
+                    active={true}
+                    style={{
+                      width: 300,
+                      height: "65vh"
+                    }}
+                  />
+                )
+
               }
               {displayTeamLeaders ? (
                 <>
@@ -569,13 +694,32 @@ setAllImagesForTeamLeaders([]);
                         height: "65vh",
                         overflowY: "scroll",
                       }}
-                      title={"Team Leaders"}
+                      title={
+                        selectedRole === "TeamLeader" && selectedIds.length > 0 ? ( // Conditional rendering
+                          <div className="newclearbuttonaddclass">
+                            <span>Team Leaders</span>
+                            <button
+                              className="clearbuttonReport"
+                              onClick={() => handleClearSelection("Team Leaders")}
+                            >
+                              <ClearOutlined className="newcolorforclearicon" />
+                            </button>
+                          </div>
+                        ) : (
+                          "Team Leaders"
+                        )
+                      }
+
                     >
                       <List
                         itemLayout="horizontal"
                         dataSource={teamLeadersList}
                         renderItem={(teamLeader, index) => (
-                          <List.Item>
+                          <List.Item
+                          className={
+                            hasSelectedChildren(teamLeader.teamLeaderId, "TeamLeader") ? "highlight-item" : ""
+                          }
+                          >
                             <input
                               className="managersTeamRecruitersInputMargin"
                               type="checkbox"
@@ -593,30 +737,30 @@ setAllImagesForTeamLeaders([]);
                             />
                             <List.Item.Meta
                               avatar={
-                                allImagesForTeamLeaders.length === 0 ?(
+                                allImagesForTeamLeaders.length === 0 ? (
                                   <Skeleton.Avatar active />
-                                ): (
-                                <Avatar
-                                  src={
-                                    allImagesForTeamLeaders.length > 0 ?
-                                      allImagesForTeamLeaders[index] !== null ? allImagesForTeamLeaders[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
-                                  }
-                                />
+                                ) : (
+                                  <Avatar
+                                    src={
+                                      allImagesForTeamLeaders.length > 0 ?
+                                        allImagesForTeamLeaders[index] !== null ? allImagesForTeamLeaders[index] : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}` : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
+                                    }
+                                  />
                                 )
                               }
                               title={teamLeader.teamLeaderName}
                             />
                             <svg
-                              onClick={(e) =>
-                                handleOpenDownArrowContentForRecruiters(
-                                  teamLeader.teamLeaderId
-                                )
-                              }
+                              onClick={(e) => {
+                                handleOpenDownArrowContentForRecruiters(teamLeader.teamLeaderId); // Your existing logic
+                                toggleTeamLeader(teamLeader.teamLeaderId); // Toggle rotation
+                              }}
                               xmlns="http://www.w3.org/2000/svg"
                               height="24px"
                               viewBox="0 -960 960 960"
                               width="24px"
                               fill="#000000"
+                              className={activeTeamLeader === teamLeader.teamLeaderId ? "rotate-icon" : ""} // Apply rotation class
                             >
                               <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
                             </svg>
@@ -627,16 +771,16 @@ setAllImagesForTeamLeaders([]);
                   }
                 </>
               )
-              : displayBigSkeletonForTeamLeaders && (
-                <Skeleton.Node
-            active={true}
-            style={{
-              width: 300,
-              height:"65vh"
-            }}
-          />
-              )
-              
+                : displayBigSkeletonForTeamLeaders && (
+                  <Skeleton.Node
+                    active={true}
+                    style={{
+                      width: 300,
+                      height: "65vh"
+                    }}
+                  />
+                )
+
               }
 
               {displayRecruiters ? (
@@ -649,7 +793,22 @@ setAllImagesForTeamLeaders([]);
                         height: "65vh",
                         overflowY: "scroll",
                       }}
-                      title={"Recruiters"}
+                      title={
+                        selectedRole === "Recruiters" && selectedIds.length > 0 ? ( // Conditional rendering
+                          <div className="newclearbuttonaddclass">
+                            <span>Recruiters</span>
+                            <button
+                              className="clearbuttonReport"
+                              onClick={() => handleClearSelection("Recruiters")}
+                            >
+                              <ClearOutlined className="newcolorforclearicon" />
+
+                            </button>
+                          </div>
+                        ) : (
+                          "Recruiters"
+                        )
+                      }
                     >
                       <List
                         itemLayout="horizontal"
@@ -674,8 +833,8 @@ setAllImagesForTeamLeaders([]);
                             <List.Item.Meta
                               avatar={
                                 allImagesForRecruiters.length === 0 ? (
-                <Skeleton.Avatar active />
-              ) : (
+                                  <Skeleton.Avatar active />
+                                ) : (
                                   <Avatar
                                     src={
                                       allImagesForRecruiters.length > 0
@@ -685,7 +844,7 @@ setAllImagesForTeamLeaders([]);
                                         : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
                                     }
                                   />
-                                  )
+                                )
                               }
                               title={recruiter.employeeName}
                             />
@@ -696,16 +855,16 @@ setAllImagesForTeamLeaders([]);
                   }
                 </>
               )
-            : displayBigSkeletonForRecruiters && (
-              <Skeleton.Node
-          active={true}
-          style={{
-            width: 300,
-            height:"65vh"
-          }}
-        />
-            )
-            }
+                : displayBigSkeletonForRecruiters && (
+                  <Skeleton.Node
+                    active={true}
+                    style={{
+                      width: 300,
+                      height: "65vh"
+                    }}
+                  />
+                )
+              }
 
             </div>
           </Modal>
@@ -721,6 +880,8 @@ setAllImagesForTeamLeaders([]);
           finalStartDatePropState={finalStartDatePropState}
           finalEndDatePropState={finalEndDatePropState}
           loginEmployeeName={loginEmployeeName}
+          selectedRole={selectedRole}
+          selectedIds={selectedIds}
         />
       )}
     </>

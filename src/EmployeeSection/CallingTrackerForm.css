@@ -620,6 +620,7 @@ strong {
 
 .calling-tracker-popup-sidebar p {
   border: 1px solid #dee2e6;
+  color: var(--sidebar-txt);
 }
 .sidebar-item {
   cursor: pointer;

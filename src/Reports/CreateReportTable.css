@@ -110,11 +110,10 @@
           position: sticky;
           top: 0;
           background-color: var(--Bg-color);
-          color:var(--text-color);
+          color:var(--table-header-txt);
           z-index: 1;
           height: 30px;
           white-space: nowrap;
-          color:var(--text-color);
           max-width: auto !important;
           font-size: 16px;
           font-weight: 500;
@@ -248,4 +247,22 @@
       }
       .setDisplayBlockNewChartPrint{
         display: flex;
+        width: fit-content;
+        justify-content: center;
+      }
+      .btnShareAndDownload{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .downloadAnimeImg{
+        width: 24px;
+        mix-blend-mode: multiply;
+      
+      }
+      .newClassNameForMakeBold{
+        font-weight: bold;
+        font-size: 18px;
+        color: black;
       }
