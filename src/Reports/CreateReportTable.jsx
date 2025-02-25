@@ -470,6 +470,3 @@ const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole, fina
 };
 
 export default Attendance;
-
-
-
