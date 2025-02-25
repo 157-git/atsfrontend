@@ -117,9 +117,7 @@ border-right: 1px solid black;
   justify-content: center;
   margin-bottom: 40px;
 }
-.setwidthacordingtoadjustchartsclass{
-  width: 50%;
-}
+
 .newsetPositionrelative{
   position: relative;
 }
