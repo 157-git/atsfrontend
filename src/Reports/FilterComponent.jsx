@@ -58,11 +58,7 @@ const FilterComponent = ({ filteredLineUpItems, onFilterChange }) => {
 
   return (
     <div className='newsetPositionrelative'>
-      <button className="lineUp-Filter-btn" onClick={() => setDisplaySelectCategories(!displaySelectCategories)}>
-        Create Chart <BarChartOutlined />
-      </button>
 
-      {displaySelectCategories && (
         <div className="filter-dropdowns">
           <div className="filter-section">
             {Object.keys(categories).map((category) => (
@@ -96,7 +92,7 @@ const FilterComponent = ({ filteredLineUpItems, onFilterChange }) => {
           </div>
 
         </div>
-      )}
+
     </div>
   );
 };

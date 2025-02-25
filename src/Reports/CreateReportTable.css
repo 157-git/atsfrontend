@@ -96,7 +96,7 @@
         .report-App-after {
           width: 100%;
           background-attachment: fixed;
-          height: 92vh;
+          /* height: 92vh; */
           overflow: hidden !important;
 
         }

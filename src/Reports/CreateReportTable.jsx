@@ -802,6 +802,13 @@ const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole, fina
         forPieWidthContainer1[0].style.display = 'block';
 
       }
+      
+      const newclassforsethightbar = document.getElementsByClassName('newclassforsethightbar');
+      if (newclassforsethightbar.length > 0) {
+        // forPieWidthContainer[0].style.display = 'block';
+        newclassforsethightbar[0].style.width = '490px';
+        newclassforsethightbar[0].style.height = '490px';
+      }
 
       const input = document.getElementById('divToPrint');
 
@@ -861,6 +868,12 @@ const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole, fina
         newbarchartclassforsetstyles[0].style.width = '450px';
         newbarchartclassforsetstyles[0].style.width = '450px';
       }
+      if (newclassforsethightbar.length > 0) {
+        // forPieWidthContainer[0].style.display = 'block';
+        newclassforsethightbar[0].style.width = '490px';
+        newclassforsethightbar[0].style.height = '490px';
+
+      }
       setModalIsOpen(true);
       setLoading(false);
     } catch (error) {
@@ -887,10 +900,10 @@ const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole, fina
       console.log(category);
 
 
-      const response = await axios.get(`${API_BASE_URL}/candidate-category/${category}/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`, {
-        // params: {
-        //   status: category,
-        // },
+      const response = await axios.get(`${API_BASE_URL}/candidate-category/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`, {
+        params: {
+          status: category,
+        },
       });
 
       setStatusCategory(category);
@@ -1009,12 +1022,6 @@ const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole, fina
           </div>
                  )
                 }
-
-          {
-                displaycreatechartbtn && (
-<button className="lineUp-Filter-btn" onClick={handletoggletable}> {displaycandidatedatareporttable ? <> Hide Candidate Details <UpOutlined /> </>  : <> Show Candidate Details <DownOutlined /> </>}</button>
-                )
-              }
           <div className="newdivformakechartsflex">
 
             {
@@ -1026,6 +1033,11 @@ const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole, fina
               
               )
             }
+                {
+                displaycreatechartbtn && (
+<button className="lineUp-Filter-btn" onClick={handletoggletable}> {displaycandidatedatareporttable ? <> Hide Candidate Details <UpOutlined /> </>  : <> Show Candidate Details <DownOutlined /> </>}</button>
+                )
+              }
 
             <div className="setchartsdiplayflex" id="divToPrint">
               <PrintTableComp userName={userName} currentDate={getFormattedDateTime()} finalStartDatePropState={finalStartDatePropState} finalEndDatePropState={finalEndDatePropState} data={reportDataDatewise} />
@@ -1037,6 +1049,7 @@ const Attendance = ({ reportDataDatewise, selectedIdsProp, selectedJobRole, fina
                 }
                
                 <BarChartComponent
+                
                   selectedCategory={selectedCategory}
                   selectedSubCategories={selectedSubCategories}
                   filteredLineUpItems={newData}

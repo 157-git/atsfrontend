@@ -24,6 +24,7 @@ import ApplicantForm from "./Applicant/applicantFrom.jsx";
 import ApplicationForm1 from "./Applicant/ApplicationForm1.jsx";
 import ApplicantForm2 from "./Applicant/applicantForm2.jsx";
 import ThankYouPage from "./Applicant/applicantThankYou.jsx";
+import InterviewForm1 from "./Help/InterviewForm1.jsx";
 
 const applySavedColors = () => {
   const bgColor = localStorage.getItem("bgColor");
@@ -178,6 +179,10 @@ const App = () => {
             path="/157industries/:employeeId/:userType/candidate-form"
             element={<ApplicationForm1 loginEmployeeName={loginEmployeeName}  />}
           ></Route> */}
+           <Route
+            path="/tempRoute"
+            element={<InterviewForm1></InterviewForm1>}
+          ></Route>
         </Routes>
       </BrowserRouter>
       <ToastContainer />

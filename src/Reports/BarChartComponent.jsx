@@ -99,7 +99,7 @@ const chartOptions = {
   return (
     <div className='setwidthacordingtoadjustchartsclass newclassforalignitemscenter'>
       {selectedCategory && selectedSubCategories.length > 0 && (
-        <Bar data={chartData} options={chartOptions}/>
+        <Bar className='newclassforsethightbar' data={chartData} options={chartOptions}/>
       )}
     </div>
   );
