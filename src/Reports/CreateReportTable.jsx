@@ -120,6 +120,15 @@ const Attendance = ({
         forPieWidthContainer1[0].style.display = "block";
       }
 
+      const newclassforsethightbar = document.getElementsByClassName(
+        "newclassforsethightbar"
+      );
+      if (newclassforsethightbar.length > 0) {
+        // forPieWidthContainer[0].style.display = 'block';
+        // newclassforsethightbar[0].style.width = "490px";
+        // newclassforsethightbar[0].style.height = "490px";
+      }
+
       const input = document.getElementById("divToPrint");
 
       // Adjust the canvas dimensions for better resolution
@@ -176,6 +185,11 @@ const Attendance = ({
         newbarchartclassforsetstyles[0].style.width = "450px";
         newbarchartclassforsetstyles[0].style.width = "450px";
       }
+      if (newclassforsethightbar.length > 0) {
+        // forPieWidthContainer[0].style.display = 'block';
+        newclassforsethightbar[0].style.width = "490px";
+        newclassforsethightbar[0].style.height = "490px";
+      }
       setModalIsOpen(true);
       setLoading(false);
     } catch (error) {
@@ -211,7 +225,11 @@ const Attendance = ({
     handleFilterDataInterview(statusCategory, 1, size);
   };
 
-  const handleFilterDataInterview = async (category, page = currentPage, size = pageSize) => {
+  const handleFilterDataInterview = async (
+    category,
+    page = currentPage,
+    size = pageSize
+  ) => {
     setLoading(true);
     try {
       console.log(category);
@@ -225,7 +243,6 @@ const Attendance = ({
           },
         }
       );
-
       setStatusCategory(category);
       setNewData(response.data);
       setTotalItems(response.data.totalItems); // Total count of candidates
@@ -237,7 +254,7 @@ const Attendance = ({
       setLoading(false);
     }
   };
-  
+
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
   const handleFilterChange = (category, subCategories) => {
@@ -353,22 +370,6 @@ const Attendance = ({
               </div>
             )}
 
-          {displaycreatechartbtn && (
-            <button className="lineUp-Filter-btn" onClick={handletoggletable}>
-              {" "}
-              {displaycandidatedatareporttable ? (
-                <>
-                  {" "}
-                  Hide Candidate Details <UpOutlined />{" "}
-                </>
-              ) : (
-                <>
-                  {" "}
-                  Show Candidate Details <DownOutlined />{" "}
-                </>
-              )}
-            </button>
-          )}
           <div className="newdivformakechartsflex">
             {displaycreatechartbtn && (
               <>
@@ -377,6 +378,22 @@ const Attendance = ({
                   onFilterChange={handleFilterChange}
                 />
               </>
+            )}
+            {displaycreatechartbtn && (
+              <button className="lineUp-Filter-btn" onClick={handletoggletable}>
+                {" "}
+                {displaycandidatedatareporttable ? (
+                  <>
+                    {" "}
+                    Hide Candidate Details <UpOutlined />{" "}
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    Show Candidate Details <DownOutlined />{" "}
+                  </>
+                )}
+              </button>
             )}
 
             <div className="setchartsdiplayflex" id="divToPrint">

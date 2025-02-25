@@ -67,6 +67,7 @@ import AddManager from "../EmployeeSection/addManager";
 import ApplicantForm from "../Applicant/applicantFrom";
 import ShareProfileData from "../TeamLeader/shareProfileData";
 import { tr } from "date-fns/locale";
+import InterviewForm1 from "../Help/InterviewForm1";
 
 const EmpDashboard = ({ userGroup }) => {
   const { userType } = useParams();
@@ -911,7 +912,7 @@ const EmpDashboard = ({ userGroup }) => {
         </div>
         <div>
           {showInterviewForm && (
-            <InterviewForm
+            <InterviewForm1
               toggleAllInterviewResponse={toggleAllInterviewResponse}
             />
           )}

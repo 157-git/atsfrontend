@@ -163,7 +163,7 @@ const AfterSelection = ({
       setLoading(true);
       try {
         const response = await fetch(
-          `${API_BASE_URL}/fetch-after-selection?candidateId=${candidateId}&employeeId=${employeeId}&requirementId=${requirementId}`
+          `${API_BASE_URL}/fetch-after-selection?candidateId=${candidateId}&employeeId=${employeeId}&jobRole=${userType}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch candidate data");
@@ -325,11 +325,13 @@ const AfterSelection = ({
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
+    console.log (" requirementId --- " + requirementId);
+    console.log (" candidateId --- " + candidateId);
     const formData = {
-      candidateId: candidateId,
+      callingTracker: {candidateId:candidateId},
+      requirementInfo:{requirementId: requirementId},
       employeeId: employeeId,
       jobRole:userType,
-      requirementId: requirementId,
       activeStatus: activeStatus,
       callDate: callDate,
       officeEnvironment: officeEnvironment,
@@ -1168,11 +1170,10 @@ const AfterSelection = ({
                     {activeStatus === "Active" && (
                       <table
                         className="attendance-table"
-                        style={{ width: "1200px" }}
                       >
                         <thead>
                           <tr className="attendancerows">
-                            <th className="attendanceheading">Call Number.</th>
+                            <th className="attendanceheading">Sr No.</th>
                             <th className="attendanceheading">Call Date</th>
                             <th className="attendanceheading">
                               Office Environment

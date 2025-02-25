@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../api/api";
 import "./interviewPreviousQuestion.css";
+import { DeleteOutlined } from "@ant-design/icons";
+import { toast } from "react-toastify";
 
 const InterviewPreviousQuestion = () => {
   const [requirementOptions, setRequirementOptions] = useState([]); // Requirement dropdown options
@@ -54,6 +56,7 @@ const InterviewPreviousQuestion = () => {
       setLoading(false);
     }
   };
+console.log(interviewDetails);
 
   const handleRequirementChange = (e) => {
     const selectedId = e.target.value;
@@ -81,7 +84,22 @@ const InterviewPreviousQuestion = () => {
       setQuestions([]);
     }
   };
-
+  const handleDeleteQuestionByQuestionId = async (id) => {
+    try {
+      const response = await axios.delete(`${API_BASE_URL}/delete-interview-questions/${id}`);
+      
+      if (response.status === 200) {
+        toast.success(response.data.message || "Question deleted successfully!");
+  
+        // Assuming you have a state variable like setQuestions to update the UI
+        setQuestions((prevQuestions) => prevQuestions.filter((q) => q.questionsId !== id));
+      }
+    } catch (error) {
+      console.error("Error deleting question:", error);
+      toast.error("Failed to delete the question.");
+    }
+  };
+  
   return (
     <div className="previousQuestion">
       <div className="Previous-Questions-Header">
@@ -137,6 +155,7 @@ const InterviewPreviousQuestion = () => {
                 <th>Question No</th>
                 <th>Questions</th>
                 <th>Answer Reference</th>
+                <th>Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -148,6 +167,7 @@ const InterviewPreviousQuestion = () => {
                   <td>{index + 1}</td>
                   <td>{question.interviewQuestions}</td>
                   <td>{question.questionsReference}</td>
+                  <td><DeleteOutlined onClick={(e)=>handleDeleteQuestionByQuestionId(question.questionsId)} /></td>
                 </tr>
               ))}
             </tbody>
