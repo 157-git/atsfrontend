@@ -24,7 +24,6 @@ import './loader.css';
 
 const Loader = () => {
     const fullText = "Recruiter's Gear";
-
     return (
         <div className="loader-overlay">
             <div className="loader-container">

@@ -163,7 +163,7 @@ const AfterSelection = ({
       setLoading(true);
       try {
         const response = await fetch(
-          `${API_BASE_URL}/fetch-after-selection?candidateId=${candidateId}&employeeId=${employeeId}&requirementId=${requirementId}`
+          `${API_BASE_URL}/fetch-after-selection?candidateId=${candidateId}&employeeId=${employeeId}&jobRole=${userType}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch candidate data");
@@ -325,10 +325,13 @@ const AfterSelection = ({
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
+    console.log (" requirementId --- " + requirementId);
+    console.log (" candidateId --- " + candidateId);
     const formData = {
-      candidateId: candidateId,
+      callingTracker: {candidateId:candidateId},
+      requirementInfo:{requirementId: requirementId},
       employeeId: employeeId,
-      requirementId: requirementId,
+      jobRole:userType,
       activeStatus: activeStatus,
       callDate: callDate,
       officeEnvironment: officeEnvironment,
@@ -367,21 +370,6 @@ const AfterSelection = ({
     }
   };
 
-  const clearForm = () => {
-    setMailReceived("");
-    setAdharCardUploaded(null);
-    setPanCardUploaded(null);
-    setDrivingLicenseUploaded(null);
-    setDegreeMarksheetUploaded(null);
-    setHscMarksheetUploaded(null);
-    setSscMarksheetUploaded(null);
-    setOfferLetterReceived("");
-    setOfferLetterAccepted("");
-    setReasonForRejectionOfferLetter("");
-    setJoinStatus("");
-    setReasonForNotJoin("");
-    setJoinDate("");
-  };
 
   const [formData, setFormData] = useState({
     employeeId: employeeId,
@@ -875,7 +863,7 @@ const AfterSelection = ({
                         </div>
                         <div className="after-document-files">
                           <label htmlFor="sscMarksheet" className="after-label">
-                            Optional Documents :
+                            Optional Document:
                           </label>
                           <input
                             style={{
@@ -888,7 +876,7 @@ const AfterSelection = ({
                             onChange={handleFileChange}
                             id=""
                           />
-                          {documents.optionalDocuments && (
+                          {/* {documents.optionalDocuments && (
                             <span>
                               <img
                                 style={{ width: "20px", marginLeft: "10px" }}
@@ -896,7 +884,7 @@ const AfterSelection = ({
                                 alt=""
                               />
                             </span>
-                          )}
+                          )} */}
                         </div>
                       </div>
 
@@ -1182,11 +1170,10 @@ const AfterSelection = ({
                     {activeStatus === "Active" && (
                       <table
                         className="attendance-table"
-                        style={{ width: "1200px" }}
                       >
                         <thead>
                           <tr className="attendancerows">
-                            <th className="attendanceheading">Call Number.</th>
+                            <th className="attendanceheading">Sr No.</th>
                             <th className="attendanceheading">Call Date</th>
                             <th className="attendanceheading">
                               Office Environment
