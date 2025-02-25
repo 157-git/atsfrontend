@@ -328,6 +328,7 @@ const AfterSelection = ({
     const formData = {
       candidateId: candidateId,
       employeeId: employeeId,
+      jobRole:userType,
       requirementId: requirementId,
       activeStatus: activeStatus,
       callDate: callDate,
@@ -367,21 +368,6 @@ const AfterSelection = ({
     }
   };
 
-  const clearForm = () => {
-    setMailReceived("");
-    setAdharCardUploaded(null);
-    setPanCardUploaded(null);
-    setDrivingLicenseUploaded(null);
-    setDegreeMarksheetUploaded(null);
-    setHscMarksheetUploaded(null);
-    setSscMarksheetUploaded(null);
-    setOfferLetterReceived("");
-    setOfferLetterAccepted("");
-    setReasonForRejectionOfferLetter("");
-    setJoinStatus("");
-    setReasonForNotJoin("");
-    setJoinDate("");
-  };
 
   const [formData, setFormData] = useState({
     employeeId: employeeId,
@@ -875,7 +861,7 @@ const AfterSelection = ({
                         </div>
                         <div className="after-document-files">
                           <label htmlFor="sscMarksheet" className="after-label">
-                            Optional Documents :
+                            Optional Document:
                           </label>
                           <input
                             style={{
@@ -888,7 +874,7 @@ const AfterSelection = ({
                             onChange={handleFileChange}
                             id=""
                           />
-                          {documents.optionalDocuments && (
+                          {/* {documents.optionalDocuments && (
                             <span>
                               <img
                                 style={{ width: "20px", marginLeft: "10px" }}
@@ -896,7 +882,7 @@ const AfterSelection = ({
                                 alt=""
                               />
                             </span>
-                          )}
+                          )} */}
                         </div>
                       </div>
 
