@@ -5,7 +5,9 @@ import { RiDeleteBin6Line } from "react-icons/ri"
 import "../Help/InterviewForm1.css"
 import { API_BASE_URL } from "../api/api"
 import { fileToBase64converter } from "../HandlerFunctions/fileToBase64converter"
-import { message } from "antd"
+import { toast } from "react-toastify"
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons"
+import { Modal } from "antd"
 
 const InterviewForm1 = ({toggleAllInterviewResponse}) => {
   const [jobId, setJobId] = useState("")
@@ -42,13 +44,13 @@ const index = e.target.value;
   
 
   const handleAddQuestion = () => {
-    if (question.trim() && reference.trim()) {
+    if (question.trim()) {
       setInterviewQuestions([...interviewQuestions, { question, reference }])
       setQuestionsList([...questionsList, { question, reference }])
       setQuestion("")
       setReference("")
     } else {
-      alert("Please enter both question and reference.")
+      toast.info("Question is required !")
     }
   }
 
@@ -93,6 +95,18 @@ fetchRequirementOptions();
   },[])
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!jobId) {
+      toast.error("Please Select Job ID");
+      return;
+    }
+    if (!interviewRound) {
+      toast.error("Please Select Interview Round");
+      return;
+    }
+    if (questionsList.length === 0) {
+      toast.info("At Least 1 Question Required !");
+      return;
+    }
 
     const questionAddedDate = new Date().toISOString().split("T")[0];
 
@@ -119,17 +133,17 @@ fetchRequirementOptions();
             }
         );
 
-        message.success(response.data);
+        toast.success(response.data);
 
         // Corrected state update
         setSubmittedData((prev) => [...prev, dataToSubmit]);
 
         // Clearing form fields after successful submission
+        setJobId("");
         setindexRequirment("");
         setCompanyName("");
         setDesignation("");
         setInterviewRound("");
-        setQuestionAttachment("");
         setInterviewQuestions([]);
         setQuestionsList([]);
         setQuestionAttachment(null);
@@ -150,7 +164,24 @@ fetchRequirementOptions();
   
 console.log(submittedData);
 console.log(requirementOptions);
+const [openAttachmentModal, setOpenAttachmentModal] = useState(false);
+const [attachmentUrl, setAttachmentUrl] = useState("");
+const handleViewAttachment = (attachmentBase64String)=>{
 
+  if (attachmentBase64String) {
+    setOpenAttachmentModal(true);
+    const newBase64Attachment = `data:application/pdf;base64,${attachmentBase64String}`;
+    setAttachmentUrl(newBase64Attachment)
+  } else{
+    setOpenAttachmentModal(false);
+  }
+}
+const handleOk = () => {
+  setOpenAttachmentModal(false);
+};
+const handleCancel = () => {
+  setOpenAttachmentModal(false);
+};
 
 
   return (
@@ -161,11 +192,11 @@ console.log(requirementOptions);
           <label>Requirement Id:</label>
           <select value={indexRequirment} onChange={handleJobChange} className="newinputforinterviewquestions">
             
-            <option value="">Select Requirement ID</option>
+            <option value="">Select Job ID</option>
             {
               requirementOptions.map((item, index)=>(
 <option key={index} value={index}>
-                {item.companyName}
+               Job Id : {item.requirementId} {" "} {item.companyName}
               </option>
               ))
             }
@@ -192,8 +223,8 @@ console.log(requirementOptions);
         </div>
         <div className="form-group small newformgroupforinterviewquestionsform">
           <label>Attachment:</label>
-          <input type="file" accept=".pdf,.doc,.docx" onChange={handleFileChange} className="newinputforinterviewquestions" />
-          {questionAttachment && <span>{questionAttachment.name}</span>}
+          <input value={questionAttachment ? "" : undefined}  type="file" accept=".pdf,.doc,.docx" onChange={handleFileChange} className="newinputforinterviewquestions" />
+        
         </div>
       </div>
 
@@ -201,7 +232,7 @@ console.log(requirementOptions);
         <div className="form-group full-width textarea-container">
           <label>Questions:</label>
           <div className="textarea-wrapper">
-            <textarea value="" className="textarea" readOnly />
+            <textarea value="" className="textareaNewForAlignment" readOnly />
             
           </div>
           <div className="newWrappedForQuestionsRef">
@@ -262,50 +293,64 @@ console.log(requirementOptions);
       </div>
 
       {submittedData.length > 0 && (
-        <div className="table-container">
+        <div className="setNewWidth">
           <hr />
-          <h2 className="theading">Interview Questions</h2>
-          <table>
+          <h2 className="theading1">Interview Questions</h2>
+          <div>
+          <table className="NEWCLASSFORTABLE">
             <thead>
-              <tr>
-                <th>Time</th>
-                <th>Interview Round</th>
-                <th>Question</th>
-                <th>Reference</th>
-                <th>Attachment</th>
+              <tr className="newtableheadingrow">
+                <th className="newthclassforinterviewtable">Time</th>
+                <th className="newthclassforinterviewtable">Interview Round</th>
+                <th className="newthclassforinterviewtable">Question</th>
+                <th className="newthclassforinterviewtable">Reference</th>
+                <th className="newthclassforinterviewtable">Attachment</th>
                 {/* <th>Action</th> */}
               </tr>
             </thead>
             <tbody>
-              {submittedData.map((data, index) =>
-                data.interviewQuestion.map((q, qIndex) => (
-                  <tr key={`${index}-${qIndex}`}>
-                    {qIndex === 0 && (
-                      <>
-                        <td rowSpan={data.interviewQuestion.length}>{data.questionAddedDate}</td>
-                        <td rowSpan={data.interviewQuestion.length}>{data.interviewRound}</td>
-                      </>
-                    )}
-                    <td>{q.interviewQuestions}</td>
-                    <td>{q.questionsReference}</td>
-                    {qIndex === 0 && <td rowSpan={data.interviewQuestion.length}>{data.questionAddedDate}</td>}
-                    {/* {qIndex === 0 && (
-                      <td rowSpan={data.interviewQuestion.length}>
-                        <button className="action-btn">
-                          <CiEdit />
-                        </button>
-                        <button className="action-btn">
-                          <RiDeleteBin6Line />
-                        </button>
-                      </td>
-                    )} */}
+              {
+                submittedData.map((item, index)=>(
+                  <>
+                  <tr>
+                  <td className="newthclassforinterviewtable">{item.questionAddedDate}</td>
+                  <td className="newthclassforinterviewtable">{item.interviewRound}</td>
+                  <td className="newthclassforinterviewtable">
+                    {
+                      item.interviewQuestion.map((ques, indexQues)=>(
+<p>{ques.interviewQuestions ? ques.interviewQuestions : " "}</p>
+                      ))
+                    }
+                  </td>
+                  <td className="newthclassforinterviewtable">
+                    {
+                      item.interviewQuestion.map((ref, indexRef)=>(
+<p>{ref.questionsReference ? ref.questionsReference : " "}</p>
+                      ))
+                    }
+                  </td>
+                  <td className="newthclassforinterviewtable" onClick={()=>handleViewAttachment(item.questionAttachment)}>{item.questionAttachment !== null ? <EyeOutlined /> : <EyeInvisibleOutlined />}</td>
                   </tr>
-                )),
-              )}
+                  </>
+                ))
+              }
             </tbody>
           </table>
+          </div>
+         
         </div>
       )}
+      {
+        openAttachmentModal && (
+          <Modal title="Attachment" open={openAttachmentModal} onOk={handleOk} onCancel={handleCancel} footer={null}>
+        <iframe
+                src={attachmentUrl}
+                title="Questions"
+                style={{ width: "100%", height: "500px" }}
+              ></iframe>
+      </Modal>
+        )
+      }
     </div>
   )
 }

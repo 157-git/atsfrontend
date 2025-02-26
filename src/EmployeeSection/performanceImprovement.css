@@ -320,7 +320,7 @@
 }
 .fixperformanceclientsection{
   display: block;
-  height: 40vh;
+  max-height: 40vh;
   overflow-y: scroll;
 }
 .selectJobIdsForPerformance{
