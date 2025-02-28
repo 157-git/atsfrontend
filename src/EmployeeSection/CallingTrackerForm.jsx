@@ -20,7 +20,7 @@ import InterviewPreviousQuestion from "./interviewPreviousQuestion";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
 // this libraries added by sahil karnekar date 21-10-2024
-import { Button, Flex, message, notification, Progress, Rate, TimePicker, Upload } from "antd";
+import { Button, Flex, message, notification, Progress, Radio, Rate, TimePicker, Upload } from "antd";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSocket } from "../EmployeeDashboard/socket";
@@ -86,7 +86,7 @@ const CallingTrackerForm = ({
     gender: "",
     qualification: "",
     yearOfPassing: "",
-    extraCertification: "",
+    extraCertification: "No",
     holdingAnyOffer: "",
     offerLetterMsg: "",
     noticePeriod: "",
@@ -2413,22 +2413,30 @@ const handleCallingFeedBackOthers = (e)=>{
                   </div>
                 </div>
               </div>
-              <div className="calling-tracker-field">
-                <label>Any Extra Certification</label>
+              <div className="calling-tracker-field"
+              >
+                <label>Working Status</label>
                 <div className="calling-tracker-field-sub-div">
-                  <input
-                    type="text"
-                    name="extraCerification"
-                    value={lineUpData.extraCertification}
-                    onChange={(e) =>
-                      setLineUpData({
-                        ...lineUpData,
-                        extraCertification: e.target.value,
-                      })
-                    }
-                    className="plain-input"
-                    placeholder="Enter Extra Certification"
-                  />
+
+<Radio.Group
+style={{
+  display:"flex",
+  width:"100%"
+}}
+  name="extraCertification"
+  value={lineUpData.extraCertification}
+  onChange={(e) =>
+    setLineUpData({
+      ...lineUpData,
+      extraCertification: e.target.value,
+    })
+  }
+  options={[
+    { value: "Yes", label: "Yes" },
+    { value: "No", label: "No" },
+  ]}
+/>
+
                 </div>
               </div>
             </div>

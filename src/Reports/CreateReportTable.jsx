@@ -74,6 +74,7 @@ const Attendance = ({
   const handleDownloadPdf = async () => {
     setLoading(true);
     try {
+      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
       const newbarchartclassforsetstyles = document.getElementsByClassName(
         "newbarchartclassforsetstyles"
       );
@@ -163,40 +164,49 @@ const Attendance = ({
       pdf.save("document.pdf");
       // Open the modal (if necessary)
 
+      await delay(100);
       if (forcharborderpage.length > 0) {
         forcharborderpage[0].style.border = "none";
         forcharborderpage[0].style.padding = "none";
       }
+      await delay(100);
       if (newclassforalignitemscenter.length > 0) {
         newclassforalignitemscenter[0].style.alignItems = "center";
       }
+      await delay(100);
       if (forPieWidthContainer.length > 0) {
         forPieWidthContainer[0].style.width = "50%";
         // forPieWidthContainer[0].style.border = 'none';
         forPieWidthContainer[0].style.padding = "none";
         forPieWidthContainer[0].style.marginTop = "0";
       }
+      await delay(100);
       if (forPieWidthContainer1.length > 0) {
         // forPieWidthContainer[0].style.display = 'block';
         forPieWidthContainer1[0].style.display = "none";
       }
+      await delay(100);
       if (setDisplayBlockNewChartPrint.length > 0) {
         setDisplayBlockNewChartPrint[0].style.display = "flex";
         setDisplayBlockNewChartPrint[0].style.width = "100%";
         setDisplayBlockNewChartPrint[0].style.paddingLeft = "0";
       }
+      await delay(100);
       if (newsahilcanvas.length > 0) {
+        newsahilcanvas[0].style.width = "500px";
         newsahilcanvas[0].style.height = "500px";
       }
-      if (newbarchartclassforsetstyles.length > 0) {
-        newbarchartclassforsetstyles[0].style.width = "450px";
-        newbarchartclassforsetstyles[0].style.width = "450px";
-      }
+      await delay(100);
+      // if (newbarchartclassforsetstyles.length > 0) {
+      //   newbarchartclassforsetstyles[0].style.width = "450px";
+      //   newbarchartclassforsetstyles[0].style.width = "450px";
+      // }
       if (newclassforsethightbar.length > 0) {
         // forPieWidthContainer[0].style.display = 'block';
-        newclassforsethightbar[0].style.width = "490px";
-        newclassforsethightbar[0].style.height = "490px";
+        newclassforsethightbar[0].style.width = "540px";
+        newclassforsethightbar[0].style.height = "540px";
       }
+      await delay(100);
       setModalIsOpen(true);
       setLoading(false);
     } catch (error) {
@@ -205,6 +215,8 @@ const Attendance = ({
     }
   };
 
+
+  
   const closeModal = () => {
     // Clear the PDF URL and close the modal
     setPdfUrl("");

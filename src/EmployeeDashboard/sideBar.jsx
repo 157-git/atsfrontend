@@ -11,6 +11,12 @@ import { API_BASE_URL } from "../api/api";
 import LogoutOnEvent from "./logoutOnEvent";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
+import { Avatar, Badge, notification, List, Card, Form, Select, Input, Radio, DatePicker, TimePicker } from "antd";
+import { BellOutlined, CloseOutlined, ClearOutlined, FormOutlined, CommentOutlined, PhoneOutlined, TeamOutlined, CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import {Modal as AntdModal} from "antd";
+import dayjs from "dayjs";
+import { getFormattedDateISOYMDformat } from "../EmployeeSection/getFormattedDateTime.jsx";
+import { toast } from "react-toastify";
 
 // Swapnil_Sidebar_AddingEmployeeDetailsinto_ManagerSection_17/07
 
@@ -494,6 +500,192 @@ function Sidebar({
       </li>
     );
   };
+const [openInterviewModal, setOpenInterviewModal] = useState(false);
+const [openInterviewModalForAction, setOpenInterviewModalForAction] = useState(false);
+const openInterviewReminderModal = ()=>{
+setOpenInterviewModal(true);
+localStorage.setItem("interviewReminderShown", getFormattedDateISOYMDformat());
+}
+
+const handleOk1 = () => {
+setOpenInterviewModal(false);
+};
+const handleCancel1 = () => {
+setOpenInterviewModal(false);
+};
+
+
+
+const [interviewFormData, setInterviewFormData] = useState({
+callingRemark: '',
+attendingStatus: '',
+comment: '',
+nextDate: '',
+nextTime: '',
+candidateId: "",
+    employeeId: "",
+    jobRole: "",
+    updatedBy: `${loginEmployeeName}`,
+    reminderId:"",
+});
+const getInterviewReminderDataByCanId = async(candidateId)=>{
+const response =await axios.get(`${API_BASE_URL}/get-reminder-data/${candidateId}`);
+console.log(response);
+
+setInterviewFormData((prev)=>({
+...prev,
+callingRemark: response.data.callingRemark,
+attendingStatus: response.data.attendingStatus,
+comment: response.data.comment,
+reminderId : response.data.reminderId ? response.data.reminderId : "",
+}))
+
+}
+const openAnotherModalForPerformAction = (item)=>{
+  setInterviewFormData((prev)=>({
+    ...prev,
+    candidateId : item.candidateId,
+    employeeId : item.empId,
+    jobRole : item.jobRole !== null ? item.jobRole : "Recruiters"
+  }));
+  getInterviewReminderDataByCanId(item.candidateId);
+setOpenInterviewModalForAction(true);
+}
+const handleAntdFormChange = (value, fieldName) => {
+setInterviewFormData((prev) => {
+  let updatedData = { ...prev, [fieldName]: value };
+
+  // Special cases based on dependent fields
+  if (fieldName === 'callingRemark') {
+    updatedData.attendingStatus = value === 'Call Done' ? prev.attendingStatus : '';
+    updatedData.nextDate = value !== 'Call Done' ? '' : prev.nextDate;
+    updatedData.nextTime = value !== 'Call Done' ? '' : prev.nextTime;
+  }
+
+  if (fieldName === 'attendingStatus') {
+    updatedData.nextDate = value === 'No' ? prev.nextDate : '';
+    updatedData.nextTime = value === 'No' ? prev.nextTime : '';
+  }
+
+  return updatedData;
+});
+};
+const [interviewsForToday, setInterviewsForToday] = useState({});
+const [filteredInterviews, setFilteredInterviews] = useState([]); 
+const handleOk2 = () => {
+  console.log(interviewFormData);
+
+  if (interviewFormData.reminderId === "") {
+    axios.post(`${API_BASE_URL}/save-reminder-data`, interviewFormData)
+    .then(response => {
+      toast.success("Reminder saved successfully!");
+      setInterviewFormData({
+        callingRemark: '',
+        attendingStatus: '',
+        comment: '',
+        nextDate: '',
+        nextTime: '',
+        candidateId: "",
+        employeeId: "",
+        jobRole: "",
+        updatedBy: loginEmployeeName, // No need for template literals here
+      });
+      
+    })
+    .catch(error => {
+      toast.error(error.response?.data?.message || "Something went wrong");
+    });
+  } else if (interviewFormData.reminderId !== ""){
+
+axios.put(`${API_BASE_URL}/update-reminder-data/${interviewFormData.candidateId}`, interviewFormData).then(response => {
+  toast.success("Reminder Updated successfully!");
+  setInterviewFormData({
+    callingRemark: '',
+    attendingStatus: '',
+    comment: '',
+    nextDate: '',
+    nextTime: '',
+    candidateId: "",
+    employeeId: "",
+    jobRole: "",
+    updatedBy: loginEmployeeName, // No need for template literals here
+  });
+  
+})
+.catch(error => {
+  toast.error(error.response?.data?.message || "Something went wrong");
+});
+
+  }
+  setOpenInterviewModalForAction(false);
+};
+
+const handleCancel2 = () => {
+setOpenInterviewModalForAction(false);
+};
+const getTodaysInterviews = async () => {
+  try {
+
+    const response = await axios.get(`${API_BASE_URL}/today-interview/${getFormattedDateISOYMDformat()}/${employeeId}/${userType}`);
+    setInterviewsForToday(response.data); 
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+const filterUpcomingInterviews = (interviews) => {
+  const currentTime = new Date(); 
+  const currentTimestamp = currentTime.getTime(); 
+
+  return interviews?.filter((item) => {
+    const interviewTime = item.interviewTime || "12:00 am"; // Default if missing
+
+    // Convert interview time to timestamp
+    const interviewDateTime = new Date(currentTime.toDateString() + " " + interviewTime).getTime();
+
+    // Condition 1: Upcoming interviews (within the next 30 minutes)
+    const isUpcoming = interviewDateTime > currentTimestamp && interviewDateTime <= currentTimestamp + 30 * 60 * 1000;
+
+    // Condition 2: Past interviews (before the current time) but `token` is NOT "yes"
+    const isPastButValid = interviewDateTime <= currentTimestamp && item.token !== "Yes";
+
+    return isUpcoming || isPastButValid;
+  });
+};
+
+
+
+useEffect(() => {
+  const reminderInterval = setInterval(() => {
+    getTodaysInterviews();
+  }, 0.1 * 60 * 1000); 
+  return () => clearInterval(reminderInterval);
+}, []); 
+
+useEffect(() => {
+  if (interviewsForToday.data) {
+   
+    const upcomingInterviews = filterUpcomingInterviews(interviewsForToday.data);
+    setFilteredInterviews(upcomingInterviews);
+
+    const todayDate = getFormattedDateISOYMDformat();
+    const lastReminderDate = localStorage.getItem("interviewReminderShown");
+
+    if (lastReminderDate !== todayDate && upcomingInterviews.length > 0) {
+      openInterviewReminderModal();
+      localStorage.setItem("interviewReminderShown", todayDate);
+    }
+
+    if (upcomingInterviews.length > 0) {
+      const reminderInterval = setInterval(() => {
+        openInterviewReminderModal();
+      }, 0.1 * 60 * 1000); 
+
+      return () => clearInterval(reminderInterval);
+    }
+  }
+}, [interviewsForToday]); 
 
   return (
     <>
@@ -2006,6 +2198,143 @@ function Sidebar({
           </Modal.Dialog>
         </div>
       )}
+            {
+        openInterviewModal && (
+          
+          <>
+          <AntdModal title="Candidate's Data" open={openInterviewModal} onOk={handleOk1} onCancel={handleCancel1} width={1000}>
+         <div className="newhightformodaltable">
+          <table className="attendance-table">
+            <thead>
+              <tr className="attendancerows-head">
+                <th className="attendanceheading">Sr. No.</th>
+                <th className="attendanceheading">Candidate Id</th>
+                <th className="attendanceheading">Candidate's Name</th>
+                <th className="attendanceheading">Candidate's Email</th>
+                <th className="attendanceheading">Contact Number</th>
+                <th className="attendanceheading">Interview Date</th>
+                <th className="attendanceheading">Interview Time</th>
+                <th className="attendanceheading">Attending Status</th>
+                <th className="attendanceheading">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+            {filteredInterviews?.map((item, index) => (
+      <tr key={index} className="attendancerows">
+        <td className="tabledata">{index + 1}</td>
+        <td className="tabledata">{item.candidateId}</td>
+        <td className="tabledata">{item.candidateName}</td>
+        <td className="tabledata">{item.candidateEmail}</td>
+        <td className="tabledata">{item.contactNumber}</td>
+        <td className="tabledata">{item.availabilityForInterview}</td>
+        <td className="tabledata">{item.interviewTime}</td>
+        <td className="tabledata">{item.token? item.token : "-"}</td>
+        <td className="tabledata">
+          <FormOutlined onClick={(e)=>openAnotherModalForPerformAction(item)} />
+        </td>
+      </tr>
+    ))}
+             
+            </tbody>
+          </table>
+         </div>
+          </AntdModal>
+
+          {
+            openInterviewModalForAction && (
+              <>
+            <AntdModal title="Perform Action" open={openInterviewModalForAction} onOk={handleOk2} onCancel={handleCancel2}>
+  <div className="infoMainDivMo">
+    <Form labelCol={{ span: 10 }} labelAlign="left" wrapperCol={{ span: 20 }} layout="horizontal">
+      
+      {/* Calling Remark */}
+      <Form.Item label="Calling Remark">
+        <Select
+          name="callingRemark"
+          value={interviewFormData.callingRemark}
+          onChange={(value) => handleAntdFormChange(value, 'callingRemark')}
+          prefix={<PhoneOutlined />}
+        >
+          <Select.Option value="Call Done">Call Done</Select.Option>
+          <Select.Option value="Asked for Call Back">Asked for Call Back</Select.Option>
+          <Select.Option value="No Answer">No Answer</Select.Option>
+          <Select.Option value="Network Issue">Network Issue</Select.Option>
+          <Select.Option value="Invalid Number">Invalid Number</Select.Option>
+          <Select.Option value="Need to call back">Need to call back</Select.Option>
+          <Select.Option value="Do not call again">Do not call again</Select.Option>
+          <Select.Option value="others">others</Select.Option>
+        </Select>
+      </Form.Item>
+
+      {/* Interview Attending Status (Shown only if Calling Remark is 'Call Done') */}
+      {/* {interviewFormData.callingRemark === 'Call Done' && ( */}
+       <Form.Item label="Interview Attending Status">
+       <Radio.Group
+         name="attendingStatus"
+         value={interviewFormData.attendingStatus}
+         onChange={(e) => handleAntdFormChange(e.target.value, 'attendingStatus')}
+         className="newclassformakeflexandjustifyformodal"
+       >
+         <Radio value="Yes">
+          
+           Yes  <CheckCircleOutlined style={{ color: 'green', marginRight: 5 }} />
+         </Radio>
+         <Radio value="No">
+          
+           No  <CloseCircleOutlined style={{ color: 'red', marginRight: 5 }} />
+         </Radio>
+
+         <Radio value="Not Confirm">
+          
+         Not Confirm  <ExclamationCircleOutlined style={{ color: 'red', marginRight: 5 }} />
+         </Radio>
+       </Radio.Group>
+     </Form.Item>
+      {/* )} */}
+
+      {/* Comment Field (Always visible) */}
+      <Form.Item label="Comment">
+        <Input
+        placeholder="Enter Comment..."
+          name="comment"
+          value={interviewFormData.comment}
+          onChange={(e) => handleAntdFormChange(e.target.value, 'comment')}
+          prefix={<CommentOutlined />}
+        />
+      </Form.Item>
+
+      {/* Interview Date & Time (Only shown when 'Interview Attending Status' is 'No') */}
+      {interviewFormData.attendingStatus === 'No' && (
+        <Form.Item label="Select Interview Date">
+          <div className="wrappedForDisplayFle">
+            <DatePicker
+              name="nextDate"
+              style={{ marginRight: '10px' }}
+              format="YYYY-MM-DD"
+              value={interviewFormData.nextDate ? dayjs(interviewFormData.nextDate) : null}
+              onChange={(date) => handleAntdFormChange(date ? dayjs(date).format('YYYY-MM-DD') : '', 'nextDate')}
+            />
+            <TimePicker
+              name="nextTime"
+              format="hh:mm A"
+              value={interviewFormData.nextTime ? dayjs(interviewFormData.nextTime, 'hh:mm A') : null}
+              onChange={(time) => handleAntdFormChange(time ? dayjs(time).format('hh:mm A') : '', 'nextTime')}
+            />
+          </div>
+        </Form.Item>
+      )}
+    </Form>
+  </div>
+</AntdModal>
+
+              </>
+            )
+          }
+          
+          </>
+        )
+      }
+
     </>
   );
 }

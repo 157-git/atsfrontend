@@ -12,7 +12,7 @@ import { API_BASE_URL } from "../api/api";
 import { Button, Modal } from "react-bootstrap";
 import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker";
 // line 14 to 15 added by sahil karnekar date 17-10-2024
-import { Progress, TimePicker, Upload } from "antd";
+import { Progress, Radio, TimePicker, Upload } from "antd";
 import dayjs from "dayjs";
 import { getSocket } from "../EmployeeDashboard/socket";
 import uploadingResumeStatic from "../assets/uploadStaticPngFile.png";
@@ -2111,16 +2111,30 @@ console.log(callingTracker);
             </div>
 
             <div className="update-calling-tracker-field">
-              <label>Any Extra Certification</label>
+              <label>Working Status</label>
               <div className="update-calling-tracker-field-sub-div">
-                <input
+                {/* <input
                   type="text"
                   name="lineUp.extraCertification"
                   value={callingTracker?.lineUp.extraCertification || ""}
                   onChange={handleChange}
                   className="plain-input"
                   placeholder="Enter Extra Certification"
-                />
+                /> */}
+
+<Radio.Group
+style={{
+  display:"flex",
+  width:"100%"
+}}
+  name="lineUp.extraCertification"
+  value={callingTracker?.lineUp.extraCertification}
+  onChange={handleChange}
+  options={[
+    { value: "Yes", label: "Yes" },
+    { value: "No", label: "No" },
+  ]}
+/>
               </div>
             </div>
           </div>

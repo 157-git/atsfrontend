@@ -342,7 +342,7 @@ const handleCancelcloseshare = ()=>{
       "Gender",
       "Education",
       "Year Of Passing",
-      "Any Extra Certification",
+      "Working Status",
       "Holding Any Offer",
       "Offer Letter Msg",
       "Notice Period",
@@ -393,7 +393,7 @@ const handleCancelcloseshare = ()=>{
         Gender: item.gender || "-",
         Education: item.qualification || "-",
         "Year Of Passing": item.yearOfPassing || "-",
-        "Any Extra Certification": item.extraCertification || "-",
+        "Working Status": item.extraCertification || "-",
         "Holding Any Offer": item.holdingAnyOffer || "-",
         "Offer Letter Msg": item.offerLetterMsg || "-",
         "Notice Period": item.noticePeriod || "-",
@@ -908,7 +908,7 @@ const handleCancelcloseshare = ()=>{
                       <th className="attendanceheading">Education</th>
                       <th className="attendanceheading">Year Of Passing</th>
                       <th className="attendanceheading">
-                        Any Extra Certification
+                        Working Status
                       </th>
                       {/* <th className="attendanceheading">Feedback</th> */}
                       <th className="attendanceheading">Holding Any Offer</th>

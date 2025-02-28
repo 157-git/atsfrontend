@@ -860,7 +860,7 @@ const handleCancelcloseshare = ()=>{
                       <th className="attendanceheading">Education</th>
                       <th className="attendanceheading">Year Of Passing</th>
                       <th className="attendanceheading">
-                        Any Extra Certification
+                        Working Status
                       </th>
                       {/* <th className="attendanceheading">Feedback</th> */}
                       <th className="attendanceheading">Holding Any Offer</th>

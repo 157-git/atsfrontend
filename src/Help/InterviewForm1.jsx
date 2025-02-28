@@ -312,20 +312,35 @@ const handleCancel = () => {
               {
                 submittedData.map((item, index)=>(
                   <>
-                  <tr>
+                  <tr className="newinterviewtablerow1">
                   <td className="newthclassforinterviewtable">{item.questionAddedDate}</td>
                   <td className="newthclassforinterviewtable">{item.interviewRound}</td>
                   <td className="newthclassforinterviewtable">
                     {
                       item.interviewQuestion.map((ques, indexQues)=>(
-<p>{ques.interviewQuestions ? ques.interviewQuestions : " "}</p>
+                        <div className="classnamesetdisplayflexforinterviewtable"
+                        style={{
+                          borderBottom:`${indexQues !== item.interviewQuestion.length-1 && "1px solid black"}`
+                        }}
+                        >
+                        <p className="setmarginclassfortableptag">{indexQues+1}{" "}</p>
+<p> {ques.interviewQuestions ? ques.interviewQuestions : " "}</p>
+</div>
                       ))
                     }
                   </td>
                   <td className="newthclassforinterviewtable">
                     {
                       item.interviewQuestion.map((ref, indexRef)=>(
-<p>{ref.questionsReference ? ref.questionsReference : " "}</p>
+                        <div className="classnamesetdisplayflexforinterviewtable"
+                        style={{
+                          borderBottom:`${indexRef !== item.interviewQuestion.length-1 && "1px solid black"}`
+                        }}
+                        >
+                        <p className="setmarginclassfortableptag">{indexRef+1}{" "}</p>
+                        <p>{ref.questionsReference ? ref.questionsReference : " "}</p>
+                        </div>
+
                       ))
                     }
                   </td>

@@ -203,3 +203,16 @@
   .newtableheadingrow{
     background-color: var(--Bg-color);
   }
+  .newtableheadingrow:hover{
+    background-color: var(--Bg-color);
+  }
+  .newinterviewtablerow1:hover{
+background-color:var(--table-row-hover);
+  }
+  .classnamesetdisplayflexforinterviewtable{
+    display: flex;
+  }
+  .setmarginclassfortableptag{
+    padding-left: 10px;
+    padding-right: 10px;
+  }

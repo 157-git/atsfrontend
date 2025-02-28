@@ -135,7 +135,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
     availabilityForInterview: "Availability For Interview",
     companyName: "Company Name",
     DateOfBirth: "Date Of Birth",
-    extraCertification: "Extra Certification",
+    extraCertification: "Working Status",
     feedBack: "Feedback",
     finalStatus: "Final Status",
     gender: "Gender",
@@ -845,7 +845,7 @@ const forwardSelectedCandidate = (e) => {
                   </th>
                   <th className="attendanceheading">Company Name</th>
                   <th className="attendanceheading">Date of Birth</th>
-                  <th className="attendanceheading">Extra Certification</th>
+                  <th className="attendanceheading">Working Status</th>
                   <th className="attendanceheading">Feedback</th>
                   <th className="attendanceheading">Final Status</th>
                   <th className="attendanceheading">Gender</th>

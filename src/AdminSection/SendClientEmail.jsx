@@ -74,7 +74,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
     ["expectedCtcThousand", "Expected CTC Thousand"],
     ["experienceMonth", "Experience Month"],
     ["experienceYear", "Experience Year"],
-    ["extraCertification", "Extra Certification"],
+    ["extraCertification", "Working Status"],
     ["feedBack", "Feedback"],
     ["finalStatus", "Final Status"],
     ["fullAddress", "Full Address"],

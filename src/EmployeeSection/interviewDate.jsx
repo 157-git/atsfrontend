@@ -286,6 +286,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                     <th className="attendanceheading">Added Date Time </th>
                     <th className="attendanceheading">Interview Date</th>
                     <th className="attendanceheading">Interview Time </th>
+                    <th className="attendanceheading">Attending Status </th>
                     <th className="attendanceheading">Candidate Name</th>
                     <th className="attendanceheading">Candidate Email</th>
                     <th className="attendanceheading">Job Id</th>
@@ -367,6 +368,19 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                         <div className="tooltip">
                           <span className="tooltiptext">
                             {item.interviewTime}
+                          </span>
+                        </div>
+                      </td>
+
+                      <td
+                        className="tabledata"
+                        onMouseOver={handleMouseOver}
+                        onMouseOut={handleMouseOut}
+                      >
+                        {item.token || "-"}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
+                            {item.token}
                           </span>
                         </div>
                       </td>
