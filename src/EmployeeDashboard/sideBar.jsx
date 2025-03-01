@@ -659,7 +659,7 @@ const filterUpcomingInterviews = (interviews) => {
 useEffect(() => {
   const reminderInterval = setInterval(() => {
     getTodaysInterviews();
-  }, 0.1 * 60 * 1000); 
+  }, 10 * 60 * 1000); 
   return () => clearInterval(reminderInterval);
 }, []); 
 
@@ -680,7 +680,7 @@ useEffect(() => {
     if (upcomingInterviews.length > 0) {
       const reminderInterval = setInterval(() => {
         openInterviewReminderModal();
-      }, 0.1 * 60 * 1000); 
+      }, 10 * 60 * 1000); 
 
       return () => clearInterval(reminderInterval);
     }
