@@ -19,6 +19,7 @@ import convertToDocumentLink from "../helper/convertToDocumentLink";
 import axios from "axios";
 // added by sahil karnekar
 import { Avatar, Card, List, Pagination } from "antd";
+import { data } from "autoprefixer";
 
 // SwapnilRokade_lineUpList_ModifyFilters_47to534_11/07
 const CallingList = ({
@@ -70,6 +71,8 @@ const CallingList = ({
     recruiterJobRole: "",
   });
 
+  console.log(filteredCallingList);
+  
   // added by sahil karnekar date 4-12-2024
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
@@ -198,6 +201,7 @@ const CallingList = ({
     });
     setFilteredCallingList(filteredData);
   };
+
 
   const handleDisplayShareConfirmClick = () => {
     setDisplayShareConfirm(true);

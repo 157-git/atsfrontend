@@ -933,37 +933,6 @@ const handleCallingFeedBackOthers = (e)=>{
     // Validate gender to be either "Male" or "Female"
     return gender === "Male" || gender === "Female" ? gender : "";
   };
-
-
-  // const setResumeResponse = (data) => {
-  //   // Set common fields
-  //   setCallingTracker((prevState) => ({
-  //     ...prevState,
-  //     candidateName: data.candidateName,
-  //     candidateEmail: data.candidateEmail,
-  //     currentLocation: data.currentLocation,
-  //     contactNumber: `${data.contactNumber}`,
-  //   }));
-  //   setLineUpData((prevState) => ({
-  //     ...prevState,
-  //     extraCertification: data.extraCertification,
-  //     relevantExperience: data.relevantExperience,
-  //     companyName: data.companyName,
-  //     dateOfBirth: formatDateString(data.dateOfBirth),
-  //     gender: validateGender(data.gender),
-  //     qualification: data.qualification,
-  //     resume: data.resume,
-  //   }));
-
-  //   // Check if currentLocation matches a predefined option
-  //   if (!predefinedLocations.includes(data.currentLocation)) {
-  //     setIsOtherLocationSelected(true); // Show the "Other" input field
-  //   } else {
-  //     setIsOtherLocationSelected(false); // No additional input needed
-  //   }
-  // };
-
-
   const setResumeResponse = (data) => {
     // Fields to check in existing state
     const hasExistingData =
@@ -971,7 +940,7 @@ const handleCallingFeedBackOthers = (e)=>{
       callingTracker.candidateEmail !== "" ||
       callingTracker.currentLocation !== "" ||
       callingTracker.contactNumber !== "" ||
-      lineUpData.extraCertification !== "" ||
+      // lineUpData.extraCertification !== "" ||
       lineUpData.relevantExperience !== "" ||
       lineUpData.companyName !== "" ||
       lineUpData.dateOfBirth !== "" ||
@@ -989,7 +958,7 @@ const handleCallingFeedBackOthers = (e)=>{
       }));
       setLineUpData((prevState) => ({
         ...prevState,
-        extraCertification: data.extraCertification,
+        // extraCertification: data.extraCertification,
         relevantExperience: data.relevantExperience,
         companyName: data.companyName,
         dateOfBirth: formatDateString(data.dateOfBirth),
@@ -1662,11 +1631,17 @@ const handleCallingFeedBackOthers = (e)=>{
                         type="text"
                         name="currentLocation"
                         value={callingTracker.currentLocation}
-                        onChange={(e) =>
+                        onChange={(e) =>{
                           setCallingTracker({
                             ...callingTracker,
                             currentLocation: e.target.value,
-                          })
+                          });
+                          setErrors((prev) => {
+                            const { currentLocation, ...rest } = prev;
+                            return rest;
+                        });                        
+                        }
+                         
                         }
                         placeholder="Enter your location"
                       />

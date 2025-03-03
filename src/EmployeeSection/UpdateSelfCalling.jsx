@@ -2171,9 +2171,9 @@ style={{
                       placeholder="Years"
                       maxLength="2"
                     />
-                      {callingTracker.lineUp.experienceYear && (
+                      {callingTracker.lineUp.experienceYear ? (
                         <span className="addtrnaslateproptospan">Years</span>
-                      )}
+                      ) : null}
                     {errors.experienceYearStar && (
                       <div className="error-message">
                         {errors.experienceYearStar}
@@ -2198,9 +2198,9 @@ style={{
                       min="0"
                       max="11"
                     />
-                     {callingTracker.lineUp.experienceMonth && (
+                     {callingTracker.lineUp.experienceMonth ? (
                         <span className="addtrnaslateproptospanForMonths">Months</span>
-                      )}
+                      ) : null}
                     {errors.experienceMonthStar && (
                       <div className="error-message">
                         {errors.experienceMonthStar}
