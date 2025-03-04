@@ -39,35 +39,30 @@ import { getSocket } from "../EmployeeDashboard/socket";
 import Loader from "../EmployeeSection/loader";
 
 function ApplicantForm2({ loginEmployeeName }) {
-  //Arshad Attar Added This Code On 12-12-2024
-  //This Code to hide Employee Id and UserType In Every Time
   const { encodedParams } = useParams();
-  // here i have performed decryption
-  // exposing directly in file just for testing and normal use purpose, please set this secreat key in env file while deploying on server
-  const secretKey = "157industries_pvt_ltd"; // Ensure this matches ShareLink
 
-  // Decryption logic
-  const decodeParams = (encrypted) => {
-    try {
-      const decodedBase64 = atob(encrypted);
-      const bytes = CryptoJS.AES.decrypt(decodedBase64, secretKey);
-      const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-      const [id, type] = decrypted.split(":");
+  const extractedParam = encodedParams?.split("+")[1];
 
-      if (!id || !type) throw new Error("Invalid decrypted data");
-
-      return { employeeId: parseInt(id, 10), userType: type };
-    } catch (error) {
-      console.error("Decryption failed:", error);
-      return { employeeId: null, userType: null }; // Fallback in case of error
-    }
-  };
 
   const [socket, setSocket] = useState(null);
   const [salaryInWords, setSalaryInWords] = useState("");
-  const { employeeId, userType } = decodeParams(encodedParams);
+  // const { employeeId, userType } = getEmployeeDetails();
+  const [employeeId, setEmployeeId] = useState();
+  const [userType, setUserType] = useState();
 
-  console.log(employeeId, userType);
+  const getEmployeeDetails = async ()=>{
+    const response = await axios.post(`${API_BASE_URL}/get-shorten-details`,{
+      shortenUrl : `${extractedParam}`
+     }
+     );
+     setEmployeeId(response.data.employeeId);
+     setUserType(response.data.userType);
+  }
+
+  useEffect(()=>{
+    getEmployeeDetails();
+  },[]);
+
   
   const [loading, setLoading] = useState(false);
   const [resumeSelected, setResumeSelected] = useState(false);
@@ -145,7 +140,6 @@ function ApplicantForm2({ loginEmployeeName }) {
   }, []);
 
   useEffect(() => {
-    console.log("Checking loginEmployeeName:", loginEmployeeName);
     if (loginEmployeeName) {
       setFormData((prevData) => ({
         ...prevData,
@@ -471,7 +465,6 @@ function ApplicantForm2({ loginEmployeeName }) {
   const startYear = 1947;
   const calendarStartDate = new Date(startYear, 0, 1);
   const calendarStartDateString = calendarStartDate.toISOString().split("T")[0];
-  console.log(calendarStartDateString);
   
 
   const handleFileChange = async (e, index) => {
@@ -502,23 +495,22 @@ function ApplicantForm2({ loginEmployeeName }) {
       "lineUp.expectedCTCLakh",
       "lineUp.qualification",
       "jobDesignation",
-      "currentLocation",
-      "lineUp.experienceYear",
-      "lineUp.resume",
-      "lineUp.photo",
-      "lineUp.dateOfBirth",
       "lineUp.preferredLocation",
       "lineUp.noticePeriod",
       "lineUp.availabilityForInterview",
       "lineUp.expectedJoiningDate",
-      "lineUp.relevantExperience",
-      "lineUp.gender",
+      "lineUp.experienceYear",
+"lineUp.relevantExperience",
+"lineUp.gender",
+"lineUp.dateOfBirth",
+"lineUp.resume",
+"lineUp.photo",
+      "currentLocation",
       "lineUp.companyName",
       "lineUp.offersalary",
       "lineUp.offerdetails",
     ];
 
-    console.log("Form data before validation:", formData);
 
     let isFormValid = true;
     let newErrors = {};
@@ -595,12 +587,9 @@ function ApplicantForm2({ loginEmployeeName }) {
         : {}),
     };
 
-    console.log("Form data being sent:", JSON.stringify(dataToSend, null, 2));
-    console.log(dataToSend);
+
     try {
-      console.log("Running Api...");
-      console.log(dataToSend);
-      
+
       const response = await axios.post(
         `${API_BASE_URL}/save-applicant/${userType}`,
         dataToSend,
@@ -621,7 +610,7 @@ function ApplicantForm2({ loginEmployeeName }) {
           setPhotoSelected(false);
           setIsSubmitted(false);
         }, 3000);
-        console.log("Form submitted successfully:", response.data);
+
       } else {
         toast.error("Error submitting form.");
       }
@@ -764,11 +753,11 @@ function ApplicantForm2({ loginEmployeeName }) {
         }
         break;
 
-      // case "lineUp.expectedCTCLakh":
-      //   if (value === "" || isNaN(value) || value <= 0) {
-      //     error = "Please enter a valid expected salary";
-      //   }
-      //   break;
+      case "lineUp.expectedCTCLakh":
+        if (value === "" || isNaN(value) || value < 0) {
+          error = "Please enter a valid expected salary";
+        }
+        break;
 
       case "lineUp.preferredLocation":
         if (!stringValue) {
@@ -1248,15 +1237,15 @@ function ApplicantForm2({ loginEmployeeName }) {
                     className="input-icon-December"
                   />
                   <input
-                    type="number"
-                    placeholder="Relevant experience [For EX (3.6) Or (12.6)]"
+                    type="text"
+                    placeholder="Relevant experience"
                     name="lineUp.relevantExperience"
                     id="lineUp.relevantExperience"
                     value={formData.lineUp.relevantExperience}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
-                    onInput={handleInputInterview}
-                    maxLength={5}
+                    // onInput={handleInputInterview}
+                    maxLength="10"
                     
                   />
                 </div>
@@ -1274,6 +1263,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                     <FormControlLabel
                       control={
                         <Radio
+                        name="lineUp.gender"
                           checked={formData.lineUp.gender === "male"}
                           onChange={() =>
                             handleChange({
@@ -1291,6 +1281,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                     <FormControlLabel
                       control={
                         <Radio
+                        name="lineUp.gender"
                           checked={formData.lineUp.gender === "female"}
                           onChange={() =>
                             handleChange({
@@ -1677,52 +1668,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   </div>
                   <br></br>
 
-                  <div className="form-group-December">
-                    <div className="negotiation">
-                      <label>Are you ready to negotiation ? </label>
-                      <div className="radio-group">
-                        <FormControlLabel
-                          control={
-                            <Radio
-                              checked={formData.lineUp.negotiation === "Yes"}
-                              onChange={() =>
-                                handleChange({
-                                  target: {
-                                    name: "lineUp.negotiation",
-                                    value: "Yes",
-                                  },
-                                })
-                              }
-                            />
-                          }
-                          label="Yes"
-                        />
-
-                        <FormControlLabel
-                          control={
-                            <Radio
-                              checked={formData.lineUp.negotiation === "No"}
-                              onChange={() =>
-                                handleChange({
-                                  target: {
-                                    name: "lineUp.negotiation",
-                                    value: "No",
-                                  },
-                                })
-                              }
-                            />
-                          }
-                          label="No"
-                        />
-                      </div>
-                      {errors["lineUp.negotiation"] && (
-                        <span className="error">
-                          {errors["lineUp.negotiation"]}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <br></br>
+               
 
                   <div className="form-group-December">
                     <label>Offer details</label>
@@ -1813,6 +1759,53 @@ function ApplicantForm2({ loginEmployeeName }) {
                   )}
                 </div>
               </div>
+
+              <div className="form-group-December">
+                    <div className="negotiation">
+                      <label>Are you ready to negotiation ? </label>
+                      <div className="radio-group">
+                        <FormControlLabel
+                          control={
+                            <Radio
+                              checked={formData.lineUp.negotiation === "Yes"}
+                              onChange={() =>
+                                handleChange({
+                                  target: {
+                                    name: "lineUp.negotiation",
+                                    value: "Yes",
+                                  },
+                                })
+                              }
+                            />
+                          }
+                          label="Yes"
+                        />
+
+                        <FormControlLabel
+                          control={
+                            <Radio
+                              checked={formData.lineUp.negotiation === "No"}
+                              onChange={() =>
+                                handleChange({
+                                  target: {
+                                    name: "lineUp.negotiation",
+                                    value: "No",
+                                  },
+                                })
+                              }
+                            />
+                          }
+                          label="No"
+                        />
+                      </div>
+                      {errors["lineUp.negotiation"] && (
+                        <span className="error">
+                          {errors["lineUp.negotiation"]}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <br></br>
             </div>
           </div>
 

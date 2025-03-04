@@ -1,32 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../ResumeData/shareLink.css";
 import CryptoJS from "crypto-js";
 import { Tag } from "antd";
+import axios from "axios";
+import { API_BASE_URL } from "../api/api";
 
-const ShareLink = ({ toggleResumeLink }) => {
+const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
   const { employeeId, userType } = useParams();
   const [copyMessage, setCopyMessage] = useState("");
+  const [userUrlString, setUserUrlString] = useState("");
+  const firstName = loginEmployeeName.split(" ")[0];
+  const [displayCopyBtn, setDisplayCopyBtn] = useState(false);
+
+const getEncodeUrlString = async()=>{
+  try {
+    const response =await axios.post(`${API_BASE_URL}/save-shorten-url`,{
+      employeeId: employeeId,
+      userType: `${userType}`
+    }
+    );
+    console.log(response);
+    setUserUrlString(response.data.shortenUrl);
+    setDisplayCopyBtn(true);
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+  useEffect(()=>{
+    getEncodeUrlString();
+  },[])
 
   // updated code for strong encryption according to requirments
   // exposing directly in file just for testing and normal use purpose, please set this secreat key in env file while deploying on server
   const secretKey = "157industries_pvt_ltd"; // Use a consistent key across components
 
-  // Encryption logic
-  const encryptParams = (id, type) => {
-    try {
-      const data = `${id}:${type}`;
-      const encrypted = CryptoJS.AES.encrypt(data, secretKey).toString();
-      return btoa(encrypted); // Convert to base64 for URL safety
-    } catch (error) {
-      console.error("Encryption failed:", error);
-      return null;
-    }
-  };
-
-  // Generate encodedParams for secure URL
-  const encodedParams = encryptParams(employeeId, userType);
-  const shareUrl = `https://rg.157careers.in/job-application-form/${encodedParams}`;
+  const shareUrl = `https://rg.157careers.in/application-form/${firstName}+${userUrlString}`;
 
   // Share using Web Share API
   const handleShareLink = async () => {
@@ -80,28 +91,33 @@ const ShareLink = ({ toggleResumeLink }) => {
 
   return (
     <div className="shareLink-mainDiv">
-      <div className="shareLink-share-btn-Div">
-        <h1 style={{
-          color:"var(--sidebar-txt)"
-        }}>Share Link To Candidate</h1>
-        <div className="share-copy-div">
-          <button className="shareLink-share-btn" onClick={handleShareLink}>
-            Share 🔗
-          </button>
-          <button className="shareLink-share-btn" onClick={handleCopyLink}>
-            Copy Link 🔗
-          </button>
-        </div>
-        <span style={{ color: "var(--sidebar-txt)", fontSize: "14px" }}>
-          Share this link with the candidate so they can fill in their
-          information through the link.
-        </span>
-        {copyMessage && (
-          <div className="copyMessage">
-            <Tag color="#87d068">{copyMessage}</Tag>
+      {
+        displayCopyBtn && (
+          <div className="shareLink-share-btn-Div">
+          <h1 style={{
+            color:"var(--sidebar-txt)"
+          }}>Share Link To Candidate</h1>
+          <div className="share-copy-div">
+            <button className="shareLink-share-btn" onClick={handleShareLink}>
+              Share 🔗
+            </button>
+            <button className="shareLink-share-btn" onClick={handleCopyLink}>
+              Copy Link 🔗
+            </button>
           </div>
-        )}
-      </div>
+          <span style={{ color: "var(--sidebar-txt)", fontSize: "14px" }}>
+            Share this link with the candidate so they can fill in their
+            information through the link.
+          </span>
+          {copyMessage && (
+            <div className="copyMessage">
+              <Tag color="#87d068">{copyMessage}</Tag>
+            </div>
+          )}
+        </div>
+        )
+      }
+   
 
       <div className="shareLink-view-btn-Div">
       <h1 style={{
