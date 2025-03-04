@@ -1211,6 +1211,7 @@ function DailyWork({
     fetchAllImages();
   }, [messages]);
 
+  
   return (
     <div className="daily-timeanddate">
       <a href="#">

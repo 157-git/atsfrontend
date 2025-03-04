@@ -92,6 +92,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
     adjustedDate.setHours(adjustedDate.getHours() + 10);
     const formattedDate = adjustedDate.toISOString().split("T")[0];
     console.log("Selected date:", formattedDate);
+    console.log("Hach Call hot ahe");
 
     try {
       setLoading(true);
@@ -286,6 +287,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                     <th className="attendanceheading">Added Date Time </th>
                     <th className="attendanceheading">Interview Date</th>
                     <th className="attendanceheading">Interview Time </th>
+                    <th className="attendanceheading">Attending Status</th>
                     <th className="attendanceheading">Candidate Name</th>
                     <th className="attendanceheading">Candidate Email</th>
                     <th className="attendanceheading">Job Id</th>
@@ -293,7 +295,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                     <th className="attendanceheading">Applying Compnay</th>
                     <th className="attendanceheading">Contact Number</th>
                     <th className="attendanceheading">Current Location</th>
-                    <th className="attendanceheading">Current Company</th>
+                    <th className="attendanceheading">Current Company ooo</th>
                     <th className="attendanceheading">Total Experience</th>
                     <th className="attendanceheading">Current CTC</th>
                     <th className="attendanceheading">Expected CTC</th>
@@ -358,6 +360,8 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                         </div>
                       </td>
 
+                    
+
                       <td
                         className="tabledata"
                         onMouseOver={handleMouseOver}
@@ -367,6 +371,19 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                         <div className="tooltip">
                           <span className="tooltiptext">
                             {item.interviewTime}
+                          </span>
+                        </div>
+                      </td>
+
+                      <td
+                        className="tabledata"
+                        onMouseOver={handleMouseOver}
+                        onMouseOut={handleMouseOut}
+                      >
+                        {item.token || "-"}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
+                            {item.token}
                           </span>
                         </div>
                       </td>
@@ -544,22 +561,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                             </span>
                           </div>
                         </td>
-                        {/* <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {item.lineUp.resume || "-"}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
-                            {item.lineUp.resume}
-                          </span>
-                        </div>
-                      </td> */}
 
-                        {/* Name:-Akash Pawar Component:-ShortListedCandidate
-                  Subcategory:-ResumeViewButton(added) start LineNo:-546
-                  Date:-02/07 */}
                         <td className="tabledata">
                           <button
                             className="table-icon-div"
@@ -568,9 +570,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                             <i className="fas fa-eye"></i>
                           </button>
                         </td>
-                        {/* Name:-Akash Pawar Component:-ShortListedCandidate
-                  Subcategory:-ResumeViewButton(added) End LineNo:-558
-                  Date:-02/07 */}
+
                         <td
                           className="tabledata"
                           onMouseOver={handleMouseOver}

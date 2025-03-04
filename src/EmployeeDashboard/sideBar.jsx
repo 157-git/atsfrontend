@@ -7,10 +7,10 @@ import { RiTeamFill } from "react-icons/ri";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
 import ColorPicker from "../HomePage/ColorPicker";
-import { API_BASE_URL } from "../api/api";
 import LogoutOnEvent from "./logoutOnEvent";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
+import { API_BASE_URL } from "../api/api";
 
 // Swapnil_Sidebar_AddingEmployeeDetailsinto_ManagerSection_17/07
 
@@ -454,6 +454,7 @@ function Sidebar({
         item.subMenu.some((subItem) => activeItem === subItem.key));
     const style = isSubMenu ? { marginLeft: "10px" } : {};
     /* Dhanashree_Sidebar_Date(09/08) End 151*/
+console.log(" jjjjjjjjjjjjjj "+ API_BASE_URL);
 
     return (
       /* Dhanashree_Sidebar_Date(09/08) Start 157*/
@@ -494,6 +495,7 @@ function Sidebar({
       </li>
     );
   };
+
 
   return (
     <>

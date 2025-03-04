@@ -91,11 +91,15 @@ const UpdateResponseFrom = ({
   };
 
   const fetchPerformanceId = async () => {
+    console.log("candidateId  " + candidateId);
+    
     try {
       const performanceId = await axios.get(
         `${API_BASE_URL}/fetch-performance-id/${candidateId}`
       );
       setPerformanceId(performanceId.data);
+      console.log(performanceId.data + "performanceId 0001");
+      
     } catch (error) {
       console.log(error);
     }
@@ -219,6 +223,7 @@ const UpdateResponseFrom = ({
             ],
           };
           console.log("Sending additional data:", additionalData);
+          console.log(performanceId + "performanceId 1111111111");
           try {
             const response1 = await axios.put(
               `${API_BASE_URL}/update-performance/${performanceId}`,
@@ -247,8 +252,8 @@ const UpdateResponseFrom = ({
               },
             ],
           };
-          console.log("2 additional data:", additionalData);
           try {
+      
             const response1 = await axios.put(
               `${API_BASE_URL}/update-performance/${performanceId}`,
               additionalData
@@ -276,21 +281,34 @@ const UpdateResponseFrom = ({
   };
 
   const handleInputChange = (event, index = null) => {
-    const { name, value } = event.target;
-
+    let { name, value } = event.target;
     if (index !== null) {
-      // Update specific entry in `data` at the given index
       const updatedData = data.map((entry, i) =>
         i === index ? { ...entry, [name]: value } : entry
       );
       setData(updatedData);
     } else {
-      // Update `formData` for the new entry row
       setFormData({
         ...formData,
         [name]: value,
       });
     }
+  };
+  
+  const convertTo12HourFormat = (time) => {
+    if (!time) return "";
+  
+    let [hourMinute, period] = time.split(" ");
+    let [hour, minute] = hourMinute.split(":");
+  
+    hour = parseInt(hour, 10);
+    if (period === "PM" && hour !== 12) {
+      hour += 12;
+    } else if (period === "AM" && hour === 12) {
+      hour = 0;
+    }
+  
+    return `${String(hour).padStart(2, "0")}:${minute}`;
   };
 
   return (
@@ -487,11 +505,13 @@ const UpdateResponseFrom = ({
                   <td className="p-2">
                     <input
                       className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
-                      type="time"
+                       type="text"
                       name="nextInterviewTiming"
-                      value={response.nextInterviewTiming}
+                      // value={response.nextInterviewTiming}
+                      value={convertTo12HourFormat(response.nextInterviewTiming)}
                       onChange={(e) => handleInputChange(e, index)}
                       disabled={index < data.length - 1}
+                      placeholder="HH:MM AM/PM" 
                       style={{
                         boxShadow: `1px 1px 4px var(--Bg-color)`,
                         lineHeight: "1",

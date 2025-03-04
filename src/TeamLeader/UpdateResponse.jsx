@@ -46,8 +46,8 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     ["interviewResponse", "Interview Response"],
     ["interviewRound", "Interview Round"],
     ["jobRole", "Job Role"],
-    ["nextInterviewDate", "Next Interview Date"],
-    ["nextInterviewTiming", "Next Interview Timing"],
+    ["nextInterviewDate", "Interview Date"],
+    ["nextInterviewTiming", "Interview Timing"],
     ["officialMail", "Official Mail"],
     ["requirementCompany", "Requirement Company"],
     ["responseUpdatedDate", "Response Updated Date"],
@@ -577,10 +577,10 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                             Response Updated Date
                           </th>
                           <th className="attendanceheading">
-                            Next Interview Date
+                            Interview Date
                           </th>
                           <th className="attendanceheading">
-                            Next Interview Timing
+                            Interview Timing
                           </th>
                           <th className="attendanceheading">Employee ID</th>
                           <th className="attendanceheading">Employee Name</th>

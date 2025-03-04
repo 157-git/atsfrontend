@@ -38,7 +38,7 @@
     border-top: 6px solid #2a4d79; /* Stylish blue accent */
     width: 70px;
     height: 70px;
-    animation: spin 0.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    /* animation: spin 0.4s cubic-bezier(0.4, 0, 0.2, 1) infinite; */
     box-shadow: 0 0 10px rgba(52, 152, 219, 0.5); /* Glow effect */
     display: flex;
     justify-content: center;

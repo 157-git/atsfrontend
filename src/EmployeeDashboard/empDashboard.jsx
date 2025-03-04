@@ -627,6 +627,7 @@ const EmpDashboard = ({ userGroup }) => {
       }`}
       style={{ backgroundColor: "white", minHeight: "100vh" }}
     >
+        
       <Sidebar
        loginEmployeeName={loginEmployeeName}
         userGroup={userGroup}

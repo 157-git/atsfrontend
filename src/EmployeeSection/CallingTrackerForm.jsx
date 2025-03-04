@@ -3410,6 +3410,7 @@ const ModalComponent = ({
                 </div>
                 <div className="distance-calculation-bottom-div">
                   <iframe
+                  id="idfortesteriframe"
                     title="Google Maps"
                     width="100%"
                     height="450"
