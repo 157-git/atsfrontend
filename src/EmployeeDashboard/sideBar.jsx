@@ -576,6 +576,8 @@ const [filteredInterviews, setFilteredInterviews] = useState([]);
 const handleOk2 = () => {
   console.log(interviewFormData);
 
+  console.log(interviewFormData.reminderId === "");
+  
   if (interviewFormData.reminderId === "") {
     axios.post(`${API_BASE_URL}/save-reminder-data`, interviewFormData)
     .then(response => {
@@ -628,6 +630,8 @@ const getTodaysInterviews = async () => {
   try {
 
     const response = await axios.get(`${API_BASE_URL}/today-interview/${getFormattedDateISOYMDformat()}/${employeeId}/${userType}`);
+    console.log(response);
+    
     setInterviewsForToday(response.data); 
   } catch (error) {
     console.log(error);
@@ -659,6 +663,7 @@ const [REMINDER_INTERVAL,SETREMINDER_INTERVAL] = useState(30 * 60 * 1000);
 const REMINDER_INTERVAL_ForContinous = 0.5 * 60 * 1000;
 
 useEffect(() => {
+  getTodaysInterviews();
   const reminderInterval = setInterval(() => {
     getTodaysInterviews();
   }, REMINDER_INTERVAL_ForContinous); 
@@ -2307,7 +2312,7 @@ useEffect(() => {
 
       {/* Interview Date & Time (Only shown when 'Interview Attending Status' is 'No') */}
       {interviewFormData.attendingStatus === 'No' && (
-        <Form.Item label="Select Interview Date">
+        <Form.Item label="Next Interview Date">
           <div className="wrappedForDisplayFle">
             <DatePicker
               name="nextDate"

@@ -3,8 +3,8 @@ import axios from "axios";
 // export const API_BASE_URL = "https://rg.157careers.in/api/ats/157industries";
 // export const CHAT_BASE_URL = "http://rg.157careers.in";
 
-export const API_BASE_URL = "http://192.168.1.37:9090/api/ats/157industries";
-export const CHAT_BASE_URL = "http://192.168.1.37";
+export const API_BASE_URL = "http://192.168.1.38:9090/api/ats/157industries";
+export const CHAT_BASE_URL = "http://192.168.1.38";
 
 // export const API_BASE_URL = "http://localhost:9090/api/ats/157industries";
 // export const CHAT_BASE_URL = "http://localhost";

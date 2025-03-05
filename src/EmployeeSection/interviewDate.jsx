@@ -9,8 +9,10 @@ import { toast } from "react-toastify";
 import "../EmployeeSection/interviewDate.css";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
+import axios from "axios";
+import InterviewActionModal from "../EmployeeDashboard/InterviewActionModal";
 
-const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
+const InterviewDates = ({ toggleShowShortListedCandidateData, loginEmployeeName }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [interviewData, setInterviewData] = useState(null);
   const [interviewDates, setInterviewDates] = useState([]);
@@ -23,6 +25,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
   const [candidateId, setCandidateId] = useState("");
   const [requirementId, setRequirementId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [openInterviewModalForAction, setOpenInterviewModalForAction] = useState(false);
 
   const { employeeId, userType } = useParams();
   const employeeIdNew = parseInt(employeeId, 10);
@@ -269,6 +272,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
       setShowShortlistTable(true);
     };
 
+ 
     return (
       <div className="App-after">
         {loading ? (
@@ -315,9 +319,9 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                           ? "highlighted-row"
                           : "attendancerows"
                       }
-                      onClick={() =>
-                        handleRowClick(item.candidateId, item.requirementId)
-                      }
+                      // onClick={() =>
+                      //   handleRowClick(item.candidateId, item.requirementId)
+                      // }
                     >
                       <td className="tabledata">{index + 1}</td>
                       <td
@@ -613,6 +617,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
                           <button className="table-icon-div">
                             <i
                               onClick={() => {
+                                openAnotherModalForPerformAction(item);
                                 fetchAndUpdateInterviewResponse(
                                   item.candidateId,
                                   item.requirementId
@@ -634,6 +639,8 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
       </div>
     );
   };
+
+
 
   const tileContent = ({ date, view }) => {
     if (view === "month") {
@@ -702,8 +709,115 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
   };
   //Name:-Akash Pawar Component:-ShortListedCandidate Subcategory:-ResumeViewButton(added) End LineNo:-271 Date:-02/07
 
+  const [interviewFormData, setInterviewFormData] = useState({
+    callingRemark: "",
+    attendingStatus: "",
+    comment: "",
+    nextDate: "",
+    nextTime: "",
+    candidateId: "",
+    employeeId: "",
+    jobRole: "",
+    updatedBy: `${loginEmployeeName}`,
+  });
+  const getInterviewReminderDataByCanId = async(candidateId)=>{
+    const response =await axios.get(`${API_BASE_URL}/get-reminder-data/${candidateId}`);
+    console.log(response);
+    
+    setInterviewFormData((prev)=>({
+    ...prev,
+    callingRemark: response.data.callingRemark,
+    attendingStatus: response.data.attendingStatus,
+    comment: response.data.comment,
+    reminderId : response.data.reminderId ? response.data.reminderId : "",
+    }))
+    
+    }
+  const openAnotherModalForPerformAction = (item)=>{
+    setInterviewFormData((prev)=>({
+      ...prev,
+      candidateId : item.candidateId,
+      employeeId : item.empId,
+      jobRole : item.jobRole !== null ? item.jobRole : "Recruiters"
+    }));
+    getInterviewReminderDataByCanId(item.candidateId);
+  setOpenInterviewModalForAction(true);
+  }
+
+  const handleAntdFormChange = (value, fieldName) => {
+    setInterviewFormData((prev) => {
+      let updatedData = { ...prev, [fieldName]: value };
+
+      if (fieldName === "callingRemark") {
+        updatedData.attendingStatus = value === "Call Done" ? prev.attendingStatus : "";
+        updatedData.nextDate = value !== "Call Done" ? "" : prev.nextDate;
+        updatedData.nextTime = value !== "Call Done" ? "" : prev.nextTime;
+      }
+
+      if (fieldName === "attendingStatus") {
+        updatedData.nextDate = value === "No" ? prev.nextDate : "";
+        updatedData.nextTime = value === "No" ? prev.nextTime : "";
+      }
+
+      return updatedData;
+    });
+  };
+
+  const handleSubmitModal = async() => {
+    if (interviewFormData.reminderId === "") {
+     await axios.post(`${API_BASE_URL}/save-reminder-data`, interviewFormData)
+        .then((response) => {
+          toast.success("Reminder saved successfully!");
+          setInterviewFormData({
+            callingRemark: "",
+            attendingStatus: "",
+            comment: "",
+            nextDate: "",
+            nextTime: "",
+            candidateId: "",
+            employeeId: "",
+            jobRole: "",
+            updatedBy: "John Doe",
+          });
+        })
+        .catch((error) => {
+          toast.error(error.response?.data?.message || "Something went wrong");
+        });
+    } else {
+      axios
+        .put(`${API_BASE_URL}/update-reminder-data/${interviewFormData.candidateId}`, interviewFormData)
+        .then((response) => {
+          toast.success("Reminder Updated successfully!");
+          setInterviewFormData({
+            callingRemark: "",
+            attendingStatus: "",
+            comment: "",
+            nextDate: "",
+            nextTime: "",
+            candidateId: "",
+            employeeId: "",
+            jobRole: "",
+            updatedBy: "John Doe",
+          });
+        })
+        .catch((error) => {
+          toast.error(error.response?.data?.message || "Something went wrong");
+        });
+    }
+    setOpenInterviewModalForAction(false);
+  };
+
+
   return (
     <div className="calendar-container">
+        <InterviewActionModal
+        open={openInterviewModalForAction}
+        onClose={() => setOpenInterviewModalForAction(false)}
+        interviewFormData={interviewFormData}
+        setInterviewFormData={setInterviewFormData}
+        handleAntdFormChange={handleAntdFormChange}
+        handleSubmit={handleSubmitModal}
+      />
       <div className="calender-main-div">
         <div className="calendar">
           <div className="calendar-div">
@@ -716,123 +830,129 @@ const InterviewDates = ({ toggleShowShortListedCandidateData }) => {
               tileContent={tileContent}
             />
           </div>
-          {loading ? (
-            <div className="register">
-              <Loader></Loader>
-            </div>
-          ) : (
-            <>
-              {showShortlistTable && (
-                <div className="shortlist-table-div">
-                  <div className="interview-response-update">
-                    {/* <h6>Response Update-Candidate Name</h6> */}
-                  </div>
-                  <form onSubmit={handleInterviewResponseSubmit}>
-                    <table
-                      id="table-shortlisted"
-                      className="table table-bordered"
-                    >
-                      <thead className="thead-dark">
-                        <tr>
-                          <th>No</th>
-                          <th>Interview Round</th>
-                          <th>Interview Response</th>
-                          <th>Comment for TL</th>
-                          <th>Update Date</th>
-                          <th>Next Interview Date</th>
-                          <th>Interview Time</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {interviewResponses.map((response, index) => (
-                          <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{response.interviewRound}</td>
-                            <td>{response.interviewResponse}</td>
-                            <td></td>
-                            <td>{response.responseUpdatedDate}</td>
-                            <td>{response.nextInterviewDate}</td>
-                            <td>{response.nextInterviewTiming}</td>
-                          </tr>
-                        ))}
-                        <tr>
-                          <td></td>
+          {
+          // loading 
+          // ? 
+          // (
+          //   <div className="register">
+          //     <Loader></Loader>
+          //   </div>
+          // ) 
+         // : 
+          // (
+          //   <>
+          //     {showShortlistTable && (
+          //       <div className="shortlist-table-div">
+          //         <div className="interview-response-update">
+          //           {/* <h6>Response Update-Candidate Name</h6> */}
+          //         </div>
+          //         <form onSubmit={handleInterviewResponseSubmit}>
+          //           <table
+          //             id="table-shortlisted"
+          //             className="table table-bordered"
+          //           >
+          //             <thead className="thead-dark">
+          //               <tr>
+          //                 <th>No</th>
+          //                 <th>Interview Round</th>
+          //                 <th>Interview Response</th>
+          //                 <th>Comment for TL</th>
+          //                 <th>Update Date</th>
+          //                 <th>Next Interview Date</th>
+          //                 <th>Interview Time</th>
+          //               </tr>
+          //             </thead>
+          //             <tbody>
+          //               {interviewResponses.map((response, index) => (
+          //                 <tr key={index}>
+          //                   <td>{index + 1}</td>
+          //                   <td>{response.interviewRound}</td>
+          //                   <td>{response.interviewResponse}</td>
+          //                   <td></td>
+          //                   <td>{response.responseUpdatedDate}</td>
+          //                   <td>{response.nextInterviewDate}</td>
+          //                   <td>{response.nextInterviewTiming}</td>
+          //                 </tr>
+          //               ))}
+          //               <tr>
+          //                 <td></td>
 
-                          <td>
-                            <select name="interviewRound" required>
-                              <option value="">Select Interview</option>
-                              <option value="Hr Round">Hr Round</option>
-                              <option value="Technical Round">
-                                Technical Round
-                              </option>
-                              <option value="L1 Round"> L1 Round</option>
-                              <option value="L2 Round"> L2 Round</option>
-                              <option value="L3 Round"> L3 Round</option>
-                            </select>
-                          </td>
-                          <td>
-                            <select name="interviewResponse" required>
-                              <option value="">Update Response</option>
-                              <option value="Shortlisted For Hr Round">
-                                Shortlisted For Hr Round
-                              </option>
-                              <option value="Shortlisted For Technical Round">
-                                Shortlisted For Technical Round
-                              </option>
-                              <option value="Shortlisted For L1 Round">
-                                Shortlisted For L1 Round
-                              </option>
-                              <option value="Shortlisted For L2 Round">
-                                Shortlisted For L2 Round
-                              </option>
-                              <option value="Shortlisted For L3 Round">
-                                Shortlisted For L3 Round
-                              </option>
-                              <option value="Selected">Selected</option>
-                              <option value="Rejected">Rejected</option>
-                              <option value="Hold">Hold</option>
-                              <option value="Result Pending">
-                                Result Pending
-                              </option>
-                              <option value="No Show">No Show</option>
-                            </select>
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              placeholder="Enter Comment here... "
-                              name=""
-                              id=""
-                            />
-                          </td>
-                          <td>
-                            <input type="date" name="responseUpdatedDate" />
-                          </td>
-                          <td>
-                            <input type="date" name="nextInterviewDate" />
-                          </td>
-                          <td>
-                            <input type="time" name="nextInterviewTiming" />
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    {/* {formSubmitted && (
-                      <div className="alert alert-success" role="alert">
-                        Interview Response Updated Successfully!
-                      </div>
-                    )} */}
-                    <div className="shortlisted-submite-btn">
-                      <button type="submit">Update</button>
-                      <button onClick={() => setShowShortlistTable(false)}>
-                        Close
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              )}
-            </>
-          )}
+          //                 <td>
+          //                   <select name="interviewRound" required>
+          //                     <option value="">Select Interview</option>
+          //                     <option value="Hr Round">Hr Round</option>
+          //                     <option value="Technical Round">
+          //                       Technical Round
+          //                     </option>
+          //                     <option value="L1 Round"> L1 Round</option>
+          //                     <option value="L2 Round"> L2 Round</option>
+          //                     <option value="L3 Round"> L3 Round</option>
+          //                   </select>
+          //                 </td>
+          //                 <td>
+          //                   <select name="interviewResponse" required>
+          //                     <option value="">Update Response</option>
+          //                     <option value="Shortlisted For Hr Round">
+          //                       Shortlisted For Hr Round
+          //                     </option>
+          //                     <option value="Shortlisted For Technical Round">
+          //                       Shortlisted For Technical Round
+          //                     </option>
+          //                     <option value="Shortlisted For L1 Round">
+          //                       Shortlisted For L1 Round
+          //                     </option>
+          //                     <option value="Shortlisted For L2 Round">
+          //                       Shortlisted For L2 Round
+          //                     </option>
+          //                     <option value="Shortlisted For L3 Round">
+          //                       Shortlisted For L3 Round
+          //                     </option>
+          //                     <option value="Selected">Selected</option>
+          //                     <option value="Rejected">Rejected</option>
+          //                     <option value="Hold">Hold</option>
+          //                     <option value="Result Pending">
+          //                       Result Pending
+          //                     </option>
+          //                     <option value="No Show">No Show</option>
+          //                   </select>
+          //                 </td>
+          //                 <td>
+          //                   <input
+          //                     type="text"
+          //                     placeholder="Enter Comment here... "
+          //                     name=""
+          //                     id=""
+          //                   />
+          //                 </td>
+          //                 <td>
+          //                   <input type="date" name="responseUpdatedDate" />
+          //                 </td>
+          //                 <td>
+          //                   <input type="date" name="nextInterviewDate" />
+          //                 </td>
+          //                 <td>
+          //                   <input type="time" name="nextInterviewTiming" />
+          //                 </td>
+          //               </tr>
+          //             </tbody>
+          //           </table>
+          //           {/* {formSubmitted && (
+          //             <div className="alert alert-success" role="alert">
+          //               Interview Response Updated Successfully!
+          //             </div>
+          //           )} */}
+          //           <div className="shortlisted-submite-btn">
+          //             <button type="submit">Update</button>
+          //             <button onClick={() => setShowShortlistTable(false)}>
+          //               Close
+          //             </button>
+          //           </div>
+          //         </form>
+          //       </div>
+          //     )}
+          //   </>
+          // )
+          }
         </div>
       </div>
 

@@ -10,8 +10,32 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
   const { employeeId, userType } = useParams();
   const [copyMessage, setCopyMessage] = useState("");
   const [userUrlString, setUserUrlString] = useState("");
-  const firstName = loginEmployeeName.split(" ")[0];
+
+  const getFirstName = ()=> {
+    // If the string is empty, generate a random 3-character string
+    if (!loginEmployeeName) {
+      const randomChars = "abcdefghijklmnopqrstuvwxyz0123456789";
+      let randomString = "";
+      for (let i = 0; i < 3; i++) {
+        randomString += randomChars[Math.floor(Math.random() * randomChars.length)];
+      }
+      return randomString;
+    }
+  
+    // Check if there's a space before the 3rd character
+    const spaceIndex = loginEmployeeName.indexOf(" ");
+    if (spaceIndex !== -1 && spaceIndex < 3) {
+      // Split by space and return the first part
+      return loginEmployeeName.split(" ")[0];
+    } else {
+      // Otherwise, split at the 3rd character
+      return loginEmployeeName.substring(0, 3);
+    }
+  }
+  const firstName = getFirstName(loginEmployeeName);
   const [displayCopyBtn, setDisplayCopyBtn] = useState(false);
+
+
 
 const getEncodeUrlString = async()=>{
   try {

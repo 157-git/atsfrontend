@@ -785,7 +785,7 @@ const EmpDashboard = ({ userGroup }) => {
           )}
         </div>
 
-        <div>{showInterviewDate && <InterviewDates />}</div>
+        <div>{showInterviewDate && <InterviewDates loginEmployeeName={loginEmployeeName} />}</div>
         <div>{showAddEmployee && <AddEmployee loginEmployeeName={loginEmployeeName} />}</div>
         <div>
           {selectCandidate && (
