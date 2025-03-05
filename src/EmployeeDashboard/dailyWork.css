@@ -253,12 +253,21 @@
 
 /* Modal content styling */
 .dw-modal-content {
-  background-color: white;
+  /* background-color: white;
   border-radius: 3px;
   width: 450x;
   height: 500px;
-  margin: 10px;
+  margin: 10px; */
   /* border: 2px solid black; */
+  text-align: center;
+  padding: 20px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(200, 200, 200, 0.3);
+  padding-bottom: 0%;
+  padding-top: 1%;
 }
 
 .dw-reminder-content {
@@ -452,3 +461,5 @@ color: var(--notification-badge-background);
   border: none; /* Removes any borders if present */
   display: block; /* Ensures no extra space below the image */
 }
+
+/* Arshad added this css of Pousar new code . created by Krishna Added By Arshad */

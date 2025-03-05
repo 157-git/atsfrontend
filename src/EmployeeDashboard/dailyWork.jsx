@@ -16,8 +16,9 @@ import { setProfileImageFromRedux } from "../EmployeeDashboard/employeeSlice.jsx
 import { Avatar, Badge, notification, List, Card } from "antd";
 import { BellOutlined, CloseOutlined, ClearOutlined } from "@ant-design/icons";
 import { initializeSocket } from "./socket.jsx";
-import notificationIcon from "../assets/notificationicon.png"
+import notificationIcon from "../assets/notificationicon.png";
 import Meta from "antd/es/card/Meta.js";
+import { LogOut } from "lucide-react";
 //SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
 
 function DailyWork({
@@ -432,6 +433,8 @@ function DailyWork({
     setBreaks(updatedBreaks);
     localStorage.setItem(`breaks_${employeeId}`, JSON.stringify(updatedBreaks));
     setShowPauseModal(true);
+    setShowBreakModal(true);
+    setIsRunning(true);
   };
 
   useEffect(() => {
@@ -440,18 +443,6 @@ function DailyWork({
       setAllowCloseModal(false); // Ensure modal cannot close until Resume is clicked again
     }
   }, [showPauseModal]);
-
-  const handleResume = () => {
-    setRunning(true);
-    const now = new Date().toLocaleTimeString("en-IN");
-    const updatedBreaks = breaks.map((b) =>
-      !b.breakEndTime ? { ...b, breakEndTime: now } : b
-    );
-    setBreaks(updatedBreaks);
-    localStorage.setItem(`breaks_${employeeId}`, JSON.stringify(updatedBreaks));
-    setAllowCloseModal(true); // Allow modal to close
-    setShowPauseModal(false); // Close the modal
-  };
 
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-handleLogoutLocal(changed) Start LineNo:-530 Date:-01/07
   useEffect(() => {
@@ -487,7 +478,7 @@ function DailyWork({
         dailyArchived: data.archived,
         dailyPending: data.pending,
         logoutTime: logoutTimestamp,
-        totalHoursWork:totalHoursWork,
+        totalHoursWork: totalHoursWork,
         dailyHours: breaks,
         dayPresentStatus: present,
         lateMark,
@@ -1211,7 +1202,73 @@ function DailyWork({
     fetchAllImages();
   }, [messages]);
 
-  
+  //New Puser Component Added By Arshad Attar On 04-03-2025
+  const [showBreakModal, setShowBreakModal] = useState(
+    JSON.parse(localStorage.getItem("showBreakModal")) || false
+  );
+  const [seconds, setSeconds] = useState(
+    parseInt(localStorage.getItem("breakTime")) || 0
+  );
+  const [isRunning, setIsRunning] = useState(
+    JSON.parse(localStorage.getItem("isRunning")) || false
+  );
+
+  useEffect(() => {
+    let interval;
+    if (isRunning) {
+      interval = setInterval(() => {
+        setSeconds((prev) => {
+          const newTime = prev + 1;
+          localStorage.setItem("breakTime", newTime);
+          return newTime;
+        });
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isRunning]);
+
+  useEffect(() => {
+    localStorage.setItem("showBreakModal", JSON.stringify(showBreakModal));
+    localStorage.setItem("isRunning", JSON.stringify(isRunning));
+  }, [showBreakModal, isRunning]);
+
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem("showBreakModal")) === true) {
+      setShowBreakModal(true);
+      setIsRunning(true);
+    }
+  }, []);
+
+  const handleResume = () => {
+    setShowBreakModal(false);
+    setIsRunning(false);
+    setSeconds(0);
+    localStorage.setItem("breakTime", "0");
+    localStorage.setItem("showBreakModal", JSON.stringify(false));
+    localStorage.setItem("isRunning", JSON.stringify(false));
+
+    setRunning(true);
+    const now = new Date().toLocaleTimeString("en-IN");
+    const updatedBreaks = breaks.map((b) =>
+      !b.breakEndTime ? { ...b, breakEndTime: now } : b
+    );
+    setBreaks(updatedBreaks);
+    localStorage.setItem(`breaks_${employeeId}`, JSON.stringify(updatedBreaks));
+    setAllowCloseModal(true); // Allow modal to close
+    setShowPauseModal(false); // Close the modal
+  };
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const secs = time % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(
+      2,
+      "0"
+    )}`;
+  };
+
   return (
     <div className="daily-timeanddate">
       <a href="#">
@@ -1311,14 +1368,12 @@ function DailyWork({
                 style={{ marginRight: "10px" }}
                 onClick={toggleNotificationBox}
               >
-                <Badge 
-                color="var(--notification-badge-background)"
-                count={messages.length}>
-                  <Avatar shape="square" icon={
-                    <BellOutlined />
-                
-                } />
-                {/* <img src={notificationIcon} alt="" /> */}
+                <Badge
+                  color="var(--notification-badge-background)"
+                  count={messages.length}
+                >
+                  <Avatar shape="square" icon={<BellOutlined />} />
+                  {/* <img src={notificationIcon} alt="" /> */}
                 </Badge>
               </div>
             </div>
@@ -1415,30 +1470,30 @@ function DailyWork({
               }
             }}
             className="dw-modal"
+            centered
+            backdrop="static"
+            keyboard={false}
           >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              className="dw-modal-content"
-            >
-              {/* none working close button removed date : 23-10-2024 */}
-              <Modal.Header>
-                <Modal.Title className="dw-modal-title">
-                  Break Runing...
-                </Modal.Title>
-              </Modal.Header>
-              <div>
-                <img src={watingImg} alt="Waiting" className="dw-waiting-img" />
+            <div className="dw-modal-content">
+              <Modal.Title className="modal-title">Break Time! ⏳</Modal.Title>
+              <div className="modal-body">
+                <img
+                  src="https://t4.ftcdn.net/jpg/11/13/64/07/240_F_1113640772_HCjT1oIW0IN4DjKTP6FA33dsWrL1G0g4.jpg"
+                  alt="Break Time"
+                  className="break-image"
+                />
+                <h2 className="timer-text">⏲ {formatTime(seconds)}</h2>
+                <p className="break-text">
+                  Enjoy your break! The timer is running. 🌿
+                </p>
               </div>
-              <Modal.Footer className="dw-modal-footer">
-                <div className="dw-resume-div">
-                  <h3>Timer is paused. Click Resume to continue...</h3>
-                  <button
-                    className="profile-resume-button"
-                    onClick={handleResume}
-                  >
-                    Resume
-                  </button>
-                </div>
+              <Modal.Footer
+                className="custom-footer"
+                style={{ alignItems: "center", justifyContent: "center" }}
+              >
+                <button className="resume-button-main" onClick={handleResume}>
+                  <LogOut size={24} />
+                </button>
               </Modal.Footer>
             </div>
           </Modal>

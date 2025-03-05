@@ -3,50 +3,57 @@
   grid-template-columns: repeat(auto-fit, minmax(490px, 1fr));
   gap: 20px;
   color: var(--text-color);
+  /* margin-left: 20px;
+  margin-right: 20px; */
 }
 
 .can-history-filter-data {
-  padding: 10px;
+  padding: 5px;
   font-size: 16px;
   border-radius: 5px;
   border: 1px solid gray;
   width: auto;
   background-color: #fff;
   height: auto;
-  overflow-y: auto; 
+  overflow-y: auto;
 }
+.can-history-filter-data {
+  width: 100%;
+  overflow-x: auto;
+}
+/* Rajlaxmi JAgadale Update That Code */
 
 .can-history-data-table {
   width: 100%;
-  border: none;
+  min-width: 600px;
   border-collapse: collapse;
-  margin-top: 10px;
-  text-align: center;
+  text-align: left;
+  white-space: nowrap;
 }
 
 .can-history-data-table th,
 .can-history-data-table td {
+  padding: 2px;
+  padding-left: 10px;
   border: 1px solid #ddd;
-  padding-left: 5px;
-  padding-right: 5px;
+  text-align: left;
 }
 
-.can-history-data-table th {
-  font-size: 16px;
-  background-color: var(--Bg-color);
-  color: var(--table-header-txt);
+.can-history-data-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+.candidate-his-center-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 7px;
+  /* width: 100%;   */
+  /* border: 1px solid black; */
 }
 
-.can-history-data-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.can-history-more-items {
-  float: right;
-  cursor: pointer;
-  color: var(--Bg-color);
-  border: none;
-}
+/* Rajlaxmi Jagadale Updated Code */
 .can-history-popup {
   position: fixed;
   top: 0;
@@ -58,28 +65,128 @@
   align-items: center;
   justify-content: center;
   color: var(--text-color);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* rajlaxmi Jagadale Updated That Code line 91 to 116 */
+.can-history-close-button {
+  /* position: absolute; */
+  top: 15px;
+  right: 5px;
+  background: none;
+  border: none;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.can-history-popup-content {
+  background: #fff;
+  padding: 25px;
+  padding-top: 0px;
+  border-radius: 8px;
+  max-height: 80%;
+  overflow-y: auto;
+  overflow-x: auto;
+  /* width: 95%; */
+  min-width: 600px;
+  position: relative;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+}
+/* Rajlaxmi Jagadale Added this code line 116 to 137 */
+.can-history-popup-contents {
+  background: #fff;
+  padding: 5px;
+  border-radius: 8px;
+  max-height: 80%;
+  overflow: hidden;
+  width: 70%;
+  min-width: 600px;
+  position: relative;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  /* border: 1px solid red; */
+}
+
+.can-history-popup-header-top-div {
+  /* border: 1px solid red; */
+  display: flex;
+}
+
+.can-history-popup-header-fist-div {
+  /* border: 1px solid red; */
+  align-items: center;
+  width: 100%;
 }
 
 .can-history-popup-content {
-  background: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  max-height: 80%;
+  flex-grow: 1;
   overflow-y: auto;
-  width: 80%;
-  max-width: 600px;
-  position: relative;
+  overflow-x: auto;
+  max-height: calc(80vh - 60px);
 }
 
-.can-history-close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 25px;
-  font-weight: bold;
+.can-history-close-button:hover {
+  transform: scale(1.1);
+}
+
+.can-history-close-button:hover {
+  transform: scale(1.1);
+}
+
+/* Rajlaxmi jagadale Added/updated this code line 177 to 218 */
+.can-history-data-table th {
+  font-size: 16px;
+  background-color: var(--Bg-color);
+  color: var(--table-header-txt);
+  text-align: center;
+  position: sticky;
+  top: 0;
+  background-color: #f2f2f2;
+}
+.theading {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 100;
+  box-shadow: 0px 1px 1px -1px black;
+}
+
+.can-history-data-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.can-history-more-items {
+  float: right;
+  background-color: white;
+  color: #a9a9a9;
+  border: 1px solid gray;
+  font-size: 16px;
   cursor: pointer;
+  border-radius: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 30px;
+  /* padding: 8px; */
+  margin-top: 6px;
+}
+
+.can-history-more-items:hover {
+  opacity: 0.8;
+}
+
+/* Removed animations that caused bottom-up effect */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .checkbox-label input[type="checkbox"] {
@@ -88,25 +195,37 @@
 }
 
 .outer-Candi-History-tracker-div {
-  gap: 10px;
   color: var(--text-color);
   display: flex;
-  align-items: center;
+  width: auto;
+
+  text-align: left;
 }
 
 .inner-Candi-History-tracker-div {
   /* border: 1px solid green;  */
-  padding-left: 10px;
-  padding-right: 10px;
+  text-align: left;
   width: auto;
+  padding-left: 60px;
 }
-
+.lineUp-Filter-btn {
+  background-color: white;
+  color: #a9a9a9;
+  border: 1px solid skyblue;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 15px;
+  /* padding: 8px; */
+}
 
 .checkbox-label {
   font-size: 16px;
   display: flex;
   align-items: center;
   margin: 5px 0;
+  text-align: center;
+  /* border: 1px solid red; */
+  white-space: nowrap;
 }
 
 .Candi-History-tracker-div {
@@ -114,6 +233,7 @@
   padding: 10px;
   border-radius: 5px;
   margin: 0 auto;
+  text-align: center;
 }
 
 .Candi-History-tracker-button {
@@ -133,7 +253,6 @@
 .Candi-History-tracker-button:hover {
   background-color: var(--primary-button-hover);
   color: var(--button-txt-hover-color);
-
 }
 
 .bha-dropdown {
@@ -141,27 +260,32 @@
 }
 
 .bhafilter-button {
-  background-color: var(--primary-button-bg);
-  color: var(--button-txt-color);
-  border: 1px solid var(--primary-border);
-  padding: 0px 8px; /* Adjust padding as needed */
-  font-size: 16px;
-  white-space: nowrap;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 15px;
-  transition: background-color 0.3s, transform 0.1s; /* Smooth transition for background color and transform */
+  display: block;
+  font-family: -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue",
+    Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 100%;
+  margin: 0;
+  outline: 0;
+  padding: 10px 15px 10px;
+  text-align: center;
+  transition: box-shadow 0.05s ease-in-out, opacity 0.05s ease-in-out;
+  user-select: none;
+  width: 100%;
 }
 
 .bhafilter-button:hover {
-  background-color: var(--button-bg-hover-color);
+  background-color: gainsboro;
   color: var(--button-txt-hover-color);
 }
 
 .bhafilter-button.active {
-  background-color: #f2f2f2; /* Background color when active */
+  background-color: #ffcb9b; /* Background color when active */
   color: var(--button-txt-hover-color);
 }
 
@@ -170,7 +294,7 @@
   transform: scale(0.95); /* Slightly scale down the button */
 }
 /* added by sahil karnekar date 19-11-2024 */
-.setborderdiv{
+.setborderdiv {
   /* margin-bottom: 20px; */
   /* border: 1px solid green; */
   width: 100%;
@@ -192,8 +316,9 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  margin-top: 20px;
-
+  gap: 2px;
+  margin-top: 10px;
+  margin-bottom: 5px;
   /* border: 1px solid green; */
 }
 
@@ -202,9 +327,10 @@
 }
 
 .tracker-date-report-option input[type="radio"] {
-  margin-right: 5px;
+  margin-right: 12px;
+  font-size: 20px;
 }
-.margin-left-set{
+.margin-left-set {
   margin-left: 13px;
 }
 @media print {
@@ -256,23 +382,47 @@
   background-color: #f2f2f2;
 }
 
-.date-inputs {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 20px;
+.history-tracker-Filter-heading {
+  text-align: center;
+  margin-top: 0px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: bold;
 }
 
-.date-inputs label {
-  margin-right: 10px;
-  display: flex;
-  width: 400px;
+.PI-radio-label {
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+  cursor: pointer;
+  display: block;
+  font-family: -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue",
+    Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  outline: 0;
+  padding: 4px;
+  padding-left: 1px;
+  text-align: center;
+  transition: box-shadow 0.05s ease-in-out, opacity 0.05s ease-in-out;
+  user-select: none;
+  width: 10%;
+}
+.PI-radio-label:hover {
+  background-color: gainsboro;
 }
 
-.date-inputs input[type="date"] {
-  height: 30px;
-  border: 1px solid grey;
-  color: grey;
+.PI-radio-label input {
+  display: none;
+}
+.hrline {
+  margin-left: 10%;
+  margin-right: 10%;
+  color: black;
+}
+
+.PI-radio-label.selected {
+  background-color: #ffcb9b;
 }
 
 .filterDataButton {
@@ -292,11 +442,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 40%;
 }
 
-.history-tracker-table-header p, strong{
-  /* color: red; */
+.history-tracker-table-header p,
+strong {
   font-size: 16px;
+  margin-top: 1px;
+}
+
+.history-tracker-table-header {
+  /* border: 1px solid red; */
+  /* margin-top: ; */
+  padding: 4px;
 }
 
 /* Arshad Attar Added CSS On 12-12-2024 */
@@ -304,25 +462,69 @@
 .history-button-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 5px;
   justify-content: center;
-  padding: 5px;
+
   /* border: 1px solid red; */
 }
+input[type="radio"] {
+  border: 1px solid rgb(249, 248, 248);
+  display: inline-block;
+}
 
-.histry-date-div{
+.histry-date-div {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 30px;
 }
-
-.history-tracker-custom-dates{
-  width: 60%;
-  align-items: center;
-  display: flex;
+.history-tracker-custom-dates {
+  /* margin-left: 35%; */
+  text-align: center;
 }
 
-.history-tracker-hr{
-  width: 90%;
+.date-inputs {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.date-container {
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  width: 350px;
+}
+
+.date-label {
+  font-weight: bold;
+  color: #333;
+  font-size: 14px;
+  width: auto;
+  text-align: justify;
+  white-space: nowrap;
+}
+
+.date-picker {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 60%;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: border 0.3s ease-in-out;
+}
+
+.date-picker:hover,
+.date-picker:focus {
+  border-color: black;
+  outline: none;
+}
+
+.date-picker:focus {
+  border-color: #1a73e8;
+  box-shadow: 0px 0px 5px rgba(26, 115, 232, 0.5);
 }

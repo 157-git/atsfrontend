@@ -66,6 +66,9 @@ function ApplicantForm2({ loginEmployeeName }) {
   const [socket, setSocket] = useState(null);
   const [salaryInWords, setSalaryInWords] = useState("");
   const { employeeId, userType } = decodeParams(encodedParams);
+
+  console.log(employeeId, userType);
+
   const [loading, setLoading] = useState(false);
   const [resumeSelected, setResumeSelected] = useState(false);
   const [fileSelected, setSelected] = useState("");
@@ -73,6 +76,7 @@ function ApplicantForm2({ loginEmployeeName }) {
   const dateInputRef = useRef(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [whatsappSelected, setWhatsappSelected] = useState(false);
+  const [doneAnyCertification, SetDoneAnyCertification] = useState(false);
 
   const initialFormData = {
     date: "",
@@ -83,7 +87,7 @@ function ApplicantForm2({ loginEmployeeName }) {
     currentLocation: "",
     recruiterName: "",
     alternateNumber: 0,
-    sourceName: "Applicant Form",
+    sourceName: "",
     requirementId: "",
     requirementCompany: "",
     communicationRating: "",
@@ -151,6 +155,11 @@ function ApplicantForm2({ loginEmployeeName }) {
   }, [loginEmployeeName]);
 
   const handleKeyDown = (e) => {
+    if (e.target.name === "candidateEmail") {
+      if (e.key === " ") {
+        e.preventDefault(); // Prevents spaces from being entered
+      }
+    }
     if (e.key === "Enter") {
       e.preventDefault();
 
@@ -175,15 +184,41 @@ function ApplicantForm2({ loginEmployeeName }) {
 
   const handleChange = (e) => {
     const { name, type, files, value } = e.target;
+
     const inputValue =
       type === "file" ? (files && files.length > 0 ? files[0] : null) : value;
+
+    if (name === "lineUp.offersalary") {
+      if (!/^\d{0,2}$/.test(value)) {
+        return; // Prevent updating if the value is not numeric or exceeds 2 digits
+      }
+    }
+    if (name === "candidateEmail") {
+      if (!/^\S*$/.test(value)) {
+        return; // Prevent updating if there is a space
+      }
+    }
 
     // Update the formData for nested objects like certificates
     setFormData((prevData) => {
       let updatedData = { ...prevData };
 
-      // If the field is part of lineUp (for certificates or other fields)
-      if (name.startsWith("lineUp.")) {
+      if (name === "lineUp.holdingAnyOffer") {
+        const isHoldingOffer = value === "true" || value === true;
+
+        updatedData.lineUp = {
+          ...prevData.lineUp,
+          holdingAnyOffer: isHoldingOffer,
+          ...(isHoldingOffer
+            ? {} // Keep existing values if "Yes" is selected
+            : {
+                companyName: "",
+                offersalary: "",
+                negotiation: "",
+                offerdetails: "",
+              }), // Clear values if "No" is selected
+        };
+      } else if (name.startsWith("lineUp.")) {
         // Split the name to handle nested fields (e.g., "lineUp.certificates[0].certificateName")
         const nameParts = name.split(".");
         if (name.startsWith("lineUp.certificates")) {
@@ -429,11 +464,10 @@ function ApplicantForm2({ loginEmployeeName }) {
   minDate.setFullYear(currentDate.getFullYear() - 18);
   const minDateString = minDate.toISOString().split("T")[0];
 
-  const startYear = 2003;
+  const startYear = 1947;
   const calendarStartDate = new Date(startYear, 0, 1);
   const calendarStartDateString = calendarStartDate.toISOString().split("T")[0];
   console.log(calendarStartDateString);
-  
 
   const handleFileChange = async (e, index) => {
     const file = e.target.files[0]; // Get the uploaded file
@@ -507,7 +541,7 @@ function ApplicantForm2({ loginEmployeeName }) {
         errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
         errorElement.focus();
       }
-      toast.error("Please fix the errors before submitting.");
+      toast.error("Please Fill All Required Fields.");
       return;
     }
 
@@ -517,13 +551,15 @@ function ApplicantForm2({ loginEmployeeName }) {
     if (formData.alternateNumber === "No") {
       formData.alternateNumber = 0;
     }
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+    const time = `${hours}:${minutes}:${seconds}`;
     const updatedFormData = {
       ...formData,
       date: currentDate.toISOString().split("T")[0],
-      candidateAddedTime: currentDate.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
+      candidateAddedTime: time,
     };
 
     const certificates = updatedFormData.lineUp.certificates || [];
@@ -555,8 +591,11 @@ function ApplicantForm2({ loginEmployeeName }) {
     };
 
     console.log("Form data being sent:", JSON.stringify(dataToSend, null, 2));
-
+    console.log(dataToSend);
     try {
+      console.log("Running Api...");
+      console.log(dataToSend);
+
       const response = await axios.post(
         `${API_BASE_URL}/save-applicant/${userType}`,
         dataToSend,
@@ -679,28 +718,27 @@ function ApplicantForm2({ loginEmployeeName }) {
       case "jobDesignation":
         if (!stringValue) {
           error = "Enter Your Job Designation";
-        } else if (!/^[a-zA-Z\s]+$/.test(value)) {
-          error = "Job designation must contain only letters and spaces.";
-        } else if (value.length > 100) {
-          error = "Job designation cannot exceed 100 characters.";
         }
+        // else if (!/^[a-zA-Z\s]+$/.test(value)) {
+        //   error = "Job designation must contain only letters and spaces.";
+        // }
+        // else if (value.length >= 100) {
+        //   error = "Job designation cannot exceed 100 characters.";
+        // }
         break;
 
       case "lineUp.experienceYear":
         if (!stringValue) {
           error = "Experience Year is required.";
-        } else if (value < 0 || value > 12) {
-          error = "Experience must be between 0 and 12 years.";
         }
+        // else if (value < 0 || value > 12) {
+        //   error = "Experience must be between 0 and 12 years.";
+        // }
         break;
 
       case "lineUp.photo":
-        if (!value) {
+        if (!value || value.length === 0) {
           error = "Upload the photo";
-        } else if (
-          !["image/jpeg", "image/jpg", "image/png"].includes(value.type)
-        ) {
-          error = "Invalid photo format. Only JPG, JPEG, and PNG allowed.";
         }
         break;
 
@@ -715,19 +753,17 @@ function ApplicantForm2({ loginEmployeeName }) {
         break;
 
       case "lineUp.currentCTCLakh":
-        if (value === "" || isNaN(value) || value <= 0) {
-          error = "Please enter a valid salary amount greater than zero.";
-        } else if (!/^\d+(\.\d{1,2})?$/.test(value)) {
+        if (!/^\d+(\.\d{1,2})?$/.test(value)) {
           error =
             "Please enter a valid salary amount with up to two decimal places.";
         }
         break;
 
-      case "lineUp.expectedCTCLakh":
-        if (value === "" || isNaN(value) || value <= 0) {
-          error = "Please enter a valid expected salary";
-        }
-        break;
+      // case "lineUp.expectedCTCLakh":
+      //   if (value === "" || isNaN(value) || value <= 0) {
+      //     error = "Please enter a valid expected salary";
+      //   }
+      //   break;
 
       case "lineUp.preferredLocation":
         if (!stringValue) {
@@ -792,7 +828,9 @@ function ApplicantForm2({ loginEmployeeName }) {
           <div className="form-grid-December">
             <div className="form-column-December">
               <div className="form-group-December">
-                <label>Full name</label>
+                <label>
+                  Full name <span className="setRequiredAstricColorRed">*</span>
+                </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faUser}
@@ -807,7 +845,6 @@ function ApplicantForm2({ loginEmployeeName }) {
                     onChange={handleChange}
                     maxLength={100}
                     onKeyDown={handleKeyDown}
-                    required
                   />
                 </div>
                 {errors.candidateName && (
@@ -816,7 +853,10 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Contact number</label>
+                <label>
+                  Contact number{" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faPhone}
@@ -831,7 +871,6 @@ function ApplicantForm2({ loginEmployeeName }) {
                     onChange={handleChange}
                     maxLength={16}
                     onKeyDown={handleKeyDown}
-                    required
                   />
                 </div>
                 {errors.contactNumber && (
@@ -840,7 +879,10 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Email address</label>
+                <label>
+                  Email address{" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faMailBulk}
@@ -855,7 +897,6 @@ function ApplicantForm2({ loginEmployeeName }) {
                     onChange={handleChange}
                     maxLength={100}
                     onKeyDown={handleKeyDown}
-                    required
                   />
                 </div>
                 {errors.candidateEmail && (
@@ -864,7 +905,10 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Current salary (LPA)</label>
+                <label>
+                  Current salary (LPA){" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faSackDollar}
@@ -883,7 +927,6 @@ function ApplicantForm2({ loginEmployeeName }) {
                         e.target.value = e.target.value.slice(0, 2);
                       }
                     }}
-                    required
                   />
                   {/* <span></span> */}
                   <input
@@ -899,7 +942,6 @@ function ApplicantForm2({ loginEmployeeName }) {
                         e.target.value = e.target.value.slice(0, 2);
                       }
                     }}
-                    required
                   />
                 </div>
                 {(errors["lineUp.currentCTCLakh"] ||
@@ -921,7 +963,10 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Expected salary (LPA)</label>
+                <label>
+                  Expected salary (LPA){" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faMoneyCheck}
@@ -939,7 +984,6 @@ function ApplicantForm2({ loginEmployeeName }) {
                         e.target.value = e.target.value.slice(0, 2);
                       }
                     }}
-                    required
                   />
                   <span></span>
                   <input
@@ -954,7 +998,6 @@ function ApplicantForm2({ loginEmployeeName }) {
                         e.target.value = e.target.value.slice(0, 2);
                       }
                     }}
-                    required
                   />
                 </div>
                 {(errors["lineUp.expectedCTCLakh"] ||
@@ -991,7 +1034,6 @@ function ApplicantForm2({ loginEmployeeName }) {
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     maxLength={100}
-                    required
                   />
                 </div>
                 {errors["lineUp.qualification"] && (
@@ -1002,7 +1044,10 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Job designation</label>
+                <label>
+                  Job designation{" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faUserTie}
@@ -1016,8 +1061,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                     value={formData.jobDesignation}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
-                    maxLength={100}
-                    required
+                    maxLength={150}
                   />
                 </div>
                 {errors.jobDesignation && (
@@ -1040,7 +1084,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                     value={formData.currentLocation}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
-                    required
+                    maxLength={100}
                   />
                 </div>
                 {errors.currentLocation && (
@@ -1051,7 +1095,10 @@ function ApplicantForm2({ loginEmployeeName }) {
 
             <div className="form-column-December">
               <div className="form-group-December">
-                <label>Preferred location</label>
+                <label>
+                  Preferred location{" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faLocationPin}
@@ -1076,7 +1123,10 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Notice period (Days)</label>
+                <label>
+                  Notice period (Days){" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faHourglassHalf}
@@ -1098,7 +1148,10 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Availability for interview</label>
+                <label>
+                  Availability for interview{" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faCalendar}
@@ -1112,6 +1165,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                     value={formData.lineUp.availabilityForInterview}
                     onKeyDown={handleKeyDown}
                     onChange={handleChange}
+                    max="9999-12-31"
                   />
                 </div>
                 {errors["lineUp.availabilityForInterview"] && (
@@ -1136,6 +1190,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                     value={formData.lineUp.expectedJoinDate}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
+                    max="9999-12-31"
                   />
                 </div>
                 {/* {errors["lineUp.expectedJoiningDate"] && (
@@ -1145,7 +1200,10 @@ function ApplicantForm2({ loginEmployeeName }) {
             )} */}
               </div>
               <div className="form-group-December">
-                <label>Total experience (Years)</label>
+                <label>
+                  Total experience{" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faKeyboard}
@@ -1153,7 +1211,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   />
                   <input
                     type="number"
-                    placeholder="Total experience (Years)"
+                    placeholder="Years"
                     name="lineUp.experienceYear"
                     id="lineUp.experienceYear"
                     value={formData.lineUp.experienceYear}
@@ -1164,7 +1222,6 @@ function ApplicantForm2({ loginEmployeeName }) {
                         e.target.value = e.target.value.slice(0, 2);
                       }
                     }}
-                    required
                   />
 
                   <span></span>
@@ -1187,7 +1244,6 @@ function ApplicantForm2({ loginEmployeeName }) {
                         e.target.value = e.target.value.slice(0, 2);
                       }
                     }}
-                    required
                   />
                 </div>
                 {errors["lineUp.experienceYear"] && (
@@ -1198,21 +1254,25 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Relevant experience</label>
+                <label>
+                  Relevant experience (Years){" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faBriefcase}
                     className="input-icon-December"
                   />
                   <input
-                    type="text"
-                    placeholder="Relevant experience"
+                    type="number"
+                    placeholder="Relevant experience [For EX (3.6) Or (12.6)]"
                     name="lineUp.relevantExperience"
                     id="lineUp.relevantExperience"
                     value={formData.lineUp.relevantExperience}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     onInput={handleInputInterview}
+                    maxLength={5}
                   />
                 </div>
                 {errors["lineUp.relevantExperience"] && (
@@ -1224,7 +1284,9 @@ function ApplicantForm2({ loginEmployeeName }) {
 
               <div className="form-group-December">
                 <div className="gender">
-                  <label>Gender</label>
+                  <label>
+                    Gender <span className="setRequiredAstricColorRed">*</span>
+                  </label>
                   <div className="radio-group" id="genderid">
                     <FormControlLabel
                       control={
@@ -1341,74 +1403,10 @@ function ApplicantForm2({ loginEmployeeName }) {
 
             <div className="form-column-December">
               <div className="form-group-December">
-                <div className="form-December-certificate">
-                  <label>Have you done any courses and certificates ? </label>
-                  {formData.lineUp.certificates.map((cert, index) => (
-                    <div key={index} className="certificate-item-December">
-                      <div className="certificate-inputs-December-sub-div">
-                        <div className="input-with-icon-December">
-                          <FontAwesomeIcon
-                            icon={faCertificate}
-                            className="input-icon-December"
-                          />
-                          <input
-                            type="text"
-                            name={`lineUp.certificates[${index}].certificateName`}
-                            placeholder="Certificate name"
-                            value={cert.certificateName}
-                            onChange={handleChange}
-                            ref={(el) => (inputRefs.current[index * 2] = el)}
-                          />
-                        </div>
-                        <div
-                          className="input-with-icon-December"
-                          id="input-with-icon-December-certificates"
-                        >
-                          <FontAwesomeIcon
-                            icon={faUpload}
-                            className="input-icon-December"
-                          />
-                          <input
-                            type="file"
-                            id="certificateFile"
-                            name={`lineUp.certificates[${index}].certificateFile`}
-                            onChange={(e) => handleFileChange(e, index)}
-                            ref={(el) =>
-                              (inputRefs.current[index * 2 + 1] = el)
-                            }
-                          />
-                        </div>
-                      </div>
-
-                      <div className="certificate-buttons-December-button-div">
-                        <button
-                          type="button"
-                          onClick={() => handleCloseCertificate(index)}
-                          className="remove-btn"
-                        >
-                          <FontAwesomeIcon
-                            icon={faXmark}
-                            className="remove-btn-icon"
-                          />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddCertificate}
-                          className="remove-btn"
-                        >
-                          <FontAwesomeIcon
-                            icon={faPlus}
-                            className="remove-btn-icon"
-                          />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="form-group-December">
-                <label>Date of birth</label>
+                <label>
+                  Date of birth{" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faBirthdayCake}
@@ -1432,13 +1430,23 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label> Upload resume</label>
+                <label>
+                  {" "}
+                  Upload resume{" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faUpload}
                     className="input-icon-December"
                   />
                   <input
+                    style={{
+                      color: "var(--text-color)",
+                      padding: "10px 10px 10px 35px",
+                      border: "1px solid #1d3a5d",
+                      borderRadius: "10px",
+                    }}
                     type="file"
                     name="lineUp.resume"
                     id="resumeUpload"
@@ -1459,19 +1467,26 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label>Upload photo</label>
+                <label>
+                  Upload profile photo{" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faPhotoFilm}
                     className="input-icon-December"
                   />
                   <input
+                    style={{
+                      color: "var(--text-color)",
+                      padding: "10px 10px 10px 35px",
+                    }}
                     type="file"
                     name="lineUp.photo"
                     id="lineUp.photo"
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
-                    accept=".jpng,.png,.jpg"
+                    accept="image/*"
                   />
                   {photoSelected && (
                     <FontAwesomeIcon
@@ -1484,6 +1499,110 @@ function ApplicantForm2({ loginEmployeeName }) {
                 {errors["lineUp.photo"] && (
                   <span className="error">{errors["lineUp.photo"]}</span>
                 )}
+              </div>
+
+              <div className="form-group-December">
+                <div className="form-December-certificate">
+                  <label>Have you done any courses and certificates ? </label>
+
+                  <div className="radio-group" id="certificationRadio">
+                    <FormControlLabel
+                      control={
+                        <Radio
+                          checked={doneAnyCertification === true}
+                          onChange={() => {
+                            SetDoneAnyCertification(true);
+                          }}
+                        />
+                      }
+                      label="Yes"
+                    />
+
+                    <FormControlLabel
+                      control={
+                        <Radio
+                          checked={doneAnyCertification === false}
+                          onChange={() => {
+                            SetDoneAnyCertification(false);
+                            formData.lineUp.certificates = [
+                              { certificateName: "", certificateFile: null },
+                            ];
+                          }}
+                        />
+                      }
+                      label="No"
+                    />
+                  </div>
+
+                  {doneAnyCertification && (
+                    <>
+                      {formData.lineUp.certificates.map((cert, index) => (
+                        <div key={index} className="certificate-item-December">
+                          <div className="certificate-inputs-December-sub-div">
+                            <div className="input-with-icon-December">
+                              <FontAwesomeIcon
+                                icon={faCertificate}
+                                className="input-icon-December"
+                              />
+                              <input
+                                type="text"
+                                name={`lineUp.certificates[${index}].certificateName`}
+                                placeholder="Certificate name"
+                                value={cert.certificateName}
+                                onChange={handleChange}
+                                ref={(el) =>
+                                  (inputRefs.current[index * 2] = el)
+                                }
+                                maxLength={100}
+                              />
+                            </div>
+                            <div
+                              className="input-with-icon-December"
+                              id="input-with-icon-December-certificates"
+                            >
+                              <FontAwesomeIcon
+                                icon={faUpload}
+                                className="input-icon-December"
+                              />
+                              <input
+                                type="file"
+                                id="certificateFile"
+                                name={`lineUp.certificates[${index}].certificateFile`}
+                                onChange={(e) => handleFileChange(e, index)}
+                                ref={(el) =>
+                                  (inputRefs.current[index * 2 + 1] = el)
+                                }
+                              />
+                            </div>
+                          </div>
+
+                          <div className="certificate-buttons-December-button-div">
+                            <button
+                              type="button"
+                              onClick={() => handleCloseCertificate(index)}
+                              className="remove-btn"
+                            >
+                              <FontAwesomeIcon
+                                icon={faXmark}
+                                className="remove-btn-icon"
+                              />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleAddCertificate}
+                              className="remove-btn"
+                            >
+                              <FontAwesomeIcon
+                                icon={faPlus}
+                                className="remove-btn-icon"
+                              />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
               </div>
 
               <div className="form-group-December">
@@ -1541,7 +1660,6 @@ function ApplicantForm2({ loginEmployeeName }) {
                         onChange={handleChange}
                         onKeyDown={handleKeyDown}
                         maxLength={100}
-                        required
                         className="form-textfield"
                       />
                     </div>
@@ -1561,16 +1679,15 @@ function ApplicantForm2({ loginEmployeeName }) {
                         className="input-icon-December"
                       />
                       <input
-                        type="number"
+                        type="text"
                         name="lineUp.offersalary"
                         id="lineUp.offersalary"
                         placeholder="Salary (Lakh)"
                         value={formData.lineUp.offersalary}
                         onChange={handleChange}
-                        maxLength={2}
                         onKeyDown={handleKeyDown}
-                        required
                         className="form-textfield"
+                        maxLength={2}
                       />
                     </div>
                     {errors["lineUp.offersalary"] && (
@@ -1700,14 +1817,17 @@ function ApplicantForm2({ loginEmployeeName }) {
                           id="alternateNumber"
                           value={formData.alternateNumber}
                           placeholder="Enter WhatsApp Number"
-                          onChange={(e) =>
-                            handleChange({
-                              target: {
-                                name: "alternateNumber",
-                                value: e.target.value,
-                              },
-                            })
-                          }
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, "");
+                            if (value.length <= 13) {
+                              handleChange({
+                                target: {
+                                  name: "alternateNumber",
+                                  value,
+                                },
+                              });
+                            }
+                          }}
                         />
                       </div>
                     </div>

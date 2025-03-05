@@ -111,6 +111,10 @@
   justify-content: center;
 }
 
+.calling-tracker-field .calling-tracker-field-sub-div .css-dev-only-do-not-override-1htoz2s .css-dev-only-do-not-override-1htoz2s{
+  border-right: none;
+}
+
 .calling-tracker-field-sub-div {
   width: 69%;
   display: flex;

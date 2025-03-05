@@ -5,7 +5,6 @@
   justify-content: center;
   flex-direction: column;
   width: 100%;
-
 }
 
 .Join-form-data {
@@ -13,7 +12,6 @@
   text-align: center;
   padding: 10px !important;
 }
-
 
 .candidate-selectdata {
   display: flex;
@@ -32,7 +30,6 @@
   height: 600px;
 }
 
-
 .after-button {
   background-color: var(--primary-button-bg);
   color: var(--button-txt-color);
@@ -47,10 +44,8 @@
 }
 
 .after-button:hover {
-
   background-color: var(--primary-button-hover);
   color: var(--button-txt-hover-color);
-
 }
 
 .after-mail-div {
@@ -62,8 +57,7 @@
   display: flex;
   justify-content: space-evenly;
 
-  color:var(--text-color);
-
+  color: var(--text-color);
 }
 
 .after-mail-div:hover {
@@ -81,11 +75,9 @@
   height: 35px;
   border-radius: 0.25rem;
   border: 1px solid #ced4da;
-
 }
 
 .after-lable-div {
-
   width: 210px;
 }
 
@@ -99,8 +91,7 @@
   font-weight: bold;
   font-size: 18px;
 
-  color:var(--text-color);
-
+  color: var(--text-color);
 }
 
 .after-document-fisrt {
@@ -110,11 +101,8 @@
 }
 
 .after-document-fisrt:hover {
-
   background-color: var(--selected-form-bg);
-
 }
-
 
 .after-documnet-sub {
   display: flex;
@@ -124,9 +112,7 @@
 }
 
 .after-documnet-sub:hover {
-
   background-color: var(--selected-form-bg);
-
 }
 
 .after-document-files {
@@ -137,7 +123,6 @@
   justify-content: space-between;
   width: 530px;
 }
-
 
 .after-file-input {
   border-radius: 4px;
@@ -177,17 +162,13 @@
   width: 100px;
   border-radius: 5px;
   margin-left: 120px;
-
 }
 
 /* table css work */
 
-
-
 .active-resone {
   width: 110px;
 }
-
 
 /* Arshad Attar Added CSS  */
 .inquiry-table-td {
@@ -198,8 +179,6 @@
   overflow-wrap: break-word; /* Break content properly */
 }
 
-
-
 /* Arshad Attar Added This CSS ON 13-02-2025 */
 .after-head {
   width: 100%;
@@ -208,20 +187,20 @@
   align-items: center;
   justify-content: center;
   display: flex;
-  position: relative; 
+  position: relative;
 }
 
 .join-close-icon {
-  position: absolute; 
+  position: absolute;
   top: 5px;
   right: 15px;
   font-size: 40px;
   font-weight: bold;
-  color: #333; 
+  color: #333;
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
 .join-close-icon:hover {
-  color: #ff0000; 
+  color: #ff0000;
 }

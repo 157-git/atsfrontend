@@ -20,7 +20,7 @@ import InterviewPreviousQuestion from "./interviewPreviousQuestion";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
 // this libraries added by sahil karnekar date 21-10-2024
-import { Button, Flex, message, notification, Progress, Rate, TimePicker, Upload } from "antd";
+import { Button, Flex, message, notification, Progress, Radio, Rate, TimePicker, Upload } from "antd";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSocket } from "../EmployeeDashboard/socket";
@@ -86,7 +86,7 @@ const CallingTrackerForm = ({
     gender: "",
     qualification: "",
     yearOfPassing: "",
-    extraCertification: "",
+    extraCertification: "No",
     holdingAnyOffer: "",
     offerLetterMsg: "",
     noticePeriod: "",
@@ -933,37 +933,6 @@ const handleCallingFeedBackOthers = (e)=>{
     // Validate gender to be either "Male" or "Female"
     return gender === "Male" || gender === "Female" ? gender : "";
   };
-
-
-  // const setResumeResponse = (data) => {
-  //   // Set common fields
-  //   setCallingTracker((prevState) => ({
-  //     ...prevState,
-  //     candidateName: data.candidateName,
-  //     candidateEmail: data.candidateEmail,
-  //     currentLocation: data.currentLocation,
-  //     contactNumber: `${data.contactNumber}`,
-  //   }));
-  //   setLineUpData((prevState) => ({
-  //     ...prevState,
-  //     extraCertification: data.extraCertification,
-  //     relevantExperience: data.relevantExperience,
-  //     companyName: data.companyName,
-  //     dateOfBirth: formatDateString(data.dateOfBirth),
-  //     gender: validateGender(data.gender),
-  //     qualification: data.qualification,
-  //     resume: data.resume,
-  //   }));
-
-  //   // Check if currentLocation matches a predefined option
-  //   if (!predefinedLocations.includes(data.currentLocation)) {
-  //     setIsOtherLocationSelected(true); // Show the "Other" input field
-  //   } else {
-  //     setIsOtherLocationSelected(false); // No additional input needed
-  //   }
-  // };
-
-
   const setResumeResponse = (data) => {
     // Fields to check in existing state
     const hasExistingData =
@@ -971,7 +940,7 @@ const handleCallingFeedBackOthers = (e)=>{
       callingTracker.candidateEmail !== "" ||
       callingTracker.currentLocation !== "" ||
       callingTracker.contactNumber !== "" ||
-      lineUpData.extraCertification !== "" ||
+      // lineUpData.extraCertification !== "" ||
       lineUpData.relevantExperience !== "" ||
       lineUpData.companyName !== "" ||
       lineUpData.dateOfBirth !== "" ||
@@ -989,7 +958,7 @@ const handleCallingFeedBackOthers = (e)=>{
       }));
       setLineUpData((prevState) => ({
         ...prevState,
-        extraCertification: data.extraCertification,
+        // extraCertification: data.extraCertification,
         relevantExperience: data.relevantExperience,
         companyName: data.companyName,
         dateOfBirth: formatDateString(data.dateOfBirth),
@@ -1662,11 +1631,17 @@ const handleCallingFeedBackOthers = (e)=>{
                         type="text"
                         name="currentLocation"
                         value={callingTracker.currentLocation}
-                        onChange={(e) =>
+                        onChange={(e) =>{
                           setCallingTracker({
                             ...callingTracker,
                             currentLocation: e.target.value,
-                          })
+                          });
+                          setErrors((prev) => {
+                            const { currentLocation, ...rest } = prev;
+                            return rest;
+                        });                        
+                        }
+                         
                         }
                         placeholder="Enter your location"
                       />
@@ -2413,22 +2388,30 @@ const handleCallingFeedBackOthers = (e)=>{
                   </div>
                 </div>
               </div>
-              <div className="calling-tracker-field">
-                <label>Any Extra Certification</label>
+              <div className="calling-tracker-field"
+              >
+                <label>Working Status</label>
                 <div className="calling-tracker-field-sub-div">
-                  <input
-                    type="text"
-                    name="extraCerification"
-                    value={lineUpData.extraCertification}
-                    onChange={(e) =>
-                      setLineUpData({
-                        ...lineUpData,
-                        extraCertification: e.target.value,
-                      })
-                    }
-                    className="plain-input"
-                    placeholder="Enter Extra Certification"
-                  />
+
+<Radio.Group
+style={{
+  display:"flex",
+  width:"100%"
+}}
+  name="extraCertification"
+  value={lineUpData.extraCertification}
+  onChange={(e) =>
+    setLineUpData({
+      ...lineUpData,
+      extraCertification: e.target.value,
+    })
+  }
+  options={[
+    { value: "Yes", label: "Yes" },
+    { value: "No", label: "No" },
+  ]}
+/>
+
                 </div>
               </div>
             </div>

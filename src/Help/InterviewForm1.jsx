@@ -5,7 +5,9 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import "../Help/InterviewForm1.css";
 import { API_BASE_URL } from "../api/api";
 import { fileToBase64converter } from "../HandlerFunctions/fileToBase64converter";
-import { message } from "antd";
+import { toast } from "react-toastify";
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
+import { Modal } from "antd";
 
 const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
   const [jobId, setJobId] = useState("");
@@ -23,8 +25,13 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
   const [reference, setReference] = useState("");
   const [question, setQuestion] = useState("");
   const [questionsList, setQuestionsList] = useState([]);
-  const [indexRequirment, setindexRequirment] = useState("");
 
+  const requirementData = {
+    "REQ-101": { companyName: "ABC Corp", designation: "Software Engineer" },
+    "REQ-102": { companyName: "XYZ Pvt Ltd", designation: "Backend Developer" },
+    "REQ-103": { companyName: "TechSoft", designation: "Frontend Developer" },
+  };
+  const [indexRequirment, setindexRequirment] = useState("");
   const handleJobChange = (e) => {
     const index = e.target.value;
     setJobId(requirementOptions[index].requirementId);
@@ -35,13 +42,13 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
   };
 
   const handleAddQuestion = () => {
-    if (question.trim() && reference.trim()) {
+    if (question.trim()) {
       setInterviewQuestions([...interviewQuestions, { question, reference }]);
       setQuestionsList([...questionsList, { question, reference }]);
       setQuestion("");
       setReference("");
     } else {
-      alert("Please enter both question and reference.");
+      toast.info("Question is required !");
     }
   };
 
@@ -85,6 +92,18 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
   }, []);
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!jobId) {
+      toast.error("Please Select Job ID");
+      return;
+    }
+    if (!interviewRound) {
+      toast.error("Please Select Interview Round");
+      return;
+    }
+    if (questionsList.length === 0) {
+      toast.info("At Least 1 Question Required !");
+      return;
+    }
 
     const questionAddedDate = new Date().toISOString().split("T")[0];
 
@@ -111,17 +130,17 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
         }
       );
 
-      message.success(response.data);
+      toast.success(response.data);
 
       // Corrected state update
       setSubmittedData((prev) => [...prev, dataToSubmit]);
 
       // Clearing form fields after successful submission
+      setJobId("");
       setindexRequirment("");
       setCompanyName("");
       setDesignation("");
       setInterviewRound("");
-      setQuestionAttachment("");
       setInterviewQuestions([]);
       setQuestionsList([]);
       setQuestionAttachment(null);
@@ -140,10 +159,27 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
 
   console.log(submittedData);
   console.log(requirementOptions);
+  const [openAttachmentModal, setOpenAttachmentModal] = useState(false);
+  const [attachmentUrl, setAttachmentUrl] = useState("");
+  const handleViewAttachment = (attachmentBase64String) => {
+    if (attachmentBase64String) {
+      setOpenAttachmentModal(true);
+      const newBase64Attachment = `data:application/pdf;base64,${attachmentBase64String}`;
+      setAttachmentUrl(newBase64Attachment);
+    } else {
+      setOpenAttachmentModal(false);
+    }
+  };
+  const handleOk = () => {
+    setOpenAttachmentModal(false);
+  };
+  const handleCancel = () => {
+    setOpenAttachmentModal(false);
+  };
 
   return (
     <div className="container newcontainerclassforinterviewform">
-      {/* <h2 className="title newclassfortitleform">Interview Details</h2> */}
+      <h2 className="title newclassfortitleform">Interview Details</h2>
       <div className="form-row">
         <div className="form-group small newformgroupforinterviewquestionsform">
           <label>Requirement Id:</label>
@@ -152,10 +188,10 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
             onChange={handleJobChange}
             className="newinputforinterviewquestions"
           >
-            <option value="">Select Requirement ID</option>
+            <option value="">Select Job ID</option>
             {requirementOptions.map((item, index) => (
               <option key={index} value={index}>
-                {item.companyName}
+                Job Id : {item.requirementId} {item.companyName}
               </option>
             ))}
           </select>
@@ -196,12 +232,12 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
         <div className="form-group small newformgroupforinterviewquestionsform">
           <label>Attachment:</label>
           <input
+            value={questionAttachment ? "" : undefined}
             type="file"
             accept=".pdf,.doc,.docx"
             onChange={handleFileChange}
             className="newinputforinterviewquestions"
           />
-          {questionAttachment && <span>{questionAttachment.name}</span>}
         </div>
       </div>
 
@@ -209,7 +245,7 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
         <div className="form-group full-width textarea-container">
           <label>Questions:</label>
           <div className="textarea-wrapper">
-            <textarea value="" className="question-details-textarea" readOnly />
+            <textarea value="" className="textareaNewForAlignment" readOnly />
           </div>
           <div className="newWrappedForQuestionsRef">
             <div className="form-group-Queations">
@@ -278,57 +314,114 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
       </div>
 
       {submittedData.length > 0 && (
-        <div className="table-container">
+        <div className="setNewWidth">
           <hr />
-          <h2 className="theading">Interview Questions</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Interview Round</th>
-                <th>Question</th>
-                <th>Reference</th>
-                <th>Attachment</th>
-                {/* <th>Action</th> */}
-              </tr>
-            </thead>
-            <tbody>
-              {submittedData.map((data, index) =>
-                data.interviewQuestion.map((q, qIndex) => (
-                  <tr key={`${index}-${qIndex}`}>
-                    {qIndex === 0 && (
-                      <>
-                        <td rowSpan={data.interviewQuestion.length}>
-                          {data.questionAddedDate}
-                        </td>
-                        <td rowSpan={data.interviewQuestion.length}>
-                          {data.interviewRound}
-                        </td>
-                      </>
-                    )}
-                    <td>{q.interviewQuestions}</td>
-                    <td>{q.questionsReference}</td>
-                    {qIndex === 0 && (
-                      <td rowSpan={data.interviewQuestion.length}>
-                        {data.questionAddedDate}
+          <h2 className="theading1">Interview Questions</h2>
+          <div>
+            <table className="NEWCLASSFORTABLE">
+              <thead>
+                <tr className="newtableheadingrow">
+                  <th className="newthclassforinterviewtable">Time</th>
+                  <th className="newthclassforinterviewtable">
+                    Interview Round
+                  </th>
+                  <th className="newthclassforinterviewtable">Question</th>
+                  <th className="newthclassforinterviewtable">Reference</th>
+                  <th className="newthclassforinterviewtable">Attachment</th>
+                  {/* <th>Action</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                {submittedData.map((item, index) => (
+                  <>
+                    <tr className="newinterviewtablerow1">
+                      <td className="newthclassforinterviewtable">
+                        {item.questionAddedDate}
                       </td>
-                    )}
-                    {/* {qIndex === 0 && (
-                      <td rowSpan={data.interviewQuestion.length}>
-                        <button className="action-btn">
-                          <CiEdit />
-                        </button>
-                        <button className="action-btn">
-                          <RiDeleteBin6Line />
-                        </button>
+                      <td className="newthclassforinterviewtable">
+                        {item.interviewRound}
                       </td>
-                    )} */}
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                      <td className="newthclassforinterviewtable">
+                        {item.interviewQuestion.map((ques, indexQues) => (
+                          <div
+                            className="classnamesetdisplayflexforinterviewtable"
+                            style={{
+                              borderBottom: `${
+                                indexQues !==
+                                  item.interviewQuestion.length - 1 &&
+                                "1px solid black"
+                              }`,
+                            }}
+                          >
+                            <p className="setmarginclassfortableptag">
+                              {indexQues + 1}{" "}
+                            </p>
+                            <p>
+                              {" "}
+                              {ques.interviewQuestions
+                                ? ques.interviewQuestions
+                                : " "}
+                            </p>
+                          </div>
+                        ))}
+                      </td>
+                      <td className="newthclassforinterviewtable">
+                        {item.interviewQuestion.map((ref, indexRef) => (
+                          <div
+                            className="classnamesetdisplayflexforinterviewtable"
+                            style={{
+                              borderBottom: `${
+                                indexRef !==
+                                  item.interviewQuestion.length - 1 &&
+                                "1px solid black"
+                              }`,
+                            }}
+                          >
+                            <p className="setmarginclassfortableptag">
+                              {indexRef + 1}{" "}
+                            </p>
+                            <p>
+                              {ref.questionsReference
+                                ? ref.questionsReference
+                                : " "}
+                            </p>
+                          </div>
+                        ))}
+                      </td>
+                      <td
+                        className="newthclassforinterviewtable"
+                        onClick={() =>
+                          handleViewAttachment(item.questionAttachment)
+                        }
+                      >
+                        {item.questionAttachment !== null ? (
+                          <EyeOutlined />
+                        ) : (
+                          <EyeInvisibleOutlined />
+                        )}
+                      </td>
+                    </tr>
+                  </>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
+      )}
+      {openAttachmentModal && (
+        <Modal
+          title="Attachment"
+          open={openAttachmentModal}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={null}
+        >
+          <iframe
+            src={attachmentUrl}
+            title="Questions"
+            style={{ width: "100%", height: "500px" }}
+          ></iframe>
+        </Modal>
       )}
     </div>
   );

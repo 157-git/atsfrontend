@@ -140,7 +140,7 @@ const ResumeList = ({
       "Education",
       "Relevant Experience",
       "Current Location",
-      "Extra Certification",
+      "Working Status",
     ];
 
     const dataToExport = data.map((item, index) => {
@@ -157,7 +157,7 @@ const ResumeList = ({
         Education: item.qualification || "-",
         "Relevant Experience": item.relevantExperience || "-",
         "Current Location": item.currentLocation || "-",
-        "Extra Certification": item.extraCertification || "-",
+        "Working Status": item.extraCertification || "-",
       };
       return filteredItem;
     });
@@ -1023,7 +1023,7 @@ const forwardSelectedCandidate = (e) => {
                       <th className="attendanceheading">Last Company</th>
                       <th className="attendanceheading">Relevant Experience</th>
                       <th className="attendanceheading">Education</th>
-                      <th className="attendanceheading">Extra Certification</th>
+                      <th className="attendanceheading">Working Status</th>
                       <th className="attendanceheading">Current Location</th>
                       <th className="attendanceheading">Resume</th>
 

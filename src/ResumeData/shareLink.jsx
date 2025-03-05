@@ -81,9 +81,13 @@ const ShareLink = ({ toggleResumeLink }) => {
   return (
     <div className="shareLink-mainDiv">
       <div className="shareLink-share-btn-Div">
-        <h1 style={{
-          color:"var(--sidebar-txt)"
-        }}>Share Link To Candidate</h1>
+        <h1
+          style={{
+            color: "var(--sidebar-txt)",
+          }}
+        >
+          Share Link To Candidate
+        </h1>
         <div className="share-copy-div">
           <button className="shareLink-share-btn" onClick={handleShareLink}>
             Share 🔗
@@ -104,9 +108,13 @@ const ShareLink = ({ toggleResumeLink }) => {
       </div>
 
       <div className="shareLink-view-btn-Div">
-      <h1 style={{
-          color:"var(--sidebar-txt)"
-        }} >Resume Builder</h1>
+        <h1
+          style={{
+            color: "var(--sidebar-txt)",
+          }}
+        >
+          Resume Builder
+        </h1>
         <button className="shareLink-view-btn" onClick={toggleResumeLink}>
           Create
         </button>

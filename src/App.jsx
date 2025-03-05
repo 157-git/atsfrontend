@@ -181,7 +181,7 @@ const App = () => {
           ></Route> */}
            <Route
             path="/tempRoute"
-            element={<InterviewForm1></InterviewForm1>}
+            element={<ApplicationForm1></ApplicationForm1>}
           ></Route>
         </Routes>
       </BrowserRouter>

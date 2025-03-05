@@ -20,7 +20,7 @@
     ["expectedCTCThousand", "Expected CTC (Thousand)"],
     ["experienceMonth", "Experience Month"],
     ["experienceYear", "Experience Year"],
-    ["extraCertification", "Extra Certification"],
+    ["extraCertification", "Working Status"],
     ["feedBack", "Feed Back"],
     ["finalStatus", "Final Status"],
     ["fullAddress", "Full Address"],

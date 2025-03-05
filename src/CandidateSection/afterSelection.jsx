@@ -70,7 +70,6 @@ const AfterSelection = ({
     console.log("2nddd useEffect ");
     const fetchData = async () => {
       await fetchCandidateData();
-      // await fetchCandidateTableData();
       await fetchJoinDate();
     };
     fetchData();
@@ -325,13 +324,13 @@ const AfterSelection = ({
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
-    console.log (" requirementId --- " + requirementId);
-    console.log (" candidateId --- " + candidateId);
+    console.log(" requirementId --- " + requirementId);
+    console.log(" candidateId --- " + candidateId);
     const formData = {
-      callingTracker: {candidateId:candidateId},
-      requirementInfo:{requirementId: requirementId},
+      callingTracker: { candidateId: candidateId },
+      requirementInfo: { requirementId: requirementId },
       employeeId: employeeId,
-      jobRole:userType,
+      jobRole: userType,
       activeStatus: activeStatus,
       callDate: callDate,
       officeEnvironment: officeEnvironment,
@@ -369,7 +368,6 @@ const AfterSelection = ({
       setLoading(false); // Ensure loading spinner stops
     }
   };
-
 
   const [formData, setFormData] = useState({
     employeeId: employeeId,
@@ -654,7 +652,7 @@ const AfterSelection = ({
             {!isActiveInquiry ? (
               <div
                 className="after-main-div"
-                style={{ width: "-webkit-fill-available" }}
+                style={{ width: "-webkit-fill-available"}}
               >
                 <form
                   className="Join-form-data"
@@ -977,6 +975,7 @@ const AfterSelection = ({
                             onChange={handleInputChange}
                           />
                         </div>
+
                         <div className="after-mail-div">
                           <div className="after-lable-div">
                             {userType === "Recruiters" && (
@@ -1041,16 +1040,24 @@ const AfterSelection = ({
                       >
                         <tbody className="table-group-divider">
                           <tr id="table-row">
-                            <th className="p-2 font-semibold whitespace-nowrap"> Recruiter Name:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">
+                              {" "}
+                              Recruiter Name:
+                            </th>
                             <td className="inquiry-table-td">
                               {candidateData.recruiterName}
                             </td>
-                            <th className="p-2 font-semibold whitespace-nowrap">Candidate Name:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">
+                              Candidate Name:
+                            </th>
                             <td className="inquiry-table-td">
                               {" "}
                               {candidateData.candidateName}
                             </td>
-                            <th className="p-2 font-semibold whitespace-nowrap"> Email:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">
+                              {" "}
+                              Email:
+                            </th>
                             <td className="inquiry-table-td">
                               {" "}
                               {candidateData.candidateEmail}
@@ -1058,16 +1065,24 @@ const AfterSelection = ({
                           </tr>
 
                           <tr id="table-row">
-                            <th className="p-2 font-semibold whitespace-nowrap"> Date of Birth:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">
+                              {" "}
+                              Date of Birth:
+                            </th>
                             <td className="inquiry-table-td">
                               {candidateData.lineUp.dateOfBirth}
                             </td>
-                            <th className="p-2 font-semibold whitespace-nowrap">Placed Company:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">
+                              Placed Company:
+                            </th>
                             <td className="inquiry-table-td">
                               {" "}
                               {candidateData.requirementCompany}
                             </td>
-                            <th className="p-2 font-semibold whitespace-nowrap"> Location:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">
+                              {" "}
+                              Location:
+                            </th>
                             <td className="inquiry-table-td">
                               {" "}
                               {candidateData.currentLocation}
@@ -1075,33 +1090,46 @@ const AfterSelection = ({
                           </tr>
 
                           <tr id="table-row">
-                            <th className="p-2 font-semibold whitespace-nowrap">Gender</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">
+                              Gender
+                            </th>
                             <td className="inquiry-table-td">
                               {candidateData.lineUp.gender}
                             </td>
-                            <th className="p-2 font-semibold whitespace-nowrap">Total Experience:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">
+                              Total Experience:
+                            </th>
                             <td className="inquiry-table-td">
                               {" "}
                               {candidateData.experienceYear} Year{" "}
                               {candidateData.experienceMonth} Month{" "}
                             </td>
-                            <th className="p-2 font-semibold whitespace-nowrap">Source Name :</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">
+                              Source Name :
+                            </th>
                             <td className="inquiry-table-td">
                               {candidateData.sourceName}
                             </td>
                           </tr>
 
                           <tr id="table-row">
-                            <th className="p-2 font-semibold whitespace-nowrap">Position:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">
+                              Position:
+                            </th>
                             <td className="inquiry-table-td">
                               {candidateData.jobDesignation}
                             </td>
-                            <th className="p-2 font-semibold whitespace-nowrap">Contact Number:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">
+                              Contact Number:
+                            </th>
                             <td className="inquiry-table-td">
                               {" "}
                               {candidateData.contactNumber}{" "}
                             </td>
-                            <th className="p-2 font-semibold whitespace-nowrap"> Alternate Number:</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">
+                              {" "}
+                              Alternate Number:
+                            </th>
                             <td className="inquiry-table-td">
                               {" "}
                               {candidateData.alternateNumber}
@@ -1116,14 +1144,18 @@ const AfterSelection = ({
                               {joiningDate ? joiningDate : "Fetching..."}
                             </td>
 
-                            <th className="p-2 font-semibold whitespace-nowrap">Date After 90 Days :</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">
+                              Date After 90 Days :
+                            </th>
                             <td className="inquiry-table-td">
                               {dateAfter90days
                                 ? dateAfter90days
                                 : "Calculating..."}
                             </td>
 
-                            <th className="p-2 font-semibold whitespace-nowrap">Days Remaining :</th>
+                            <th className="p-2 font-semibold whitespace-nowrap">
+                              Days Remaining :
+                            </th>
                             <td
                               className="inquiry-table-td"
                               style={{
@@ -1168,9 +1200,7 @@ const AfterSelection = ({
                     </div>
 
                     {activeStatus === "Active" && (
-                      <table
-                        className="attendance-table"
-                      >
+                      <table className="attendance-table">
                         <thead>
                           <tr className="attendancerows">
                             <th className="attendanceheading">Sr No.</th>

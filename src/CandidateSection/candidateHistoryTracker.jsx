@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import "../CandidateSection/candidateHistoryTracker.css";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { API_BASE_URL } from "../api/api";
 import {
   endOfMonth,
@@ -26,7 +28,6 @@ const CandidateHistoryTracker = () => {
   const [dateRange, setDateRange] = useState("");
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
-
   const popupRef = useRef();
 
   const policyRef = useRef(); //Prachi Parab Filter Data pdf 156 to 207
@@ -77,6 +78,9 @@ const CandidateHistoryTracker = () => {
     content: () => policyRef.current,
     documentTitle: "Report",
   });
+  const handleClearAll = () => {
+    setSelectedFilters([]); // Reset to an empty array
+  };
 
   const handleFilterChange = (e) => {
     let value = e.target.value;
@@ -101,28 +105,42 @@ const CandidateHistoryTracker = () => {
     });
   };
 
-  const handleClickOutside = (e) => {
-    if (popupRef.current && !popupRef.current.contains(e.target)) {
-      setPopupData(null);
+  // const handleClickOutside = (e) => {
+  //   if (popupRef.current && !popupRef.current.contains(e.target)) {
+  //     setPopupData(null);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => document.removeEventListener("mousedown", handleClickOutside);
+  // }, []);
+  // Rajlaxmi Jagadale Added this code line 122 to 151
+  const [isVisible, setIsVisible] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const handleButtonClick = () => {
+    setIsVisible(!isVisible);
+  };
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsVisible(false);
     }
   };
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
-
-  const [isVisible, setIsVisible] = useState(false);
-
-  const handleButtonClick = () => {
-    setIsVisible(!isVisible);
-  };
 
   const [openDropdown, setOpenDropdown] = useState("");
 
   const handleDropdownToggle = (label) => {
     console.log(label);
     setOpenDropdown(label);
+    selectAllFilters();
   };
   useEffect(() => {
     fetchData();
@@ -194,7 +212,7 @@ const CandidateHistoryTracker = () => {
     // updated by sahil karnekar dat 18-11-2024
     setStartDate(format(date, "yyyy-MM-dd"));
   };
-
+  // Rajlaxmi JAgadale some changes if that code line 220 to257
   const handleCustomEndDateChange = (event) => {
     const date = new Date(event.target.value);
     setCustomEndDate(event.target.value);
@@ -231,7 +249,7 @@ const CandidateHistoryTracker = () => {
     } else {
       setSelectedFilters([]);
     }
-    setSelectAll(!selectAll);
+    setSelectAll(selectAll);
   };
 
   // conditional case created by sahil karnekar date 18-11-2024
@@ -308,7 +326,7 @@ const CandidateHistoryTracker = () => {
       console.warn("Missing parameters: startDate, endDate, or openDropdown");
     }
   };
-
+  // Rajlaxmi Jagadale Updated Taht code line 334 to 429
   return (
     <div>
       <div className="HeadingHistory">Candidate History</div>
@@ -316,114 +334,139 @@ const CandidateHistoryTracker = () => {
       <div className="setborderdiv">
         <div className="tracker-date-report-option">
           <div className="histry-date-div">
-          <label className="PI-radio-label">
-            <input
-              type="radio"
-              value="Current Month"
-              id="CurrentMonth"
-              name="reportOption"
-              onClick={handleDateRangeChange}
-            />
-            Current Month
-          </label>
-          <label className="PI-radio-label">
-            <input
-              type="radio"
-              value="Last Month"
-              id="LastMonth"
-              name="reportOption"
-              onClick={handleDateRangeChange}
-            />
-            Last Month
-          </label>
-          <label className="PI-radio-label">
-            <input
-              type="radio"
-              value="Last 3 Months"
-              id="Last3Months"
-              name="reportOption"
-              onClick={handleDateRangeChange}
-            />
-            Last 3 Months
-          </label>
-          <label className="PI-radio-label">
-            <input
-              type="radio"
-              value="Last 6 Months"
-              name="reportOption"
-              id="Last6Months"
-              onClick={handleDateRangeChange}
-            />
-            Last 6 Months
-          </label>
-          <label className="PI-radio-label">
-            <input
-              type="radio"
-              value="Last 1 Year"
-              name="reportOption"
-              id="Last1Year"
-              onClick={handleDateRangeChange}
-            />
-            Last 1 Year
-          </label>
-          <label className="PI-radio-label">
-            <input
-              type="radio"
-              value="custom"
-              checked={dateRange === "custom"}
-              name="reportOption"
-              id="CustomDate"
-              onClick={handleDateRangeChange}
-            />
-            Custom Date
-          </label>
+            <label
+              className={`PI-radio-label ${
+                dateRange === "Current Month" ? "selected" : ""
+              }`}
+            >
+              <input
+                type="radio"
+                value="Current Month"
+                id="CurrentMonth"
+                name="reportOption"
+                onChange={handleDateRangeChange}
+              />
+              Current Month
+            </label>
+            <label
+              className={`PI-radio-label ${
+                dateRange === "Last Month" ? "selected" : ""
+              }`}
+            >
+              <input
+                type="radio"
+                value="Last Month"
+                id="LastMonth"
+                name="reportOption"
+                onChange={handleDateRangeChange}
+              />
+              Last Month
+            </label>
+            <label
+              className={`PI-radio-label ${
+                dateRange === "Last 3 Months" ? "selected" : ""
+              }`}
+            >
+              <input
+                type="radio"
+                value="Last 3 Months"
+                id="Last3Months"
+                name="reportOption"
+                onChange={handleDateRangeChange}
+              />
+              Last 3 Months
+            </label>
+            <label
+              className={`PI-radio-label ${
+                dateRange === "Last 6 Months" ? "selected" : ""
+              }`}
+            >
+              <input
+                type="radio"
+                value="Last 6 Months"
+                name="reportOption"
+                id="Last6Months"
+                onChange={handleDateRangeChange}
+              />
+              Last 6 Months
+            </label>
+            <label
+              className={`PI-radio-label ${
+                dateRange === "Last 1 Year" ? "selected" : ""
+              }`}
+            >
+              <input
+                type="radio"
+                value="Last 1 Year"
+                name="reportOption"
+                id="Last1Year"
+                onChange={handleDateRangeChange}
+              />
+              Last 1 Year
+            </label>
+            <label
+              className={`PI-radio-label ${
+                dateRange === "custom" ? "selected" : ""
+              }`}
+            >
+              <input
+                type="radio"
+                value="custom"
+                checked={dateRange === "custom"}
+                name="reportOption"
+                id="CustomDate"
+                onChange={handleDateRangeChange}
+              />
+              Custom Date
+            </label>
           </div>
           <center>
-          <div className="history-tracker-custom-dates">
-            {showCustomDiv && (
+            <div className="history-tracker-custom-dates">
+              {showCustomDiv && (
                 <div className="date-inputs">
-                  <label>
-                    Start Date:
-                    </label>
+                  <div className="date-container">
+                    <label className="date-label">Start Date:</label>
                     <input
                       type="date"
                       value={customStartDate}
                       onChange={handleCustomStartDateChange}
+                      className="date-picker"
                     />
-                 
-                  <label>
-                    End Date:
-                    </label>
+                  </div>
+
+                  <div className="date-container">
+                    <label className="date-label">End Date:</label>
                     <input
                       type="date"
                       value={customEndDate}
                       onChange={handleCustomEndDateChange}
+                      className="date-picker"
                     />
-                
-                  {/* <div className="filterDataButton">
-                    <button className="Candi-History-tracker-button">
-                      Filter Data
-                    </button>
-                  </div> */}
+                  </div>
                 </div>
-              
-            )}
-          </div>
+              )}
+            </div>
           </center>
+
+          {/* Rajlaxmi JAgadale some changes that code line 432 to 475 */}
         </div>
         {/* LINE 356 to 403 updated by sahil karnekar dat 18-11-2024 */}
-
-        <div className="history-button-main-div" >
+        <h4 className="history-tracker-Filter-heading">
+          Filter Options ( Based On Candidate Status )
+        </h4>
+        {/* <hr className="hrline"></hr> */}
+        <div style={{ marginTop: 0 }} className="history-button-main-div">
           <div className={`history-button-container`}>
             {[
               "Yet To Confirm", //1
               "Interview Schedule", //2
               "Attending After Some time", //3
               "Shortlisted For Hr Round", //4
-              "Shortlisted For Technical Round",//5
-              "Shortlisted For L1 Round",//6
-              "Shortlisted For L2 Round",//7
-              "Shortlisted For L3 Round",//8
+              "Shortlisted For Technical Round", //5
+              "Shortlisted For L1 Round", //6
+              "Inactive", //19
+              "Shortlisted For L2 Round", //7
+              "Shortlisted For L3 Round", //8
               "Selected", //9
               "Rejected", //10
               "Hold", //11
@@ -434,14 +477,15 @@ const CandidateHistoryTracker = () => {
               "Not Joined", //16
               "No Show", //17
               "Active", //18
-              "Inactive", //19
             ].map((label) => (
               <div key={label} className="bha-dropdown">
                 <button
                   className={`bhafilter-button ${
                     openDropdown === label ? "active" : ""
                   }`}
-                  onClick={() => handleDropdownToggle(label)}
+                  onClick={() => (
+                    selectAllFilters(), handleDropdownToggle(label)
+                  )}
                 >
                   {label}
                 </button>
@@ -450,28 +494,29 @@ const CandidateHistoryTracker = () => {
           </div>
         </div>
       </div>
-
-      {openDropdown && (
-        <div className="Candi-History-tracker-div">
-          <div className="history-filtter-data-div">
-            <div className="history-main-div">
-              <button
-                onClick={handleButtonClick}
-                className="lineUp-Filter-btn"
-              >
-                {isVisible ? "Hide Filters" : "Show Filters"}
-              </button>
-              &nbsp; &nbsp;
-              {isVisible && (
+      <div>
+        {/* Rajlaxmi Jagadale some updated that field */}
+        {openDropdown && (
+          <div className="Candi-History-tracker-div">
+            <div className="history-filtter-data-div">
+              <div className="history-main-div">
                 <button
-                  onClick={selectAllFilters}
+                  onClick={handleButtonClick}
                   className="lineUp-Filter-btn"
                 >
-                  {selectAll ? "Select All" : "Deselect All"}
+                  {isVisible ? "Hide Filters" : "Show Filters"}
                 </button>
-              )}
-            </div>
-            {/* <div className="company-position-container">
+                &nbsp; &nbsp;
+                {isVisible && (
+                  <button
+                    onClick={selectAllFilters}
+                    className="lineUp-Filter-btn"
+                  >
+                    {selectAll ? "Select All" : "Deselect All"}
+                  </button>
+                )}
+              </div>
+              {/* <div className="company-position-container">
               <div className="combobox-container">
                 <select value={companyName} onChange={handleCompanyChange}>
                   <option value="">Select Company</option>
@@ -488,161 +533,158 @@ const CandidateHistoryTracker = () => {
               </div>
             </div> */}
 
-            <div className="">
-              {selectedFilters.length > 0 && (
-                <span className="handlePrintDiv">
-                  <button
-                    className="lineUp-Filter-btn margin-left-set"
-                    onClick={handlePrint}
-                  >
-                    Export PDF
-                  </button>
-                </span>
-              )}
+              
+              <div className="">
+                {selectedFilters.length > 0 && (
+                  <span className="handlePrintDiv">
+                    <button
+                      className="lineUp-Filter-btn margin-left-set"
+                      onClick={handleClearAll}
+                    >
+                      Clear Filters
+                    </button>
+                  </span>
+                )}
+              </div>
+              <div className="">
+                {selectedFilters.length > 0 && (
+                  <span className="handlePrintDiv">
+                    <button
+                      className="lineUp-Filter-btn margin-left-set"
+                      onClick={handlePrint}
+                    >
+                      Export PDF
+                    </button>
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
+            {/* Rajlaxmi Jagadale work on filters  */}
+            {isVisible && (
+              <div className="outer-Candi-History-tracker-div">
+                <div className="inner-Candi-History-tracker-div">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="extraCertificationCounts"
+                      checked={selectedFilters.includes(
+                        "extraCertificationCounts"
+                      )}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Extra Certification
+                  </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="onRoleCounts"
+                      checked={selectedFilters.includes("onRoleCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    On Role
+                  </label>
 
-          {isVisible && (
-            <div className="outer-Candi-History-tracker-div">
-              <div className="inner-Candi-History-tracker-div">
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="extraCertificationCounts"
-                    checked={selectedFilters.includes(
-                      "extraCertificationCounts"
-                    )}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Extra Certification hhh
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="onRoleCounts"
-                    checked={selectedFilters.includes("onRoleCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  On Role
-                </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="distanceCounts"
+                      checked={selectedFilters.includes("distanceCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Distance
+                  </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="genderCounts"
+                      checked={selectedFilters.includes("genderCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Gender
+                  </label>
+                </div>
+                <div className="inner-Candi-History-tracker-div">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="jobDesignationCounts"
+                      checked={selectedFilters.includes("jobDesignationCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Job Designation
+                  </label>
 
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="distanceCounts"
-                    checked={selectedFilters.includes("distanceCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Distance
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="genderCounts"
-                    checked={selectedFilters.includes("genderCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Gender
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="ageCounts"
-                    checked={selectedFilters.includes("ageCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Age
-                </label>
-              </div>
-              <div className="inner-Candi-History-tracker-div">
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="jobDesignationCounts"
-                    checked={selectedFilters.includes("jobDesignationCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Job Designation
-                </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="salaryCounts"
+                      checked={selectedFilters.includes("salaryCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Salary Counts
+                  </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="communicationRatingCounts"
+                      checked={selectedFilters.includes(
+                        "communicationRatingCounts"
+                      )}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Communication Rating
+                  </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="lastCompanyCounts"
+                      checked={selectedFilters.includes("lastCompanyCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Last Company
+                  </label>
+                </div>
 
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="salaryCounts"
-                    checked={selectedFilters.includes("salaryCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Salary Counts
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="communicationRatingCounts"
-                    checked={selectedFilters.includes(
-                      "communicationRatingCounts"
-                    )}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Communication Rating
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="lastCompanyCounts"
-                    checked={selectedFilters.includes("lastCompanyCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Last Company
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="companyTypeCounts"
-                    checked={selectedFilters.includes("companyTypeCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Company Type Counts
-                </label>
-              </div>
-
-              <div className="inner-Candi-History-tracker-div">
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="sourceNameCounts"
-                    checked={selectedFilters.includes("sourceNameCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Source Name
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="pickUpAndDropCounts"
-                    checked={selectedFilters.includes("pickUpAndDropCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Pick Up and Drop
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="experienceCounts"
-                    checked={selectedFilters.includes("experienceCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Experience Count
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="holdingAnyOfferCounts"
-                    checked={selectedFilters.includes("holdingAnyOfferCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Holding Any Offer
-                </label>
-                {/* <label className="checkbox-label">
+                <div className="inner-Candi-History-tracker-div">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="sourceNameCounts"
+                      checked={selectedFilters.includes("sourceNameCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Source Name
+                  </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="pickUpAndDropCounts"
+                      checked={selectedFilters.includes("pickUpAndDropCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Pick Up and Drop
+                  </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="experienceCounts"
+                      checked={selectedFilters.includes("experienceCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Experience Count
+                  </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="holdingAnyOfferCounts"
+                      checked={selectedFilters.includes(
+                        "holdingAnyOfferCounts"
+                      )}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Holding Any Offer
+                  </label>
+                  {/* <label className="checkbox-label">
                   <input
                     type="checkbox"
                     value="Skills Set"
@@ -651,70 +693,90 @@ const CandidateHistoryTracker = () => {
                   />{" "}
                   Skills Set
                 </label> */}
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="tatReportsCounts"
-                    checked={selectedFilters.includes("tatReportsCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  TAT Reports
-                </label>
+                </div>
+                <div className="inner-Candi-History-tracker-div">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="requirementCompanyCounts"
+                      checked={selectedFilters.includes(
+                        "requirementCompanyCounts"
+                      )}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Requirement Company
+                  </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="noticePeriodCounts"
+                      checked={selectedFilters.includes("noticePeriodCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Notice Period
+                  </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="incentiveCounts"
+                      checked={selectedFilters.includes("incentiveCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Incentive Counts
+                  </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="qualificationCounts"
+                      checked={selectedFilters.includes("qualificationCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Qualification
+                  </label>
+                </div>
+                <div className="inner-Candi-History-tracker-div">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="companyTypeCounts"
+                      checked={selectedFilters.includes("companyTypeCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Company Type Counts
+                  </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="tatReportsCounts"
+                      checked={selectedFilters.includes("tatReportsCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    TAT Reports
+                  </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="maritalStatusCounts"
+                      checked={selectedFilters.includes("maritalStatusCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Marital Status
+                  </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="ageCounts"
+                      checked={selectedFilters.includes("ageCounts")}
+                      onChange={handleFilterChange}
+                    />{" "}
+                    Age
+                  </label>
+                </div>
               </div>
-              <div className="inner-Candi-History-tracker-div">
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="requirementCompanyCounts"
-                    checked={selectedFilters.includes(
-                      "requirementCompanyCounts"
-                    )}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Requirement Company
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="noticePeriodCounts"
-                    checked={selectedFilters.includes("noticePeriodCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Notice Period
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="incentiveCounts"
-                    checked={selectedFilters.includes("incentiveCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Incentive Counts
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="qualificationCounts"
-                    checked={selectedFilters.includes("qualificationCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Qualification
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="maritalStatusCounts"
-                    checked={selectedFilters.includes("maritalStatusCounts")}
-                    onChange={handleFilterChange}
-                  />{" "}
-                  Marital Status
-                </label>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
+            )}
+          </div>
+        )}
+      </div>
       {/* <h5>{openDropdown}</h5> */}
       <div
         className="can-history-filter-data-section"
@@ -730,7 +792,7 @@ const CandidateHistoryTracker = () => {
 
           // added by sahil karnekar
           const displayName = getDisplayName(filter);
-
+          // Rajlaxmi Jaggadale update that code
           return (
             <div className="can-history-filter-data" key={filter}>
               <div className="history-tracker-table-header">
@@ -743,9 +805,8 @@ const CandidateHistoryTracker = () => {
                   <strong>Position :</strong> {position}
                 </p> */}
                 <p>
-                  <strong>Category :</strong> {openDropdown}
-                </p>
-                <p>
+                  <strong>Category :</strong> {openDropdown} &nbsp; &nbsp;
+                  &nbsp;
                   <strong>Filtered Data by :</strong> {displayName}
                 </p>
                 {/* <p> <strong>Data for : - </strong> {monthSelector}</p> */}
@@ -756,7 +817,7 @@ const CandidateHistoryTracker = () => {
                     <thead>
                       <tr>
                         <th>{displayName}</th>
-                        <th>{openDropdown + " " + "Count"}</th>
+                        <th>{openDropdown + " Count"}</th>
                         <th>Total Count</th>
                         <th>Percentage</th>
                       </tr>
@@ -799,10 +860,7 @@ const CandidateHistoryTracker = () => {
                           item.sourceName !== null &&
                           item.tatReports !== "" &&
                           item.tatReports !== null && (
-                            <tr
-                              key={index}
-                              
-                            >
+                            <tr key={index}>
                               <td>
                                 {item.companyName ||
                                   item.ageRange ||
@@ -836,7 +894,7 @@ const CandidateHistoryTracker = () => {
                                   item.tatReports ||
                                   item.incentiveRange}
                               </td>
-                              <td>
+                              <td style={{ textAlign: "center" }}>
                                 {/* updated by sahil karnekar date 18-11-2024 */}
                                 {item.SelectedCount ??
                                   item.YetToConfirmCount ??
@@ -860,13 +918,13 @@ const CandidateHistoryTracker = () => {
                                   item.l3RoundCount}
                               </td>
 
-                              <td>
+                              <td style={{ textAlign: "center" }}>
                                 {item.totalCount ||
                                   item.COUNT ||
                                   item.countCallingTracker ||
                                   item.candidateCount}
                               </td>
-                              <td>
+                              <td style={{ textAlign: "center" }}>
                                 {/* updated by sahil karnekar date 18-11-2024 */}
                                 {(() => {
                                   // Array of all possible fields
@@ -922,162 +980,177 @@ const CandidateHistoryTracker = () => {
           );
         })}
       </div>
+      {/* Rajlaxmi Jagadale work on Button header table */}
       {popupData && (
         <div className="can-history-popup">
-          <div className="can-history-popup-content" ref={popupRef}>
-            <button
+          <div className="can-history-popup-contents" ref={popupRef}>
+           <div className="can-history-popup-header-top-div">
+           
+           <div className="can-history-popup-header-fist-div">
+           <h3 className="candidate-his-center-text">
+              <strong className="popheading">
+                {getDisplayName(popupData.filter)}
+              </strong>
+            </h3>
+           </div>
+           <div>
+           <button
               className="can-history-close-button"
               onClick={() => setPopupData(null)}
             >
               ×
             </button>
-            <h3>
-              <strong>{getDisplayName(popupData.filter)}</strong>
-            </h3>
-            <table className="can-history-data-table">
-              <thead>
-                <tr>
-                  <th>{getDisplayName(popupData.filter)}</th>
-                  <th>{openDropdown + " " + "Count"}</th>
-                  <th>Total Count</th>
-                  <th> Percentage</th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* updated by sahil karnekar date 18-11-2024 */}
-                {popupData.data.map(
-                  (item, index) =>
-                    item.gender !== "" &&
-                    item.gender !== null &&
-                    item.communicationRating !== "" &&
-                    item.communicationRating !== null &&
-                    item.companyType !== "" &&
-                    item.companyType !== null &&
-                    item.distanceRange !== "" &&
-                    item.distanceRange !== null &&
-                    item.extraCertification !== "" &&
-                    item.extraCertification !== null &&
-                    item.holdingAnyOffer !== "" &&
-                    item.holdingAnyOffer !== null &&
-                    item.incentiveRange !== "" &&
-                    item.incentiveRange !== null &&
-                    item.jobDesignation !== "" &&
-                    item.jobDesignation !== null &&
-                    item.lastCompany !== "" &&
-                    item.lastCompany !== null &&
-                    item.maritalStatus !== "" &&
-                    item.maritalStatus !== null &&
-                    item.onRole !== "" &&
-                    item.onRole !== null &&
-                    item.pickUpAndDrop !== "" &&
-                    item.pickUpAndDrop !== null &&
-                    item.qualification !== "" &&
-                    item.qualification !== null &&
-                    item.requirementCompany !== "" &&
-                    item.requirementCompany !== null &&
-                    item.salaryRange !== "" &&
-                    item.salaryRange !== null &&
-                    item.sourceName !== "" &&
-                    item.sourceName !== null &&
-                    item.tatReports !== "" &&
-                    item.tatReports !== null && (
-                      <tr
-                        key={index}
-                      >
-                        <td>
-                          {item.companyName ||
-                            item.ageRange ||
-                            item.sourceName ||
-                            item.reportName ||
-                            item.option ||
-                            item.communicationRating ||
-                            item.maritalStatus ||
-                            item.gender ||
-                            item.qualification ||
-                            item.requirementCompany ||
-                            item.recruiter ||
-                            item.noticePeriod ||
-                            item.type ||
-                            item.onRole ||
-                            item.experienceGroup ||
-                            item.skill ||
-                            item.jobDesignation ||
-                            item.salaryRange ||
-                            item.distanceRange ||
-                            item.department ||
-                            item.tat ||
-                            item.holdingAnyOffer ||
-                            item.position ||
-                            item.pickUpAndDrop ||
-                            item.joiningType ||
-                            item.lastCompany ||
-                            item.companyType ||
-                            item.experienceRange ||
-                            item.extraCertification ||
-                            item.tatReports ||
-                            item.incentiveRange}
-                        </td>
-                        <td>
-                          {item.SelectedCount ??
-                            item.YetToConfirmCount ??
-                            item.InterviewScheduleCount ??
-                            item.AttendingAfterSometimeCount ??
-                            item.RejectedCount ??
-                            item.HoldCount ??
-                            item.DropOutCount ??
-                            item.ToJoinCount ??
-                            item.JoinedCount ??
-                            item.NotJoinedCount ??
-                            item.NoShowCount ??
-                            item.ActiveCount ??
-                            item.InactiveCount ??
-                            item.ShortlistedCount ??
-                            item.Joining}
-                        </td>
-                        <td>
-                          {item.totalCount ||
-                            item.COUNT ||
-                            item.countCallingTracker ||
-                            item.candidateCount}
-                        </td>
-                        <td>
-                          {(() => {
-                            // Array of all possible fields
-                            const fields = [
-                              item.SelectedCount,
-                              item.YetToConfirmCount,
-                              item.InterviewScheduleCount,
-                              item.AttendingAfterSometimeCount,
-                              item.RejectedCount,
-                              item.HoldCount,
-                              item.DropOutCount,
-                              item.ToJoinCount,
-                              item.JoinedCount,
-                              item.NotJoinedCount,
-                              item.NoShowCount,
-                              item.ActiveCount,
-                              item.InactiveCount,
-                            ];
+           </div>
+           </div>
+           
+            <div className="can-history-popup-content">
+              <table className="can-history-data-table">
+                <thead className="theading">
+                  <tr>
+                    <th>{getDisplayName(popupData.filter)}</th>
+                    <th style={{ textAlign: "center" }}>
+                      {openDropdown + " " + "Count"}
+                    </th>
+                    <th>Total Count</th>
+                    <th> Percentage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* updated by sahil karnekar date 18-11-2024 */}
+                  {popupData.data.map(
+                    (item, index) =>
+                      item.gender !== "" &&
+                      item.gender !== null &&
+                      item.communicationRating !== "" &&
+                      item.communicationRating !== null &&
+                      item.companyType !== "" &&
+                      item.companyType !== null &&
+                      item.distanceRange !== "" &&
+                      item.distanceRange !== null &&
+                      item.extraCertification !== "" &&
+                      item.extraCertification !== null &&
+                      item.holdingAnyOffer !== "" &&
+                      item.holdingAnyOffer !== null &&
+                      item.incentiveRange !== "" &&
+                      item.incentiveRange !== null &&
+                      item.jobDesignation !== "" &&
+                      item.jobDesignation !== null &&
+                      item.lastCompany !== "" &&
+                      item.lastCompany !== null &&
+                      item.maritalStatus !== "" &&
+                      item.maritalStatus !== null &&
+                      item.onRole !== "" &&
+                      item.onRole !== null &&
+                      item.pickUpAndDrop !== "" &&
+                      item.pickUpAndDrop !== null &&
+                      item.qualification !== "" &&
+                      item.qualification !== null &&
+                      item.requirementCompany !== "" &&
+                      item.requirementCompany !== null &&
+                      item.salaryRange !== "" &&
+                      item.salaryRange !== null &&
+                      item.sourceName !== "" &&
+                      item.sourceName !== null &&
+                      item.tatReports !== "" &&
+                      item.tatReports !== null && (
+                        <tr key={index}>
+                          <td style={{ width: "25px" }}>
+                            {item.companyName ||
+                              item.ageRange ||
+                              item.sourceName ||
+                              item.reportName ||
+                              item.option ||
+                              item.communicationRating ||
+                              item.maritalStatus ||
+                              item.gender ||
+                              item.qualification ||
+                              item.requirementCompany ||
+                              item.recruiter ||
+                              item.noticePeriod ||
+                              item.type ||
+                              item.onRole ||
+                              item.experienceGroup ||
+                              item.skill ||
+                              item.jobDesignation ||
+                              item.salaryRange ||
+                              item.distanceRange ||
+                              item.department ||
+                              item.tat ||
+                              item.holdingAnyOffer ||
+                              item.position ||
+                              item.pickUpAndDrop ||
+                              item.joiningType ||
+                              item.lastCompany ||
+                              item.companyType ||
+                              item.experienceRange ||
+                              item.extraCertification ||
+                              item.tatReports ||
+                              item.incentiveRange}
+                          </td>
+                          <td style={{ textAlign: "center" }}>
+                            {item.SelectedCount ??
+                              item.YetToConfirmCount ??
+                              item.InterviewScheduleCount ??
+                              item.AttendingAfterSometimeCount ??
+                              item.RejectedCount ??
+                              item.HoldCount ??
+                              item.DropOutCount ??
+                              item.ToJoinCount ??
+                              item.JoinedCount ??
+                              item.NotJoinedCount ??
+                              item.NoShowCount ??
+                              item.ActiveCount ??
+                              item.InactiveCount ??
+                              item.ShortlistedCount ??
+                              item.Joining}
+                          </td>
+                          <td style={{ textAlign: "center" }}>
+                            {item.totalCount ||
+                              item.COUNT ||
+                              item.countCallingTracker ||
+                              item.candidateCount}
+                          </td>
+                          <td style={{ textAlign: "center" }}>
+                            {(() => {
+                              // Array of all possible fields
+                              const fields = [
+                                item.SelectedCount,
+                                item.YetToConfirmCount,
+                                item.InterviewScheduleCount,
+                                item.AttendingAfterSometimeCount,
+                                item.RejectedCount,
+                                item.HoldCount,
+                                item.DropOutCount,
+                                item.ToJoinCount,
+                                item.JoinedCount,
+                                item.NotJoinedCount,
+                                item.NoShowCount,
+                                item.ActiveCount,
+                                item.InactiveCount,
+                              ];
 
-                            // Find the first non-null or non-undefined value
-                            const firstNonNullValue =
-                              fields.find((value) => value != null) ?? 0;
+                              // Find the first non-null or non-undefined value
+                              const firstNonNullValue =
+                                fields.find((value) => value != null) ?? 0;
 
-                            // Calculate percentage
-                            const percentage = (
-                              (firstNonNullValue / (item.totalCount ?? 1)) *
-                              100
-                            ).toFixed(2);
+                              // Calculate percentage
+                              const percentage = (
+                                (firstNonNullValue / (item.totalCount ?? 1)) *
+                                100
+                              ).toFixed(2);
 
-                            // Return percentage with a fallback for empty data
-                            return item.totalCount ? `${percentage} %` : "N/A";
-                          })()}
-                        </td>
-                      </tr>
-                    )
-                )}
-              </tbody>
-            </table>
+                              // Return percentage with a fallback for empty data
+                              return item.totalCount
+                                ? `${percentage} %`
+                                : "N/A";
+                            })()}
+                          </td>
+                        </tr>
+                      )
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
