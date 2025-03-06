@@ -18,6 +18,11 @@ import { BellOutlined, CloseOutlined, ClearOutlined } from "@ant-design/icons";
 import { initializeSocket } from "./socket.jsx";
 import notificationIcon from "../assets/notificationicon.png"
 import Meta from "antd/es/card/Meta.js";
+import { getCurrentLogTime, getFormattedDateISOYMDformat, getFormattedDateOnly, getLateMark } from "../EmployeeSection/getFormattedDateTime.jsx";
+import { getDailyworkData } from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable.jsx";
+import { Statistic } from 'antd';
+import dayjs from "dayjs";
+const { Countdown } = Statistic;
 //SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
 
 function DailyWork({
@@ -30,6 +35,7 @@ function DailyWork({
   jobRole,
   emailSenderInformation,
   successfulDataUpdation,
+  loginEmployeeName,
 }) {
   const { employeeId, userType } = useParams();
   const [fetchWorkId, setFetchWorkId] = useState(null);
@@ -1211,6 +1217,102 @@ function DailyWork({
     fetchAllImages();
   }, [messages]);
 
+
+const [newWordId, setNewWorkId] = useState(null);
+const fetchNewWorkId = async () => {
+  try {
+    const currentDateNew = getFormattedDateISOYMDformat();
+    const resp = await axios.get(`${API_BASE_URL}/fetch-work-id/${employeeId}/${userType}/${currentDateNew}`);
+    const yesNo = resp.data;
+
+    if (typeof yesNo === "string") {
+try {
+  const respPost = await axios.post(`${API_BASE_URL}/save-daily-work/${employeeId}/${userType}`,
+    {
+      // callingCount:20,
+      // dailyArchived:3,
+      // dailyPending:7,
+      dailyTarget:10,
+      date:`${currentDateNew}`,
+      dayPresentStatus:"Present",
+      employeeName:`${loginEmployeeName}`,
+      halfDay:"No",
+      holidayLeave:"NO",
+      jobRole:`${userType}`,
+      lateMark:`${getLateMark()}`,
+      // leaveType:"Unpaid",
+      loginTime:`${getCurrentLogTime()}`,
+      // logoutTime:"00:00:00 am",
+      remoteWork:"WFO",
+      totalHoursWork:"00:00:00"
+     }
+  )
+} catch (error1) {
+  
+}
+    } else if (typeof yesNo === "number") {
+      console.log("newRunningNum");
+      try {
+     const getData =await getDailyworkData(employeeId, userType, currentDateNew);
+
+     console.log(getData);
+     
+        const getDataForUpdate = {
+          totalHoursWork: getData.totalHoursWork,
+          dailyHours: [
+            {
+              breakStartTime: getData,
+              breakEndTime: getData
+            }
+          ],
+          attendanceRole: {
+            employee: {
+              employeeId: 2
+            }
+          }
+        }
+        
+      } catch (errorget) {
+        
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+  useEffect(()=>{
+fetchNewWorkId();
+  },[])
+
+  const startTimer = "00:12:34"; // Your initial timer string (hh:mm:ss)
+  const [deadline, setDeadline] = useState(() =>
+    dayjs().add(parseTime(startTimer), "second").valueOf()
+  );
+  const [pausedTime, setPausedTime] = useState(null);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Function to parse "hh:mm:ss" into total seconds
+  function parseTime(timeStr) {
+    const [hours, minutes, seconds] = timeStr.split(":").map(Number);
+    return hours * 3600 + minutes * 60 + seconds;
+  }
+
+  // Pause Timer
+  const handlePauseNew = () => {
+    setPausedTime(deadline - Date.now()); // Store remaining time
+    setIsPaused(true);
+  };
+
+  // Resume Timer
+  const handleResumeNew = () => {
+    if (pausedTime) {
+      setDeadline(Date.now() + pausedTime); // Resume from paused time
+      setIsPaused(false);
+    }
+  };
+
+
   return (
     <div className="daily-timeanddate">
       <a href="#">
@@ -1274,6 +1376,7 @@ function DailyWork({
               {time.minutes.toString().padStart(2, "0")}:
               {time.seconds.toString().padStart(2, "0")}
             </button>
+            <Countdown value={deadline} onFinish={() => console.log("Time's up!")} />
             <div hidden>
               <h6>Late Mark : {lateMark}</h6>
               <h6>Leave Type : {leaveType}</h6>

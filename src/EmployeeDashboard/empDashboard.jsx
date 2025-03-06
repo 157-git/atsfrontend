@@ -708,6 +708,7 @@ const EmpDashboard = ({ userGroup }) => {
             jobRole={jobRoles}
             emailSenderInformation={handleEmailSenderInformation}
             successfulDataUpdation={successfulDataUpdation}
+            loginEmployeeName={loginEmployeeName}
           />
         </div>
 

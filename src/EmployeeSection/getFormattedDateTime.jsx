@@ -57,3 +57,23 @@ export const getFormattedDateTime = () => {
   
     return `${year}-${month}-${day}`;
 };
+export const getCurrentLogTime = () => {
+  const now = new Date();
+  let hours = now.getHours();
+  const minutes = now.getMinutes().toString().padStart(2, "0");
+  const seconds = now.getSeconds().toString().padStart(2, "0");
+  const period = hours >= 12 ? "pm" : "am";
+
+  hours = hours % 12 || 12; // Convert to 12-hour format, ensuring 12 instead of 0
+
+  return `${hours}:${minutes}:${seconds} ${period}`;
+};
+export const getLateMark = () => {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  if (hours > 10 || (hours === 10 && minutes > 0)) {
+    return "Yes"; // Late
+  }
+  return "No"; // Not Late
+};

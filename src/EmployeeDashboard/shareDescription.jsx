@@ -3,7 +3,7 @@ import "./shareDescription.css";
 import html2canvas from "html2canvas";
 import { API_BASE_URL } from "../api/api";
 import { useParams } from "react-router-dom";
-import LoginImage from "../assets/rgLogo.png";
+import LoginImage from "../assets/157logo.jpeg";
 
 const ShareDescription = ({ Descriptions }) => {
   const [data, setData] = useState(null);
