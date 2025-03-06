@@ -490,7 +490,7 @@ function DailyWork({
       };
 
       await axios.put(
-        `${API_BASE_URL}/update-daily-work/${fetchWorkId} `,
+        `${API_BASE_URL}/update-daily-work/${employeeId}/${userType}`,
         formData
       );
       console.log(" ----------------  update-daily-work");

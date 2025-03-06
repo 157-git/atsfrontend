@@ -513,6 +513,7 @@ setOpenInterviewModal(false);
 };
 const handleCancel1 = () => {
 setOpenInterviewModal(false);
+SETREMINDER_INTERVAL(10 * 60 * 1000);
 };
 
 
@@ -655,12 +656,13 @@ const filterUpcomingInterviews = (interviews) => {
   });
 };
 
-
+const [REMINDER_INTERVAL,SETREMINDER_INTERVAL] = useState(30 * 60 * 1000);
+const REMINDER_INTERVAL_ForContinous = 0.5 * 60 * 1000;
 
 useEffect(() => {
   const reminderInterval = setInterval(() => {
     getTodaysInterviews();
-  }, 10 * 60 * 1000); 
+  }, REMINDER_INTERVAL_ForContinous); 
   return () => clearInterval(reminderInterval);
 }, []); 
 
@@ -681,7 +683,7 @@ useEffect(() => {
     if (upcomingInterviews.length > 0) {
       const reminderInterval = setInterval(() => {
         openInterviewReminderModal();
-      }, 10 * 60 * 1000); 
+      }, REMINDER_INTERVAL); 
 
       return () => clearInterval(reminderInterval);
     }
@@ -2204,7 +2206,7 @@ useEffect(() => {
         openInterviewModal && (
           
           <>
-          <AntdModal title="Candidate's Data" open={openInterviewModal} onOk={handleOk1} onCancel={handleCancel1} width={1000}>
+          <AntdModal title="Candidate's Data" open={openInterviewModal} onOk={handleOk1} onCancel={handleCancel1} width={1000} cancelText="Skip">
          <div className="newhightformodaltable">
           <table className="attendance-table">
             <thead>

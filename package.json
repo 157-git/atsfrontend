@@ -33,6 +33,7 @@
     "ats": "file:",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
+    "bs58": "^6.0.0",
     "canvas-confetti": "^1.9.3",
     "chart.js": "^4.4.8",
     "chartjs-plugin-datalabels": "^2.2.0",

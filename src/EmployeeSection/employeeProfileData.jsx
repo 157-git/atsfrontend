@@ -532,7 +532,7 @@ const EmployeeProfileData = ({
             }}
           >
             <span style={{ fontWeight: "bold", fontSize: "18px" }}>
-              Employee Profile hjj
+              Employee Profile
             </span>
             <button
               onClick={onClose}
