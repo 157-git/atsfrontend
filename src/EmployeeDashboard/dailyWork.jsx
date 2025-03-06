@@ -1376,7 +1376,7 @@ fetchNewWorkId();
               {time.minutes.toString().padStart(2, "0")}:
               {time.seconds.toString().padStart(2, "0")}
             </button>
-            <Countdown value={deadline} onFinish={() => console.log("Time's up!")} />
+          
             <div hidden>
               <h6>Late Mark : {lateMark}</h6>
               <h6>Leave Type : {leaveType}</h6>
