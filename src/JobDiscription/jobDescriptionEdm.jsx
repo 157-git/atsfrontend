@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import html2canvas from "html2canvas";
-import profileImage from '../assets/rgLogo.png';
+import profileImage from '../assets/157logo.jpeg';
 import { API_BASE_URL } from "../api/api";
 import "./jobDescriptionEdm.css"
 
@@ -163,7 +163,7 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
             <div className="image-container">
               <img src={profileImage} alt="Profile Image" />
             </div>
-            <h3 className="share-edm-black-bold"> We are Hiring </h3>
+            <h3 className="share-edm-black-bold"> We are Hiring</h3>
             <h2 className="short-edm-heading"> "{data.designation}"</h2>
             <div className="details">
             <h3 className="share-edm-black-skill">Required Key Skills</h3>

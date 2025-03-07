@@ -178,7 +178,7 @@
 .Choose-color-container {
   display: flex;
   align-items: center;
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 
 .Choose-Color-Btn {

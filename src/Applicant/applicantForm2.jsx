@@ -40,9 +40,7 @@ import Loader from "../EmployeeSection/loader";
 
 function ApplicantForm2({ loginEmployeeName }) {
   const { encodedParams } = useParams();
-
   const extractedParam = encodedParams?.split("+")[1];
-
   const [socket, setSocket] = useState(null);
   const [salaryInWords, setSalaryInWords] = useState("");
   // const { employeeId, userType } = getEmployeeDetails();
@@ -121,7 +119,7 @@ function ApplicantForm2({ loginEmployeeName }) {
       yearOfPassing: "",
       disability: "",
       disabilityDetails: "",
-      certificates: [{ certificateName: "", certificateFile: null }],
+      // certificates: [{ certificateName: "", certificateFile: null }],
     },
   };
 
@@ -210,33 +208,28 @@ function ApplicantForm2({ loginEmployeeName }) {
               }), // Clear values if "No" is selected
         };
       } else if (name.startsWith("lineUp.")) {
-        // Split the name to handle nested fields (e.g., "lineUp.certificates[0].certificateName")
         const nameParts = name.split(".");
         if (name.startsWith("lineUp.certificates")) {
-          // Split the name to handle nested fields (e.g., "lineUp.certificates[0].certificateName")
           const nameParts = name.split(".");
-          const index = parseInt(nameParts[1].match(/\d+/)[0], 10); // Extract index from "certificates[0]"
-          const field = nameParts[2]; // Get the field name (e.g., "certificateName" or "certificateFile")
-
+          const index = parseInt(nameParts[1].match(/\d+/)[0], 10);
+          const field = nameParts[2];
           const updatedCertificates = [...prevData.lineUp.certificates];
-          updatedCertificates[index][field] = inputValue; // Update the specific field for the certificate
+          updatedCertificates[index][field] = inputValue;
 
           updatedData.lineUp = {
             ...prevData.lineUp,
             certificates: updatedCertificates,
           };
         } else {
-          const nestedField = nameParts[1]; // e.g., lineUp.someField
+          const nestedField = nameParts[1];
           updatedData.lineUp = {
             ...prevData.lineUp,
             [nestedField]: inputValue,
           };
         }
       } else {
-        // For non-nested fields, update normally
         updatedData[name] = inputValue;
       }
-
       return updatedData;
     });
 
@@ -291,16 +284,16 @@ function ApplicantForm2({ loginEmployeeName }) {
     }
   };
 
-  const handleCertificateChange = (e, index, field) => {
-    const value =
-      field === "certificateFile" ? e.target.files[0] : e.target.value;
+  // const handleCertificateChange = (e, index, field) => {
+  //   const value =
+  //     field === "certificateFile" ? e.target.files[0] : e.target.value;
 
-    setFormData((prev) => {
-      const certificates = [...prev.lineUp.certificates];
-      certificates[index][field] = value;
-      return { ...prev, lineUp: { ...prev.lineUp, certificates } };
-    });
-  };
+  //   setFormData((prev) => {
+  //     const certificates = [...prev.lineUp.certificates];
+  //     certificates[index][field] = value;
+  //     return { ...prev, lineUp: { ...prev.lineUp, certificates } };
+  //   });
+  // };
 
   // Attach the event listener for keydown event
 
@@ -320,39 +313,39 @@ function ApplicantForm2({ loginEmployeeName }) {
     return null;
   };
 
-  const handleAddCertificate = () => {
-    setFormData((prev) => ({
-      ...prev,
-      lineUp: {
-        ...prev.lineUp,
-        certificates: [
-          ...prev.lineUp.certificates,
-          { certificateName: "", certificateFile: null },
-        ],
-      },
-    }));
-  };
+  // const handleAddCertificate = () => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     lineUp: {
+  //       ...prev.lineUp,
+  //       certificates: [
+  //         ...prev.lineUp.certificates,
+  //         { certificateName: "", certificateFile: null },
+  //       ],
+  //     },
+  //   }));
+  // };
 
-  const handleRemoveCertificate = (index) => {
-    setFormData((prev) => {
-      const certificates = [...prev.lineUp.certificates];
-      certificates.splice(index, 1);
-      return { ...prev, lineUp: { ...prev.lineUp, certificates } };
-    });
-  };
+  // const handleRemoveCertificate = (index) => {
+  //   setFormData((prev) => {
+  //     const certificates = [...prev.lineUp.certificates];
+  //     certificates.splice(index, 1);
+  //     return { ...prev, lineUp: { ...prev.lineUp, certificates } };
+  //   });
+  // };
 
-  const handleCloseCertificate = (index) => {
-    const updatedCertificates = formData.lineUp.certificates.filter(
-      (_, i) => i !== index
-    );
-    setFormData((prevData) => ({
-      ...prevData,
-      lineUp: {
-        ...prevData.lineUp,
-        certificates: updatedCertificates,
-      },
-    }));
-  };
+  // const handleCloseCertificate = (index) => {
+  //   const updatedCertificates = formData.lineUp.certificates.filter(
+  //     (_, i) => i !== index
+  //   );
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     lineUp: {
+  //       ...prevData.lineUp,
+  //       certificates: updatedCertificates,
+  //     },
+  //   }));
+  // };
 
   //rajalxmi JAgadale 10-01-2025
   const convertToBase64 = (file) => {
@@ -450,6 +443,22 @@ function ApplicantForm2({ loginEmployeeName }) {
     return words || "Zero";
   };
 
+  const convertNumberToWordsYesr = (experienceYear, experienceMonth) => {
+    let year = parseInt(experienceYear, 10);
+    let month = parseInt(experienceMonth, 10);
+    let words = "";
+
+    if (year > 0) {
+      words += numberToWords(year) + (year === 1 ? " Year" : " Years");
+    }
+
+    if (month > 0) {
+      if (words) words += " ";
+      words += numberToWords(month) + (month === 1 ? " Month" : " Month");
+    }
+    return words || "Zero";
+  };
+
   const currentDate = new Date();
   const minDate = new Date();
   minDate.setFullYear(currentDate.getFullYear() - 18);
@@ -458,48 +467,50 @@ function ApplicantForm2({ loginEmployeeName }) {
   const startYear = 1947;
   const calendarStartDate = new Date(startYear, 0, 1);
   const calendarStartDateString = calendarStartDate.toISOString().split("T")[0];
-  const handleFileChange = async (e, index) => {
-    const file = e.target.files[0]; // Get the uploaded file
 
-    if (file) {
-      // Convert file to Base64 string
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const updatedFormData = { ...formData };
-        updatedFormData.lineUp.certificates[index].certificateFile =
-          reader.result.split(",")[1]; // Only keep base64 part
+  // const handleFileChange = async (e, index) => {
+  //   const file = e.target.files[0];
 
-        setFormData(updatedFormData);
-      };
-      reader.readAsDataURL(file); // Convert to Base64 string
-    }
-  };
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       const updatedFormData = { ...formData };
+  //       updatedFormData.lineUp.certificates[index].certificateFile =
+  //         reader.result.split(",")[1];
+
+  //       setFormData(updatedFormData);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const requiredFields = [
       "candidateName",
-      "contactNumber",
       "candidateEmail",
-      "lineUp.currentCTCLakh",
-      "lineUp.expectedCTCLakh",
+      "contactNumber",
+      "lineUp.gender",
       "lineUp.qualification",
       "jobDesignation",
-      "lineUp.preferredLocation",
-      "lineUp.noticePeriod",
-      "lineUp.availabilityForInterview",
-      "lineUp.expectedJoiningDate",
       "lineUp.experienceYear",
-      "lineUp.relevantExperience",
-      "lineUp.gender",
-      "lineUp.dateOfBirth",
-      "lineUp.resume",
-      "lineUp.photo",
+      "lineUp.currentCTCLakh",
+      "lineUp.expectedCTCLakh",
+      "lineUp.noticePeriod",
       "currentLocation",
-      "lineUp.companyName",
-      "lineUp.offersalary",
-      "lineUp.offerdetails",
+      "lineUp.preferredLocation",
+      "lineUp.resume",
+
+      // "lineUp.availabilityForInterview",
+      // "lineUp.expectedJoiningDate",
+      // "lineUp.relevantExperience",
+      // "lineUp.dateOfBirth",
+      // "lineUp.photo",
+      // "currentLocation",
+      // "lineUp.companyName",
+      // "lineUp.offersalary",
+      // "lineUp.offerdetails",
     ];
 
     let isFormValid = true;
@@ -549,16 +560,16 @@ function ApplicantForm2({ loginEmployeeName }) {
       candidateAddedTime: time,
     };
 
-    const certificates = updatedFormData.lineUp.certificates || [];
+    // const certificates = updatedFormData.lineUp.certificates || [];
 
     const dataToSend = {
       ...updatedFormData,
       lineUp: {
         ...updatedFormData.lineUp,
-        certificates: certificates.map((cert) => ({
-          certificateName: cert.certificateName || "",
-          certificateFile: cert.certificateFile || null,
-        })),
+        // certificates: certificates.map((cert) => ({
+        //   certificateName: cert.certificateName || "",
+        //   certificateFile: cert.certificateFile || null,
+        // })),
         resume:
           formData.lineUp.resume instanceof File
             ? await convertToBase64(formData.lineUp.resume)
@@ -647,9 +658,16 @@ function ApplicantForm2({ loginEmployeeName }) {
     switch (name) {
       case "candidateName":
         if (!stringValue) {
-          error = "Enter Your Name.";
+          error = "Enter your name.";
         } else if (/[^a-zA-Z\s]/.test(value)) {
           error = "Only alphabets and spaces are allowed.";
+        } else if (stringValue.length > 100) {
+          error = "Name cannot exceed 100 characters.";
+        }
+        break;
+      case "currentLocation":
+        if (!stringValue) {
+          error = "Enter your current location.";
         } else if (stringValue.length > 100) {
           error = "Name cannot exceed 100 characters.";
         }
@@ -657,7 +675,7 @@ function ApplicantForm2({ loginEmployeeName }) {
 
       case "contactNumber":
         if (!stringValue) {
-          error = "Enter Your Contact Number";
+          error = "Enter your contact number";
         } else if (!/^\d{6,16}$/.test(value)) {
           error = "Contact Number must be between 6 and 16 digits.";
         }
@@ -665,7 +683,7 @@ function ApplicantForm2({ loginEmployeeName }) {
 
       case "lineUp.dateOfBirth":
         if (!stringValue) {
-          error = "Enter Your Birth Date";
+          error = "Enter your date of birth";
         } else {
           const dob = new Date(value);
           const today = new Date();
@@ -686,7 +704,7 @@ function ApplicantForm2({ loginEmployeeName }) {
 
       case "candidateEmail":
         if (!stringValue) {
-          error = "Enter Your Email Address";
+          error = "Enter your email address";
         } else if (
           !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
         ) {
@@ -698,7 +716,7 @@ function ApplicantForm2({ loginEmployeeName }) {
 
       case "jobDesignation":
         if (!stringValue) {
-          error = "Enter Your Job Designation";
+          error = "Enter your job designation";
         }
         // else if (!/^[a-zA-Z\s]+$/.test(value)) {
         //   error = "Job designation must contain only letters and spaces.";
@@ -710,7 +728,7 @@ function ApplicantForm2({ loginEmployeeName }) {
 
       case "lineUp.experienceYear":
         if (!stringValue) {
-          error = "Experience Year is required.";
+          error = "Experience year is required.";
         }
         // else if (value < 0 || value > 12) {
         //   error = "Experience must be between 0 and 12 years.";
@@ -748,7 +766,7 @@ function ApplicantForm2({ loginEmployeeName }) {
 
       case "lineUp.preferredLocation":
         if (!stringValue) {
-          error = "Enter Your Preferred Location";
+          error = "Enter your preferred location";
         } else if (!/^[a-zA-Z0-9\s,.'-]*$/.test(value)) {
           error = "Only Alphabets and Spaces are allowed";
         }
@@ -773,7 +791,7 @@ function ApplicantForm2({ loginEmployeeName }) {
 
       case "lineUp.relevantExperience":
         if (!stringValue) {
-          error = "Enter Relevant Experience";
+          error = "Enter relevant experience";
         } else if (!/^[a-zA-Z0-9\s,.'-]*$/.test(value)) {
           error = "Enter Relevant Experience";
         }
@@ -810,7 +828,8 @@ function ApplicantForm2({ loginEmployeeName }) {
             <div className="form-column-December">
               <div className="form-group-December">
                 <label>
-                  Full name <span className="setRequiredAstricColorRed">*</span>
+                  Full name
+                  <span className="setRequiredAstricColorRed">*</span>
                 </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
@@ -830,32 +849,6 @@ function ApplicantForm2({ loginEmployeeName }) {
                 </div>
                 {errors.candidateName && (
                   <span className="error">{errors.candidateName}</span>
-                )}
-              </div>
-
-              <div className="form-group-December">
-                <label>
-                  Contact number{" "}
-                  <span className="setRequiredAstricColorRed">*</span>
-                </label>
-                <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faPhone}
-                    className="input-icon-December"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Enter contact number"
-                    name="contactNumber"
-                    id="contactNumber"
-                    value={formData.contactNumber}
-                    onChange={handleChange}
-                    maxLength={16}
-                    onKeyDown={handleKeyDown}
-                  />
-                </div>
-                {errors.contactNumber && (
-                  <span className="error">{errors.contactNumber}</span>
                 )}
               </div>
 
@@ -887,120 +880,80 @@ function ApplicantForm2({ loginEmployeeName }) {
 
               <div className="form-group-December">
                 <label>
-                  Current salary (LPA){" "}
+                  Contact number{" "}
                   <span className="setRequiredAstricColorRed">*</span>
                 </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
-                    icon={faSackDollar}
+                    icon={faPhone}
                     className="input-icon-December"
                   />
                   <input
                     type="number"
-                    placeholder="Lakhs"
-                    name="lineUp.currentCTCLakh"
-                    id="lineUp.currentCTCLakh"
-                    value={formData.lineUp.currentCTCLakh}
-                    onKeyDown={handleKeyDown}
+                    placeholder="Enter contact number"
+                    name="contactNumber"
+                    id="contactNumber"
+                    value={formData.contactNumber}
                     onChange={handleChange}
-                    onInput={(e) => {
-                      if (e.target.value.length > 2) {
-                        e.target.value = e.target.value.slice(0, 2);
-                      }
-                    }}
-                  />
-                  {/* <span></span> */}
-                  <input
-                    type="number"
-                    name="lineUp.currentCTCThousand"
-                    id="lineUp.currentCTCThousand"
-                    placeholder="Thousands"
-                    value={formData.lineUp.currentCTCThousand}
-                    onChange={handleChange}
+                    maxLength={16}
                     onKeyDown={handleKeyDown}
-                    onInput={(e) => {
-                      if (e.target.value.length > 2) {
-                        e.target.value = e.target.value.slice(0, 2);
-                      }
-                    }}
                   />
                 </div>
-                {(errors["lineUp.currentCTCLakh"] ||
-                  errors["lineUp.currentCTCThousand"]) && (
-                  <span className="error">
-                    {errors["lineUp.currentCTCLakh"] ||
-                      errors["lineUp.currentCTCThousand"]}
-                  </span>
-                )}
-                {(formData.lineUp.currentCTCLakh ||
-                  formData.lineUp.currentCTCThousand) && (
-                  <span>
-                    {convertNumberToWords(
-                      formData.lineUp.currentCTCLakh,
-                      formData.lineUp.currentCTCThousand
-                    )}
-                  </span>
+                {errors.contactNumber && (
+                  <span className="error">{errors.contactNumber}</span>
                 )}
               </div>
 
               <div className="form-group-December">
-                <label>
-                  Expected salary (LPA){" "}
-                  <span className="setRequiredAstricColorRed">*</span>
-                </label>
-                <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faMoneyCheck}
-                    className="input-icon-December"
-                  />
-                  <input
-                    type="number"
-                    name="lineUp.expectedCTCLakh"
-                    placeholder="Lakhs"
-                    value={formData.lineUp.expectedCTCLakh}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    onInput={(e) => {
-                      if (e.target.value.length > 2) {
-                        e.target.value = e.target.value.slice(0, 2);
+                <div className="gender">
+                  <label>
+                    Gender <span className="setRequiredAstricColorRed">*</span>
+                  </label>
+                  <div className="radio-group" id="genderid">
+                    <FormControlLabel
+                      control={
+                        <Radio
+                          name="lineUp.gender"
+                          checked={formData.lineUp.gender === "male"}
+                          onChange={() =>
+                            handleChange({
+                              target: {
+                                name: "lineUp.gender",
+                                value: "male",
+                              },
+                            })
+                          }
+                        />
                       }
-                    }}
-                  />
-                  <span></span>
-                  <input
-                    type="number"
-                    name="lineUp.expectedCTCThousand"
-                    placeholder="Thousands"
-                    value={formData.lineUp.expectedCTCThousand}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    onInput={(e) => {
-                      if (e.target.value.length > 2) {
-                        e.target.value = e.target.value.slice(0, 2);
+                      label="Male"
+                    />
+
+                    <FormControlLabel
+                      control={
+                        <Radio
+                          name="lineUp.gender"
+                          checked={formData.lineUp.gender === "female"}
+                          onChange={() =>
+                            handleChange({
+                              target: {
+                                name: "lineUp.gender",
+                                value: "female",
+                              },
+                            })
+                          }
+                        />
                       }
-                    }}
-                  />
+                      label="Female"
+                    />
+                  </div>
+                  {errors["lineUp.gender"] && (
+                    <span className="error">{errors["lineUp.gender"]}</span>
+                  )}
                 </div>
-                {(errors["lineUp.expectedCTCLakh"] ||
-                  errors["lineUp.expectedCTCThousand"]) && (
-                  <span className="error">
-                    {errors["lineUp.expectedCTCLakh"] ||
-                      errors["lineUp.expectedCTCThousand"]}
-                  </span>
-                )}
-                {(formData.lineUp.expectedCTCLakh ||
-                  formData.lineUp.expectedCTCThousand) && (
-                  <span>
-                    {convertNumberToWords(
-                      formData.lineUp.expectedCTCLakh,
-                      formData.lineUp.expectedCTCThousand
-                    )}
-                  </span>
-                )}
               </div>
 
               <div className="form-group-December">
-                <label>Education</label>
+                <label>Educational Qualification</label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
                     icon={faFile}
@@ -1009,8 +962,9 @@ function ApplicantForm2({ loginEmployeeName }) {
                   <input
                     type="text"
                     name="lineUp.qualification"
+                    Highest
                     id="lineUp.qualification"
-                    placeholder="Education"
+                    placeholder="Enter highest qualification"
                     value={formData.lineUp.qualification}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
@@ -1023,7 +977,8 @@ function ApplicantForm2({ loginEmployeeName }) {
                   </span>
                 )}
               </div>
-
+            </div>
+            <div className="form-column-December">
               <div className="form-group-December">
                 <label>
                   Job designation{" "}
@@ -1036,7 +991,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   />
                   <input
                     type="text"
-                    placeholder="Designation"
+                    placeholder="Enter designation"
                     name="jobDesignation"
                     id="jobDesignation"
                     value={formData.jobDesignation}
@@ -1048,137 +1003,6 @@ function ApplicantForm2({ loginEmployeeName }) {
                 {errors.jobDesignation && (
                   <span className="error">{errors.jobDesignation}</span>
                 )}
-              </div>
-
-              <div className="form-group-December">
-                <label>Current location</label>
-                <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faLocation}
-                    className="input-icon-December"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Current location"
-                    name="currentLocation"
-                    id="currentLocation"
-                    value={formData.currentLocation}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    maxLength={100}
-                  />
-                </div>
-                {errors.currentLocation && (
-                  <span className="error">{errors.currentLocation}</span>
-                )}
-              </div>
-            </div>
-
-            <div className="form-column-December">
-              <div className="form-group-December">
-                <label>
-                  Preferred location{" "}
-                  <span className="setRequiredAstricColorRed">*</span>
-                </label>
-                <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faLocationPin}
-                    className="input-icon-December"
-                  />
-                  <input
-                    type="text"
-                    name="lineUp.preferredLocation"
-                    id="lineUp.preferredLocation"
-                    placeholder="Preferred location"
-                    value={formData.lineUp.preferredLocation}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    maxLength={100}
-                  />
-                </div>
-                {errors["lineUp.preferredLocation"] && (
-                  <span className="error">
-                    {errors["lineUp.preferredLocation"]}
-                  </span>
-                )}
-              </div>
-
-              <div className="form-group-December">
-                <label>
-                  Notice period (Days){" "}
-                  <span className="setRequiredAstricColorRed">*</span>
-                </label>
-                <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faHourglassHalf}
-                    className="input-icon-December"
-                  />
-                  <input
-                    type="text"
-                    name="lineUp.noticePeriod"
-                    placeholder="Notice period in days"
-                    value={formData.lineUp.noticePeriod}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    maxLength={100}
-                  />
-                </div>
-                {errors["lineUp.noticePeriod"] && (
-                  <div className="error">{errors["lineUp.noticePeriod"]}</div>
-                )}
-              </div>
-
-              <div className="form-group-December">
-                <label>
-                  Availability for interview{" "}
-                  <span className="setRequiredAstricColorRed">*</span>
-                </label>
-                <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faCalendar}
-                    className="input-icon-December"
-                  />
-                  <input
-                    type="date"
-                    name="lineUp.availabilityForInterview"
-                    placeholder="Availability For Interview"
-                    id="lineUp.availabilityForInterview"
-                    value={formData.lineUp.availabilityForInterview}
-                    onKeyDown={handleKeyDown}
-                    onChange={handleChange}
-                    max="9999-12-31"
-                  />
-                </div>
-                {errors["lineUp.availabilityForInterview"] && (
-                  <div className="error">
-                    {errors["lineUp.availabilityForInterview"]}
-                  </div>
-                )}
-              </div>
-
-              <div className="form-group-December">
-                <label>Expected joining date</label>
-                <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faClock}
-                    className="input-icon-December"
-                  />
-                  <input
-                    type="date"
-                    placeholder="Expected Joining Date"
-                    name="lineUp.expectedJoinDate"
-                    id="lineUp.expectedJoinDate"
-                    value={formData.lineUp.expectedJoinDate}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    max="9999-12-31"
-                  />
-                </div>
-                {/* {errors["lineUp.expectedJoiningDate"] && (
-              <div className="error">
-                {errors["lineUp.expectedJoiningDate"]}
-              </div>
-            )} */}
               </div>
               <div className="form-group-December">
                 <label>
@@ -1232,9 +1056,212 @@ function ApplicantForm2({ loginEmployeeName }) {
                     {errors["lineUp.experienceYear"]}
                   </span>
                 )}
+
+                {(formData.lineUp.experienceYear ||
+                  formData.lineUp.experienceMonth) && (
+                  <span className="experience-words">
+                    {convertNumberToWordsYesr(
+                      formData.lineUp.experienceYear,
+                      formData.lineUp.experienceMonth
+                    )}
+                  </span>
+                )}
               </div>
 
               <div className="form-group-December">
+                <label>
+                  Current salary (LPA){" "}
+                  {/* <span className="setRequiredAstricColorRed">*</span> */}
+                </label>
+                <div className="input-with-icon-December">
+                  <FontAwesomeIcon
+                    icon={faSackDollar}
+                    className="input-icon-December"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Lakhs"
+                    name="lineUp.currentCTCLakh"
+                    id="lineUp.currentCTCLakh"
+                    value={formData.lineUp.currentCTCLakh}
+                    onKeyDown={handleKeyDown}
+                    onChange={handleChange}
+                    onInput={(e) => {
+                      if (e.target.value.length > 2) {
+                        e.target.value = e.target.value.slice(0, 2);
+                      }
+                    }}
+                  />
+                  <input
+                    type="number"
+                    name="lineUp.currentCTCThousand"
+                    id="lineUp.currentCTCThousand"
+                    placeholder="Thousands"
+                    value={formData.lineUp.currentCTCThousand}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    onInput={(e) => {
+                      if (e.target.value.length > 2) {
+                        e.target.value = e.target.value.slice(0, 2);
+                      }
+                    }}
+                  />
+                </div>
+                {(errors["lineUp.currentCTCLakh"] ||
+                  errors["lineUp.currentCTCThousand"]) && (
+                  <span className="error">
+                    {errors["lineUp.currentCTCLakh"] ||
+                      errors["lineUp.currentCTCThousand"]}
+                  </span>
+                )}
+
+                {(formData.lineUp.currentCTCLakh ||
+                  formData.lineUp.currentCTCThousand) && (
+                    <span className="experience-words">
+                    {convertNumberToWords(
+                      formData.lineUp.currentCTCLakh,
+                      formData.lineUp.currentCTCThousand
+                    )}
+                  </span>
+                )}
+              </div>
+
+              <div className="form-group-December">
+                <label>
+                  Expected salary (LPA){" "}
+                  {/* <span className="setRequiredAstricColorRed">*</span> */}
+                </label>
+                <div className="input-with-icon-December">
+                  <FontAwesomeIcon
+                    icon={faMoneyCheck}
+                    className="input-icon-December"
+                  />
+                  <input
+                    type="number"
+                    name="lineUp.expectedCTCLakh"
+                    placeholder="Lakhs"
+                    value={formData.lineUp.expectedCTCLakh}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    onInput={(e) => {
+                      if (e.target.value.length > 2) {
+                        e.target.value = e.target.value.slice(0, 2);
+                      }
+                    }}
+                  />
+                  <span></span>
+                  <input
+                    type="number"
+                    name="lineUp.expectedCTCThousand"
+                    placeholder="Thousands"
+                    value={formData.lineUp.expectedCTCThousand}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    onInput={(e) => {
+                      if (e.target.value.length > 2) {
+                        e.target.value = e.target.value.slice(0, 2);
+                      }
+                    }}
+                  />
+                </div>
+                {(errors["lineUp.expectedCTCLakh"] ||
+                  errors["lineUp.expectedCTCThousand"]) && (
+                  <span className="error">
+                    {errors["lineUp.expectedCTCLakh"] ||
+                      errors["lineUp.expectedCTCThousand"]}
+                  </span>
+                )}
+                {(formData.lineUp.expectedCTCLakh ||
+                  formData.lineUp.expectedCTCThousand) && (
+                    <span className="experience-words">
+                    {convertNumberToWords(
+                      formData.lineUp.expectedCTCLakh,
+                      formData.lineUp.expectedCTCThousand
+                    )}
+                  </span>
+                )}
+              </div>
+
+              <div className="form-group-December">
+                <label>
+                  Notice period{" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
+                <div className="input-with-icon-December">
+                  <FontAwesomeIcon
+                    icon={faHourglassHalf}
+                    className="input-icon-December"
+                  />
+                  <input
+                    type="text"
+                    name="lineUp.noticePeriod"
+                    placeholder="Enter notice period "
+                    value={formData.lineUp.noticePeriod}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    maxLength={100}
+                  />
+                </div>
+                {errors["lineUp.noticePeriod"] && (
+                  <div className="error">{errors["lineUp.noticePeriod"]}</div>
+                )}
+              </div>
+            </div>
+
+            {/* <div className="form-group-December">
+                <label>
+                  Availability for interview{" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
+                <div className="input-with-icon-December">
+                  <FontAwesomeIcon
+                    icon={faCalendar}
+                    className="input-icon-December"
+                  />
+                  <input
+                    type="date"
+                    name="lineUp.availabilityForInterview"
+                    placeholder="Availability For Interview"
+                    id="lineUp.availabilityForInterview"
+                    value={formData.lineUp.availabilityForInterview}
+                    onKeyDown={handleKeyDown}
+                    onChange={handleChange}
+                    max="9999-12-31"
+                  />
+                </div>
+                {errors["lineUp.availabilityForInterview"] && (
+                  <div className="error">
+                    {errors["lineUp.availabilityForInterview"]}
+                  </div>
+                )}
+              </div> */}
+            {/* 
+              <div className="form-group-December">
+                <label>Expected joining date</label> */}
+            {/* <div className="input-with-icon-December">
+                  <FontAwesomeIcon
+                    icon={faClock}
+                    className="input-icon-December"
+                  />
+                  <input
+                    type="date"
+                    placeholder="Expected Joining Date"
+                    name="lineUp.expectedJoinDate"
+                    id="lineUp.expectedJoinDate"
+                    value={formData.lineUp.expectedJoinDate}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    max="9999-12-31"
+                  />
+                </div> */}
+            {/* {errors["lineUp.expectedJoiningDate"] && (
+              <div className="error">
+                {errors["lineUp.expectedJoiningDate"]}
+              </div>
+            )} */}
+            {/* </div> */}
+
+            {/* <div className="form-group-December">
                 <label>
                   Relevant experience (Years){" "}
                   <span className="setRequiredAstricColorRed">*</span>
@@ -1252,7 +1279,6 @@ function ApplicantForm2({ loginEmployeeName }) {
                     value={formData.lineUp.relevantExperience}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
-                    // onInput={handleInputInterview}
                     maxLength="10"
                   />
                 </div>
@@ -1261,56 +1287,9 @@ function ApplicantForm2({ loginEmployeeName }) {
                     {errors["lineUp.relevantExperience"]}
                   </span>
                 )}
-              </div>
+              </div> */}
 
-              <div className="form-group-December">
-                <div className="gender">
-                  <label>
-                    Gender <span className="setRequiredAstricColorRed">*</span>
-                  </label>
-                  <div className="radio-group" id="genderid">
-                    <FormControlLabel
-                      control={
-                        <Radio
-                          name="lineUp.gender"
-                          checked={formData.lineUp.gender === "male"}
-                          onChange={() =>
-                            handleChange({
-                              target: {
-                                name: "lineUp.gender",
-                                value: "male",
-                              },
-                            })
-                          }
-                        />
-                      }
-                      label="Male"
-                    />
-
-                    <FormControlLabel
-                      control={
-                        <Radio
-                          name="lineUp.gender"
-                          checked={formData.lineUp.gender === "female"}
-                          onChange={() =>
-                            handleChange({
-                              target: {
-                                name: "lineUp.gender",
-                                value: "female",
-                              },
-                            })
-                          }
-                        />
-                      }
-                      label="Female"
-                    />
-                  </div>
-                  {errors["lineUp.gender"] && (
-                    <span className="error">{errors["lineUp.gender"]}</span>
-                  )}
-                </div>
-              </div>
-              <div className="form-group-December">
+            {/* <div className="form-group-December">
                 <div className="disability">
                   <label>Disability</label>
                   <div className="radio-group" id="disabilityId">
@@ -1381,11 +1360,9 @@ function ApplicantForm2({ loginEmployeeName }) {
                     </div>
                   )}
                 </div>
-              </div>
-            </div>
+              </div> */}
 
-            <div className="form-column-December">
-              <div className="form-group-December">
+            {/* <div className="form-group-December">
                 <label>
                   Date of birth{" "}
                   <span className="setRequiredAstricColorRed">*</span>
@@ -1410,8 +1387,62 @@ function ApplicantForm2({ loginEmployeeName }) {
                 {errors["lineUp.dateOfBirth"] && (
                   <span className="error">{errors["lineUp.dateOfBirth"]}</span>
                 )}
+              </div> */}
+
+            <div className="form-column-December">
+              <div className="form-group-December">
+                <label>
+                  Current location
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
+                <div className="input-with-icon-December">
+                  <FontAwesomeIcon
+                    icon={faLocation}
+                    className="input-icon-December"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Current location"
+                    name="currentLocation"
+                    id="currentLocation"
+                    value={formData.currentLocation}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    maxLength={100}
+                  />
+                </div>
+                {errors.currentLocation && (
+                  <span className="error">{errors.currentLocation}</span>
+                )}
               </div>
 
+              <div className="form-group-December">
+                <label>
+                  Preferred location{" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
+                <div className="input-with-icon-December">
+                  <FontAwesomeIcon
+                    icon={faLocationPin}
+                    className="input-icon-December"
+                  />
+                  <input
+                    type="text"
+                    name="lineUp.preferredLocation"
+                    id="lineUp.preferredLocation"
+                    placeholder="Preferred location"
+                    value={formData.lineUp.preferredLocation}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    maxLength={100}
+                  />
+                </div>
+                {errors["lineUp.preferredLocation"] && (
+                  <span className="error">
+                    {errors["lineUp.preferredLocation"]}
+                  </span>
+                )}
+              </div>
               <div className="form-group-December">
                 <label>
                   {" "}
@@ -1452,7 +1483,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               <div className="form-group-December">
                 <label>
                   Upload profile photo{" "}
-                  <span className="setRequiredAstricColorRed">*</span>
+                  {/* <span className="setRequiredAstricColorRed">*</span> */}
                 </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
@@ -1483,8 +1514,10 @@ function ApplicantForm2({ loginEmployeeName }) {
                   <span className="error">{errors["lineUp.photo"]}</span>
                 )}
               </div>
+            </div>
+          </div>
 
-              <div className="form-group-December">
+          {/* <div className="form-group-December">
                 <div className="form-December-certificate">
                   <label>Have you done any courses and certificates ? </label>
 
@@ -1625,6 +1658,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   />
                 </div>
               </div>
+
               {formData.lineUp.holdingAnyOffer && (
                 <div className="offer-details">
                   <div className="form-group-December">
@@ -1699,9 +1733,9 @@ function ApplicantForm2({ loginEmployeeName }) {
                     )}
                   </div>
                 </div>
-              )}
+              )} */}
 
-              <div className="input-with-icon-December">
+          {/* <div className="input-with-icon-December">
                 <div className="form-group-December" style={{ width: "400px" }}>
                   <label>Do you have a WhatsApp number ? </label>
                   <div className="radio-group" id="whatsappnumberid">
@@ -1713,7 +1747,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                             setWhatsappSelected(true);
                             setFormData({
                               ...formData,
-                              alternateNumber: "", // Reset when "Yes" is selected
+                              alternateNumber: "",
                             });
                           }}
                         />
@@ -1729,7 +1763,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                             setWhatsappSelected(false);
                             setFormData({
                               ...formData,
-                              alternateNumber: 0, // Set 0 when "No" is selected
+                              alternateNumber: 0, 
                             });
                           }}
                         />
@@ -1738,7 +1772,6 @@ function ApplicantForm2({ loginEmployeeName }) {
                     />
                   </div>
 
-                  {/* Conditionally render the WhatsApp number input field when 'Yes' is selected */}
                   {whatsappSelected && (
                     <div className="form-group-December">
                       <label>WhatsApp number:</label>
@@ -1769,9 +1802,9 @@ function ApplicantForm2({ loginEmployeeName }) {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
 
-              <div className="form-group-December">
+          {/* <div className="form-group-December">
                 <div className="negotiation">
                   <label>Are you ready to negotiation ? </label>
                   <div className="radio-group">
@@ -1815,15 +1848,11 @@ function ApplicantForm2({ loginEmployeeName }) {
                     </span>
                   )}
                 </div>
-              </div>
-              <br></br>
-            </div>
-          </div>
+              </div> */}
 
           <div className="click-December">
             <button
               type="submit"
-              className="daily-tr-btn"
               onKeyDown={handleKeyDown}
               disabled={loading}
             >
@@ -1831,6 +1860,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               {loading ? "Submitting..." : "Submit"}
             </button>
           </div>
+
         </form>
         {loading && (
           <div className="SCE_Loading_Animation">

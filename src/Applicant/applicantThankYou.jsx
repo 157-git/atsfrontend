@@ -36,6 +36,7 @@ function ThankYouPage() {
           <p>Our team will review your application, and we will be in touch with you soon.</p>
           <p>Wishing you the very best in your journey!</p>
         </div>
+        
       </div>
     </div>
   );

@@ -10,7 +10,30 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
   const { employeeId, userType } = useParams();
   const [copyMessage, setCopyMessage] = useState("");
   const [userUrlString, setUserUrlString] = useState("");
-  const firstName = loginEmployeeName.split(" ")[0];
+
+  const getFirstName = () => {
+    // If the string is empty, generate a random 3-character string
+    if (!loginEmployeeName) {
+      const randomChars = "abcdefghijklmnopqrstuvwxyz0123456789";
+      let randomString = "";
+      for (let i = 0; i < 3; i++) {
+        randomString +=
+          randomChars[Math.floor(Math.random() * randomChars.length)];
+      }
+      return randomString;
+    }
+
+    // Check if there's a space before the 3rd character
+    const spaceIndex = loginEmployeeName.indexOf(" ");
+    if (spaceIndex !== -1 && spaceIndex < 3) {
+      // Split by space and return the first part
+      return loginEmployeeName.split(" ")[0];
+    } else {
+      // Otherwise, split at the 3rd character
+      return loginEmployeeName.substring(0, 3);
+    }
+  };
+  const firstName = getFirstName(loginEmployeeName);
   const [displayCopyBtn, setDisplayCopyBtn] = useState(false);
 
   const getEncodeUrlString = async () => {
@@ -34,7 +57,7 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
   // exposing directly in file just for testing and normal use purpose, please set this secreat key in env file while deploying on server
   const secretKey = "157industries_pvt_ltd"; // Use a consistent key across components
 
-  const shareUrl = `https://rg.157careers.in/application-form/${firstName}+${userUrlString}`;
+  const shareUrl = `https://rg.157careers.in/applicant-form/${firstName}+${userUrlString}`;
 
   // Share using Web Share API
   const handleShareLink = async () => {

@@ -20,7 +20,17 @@ import InterviewPreviousQuestion from "./interviewPreviousQuestion";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
 // this libraries added by sahil karnekar date 21-10-2024
-import { Button, Flex, message, notification, Progress, Radio, Rate, TimePicker, Upload } from "antd";
+import {
+  Button,
+  Flex,
+  message,
+  notification,
+  Progress,
+  Radio,
+  Rate,
+  TimePicker,
+  Upload,
+} from "antd";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSocket } from "../EmployeeDashboard/socket";
@@ -132,7 +142,8 @@ const CallingTrackerForm = ({
   const [candidateData, setCandidateData] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isConfirmationPending, setIsConfirmationPending] = useState(false);
-const [displayCallingRemarkOthersInput, setDisplayCallingRemarkOthersInput] = useState(false);
+  const [displayCallingRemarkOthersInput, setDisplayCallingRemarkOthersInput] =
+    useState(false);
 
   const handleCloseForm = () => {
     setIsFormVisible(false);
@@ -144,7 +155,6 @@ const [displayCallingRemarkOthersInput, setDisplayCallingRemarkOthersInput] = us
 
   useEffect(() => {
     if (initialData) {
-
       const updatedCallingTracker = { ...initialCallingTrackerState };
       const updatedLineUpData = { ...initialLineUpState };
 
@@ -237,7 +247,10 @@ const [displayCallingRemarkOthersInput, setDisplayCallingRemarkOthersInput] = us
     } else {
       delete errors.candidateEmail;
     }
-    if (!callingTracker.callingFeedback || callingTracker.callingFeedback === "others") {
+    if (
+      !callingTracker.callingFeedback ||
+      callingTracker.callingFeedback === "others"
+    ) {
       errors.callingFeedback = "Calling Feedback is required";
     }
     return errors;
@@ -306,11 +319,11 @@ const [displayCallingRemarkOthersInput, setDisplayCallingRemarkOthersInput] = us
     callingTracker.sourceName = value;
     setErrors((prevErrors) => ({ ...prevErrors, ["sourceName"]: "" }));
   };
-const handleCallingFeedBackOthers = (e)=>{
-  const { name, value } = e.target;
-  callingTracker.callingFeedback = value;
-  setErrors((prevErrors) => ({ ...prevErrors, ["callingFeedback"]: "" }));
-}
+  const handleCallingFeedBackOthers = (e) => {
+    const { name, value } = e.target;
+    callingTracker.callingFeedback = value;
+    setErrors((prevErrors) => ({ ...prevErrors, ["callingFeedback"]: "" }));
+  };
   const handleRatingsChange = (value) => {
     setCallingTracker((prev) => ({
       ...prev,
@@ -339,7 +352,6 @@ const handleCallingFeedBackOthers = (e)=>{
         interviewTime: "",
       }));
     }
-    
 
     // Rajlaxmi Jagadale Added Email Validation Date-24-01-25 line263 to 312
     if (name === "sourceName" && value === "others") {
@@ -350,7 +362,7 @@ const handleCallingFeedBackOthers = (e)=>{
 
     if (name === "callingFeedback" && value === "others") {
       setDisplayCallingRemarkOthersInput(true);
-    }else if(name === "callingFeedback" && value !== "others"){
+    } else if (name === "callingFeedback" && value !== "others") {
       setDisplayCallingRemarkOthersInput(false);
     }
 
@@ -393,7 +405,6 @@ const handleCallingFeedBackOthers = (e)=>{
     setCallingTracker({ ...callingTracker, [name]: value });
     if (!startTime) {
       setStartTime(Date.now());
-
     }
     if (name === "fullAddress") {
       setStartPoint(value);
@@ -473,7 +484,7 @@ const handleCallingFeedBackOthers = (e)=>{
           ...prevErrors,
           experienceMonth: "Experience in months cannot exceed 11.",
         }));
-    
+
         // Clear error after 4 seconds
         setTimeout(() => {
           setErrors((prevErrors) => ({
@@ -481,7 +492,7 @@ const handleCallingFeedBackOthers = (e)=>{
             experienceMonth: "",
           }));
         }, 2000);
-        
+
         return;
       } else {
         setErrors((prevErrors) => ({
@@ -490,7 +501,6 @@ const handleCallingFeedBackOthers = (e)=>{
         }));
       }
     }
-    
 
     if (name === "currentCTCLakh" || name === "currentCTCThousand") {
       const lakhValue = parseFloat(updatedLineUpData.currentCTCLakh) || 0;
@@ -682,7 +692,6 @@ const handleCallingFeedBackOthers = (e)=>{
       } else if (error.request) {
         toast.error("No response received from the server");
       } else {
-
         toast.error("An error occurred: " + error.message);
       }
     } finally {
@@ -699,7 +708,6 @@ const handleCallingFeedBackOthers = (e)=>{
       );
 
       if (response.status === 200 || response.status === 204) {
-
         // toast.success("Candidate Data Transfered Succefully...");
       } else {
         console.warn(`Unexpected response status: ${response.status}`);
@@ -728,7 +736,6 @@ const handleCallingFeedBackOthers = (e)=>{
       );
 
       if (response.status === 200 || response.status === 204) {
-
         // toast.success("Candidate Data Transfered Succefully...");
       } else {
         console.warn(`Unexpected response status: ${response.status}`);
@@ -862,7 +869,7 @@ const handleCallingFeedBackOthers = (e)=>{
   };
 
   // line 612 to 727 added by sahil karnekar upload resume and autofill date 30-10-2024
-  let tempData ;
+  let tempData;
   const handleUploadAndSetData = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -886,9 +893,8 @@ const handleCallingFeedBackOthers = (e)=>{
       }
 
       const data = await response.json();
-    tempData = data;
-    setResumeResponse(data);
-     
+      tempData = data;
+      setResumeResponse(data);
     } catch (error) {
       console.error("Error uploading file:", error);
     } finally {
@@ -945,8 +951,8 @@ const handleCallingFeedBackOthers = (e)=>{
       lineUpData.companyName !== "" ||
       lineUpData.dateOfBirth !== "" ||
       lineUpData.gender !== "" ||
-      lineUpData.qualification !== "" 
-      // lineUpData.resume;
+      lineUpData.qualification !== "";
+    // lineUpData.resume;
 
     const updateFields = () => {
       setCallingTracker((prevState) => ({
@@ -966,7 +972,7 @@ const handleCallingFeedBackOthers = (e)=>{
         qualification: data.qualification,
         // resume: data.resume,
       }));
-  
+
       // Check if currentLocation matches a predefined option
       if (!predefinedLocations.includes(data.currentLocation)) {
         setIsOtherLocationSelected(true);
@@ -975,7 +981,7 @@ const handleCallingFeedBackOthers = (e)=>{
       }
       setIsConfirmationPending(false);
     };
-  
+
     if (hasExistingData) {
       // Show confirmation notification
       setIsConfirmationPending(true);
@@ -985,11 +991,14 @@ const handleCallingFeedBackOthers = (e)=>{
         duration: 0, // Keep open until user decides
         btn: (
           <div style={{ display: "flex", gap: "10px" }}>
-            <Button type="primary" onClick={() => { 
-              setIsConfirmationPending(false);
-              updateFields();
-              notification.destroy();
-            }}>
+            <Button
+              type="primary"
+              onClick={() => {
+                setIsConfirmationPending(false);
+                updateFields();
+                notification.destroy();
+              }}
+            >
               Yes
             </Button>
             <Button onClick={() => notification.destroy()}>No</Button>
@@ -1004,7 +1013,6 @@ const handleCallingFeedBackOthers = (e)=>{
   const [displaySameAsContactField, setDisplaySameAsContactField] =
     useState(false);
   const handleDisplaySameAsContactText = () => {
-
     if (callingTracker.contactNumber !== "") {
       setDisplaySameAsContactField(true);
     }
@@ -1498,7 +1506,7 @@ const handleCallingFeedBackOthers = (e)=>{
 
                     {displaySourceOthersInput && (
                       <input
-                      className="applyborderforinputs"
+                        className="applyborderforinputs"
                         type="text"
                         name="sourceNameOthers"
                         id=""
@@ -1605,9 +1613,12 @@ const handleCallingFeedBackOthers = (e)=>{
                     <div className="setRequiredStarDiv">
                       <select
                         name="currentLocation"
-                        value={callingTracker.currentLocation === "Pune City" ?
-                          callingTracker.currentLocation : callingTracker.currentLocation === "PCMC" ?
-                          callingTracker.currentLocation : ""
+                        value={
+                          callingTracker.currentLocation === "Pune City"
+                            ? callingTracker.currentLocation
+                            : callingTracker.currentLocation === "PCMC"
+                            ? callingTracker.currentLocation
+                            : ""
                         }
                         onChange={handleLocationChange}
                         style={{ width: "200px" }}
@@ -1631,7 +1642,7 @@ const handleCallingFeedBackOthers = (e)=>{
                         type="text"
                         name="currentLocation"
                         value={callingTracker.currentLocation}
-                        onChange={(e) =>{
+                        onChange={(e) => {
                           setCallingTracker({
                             ...callingTracker,
                             currentLocation: e.target.value,
@@ -1639,10 +1650,8 @@ const handleCallingFeedBackOthers = (e)=>{
                           setErrors((prev) => {
                             const { currentLocation, ...rest } = prev;
                             return rest;
-                        });                        
-                        }
-                         
-                        }
+                          });
+                        }}
                         placeholder="Enter your location"
                       />
                     )}
@@ -1656,7 +1665,7 @@ const handleCallingFeedBackOthers = (e)=>{
                   </div>
                   <div className="calling-tracker-two-input">
                     <input
-                     className="applyborderforinputs"
+                      className="applyborderforinputs"
                       type="text"
                       name="fullAddress"
                       placeholder="Full Address"
@@ -1683,12 +1692,15 @@ const handleCallingFeedBackOthers = (e)=>{
                       value={
                         callingTracker.callingFeedback === "" ||
                         callingTracker.callingFeedback === "Call Done" ||
-                        callingTracker.callingFeedback === "Asked for Call Back" ||
+                        callingTracker.callingFeedback ===
+                          "Asked for Call Back" ||
                         callingTracker.callingFeedback === "No Answer" ||
                         callingTracker.callingFeedback === "Network Issue" ||
                         callingTracker.callingFeedback === "Invalid Number" ||
-                        callingTracker.callingFeedback === "Need to call back" ||
-                        callingTracker.callingFeedback === "Do not call again" ||
+                        callingTracker.callingFeedback ===
+                          "Need to call back" ||
+                        callingTracker.callingFeedback ===
+                          "Do not call again" ||
                         callingTracker.callingFeedback === "others"
                           ? callingTracker.callingFeedback
                           : "others"
@@ -1714,14 +1726,12 @@ const handleCallingFeedBackOthers = (e)=>{
                       <option value="Do not call again">
                         Do not call again
                       </option>
-                      <option value="others">
-                        Others
-                      </option>
+                      <option value="others">Others</option>
                       {/* <option value="Other">Other</option> */}
                     </select>
                     {displayCallingRemarkOthersInput && (
                       <input
-                      className="applyborderforinputs"
+                        className="applyborderforinputs"
                         type="text"
                         name="callingFeedbackOthers"
                         id=""
@@ -1731,10 +1741,9 @@ const handleCallingFeedBackOthers = (e)=>{
                       />
                     )}
                     {/* this line added by sahil date 22-10-2024 */}
-                
+
                     {(!callingTracker.callingFeedback ||
-                      callingTracker.callingFeedback === "others"
-                    ) && (
+                      callingTracker.callingFeedback === "others") && (
                       <span className="requiredFieldStar">*</span>
                     )}
                   </div>
@@ -1837,7 +1846,7 @@ const handleCallingFeedBackOthers = (e)=>{
                   <div className="calling-tracker-two-input">
                     <div className="setRequiredStarDiv">
                       <input
-                      className="applyborderforinputs"
+                        className="applyborderforinputs"
                         list="educationListDropDown"
                         name="qualification"
                         type="text"
@@ -2279,7 +2288,7 @@ const handleCallingFeedBackOthers = (e)=>{
                     <div className="setRequiredStarDiv">
                       {/* sahil karnekar line 1376 to 1420 */}
                       <input
-                       className="applyborderforinputs"
+                        className="applyborderforinputs"
                         type="text"
                         min="1947"
                         name="yearOfPassing"
@@ -2388,30 +2397,27 @@ const handleCallingFeedBackOthers = (e)=>{
                   </div>
                 </div>
               </div>
-              <div className="calling-tracker-field"
-              >
-                <label>Working Status</label>
+              <div className="calling-tracker-field">
+                <label>Currently Working</label>
                 <div className="calling-tracker-field-sub-div">
-
-<Radio.Group
-style={{
-  display:"flex",
-  width:"100%"
-}}
-  name="extraCertification"
-  value={lineUpData.extraCertification}
-  onChange={(e) =>
-    setLineUpData({
-      ...lineUpData,
-      extraCertification: e.target.value,
-    })
-  }
-  options={[
-    { value: "Yes", label: "Yes" },
-    { value: "No", label: "No" },
-  ]}
-/>
-
+                  <Radio.Group
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                    }}
+                    name="extraCertification"
+                    value={lineUpData.extraCertification}
+                    onChange={(e) =>
+                      setLineUpData({
+                        ...lineUpData,
+                        extraCertification: e.target.value,
+                      })
+                    }
+                    options={[
+                      { value: "Yes", label: "Yes" },
+                      { value: "No", label: "No" },
+                    ]}
+                  />
                 </div>
               </div>
             </div>
@@ -2442,7 +2448,7 @@ style={{
                     {/* this line added by sahil date 22-10-2024 */}
                     <div className="setRequiredStarDiv">
                       <input
-                       className="applyborderforinputs"
+                        className="applyborderforinputs"
                         type="text"
                         name="experienceYear"
                         value={lineUpData.experienceYear}
@@ -2474,7 +2480,7 @@ style={{
                     {/* this line added by sahil date 22-10-2024 */}
                     <div className="setRequiredStarDiv">
                       <input
-                       className="applyborderforinputs"
+                        className="applyborderforinputs"
                         type="text"
                         name="experienceMonth"
                         value={lineUpData.experienceMonth}
@@ -2598,37 +2604,37 @@ tooltips={desc} value={callingTracker.communicationRating}
  allowHalf
 /> */}
 
-<select
-  className="plain-input setwidthandmarginforratings"
-  name="communicationRating"
-  value={callingTracker.communicationRating}
-  onChange={handleRatingsChange1}
->
-  <option value="">Select Rating</option>
-  {[...Array(10)].map((_, index) => {
-    const rating = (index + 1) * 0.5;
+                    <select
+                      className="plain-input setwidthandmarginforratings"
+                      name="communicationRating"
+                      value={callingTracker.communicationRating}
+                      onChange={handleRatingsChange1}
+                    >
+                      <option value="">Select Rating</option>
+                      {[...Array(10)].map((_, index) => {
+                        const rating = (index + 1) * 0.5;
 
-    // Assign unique tags to each rating
-    const tags = [
-      "Very Poor",  // 0.5
-      "Poor",       // 1.0
-      "Below Average", // 1.5
-      "Average",    // 2.0
-      "Fair",       // 2.5
-      "Good",       // 3.0
-      "Very Good",  // 3.5
-      "Excellent",  // 4.0
-      "Outstanding",// 4.5
-      "Perfect"     // 5.0
-    ];
+                        // Assign unique tags to each rating
+                        const tags = [
+                          "Very Poor", // 0.5
+                          "Poor", // 1.0
+                          "Below Average", // 1.5
+                          "Average", // 2.0
+                          "Fair", // 2.5
+                          "Good", // 3.0
+                          "Very Good", // 3.5
+                          "Excellent", // 4.0
+                          "Outstanding", // 4.5
+                          "Perfect", // 5.0
+                        ];
 
-    return (
-      <option key={rating} value={`${rating}`}>
-        {rating.toFixed(1)} - {tags[index]}
-      </option>
-    );
-  })}
-</select>
+                        return (
+                          <option key={rating} value={`${rating}`}>
+                            {rating.toFixed(1)} - {tags[index]}
+                          </option>
+                        );
+                      })}
+                    </select>
 
                     <span className="ml-5">Out Of 5</span>
 
@@ -2656,7 +2662,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                       {/* this line added by sahil date 22-10-2024 */}
                       <div className="setRequiredStarDiv">
                         <input
-                        className="applyborderforinputs"
+                          className="applyborderforinputs"
                           type="text"
                           name="currentCTCLakh"
                           value={lineUpData.currentCTCLakh}
@@ -2681,7 +2687,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                     </div>
                     <div className="calling-tracker-two-input">
                       <input
-                       className="applyborderforinputs"
+                        className="applyborderforinputs"
                         type="text"
                         name="currentCTCThousand"
                         value={lineUpData.currentCTCThousand}
@@ -2712,7 +2718,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                       {/* this line added by sahil date 22-10-2024 */}
                       <div className="setRequiredStarDiv">
                         <input
-                         className="applyborderforinputs"
+                          className="applyborderforinputs"
                           type="text"
                           name="expectedCTCLakh"
                           value={lineUpData.expectedCTCLakh}
@@ -2737,7 +2743,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                     </div>
                     <div className="calling-tracker-two-input">
                       <input
-                       className="applyborderforinputs"
+                        className="applyborderforinputs"
                         type="text"
                         name="expectedCTCThousand"
                         value={lineUpData.expectedCTCThousand}
@@ -3393,7 +3399,7 @@ const ModalComponent = ({
                 </div>
                 <div className="distance-calculation-bottom-div">
                   <iframe
-                  id="idfortesteriframe"
+                    id="idfortesteriframe"
                     title="Google Maps"
                     width="100%"
                     height="450"

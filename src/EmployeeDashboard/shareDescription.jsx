@@ -3,7 +3,7 @@ import "./shareDescription.css";
 import html2canvas from "html2canvas";
 import { API_BASE_URL } from "../api/api";
 import { useParams } from "react-router-dom";
-import LoginImage from "../assets/rgLogo.png";
+import LoginImage from "../assets/157logo.jpeg";
 
 const ShareDescription = ({ Descriptions }) => {
   const [data, setData] = useState(null);
@@ -119,7 +119,7 @@ const ShareDescription = ({ Descriptions }) => {
           {Descriptions.designation && (
             <div className="job-title-share">
               <p className="job-title-share-title" contentEditable>
-                We are Hiring For "{Descriptions.designation}"
+                We are Hiring For " {Descriptions.designation}"
               </p>
             </div>
           )}

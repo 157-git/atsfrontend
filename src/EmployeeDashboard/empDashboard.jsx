@@ -709,6 +709,7 @@ const EmpDashboard = ({ userGroup }) => {
             jobRole={jobRoles}
             emailSenderInformation={handleEmailSenderInformation}
             successfulDataUpdation={successfulDataUpdation}
+            loginEmployeeName={loginEmployeeName}
           />
         </div>
 
@@ -786,7 +787,7 @@ const EmpDashboard = ({ userGroup }) => {
           )}
         </div>
 
-        <div>{showInterviewDate && <InterviewDates />}</div>
+        <div>{showInterviewDate && <InterviewDates loginEmployeeName={loginEmployeeName} />}</div>
         <div>{showAddEmployee && <AddEmployee loginEmployeeName={loginEmployeeName} />}</div>
         <div>
           {selectCandidate && (

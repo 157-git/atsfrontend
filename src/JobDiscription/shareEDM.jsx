@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./shareEDM.css";
-import profileImage from "../assets/rgLogo.png";
+import profileImage from "../assets/157logo.jpeg";
 import { useParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";

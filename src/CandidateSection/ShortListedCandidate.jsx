@@ -65,8 +65,10 @@ const ShortListedCandidates = ({
   };
 
   useEffect(() => {
-    fetchShortListedData(currentPage, pageSize);
-  }, [currentPage, pageSize, triggerFetch, searchTerm]);
+   
+      fetchShortListedData(currentPage, pageSize);
+  
+  }, [currentPage, pageSize, triggerFetch]);
   //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_116
 
   const fetchShortListedData = async (page, size) => {
@@ -224,7 +226,9 @@ const handleCancelcloseshare = ()=>{
       setDisplayShareConfirm(false);
     }
   };
-
+const handleSearchClick = ()=>{
+  fetchShortListedData(currentPage, pageSize);
+}
   const resetSelections = () => {
     setSelectedEmployeeId(null); // Clear the selected recruiter ID
     setSelectedRole(""); // Clear the selected role
@@ -250,7 +254,7 @@ const handleCancelcloseshare = ()=>{
     
     setFilteredShortListed(filtered);
     setSearchCount(filtered.length);
-  }, [searchTerm, shortListedData]);
+  }, [ shortListedData]);
   //  filter problem solved updated by sahil karnekar date 23-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
     if (activeFilterOption === key) {
@@ -562,10 +566,15 @@ const handleCancelcloseshare = ()=>{
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
                         />
+                         
                         {searchTerm && (
                           <div className="svgimagesetinInput">
                             <svg
-                              onClick={() => setSearchTerm("")}
+                              onClick={() => {
+                                setSearchTerm("")
+                                handleTriggerFetch();
+                              }
+                              }
                               xmlns="http://www.w3.org/2000/svg"
                               height="24px"
                               viewBox="0 -960 960 960"
@@ -578,6 +587,18 @@ const handleCancelcloseshare = ()=>{
                         )}
                       </div>
                     </div>
+                    <button
+        className="search-btns lineUp-share-btn"
+        onClick={() => handleSearchClick()} 
+      >
+        Search 
+      </button>
+      {/* <button
+        className="search-btns lineUp-share-btn"
+        // onClick={handleClear} 
+      >
+        Clear <i className="fa-solid fa-filter"></i>
+      </button> */}
                   </div>
                   <h5 style={{ color: "gray", paddingTop: "5px" }}>
                     Shortlisted Candidate
@@ -603,6 +624,14 @@ const handleCancelcloseshare = ()=>{
                           </button>
                         ) : (
                           <div style={{ display: "flex", gap: "5px" }}>
+
+        <label style={{ fontWeight: "bold", marginRight:0 }}>Selected Candidates:</label>
+        <input 
+          type="text" 
+          value={selectedRows.length} 
+          readOnly 
+          style={{ width: "50px", textAlign: "center", fontWeight: "bold",  marginRight:"10px"}} 
+        />
                             <button
                               className="lineUp-share-btn"
                               onClick={() => {

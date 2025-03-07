@@ -6,7 +6,7 @@ import developerjob from "../LogoImages/developerjob.svg";
 import { Link } from "react-router-dom";
 import { Modal } from "react-bootstrap";
 import ColorPicker from "./ColorPicker";
-import siteLogo from "../assets/rgLogo.png"
+import siteLogo from "../assets/rgLogo.png";
 
 const HomePage = () => {
   // the showColor implemented instead of choose color by sahil karnekar date 14-11-2024
@@ -57,7 +57,6 @@ const HomePage = () => {
         }}
       >
         <div className="landing-content">
-         
           <div className="langingcontentsecond">
             {/* <h1
               style={{
@@ -72,13 +71,11 @@ const HomePage = () => {
               Recruiter's Gear
             </h1> */}
             <div className="maindivlandingpage">
-            <div className="siteLogoDivFlex">
-            <img src={siteLogo} alt=''
-           className="logoimagelandingpage"
-            />
-            </div>
+              <div className="siteLogoDivFlex">
+                <img src={siteLogo} alt="" className="logoimagelandingpage" />
+              </div>
 
-            {/* <div
+              {/* <div
               className="landingbtn"
               style={{
                 display: "flex",
@@ -89,28 +86,29 @@ const HomePage = () => {
                 paddingTop: "20px",
               }}
             > */}
-            <div className="linkdiv">
-            <Link to="/Main-Dashboard">
-                <button className="main-homepage-btn">Let's begin</button>
-              </Link>
+              <div className="linkdiv">
+                <Link to="/Main-Dashboard">
+                  <button className="main-homepage-btn">Let's begin</button>
+                </Link>
+              </div>
+              <div className="tagline">
+                <p className="taglineDesc">
+                  Like a superhero needs their suit, you need Recruiter’s Gear
+                  to boost hiring power!
+                </p>
+              </div>
+
+              {/* </div> */}
             </div>
-            <div className="tagline">
-              <p className="taglineDesc">Like a superhero needs their suit, you  need Recruiter’s Gear to boost hiring power!</p>
-            </div>
-            
-            {/* </div> */}
-            </div>
-           
-           
-          
           </div>
-          <div
-            className="Choose-color-container"
-          >
-            <button className="Choose-Color-Btn" onClick={()=>setShowColor(true)}>
-    <i className="fa-solid fa-chevron-right"></i>
-    <span>Choose Color</span>
-  </button>
+          <div className="Choose-color-container">
+            <button
+              className="Choose-Color-Btn"
+              onClick={() => setShowColor(true)}
+            >
+              <i className="fa-solid fa-chevron-right"></i>
+              <span>Choose Color</span>
+            </button>
           </div>
         </div>
       </div>
@@ -134,8 +132,9 @@ const HomePage = () => {
             }}
           >
             <Modal.Body>
-              <ColorPicker onColorApplied={handleColorApplied} 
-              setShowColor={setShowColor}
+              <ColorPicker
+                onColorApplied={handleColorApplied}
+                setShowColor={setShowColor}
               />
             </Modal.Body>
           </Modal.Dialog>
