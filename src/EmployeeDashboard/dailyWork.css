@@ -434,32 +434,46 @@
   max-height: 75vh;
   overflow-y: scroll;
 }
-.notificationIconBackgroundProperties{
+.notificationIconBackgroundProperties {
   background-color: var(--notification-icon-background);
 }
-.forbackgroundcolortobadge{
-color: var(--notification-badge-background);
+.forbackgroundcolortobadge {
+  color: var(--notification-badge-background);
 }
 
-
-:where(.css-dev-only-do-not-override-ni1kz0).ant-notification-bottomRight.ant-notification-stack
-.ant-notification-notice-wrapper {
+:where(
+    .css-dev-only-do-not-override-ni1kz0
+  ).ant-notification-bottomRight.ant-notification-stack
+  .ant-notification-notice-wrapper {
   background-color: rgb(214, 213, 213);
   color: white;
   border: 1px solid rgb(167, 165, 165);
 }
 
 :where(.css-dev-only-do-not-override-ni1kz0).ant-notification
- .ant-notification-notice-wrapper
- .ant-notification-notice-with-icon
- .ant-notification-notice-message { 
+  .ant-notification-notice-wrapper
+  .ant-notification-notice-with-icon
+  .ant-notification-notice-message {
   font-weight: bold;
 }
 
-.user-img img{
+.user-img img {
   background: none; /* Ensures no background is applied */
   border: none; /* Removes any borders if present */
   display: block; /* Ensures no extra space below the image */
 }
 
-/* Arshad added this css of Pousar new code . created by Krishna Added By Arshad */
+.stopwatch-container {
+  display: flex;
+}
+.stopwatch-buttons {
+  display: flex;
+  justify-content: center;
+  margin-left: 5px;
+}
+.setDisplayFlexForLoginhrandbreak {
+  display: flex;
+}
+.newclassforhrbutton {
+  margin-right: 5px;
+}

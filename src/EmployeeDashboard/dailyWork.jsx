@@ -10,7 +10,6 @@ import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
 import { API_BASE_URL } from "../api/api";
 import watingImg from "../photos/fire-relax.gif";
 // line 12 to 19 added by sahil karnekar on date 14-01-2025
-import { useDispatch } from "react-redux";
 import { setProfileImageFromRedux } from "../EmployeeDashboard/employeeSlice.jsx";
 //added by sahil karnekar and commented because it was implemented just for testing purpose but dont remove this
 import { Avatar, Badge, notification, List, Card } from "antd";
@@ -18,9 +17,22 @@ import { BellOutlined, CloseOutlined, ClearOutlined } from "@ant-design/icons";
 import { initializeSocket } from "./socket.jsx";
 import notificationIcon from "../assets/notificationicon.png";
 import Meta from "antd/es/card/Meta.js";
-import { LogOut } from "lucide-react";
-//SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
+import {
+  getCurrentLogTime,
+  getCurrentTimeForUpdateData,
+  getFormattedDateISOYMDformat,
+  getFormattedDateOnly,
+  getLateMark,
+} from "../EmployeeSection/getFormattedDateTime.jsx";
+import {
+  getDailyworkData,
+  putDailyworkData,
+} from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable.jsx";
+import Stopwatch from "../HandlerFunctions/StopWatch.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { setTriggerFetch } from "../sclices/triggerSlice.jsx";
 
+//SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
 function DailyWork({
   onCurrentEmployeeJobRoleSet,
   successCount,
@@ -31,6 +43,8 @@ function DailyWork({
   jobRole,
   emailSenderInformation,
   successfulDataUpdation,
+  loginEmployeeName,
+  trigger,
 }) {
   const { employeeId, userType } = useParams();
   const [fetchWorkId, setFetchWorkId] = useState(null);
@@ -46,6 +60,7 @@ function DailyWork({
   const [buttonColor, setButtonColor] = useState(() => {
     return localStorage.getItem("buttonColor");
   });
+  const triggerFetch = useSelector((state) => state.trigger.triggerFetch);
 
   const getStoredTime = () => {
     const storedTime = localStorage.getItem(`stopwatchTime_${employeeId}`);
@@ -81,6 +96,7 @@ function DailyWork({
   const [expiryMessage, setExpiryMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [paymentMade, setPaymentMade] = useState(false);
+  const currentDateNewGlobal = getFormattedDateISOYMDformat();
   const [messagesContext, contextHolder] = notification.useNotification({
     stack: true
       ? {
@@ -209,40 +225,40 @@ function DailyWork({
         console.log("Login details already saved.");
       } else {
         try {
-          console.log(name);
-          const now = new Date();
-          const day = now.getDate().toString().padStart(2, "0");
-          const month = (now.getMonth() + 1).toString().padStart(2, "0");
-          const year = now.getFullYear();
-          const formData = {
-            employeeId,
-            jobRole: userType,
-            employeeName: name,
-            date: `${year}-${month}-${day}`,
-            loginTime: now.toLocaleTimeString("en-IN"),
-            lateMark,
-            leaveType,
-            paidLeave,
-            unpaidLeave,
-            dailyTarget: data.pending + data.archived,
-            dailyArchived: data.archived,
-            dailyPending: data.pending,
-            remoteWork,
-          };
-          localStorage.setItem(
-            `dailyWorkData_${employeeId}`,
-            JSON.stringify({ archived: data.archived, pending: data.pending })
-          );
+          // console.log(name);
+          // const now = new Date();
+          // const day = now.getDate().toString().padStart(2, "0");
+          // const month = (now.getMonth() + 1).toString().padStart(2, "0");
+          // const year = now.getFullYear();
+          // const formData = {
+          //   employeeId,
+          //   jobRole: userType,
+          //   employeeName: name,
+          //   date: `${year}-${month}-${day}`,
+          //   loginTime: now.toLocaleTimeString("en-IN"),
+          //   lateMark,
+          //   leaveType,
+          //   paidLeave,
+          //   unpaidLeave,
+          //   dailyTarget: data.pending + data.archived,
+          //   dailyArchived: data.archived,
+          //   dailyPending: data.pending,
+          //   remoteWork,
+          // };
+          // localStorage.setItem(
+          //   `dailyWorkData_${employeeId}`,
+          //   JSON.stringify({ archived: data.archived, pending: data.pending })
+          // );
 
-          const response = await axios.post(
-            `${API_BASE_URL}/save-daily-work/${employeeId}/${userType}`,
-            formData
-          );
+          // const response = await axios.post(
+          //   `${API_BASE_URL}/save-daily-work/${employeeId}/${userType}`,
+          //   formData
+          // );
 
-          console.log(
-            "Data going to API (formData):",
-            JSON.stringify(formData, null, 2)
-          );
+          // console.log(
+          //   "Data going to API (formData):",
+          //   JSON.stringify(formData, null, 2)
+          // );
 
           if (response.data) {
             fetchCurrentEmployerWorkId();
@@ -273,13 +289,12 @@ function DailyWork({
 
   const fetchCurrentEmployerWorkId = async () => {
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/fetch-work-id/${employeeId}/${userType}`
-      );
-      console.log(response);
-
-      setFetchWorkId(response.data);
-      console.log(response.data + "----->");
+      // const response = await axios.get(
+      //   `${API_BASE_URL}/fetch-work-id/${employeeId}/${userType}`
+      // );
+      // console.log(response);
+      // setFetchWorkId(response.data);
+      // console.log(response.data + "----->");
     } catch (error) {
       console.error("Error fetching work ID:", error);
     }
@@ -433,8 +448,6 @@ function DailyWork({
     setBreaks(updatedBreaks);
     localStorage.setItem(`breaks_${employeeId}`, JSON.stringify(updatedBreaks));
     setShowPauseModal(true);
-    setShowBreakModal(true);
-    setIsRunning(true);
   };
 
   useEffect(() => {
@@ -443,6 +456,20 @@ function DailyWork({
       setAllowCloseModal(false); // Ensure modal cannot close until Resume is clicked again
     }
   }, [showPauseModal]);
+  const [startResumeNewTimer, setStartResumeNewTimer] = useState(false);
+  const handleResume = () => {
+    setRunning(true);
+    const now = new Date().toLocaleTimeString("en-IN");
+    const updatedBreaks = breaks.map((b) =>
+      !b.breakEndTime ? { ...b, breakEndTime: now } : b
+    );
+    setBreaks(updatedBreaks);
+    localStorage.setItem(`breaks_${employeeId}`, JSON.stringify(updatedBreaks));
+    setAllowCloseModal(true); // Allow modal to close
+    setShowPauseModal(false); // Close the modal
+
+    setStartResumeNewTimer(true);
+  };
 
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-handleLogoutLocal(changed) Start LineNo:-530 Date:-01/07
   useEffect(() => {
@@ -453,58 +480,56 @@ function DailyWork({
   const handleLogoutLocal = async () => {
     console.log("Logout clicked 05 in Daily Work handleLogoutLocal");
     try {
-      console.log(" Fetched Work Id :- " + fetchWorkId);
-      const breaksData = localStorage.getItem(`breaks_${employeeId}`);
-      const breaks = breaksData ? JSON.parse(breaksData) : [];
-      const totalHoursWork = calculateTotalHoursWork(
-        JSON.parse(localStorage.getItem(`loginTimeSaved_${employeeId}`)),
-        logoutTimestamp,
-        breaks
-      );
-      const now = new Date();
-      const day = now.getDate().toString().padStart(2, "0");
-      const month = (now.getMonth() + 1).toString().padStart(2, "0");
-      const year = now.getFullYear();
-      let present = "absent";
-      if (data.pending >= 5 && data.archived >= 5) {
-        present = "present";
-      }
-      let checkHalfDay = "No";
-      console.log(typeof totalHoursWork);
-      const formData = {
-        employeeId,
-        date: `${year}-${month}-${day}`,
-        dailyTarget: data.pending + data.archived,
-        dailyArchived: data.archived,
-        dailyPending: data.pending,
-        logoutTime: logoutTimestamp,
-        totalHoursWork: totalHoursWork,
-        dailyHours: breaks,
-        dayPresentStatus: present,
-        lateMark,
-        leaveType,
-        paidLeave,
-        unpaidLeave,
-        dayPresentPaid,
-        dayPresentUnpaid,
-      };
-
-      await axios.put(
-        `${API_BASE_URL}/update-daily-work/${employeeId}/${userType}`,
-        formData
-      );
-      console.log(" ----------------  update-daily-work");
-      localStorage.removeItem(`loginTimeSaved_${employeeId}`);
-      localStorage.removeItem(`loginDetailsSaved_${employeeId}`);
-      localStorage.removeItem(`stopwatchTime_${employeeId}`);
-      localStorage.removeItem(`dailyWorkData_${employeeId}`);
-      localStorage.removeItem(`breaks_${employeeId}`);
-      localStorage.removeItem(`user_${userType}${employeeId}`);
-      localStorage.removeItem("paymentMade");
-
-      setTime({ hours: 0, minutes: 0, seconds: 0 });
-      setData({ archived: 0, pending: 10 });
-      console.log("Logged out successfully. in daily work last");
+      // console.log(" Fetched Work Id :- " + fetchWorkId);
+      // const breaksData = localStorage.getItem(`breaks_${employeeId}`);
+      // const breaks = breaksData ? JSON.parse(breaksData) : [];
+      // const totalHoursWork = calculateTotalHoursWork(
+      //   JSON.parse(localStorage.getItem(`loginTimeSaved_${employeeId}`)),
+      //   logoutTimestamp,
+      //   breaks
+      // );
+      // const now = new Date();
+      // const day = now.getDate().toString().padStart(2, "0");
+      // const month = (now.getMonth() + 1).toString().padStart(2, "0");
+      // const year = now.getFullYear();
+      // let present = "absent";
+      // if (data.pending >= 5 && data.archived >= 5) {
+      //   present = "present";
+      // }
+      // let checkHalfDay = "No";
+      // console.log(typeof totalHoursWork);
+      // const formData = {
+      //   employeeId,
+      //   date: `${year}-${month}-${day}`,
+      //   dailyTarget: data.pending + data.archived,
+      //   dailyArchived: data.archived,
+      //   dailyPending: data.pending,
+      //   logoutTime: logoutTimestamp,
+      //   totalHoursWork:totalHoursWork,
+      //   dailyHours: breaks,
+      //   dayPresentStatus: present,
+      //   lateMark,
+      //   leaveType,
+      //   paidLeave,
+      //   unpaidLeave,
+      //   dayPresentPaid,
+      //   dayPresentUnpaid,
+      // };
+      // await axios.put(
+      //   `${API_BASE_URL}/update-daily-work/${fetchWorkId} `,
+      //   formData
+      // );
+      // console.log(" ----------------  update-daily-work");
+      // localStorage.removeItem(`loginTimeSaved_${employeeId}`);
+      // localStorage.removeItem(`loginDetailsSaved_${employeeId}`);
+      // localStorage.removeItem(`stopwatchTime_${employeeId}`);
+      // localStorage.removeItem(`dailyWorkData_${employeeId}`);
+      // localStorage.removeItem(`breaks_${employeeId}`);
+      // localStorage.removeItem(`user_${userType}${employeeId}`);
+      // localStorage.removeItem("paymentMade");
+      // setTime({ hours: 0, minutes: 0, seconds: 0 });
+      // setData({ archived: 0, pending: 10 });
+      // console.log("Logged out successfully. in daily work last");
     } catch (error) {
       console.error("Error logging out:", error);
     }
@@ -1202,73 +1227,190 @@ function DailyWork({
     fetchAllImages();
   }, [messages]);
 
-  //New Puser Component Added By Arshad Attar On 04-03-2025
-  const [showBreakModal, setShowBreakModal] = useState(
-    JSON.parse(localStorage.getItem("showBreakModal")) || false
-  );
-  const [seconds, setSeconds] = useState(
-    parseInt(localStorage.getItem("breakTime")) || 0
-  );
-  const [isRunning, setIsRunning] = useState(
-    JSON.parse(localStorage.getItem("isRunning")) || false
-  );
+  const [newWordId, setNewWorkId] = useState(null);
+  const [loginHoursTimerStart, setLoginHoursTimerStart] = useState("00:00:00");
+  const [dailyWorkDataNew, setDailyWorkDataNew] = useState(null); // State to store getData
+  const [displayStopWatch, setDisplayStopWatch] = useState(false);
 
-  useEffect(() => {
-    let interval;
-    if (isRunning) {
-      interval = setInterval(() => {
-        setSeconds((prev) => {
-          const newTime = prev + 1;
-          localStorage.setItem("breakTime", newTime);
-          return newTime;
-        });
-      }, 1000);
-    } else {
-      clearInterval(interval);
+  const fetchNewWorkId = async () => {
+    try {
+      const currentDateNew = getFormattedDateISOYMDformat();
+      const resp = await axios.get(
+        `${API_BASE_URL}/fetch-work-id/${employeeId}/${userType}/${currentDateNew}`
+      );
+      const yesNo = resp.data;
+
+      if (typeof yesNo === "string") {
+        console.log("running post");
+
+        try {
+          const respPost = await axios.post(
+            `${API_BASE_URL}/save-daily-work/${employeeId}/${userType}`,
+            {
+              // callingCount:20,
+              // dailyArchived:3,
+              // dailyPending:7,
+              dailyTarget: 20,
+              date: `${currentDateNew}`,
+              // dayPresentStatus:"Present",
+              employeeName: `${loginEmployeeName}`,
+              // halfDay:"No",
+              // holidayLeave:"NO",
+              jobRole: `${userType}`,
+              lateMark: `${getLateMark()}`,
+              // leaveType:"Unpaid",
+              loginTime: `${getCurrentLogTime()}`,
+              // logoutTime:"00:00:00 am",
+              // remoteWork:"WFO",
+              totalHoursWork: "00:00:00",
+            }
+          );
+          console.log(respPost);
+          setLoginHoursTimerStart("00:00:00");
+          setDisplayStopWatch(true);
+        } catch (error1) {}
+      } else if (typeof yesNo === "number") {
+        console.log("running put");
+        try {
+          const getData = await getDailyworkData(
+            employeeId,
+            userType,
+            currentDateNew
+          );
+          console.log(getData);
+          setDailyWorkDataNew(getData);
+
+          const loginHoursTimerString = getData.totalHoursWork;
+
+          const getDataForUpdate = {
+            totalHoursWork: loginHoursTimerString,
+            attendanceRole: {
+              ...(userType === "Recruiters" && { employee: { employeeId } }),
+              ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
+              ...(userType === "Manager" && { manager: { employeeId } }),
+            },
+          };
+          console.log(getDataForUpdate);
+          try {
+            const putData = await putDailyworkData(
+              employeeId,
+              userType,
+              currentDateNew,
+              getDataForUpdate
+            );
+            console.log(putData);
+          } catch (errorPut) {}
+        } catch (errorget) {}
+      }
+    } catch (error) {
+      console.error(error);
     }
-    return () => clearInterval(interval);
-  }, [isRunning]);
+  };
+
+  console.log(dailyWorkDataNew);
 
   useEffect(() => {
-    localStorage.setItem("showBreakModal", JSON.stringify(showBreakModal));
-    localStorage.setItem("isRunning", JSON.stringify(isRunning));
-  }, [showBreakModal, isRunning]);
-
-  useEffect(() => {
-    if (JSON.parse(localStorage.getItem("showBreakModal")) === true) {
-      setShowBreakModal(true);
-      setIsRunning(true);
-    }
+    fetchNewWorkId();
   }, []);
 
-  const handleResume = () => {
-    setShowBreakModal(false);
-    setIsRunning(false);
-    setSeconds(0);
-    localStorage.setItem("breakTime", "0");
-    localStorage.setItem("showBreakModal", JSON.stringify(false));
-    localStorage.setItem("isRunning", JSON.stringify(false));
+  useEffect(() => {
+    if (dailyWorkDataNew && dailyWorkDataNew.totalHoursWork) {
+      console.log(
+        "Updating loginHoursTimerStart:",
+        dailyWorkDataNew.totalHoursWork
+      );
+      setLoginHoursTimerStart(dailyWorkDataNew.totalHoursWork);
+      setDisplayStopWatch(true);
+    }
+  }, [dailyWorkDataNew]);
 
-    setRunning(true);
-    const now = new Date().toLocaleTimeString("en-IN");
-    const updatedBreaks = breaks.map((b) =>
-      !b.breakEndTime ? { ...b, breakEndTime: now } : b
-    );
-    setBreaks(updatedBreaks);
-    localStorage.setItem(`breaks_${employeeId}`, JSON.stringify(updatedBreaks));
-    setAllowCloseModal(true); // Allow modal to close
-    setShowPauseModal(false); // Close the modal
+  const [breakStartTime, setBreakStartTime] = useState("");
+  const handleStopClick = async (value) => {
+    if (value) {
+      try {
+        setBreakStartTime(getCurrentTimeForUpdateData());
+        const getDataForUpdate = {
+          totalHoursWork: value,
+          attendanceRole: {
+            ...(userType === "Recruiters" && { employee: { employeeId } }),
+            ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
+            ...(userType === "Manager" && { manager: { employeeId } }),
+          },
+        };
+        console.log(getDataForUpdate);
+
+        const stopPutReq = await putDailyworkData(
+          employeeId,
+          userType,
+          currentDateNewGlobal,
+          getDataForUpdate
+        );
+        console.log(stopPutReq);
+        setShowPauseModal(true);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+  const handleStartClick = async (value) => {
+    if (value === true) {
+      const breakEndTime = getCurrentTimeForUpdateData();
+      try {
+        const getDataForUpdate = {
+          attendanceRole: {
+            ...(userType === "Recruiters" && { employee: { employeeId } }),
+            ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
+            ...(userType === "Manager" && { manager: { employeeId } }),
+          },
+          dailyHours: [
+            {
+              breakStartTime,
+              breakEndTime,
+            },
+          ],
+        };
+        console.log(getDataForUpdate);
+
+        const startPutReq = await putDailyworkData(
+          employeeId,
+          userType,
+          currentDateNewGlobal,
+          getDataForUpdate
+        );
+        console.log(startPutReq);
+      } catch (error) {}
+    }
+  };
+  const fetchDailyworkGetPendingAchivedData = async () => {
+    try {
+      const getData = await getDailyworkData(
+        employeeId,
+        userType,
+        currentDateNewGlobal
+      );
+
+      if (!getData || typeof getData !== "object") {
+        console.error(
+          "fetchDailyworkGetPendingAchivedData: No valid data received",
+          getData
+        );
+        return;
+      }
+
+      setDailyWorkDataNew((prev) => ({
+        ...prev,
+        dailyArchived: getData.dailyArchived ?? prev?.dailyArchived ?? 0, // Default to 0 if undefined
+        dailyPending: getData.dailyPending ?? prev?.dailyPending ?? 0,
+        dailyTarget: getData.dailyTarget ?? prev?.dailyTarget ?? 10, // Default target value
+      }));
+    } catch (error) {
+      console.error("Error fetching daily work data:", error);
+    }
   };
 
-  const formatTime = (time) => {
-    const minutes = Math.floor(time / 60);
-    const secs = time % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(
-      2,
-      "0"
-    )}`;
-  };
-
+  useEffect(() => {
+    fetchDailyworkGetPendingAchivedData();
+  }, [trigger, triggerFetch]); // Runs when 'trigger' changes
   return (
     <div className="daily-timeanddate">
       <a href="#">
@@ -1306,7 +1448,11 @@ function DailyWork({
             {contextHolder}
             <div className="daily-t-btn">
               <button className="daily-tr-btn" style={{ whiteSpace: "nowrap" }}>
-                Target : 10
+                Target:{" "}
+                {dailyWorkDataNew?.dailyTarget !== null &&
+                dailyWorkDataNew?.dailyTarget !== undefined
+                  ? dailyWorkDataNew.dailyTarget
+                  : 10}
               </button>
               <button
                 className="daily-tr-btn"
@@ -1314,7 +1460,11 @@ function DailyWork({
                   color: data.archived <= 3 ? "red" : "green",
                 }}
               >
-                Achieved : {data.archived}
+                Achieved :{" "}
+                {dailyWorkDataNew?.dailyArchived !== null &&
+                dailyWorkDataNew?.dailyArchived !== undefined
+                  ? dailyWorkDataNew.dailyArchived
+                  : 0}
               </button>
               <button
                 className="daily-tr-btn"
@@ -1322,16 +1472,29 @@ function DailyWork({
                   color: data.pending < 7 ? "green" : "red",
                 }}
               >
-                Pending : {data.pending}
+                Pending :{" "}
+                {dailyWorkDataNew?.dailyPending !== null &&
+                dailyWorkDataNew?.dailyPending !== undefined
+                  ? dailyWorkDataNew.dailyPending
+                  : 10}
               </button>
             </div>
-            <button className="loging-hr">
+            {/* <button className="loging-hr">
               <h6 hidden>Time: {currentTime}</h6>
               <h6 hidden>Date: {currentDate}</h6>
               Login Hours : {time.hours.toString().padStart(2, "0")}:
               {time.minutes.toString().padStart(2, "0")}:
               {time.seconds.toString().padStart(2, "0")}
-            </button>
+            </button> */}
+            {displayStopWatch && (
+              <Stopwatch
+                startTimer={loginHoursTimerStart}
+                onStopClick={handleStopClick}
+                onStartClick={handleStartClick}
+                onResumeClick={startResumeNewTimer}
+              />
+            )}
+
             <div hidden>
               <h6>Late Mark : {lateMark}</h6>
               <h6>Leave Type : {leaveType}</h6>
@@ -1356,13 +1519,13 @@ function DailyWork({
               </select>
             </div>
 
-            <button
+            {/* <button
               className={running ? "timer-break-btn" : "timer-break-btn"}
               onClick={running ? handlePause : handleResume}
               style={{ height: "30px" }}
             >
               {running ? "Pause" : "Resume"}
-            </button>
+            </button> */}
             <div style={{ display: "flex" }}>
               <div
                 style={{ marginRight: "10px" }}
@@ -1470,30 +1633,30 @@ function DailyWork({
               }
             }}
             className="dw-modal"
-            centered
-            backdrop="static"
-            keyboard={false}
           >
-            <div className="dw-modal-content">
-              <Modal.Title className="modal-title">Break Time! ⏳</Modal.Title>
-              <div className="modal-body">
-                <img
-                  src="https://t4.ftcdn.net/jpg/11/13/64/07/240_F_1113640772_HCjT1oIW0IN4DjKTP6FA33dsWrL1G0g4.jpg"
-                  alt="Break Time"
-                  className="break-image"
-                />
-                <h2 className="timer-text">⏲ {formatTime(seconds)}</h2>
-                <p className="break-text">
-                  Enjoy your break! The timer is running. 🌿
-                </p>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="dw-modal-content"
+            >
+              {/* none working close button removed date : 23-10-2024 */}
+              <Modal.Header>
+                <Modal.Title className="dw-modal-title">
+                  Break Runing...
+                </Modal.Title>
+              </Modal.Header>
+              <div>
+                <img src={watingImg} alt="Waiting" className="dw-waiting-img" />
               </div>
-              <Modal.Footer
-                className="custom-footer"
-                style={{ alignItems: "center", justifyContent: "center" }}
-              >
-                <button className="resume-button-main" onClick={handleResume}>
-                  <LogOut size={24} />
-                </button>
+              <Modal.Footer className="dw-modal-footer">
+                <div className="dw-resume-div">
+                  <h3>Timer is paused. Click Resume to continue...</h3>
+                  <button
+                    className="profile-resume-button"
+                    onClick={handleResume}
+                  >
+                    Resume
+                  </button>
+                </div>
               </Modal.Footer>
             </div>
           </Modal>

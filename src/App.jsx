@@ -80,8 +80,6 @@ const applySavedColors = () => {
     { variable: "--notification-ribben-color" },
     { variable: "--active-button1-bg" },
     { variable: "--selected-form-bg" },
-
-    
   ];
 
   if (bgColor)
@@ -164,7 +162,7 @@ const App = () => {
             element={<ApplicantForm2 loginEmployeeName={loginEmployeeName} />}
           ></Route>
 
-          <Route  
+          <Route
             path="/thank-you"
             element={<ThankYouPage></ThankYouPage>}
           ></Route>
@@ -179,7 +177,7 @@ const App = () => {
             path="/157industries/:employeeId/:userType/candidate-form"
             element={<ApplicationForm1 loginEmployeeName={loginEmployeeName}  />}
           ></Route> */}
-           <Route
+          <Route
             path="/tempRoute"
             element={<ApplicationForm1></ApplicationForm1>}
           ></Route>

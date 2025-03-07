@@ -9,14 +9,46 @@ import { Modal } from "react-bootstrap";
 import ColorPicker from "../HomePage/ColorPicker";
 import LogoutOnEvent from "./logoutOnEvent";
 import { getSocket } from "../EmployeeDashboard/socket";
-import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
 import { API_BASE_URL } from "../api/api";
-import { Avatar, Badge, notification, List, Card, Form, Select, Input, Radio, DatePicker, TimePicker } from "antd";
-import { BellOutlined, CloseOutlined, ClearOutlined, FormOutlined, CommentOutlined, PhoneOutlined, TeamOutlined, CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import {Modal as AntdModal} from "antd";
+import {
+  checkTimeThreshold,
+  getCurrentLogTime,
+  getFormattedDateTime,
+} from "../EmployeeSection/getFormattedDateTime";
+import {
+  Avatar,
+  Badge,
+  notification,
+  List,
+  Card,
+  Form,
+  Select,
+  Input,
+  Radio,
+  DatePicker,
+  TimePicker,
+} from "antd";
+import {
+  BellOutlined,
+  CloseOutlined,
+  ClearOutlined,
+  FormOutlined,
+  CommentOutlined,
+  PhoneOutlined,
+  TeamOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons";
+import { Modal as AntdModal } from "antd";
 import dayjs from "dayjs";
 import { getFormattedDateISOYMDformat } from "../EmployeeSection/getFormattedDateTime.jsx";
 import { toast } from "react-toastify";
+import {
+  getDailyworkData,
+  putDailyworkData,
+} from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable.jsx";
+import { useSelector } from "react-redux";
 
 // Swapnil_Sidebar_AddingEmployeeDetailsinto_ManagerSection_17/07
 
@@ -91,6 +123,8 @@ function Sidebar({
   const [showColor, setShowColor] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
   const [socket, setSocket] = useState(null);
+  const currentDateNewGlobal = getFormattedDateISOYMDformat();
+  const timeString = useSelector((state) => state.stopwatch.timeString);
 
   const navigator = useNavigate();
   const { employeeId, userType } = useParams();
@@ -132,14 +166,14 @@ function Sidebar({
     setSocket(newSocket);
   }, []);
 
-    //Arshad Commente this code, dont remove
-    const handleLogoutLocal = () => {
-      console.log("Logout clicked 01");
-      const logoutTime = new Date().toLocaleTimeString("en-IN");
-      console.log(logoutTime);
-      temproryLogout();
-      onLogout(logoutTime);
-    };  
+  //Arshad Commente this code, dont remove
+  const handleLogoutLocal = () => {
+    console.log("Logout clicked 01");
+    const logoutTime = new Date().toLocaleTimeString("en-IN");
+    console.log(logoutTime);
+    temproryLogout();
+    // onLogout(logoutTime);
+  };
 
   const temproryLogout = async () => {
     console.log("Logout clicked in Logout clicked 02");
@@ -148,7 +182,7 @@ function Sidebar({
       switch (`${userType}`) {
         case "SuperUser":
           requestBody = {
-            superUserId:employeeId,
+            superUserId: employeeId,
             employeeId: employeeId,
             userType: "SuperUser",
             employeeName: loginEmployeeName,
@@ -185,7 +219,7 @@ function Sidebar({
           console.error("Invalid user type");
           return;
       }
-      
+
       const response = await axios.post(
         `${API_BASE_URL}/user-logout-157/${userType}`,
         requestBody
@@ -193,6 +227,29 @@ function Sidebar({
 
       console.log(" user-logout-157 -- " + JSON.stringify(requestBody));
       console.log(response);
+
+      try {
+        const logoutTime = getCurrentLogTime();
+        const dailyWorkData = {
+          halfDay: `${checkTimeThreshold(timeString)}`,
+          logoutTime: `${logoutTime}`,
+          totalHoursWork: `${timeString}`,
+          attendanceRole: {
+            ...(userType === "Recruiters" && { employee: { employeeId } }),
+            ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
+            ...(userType === "Manager" && { manager: { employeeId } }),
+          },
+        };
+        const logoutPutReq = await putDailyworkData(
+          employeeId,
+          userType,
+          currentDateNewGlobal,
+          dailyWorkData
+        );
+        console.log(logoutPutReq);
+      } catch (error1) {
+        console.log(error1);
+      }
 
       if (socket && typeof socket.emit === "function") {
         socket.emit("user_logout_event", requestBody);
@@ -209,7 +266,6 @@ function Sidebar({
       console.log(
         "Logout Successfully And Status Updated Successfully.. in Side "
       );
-     
     } catch (error) {
       console.error("Error during logout:", error);
     }
@@ -310,7 +366,7 @@ function Sidebar({
     };
     return subMenuMap[buttonKey] || null;
   };
-  
+
   const toggleSubMenu = (subMenuKey) => (e) => {
     e.preventDefault();
     setActiveSubMenu(activeSubMenu === subMenuKey ? null : subMenuKey);
@@ -372,8 +428,6 @@ function Sidebar({
     if (callback) callback(e);
   };
 
-
-
   const isCandidateSectionActive = [
     "selfCalling",
     "lineUp",
@@ -396,7 +450,7 @@ function Sidebar({
     "questionPaper",
     "scheduleinterview",
     "addRecruiter",
-    "employeeDetails"
+    "employeeDetails",
   ].includes(activeButton);
   const isManagerActive = [
     "admin-section",
@@ -408,10 +462,10 @@ function Sidebar({
     "billing",
     "invoice",
     "assignC",
-  "managerTeamD",
-   "addTeamLeader",
-   "addCompany",
-   "capex"
+    "managerTeamD",
+    "addTeamLeader",
+    "addCompany",
+    "capex",
   ].includes(activeButton);
   const isSuperUserActive = [
     "admin-section",
@@ -423,10 +477,10 @@ function Sidebar({
     "billing",
     "invoice",
     "assignC",
-  "managerTeamD",
-   "addTeamLeader",
-   "addCompany",
-   "capex"
+    "managerTeamD",
+    "addTeamLeader",
+    "addCompany",
+    "capex",
   ].includes(activeButton);
   const isadminactive = ["teamleader", "addJobDescription"].includes(
     activeButton
@@ -460,7 +514,7 @@ function Sidebar({
         item.subMenu.some((subItem) => activeItem === subItem.key));
     const style = isSubMenu ? { marginLeft: "10px" } : {};
     /* Dhanashree_Sidebar_Date(09/08) End 151*/
-console.log(" jjjjjjjjjjjjjj "+ API_BASE_URL);
+    console.log(" jjjjjjjjjjjjjj " + API_BASE_URL);
 
     return (
       /* Dhanashree_Sidebar_Date(09/08) Start 157*/
@@ -501,200 +555,211 @@ console.log(" jjjjjjjjjjjjjj "+ API_BASE_URL);
       </li>
     );
   };
-const [openInterviewModal, setOpenInterviewModal] = useState(false);
-const [openInterviewModalForAction, setOpenInterviewModalForAction] = useState(false);
-const openInterviewReminderModal = ()=>{
-setOpenInterviewModal(true);
-localStorage.setItem("interviewReminderShown", getFormattedDateISOYMDformat());
-}
+  const [openInterviewModal, setOpenInterviewModal] = useState(false);
+  const [openInterviewModalForAction, setOpenInterviewModalForAction] =
+    useState(false);
+  const openInterviewReminderModal = () => {
+    setOpenInterviewModal(true);
+    localStorage.setItem(
+      "interviewReminderShown",
+      getFormattedDateISOYMDformat()
+    );
+  };
 
-const handleOk1 = () => {
-setOpenInterviewModal(false);
-};
-const handleCancel1 = () => {
-setOpenInterviewModal(false);
-SETREMINDER_INTERVAL(10 * 60 * 1000);
-};
+  const handleOk1 = () => {
+    setOpenInterviewModal(false);
+  };
+  const handleCancel1 = () => {
+    setOpenInterviewModal(false);
+    SETREMINDER_INTERVAL(10 * 60 * 1000);
+  };
 
-
-
-const [interviewFormData, setInterviewFormData] = useState({
-callingRemark: '',
-attendingStatus: '',
-comment: '',
-nextDate: '',
-nextTime: '',
-candidateId: "",
-    employeeId: "",
-    jobRole: "",
-    updatedBy: `${loginEmployeeName}`,
-    reminderId:"",
-});
-const getInterviewReminderDataByCanId = async(candidateId)=>{
-const response =await axios.get(`${API_BASE_URL}/get-reminder-data/${candidateId}`);
-console.log(response);
-
-setInterviewFormData((prev)=>({
-...prev,
-callingRemark: response.data.callingRemark,
-attendingStatus: response.data.attendingStatus,
-comment: response.data.comment,
-reminderId : response.data.reminderId ? response.data.reminderId : "",
-}))
-
-}
-const openAnotherModalForPerformAction = (item)=>{
-  setInterviewFormData((prev)=>({
-    ...prev,
-    candidateId : item.candidateId,
-    employeeId : item.empId,
-    jobRole : item.jobRole !== null ? item.jobRole : "Recruiters"
-  }));
-  getInterviewReminderDataByCanId(item.candidateId);
-setOpenInterviewModalForAction(true);
-}
-const handleAntdFormChange = (value, fieldName) => {
-setInterviewFormData((prev) => {
-  let updatedData = { ...prev, [fieldName]: value };
-
-  // Special cases based on dependent fields
-  if (fieldName === 'callingRemark') {
-    updatedData.attendingStatus = value === 'Call Done' ? prev.attendingStatus : '';
-    updatedData.nextDate = value !== 'Call Done' ? '' : prev.nextDate;
-    updatedData.nextTime = value !== 'Call Done' ? '' : prev.nextTime;
-  }
-
-  if (fieldName === 'attendingStatus') {
-    updatedData.nextDate = value === 'No' ? prev.nextDate : '';
-    updatedData.nextTime = value === 'No' ? prev.nextTime : '';
-  }
-
-  return updatedData;
-});
-};
-const [interviewsForToday, setInterviewsForToday] = useState({});
-const [filteredInterviews, setFilteredInterviews] = useState([]); 
-const handleOk2 = () => {
-  console.log(interviewFormData);
-
-  console.log(interviewFormData.reminderId === "");
-  
-  if (interviewFormData.reminderId === "") {
-    axios.post(`${API_BASE_URL}/save-reminder-data`, interviewFormData)
-    .then(response => {
-      toast.success("Reminder saved successfully!");
-      setInterviewFormData({
-        callingRemark: '',
-        attendingStatus: '',
-        comment: '',
-        nextDate: '',
-        nextTime: '',
-        candidateId: "",
-        employeeId: "",
-        jobRole: "",
-        updatedBy: loginEmployeeName, // No need for template literals here
-      });
-      
-    })
-    .catch(error => {
-      toast.error(error.response?.data?.message || "Something went wrong");
-    });
-  } else if (interviewFormData.reminderId !== ""){
-
-axios.put(`${API_BASE_URL}/update-reminder-data/${interviewFormData.candidateId}`, interviewFormData).then(response => {
-  toast.success("Reminder Updated successfully!");
-  setInterviewFormData({
-    callingRemark: '',
-    attendingStatus: '',
-    comment: '',
-    nextDate: '',
-    nextTime: '',
+  const [interviewFormData, setInterviewFormData] = useState({
+    callingRemark: "",
+    attendingStatus: "",
+    comment: "",
+    nextDate: "",
+    nextTime: "",
     candidateId: "",
     employeeId: "",
     jobRole: "",
-    updatedBy: loginEmployeeName, // No need for template literals here
+    updatedBy: `${loginEmployeeName}`,
+    reminderId: "",
   });
-  
-})
-.catch(error => {
-  toast.error(error.response?.data?.message || "Something went wrong");
-});
-
-  }
-  setOpenInterviewModalForAction(false);
-};
-
-const handleCancel2 = () => {
-setOpenInterviewModalForAction(false);
-};
-const getTodaysInterviews = async () => {
-  try {
-
-    const response = await axios.get(`${API_BASE_URL}/today-interview/${getFormattedDateISOYMDformat()}/${employeeId}/${userType}`);
+  const getInterviewReminderDataByCanId = async (candidateId) => {
+    const response = await axios.get(
+      `${API_BASE_URL}/get-reminder-data/${candidateId}`
+    );
     console.log(response);
-    
-    setInterviewsForToday(response.data); 
-  } catch (error) {
-    console.log(error);
-  }
-};
 
+    setInterviewFormData((prev) => ({
+      ...prev,
+      callingRemark: response.data.callingRemark,
+      attendingStatus: response.data.attendingStatus,
+      comment: response.data.comment,
+      reminderId: response.data.reminderId ? response.data.reminderId : "",
+    }));
+  };
+  const openAnotherModalForPerformAction = (item) => {
+    setInterviewFormData((prev) => ({
+      ...prev,
+      candidateId: item.candidateId,
+      employeeId: item.empId,
+      jobRole: item.jobRole !== null ? item.jobRole : "Recruiters",
+    }));
+    getInterviewReminderDataByCanId(item.candidateId);
+    setOpenInterviewModalForAction(true);
+  };
+  const handleAntdFormChange = (value, fieldName) => {
+    setInterviewFormData((prev) => {
+      let updatedData = { ...prev, [fieldName]: value };
 
-const filterUpcomingInterviews = (interviews) => {
-  const currentTime = new Date(); 
-  const currentTimestamp = currentTime.getTime(); 
+      // Special cases based on dependent fields
+      if (fieldName === "callingRemark") {
+        updatedData.attendingStatus =
+          value === "Call Done" ? prev.attendingStatus : "";
+        updatedData.nextDate = value !== "Call Done" ? "" : prev.nextDate;
+        updatedData.nextTime = value !== "Call Done" ? "" : prev.nextTime;
+      }
 
-  return interviews?.filter((item) => {
-    const interviewTime = item.interviewTime || "12:00 am"; // Default if missing
+      if (fieldName === "attendingStatus") {
+        updatedData.nextDate = value === "No" ? prev.nextDate : "";
+        updatedData.nextTime = value === "No" ? prev.nextTime : "";
+      }
 
-    // Convert interview time to timestamp
-    const interviewDateTime = new Date(currentTime.toDateString() + " " + interviewTime).getTime();
+      return updatedData;
+    });
+  };
+  const [interviewsForToday, setInterviewsForToday] = useState({});
+  const [filteredInterviews, setFilteredInterviews] = useState([]);
+  const handleOk2 = () => {
+    console.log(interviewFormData);
 
-    // Condition 1: Upcoming interviews (within the next 30 minutes)
-    const isUpcoming = interviewDateTime > currentTimestamp && interviewDateTime <= currentTimestamp + 30 * 60 * 1000;
+    console.log(interviewFormData.reminderId === "");
 
-    // Condition 2: Past interviews (before the current time) but `token` is NOT "yes"
-    const isPastButValid = interviewDateTime <= currentTimestamp && item.token !== "Yes";
+    if (interviewFormData.reminderId === "") {
+      axios
+        .post(`${API_BASE_URL}/save-reminder-data`, interviewFormData)
+        .then((response) => {
+          toast.success("Reminder saved successfully!");
+          setInterviewFormData({
+            callingRemark: "",
+            attendingStatus: "",
+            comment: "",
+            nextDate: "",
+            nextTime: "",
+            candidateId: "",
+            employeeId: "",
+            jobRole: "",
+            updatedBy: loginEmployeeName, // No need for template literals here
+          });
+        })
+        .catch((error) => {
+          toast.error(error.response?.data?.message || "Something went wrong");
+        });
+    } else if (interviewFormData.reminderId !== "") {
+      axios
+        .put(
+          `${API_BASE_URL}/update-reminder-data/${interviewFormData.candidateId}`,
+          interviewFormData
+        )
+        .then((response) => {
+          toast.success("Reminder Updated successfully!");
+          setInterviewFormData({
+            callingRemark: "",
+            attendingStatus: "",
+            comment: "",
+            nextDate: "",
+            nextTime: "",
+            candidateId: "",
+            employeeId: "",
+            jobRole: "",
+            updatedBy: loginEmployeeName, // No need for template literals here
+          });
+        })
+        .catch((error) => {
+          toast.error(error.response?.data?.message || "Something went wrong");
+        });
+    }
+    setOpenInterviewModalForAction(false);
+  };
 
-    return isUpcoming || isPastButValid;
-  });
-};
+  const handleCancel2 = () => {
+    setOpenInterviewModalForAction(false);
+  };
+  const getTodaysInterviews = async () => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/today-interview/${getFormattedDateISOYMDformat()}/${employeeId}/${userType}`
+      );
+      console.log(response);
 
-const [REMINDER_INTERVAL,SETREMINDER_INTERVAL] = useState(30 * 60 * 1000);
-const REMINDER_INTERVAL_ForContinous = 0.5 * 60 * 1000;
+      setInterviewsForToday(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-useEffect(() => {
-  getTodaysInterviews();
-  const reminderInterval = setInterval(() => {
+  const filterUpcomingInterviews = (interviews) => {
+    const currentTime = new Date();
+    const currentTimestamp = currentTime.getTime();
+
+    return interviews?.filter((item) => {
+      const interviewTime = item.interviewTime || "12:00 am"; // Default if missing
+
+      // Convert interview time to timestamp
+      const interviewDateTime = new Date(
+        currentTime.toDateString() + " " + interviewTime
+      ).getTime();
+
+      // Condition 1: Upcoming interviews (within the next 30 minutes)
+      const isUpcoming =
+        interviewDateTime > currentTimestamp &&
+        interviewDateTime <= currentTimestamp + 30 * 60 * 1000;
+
+      // Condition 2: Past interviews (before the current time) but `token` is NOT "yes"
+      const isPastButValid =
+        interviewDateTime <= currentTimestamp && item.token !== "Yes";
+
+      return isUpcoming || isPastButValid;
+    });
+  };
+
+  const [REMINDER_INTERVAL, SETREMINDER_INTERVAL] = useState(30 * 60 * 1000);
+  const REMINDER_INTERVAL_ForContinous = 0.5 * 60 * 1000;
+
+  useEffect(() => {
     getTodaysInterviews();
-  }, REMINDER_INTERVAL_ForContinous); 
-  return () => clearInterval(reminderInterval);
-}, []); 
+    const reminderInterval = setInterval(() => {
+      getTodaysInterviews();
+    }, REMINDER_INTERVAL_ForContinous);
+    return () => clearInterval(reminderInterval);
+  }, []);
 
-useEffect(() => {
-  if (interviewsForToday.data) {
-   
-    const upcomingInterviews = filterUpcomingInterviews(interviewsForToday.data);
-    setFilteredInterviews(upcomingInterviews);
+  useEffect(() => {
+    if (interviewsForToday.data) {
+      const upcomingInterviews = filterUpcomingInterviews(
+        interviewsForToday.data
+      );
+      setFilteredInterviews(upcomingInterviews);
 
-    const todayDate = getFormattedDateISOYMDformat();
-    const lastReminderDate = localStorage.getItem("interviewReminderShown");
+      const todayDate = getFormattedDateISOYMDformat();
+      const lastReminderDate = localStorage.getItem("interviewReminderShown");
 
-    if (lastReminderDate !== todayDate && upcomingInterviews.length > 0) {
-      openInterviewReminderModal();
-      localStorage.setItem("interviewReminderShown", todayDate);
-    }
-
-    if (upcomingInterviews.length > 0) {
-      const reminderInterval = setInterval(() => {
+      if (lastReminderDate !== todayDate && upcomingInterviews.length > 0) {
         openInterviewReminderModal();
-      }, REMINDER_INTERVAL); 
+        localStorage.setItem("interviewReminderShown", todayDate);
+      }
 
-      return () => clearInterval(reminderInterval);
+      if (upcomingInterviews.length > 0) {
+        const reminderInterval = setInterval(() => {
+          openInterviewReminderModal();
+        }, REMINDER_INTERVAL);
+
+        return () => clearInterval(reminderInterval);
+      }
     }
-  }
-}, [interviewsForToday]); 
-
+  }, [interviewsForToday]);
 
   return (
     <>
@@ -800,11 +865,12 @@ useEffect(() => {
                           : ""
                       }`}
                       onClick={toggleSubMenu("candidate")}
-                
                     >
                       <a href="#">
                         <i className="fa-solid fa-users"></i>
-                        <span className="sidebar-text newoverlayontopcss">Find Candidate</span>
+                        <span className="sidebar-text newoverlayontopcss">
+                          Find Candidate
+                        </span>
                         {successAddUpdateResponse ? (
                           <span className="text-xl font-bold text-red-600">
                             *
@@ -995,7 +1061,6 @@ useEffect(() => {
                       ? "Complete payment to access this feature"
                       : ""
                   }
-                
                 >
                   <a
                     href="#"
@@ -1125,10 +1190,9 @@ useEffect(() => {
                   <>
                     {userType != "Recruiters" && userType != "Vendor" ? (
                       <li
-                      
-                        className=
-                        {`${
-                          activeSubMenu === "TeamLeader-section" || isTeamLeaderActive
+                        className={`${
+                          activeSubMenu === "TeamLeader-section" ||
+                          isTeamLeaderActive
                             ? "active"
                             : ""
                         }`}
@@ -1136,7 +1200,6 @@ useEffect(() => {
                         //   activeButton === "TeamLeader-section" || isTeamLeaderActive ? "active" : ""
                         // }
                         onClick={toggleSubMenu("TeamLeader-section")}
-                 
                       >
                         <a href="#">
                           <i className="fa-solid fa-users"></i>
@@ -1294,15 +1357,12 @@ useEffect(() => {
 
                 {userType === "Manager" ? (
                   <li
-                  className=
-                        {`${
-                          activeSubMenu === "admin-section" || isManagerActive
-                            ? "active"
-                            : ""
-                        }`}
-            
+                    className={`${
+                      activeSubMenu === "admin-section" || isManagerActive
+                        ? "active"
+                        : ""
+                    }`}
                     onClick={toggleSubMenu("admin-section")}
-               
                   >
                     <a href="#">
                       <i className="fa-solid fa-computer"></i>
@@ -1564,12 +1624,11 @@ useEffect(() => {
                 {/* Arshad Attar Added New Cement button Logic as per, Subscription Status- On 28-11-2024 Start Line- 1166 to 12000 */}
                 {userType === "SuperUser" ? (
                   <li
-                  className=
-                        {`${
-                          activeSubMenu === "SuperUser" || isSuperUserActive
-                            ? "active"
-                            : ""
-                        }`}
+                    className={`${
+                      activeSubMenu === "SuperUser" || isSuperUserActive
+                        ? "active"
+                        : ""
+                    }`}
                     onClick={
                       paymentMade
                         ? handleButtonClick(
@@ -1587,7 +1646,6 @@ useEffect(() => {
                         ? "Complete payment to access this feature"
                         : ""
                     }
-       
                   >
                     <a
                       href="#"
@@ -1749,7 +1807,6 @@ useEffect(() => {
                   <li
                     className={activeSubMenu === "database" ? "active" : ""}
                     onClick={toggleSubMenu("database")}
-              
                   >
                     <a href="#">
                       <i className="fa-solid fa-database"></i>
@@ -1889,7 +1946,6 @@ useEffect(() => {
                   <li
                     className={activeSubMenu === "portal" ? "active" : ""}
                     onClick={toggleSubMenu("portal")}
-           
                   >
                     <a href="#">
                       <i className="fa-brands fa-linkedin"></i>
@@ -2055,7 +2111,6 @@ useEffect(() => {
                   <li
                     className={activeSubMenu === "help" ? "active" : ""}
                     onClick={toggleSubMenu("help")}
-             
                   >
                     <a href="#">
                       <i className="fa-regular fa-circle-question"></i>
@@ -2207,143 +2262,205 @@ useEffect(() => {
           </Modal.Dialog>
         </div>
       )}
-            {
-        openInterviewModal && (
-          
-          <>
-          <AntdModal title="Candidate's Data" open={openInterviewModal} onOk={handleOk1} onCancel={handleCancel1} width={1000} cancelText="Skip">
-         <div className="newhightformodaltable">
-          <table className="attendance-table">
-            <thead>
-              <tr className="attendancerows-head">
-                <th className="attendanceheading">Sr. No.</th>
-                <th className="attendanceheading">Candidate Id</th>
-                <th className="attendanceheading">Candidate's Name</th>
-                <th className="attendanceheading">Candidate's Email</th>
-                <th className="attendanceheading">Contact Number</th>
-                <th className="attendanceheading">Interview Date</th>
-                <th className="attendanceheading">Interview Time</th>
-                <th className="attendanceheading">Attending Status</th>
-                <th className="attendanceheading">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-            {filteredInterviews?.map((item, index) => (
-      <tr key={index} className="attendancerows">
-        <td className="tabledata">{index + 1}</td>
-        <td className="tabledata">{item.candidateId}</td>
-        <td className="tabledata">{item.candidateName}</td>
-        <td className="tabledata">{item.candidateEmail}</td>
-        <td className="tabledata">{item.contactNumber}</td>
-        <td className="tabledata">{item.availabilityForInterview}</td>
-        <td className="tabledata">{item.interviewTime}</td>
-        <td className="tabledata">{item.token? item.token : "-"}</td>
-        <td className="tabledata">
-          <FormOutlined onClick={(e)=>openAnotherModalForPerformAction(item)} />
-        </td>
-      </tr>
-    ))}
-             
-            </tbody>
-          </table>
-         </div>
+      {openInterviewModal && (
+        <>
+          <AntdModal
+            title="Candidate's Data"
+            open={openInterviewModal}
+            onOk={handleOk1}
+            onCancel={handleCancel1}
+            width={1000}
+            cancelText="Skip"
+          >
+            <div className="newhightformodaltable">
+              <table className="attendance-table">
+                <thead>
+                  <tr className="attendancerows-head">
+                    <th className="attendanceheading">Sr. No.</th>
+                    <th className="attendanceheading">Candidate Id</th>
+                    <th className="attendanceheading">Candidate's Name</th>
+                    <th className="attendanceheading">Candidate's Email</th>
+                    <th className="attendanceheading">Contact Number</th>
+                    <th className="attendanceheading">Interview Date</th>
+                    <th className="attendanceheading">Interview Time</th>
+                    <th className="attendanceheading">Attending Status</th>
+                    <th className="attendanceheading">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredInterviews?.map((item, index) => (
+                    <tr key={index} className="attendancerows">
+                      <td className="tabledata">{index + 1}</td>
+                      <td className="tabledata">{item.candidateId}</td>
+                      <td className="tabledata">{item.candidateName}</td>
+                      <td className="tabledata">{item.candidateEmail}</td>
+                      <td className="tabledata">{item.contactNumber}</td>
+                      <td className="tabledata">
+                        {item.availabilityForInterview}
+                      </td>
+                      <td className="tabledata">{item.interviewTime}</td>
+                      <td className="tabledata">
+                        {item.token ? item.token : "-"}
+                      </td>
+                      <td className="tabledata">
+                        <FormOutlined
+                          onClick={(e) =>
+                            openAnotherModalForPerformAction(item)
+                          }
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </AntdModal>
 
-          {
-            openInterviewModalForAction && (
-              <>
-            <AntdModal title="Perform Action" open={openInterviewModalForAction} onOk={handleOk2} onCancel={handleCancel2}>
-  <div className="infoMainDivMo">
-    <Form labelCol={{ span: 10 }} labelAlign="left" wrapperCol={{ span: 20 }} layout="horizontal">
-      
-      {/* Calling Remark */}
-      <Form.Item label="Calling Remark">
-        <Select
-          name="callingRemark"
-          value={interviewFormData.callingRemark}
-          onChange={(value) => handleAntdFormChange(value, 'callingRemark')}
-          prefix={<PhoneOutlined />}
-        >
-          <Select.Option value="Call Done">Call Done</Select.Option>
-          <Select.Option value="Asked for Call Back">Asked for Call Back</Select.Option>
-          <Select.Option value="No Answer">No Answer</Select.Option>
-          <Select.Option value="Network Issue">Network Issue</Select.Option>
-          <Select.Option value="Invalid Number">Invalid Number</Select.Option>
-          <Select.Option value="Need to call back">Need to call back</Select.Option>
-          <Select.Option value="Do not call again">Do not call again</Select.Option>
-          <Select.Option value="others">others</Select.Option>
-        </Select>
-      </Form.Item>
+          {openInterviewModalForAction && (
+            <>
+              <AntdModal
+                title="Perform Action"
+                open={openInterviewModalForAction}
+                onOk={handleOk2}
+                onCancel={handleCancel2}
+              >
+                <div className="infoMainDivMo">
+                  <Form
+                    labelCol={{ span: 10 }}
+                    labelAlign="left"
+                    wrapperCol={{ span: 20 }}
+                    layout="horizontal"
+                  >
+                    {/* Calling Remark */}
+                    <Form.Item label="Calling Remark">
+                      <Select
+                        name="callingRemark"
+                        value={interviewFormData.callingRemark}
+                        onChange={(value) =>
+                          handleAntdFormChange(value, "callingRemark")
+                        }
+                        prefix={<PhoneOutlined />}
+                      >
+                        <Select.Option value="Call Done">
+                          Call Done
+                        </Select.Option>
+                        <Select.Option value="Asked for Call Back">
+                          Asked for Call Back
+                        </Select.Option>
+                        <Select.Option value="No Answer">
+                          No Answer
+                        </Select.Option>
+                        <Select.Option value="Network Issue">
+                          Network Issue
+                        </Select.Option>
+                        <Select.Option value="Invalid Number">
+                          Invalid Number
+                        </Select.Option>
+                        <Select.Option value="Need to call back">
+                          Need to call back
+                        </Select.Option>
+                        <Select.Option value="Do not call again">
+                          Do not call again
+                        </Select.Option>
+                        <Select.Option value="others">others</Select.Option>
+                      </Select>
+                    </Form.Item>
 
-      {/* Interview Attending Status (Shown only if Calling Remark is 'Call Done') */}
-      {/* {interviewFormData.callingRemark === 'Call Done' && ( */}
-       <Form.Item label="Interview Attending Status">
-       <Radio.Group
-         name="attendingStatus"
-         value={interviewFormData.attendingStatus}
-         onChange={(e) => handleAntdFormChange(e.target.value, 'attendingStatus')}
-         className="newclassformakeflexandjustifyformodal"
-       >
-         <Radio value="Yes">
-          
-           Yes  <CheckCircleOutlined style={{ color: 'green', marginRight: 5 }} />
-         </Radio>
-         <Radio value="No">
-          
-           No  <CloseCircleOutlined style={{ color: 'red', marginRight: 5 }} />
-         </Radio>
+                    {/* Interview Attending Status (Shown only if Calling Remark is 'Call Done') */}
+                    {/* {interviewFormData.callingRemark === 'Call Done' && ( */}
+                    <Form.Item label="Interview Attending Status">
+                      <Radio.Group
+                        name="attendingStatus"
+                        value={interviewFormData.attendingStatus}
+                        onChange={(e) =>
+                          handleAntdFormChange(
+                            e.target.value,
+                            "attendingStatus"
+                          )
+                        }
+                        className="newclassformakeflexandjustifyformodal"
+                      >
+                        <Radio value="Yes">
+                          Yes{" "}
+                          <CheckCircleOutlined
+                            style={{ color: "green", marginRight: 5 }}
+                          />
+                        </Radio>
+                        <Radio value="No">
+                          No{" "}
+                          <CloseCircleOutlined
+                            style={{ color: "red", marginRight: 5 }}
+                          />
+                        </Radio>
 
-         <Radio value="Not Confirm">
-          
-         Not Confirm  <ExclamationCircleOutlined style={{ color: 'red', marginRight: 5 }} />
-         </Radio>
-       </Radio.Group>
-     </Form.Item>
-      {/* )} */}
+                        <Radio value="Not Confirm">
+                          Not Confirm{" "}
+                          <ExclamationCircleOutlined
+                            style={{ color: "red", marginRight: 5 }}
+                          />
+                        </Radio>
+                      </Radio.Group>
+                    </Form.Item>
+                    {/* )} */}
 
-      {/* Comment Field (Always visible) */}
-      <Form.Item label="Comment">
-        <Input
-        placeholder="Enter Comment..."
-          name="comment"
-          value={interviewFormData.comment}
-          onChange={(e) => handleAntdFormChange(e.target.value, 'comment')}
-          prefix={<CommentOutlined />}
-        />
-      </Form.Item>
+                    {/* Comment Field (Always visible) */}
+                    <Form.Item label="Comment">
+                      <Input
+                        placeholder="Enter Comment..."
+                        name="comment"
+                        value={interviewFormData.comment}
+                        onChange={(e) =>
+                          handleAntdFormChange(e.target.value, "comment")
+                        }
+                        prefix={<CommentOutlined />}
+                      />
+                    </Form.Item>
 
-      {/* Interview Date & Time (Only shown when 'Interview Attending Status' is 'No') */}
-      {interviewFormData.attendingStatus === 'No' && (
-        <Form.Item label="Next Interview Date">
-          <div className="wrappedForDisplayFle">
-            <DatePicker
-              name="nextDate"
-              style={{ marginRight: '10px' }}
-              format="YYYY-MM-DD"
-              value={interviewFormData.nextDate ? dayjs(interviewFormData.nextDate) : null}
-              onChange={(date) => handleAntdFormChange(date ? dayjs(date).format('YYYY-MM-DD') : '', 'nextDate')}
-            />
-            <TimePicker
-              name="nextTime"
-              format="hh:mm A"
-              value={interviewFormData.nextTime ? dayjs(interviewFormData.nextTime, 'hh:mm A') : null}
-              onChange={(time) => handleAntdFormChange(time ? dayjs(time).format('hh:mm A') : '', 'nextTime')}
-            />
-          </div>
-        </Form.Item>
+                    {/* Interview Date & Time (Only shown when 'Interview Attending Status' is 'No') */}
+                    {interviewFormData.attendingStatus === "No" && (
+                      <Form.Item label="Next Interview Date">
+                        <div className="wrappedForDisplayFle">
+                          <DatePicker
+                            name="nextDate"
+                            style={{ marginRight: "10px" }}
+                            format="YYYY-MM-DD"
+                            value={
+                              interviewFormData.nextDate
+                                ? dayjs(interviewFormData.nextDate)
+                                : null
+                            }
+                            onChange={(date) =>
+                              handleAntdFormChange(
+                                date ? dayjs(date).format("YYYY-MM-DD") : "",
+                                "nextDate"
+                              )
+                            }
+                          />
+                          <TimePicker
+                            name="nextTime"
+                            format="hh:mm A"
+                            value={
+                              interviewFormData.nextTime
+                                ? dayjs(interviewFormData.nextTime, "hh:mm A")
+                                : null
+                            }
+                            onChange={(time) =>
+                              handleAntdFormChange(
+                                time ? dayjs(time).format("hh:mm A") : "",
+                                "nextTime"
+                              )
+                            }
+                          />
+                        </div>
+                      </Form.Item>
+                    )}
+                  </Form>
+                </div>
+              </AntdModal>
+            </>
+          )}
+        </>
       )}
-    </Form>
-  </div>
-</AntdModal>
-
-              </>
-            )
-          }
-          
-          </>
-        )
-      }
-
     </>
   );
 }

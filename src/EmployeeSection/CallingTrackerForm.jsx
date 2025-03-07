@@ -41,12 +41,18 @@ import uploadingResumeStatic from "../assets/uploadStaticPngFile.png";
 import startPointImg from "../photos/start-line.png";
 import endpointImg from "../photos/finish.png";
 import { convertNumberToWords } from "./convertNumberToWords";
+import {
+  getDailyworkData,
+  putDailyworkData,
+} from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable";
+import { getFormattedDateISOYMDformat } from "./getFormattedDateTime";
 
 const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
   initialData = {},
   loginEmployeeName,
   onsuccessfulDataUpdation,
+  setRefresPropForDailyWork,
 }) => {
   const { employeeId, userType } = useParams();
   const [submited, setSubmited] = useState(false);
@@ -144,7 +150,7 @@ const CallingTrackerForm = ({
   const [isConfirmationPending, setIsConfirmationPending] = useState(false);
   const [displayCallingRemarkOthersInput, setDisplayCallingRemarkOthersInput] =
     useState(false);
-
+  const currentDateNewGlobal = getFormattedDateISOYMDformat();
   const handleCloseForm = () => {
     setIsFormVisible(false);
   };
@@ -204,6 +210,25 @@ const CallingTrackerForm = ({
     updateTimer();
     const timerInterval = setInterval(updateTimer, 1000);
     return () => clearInterval(timerInterval);
+  }, []);
+
+  const [dailyWorkDataNew, setDailyWorkDataNew] = useState(null); // State to store getData
+  const getDailyworkDataFunc = async () => {
+    try {
+      const getData = await getDailyworkData(
+        employeeId,
+        userType,
+        currentDateNewGlobal
+      );
+      console.log(getData);
+
+      setDailyWorkDataNew(getData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getDailyworkDataFunc();
   }, []);
 
   const ensureStringValue = (value) =>
@@ -653,6 +678,38 @@ const CallingTrackerForm = ({
       };
       if (callingTracker.selectYesOrNo === "Interested") {
         socket.emit("add_candidate", updatedCallingTracker);
+        try {
+          if (!dailyWorkDataNew) {
+            throw new Error("dailyWorkDataNew is null or undefined");
+          }
+
+          const getDataForUpdate = {
+            attendanceRole: {
+              ...(userType === "Recruiters" && { employee: { employeeId } }),
+              ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
+              ...(userType === "Manager" && { manager: { employeeId } }),
+            },
+            dailyArchived: (dailyWorkDataNew?.dailyArchived || 0) + 1, // Prevents NaN if value is null
+            dailyPending: (dailyWorkDataNew?.dailyPending || 0) - 1,
+            dayPresentStatus:
+              (dailyWorkDataNew?.dailyArchived ?? 0) + 1 >= 5 ? "Yes" : "No",
+          };
+
+          console.log(getDataForUpdate);
+
+          const putData = await putDailyworkData(
+            employeeId,
+            userType,
+            currentDateNewGlobal,
+            getDataForUpdate
+          );
+          let triggerState = false;
+          triggerState = !triggerState;
+          setRefresPropForDailyWork(triggerState);
+          getDailyworkDataFunc();
+        } catch (error) {
+          console.error("Error in updating daily work data:", error);
+        }
       }
 
       if (response.status === 200 || response.status === 201) {
@@ -698,6 +755,8 @@ const CallingTrackerForm = ({
       setLoading(false);
     }
   };
+
+  console.log(dailyWorkDataNew);
 
   //Arshad Attar Added this function to add data from excel and after added in data based delete from excel
   //added On Date : 22-11-2024
