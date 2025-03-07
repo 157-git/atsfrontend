@@ -18,6 +18,10 @@ import { getSocket } from "../EmployeeDashboard/socket";
 import uploadingResumeStatic from "../assets/uploadStaticPngFile.png";
 import { Button as ButtonAntd } from "antd";
 import { convertNumberToWords } from "./convertNumberToWords";
+import { getDailyworkData, putDailyworkData } from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable";
+import { getFormattedDateISOYMDformat } from "./getFormattedDateTime";
+import { useDispatch } from "react-redux";
+import { setTriggerFetch } from "../sclices/triggerSlice";
 // this line added by sahil karnekar on date 14-01-2024
 
 const UpdateSelfCalling = ({
@@ -125,6 +129,7 @@ const UpdateSelfCalling = ({
   const [errorInterviewSlot, seterrorInterviewSlot] = useState("");
   const [socket, setSocket] = useState(null);
   const [displaySourceOthersInput, setDisplaySourceOthersInput] = useState(false);
+  const dispatch = useDispatch();
   // updated by sahil karnekar date 18-10-2024
   const today = new Date();
   const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
@@ -700,6 +705,28 @@ console.log(callingTracker.contactNumber);
     setSocket(newSocket);
   }, []);
 
+
+
+  const [dailyWorkDataNew, setDailyWorkDataNew] = useState(null); // State to store getData
+  const currentDateNewGlobal = getFormattedDateISOYMDformat();
+    const getDailyworkDataFunc = async()=>{
+      try {
+        const getData =await getDailyworkData(employeeId, userType, currentDateNewGlobal);
+        console.log(getData);
+        
+        setDailyWorkDataNew(getData);
+      } catch (error) {
+        console.log(error); 
+      }
+    }
+    useEffect(()=>{
+      getDailyworkDataFunc();
+    },[]);
+  
+
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -834,6 +861,35 @@ console.log(callingTracker.contactNumber);
       if (callingTracker.selectYesOrNo === "Interested") {
         console.log("emit called", callingTrackerObjectForEmit);
         socket.emit("update_candidate", callingTrackerObjectForEmit);
+            try {
+                  if (!dailyWorkDataNew) {
+                    throw new Error("dailyWorkDataNew is null or undefined");
+                  }
+                
+                  const getDataForUpdate = {
+                    attendanceRole: {
+                      ...(userType === "Recruiters" && { employee: { employeeId } }),
+                      ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
+                      ...(userType === "Manager" && { manager: { employeeId } })
+                    },
+                    dailyArchived: (dailyWorkDataNew?.dailyArchived || 0) + 1, // Prevents NaN if value is null
+                    dailyPending: (dailyWorkDataNew?.dailyPending || 0) - 1,
+                    dayPresentStatus: ((dailyWorkDataNew?.dailyArchived ?? 0) + 1) >= 5 ? "Yes" : "No"
+                  };
+                
+                  console.log(getDataForUpdate);
+                
+                  const putData = await putDailyworkData(
+                    employeeId,
+                    userType,
+                    currentDateNewGlobal,
+                    getDataForUpdate
+                  );
+                  dispatch(setTriggerFetch());
+                  getDailyworkDataFunc();
+                } catch (error) {
+                  console.error("Error in updating daily work data:", error);
+                }
       }
       if (response.ok) {
         if (callingTracker.selectYesOrNo === "Interested") {
@@ -2738,6 +2794,7 @@ const ModalComponent = ({
       setCalculatedHike(hikePercentage.toFixed(2));
     }
   }, [expectedCTCLakh, expectedCTCThousand, convertedCurrentCTC]);
+
 
   return (
     <Modal size="xl" centered show={show} onHide={handleClose}>

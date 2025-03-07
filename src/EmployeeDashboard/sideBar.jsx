@@ -10,13 +10,15 @@ import ColorPicker from "../HomePage/ColorPicker";
 import { API_BASE_URL } from "../api/api";
 import LogoutOnEvent from "./logoutOnEvent";
 import { getSocket } from "../EmployeeDashboard/socket";
-import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
+import { checkTimeThreshold, getCurrentLogTime, getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
 import { Avatar, Badge, notification, List, Card, Form, Select, Input, Radio, DatePicker, TimePicker } from "antd";
 import { BellOutlined, CloseOutlined, ClearOutlined, FormOutlined, CommentOutlined, PhoneOutlined, TeamOutlined, CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import {Modal as AntdModal} from "antd";
 import dayjs from "dayjs";
 import { getFormattedDateISOYMDformat } from "../EmployeeSection/getFormattedDateTime.jsx";
 import { toast } from "react-toastify";
+import { getDailyworkData, putDailyworkData } from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable.jsx";
+import { useSelector } from "react-redux";
 
 // Swapnil_Sidebar_AddingEmployeeDetailsinto_ManagerSection_17/07
 
@@ -91,6 +93,8 @@ function Sidebar({
   const [showColor, setShowColor] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
   const [socket, setSocket] = useState(null);
+    const currentDateNewGlobal = getFormattedDateISOYMDformat();
+    const timeString = useSelector((state) => state.stopwatch.timeString);
 
   const navigator = useNavigate();
   const { employeeId, userType } = useParams();
@@ -138,7 +142,7 @@ function Sidebar({
       const logoutTime = new Date().toLocaleTimeString("en-IN");
       console.log(logoutTime);
       temproryLogout();
-      onLogout(logoutTime);
+      // onLogout(logoutTime);
     };  
 
   const temproryLogout = async () => {
@@ -194,6 +198,24 @@ function Sidebar({
       console.log(" user-logout-157 -- " + JSON.stringify(requestBody));
       console.log(response);
 
+      try {
+        const logoutTime = getCurrentLogTime();
+           const dailyWorkData =   {
+            halfDay: `${checkTimeThreshold(timeString)}`,
+              logoutTime: `${logoutTime}`,
+            totalHoursWork: `${timeString}`,
+            attendanceRole: {
+              ...(userType === "Recruiters" && { employee: { employeeId } }),
+              ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
+              ...(userType === "Manager" && { manager: { employeeId } })
+            },
+              }
+const logoutPutReq = await putDailyworkData(employeeId, userType, currentDateNewGlobal, dailyWorkData);
+console.log(logoutPutReq);
+      } catch (error1) {
+        console.log(error1);
+      }
+
       if (socket && typeof socket.emit === "function") {
         socket.emit("user_logout_event", requestBody);
         console.log(
@@ -210,6 +232,10 @@ function Sidebar({
         "Logout Successfully And Status Updated Successfully.. in Side "
       );
      
+
+     
+
+
     } catch (error) {
       console.error("Error during logout:", error);
     }

@@ -160,7 +160,7 @@ const App = () => {
           ></Route>
 
           <Route
-            path="/application-form/:encodedParams"
+            path="/applicants-form/:encodedParams"
             element={<ApplicantForm2 loginEmployeeName={loginEmployeeName} />}
           ></Route>
 

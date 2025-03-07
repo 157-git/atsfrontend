@@ -61,7 +61,7 @@ const getEncodeUrlString = async()=>{
   // exposing directly in file just for testing and normal use purpose, please set this secreat key in env file while deploying on server
   const secretKey = "157industries_pvt_ltd"; // Use a consistent key across components
 
-  const shareUrl = `https://rg.157careers.in/application-form/${firstName}+${userUrlString}`;
+  const shareUrl = `https://rg.157careers.in/applicants-form/${firstName}+${userUrlString}`;
 
   // Share using Web Share API
   const handleShareLink = async () => {

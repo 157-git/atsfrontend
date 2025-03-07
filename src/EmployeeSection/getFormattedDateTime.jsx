@@ -77,3 +77,25 @@ export const getLateMark = () => {
   }
   return "No"; // Not Late
 };
+export const getCurrentTimeForUpdateData = () => {
+  const now = new Date();
+  let hours = now.getHours();
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
+  const ampm = hours >= 12 ? "pm" : "am";
+
+  // Convert 24-hour format to 12-hour format
+  hours = hours % 12 || 12;
+
+  // Ensure two-digit format
+  const formattedTime = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")} ${ampm}`;
+  
+  return formattedTime;
+};
+
+export const checkTimeThreshold = (timeString) => {
+  const [hours, minutes, seconds] = timeString.split(":").map(Number);
+  const totalMinutes = hours * 60 + minutes + seconds / 60; // Convert total time to minutes
+
+  return totalMinutes >= 300 ? "No" : "Yes"; // 5 hours = 300 minutes
+};

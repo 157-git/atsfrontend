@@ -452,3 +452,17 @@ color: var(--notification-badge-background);
   border: none; /* Removes any borders if present */
   display: block; /* Ensures no extra space below the image */
 }
+.stopwatch-container{
+  display: flex;
+}
+.stopwatch-buttons{
+  display: flex;
+  justify-content: center;
+  margin-left: 5px;
+}
+.setDisplayFlexForLoginhrandbreak{
+  display: flex;
+}
+.newclassforhrbutton{
+  margin-right: 5px;
+}

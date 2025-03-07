@@ -619,6 +619,10 @@ const EmpDashboard = ({ userGroup }) => {
     resetAllToggles();
     setShowSharedProfile(true)
   };
+  const [triggerForChildTwo, setTriggerForChildTwo] = useState(false);
+  const handleSetRefresPropForDailyWork = ()=>{
+    setTriggerForChildTwo((prev) => !prev);
+  }
 
   return (
     <div
@@ -709,6 +713,7 @@ const EmpDashboard = ({ userGroup }) => {
             emailSenderInformation={handleEmailSenderInformation}
             successfulDataUpdation={successfulDataUpdation}
             loginEmployeeName={loginEmployeeName}
+            trigger={triggerForChildTwo}
           />
         </div>
 
@@ -846,6 +851,7 @@ const EmpDashboard = ({ userGroup }) => {
             <CallingTrackerForm
               loginEmployeeName={loginEmployeeName}
               onsuccessfulDataAdditions={handleSuccessfulDataAdditions}
+              setRefresPropForDailyWork={handleSetRefresPropForDailyWork}
             />
           )}
         </div>
