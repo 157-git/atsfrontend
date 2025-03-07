@@ -1248,8 +1248,8 @@ function DailyWork({
             `${API_BASE_URL}/save-daily-work/${employeeId}/${userType}`,
             {
               // callingCount:20,
-              // dailyArchived:3,
-              // dailyPending:7,
+              dailyArchived:0,
+              dailyPending:20,
               dailyTarget: 20,
               date: `${currentDateNew}`,
               // dayPresentStatus:"Present",
@@ -1452,7 +1452,7 @@ function DailyWork({
                 {dailyWorkDataNew?.dailyTarget !== null &&
                 dailyWorkDataNew?.dailyTarget !== undefined
                   ? dailyWorkDataNew.dailyTarget
-                  : 10}
+                  : 20}
               </button>
               <button
                 className="daily-tr-btn"
@@ -1476,7 +1476,7 @@ function DailyWork({
                 {dailyWorkDataNew?.dailyPending !== null &&
                 dailyWorkDataNew?.dailyPending !== undefined
                   ? dailyWorkDataNew.dailyPending
-                  : 10}
+                  : 20}
               </button>
             </div>
             {/* <button className="loging-hr">
