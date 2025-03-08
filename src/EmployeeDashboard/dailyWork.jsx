@@ -17,10 +17,7 @@ import {
   getFormattedDateISOYMDformat,
   getLateMark,
 } from "../EmployeeSection/getFormattedDateTime.jsx";
-import {
-  getDailyworkData,
-  putDailyworkData,
-} from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable.jsx";
+import { getDailyworkData,putDailyworkData } from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable.jsx";
 import { useSelector } from "react-redux";
 import { LogOut } from "lucide-react";
 import StopWatch from "./stopWatch.jsx";
