@@ -1308,7 +1308,6 @@ function DailyWork({
     }
   };
 
-  console.log(dailyWorkDataNew);
 
   useEffect(() => {
     fetchNewWorkId();
