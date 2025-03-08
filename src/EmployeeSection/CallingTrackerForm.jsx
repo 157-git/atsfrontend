@@ -22,6 +22,7 @@ import Loader from "./loader";
 // this libraries added by sahil karnekar date 21-10-2024
 import {
   Button,
+  Checkbox,
   Flex,
   message,
   notification,
@@ -96,6 +97,7 @@ const CallingTrackerForm = ({
     relevantExperience: "",
     currentCTCLakh: "",
     currentCTCThousand: "",
+    emailStatus:"No",
     expectedCTCLakh: "",
     expectedCTCThousand: "",
     dateOfBirth: "",
@@ -552,7 +554,16 @@ const CallingTrackerForm = ({
     const newSocket = getSocket();
     setSocket(newSocket);
   }, []);
-
+  console.log(lineUpData);
+  
+  const handleEmailCheckbox = (e) => {
+    const checkornot = e.target.checked
+   if (checkornot === true) {
+    lineUpData.emailStatus = "Yes";
+   }else {
+    lineUpData.emailStatus = "No";
+   }
+  };
   const handleSubmit = async (e) => {
     setShowConfirmation(false);
     e.preventDefault();
@@ -3107,6 +3118,9 @@ tooltips={desc} value={callingTracker.communicationRating}
                         information ?
                       </p>
                       <p>{callingTracker.errors}</p>
+                      <Checkbox onChange={handleEmailCheckbox} checked={lineUpData.emailStatus === "Yes"}>
+      Do You Want Send Email To Candidate ?
+    </Checkbox>
                       <div
                         style={{
                           display: "flex",

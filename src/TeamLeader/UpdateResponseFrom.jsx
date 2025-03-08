@@ -9,6 +9,7 @@ import Loader from "../EmployeeSection/loader";
 import { useParams } from "react-router-dom";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
+import { Popconfirm } from "antd";
 
 // SwapnilRokade_UpdateResponseFrom_addedProcessImprovmentEvaluatorFunctionalityStoringInterviweResponse_08_to_486_29/07/2024
 const UpdateResponseFrom = ({
@@ -38,6 +39,7 @@ const UpdateResponseFrom = ({
       interviewerName: "",
       requirementId,
       callingTracker: { candidateId: candidateId },
+      emailStatus:"No"
     };
 
     if (passedJobRole === "Recruiters") {
@@ -126,7 +128,7 @@ const UpdateResponseFrom = ({
     return new Intl.DateTimeFormat("en-IN", options).format(date);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, status) => {
     setSubmited(true);
     e.preventDefault();
     const validationErrors = validateForm();
@@ -173,6 +175,8 @@ const UpdateResponseFrom = ({
         candidateName: candidateName, // Added candidateName from props
         employeeName: employeeName, // Added employeeName from props
       };
+formData.emailStatus = status === "Yes" ? "Yes" : "No";
+console.log(formData);
 
       const response = await axios.post(
         `${API_BASE_URL}/save-interview-response/${employeeId}/${userType}`,
@@ -320,7 +324,7 @@ const UpdateResponseFrom = ({
       </div>
       {/* line 222 to 233 updated by sahil karnekar date 14-11-2024 */}
       <form
-        onSubmit={handleSubmit}
+        // onSubmit={handleSubmit}
         style={{
           overflowX: "scroll",
         }}
@@ -715,15 +719,27 @@ const UpdateResponseFrom = ({
             </tbody>
           </table>
         </div>
-        <div className="mt-4 flex gap-2 justify-end">
-          <button className="lineUp-share-btn" type="submit">
-            Update
-          </button>
+       
+      </form>
+      <div className="mt-4 flex gap-2 justify-end">
+      <Popconfirm
+  placement="leftTop"
+  title={"Do You Want to Send Email to Candidate?"}
+  onConfirm={(e) => handleSubmit(e, "Yes")}  // Calls handleSubmit with "Yes" when clicked
+  onCancel={(e) => handleSubmit(e, "No")}    // Calls handleSubmit with "No" when clicked
+  okText="Yes"
+  cancelText="No"
+  className="custompopconfirmUpdateResp"
+>
+  <button className="lineUp-share-btn">Update</button>
+</Popconfirm>
+
+
+         
           <button className="lineUp-share-btn" onClick={onClose}>
             Close
           </button>
         </div>
-      </form>
       {submited && (
         <div className="SCE_Loading_Animation">
           <Loader size={50} color="#ffb281" />
