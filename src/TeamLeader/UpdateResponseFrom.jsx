@@ -69,7 +69,21 @@ const UpdateResponseFrom = ({
     }
     return baseFormData;
   });
-
+  useEffect(() => {
+    // Apply background color when the component mounts
+    const style = document.createElement("style");
+    style.innerHTML = `
+      .ant-popover-inner {
+        background-color: #e4e4e4 !important;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      // Cleanup when component unmounts (optional)
+      document.head.removeChild(style);
+    };
+  }, []);
   useEffect(() => {
     fetchDataToUpdate();
   }, []);
@@ -721,7 +735,7 @@ console.log(formData);
         </div>
        
       </form>
-      <div className="mt-4 flex gap-2 justify-end">
+      <div className="mt-4 flex gap-2 justify-end custompopconfirmUpdateResp1">
       <Popconfirm
   placement="leftTop"
   title={"Do You Want to Send Email to Candidate?"}
