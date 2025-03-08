@@ -21,9 +21,9 @@ import {
   getDailyworkData,
   putDailyworkData,
 } from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable.jsx";
-import Stopwatch from "../HandlerFunctions/stopWatch.jsx";
 import { useSelector } from "react-redux";
 import { LogOut } from "lucide-react";
+import StopWatch from "../HandlerFunctions/StopWatch.jsx";
 
 
 //SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
@@ -1479,7 +1479,7 @@ function DailyWork({
               {time.seconds.toString().padStart(2, "0")}
             </button> */}
             {displayStopWatch && (
-              <Stopwatch
+              <StopWatch
                 startTimer={loginHoursTimerStart}
                 onStopClick={handleStopClick}
                 onStartClick={handleStartClick}

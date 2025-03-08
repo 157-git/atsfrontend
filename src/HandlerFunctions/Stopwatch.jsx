@@ -5,7 +5,7 @@ import { startTimer, stopTimer, updateTime } from "../sclices/stopwatchSlice";
 import { getFormattedDateISOYMDformat } from "../EmployeeSection/getFormattedDateTime";
 import { putDailyworkData } from "./getDailyWorkDataByIdTypeDateReusable";
 
-const Stopwatch = ({ startTimer: startProp, onStopClick, onStartClick, onResumeClick }) => {
+const StopWatch = ({ startTimer: startProp, onStopClick, onStartClick, onResumeClick }) => {
   const { employeeId, userType } = useParams();
   const currentDateNewGlobal = getFormattedDateISOYMDformat();
   const dispatch = useDispatch();
@@ -105,4 +105,4 @@ const Stopwatch = ({ startTimer: startProp, onStopClick, onStartClick, onResumeC
   );
 };
 
-export default Stopwatch;
+export default StopWatch;
