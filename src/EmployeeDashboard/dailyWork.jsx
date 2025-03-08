@@ -31,6 +31,7 @@ import {
 import Stopwatch from "../HandlerFunctions/StopWatch.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { setTriggerFetch } from "../sclices/triggerSlice.jsx";
+import { LogOut } from "lucide-react";
 
 //SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
 function DailyWork({
@@ -1641,20 +1642,22 @@ function DailyWork({
               {/* none working close button removed date : 23-10-2024 */}
               <Modal.Header>
                 <Modal.Title className="dw-modal-title">
-                  Break Runing...
+                Break Time! ⏳
                 </Modal.Title>
               </Modal.Header>
               <div>
-                <img src={watingImg} alt="Waiting" className="dw-waiting-img" />
+                <img 
+          src="https://t4.ftcdn.net/jpg/11/13/64/07/240_F_1113640772_HCjT1oIW0IN4DjKTP6FA33dsWrL1G0g4.jpg"
+                 alt="Waiting" className="dw-waiting-img" />
               </div>
               <Modal.Footer className="dw-modal-footer">
                 <div className="dw-resume-div">
-                  <h3>Timer is paused. Click Resume to continue...</h3>
+                  <h3>Enjoy your break! The timer is running. 🌿</h3>
                   <button
                     className="profile-resume-button"
                     onClick={handleResume}
                   >
-                    Resume
+                 <LogOut size={24} color="black" />
                   </button>
                 </div>
               </Modal.Footer>
