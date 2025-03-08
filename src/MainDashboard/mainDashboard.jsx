@@ -1,7 +1,6 @@
 
 import React, { useEffect } from "react";
 import "./mainDashboard.css";
-// import clouds from '../LogoImages/clouds.png';
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {

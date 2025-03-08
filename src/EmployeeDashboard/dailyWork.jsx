@@ -23,7 +23,7 @@ import {
 } from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable.jsx";
 import { useSelector } from "react-redux";
 import { LogOut } from "lucide-react";
-import StopWatch from "../HandlerFunctions/StopWatch.jsx";
+import StopWatch from "./stopWatch.jsx";
 
 
 //SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
