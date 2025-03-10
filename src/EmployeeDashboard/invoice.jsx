@@ -4,10 +4,11 @@ import React, { useState } from "react";
 import "./invoice.css";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { API_BASE_URL } from "../api/api";
+// import { API_BASE_URL } from "../api/api";
 // SwapnilRokade_InvoiceTable_StroreFormDateToDatabase__07_to_654_12/07
 // SwapnilRokade_InvoiceTable_StoringSupplierSection_09To664_15/07
 const InvoiceTable = () => {
+  const API_BASE_URL = "https://rg.157careers.in/api/ats/157industries";
   const [formData, setFormData] = useState({
     invoiceDate: "",
     clientName: "",
@@ -64,13 +65,6 @@ const InvoiceTable = () => {
       email: "",
       mobile: "",
     },
-    //Arshad Attar Comment this 21-10-2024
-    // clientDetails: {
-    //   name: "",
-    //   designation: "",
-    //   email: "",
-    //   mobile: "",
-    // },
     supplierDetails: {
       supplierName: "",
       supplierOfficeNo: "",
@@ -735,46 +729,6 @@ const InvoiceTable = () => {
                   />
                 </div>
               </div>
-
-
-
-              {/* //Arshad Attar Comment : - Start Line 741 / 21-10-2024 */}
-              {/* <div className="field-Row-white">
-                <div className="field">
-                  <label>Client details</label>
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    // value={formData.clientDetails.name}
-                    // onChange={handleCompanyDetailsChange}
-                  />
-                  <label>Designation</label>
-                  <input
-                    type="text"
-                    name="designation"
-                    // value={formData.clientDetails.designation}
-                    // onChange={handleCompanyDetailsChange}
-                  />
-                </div>
-                <div className="field">
-                  <label>Email</label>
-                  <input
-                    type="text"
-                    name="email"
-                    // value={formData.clientDetails.email}
-                    // onChange={handleCompanyDetailsChange}
-                  />
-                  <label>Mobile</label>{" "}
-                  <input
-                    type="text"
-                    name="mobile"
-                    // value={formData.clientDetails.mobile}
-                    // onChange={handleCompanyDetailsChange}
-                  />
-                </div>
-              </div> */}
-                  {/* //Arshad Attar Comment : - end Line 77 / 21-10-2024 */}
               
               <div className="field-Row-Gray">
                 <div className="field">

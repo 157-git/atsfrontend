@@ -182,7 +182,7 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
       <h2 className="title newclassfortitleform">Interview Details</h2>
       <div className="form-row">
         <div className="form-group small newformgroupforinterviewquestionsform">
-          <label>Requirement Id:</label>
+          <label>Job Id:</label>
           <select
             value={indexRequirment}
             onChange={handleJobChange}
@@ -191,7 +191,7 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
             <option value="">Select Job ID</option>
             {requirementOptions.map((item, index) => (
               <option key={index} value={index}>
-                Job Id : {item.requirementId} {item.companyName}
+              <strong>  {item.requirementId}</strong> : {item.companyName}
               </option>
             ))}
           </select>

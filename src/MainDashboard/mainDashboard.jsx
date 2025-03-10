@@ -1,8 +1,8 @@
 
 import React, { useEffect } from "react";
 import "./mainDashboard.css";
-// import clouds from '../LogoImages/clouds.png';
 import { useNavigate } from "react-router-dom";
+// import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -19,6 +19,7 @@ const Home = () => {
       navigate(`/employee-login/${userType}`);
     }
   };
+  
 
   useEffect(() => {
     // Retrieve the saved color from local storage and apply it

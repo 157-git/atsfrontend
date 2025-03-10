@@ -97,7 +97,7 @@ const CallingTrackerForm = ({
     relevantExperience: "",
     currentCTCLakh: "",
     currentCTCThousand: "",
-    emailStatus:"No",
+    emailStatus: "",
     expectedCTCLakh: "",
     expectedCTCThousand: "",
     dateOfBirth: "",
@@ -555,14 +555,14 @@ const CallingTrackerForm = ({
     setSocket(newSocket);
   }, []);
   console.log(lineUpData);
-  
+
   const handleEmailCheckbox = (e) => {
-    const checkornot = e.target.checked
-   if (checkornot === true) {
-    lineUpData.emailStatus = "Yes";
-   }else {
-    lineUpData.emailStatus = "No";
-   }
+    const checkornot = e.target.checked;
+    if (checkornot === true) {
+      lineUpData.emailStatus = "yes";
+    } else {
+      lineUpData.emailStatus = "no";
+    }
   };
   const handleSubmit = async (e) => {
     setShowConfirmation(false);

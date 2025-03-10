@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { startTimer, stopTimer, updateTime } from "../sclices/stopwatchSlice";
 import { getFormattedDateISOYMDformat } from "../EmployeeSection/getFormattedDateTime";
-import { putDailyworkData } from "./getDailyWorkDataByIdTypeDateReusable";
+import { putDailyworkData } from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable";
 
-const Stopwatch = ({ startTimer: startProp, onStopClick, onStartClick, onResumeClick }) => {
+const StopWatch = ({ startTimer: startProp, onStopClick, onStartClick, onResumeClick }) => {
   const { employeeId, userType } = useParams();
   const currentDateNewGlobal = getFormattedDateISOYMDformat();
   const dispatch = useDispatch();
@@ -105,4 +105,4 @@ const Stopwatch = ({ startTimer: startProp, onStopClick, onStartClick, onResumeC
   );
 };
 
-export default Stopwatch;
+export default StopWatch;

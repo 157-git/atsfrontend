@@ -2,35 +2,26 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "../EmployeeDashboard/dailyWork.css";
-import Profile from "../photos/profileImg.webp";
 import dummyUserImg from "../photos/DummyUserImg.png";
-import logoutImg from "../photos/download.jpeg";
 import { Modal } from "react-bootstrap";
-import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
 import { API_BASE_URL } from "../api/api";
-import watingImg from "../photos/fire-relax.gif";
 // line 12 to 19 added by sahil karnekar on date 14-01-2025
-import { setProfileImageFromRedux } from "../EmployeeDashboard/employeeSlice.jsx";
 //added by sahil karnekar and commented because it was implemented just for testing purpose but dont remove this
 import { Avatar, Badge, notification, List, Card } from "antd";
 import { BellOutlined, CloseOutlined, ClearOutlined } from "@ant-design/icons";
 import { initializeSocket } from "./socket.jsx";
-import notificationIcon from "../assets/notificationicon.png";
 import Meta from "antd/es/card/Meta.js";
 import {
   getCurrentLogTime,
   getCurrentTimeForUpdateData,
   getFormattedDateISOYMDformat,
-  getFormattedDateOnly,
   getLateMark,
 } from "../EmployeeSection/getFormattedDateTime.jsx";
-import {
-  getDailyworkData,
-  putDailyworkData,
-} from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable.jsx";
-import Stopwatch from "../HandlerFunctions/StopWatch.jsx";
-import { useDispatch, useSelector } from "react-redux";
-import { setTriggerFetch } from "../sclices/triggerSlice.jsx";
+import { getDailyworkData,putDailyworkData } from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable.jsx";
+import { useSelector } from "react-redux";
+import { LogOut } from "lucide-react";
+import StopWatch from "./stopWatch.jsx";
+
 
 //SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
 function DailyWork({
@@ -1248,8 +1239,8 @@ function DailyWork({
             `${API_BASE_URL}/save-daily-work/${employeeId}/${userType}`,
             {
               // callingCount:20,
-              dailyArchived:0,
-              dailyPending:20,
+              dailyArchived: 0,
+              dailyPending: 20,
               dailyTarget: 20,
               date: `${currentDateNew}`,
               // dayPresentStatus:"Present",
@@ -1306,7 +1297,6 @@ function DailyWork({
       console.error(error);
     }
   };
-
 
   useEffect(() => {
     fetchNewWorkId();
@@ -1486,7 +1476,7 @@ function DailyWork({
               {time.seconds.toString().padStart(2, "0")}
             </button> */}
             {displayStopWatch && (
-              <Stopwatch
+              <StopWatch
                 startTimer={loginHoursTimerStart}
                 onStopClick={handleStopClick}
                 onStartClick={handleStartClick}
@@ -1535,7 +1525,6 @@ function DailyWork({
                   count={messages.length}
                 >
                   <Avatar shape="square" icon={<BellOutlined />} />
-                  {/* <img src={notificationIcon} alt="" /> */}
                 </Badge>
               </div>
             </div>
@@ -1640,20 +1629,24 @@ function DailyWork({
               {/* none working close button removed date : 23-10-2024 */}
               <Modal.Header>
                 <Modal.Title className="dw-modal-title">
-                  Break Runing...
+                  Break Time! ⏳
                 </Modal.Title>
               </Modal.Header>
               <div>
-                <img src={watingImg} alt="Waiting" className="dw-waiting-img" />
+                <img
+                  src="https://t4.ftcdn.net/jpg/11/13/64/07/240_F_1113640772_HCjT1oIW0IN4DjKTP6FA33dsWrL1G0g4.jpg"
+                  alt="Waiting"
+                  className="dw-waiting-img"
+                />
               </div>
               <Modal.Footer className="dw-modal-footer">
                 <div className="dw-resume-div">
-                  <h3>Timer is paused. Click Resume to continue...</h3>
+                  <h3>Enjoy your break! The timer is running. 🌿</h3>
                   <button
                     className="profile-resume-button"
                     onClick={handleResume}
                   >
-                    Resume
+                    <LogOut size={24} color="black" />
                   </button>
                 </div>
               </Modal.Footer>
