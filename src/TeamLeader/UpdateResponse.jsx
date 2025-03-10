@@ -9,6 +9,7 @@ import Loader from "../EmployeeSection/loader";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import { Pagination } from "antd";
 import { set } from "date-fns";
+import {Modal as AntdModal} from "antd";
 
 const UpdateResponse = ({ onSuccessAdd, date }) => {
   const [updateResponseList, setUpdateResponseList] = useState([]);
@@ -984,13 +985,14 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
               ) : (
                 <>
                   <div className="update-response-table">
-                    <Modal
-                      show={showUpdateResponseForm}
-                      onHide={closeUpdateForm}
-                      size="xl"
-                      centered
+                    <AntdModal
+                      open={showUpdateResponseForm}
+                      onCancel={closeUpdateForm}
+                      width="90%"
+  centered
+  footer={null}
                     >
-                      <Modal.Body>
+                      {/* <Modal.Body> */}
                         <div className="TeamLead-main-table-container">
                           <UpdateResponseFrom
                             candidateId={showUpdateResponseID}
@@ -1003,8 +1005,8 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                             onSuccessAdd={onSuccessAdd}
                           />
                         </div>
-                      </Modal.Body>
-                    </Modal>
+                      {/* </Modal.Body> */}
+                    </AntdModal>
                   </div>
                 </>
               )}

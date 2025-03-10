@@ -2323,6 +2323,7 @@ function Sidebar({
                 open={openInterviewModalForAction}
                 onOk={handleOk2}
                 onCancel={handleCancel2}
+                width={650}
               >
                 <div className="infoMainDivMo">
                   <Form

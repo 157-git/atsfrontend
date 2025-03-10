@@ -210,7 +210,7 @@
 
 .login1 {
     background-color: var(--button-color);
-    color: white;
+    color: var(--button-txt-color);
     margin-left: 0;
 }
 @media (max-width: 768px) {

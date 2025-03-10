@@ -9,7 +9,7 @@ import Loader from "../EmployeeSection/loader";
 import { useParams } from "react-router-dom";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
-import { Popconfirm } from "antd";
+import { Modal, Popconfirm } from "antd";
 
 // SwapnilRokade_UpdateResponseFrom_addedProcessImprovmentEvaluatorFunctionalityStoringInterviweResponse_08_to_486_29/07/2024
 const UpdateResponseFrom = ({
@@ -143,6 +143,7 @@ const UpdateResponseFrom = ({
   };
 
   const handleSubmit = async (e, status) => {
+    setDisplayEmailConfirm(false);
     setSubmited(true);
     e.preventDefault();
     const validationErrors = validateForm();
@@ -328,6 +329,12 @@ console.log(formData);
   
     return `${String(hour).padStart(2, "0")}:${minute}`;
   };
+
+const [displayEmailConfirm, setDisplayEmailConfirm]= useState(false);
+  const displayModalForEmailConfirm = ()=>{
+    setDisplayEmailConfirm(true);
+  }
+
 
   return (
     <div className="update-response-modal">
@@ -736,7 +743,7 @@ console.log(formData);
        
       </form>
       <div className="mt-4 flex gap-2 justify-end custompopconfirmUpdateResp1">
-      <Popconfirm
+      {/* <Popconfirm
   placement="leftTop"
   title={"Do You Want to Send Email to Candidate?"}
   onConfirm={(e) => handleSubmit(e, "Yes")}  // Calls handleSubmit with "Yes" when clicked
@@ -744,9 +751,9 @@ console.log(formData);
   okText="Yes"
   cancelText="No"
   className="custompopconfirmUpdateResp"
->
-  <button className="lineUp-share-btn">Update</button>
-</Popconfirm>
+> */}
+  <button className="lineUp-share-btn" onClick={displayModalForEmailConfirm}>Update</button>
+{/* </Popconfirm> */}
 
 
          
@@ -759,6 +766,19 @@ console.log(formData);
           <Loader size={50} color="#ffb281" />
         </div>
       )}
+      {
+        displayEmailConfirm && (
+          <Modal
+  title="Do You Want to Send Email to Candidate?"
+  open={displayEmailConfirm}
+  onOk={(e) => handleSubmit(e, "Yes")} 
+  onCancel={(e) => handleSubmit(e, "No")} 
+  okText="Yes"
+  cancelText="No"
+>
+</Modal>
+        )
+      }
     </div>
   );
 };

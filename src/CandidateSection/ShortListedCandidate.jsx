@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../CandidateSection/shortlistedcandidate.css";
 import UpdateCallingTracker from "../EmployeeSection/UpdateSelfCalling";
@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { toast } from "react-toastify";
-import { Alert, Avatar, Card, List, Pagination, Skeleton } from "antd";
+import { Alert, Avatar, Badge, Card, List, Pagination, Skeleton } from "antd";
 import axios from "axios";
 import { highlightText } from "./HighlightTextHandlerFunc";
 import FilterData from "../helper/filterData";
@@ -53,6 +53,8 @@ const ShortListedCandidates = ({
   const [recruitersList, setRecruitersList] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const { employeeId, userType } = useParams();
+   // rajalxmi jagadale Added taht line
+   const filterRef=useRef(null);
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
@@ -118,6 +120,20 @@ const ShortListedCandidates = ({
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (filterRef.current && !filterRef.current.contains(event.target)) {
+        setActiveFilterOption(null); // Close filter dropdown when clicking outside
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const handleMouseOut = (event) => {
     const tooltip = event.currentTarget.querySelector(".tooltip");
     if (tooltip) {
@@ -138,17 +154,25 @@ const ShortListedCandidates = ({
  // Pranjali Raut_handleSelectAll (20-01-25)
   const handleSelectAll = () => {
     if (allSelected) {
-      // Deselect all rows
       setSelectedRows((prevSelectedRows) => 
         prevSelectedRows.filter((id) => !shortListedData.map((item) => item.candidateId).includes(id))
       );
     } else {
-      // Select all rows on the current page
       const allRowIds = shortListedData.map((item) => item.candidateId);
       setSelectedRows((prevSelectedRows) => [...new Set([...prevSelectedRows, ...allRowIds])]);
     }
     setAllSelected(!allSelected);
   };
+
+
+  const areAllRowsSelectedOnPage = shortListedData.every((item) =>
+    selectedRows.includes(item.candidateId)
+  );
+
+  useEffect(() => {
+    setAllSelected(areAllRowsSelectedOnPage);
+  }, [shortListedData, selectedRows]);  
+
 
   const handleSelectRow = (candidateId) => {
     setSelectedRows((prevSelectedRows) => {
@@ -401,6 +425,20 @@ const handleSearchClick = ()=>{
     recruitersList
   );
   
+
+  const handleClearAll = () => {
+    setSelectedFilters({});
+  };
+  const handleClear = () => {
+    setQuery('');
+    window.location.reload(); 
+  };
+
+  const countSelectedValues = (option) => {
+    return selectedFilters[option] ? selectedFilters[option].length : 0;
+  };
+
+  
  const [allImagesForRecruiters, setAllImagesForRecruiters] = useState([]); // Initialize as an object
   useEffect(() => {
     const fetchAllImagesForRecruiters = async () => {
@@ -625,13 +663,22 @@ const handleSearchClick = ()=>{
                         ) : (
                           <div style={{ display: "flex", gap: "5px" }}>
 
-        <label style={{ fontWeight: "bold", marginRight:0 }}>Selected Candidates:</label>
-        <input 
+        {/* <label style={{ fontWeight: "bold", marginRight:0 }}>Selected Candidates:</label> */}
+
+        <Badge
+                  color="var(--notification-badge-background)"
+                  count={selectedRows.length}
+                  className="newBadgeselectedcandidatestyle"
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M222-200 80-342l56-56 85 85 170-170 56 57-225 226Zm0-320L80-662l56-56 85 85 170-170 56 57-225 226Zm298 240v-80h360v80H520Zm0-320v-80h360v80H520Z"/></svg>
+                </Badge>
+      
+        {/* <input 
           type="text" 
           value={selectedRows.length} 
           readOnly 
           style={{ width: "50px", textAlign: "center", fontWeight: "bold",  marginRight:"10px"}} 
-        />
+        /> */}
                             <button
                               className="lineUp-share-btn"
                               onClick={() => {
@@ -670,7 +717,7 @@ const handleSearchClick = ()=>{
                     </button>
                   </div>
                 </div>
-                {showFilterSection && (
+                {/* {showFilterSection && (
                   <div className="filter-section">
                     {limitedOptions.map(([optionKey, optionLabel]) => {
                       const uniqueValues = Array.from(
@@ -735,6 +782,90 @@ const handleSearchClick = ()=>{
                       );
                     })}
                   </div>
+                )} */}
+
+{showFilterSection && (
+                  <div ref={filterRef} className="filter-section">
+                    {limitedOptions.map(([optionKey, optionLabel]) => {
+                      
+                      const uniqueValues = Array.from(
+                        new Set(
+                          shortListedData
+                            .map((item) =>
+                              item[optionKey]?.toString().toLowerCase()
+                            )
+                            .filter(
+                              (value) =>
+                                value &&
+                                value !== "-" &&
+                                !(
+                                  optionKey === "alternateNumber" &&
+                                  value === "0"
+                                )
+                                
+
+                            )
+                            
+                        )
+                      );
+                        
+
+
+                      return (
+                        <div>
+                          {/* Rajlaxmi jagadle  Added countSelectedValues that code date 20-02-2025 line 987/1003 */}
+                        <div key={optionKey} className="filter-option">
+  <button
+    className={`white-Btn ${
+      (selectedFilters[optionKey] && selectedFilters[optionKey].length > 0) || activeFilterOption === optionKey
+        ? "selected glow"
+        : ""
+    }`}
+    onClick={() => handleFilterOptionClick(optionKey)}
+  >
+    {optionLabel}
+    {selectedFilters[optionKey]?.length > 0 && (
+      <span className="selected-count">
+        ({countSelectedValues(optionKey)})
+      </span>
+    )}
+    <span className="filter-icon">&#x25bc;</span>
+  </button>
+{/* rajlaxmi Jagadle Changes That code date 20-02-2025 line 1003/1027 */}
+
+  {activeFilterOption === optionKey && (
+    <div className="city-filter">
+      <div className="optionDiv">
+        {uniqueValues.length > 0 ? (
+          uniqueValues.map((value) => (
+            <label key={value} className="selfcalling-filter-value">
+              <input
+                type="checkbox"
+                checked={selectedFilters[optionKey]?.includes(value) || false}
+                onChange={() => handleFilterSelect(optionKey, value)}
+                style={{ marginRight: "5px" }}
+                
+              />
+              {value}
+            </label>
+          ))
+        ) : (
+          <div>No values</div>
+        )}
+      </div>
+    </div>
+  )}
+</div>
+
+                          
+                          </div>
+                          );
+                    })}
+                    
+                    <button className="clr-button" onClick={handleClearAll}>Clear Filters</button>
+
+                  </div>
+                  
                 )}
               </>
             )}
