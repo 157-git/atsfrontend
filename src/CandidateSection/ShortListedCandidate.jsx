@@ -862,7 +862,7 @@ const handleSearchClick = ()=>{
                           );
                     })}
                     
-                    <button className="clr-button" onClick={handleClearAll}>Clear Filters</button>
+                    <button className="clr-button lineUp-Filter-btn" onClick={handleClearAll}>Clear Filters</button>
 
                   </div>
                   
@@ -880,35 +880,25 @@ const handleSearchClick = ()=>{
                       <tr className="attendancerows-head">
                         {(!showShareButton && userType === "TeamLeader") ||
                         (!showShareButton && userType === "Manager") ? (
-                          <th className="attendanceheading">
-                            
-                            {/* <input
-                              type="checkbox"
-                              onChange={handleSelectAll}
-                              checked={
-                                selectedRows.length === shortListedData.length
-                              }
-                              name="selectAll"
-                            /> */}
+                          <th  style={{ position: "sticky",left:0, zIndex: 10 }} className="attendanceheading">
+                          <input
+                               type="checkbox"
+                               onChange={handleSelectAll}
+                               checked={
+                                 shortListedData.every((row) => selectedRows.includes(row.candidateId))
+                               }
+                               name="selectAll"
+                             />
 
-{/* updatesd shortListeddata by Pranjali Raut data 20-01-2025 */}
-<input
-                                type="checkbox"
-                                onChange={handleSelectAll}
-                                checked={
-                                  shortListedData.every((row) => selectedRows.includes(row.candidateId))
-                                }
-                                name="selectAll"
-                              />
-                          </th>
+                         </th>
                         ) : null}
-                        <th className="attendanceheading">Sr No.</th>
+                        <th  style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}} className="attendanceheading">Sr No.</th>
 
-                        <th className="attendanceheading">Candidate Id</th>
-                        <th className="attendanceheading">Added Date Time</th>
-                        <th className="attendanceheading">Recruiter's Name</th>
-                        <th className="attendanceheading">Candidate's Name</th>
-                        <th className="attendanceheading">Candidate's Email</th>
+<th style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10}} className="attendanceheading">Candidate Id</th>
+<th   className="attendanceheading">Added Date Time</th>
+<th style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 10 }}  className="attendanceheading">Recruiter's Name</th>
+<th className="attendanceheading">Candidate's Name</th>
+<th className="attendanceheading">Candidate's Email</th>
                         <th className="attendanceheading">Contact Number</th>
                         <th className="attendanceheading">Whatsapp Number</th>
                         <th className="attendanceheading">Source Name</th>
@@ -970,7 +960,7 @@ const handleSearchClick = ()=>{
                         <tr key={item.candidateId} className="attendancerows">
                           {(!showShareButton && userType === "TeamLeader") ||
                           (!showShareButton && userType === "Manager") ? (
-                            <td className="tabledata">
+                            <td style={{ position: "sticky", backgroundColor:"white",left:0, zIndex: 10 }} className="tabledata">
                               <input
                                 type="checkbox"
                                 checked={selectedRows.includes(
@@ -982,7 +972,7 @@ const handleSearchClick = ()=>{
                               />
                             </td>
                           ) : null}
-                          <td
+                           <td  style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10, backgroundColor: "white" }}
                             className="tabledata "
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
@@ -994,7 +984,7 @@ const handleSearchClick = ()=>{
                               </span>
                             </div>
                           </td>
-                          <td
+                          <td style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10, backgroundColor: "white" }}
                             className="tabledata"
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
@@ -1032,7 +1022,7 @@ const handleSearchClick = ()=>{
                             </div>
                           </td>
 
-                          <td
+                          <td style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 10, backgroundColor: "white" }}
                             className="tabledata"
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
