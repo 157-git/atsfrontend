@@ -1,0 +1,564 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+/* Rajlaxmi jagadale update css */
+#profileContainerresumecopytemplete {
+  /* width: 594px; */
+  /* min-height: 100%; Ensure the container grows based on content */
+  /* max-width: 595px;  A4 size width in px */
+  overflow: visible; /* Make sure overflow content is visible */
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  /* height: 1800px; */
+  height: auto;
+}
+
+.imgandtitleresumecopytemplete {
+  display: flex;
+  justify-content: center;
+  /* margin-top: 50px; */
+  background-color: lightgray;
+  height: 230px;
+  /* border-radius: 15px; */
+}
+.imageresumecopytemplete {
+  width: 40%;
+  margin: 0 auto;
+  border: 2px solid black;
+  height: 180px;
+  width: 180px;
+  border-radius: 50%;
+}
+/* Make the imagemain element a circular container with a background image */
+.imageresumecopytemplete {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  transition: opacity 0.3s ease;
+}
+
+/* Hover effect to decrease opacity */
+.imageresumecopytemplete:hover {
+  opacity: 0.7;
+}
+
+/* Edit icon positioning and visibility */
+.editmainresumecopytemplete {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -380%);
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.3s ease;
+  color: white;
+  font-weight: 900;
+  font-size: 21px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Show edit icon when the imagemain is hovered */
+.imageresumecopytemplete:hover .editmainresumecopytemplete {
+  opacity: 1;
+  color: white;
+  font-weight: 900;
+  font-size: 21px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Hidden file input */
+#imageUpload {
+  display: none;
+}
+
+.titleresumecopytemplete {
+  width: 60%;
+  margin: 0 auto;
+}
+.maindivresumecopytemplete {
+  width: 100%;
+}
+/* img {
+   object-fit: cover;
+   border-radius: 50%;
+   transition: 0.3s ease; 
+  } */
+
+img:hover {
+  opacity: 0.6;
+}
+.editresumecopytemplete {
+  color: white;
+}
+.editmainresumecopytemplete {
+  width: 10%;
+  margin: 0 auto;
+  margin-top: 140px;
+}
+
+.imagemainresumecopytemplete {
+  height: 220px;
+  /* width: 200px; */
+  background-color: #423f3e;
+  display: flex;
+  align-items: center;
+  width: 30%;
+  margin: 0 auto;
+  margin-top: 25px;
+}
+.editresumecopytemplete {
+  height: 30px;
+  width: 30px;
+  margin-top: 150px;
+}
+.mainresumecopytemplete {
+  /* border: 1px solid black; */
+  /* border-radius: 15px; */
+  width: 100%;
+  margin: 0 auto;
+  /* margin-top: 50px; */
+}
+.fnameresumecopytemplete {
+  font-size: 20px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 100;
+  letter-spacing: 0.5px;
+  margin-top: 50px;
+}
+.lnameresumecopytemplete {
+  font-size: 23px;
+  font-weight: 900;
+}
+.designationresumecopytemplete {
+  font-size: 16px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #423f3e;
+}
+.contactresumecopytemplete {
+  display: flex;
+  justify-content: end;
+  margin-top: 15px;
+  color: whitesmoke;
+}
+.input1resumecopytemplete {
+  background: none;
+  border: none;
+  color: whitesmoke;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.contactresumecopytemplete img {
+  width: 40%;
+  margin: 0 auto;
+  height: 16px;
+  width: 16px;
+}
+.contactresumecopytemplete p {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.skillsmainresumecopytemplete {
+  display: flex;
+  justify-content: center;
+}
+.skill1resumecopytemplete {
+  width: 50%;
+  margin: 0 auto;
+}
+.skill2resumecopytemplete {
+  width: 50%;
+  margin: 0 auto;
+}
+.flexheroresumecopytemplete {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+}
+.flexbrownresumecopytemplete {
+  width: 30%;
+  margin: 0 auto;
+  background-color: #423f3e;
+  color: white;
+  /* margin-bottom: 40px; */
+}
+.flexwhiteresumecopytemplete {
+  width: 60%;
+  margin: 0 auto;
+}
+.ulresumecopytemplete {
+  width: 80%;
+  margin: 0 auto;
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.liresumecopytemplete {
+  margin-top: 10px;
+  font-size: 14px;
+}
+.textmarginresumecopytemplete {
+  width: 90%;
+  margin: 0 auto;
+}
+.contactresumecopytemplete img {
+  height: 20px;
+  width: 20px;
+}
+.titlesresumecopytemplete {
+  font-size: 16px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+.profilesummaryresumecopytemplete {
+  font-size: 14px;
+  font-weight: 100;
+  color: whitesmoke;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 20px;
+
+  /* overflow: hidden; */
+  /* overflow: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word; */
+}
+.contactmainresumecopytemplete {
+  margin-top: 15px;
+}
+.collegeresumecopytemplete {
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.courseresumecopytemplete p {
+  margin-top: 3px;
+  font-weight: 100;
+  color: whitesmoke;
+}
+.courseresumecopytemplete {
+  margin-top: 3px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+}
+.edulineresumecopytemplete {
+  line-height: 20px;
+}
+.edudateresumecopytemplete {
+  margin-top: 3px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  color: whitesmoke;
+  margin-bottom: 10px;
+}
+.skillsresumecopytemplete {
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-bottom: 3px;
+}
+.exptitleresumecopytemplete {
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.expcompanyresumecopytemplete {
+  font-size: 14px;
+  font-weight: 100;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.expflexresumecopytemplete {
+  display: flex;
+  justify-content: end;
+}
+.companyresumecopytemplete {
+  width: 100%;
+  margin-bottom: 5px;
+}
+.expdatedivresumecopytemplete {
+  width: 50%;
+}
+.expdateresumecopytemplete {
+  font-size: 14px;
+  font-weight: 100;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.expdesresumecopytemplete {
+  font-size: 14px;
+  font-weight: 100;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 20px;
+  margin-bottom: 20px;
+}
+.projresumecopytemplete {
+  margin-bottom: 5px;
+}
+.personalresumecopytemplete {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 5px;
+  width: 80%;
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.per1resumecopytemplete {
+  width: 50%;
+  margin: 0 auto;
+}
+.personaltitleresumecopytemplete {
+  width: 50%;
+  margin: 0 auto;
+}
+.hrresumecopytemplete {
+  margin-bottom: 15px;
+}
+.personaldeetsflexresumecopytemplete {
+  display: flex;
+  justify-content: end;
+}
+.perflex1resumecopytemplete {
+  width: 50%;
+  margin: 0 auto;
+  line-height: 20px;
+}
+.perflex2resumecopytemplete {
+  width: 50%;
+  margin: 0 auto;
+}
+.skillingresumecopytemplete {
+  margin-bottom: 15px;
+}
+.textarea1resumecopytemplete {
+  background: none;
+  border: 1px solid whitesmoke; /* Add a border to textarea for visibility */
+  color: whitesmoke;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  resize: none; /* Prevent resizing the textarea */
+  width: 100%;
+  height: fit-content; /* You can adjust height as needed */
+  padding: 10px;
+  box-sizing: border-box; /* Ensure padding is inside the width */
+}
+.buttonresumecopytemplete {
+  height: 50px;
+  width: 150px;
+  text-align: center;
+}
+.buttondivresumecopytemplete {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+.contactpresumecopytemplete {
+  font-size: 14px;
+}
+[contenteditable="true"] p {
+  color: inherit; /* Inherit text color from parent */
+  font-size: inherit; /* Inherit font size from parent */
+  margin: 0; /* Remove default margins from paragraphs */
+}
+/*flex of resume and form  */
+.mainflexdivresumecopytemplete {
+  display: flex;
+  justify-content: space-around;
+}
+.formdivresumecopytemplete {
+  width: 30%;
+  margin: 0 auto;
+}
+.resumemainresumecopytemplete {
+  width: 794px;
+  height: 1123px;
+  margin: 0 auto;
+}
+/* form styling start */
+/* Form Container */
+.formdivresumecopytemplete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f4f4; /* Light grey background for the form area */
+  /* padding: 20px; */
+}
+
+/* Form Styling */
+.formresumecopytemplete {
+  background-color: #fff; /* White background for the form */
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  width: 100%;
+  max-width: 800px;
+}
+
+/* Form Header */
+.resumeheaderresumecopytemplete {
+  color: #423f3e; /* Dark grey/brown for title */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.pdeatilsresumecopytemplete {
+  color: #423f3e; /* Dark grey/brown for section headers */
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+/* Input fields */
+.inputboxresumecopytemplete,
+.textareinputresumecopytemplete {
+  width: 90%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: #000; /* Black text color */
+  background-color: #fff; /* White background for inputs */
+}
+
+/* Focused state for inputs and textareas */
+.inputboxresumecopytemplete:focus,
+.textareinputresumecopytemplete:focus {
+  border-color: #423f3e; /* Dark grey border on focus */
+  outline: none;
+}
+
+/* Label Styling */
+.labelresumecopytemplete {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  color: #423f3e; /* Dark grey/brown text for labels */
+  margin-bottom: 5px;
+}
+
+/* Textarea Styling */
+.textareinputresumecopytemplete {
+  resize: vertical; /* Allow textarea to be resized vertically */
+  min-height: 100px; /* Minimum height for textareas */
+}
+
+/* Spacing Between Form Fields */
+.backdivresumecopytemplete {
+  margin-bottom: 20px;
+}
+
+/* For Button Styling (Optional) */
+.formresumecopytemplete button {
+  background-color: #423f3e; /* Dark grey button */
+  color: #fff; /* White text on button */
+  border: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.formresumecopytemplete button:hover {
+  background-color: #333; /* Slightly darker button on hover */
+}
+
+/* form styling end */
+
+/* scroll manage start*/
+/* Resume Container */
+#profileContainerresumecopytemplete {
+  /* max-height: calc(100vh - 80px); Ensure the resume content doesn't exceed the height of the viewport */
+  /* overflow-y: auto;  Make the resume content scrollable if it exceeds the height */
+  /* padding: 10px; */
+  /* border: 1px solid #ccc; */
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+/* Button Container (Ensure the button stays at the bottom) */
+.download-button-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Form Styling */
+.formdivresumecopytemplete {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  background-color: #f4f4f4;
+  overflow-y: auto; /* Allow form container to scroll if content overflows */
+  max-height: 100vh; /* Allow the form to scroll if necessary */
+}
+
+/* Form Container */
+.formresumecopytemplete {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 100%;
+  max-width: 800px;
+  overflow-y: auto; /* Ensure the form scrolls if needed */
+  max-height: calc(
+    100vh - 40px
+  ); /* Make sure form scrolls only if it exceeds the screen height */
+  padding-bottom: 20px;
+}
+
+/* Add some padding to the form container */
+.formresumecopytemplete div {
+  margin-bottom: 20px;
+}
+button {
+  margin-bottom: 20px;
+}
+
+/* Button Styling (for the download button) */
+.download-button-container button {
+  background-color: #423f3e;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  border: none;
+}
+
+.download-button-container button:hover {
+  background-color: #333;
+}
+
+/* scroll manage end */
+
+/* search */
+.candidateidresumecopytemplete {
+  width: 96%;
+  margin: 0 auto;
+}
+.inputfieldresumecopytemplete {
+  height: 50px;
+  width: 280px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+  box-sizing: border-box;
+}
+.searchbuttonresumecopytemplete {
+  height: 50px;
+  width: 180px;
+  background-color: #423f3e;
+  color: white;
+  font-size: 15px;
+}

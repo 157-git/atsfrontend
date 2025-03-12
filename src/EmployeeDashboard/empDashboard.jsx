@@ -810,7 +810,9 @@ const EmpDashboard = ({ userGroup }) => {
         </div>
         <div className="calling-excel-div">
           {showCallingExcel && (
-            <CallingExcel loginEmployeeName={loginEmployeeName} />
+            <CallingExcel loginEmployeeName={loginEmployeeName} 
+            onsuccessfulDataAdditions={handleSuccessfulDataAdditions}
+            />
           )}
         </div>
 

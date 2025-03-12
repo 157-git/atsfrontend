@@ -18,7 +18,10 @@ import { getSocket } from "../EmployeeDashboard/socket";
 import uploadingResumeStatic from "../assets/uploadStaticPngFile.png";
 import { Button as ButtonAntd } from "antd";
 import { convertNumberToWords } from "./convertNumberToWords";
-import { getDailyworkData, putDailyworkData } from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable";
+import {
+  getDailyworkData,
+  putDailyworkData,
+} from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable";
 import { getFormattedDateISOYMDformat } from "./getFormattedDateTime";
 import { useDispatch } from "react-redux";
 import { setTriggerFetch } from "../sclices/triggerSlice";
@@ -128,7 +131,8 @@ const UpdateSelfCalling = ({
   const [errorForDOB, setErrorForDOB] = useState("");
   const [errorInterviewSlot, seterrorInterviewSlot] = useState("");
   const [socket, setSocket] = useState(null);
-  const [displaySourceOthersInput, setDisplaySourceOthersInput] = useState(false);
+  const [displaySourceOthersInput, setDisplaySourceOthersInput] =
+    useState(false);
   const dispatch = useDispatch();
   // updated by sahil karnekar date 18-10-2024
   const today = new Date();
@@ -210,7 +214,8 @@ const UpdateSelfCalling = ({
       if (
         !callingTracker.lineUp.expectedCTCLakh &&
         !callingTracker.lineUp.expectedCTCThousand
-      ) {1
+      ) {
+        1;
         newErrors.expectedCTCLakh = "Expected CTC is required";
         newErrors.expectedCTCLakhStar = "*";
       }
@@ -248,11 +253,9 @@ const UpdateSelfCalling = ({
       const updatedCallingTracker = { ...initialCallingTrackerState };
       const updatedLineUpData = { ...initialLineUpState };
       console.log(initialData.sourceName);
-   
-      
     }
   }, [initialData]);
-console.log(errors);
+  console.log(errors);
 
   const fetchCandidateData = async (candidateId) => {
     try {
@@ -262,15 +265,26 @@ console.log(errors);
       const data = await response.json();
       setCallingTracker(data);
       console.log(data);
-      const validSources = ["LinkedIn", "Naukri", "Indeed", "Times", "Social Media", "Company Page", "Excel", "Friends"];
+      const validSources = [
+        "LinkedIn",
+        "Naukri",
+        "Indeed",
+        "Times",
+        "Social Media",
+        "Company Page",
+        "Excel",
+        "Friends",
+      ];
       if (data.sourceName !== "" && !validSources.includes(data.sourceName)) {
         setDisplaySourceOthersInput(true);
       }
-      
+
       if (data.lineUp.resume !== "") {
         setResumeUploaded(true);
         setUploadProgress(100);
-        setResumeFileName(`${data.candidateName}_${data.designation}_Resume.pdf`);
+        setResumeFileName(
+          `${data.candidateName}_${data.designation}_Resume.pdf`
+        );
       }
       if (data.lineUp.resume === undefined) {
         setResumeUploaded(false);
@@ -369,7 +383,6 @@ console.log(errors);
         };
       });
     }
- 
 
     setCallingTracker((prevState) => {
       if (name.includes("lineUp")) {
@@ -391,9 +404,8 @@ console.log(errors);
     // line 290 to 15 added by sahil karnekar date 17-10-2024
     validateRealTime(name, value, isNotInterested);
   };
-console.log(callingTracker.alternateNumber);
-console.log(callingTracker.contactNumber);
-
+  console.log(callingTracker.alternateNumber);
+  console.log(callingTracker.contactNumber);
 
   const validateRealTime = (name, value, isNotInterested) => {
     setErrors((prevErrors) => {
@@ -499,7 +511,7 @@ console.log(callingTracker.contactNumber);
       if (name === "candidateEmail") {
         // const emailPattern =
         //   /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
-          // Rajlaxmi Jagadale Added Email Validation Date-24-01-25 line263 to 312
+        // Rajlaxmi Jagadale Added Email Validation Date-24-01-25 line263 to 312
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (value === "") {
           newErrors.candidateEmail = "Candidate Email is required";
@@ -649,7 +661,7 @@ console.log(callingTracker.contactNumber);
     });
   };
   const [displaySameAsContactField, setDisplaySameAsContactField] =
-  useState(false);
+    useState(false);
   const handleDisplaySameAsContactText = () => {
     if (callingTracker.contactNumber !== "") {
       setDisplaySameAsContactField(true);
@@ -705,27 +717,25 @@ console.log(callingTracker.contactNumber);
     setSocket(newSocket);
   }, []);
 
-
-
   const [dailyWorkDataNew, setDailyWorkDataNew] = useState(null); // State to store getData
   const currentDateNewGlobal = getFormattedDateISOYMDformat();
-    const getDailyworkDataFunc = async()=>{
-      try {
-        const getData =await getDailyworkData(employeeId, userType, currentDateNewGlobal);
-        console.log(getData);
-        
-        setDailyWorkDataNew(getData);
-      } catch (error) {
-        console.log(error); 
-      }
+  const getDailyworkDataFunc = async () => {
+    try {
+      const getData = await getDailyworkData(
+        employeeId,
+        userType,
+        currentDateNewGlobal
+      );
+      console.log(getData);
+
+      setDailyWorkDataNew(getData);
+    } catch (error) {
+      console.log(error);
     }
-    useEffect(()=>{
-      getDailyworkDataFunc();
-    },[]);
-  
-
-
-
+  };
+  useEffect(() => {
+    getDailyworkDataFunc();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -733,7 +743,7 @@ console.log(callingTracker.contactNumber);
     // Display loginEmployeeName in the input field
     setCallingTracker({
       ...callingTracker,
-      // recruiterName: loginEmployeeName, 
+      // recruiterName: loginEmployeeName,
     });
 
     console.log("Recruiter Name to be sent:", callingTracker.recruiterName); // Print recruiterName
@@ -809,12 +819,12 @@ console.log(callingTracker.contactNumber);
       console.log(getFormattedDateTime()); // Example output: Date: 2024-1-1, Time: 4:05 PM
 
       const callingTrackerObjectForEmit = {
-        employeeId:employeeId,
+        employeeId: employeeId,
         userType: userType,
         date: callingTracker.date,
         candidateId: callingTracker.candidateId,
         candidateAddedTime: getFormattedDateTime(),
-        recruiterName: loginEmployeeName, 
+        recruiterName: loginEmployeeName,
         candidateName: callingTracker.candidateName.trim(),
         candidateEmail: callingTracker.candidateEmail,
         jobDesignation: callingTracker.jobDesignation,
@@ -829,7 +839,7 @@ console.log(callingTracker.contactNumber);
         communicationRating: callingTracker.communicationRating,
         selectYesOrNo: callingTracker.selectYesOrNo,
         callingFeedback: callingTracker.callingFeedback,
-        jobRole : callingTracker.jobRole,
+        jobRole: callingTracker.jobRole,
         employee: {
           employeeId: callingTracker.employeeId,
         },
@@ -861,35 +871,36 @@ console.log(callingTracker.contactNumber);
       if (callingTracker.selectYesOrNo === "Interested") {
         console.log("emit called", callingTrackerObjectForEmit);
         socket.emit("update_candidate", callingTrackerObjectForEmit);
-            try {
-                  if (!dailyWorkDataNew) {
-                    throw new Error("dailyWorkDataNew is null or undefined");
-                  }
-                
-                  const getDataForUpdate = {
-                    attendanceRole: {
-                      ...(userType === "Recruiters" && { employee: { employeeId } }),
-                      ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
-                      ...(userType === "Manager" && { manager: { employeeId } })
-                    },
-                    dailyArchived: (dailyWorkDataNew?.dailyArchived || 0) + 1, // Prevents NaN if value is null
-                    dailyPending: (dailyWorkDataNew?.dailyPending || 0) - 1,
-                    dayPresentStatus: ((dailyWorkDataNew?.dailyArchived ?? 0) + 1) >= 5 ? "Yes" : "No"
-                  };
-                
-                  console.log(getDataForUpdate);
-                
-                  const putData = await putDailyworkData(
-                    employeeId,
-                    userType,
-                    currentDateNewGlobal,
-                    getDataForUpdate
-                  );
-                  dispatch(setTriggerFetch());
-                  getDailyworkDataFunc();
-                } catch (error) {
-                  console.error("Error in updating daily work data:", error);
-                }
+        try {
+          if (!dailyWorkDataNew) {
+            throw new Error("dailyWorkDataNew is null or undefined");
+          }
+
+          const getDataForUpdate = {
+            attendanceRole: {
+              ...(userType === "Recruiters" && { employee: { employeeId } }),
+              ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
+              ...(userType === "Manager" && { manager: { employeeId } }),
+            },
+            dailyArchived: (dailyWorkDataNew?.dailyArchived || 0) + 1, // Prevents NaN if value is null
+            dailyPending: (dailyWorkDataNew?.dailyPending || 0) - 1,
+            dayPresentStatus:
+              (dailyWorkDataNew?.dailyArchived ?? 0) + 1 >= 5 ? "Yes" : "No",
+          };
+
+          console.log(getDataForUpdate);
+
+          const putData = await putDailyworkData(
+            employeeId,
+            userType,
+            currentDateNewGlobal,
+            getDataForUpdate
+          );
+          dispatch(setTriggerFetch());
+          getDailyworkDataFunc();
+        } catch (error) {
+          console.error("Error in updating daily work data:", error);
+        }
       }
       if (response.ok) {
         if (callingTracker.selectYesOrNo === "Interested") {
@@ -929,7 +940,7 @@ console.log(callingTracker.contactNumber);
       toast.error(`Error updating data: ${error.message}`);
     }
   };
-console.log(callingTracker);
+  console.log(callingTracker);
 
   const handleRequirementChange = (e) => {
     const { value } = e.target;
@@ -986,10 +997,9 @@ console.log(callingTracker);
     console.log(errors);
 
     const isNotInterested =
-    callingTracker.selectYesOrNo !== "Interested" ? true : false;
+      callingTracker.selectYesOrNo !== "Interested" ? true : false;
 
     validateRealTime(name, value, isNotInterested);
-    
   };
   const handleShow = () => {
     setShowModal(true);
@@ -1029,7 +1039,7 @@ console.log(callingTracker);
         setUploadProgress(i);
         await new Promise((resolve) => setTimeout(resolve, 300)); // Simulated delay
       }
-      
+
       setResumeUploaded(true);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -1107,7 +1117,7 @@ console.log(callingTracker);
                 <div
                   style={{
                     display: "flex",
-                    justifyContent:"space-between"
+                    justifyContent: "space-between",
                   }}
                 >
                   {/* <input
@@ -1118,63 +1128,67 @@ console.log(callingTracker);
                     className="plain-input"
                   /> */}
 
-<div
-                      className="uploadantdc"
-                      style={{
-                        width: "60%",
+                  <div
+                    className="uploadantdc"
+                    style={{
+                      width: "60%",
+                    }}
+                  >
+                    <Upload
+                      accept=".pdf,.doc,.docx"
+                      showUploadList={false} // Hide file preview list
+                      beforeUpload={async (file) => {
+                        setUploadingResumeNewState(true);
+                        setDisplayProgress(false);
+                        setResumeFileName(file.name);
+                        setDisplayProgress(true);
+                        setUploadProgress(0);
+                        console.log(file);
+                        // Create a synthetic event to match input file event structure
+                        const syntheticEvent = { target: { files: [file] } };
+                        // Call handleResumeUploadBoth function
+                        await handleResumeUploadBoth(syntheticEvent);
+                        setUploadingResumeNewState(false);
+                        return false; // Prevent automatic upload
                       }}
                     >
-                      <Upload
-                        accept=".pdf,.doc,.docx"
-                        showUploadList={false} // Hide file preview list
-                        beforeUpload={async (file) => {
-                          setUploadingResumeNewState(true);
-                          setDisplayProgress(false);
-                          setResumeFileName(file.name);
-                          setDisplayProgress(true);
-                          setUploadProgress(0);
-                          console.log(file);
-                          // Create a synthetic event to match input file event structure
-                          const syntheticEvent = { target: { files: [file] } };
-                          // Call handleResumeUploadBoth function
-                          await handleResumeUploadBoth(syntheticEvent);
-                          setUploadingResumeNewState(false);
-                          return false; // Prevent automatic upload
-                        }}
+                      <ButtonAntd
+                        icon={
+                          uploadingResumeNewState ? (
+                            <img
+                              src={uploadingResumeGif}
+                              alt="Uploading"
+                              style={{ width: 20, height: 20 }}
+                            />
+                          ) : (
+                            <img
+                              src={uploadingResumeStatic}
+                              alt="Static"
+                              style={{ width: 20, height: 20 }}
+                            />
+                          )
+                        }
                       >
-                        <ButtonAntd
-                          icon={
-                            uploadingResumeNewState ? (
-                              <img
-                                src={uploadingResumeGif}
-                                alt="Uploading"
-                                style={{ width: 20, height: 20 }}
-                              />
-                            ) : (
-                              <img
-                                src={uploadingResumeStatic}
-                                alt="Static"
-                                style={{ width: 20, height: 20 }}
-                              />
-                            )
-                          }
-                        >
-                          {resumeUploaded ? resumeFileName.length > 10
+                        {resumeUploaded
+                          ? resumeFileName.length > 10
                             ? `${resumeFileName.substring(0, 15)}...`
-                            : resumeFileName || `${callingTracker.candidateName.substring(0, 15)}...` : "upload Resume" } 
-                        </ButtonAntd>
-                      </Upload>
-                      {(displayProgress || resumeUploaded) && (
-                        <Progress
-                          percent={uploadProgress}
-                          strokeWidth={4}
-                          size="small"
-                          className="customprogressForCallingTracker"
-                        />
-                      )}
-                    </div>
-
-
+                            : resumeFileName ||
+                              `${callingTracker.candidateName.substring(
+                                0,
+                                15
+                              )}...`
+                          : "upload Resume"}
+                      </ButtonAntd>
+                    </Upload>
+                    {(displayProgress || resumeUploaded) && (
+                      <Progress
+                        percent={uploadProgress}
+                        strokeWidth={4}
+                        size="small"
+                        className="customprogressForCallingTracker"
+                      />
+                    )}
+                  </div>
 
                   {resumeUploaded && (
                     <div className="calling-tracker-popup-open-btn newclassformakesameashelp ForEYEButtonInUpdate">
@@ -1240,16 +1254,16 @@ console.log(callingTracker);
               <label>Recruiter Name</label>
               <div className="update-calling-tracker-field-sub-div newsetforrightdiv">
                 <div className="helpsideinputdiv">
-                <input
-                  type="text"
-                  name="recruiterName"
-                  value={loginEmployeeName}
-                  // readOnly
-                  onChange={handleChange}
-                  className="plain-input"
-                />
+                  <input
+                    type="text"
+                    name="recruiterName"
+                    value={loginEmployeeName}
+                    // readOnly
+                    onChange={handleChange}
+                    className="plain-input"
+                  />
                 </div>
-               
+
                 <div className="calling-tracker-two-input newalignrightdivforhelp">
                   <button
                     type="button"
@@ -1344,24 +1358,29 @@ console.log(callingTracker);
             </div>
             <div className="update-calling-tracker-field">
               <label>Whatsapp Number</label>
-              <div className="update-calling-tracker-field-sub-div"
-               onClick={handleDisplaySameAsContactText}>
+              <div
+                className="update-calling-tracker-field-sub-div"
+                onClick={handleDisplaySameAsContactText}
+              >
                 <div className="newwrapperdivforwhatsapp">
-                <input
-                  placeholder="Enter phone number"
-                  name="alternateNumber"
-                  value={callingTracker?.alternateNumber || ""}
-                  onChange={handleChange}
-                  // required={callingTracker.selectYesOrNo !== "Interested"}
-                  defaultCountry="IN"
-                  maxLength={11}
-                />
-                 {displaySameAsContactField && (
+                  <input
+                    placeholder="Enter phone number"
+                    name="alternateNumber"
+                    value={callingTracker?.alternateNumber || ""}
+                    onChange={handleChange}
+                    // required={callingTracker.selectYesOrNo !== "Interested"}
+                    defaultCountry="IN"
+                    maxLength={11}
+                  />
+                  {displaySameAsContactField && (
                     <div className="inputsameascontact">
                       <input
                         type="checkbox"
                         name="copyContactNumber"
-                        checked={callingTracker.alternateNumber === callingTracker.contactNumber}
+                        checked={
+                          callingTracker.alternateNumber ===
+                          callingTracker.contactNumber
+                        }
                         onChange={(e) => {
                           if (e.target.checked) {
                             if (callingTracker?.contactNumber) {
@@ -1384,7 +1403,6 @@ console.log(callingTracker);
                     </div>
                   )}
                 </div>
-               
               </div>
             </div>
           </div>
@@ -1396,46 +1414,52 @@ console.log(callingTracker);
               <div className="update-calling-tracker-field-sub-div setInputBlock">
                 <div className="setDisplayFlexForUpdateForm">
                   <div className="wrappedSourcenamediv">
-                  <select
-                    name="sourceName"
-                    className={`plain-input`}
-                    value={
-                      callingTracker.sourceName === "" ||
-                      callingTracker.sourceName === "LinkedIn" ||
-                      callingTracker.sourceName === "Naukri" ||
-                      callingTracker.sourceName === "Indeed" ||
-                      callingTracker.sourceName === "Times" ||
-                      callingTracker.sourceName === "Social Media" ||
-                      callingTracker.sourceName === "Company Page" ||
-                      callingTracker.sourceName === "Excel" ||
-                      callingTracker.sourceName === "Friends" ||
-                      callingTracker.sourceName === "others"
-                        ? callingTracker.sourceName
-                        : "others"
-                    }
-                    onChange={handleChange}
-                    // required={callingTracker.selectYesOrNo !== "Interested"}
-                  >
-                    <option value="" disabled>Select Source Name</option>
-                    <option value="LinkedIn">linkedIn</option>
-                    <option value="Naukri">Naukri</option>
-                    <option value="Indeed">Indeed </option>
-                    <option value="Times">Times</option>
-                    <option value="Social Media">Social Media</option>
-                    <option value="Company Page">Company Page</option>
-                    <option value="Excel">Excel</option>
-                    <option value="Friends">Friends</option>
-                    <option value="others">others</option>
-                  </select>
+                    <select
+                      name="sourceName"
+                      className={`plain-input`}
+                      value={
+                        callingTracker.sourceName === "" ||
+                        callingTracker.sourceName === "LinkedIn" ||
+                        callingTracker.sourceName === "Naukri" ||
+                        callingTracker.sourceName === "Indeed" ||
+                        callingTracker.sourceName === "Times" ||
+                        callingTracker.sourceName === "Social Media" ||
+                        callingTracker.sourceName === "Company Page" ||
+                        callingTracker.sourceName === "Excel" ||
+                        callingTracker.sourceName === "Friends" ||
+                        callingTracker.sourceName === "others"
+                          ? callingTracker.sourceName
+                          : "others"
+                      }
+                      onChange={handleChange}
+                      // required={callingTracker.selectYesOrNo !== "Interested"}
+                    >
+                      <option value="" disabled>
+                        Select Source Name
+                      </option>
+                      <option value="LinkedIn">linkedIn</option>
+                      <option value="Naukri">Naukri</option>
+                      <option value="Indeed">Indeed </option>
+                      <option value="Times">Times</option>
+                      <option value="Social Media">Social Media</option>
+                      <option value="Company Page">Company Page</option>
+                      <option value="Excel">Excel</option>
+                      <option value="Friends">Friends</option>
+                      <option value="others">others</option>
+                    </select>
 
-                  {displaySourceOthersInput && (
+                    {displaySourceOthersInput && (
                       <input
-                      className="marginleftforothers"
+                        className="marginleftforothers"
                         type="text"
                         name="sourceName"
                         id=""
                         placeholder="Enter Source Name"
-                        value={callingTracker.sourceName !== "others" ? callingTracker.sourceName : callingTracker.sourceName === "others" && ""}
+                        value={
+                          callingTracker.sourceName !== "others"
+                            ? callingTracker.sourceName
+                            : callingTracker.sourceName === "others" && ""
+                        }
                         onChange={handleSourceNameOthers}
                       />
                     )}
@@ -1496,7 +1520,7 @@ console.log(callingTracker);
                     style={{ width: "100%" }}
            
                   /> */}
-                   <div className="calling-tracker-two-input newhightforincentivesdivUpdateForm">
+                  <div className="calling-tracker-two-input newhightforincentivesdivUpdateForm">
                     <input
                       className="nighlightincentivesinputnew"
                       placeholder="Your Incentive"
@@ -1580,13 +1604,15 @@ console.log(callingTracker);
                 <div className="setDisplayFlexForUpdateForm">
                   <select
                     //  required={callingTracker.selectYesOrNo === "Interested"}
-                  
+
                     className="plain-input"
                     name="callingFeedback"
                     value={callingTracker?.callingFeedback || ""}
                     onChange={handleChange}
                   >
-                    <option value=""   disabled>Feedback</option>
+                    <option value="" disabled>
+                      Feedback
+                    </option>
                     <option value="Call Done">Call Done</option>
                     <option value="Asked for Call Back">
                       Asked for Call Back
@@ -2178,19 +2204,19 @@ console.log(callingTracker);
                   placeholder="Enter Extra Certification"
                 /> */}
 
-<Radio.Group
-style={{
-  display:"flex",
-  width:"100%"
-}}
-  name="lineUp.extraCertification"
-  value={callingTracker?.lineUp.extraCertification}
-  onChange={handleChange}
-  options={[
-    { value: "Yes", label: "Yes" },
-    { value: "No", label: "No" },
-  ]}
-/>
+                <Radio.Group
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                  }}
+                  name="lineUp.extraCertification"
+                  value={callingTracker?.lineUp.extraCertification}
+                  onChange={handleChange}
+                  options={[
+                    { value: "Yes", label: "Yes" },
+                    { value: "No", label: "No" },
+                  ]}
+                />
               </div>
             </div>
           </div>
@@ -2227,9 +2253,9 @@ style={{
                       placeholder="Years"
                       maxLength="2"
                     />
-                      {callingTracker.lineUp.experienceYear ? (
-                        <span className="addtrnaslateproptospan">Years</span>
-                      ) : null}
+                    {callingTracker.lineUp.experienceYear ? (
+                      <span className="addtrnaslateproptospan">Years</span>
+                    ) : null}
                     {errors.experienceYearStar && (
                       <div className="error-message">
                         {errors.experienceYearStar}
@@ -2254,9 +2280,11 @@ style={{
                       min="0"
                       max="11"
                     />
-                     {callingTracker.lineUp.experienceMonth ? (
-                        <span className="addtrnaslateproptospanForMonths">Months</span>
-                      ) : null}
+                    {callingTracker.lineUp.experienceMonth ? (
+                      <span className="addtrnaslateproptospanForMonths">
+                        Months
+                      </span>
+                    ) : null}
                     {errors.experienceMonthStar && (
                       <div className="error-message">
                         {errors.experienceMonthStar}
@@ -2315,40 +2343,39 @@ style={{
                     // required={callingTracker.selectYesOrNo === "Interested"}
                   /> */}
 
-<select
-  className="plain-input setwidthandmarginforratings"
-  name="communicationRating"
-  value={callingTracker?.communicationRating || ""}
-  onChange={handleChange}
->
-  <option value="">Select Rating</option>
-  {[...Array(10)].map((_, index) => {
-    const rating = (index + 1) * 0.5;
+                  <select
+                    className="plain-input setwidthandmarginforratings"
+                    name="communicationRating"
+                    value={callingTracker?.communicationRating || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Rating</option>
+                    {[...Array(10)].map((_, index) => {
+                      const rating = (index + 1) * 0.5;
 
-    // Assign unique tags to each rating
-    const tags = [
-      "Very Poor",  // 0.5
-      "Poor",       // 1.0
-      "Below Average", // 1.5
-      "Average",    // 2.0
-      "Fair",       // 2.5
-      "Good",       // 3.0
-      "Very Good",  // 3.5
-      "Excellent",  // 4.0
-      "Outstanding",// 4.5
-      "Perfect"     // 5.0
-    ];
+                      // Assign unique tags to each rating
+                      const tags = [
+                        "Very Poor", // 0.5
+                        "Poor", // 1.0
+                        "Below Average", // 1.5
+                        "Average", // 2.0
+                        "Fair", // 2.5
+                        "Good", // 3.0
+                        "Very Good", // 3.5
+                        "Excellent", // 4.0
+                        "Outstanding", // 4.5
+                        "Perfect", // 5.0
+                      ];
 
-    return (
-      <option key={rating} value={`${rating}`}>
-        {rating.toFixed(1)} - {tags[index]}
-      </option>
-    );
-  })}
-</select>
+                      return (
+                        <option key={rating} value={`${rating}`}>
+                          {rating.toFixed(1)} - {tags[index]}
+                        </option>
+                      );
+                    })}
+                  </select>
 
-                    <span className="ml-5">Out Of 5</span>
-
+                  <span className="ml-5">Out Of 5</span>
 
                   {errors.communicationRatingStar && (
                     <div className="error-message">
@@ -2369,124 +2396,119 @@ style={{
               <label>Current CTC (LPA)</label>
               <div className="update-calling-tracker-two-input-container setDisplayblockfornumtoword">
                 <div className="displayflexfornumtoword">
-                  
-             
-                <div>
-                  <div className="setDisplayFlexForUpdateForm">
+                  <div>
+                    <div className="setDisplayFlexForUpdateForm">
+                      <input
+                        style={{ width: "75%" }}
+                        type="text"
+                        name="lineUp.currentCTCLakh"
+                        value={callingTracker?.lineUp.currentCTCLakh || ""}
+                        onChange={handleChange}
+                        className="update-calling-tracker-two-input"
+                        placeholder="Lakh"
+                        maxLength="2"
+                        // required={callingTracker.selectYesOrNo === "Interested"}
+                        pattern="\d*"
+                      />
+                      {errors.currentCTCLakhStar && (
+                        <div className="error-message">
+                          {errors.currentCTCLakhStar}
+                        </div>
+                      )}
+                    </div>
+                    {errors.currentCTCLakh && (
+                      <div className="error-message">
+                        {errors.currentCTCLakh}
+                      </div>
+                    )}
+                  </div>
+                  <div>
                     <input
                       style={{ width: "75%" }}
                       type="text"
-                      name="lineUp.currentCTCLakh"
-                      value={callingTracker?.lineUp.currentCTCLakh || ""}
+                      name="lineUp.currentCTCThousand"
+                      value={callingTracker?.lineUp.currentCTCThousand || ""}
                       onChange={handleChange}
                       className="update-calling-tracker-two-input"
-                      placeholder="Lakh"
+                      placeholder="Thousand"
                       maxLength="2"
-                      // required={callingTracker.selectYesOrNo === "Interested"}
                       pattern="\d*"
+                      inputMode="numeric"
                     />
-                    {errors.currentCTCLakhStar && (
-                      <div className="error-message">
-                        {errors.currentCTCLakhStar}
-                      </div>
-                    )}
                   </div>
-                  {errors.currentCTCLakh && (
-                    <div className="error-message">{errors.currentCTCLakh}</div>
-                  )}
-                  
-                </div>
-                <div>
-                  <input
-                    style={{ width: "75%" }}
-                    type="text"
-                    name="lineUp.currentCTCThousand"
-                    value={callingTracker?.lineUp.currentCTCThousand || ""}
-                    onChange={handleChange}
-                    className="update-calling-tracker-two-input"
-                    placeholder="Thousand"
-                    maxLength="2"
-                    pattern="\d*"
-                    inputMode="numeric"
-                  />
-                </div>
-
                 </div>
 
                 <div className="convertnumtowordstext">
-  {(callingTracker.lineUp.currentCTCLakh > 0 || callingTracker.lineUp.currentCTCThousand > 0) && (
-    <span>
-      {convertNumberToWords(
-        callingTracker.lineUp.currentCTCLakh,
-        callingTracker.lineUp.currentCTCThousand
-      )}
-    </span>
-  )}
-</div>
-
-
+                  {(callingTracker.lineUp.currentCTCLakh > 0 ||
+                    callingTracker.lineUp.currentCTCThousand > 0) && (
+                    <span>
+                      {convertNumberToWords(
+                        callingTracker.lineUp.currentCTCLakh,
+                        callingTracker.lineUp.currentCTCThousand
+                      )}
+                    </span>
+                  )}
+                </div>
               </div>
-              
-              
             </div>
-            
+
             <div className="update-calling-tracker-field">
               <label>Expected CTC (LPA)</label>
               <div className="update-calling-tracker-two-input-container setDisplayblockfornumtoword">
-              <div className="displayflexfornumtoword">
-                <div>
-                  <div className="setDisplayFlexForUpdateForm">
-                    <input
-                      style={{ width: "100%" }}
-                      type="text"
-                      name="lineUp.expectedCTCLakh"
-                      value={callingTracker?.lineUp.expectedCTCLakh || ""}
-                      onChange={handleChange}
-                      className="update-calling-tracker-two-input"
-                      placeholder="Lakh"
-                      // required={callingTracker.selectYesOrNo === "Interested"}
-                      maxLength="2"
-                      pattern="\d*"
-                    />
-                    {errors.expectedCTCLakhStar && (
+                <div className="displayflexfornumtoword">
+                  <div>
+                    <div className="setDisplayFlexForUpdateForm">
+                      <input
+                        style={{ width: "100%" }}
+                        type="text"
+                        name="lineUp.expectedCTCLakh"
+                        value={callingTracker?.lineUp.expectedCTCLakh || ""}
+                        onChange={handleChange}
+                        className="update-calling-tracker-two-input"
+                        placeholder="Lakh"
+                        // required={callingTracker.selectYesOrNo === "Interested"}
+                        maxLength="2"
+                        pattern="\d*"
+                      />
+                      {errors.expectedCTCLakhStar && (
+                        <div className="error-message">
+                          {errors.expectedCTCLakhStar}
+                        </div>
+                      )}
+                    </div>
+                    {errors.expectedCTCLakh && (
                       <div className="error-message">
-                        {errors.expectedCTCLakhStar}
+                        {errors.expectedCTCLakh}
                       </div>
                     )}
                   </div>
-                  {errors.expectedCTCLakh && (
-                    <div className="error-message">
-                      {errors.expectedCTCLakh}
-                    </div>
+                  <div>
+                    <input
+                      style={{ width: "95%" }}
+                      type="text"
+                      name="lineUp.expectedCTCThousand"
+                      value={callingTracker?.lineUp.expectedCTCThousand || ""}
+                      onChange={handleChange}
+                      className="update-calling-tracker-two-input"
+                      placeholder="Thousand"
+                      maxLength="2"
+                      pattern="\d*"
+                      inputMode="numeric"
+                    />
+                  </div>
+                </div>
+
+                <div className="convertnumtowordstext">
+                  {(callingTracker.lineUp.expectedCTCLakh > 0 ||
+                    callingTracker.lineUp.expectedCTCThousand > 0) && (
+                    <span>
+                      {convertNumberToWords(
+                        callingTracker.lineUp.expectedCTCLakh,
+                        callingTracker.lineUp.expectedCTCThousand
+                      )}
+                    </span>
                   )}
                 </div>
-                <div>
-                  <input
-                    style={{ width: "95%" }}
-                    type="text"
-                    name="lineUp.expectedCTCThousand"
-                    value={callingTracker?.lineUp.expectedCTCThousand || ""}
-                    onChange={handleChange}
-                    className="update-calling-tracker-two-input"
-                    placeholder="Thousand"
-                    maxLength="2"
-                    pattern="\d*"
-                    inputMode="numeric"
-                  />
-                </div>
-</div>
-
-<div className="convertnumtowordstext">
-  {(callingTracker.lineUp.expectedCTCLakh > 0 || callingTracker.lineUp.expectedCTCThousand > 0) && (
-    <span>
-      {convertNumberToWords(
-        callingTracker.lineUp.expectedCTCLakh,
-        callingTracker.lineUp.expectedCTCThousand
-      )}
-    </span>
-  )}
-</div>
-
               </div>
             </div>
           </div>
@@ -2579,36 +2601,35 @@ style={{
                 }}
               >
                 <div className="intresteddiv">
-                <select
-                  className="update-calling-tracker-two-input newwidthforintrestedselecttag"
-                  name="selectYesOrNo"
-                  placeholder="Candidate Interested"
-                  value={callingTracker?.selectYesOrNo}
-                  onChange={handleChange}
-                >
-                  <option value="Yet To Confirm">Yet To Confirm</option>
-                      <option value="Interested">Interested</option>
-                      <option value="Not Interested">Not Interested</option>
-                      <option value="Interested, will confirm later">
-                        Interested, will confirm later
-                      </option>
-                      <option value="Interested But Not Eligible">
-                        Interested But Not Eligible
-                      </option>
-                      <option value="Not Eligible But Interested">
-                        Eligible But Not Interested
-                      </option>
-                      <option value="Not Eligible">Not Eligible</option>
-                      <option value="Not Eligibel Not Interested">
-                        Not Eligibel Not Interested
-                      </option>
-                </select>
+                  <select
+                    className="update-calling-tracker-two-input newwidthforintrestedselecttag"
+                    name="selectYesOrNo"
+                    placeholder="Candidate Interested"
+                    value={callingTracker?.selectYesOrNo}
+                    onChange={handleChange}
+                  >
+                    <option value="Yet To Confirm">Yet To Confirm</option>
+                    <option value="Interested">Interested</option>
+                    <option value="Not Interested">Not Interested</option>
+                    <option value="Interested, will confirm later">
+                      Interested, will confirm later
+                    </option>
+                    <option value="Interested But Not Eligible">
+                      Interested But Not Eligible
+                    </option>
+                    <option value="Not Eligible But Interested">
+                      Eligible But Not Interested
+                    </option>
+                    <option value="Not Eligible">Not Eligible</option>
+                    <option value="Not Eligibel Not Interested">
+                      Not Eligibel Not Interested
+                    </option>
+                  </select>
                 </div>
-               
 
                 <div
                   style={{
-                    width:"100%"
+                    width: "100%",
                   }}
                 >
                   {/* line 1784 added by sahil karnekar date 21-10-2024 */}
@@ -2621,19 +2642,19 @@ style={{
                     className="newwidthforselectfinalstatus"
                     // required={callingTracker.selectYesOrNo === "Interested"}
                   >
-                     <option value="" disabled>
-                          Select
-                        </option>
-                        <option value="Yet To Confirm">Yet To Confirm</option>
-                        {/* <option value="Interview Schedule">
+                    <option value="" disabled>
+                      Select
+                    </option>
+                    <option value="Yet To Confirm">Yet To Confirm</option>
+                    {/* <option value="Interview Schedule">
                           Available For Interview
                         </option> */}
-                        <option value="Available For Interview">
-                          Available For Interview
-                        </option>
-                        <option value="Confirmed, but will be available later">
-                          Confirmed, but will be available later.
-                        </option>
+                    <option value="Available For Interview">
+                      Available For Interview
+                    </option>
+                    <option value="Confirmed, but will be available later">
+                      Confirmed, but will be available later.
+                    </option>
                   </select>
                   {errors.finalStatus && (
                     <div className="error-message">{errors.finalStatus}</div>
@@ -2665,13 +2686,13 @@ style={{
                       // } else {
                       //   seterrorInterviewSlot(""); // Clear error message if the date is valid
 
-                        setCallingTracker((prevState) => ({
-                          ...prevState,
-                          lineUp: {
-                            ...prevState.lineUp,
-                            availabilityForInterview: e.target.value,
-                          },
-                        }));
+                      setCallingTracker((prevState) => ({
+                        ...prevState,
+                        lineUp: {
+                          ...prevState.lineUp,
+                          availabilityForInterview: e.target.value,
+                        },
+                      }));
                       // }
                     }}
                     // line 1831 changed updated by sahil karnekar date 21-10-2024
@@ -2794,7 +2815,6 @@ const ModalComponent = ({
       setCalculatedHike(hikePercentage.toFixed(2));
     }
   }, [expectedCTCLakh, expectedCTCThousand, convertedCurrentCTC]);
-
 
   return (
     <Modal size="xl" centered show={show} onHide={handleClose}>

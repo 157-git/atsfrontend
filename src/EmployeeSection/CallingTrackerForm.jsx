@@ -222,7 +222,7 @@ const CallingTrackerForm = ({
         userType,
         currentDateNewGlobal
       );
-      console.log(getData);
+      // console.log(getData);
 
       setDailyWorkDataNew(getData);
     } catch (error) {
@@ -554,7 +554,7 @@ const CallingTrackerForm = ({
     const newSocket = getSocket();
     setSocket(newSocket);
   }, []);
-  console.log(lineUpData);
+  // console.log(lineUpData);
 
   const handleEmailCheckbox = (e) => {
     const checkornot = e.target.checked;
@@ -706,7 +706,7 @@ const CallingTrackerForm = ({
               (dailyWorkDataNew?.dailyArchived ?? 0) + 1 >= 5 ? "Yes" : "No",
           };
 
-          console.log(getDataForUpdate);
+          // console.log(getDataForUpdate);
 
           const putData = await putDailyworkData(
             employeeId,
@@ -767,7 +767,7 @@ const CallingTrackerForm = ({
     }
   };
 
-  console.log(dailyWorkDataNew);
+  // console.log(dailyWorkDataNew);
 
   //Arshad Attar Added this function to add data from excel and after added in data based delete from excel
   //added On Date : 22-11-2024
@@ -1245,46 +1245,61 @@ const CallingTrackerForm = ({
                         width: "60%",
                       }}
                     >
-                      <Upload
-                        accept=".pdf,.doc,.docx"
-                        showUploadList={false} // Hide file preview list
-                        beforeUpload={async (file) => {
-                          setUploadingResumeNewState(true);
-                          setDisplayProgress(false);
-                          setResumeFileName(file.name);
-                          setDisplayProgress(true);
-                          setUploadProgress(0);
-                          console.log(file);
-                          // Create a synthetic event to match input file event structure
-                          const syntheticEvent = { target: { files: [file] } };
-                          // Call handleResumeUploadBoth function
-                          await handleResumeUploadBoth(syntheticEvent);
-                          setUploadingResumeNewState(false);
-                          return false; // Prevent automatic upload
-                        }}
-                      >
-                        <Button
-                          icon={
-                            uploadingResumeNewState ? (
-                              <img
-                                src={uploadingResumeGif}
-                                alt="Uploading"
-                                style={{ width: 20, height: 20 }}
-                              />
-                            ) : (
-                              <img
-                                src={uploadingResumeStatic}
-                                alt="Static"
-                                style={{ width: 20, height: 20 }}
-                              />
-                            )
-                          }
-                        >
-                          {resumeFileName.length > 10
-                            ? `${resumeFileName.substring(0, 15)}...`
-                            : resumeFileName || "Upload Resume"}
-                        </Button>
-                      </Upload>
+
+                   <Upload
+  accept=".pdf,.doc,.docx"
+  showUploadList={false}
+  beforeUpload={async (file) => {
+    try {
+      if (!file) {
+        tostify.error("No file selected. Please upload a valid resume.");
+        return false;
+      }
+
+      setUploadingResumeNewState(true);
+      setDisplayProgress(false);
+      setResumeFileName(file.name || '');
+      setDisplayProgress(true);
+      setUploadProgress(0);
+
+      // Create a synthetic event to match input file event structure
+      const syntheticEvent = { target: { files: [file] } };
+
+      // Call handleResumeUploadBoth function
+      await handleResumeUploadBoth(syntheticEvent);
+    } catch (error) {
+      console.error("Error uploading resume:", error);
+      tostify.error("There was an issue uploading the resume. Please try again.");
+    } finally {
+      setUploadingResumeNewState(false);
+    }
+    return false; // Prevent automatic upload
+  }}
+>
+  <Button
+    icon={
+      uploadingResumeNewState ? (
+        <img
+          src={uploadingResumeGif}
+          alt="Uploading"
+          style={{ width: 20, height: 20 }}
+        />
+      ) : (
+        <img
+          src={uploadingResumeStatic}
+          alt="Static"
+          style={{ width: 20, height: 20 }}
+        />
+      )
+    }
+  >
+    {(resumeFileName && resumeFileName.length > 10)
+      ? `${resumeFileName.substring(0, 15)}...`
+      : resumeFileName || "Upload Resume"}
+  </Button>
+</Upload>
+
+
                       {displayProgress && (
                         <Progress
                           percent={uploadProgress}

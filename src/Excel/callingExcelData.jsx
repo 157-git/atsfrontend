@@ -16,7 +16,7 @@ import limitedOptions from "../helper/limitedOptions";
 import FilterData from "../helper/filterData";
 import convertToDocumentLink from "../helper/convertToDocumentLink";
 import { Avatar, Card, List, Pagination } from "antd";
-import {Alert, Modal as AntdModal} from "antd";
+import { Alert, Modal as AntdModal } from "antd";
 
 const CallingExcelList = ({
   updateState,
@@ -63,7 +63,7 @@ const CallingExcelList = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
   const [socket, setSocket] = useState(null);
-  const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
+  const [displayShareConfirm, setDisplayShareConfirm] = useState(false);
 
   const fetchUpdatedData = (page, size) => {
     fetch(
@@ -145,12 +145,12 @@ const CallingExcelList = ({
     setFilteredCallingList(filtered);
     setSearchCount(filtered.length);
   }, [searchTerm, callingList]);
-  const handleDisplayShareConfirmClick = ()=>{
+  const handleDisplayShareConfirmClick = () => {
     setDisplayShareConfirm(true);
-  }
-const handleCancelcloseshare = ()=>{
-  setDisplayShareConfirm(false);
-}
+  };
+  const handleCancelcloseshare = () => {
+    setDisplayShareConfirm(false);
+  };
   useEffect(() => {
     if (sortCriteria) {
       const sortedList = [...filteredCallingList].sort((a, b) => {
@@ -520,7 +520,6 @@ const handleCancelcloseshare = ()=>{
     return (currentPage - 1) * pageSize + index + 1;
   };
 
-  
   const [selectedRole, setSelectedRole] = useState("");
   const [displayManagers, setDisplayManagers] = useState(false);
   const [displayTeamLeaders, setDisplayTeamLeaders] = useState(false);
@@ -573,7 +572,7 @@ const handleCancelcloseshare = ()=>{
     } catch (error) {
       setIsDataSending(false);
       console.error("Error while forwarding candidates:", error);
-    }finally{
+    } finally {
       setDisplayShareConfirm(false);
     }
   };
@@ -677,7 +676,6 @@ const handleCancelcloseshare = ()=>{
       />
     </Card>
   );
-
 
   return (
     <div className="App-after1">
@@ -1113,57 +1111,66 @@ const handleCancelcloseshare = ()=>{
               />
 
               {/*Arshad Attar Added This Code On 20-01-205*/}
-               {showForwardPopup ? (
-                  <>
-                    <div className="custom-modal-overlay">
-                      <div className="custom-modal-container">
-                        <div className="custom-modal-dialog">
-                          <div className="custom-modal-header">Forward To</div>
-                          <div className="custom-modal-body">
-                            <div className="custom-accordion">
-                              {userType === "TeamLeader" && (
-                                <div className="custom-main-list">
-                                  {displayRecruiters &&
-                                    renderCard("Recruiters", recruitersList)}
-                                </div>
-                              )}
+              {showForwardPopup ? (
+                <>
+                  <div className="custom-modal-overlay">
+                    <div className="custom-modal-container">
+                      <div className="custom-modal-dialog">
+                        <div className="custom-modal-header">Forward To</div>
+                        <div className="custom-modal-body">
+                          <div className="custom-accordion">
+                            {userType === "TeamLeader" && (
+                              <div className="custom-main-list">
+                                {displayRecruiters &&
+                                  renderCard("Recruiters", recruitersList)}
+                              </div>
+                            )}
 
-                              {userType === "Manager" && (
-                                <div className="custom-main-list">
-                                  {displayTeamLeaders &&
-                                    renderCard("Team Leaders", teamLeadersList)}
-                                  {displayRecruiters &&
-                                    renderCard("Recruiters", recruitersList)}
-                                </div>
-                              )}
-                            </div>
+                            {userType === "Manager" && (
+                              <div className="custom-main-list">
+                                {displayTeamLeaders &&
+                                  renderCard("Team Leaders", teamLeadersList)}
+                                {displayRecruiters &&
+                                  renderCard("Recruiters", recruitersList)}
+                              </div>
+                            )}
                           </div>
+                        </div>
 
-                          <div className="custom-modal-footer">
-                             <AntdModal title="Share Data" open={displayShareConfirm} onOk={handleShare} onCancel={handleCancelcloseshare}>
-                                                      <Alert message="Are You Sure ? You Want To Send ?" type="info" showIcon />
-                                  </AntdModal>
-                            <button
-                              onClick={handleDisplayShareConfirmClick}
-                              className="daily-tr-btn"
-                            >
-                              Share
-                            </button>
-                            <button
-                              onClick={() => {
-                                setShowForwardPopup(false);
-                                resetSelections();
-                              }}
-                              className="daily-tr-btn"
-                            >
-                              Close
-                            </button>
-                          </div>
+                        <div className="custom-modal-footer">
+                          <AntdModal
+                            title="Share Data"
+                            open={displayShareConfirm}
+                            onOk={handleShare}
+                            onCancel={handleCancelcloseshare}
+                          >
+                            <Alert
+                              message="Are You Sure ? You Want To Send ?"
+                              type="info"
+                              showIcon
+                            />
+                          </AntdModal>
+                          <button
+                            onClick={handleDisplayShareConfirmClick}
+                            className="daily-tr-btn"
+                          >
+                            Share
+                          </button>
+                          <button
+                            onClick={() => {
+                              setShowForwardPopup(false);
+                              resetSelections();
+                            }}
+                            className="daily-tr-btn"
+                          >
+                            Close
+                          </button>
                         </div>
                       </div>
                     </div>
-                  </>
-                ) : null}
+                  </div>
+                </>
+              ) : null}
 
               <div>
                 <Modal

@@ -12,7 +12,7 @@ import Loader from "../EmployeeSection/loader";
 import * as XLSX from "xlsx";
 import ClipLoader from "react-spinners/ClipLoader";
 
-const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
+const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuccessfulDataAdditions}) => {
   const [file, setFile] = useState(null);
   // line number 16 added by sahil karnekar for manage input state for lineup file input
   const [lineupFile, setLineupFile] = useState(null);
@@ -567,6 +567,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
             onClick={displayCandidateForm}
             toggleSection={toggleSection}
             loginEmployeeName={loginEmployeeName}
+            onsuccessfulDataAdditions={onsuccessfulDataAdditions}
             // viewsSearchTerm={viewsSearchTerm}
             // this line added by sahil karnekar line 302
           />
@@ -578,6 +579,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
             onActionClick={handleActionClick} // Pass the handler to the table component
             toggleSection={toggleSection} // this line added by sahil karnekar line 302
             loginEmployeeName={loginEmployeeName}
+            onsuccessfulDataAdditions={onsuccessfulDataAdditions}
           />
         )}
 
@@ -586,6 +588,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName }) => {
             onCloseTable={() => setActiveTable("")}
             onActionClick={handleActionClick} // Pass the handler to the table component
             loginEmployeeName={loginEmployeeName}
+            onsuccessfulDataAdditions={onsuccessfulDataAdditions}
             // viewsSearchTerm={viewsSearchTerm}
           />
         )}

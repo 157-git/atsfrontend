@@ -19,15 +19,14 @@ const Home = () => {
       navigate(`/employee-login/${userType}`);
     }
   };
-  
 
   useEffect(() => {
-    // Retrieve the saved color from local storage and apply it
     const savedColor = localStorage.getItem("selectedColor");
     if (savedColor) {
       applyColor(savedColor);
     }
   }, []);
+
   const applyColor = (color) => {
     const darkenColor = (color, amount) => {
       let colorInt = parseInt(color.slice(1), 16);
@@ -50,6 +49,7 @@ const Home = () => {
     document.documentElement.style.setProperty("--hover-effect", hoverColor);
     document.documentElement.style.setProperty("--filter-color", color);
   };
+  
   return (
     <div className="mainDashboard-div">
       <div className="main-clouds"></div>
