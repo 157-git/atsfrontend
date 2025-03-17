@@ -176,6 +176,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
+   const [triggerFetch, setTriggerFetch] = useState(false);
 
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_39
   const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
@@ -210,7 +211,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
 
   useEffect(() => {
     fetchData(currentPage, pageSize);
-  }, [employeeId, currentPage, pageSize,searchTerm]);
+  }, [employeeId, currentPage, pageSize, triggerFetch]);
 
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_54
   const fetchManager = async () => {
@@ -340,6 +341,9 @@ const forwardSelectedCandidate = (e) => {
     }
 };
 
+const handleSearchClick = ()=>{
+  fetchData(currentPage, pageSize);
+}
 
   const handleShare = async () => {
     if (userType === "TeamLeader") {
@@ -427,7 +431,9 @@ const forwardSelectedCandidate = (e) => {
     }
   };
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_243
-
+  const handleTriggerFetch = () => {
+    setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
+  };
   //Name:-Akash Pawar Component:-EmployeeMarksheet Subcategory:-ResumeViewButton(added) start LineNo:-135 Date:-02/07
   const convertToDocumentLink = (byteCode, fileName) => {
     if (byteCode) {
@@ -668,7 +674,9 @@ const forwardSelectedCandidate = (e) => {
                   {searchTerm && (
                     <div className="svgimagesetinInput">
                       <svg
-                        onClick={() => setSearchTerm("")}
+                         onClick={() => {setSearchTerm("")
+                          handleTriggerFetch();
+                        }}
                         xmlns="http://www.w3.org/2000/svg"
                         height="24px"
                         viewBox="0 -960 960 960"
@@ -681,6 +689,12 @@ const forwardSelectedCandidate = (e) => {
                   )}
                 </div>
               </div>
+              <button
+        className="search-btns lineUp-share-btn"
+        onClick={() => handleSearchClick()} 
+      >
+        Search 
+      </button>
             </div>
 
             <div className="master-sheet-header">

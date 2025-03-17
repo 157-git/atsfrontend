@@ -1,5 +1,5 @@
 //Akash_Pawar_SendClientEmail_09/07
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./SendClientEmail.css";
 import { differenceInDays, differenceInSeconds } from "date-fns";
@@ -49,6 +49,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [searchCount, setSearchCount] = useState(0);
    const [allSelected, setAllSelected] = useState(false); // New state to track if all rows are selected
+   const filterRef=useRef(null);
 
   const navigator = useNavigate();
 
@@ -100,6 +101,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
+    const [triggerFetch, setTriggerFetch] = useState(false);
 
   const fetchCallingList = (page, size) => {
     fetch(`${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`)
@@ -121,7 +123,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
     fetchCallingList(currentPage, pageSize);
     setSelectedRows([]);
     setAllSelected(false);
-  }, [employeeId,currentPage,pageSize,searchTerm]);
+  }, [employeeId,currentPage,pageSize, triggerFetch]);
 
   useEffect(() => {
     const options = limitedOptions
@@ -157,14 +159,31 @@ const SendClientEmail = ({ clientEmailSender }) => {
       }
     }
   };
-
+   useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (filterRef.current && !filterRef.current.contains(event.target)) {
+          setActiveFilterOption(null); // Close filter dropdown when clicking outside
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+  
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
   const handleMouseOut = (event) => {
     const tooltip = event.currentTarget.querySelector(".tooltip");
     if (tooltip) {
       tooltip.style.visibility = "hidden";
     }
   };
-
+  const handleClearAll = () => {
+    setSelectedFilters({});
+  };
+  const countSelectedValues = (option) => {
+    return selectedFilters[option] ? selectedFilters[option].length : 0;
+  };
   useEffect(() => {
     filterData();
   }, [selectedFilters, callingList]);
@@ -259,7 +278,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
     });
     setFilteredCallingList(filtered);
     setSearchCount(filtered.length);
-  }, [searchTerm, callingList]);
+  }, [callingList]);
 
   useEffect(() => {
     if (sortCriteria) {
@@ -281,6 +300,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
     }
   }, [sortCriteria, sortOrder]);
 
+  const handleSearchClick = ()=>{
+    fetchCallingList(currentPage, pageSize);
+  }
+  const handleTriggerFetch = () => {
+    setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
+  };
   const filterData = () => {
     let filteredData = [...callingList];
     Object.entries(selectedFilters).forEach(([option, values]) => {
@@ -639,12 +664,22 @@ const SendClientEmail = ({ clientEmailSender }) => {
                     />
                     { searchTerm && (
                       <div className="svgimagesetinInput">
-                    <svg onClick={(()=>setSearchTerm(""))} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                    <svg 
+                    onClick={() => {setSearchTerm("")
+                      handleTriggerFetch();
+                    }}
+                    xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
                     </div>
                     )}
                     
                     </div>
                   </div>
+                  <button
+        className="search-btns lineUp-share-btn"
+        onClick={() => handleSearchClick()} 
+      >
+        Search 
+      </button>
             </div>
             <h5 style={{ color: "gray", fontSize: "18px" }}>Candidate Data</h5>
 
@@ -686,7 +721,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
             </div>
           </div>
           <div className="filter-dropdowns">
-            {showFilterSection && (
+            {/* {showFilterSection && (
               <div className="filter-section">
                 {limitedOptions.map(([optionKey, optionLabel]) => {
                   const uniqueValues = Array.from(
@@ -731,7 +766,91 @@ const SendClientEmail = ({ clientEmailSender }) => {
                   );
                 })}
               </div>
-            )}
+            )} */}
+
+{showFilterSection && (
+                  <div ref={filterRef} className="filter-section">
+                    {limitedOptions.map(([optionKey, optionLabel]) => {
+                      
+                      const uniqueValues = Array.from(
+                        new Set(
+                          callingList
+                            .map((item) =>
+                              item[optionKey]?.toString().toLowerCase()
+                            )
+                            .filter(
+                              (value) =>
+                                value &&
+                                value !== "-" &&
+                                !(
+                                  optionKey === "alternateNumber" &&
+                                  value === "0"
+                                )
+                                
+
+                            )
+                            
+                        )
+                      );
+                        
+
+
+                      return (
+                        <div>
+                          {/* Rajlaxmi jagadle  Added countSelectedValues that code date 20-02-2025 line 987/1003 */}
+                        <div key={optionKey} className="filter-option">
+  <button
+    className={`white-Btn ${
+      (selectedFilters[optionKey] && selectedFilters[optionKey].length > 0) || activeFilterOption === optionKey
+        ? "selected glow"
+        : ""
+    }`}
+    onClick={() => handleFilterOptionClick(optionKey)}
+  >
+    {optionLabel}
+    {selectedFilters[optionKey]?.length > 0 && (
+      <span className="selected-count">
+        ({countSelectedValues(optionKey)})
+      </span>
+    )}
+    <span className="filter-icon">&#x25bc;</span>
+  </button>
+{/* rajlaxmi Jagadle Changes That code date 20-02-2025 line 1003/1027 */}
+
+  {activeFilterOption === optionKey && (
+    <div className="city-filter">
+      <div className="optionDiv">
+        {uniqueValues.length > 0 ? (
+          uniqueValues.map((value) => (
+            <label key={value} className="selfcalling-filter-value">
+              <input
+                type="checkbox"
+                checked={selectedFilters[optionKey]?.includes(value) || false}
+                onChange={() => handleFilterSelect(optionKey, value)}
+                style={{ marginRight: "5px" }}
+                
+              />
+              {value}
+            </label>
+          ))
+        ) : (
+          <div>No values</div>
+        )}
+      </div>
+    </div>
+  )}
+</div>
+
+                          
+                          </div>
+                          );
+                    })}
+                    
+                    <button className="clr-button lineUp-Filter-btn" onClick={handleClearAll}>Clear Filters</button>
+
+                  </div>
+                  
+                )}
           </div>
 
           <div className="attendanceTableData">
@@ -739,7 +858,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
               <thead>
                 <tr className="attendancerows-head">
                   {!showShareButton ? (
-                    <th className="attendanceheading">
+                    <th className="attendanceheading" style={{ position: "sticky",left:0, zIndex: 10 }}>
                       <input
                         type="checkbox"
                         onChange={handleSelectAll}
@@ -750,7 +869,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       />
                     </th>
                   ) : null}
-                  <th className="attendanceheading">No.</th>
+                  <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>No.</th>
                   <th
                     className="attendanceheading"
                     onClick={() => handleSort("date")}
@@ -758,7 +877,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                     Added Date Time
                   </th>
                   {/* <th className="attendanceheading">Time</th> */}
-                  <th className="attendanceheading">Candidate Id</th>
+                  <th className="attendanceheading"  style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10}}>Candidate Id</th>
                   <th
                     className="attendanceheading"
                     onClick={() => handleSort("recruiterName")}
@@ -819,7 +938,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                 {filteredCallingList.map((item, index) => (
                   <tr key={item.candidateId} className="attendancerows">
                     {!showShareButton ? (
-                      <td className="tabledata">
+                      <td className="tabledata" style={{ position: "sticky", backgroundColor:"white",left:0, zIndex: 10 }}>
                         <input
                           type="checkbox"
                           checked={selectedRows.includes(item)}
@@ -832,6 +951,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
+                          style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10, backgroundColor: "white" }}
                         >
                          {calculateRowIndex(index)}
                           <div className="tooltip">
@@ -857,6 +977,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
+                      style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10, backgroundColor: "white" }}
                     >
                      {highlightText(item.candidateId.toString().toLowerCase() || "", searchTerm)}
                           <div className="tooltip">
