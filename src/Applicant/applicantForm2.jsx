@@ -914,12 +914,12 @@ function ApplicantForm2({ loginEmployeeName }) {
                       control={
                         <Radio
                           name="lineUp.gender"
-                          checked={formData.lineUp.gender === "male"}
+                          checked={formData.lineUp.gender === "Male"}
                           onChange={() =>
                             handleChange({
                               target: {
                                 name: "lineUp.gender",
-                                value: "male",
+                                value: "Male",
                               },
                             })
                           }
@@ -932,12 +932,12 @@ function ApplicantForm2({ loginEmployeeName }) {
                       control={
                         <Radio
                           name="lineUp.gender"
-                          checked={formData.lineUp.gender === "female"}
+                          checked={formData.lineUp.gender === "Female"}
                           onChange={() =>
                             handleChange({
                               target: {
                                 name: "lineUp.gender",
-                                value: "female",
+                                value: "Female",
                               },
                             })
                           }

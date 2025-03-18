@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./UpdateResponse.css";
 import { Button, Modal } from "react-bootstrap";
 import UpdateResponseFrom from "./UpdateResponseFrom";
@@ -10,6 +10,7 @@ import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import { Pagination } from "antd";
 import { set } from "date-fns";
 import {Modal as AntdModal} from "antd";
+import limitedOptions from "../helper/limitedOptions";
 
 const UpdateResponse = ({ onSuccessAdd, date }) => {
   const [updateResponseList, setUpdateResponseList] = useState([]);
@@ -33,29 +34,10 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
   const [formClosed, setFormClosed] = useState(false);
   const [searchCount, setSearchCount] = useState(0);
   const [showJobRole, setShowJobRole] = useState();
+  const filterRef=useRef(null);
+    const [triggerFetch, setTriggerFetch] = useState(false);
 
-  const limitedOptions = [
-    ["candidateId", "Candidate Id"],
-    ["candidateName", "Candidate Name"],
-    ["jobDesignation", "Job Designation"],
-    ["requirementId", "Requirement Id"],
-    ["employeeId", "Employee Id"],
-    ["candidateEmail", "Candidate Email"],
-    ["commentForTL", "Comment For TL"],
-    ["contactNumber", "Contact Number"],
-    ["finalStatus", "Final Status"],
-    ["interviewResponse", "Interview Response"],
-    ["interviewRound", "Interview Round"],
-    ["jobRole", "Job Role"],
-    ["nextInterviewDate", "Interview Date"],
-    ["nextInterviewTiming", "Interview Timing"],
-    ["officialMail", "Official Mail"],
-    ["requirementCompany", "Requirement Company"],
-    ["responseUpdatedDate", "Response Updated Date"],
-    ["sourceName", "Source Name"],
 
-    ["employeeName", "Employee Name"],
-  ];
   useEffect(() => {
     const options = limitedOptions
       .filter(([key]) =>
@@ -74,11 +56,11 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
   useEffect(() => {
     fetchUpdateResponseList(currentPage, pageSize);
     setFormClosed(false);
-  }, [formClosed, currentPage, pageSize, filterValue]);
+  }, [formClosed, currentPage, pageSize, triggerFetch]);
 
   useEffect(() => {
     applyFilters();
-  }, [filterType, filterValue, callingList]);
+  }, [filterType, callingList]);
 
   useEffect(() => {
     filterData();
@@ -102,6 +84,13 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
       console.log("Error fetching shortlisted data:", err);
       setLoading(false);
     }
+  };
+
+  const handleClearAll = () => {
+    setSelectedFilters({});
+  };
+  const handleTriggerFetch = () => {
+    setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
   };
 
   const applyFilters = () => {
@@ -177,7 +166,9 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     setFilteredCallingList(filteredResults);
     setSearchCount(filteredResults.length);
   };
-
+  const handleSearchClick = ()=>{
+    fetchUpdateResponseList(currentPage, pageSize);
+  }
   const handleFilterTypeChange = (e) => {
     setFilterType(e.target.value);
     setFilterValue("");
@@ -284,13 +275,29 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     }
   };
 
+   useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (filterRef.current && !filterRef.current.contains(event.target)) {
+          setActiveFilterOption(null); // Close filter dropdown when clicking outside
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+  
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
+
   const handleMouseOut = (event) => {
     const tooltip = event.currentTarget.querySelector(".tooltip");
     if (tooltip) {
       tooltip.style.visibility = "hidden";
     }
   };
-
+  const countSelectedValues = (option) => {
+    return selectedFilters[option] ? selectedFilters[option].length : 0;
+  };
   const filterData = () => {
     let filteredData = [...callingList];
     Object.entries(selectedFilters).forEach(([option, values]) => {
@@ -401,7 +408,9 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                   <div className="TeamLead-main-filter-section">
                     <div className="TeamLead-main-filter-section-header">
                       <div style={{ display: "flex" }}>
-                        <div className="search">
+                        <div className="search"  style={{
+                            paddingTop:"0"
+                          }}>
                           <i className="fa-solid fa-magnifying-glass"></i>
                         </div>
 
@@ -424,7 +433,9 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                               {filterValue && (
                                 <div className="svgimagesetinInput">
                                   <svg
-                                    onClick={() => setFilterValue("")}
+                                     onClick={() => {setFilterValue("")
+                                      handleTriggerFetch();
+                                    }}
                                     xmlns="http://www.w3.org/2000/svg"
                                     height="24px"
                                     viewBox="0 -960 960 960"
@@ -437,6 +448,12 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                               )}
                             </div>
                           </div>
+                          <button
+        className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
+        onClick={() => handleSearchClick()} 
+      >
+        Search 
+      </button>
                         </div>
                       </div>
                       <div
@@ -446,7 +463,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           paddingLeft: "180px",
                         }}
                       >
-                        <h1 style={{ color: "gray" }}>Update Response</h1>
+                        <h1 className="newclassnameforpageheader">Update Response</h1>
                       </div>
                       <div>
                         <button
@@ -462,7 +479,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                     </div>
 
                     <div className="filter-dropdowns">
-                      {showFilterOptions && (
+                      {/* {showFilterOptions && (
                         <div className="filter-section">
                           {limitedOptions.map(([optionKey, optionLabel]) => {
                             const uniqueValues = Array.from(
@@ -548,7 +565,91 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                             );
                           })}
                         </div>
-                      )}
+                      )} */}
+
+{showFilterOptions && (
+                  <div ref={filterRef} className="filter-section">
+                    {limitedOptions.map(([optionKey, optionLabel]) => {
+                      
+                      const uniqueValues = Array.from(
+                        new Set(
+                          callingList
+                            .map((item) =>
+                              item[optionKey]?.toString().toLowerCase()
+                            )
+                            .filter(
+                              (value) =>
+                                value &&
+                                value !== "-" &&
+                                !(
+                                  optionKey === "alternateNumber" &&
+                                  value === "0"
+                                )
+                                
+
+                            )
+                            
+                        )
+                      );
+                        
+
+
+                      return (
+                        <div>
+                          {/* Rajlaxmi jagadle  Added countSelectedValues that code date 20-02-2025 line 987/1003 */}
+                        <div key={optionKey} className="filter-option">
+  <button
+    className={`white-Btn ${
+      (selectedFilters[optionKey] && selectedFilters[optionKey].length > 0) || activeFilterOption === optionKey
+        ? "selected glow"
+        : ""
+    }`}
+    onClick={() => handleFilterOptionClick(optionKey)}
+  >
+    {optionLabel}
+    {selectedFilters[optionKey]?.length > 0 && (
+      <span className="selected-count">
+        ({countSelectedValues(optionKey)})
+      </span>
+    )}
+    <span className="filter-icon">&#x25bc;</span>
+  </button>
+{/* rajlaxmi Jagadle Changes That code date 20-02-2025 line 1003/1027 */}
+
+  {activeFilterOption === optionKey && (
+    <div className="city-filter">
+      <div className="optionDiv">
+        {uniqueValues.length > 0 ? (
+          uniqueValues.map((value) => (
+            <label key={value} className="selfcalling-filter-value">
+              <input
+                type="checkbox"
+                checked={selectedFilters[optionKey]?.includes(value) || false}
+                onChange={() => handleFilterSelect(optionKey, value)}
+                style={{ marginRight: "5px" }}
+                
+              />
+              {value}
+            </label>
+          ))
+        ) : (
+          <div>No values</div>
+        )}
+      </div>
+    </div>
+  )}
+</div>
+
+                          
+                          </div>
+                          );
+                    })}
+                    
+                    <button className="clr-button lineUp-Filter-btn" onClick={handleClearAll}>Clear Filters</button>
+
+                  </div>
+                  
+                )}
                     </div>
                   </div>
 
@@ -556,8 +657,8 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                     <table className="attendance-table">
                       <thead>
                         <tr className="attendancerows-head">
-                          <th className="attendanceheading">Sr No</th>
-                          <th className="attendanceheading">Candidate ID</th>
+                          <th className="attendanceheading" style={{ position: "sticky",left:0, zIndex: 10 }}>Sr No</th>
+                          <th className="attendanceheading" style={{ position: "sticky", left:"35px", zIndex: 10}}>Candidate ID</th>
                           <th className="attendanceheading">Candidate Name</th>
                           <th className="attendanceheading">Candidate Email</th>
                           <th className="attendanceheading">Contact Number</th>
@@ -600,6 +701,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                               className="tabledata "
                               onMouseOver={handleMouseOver}
                               onMouseOut={handleMouseOut}
+                              style={{ position: "sticky", backgroundColor:"white",left:0, zIndex: 1 }}
                             >
                               {calculateRowIndex(index)}
                               <div className="tooltip">
@@ -608,7 +710,9 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                                 </span>
                               </div>
                             </td>
-                            <td className="tabledata">
+                            <td className="tabledata"
+                             style={{ position: "sticky", left: "35px", zIndex: 1, backgroundColor: "white" }}
+                            >
                               {highlightText(
                                 data.candidateId.toString().toLowerCase() || "",
                                 filterValue

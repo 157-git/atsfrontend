@@ -698,7 +698,7 @@ const CallingList = ({
             <div className="search">
               {/* this line updated by sahil karnekar date 24-10-2024 */}
 
-              <div style={{ display: "flex" }}>
+              <div className="newsearchclassnameforalignment" style={{ display: "flex" }}>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <i
                     className="fa-solid fa-magnifying-glass"
@@ -738,14 +738,14 @@ const CallingList = ({
                   </div>
                 </div>
                 <button
-        className="search-btns lineUp-share-btn"
+        className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
         onClick={() => handleSearchClick()} 
       >
         Search 
       </button>
               </div>
 
-              <h3 style={{ color: "gray" }}>Calling Tracker</h3>
+              <h3 className="newclassnameforpageheader">Calling Tracker</h3>
 
               <div
                 style={{
@@ -1047,7 +1047,7 @@ const CallingList = ({
                       <tr key={item.candidateId} className="attendancerows">
                         {(!showShareButton && userType === "TeamLeader") ||
                         (!showShareButton && userType === "Manager") ? (
-                          <td className="tabledata" style={{ position: "sticky", backgroundColor:"white",left:0, zIndex: 10 }}>
+                          <td className="tabledata" style={{ position: "sticky", backgroundColor:"white",left:0, zIndex: 1 }}>
                             <input
                               type="checkbox"
                               checked={selectedRows.includes(item.candidateId)}
@@ -1060,7 +1060,7 @@ const CallingList = ({
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
-                          style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10, backgroundColor: "white" }}
+                          style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1, backgroundColor: "white" }}
                         >
                           {calculateRowIndex(index)}
                           <div className="tooltip">
@@ -1074,7 +1074,7 @@ const CallingList = ({
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
-                          style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10, backgroundColor: "white" }}
+                          style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1, backgroundColor: "white" }}
                         >
                           {highlightText(
                             item.candidateId.toString().toLowerCase() || "",
@@ -1112,7 +1112,7 @@ const CallingList = ({
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
-                          style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 10, backgroundColor: "white" }}
+                          style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 1, backgroundColor: "white" }}
                         >
                           {highlightText(item.recruiterName || "", searchTerm)}
                           <div className="tooltip">

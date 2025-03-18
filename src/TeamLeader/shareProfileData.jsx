@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CallingTrackerForm from "../EmployeeSection/CallingTrackerForm";
 import "../Excel/resumeList.css";
 import { useParams } from "react-router-dom";
@@ -35,30 +35,34 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
   const [searchCount, setSearchCount] = useState(0);
+   const [triggerFetch, setTriggerFetch] = useState(false);
+    const filterRef=useRef(null);
 
-  useEffect(() => {
-    const fetchData = async (page, size) => {
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/share-profile-count-data?page=${page}&size=${size}`
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const result = await response.json();
-        setData(result.content);
-        setFilteredData(result.content);
-        setTotalRecords(result.totalElements);
-        setSearchCount(result.length);
-        console.log(filteredData);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
+
+  const fetchData = async (page, size) => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/share-profile-count-data?page=${page}&size=${size}`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
-    };
+      const result = await response.json();
+      setData(result.content);
+      setFilteredData(result.content);
+      setTotalRecords(result.totalElements);
+      setSearchCount(result.length);
+      console.log(filteredData);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+ 
     fetchData(currentPage, pageSize);
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, triggerFetch]);
 
   const handleMouseOver = (event) => {
     const tableData = event.currentTarget;
@@ -79,7 +83,19 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
       }
     }
   };
-
+ useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (filterRef.current && !filterRef.current.contains(event.target)) {
+          setActiveFilterOption(null); // Close filter dropdown when clicking outside
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+  
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
   const handleMouseOut = (event) => {
     const tooltip = event.currentTarget.querySelector(".tooltip");
     if (tooltip) {
@@ -105,7 +121,15 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   const toggleFilterSection = () => {
     setShowFilterSection(!showFilterSection);
   };
-
+  const handleSearchClick = ()=>{
+    fetchData(currentPage, pageSize);
+  }
+  const handleClearAll = () => {
+    setSelectedFilters({});
+  };
+  const countSelectedValues = (option) => {
+    return selectedFilters[option] ? selectedFilters[option].length : 0;
+  };
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -133,7 +157,9 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
       return newSelectedFilters;
     });
   };
-
+  const handleTriggerFetch = () => {
+    setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
+  };
   const handleFilterSelect = (key, value) => {
     setSelectedFilters((prev) => ({
       ...prev,
@@ -202,7 +228,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
 
   useEffect(() => {
     applyFilters(); // Reapply filters whenever the data or selected filters change
-  }, [searchTerm, data, selectedFilters]);
+  }, [ data, selectedFilters]);
 
   const calculateWidth = () => {
     const baseWidth = 250;
@@ -247,7 +273,9 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                         {searchTerm && (
                           <div className="svgimagesetinInput">
                             <svg
-                              onClick={() => setSearchTerm("")}
+                              onClick={() => {setSearchTerm("")
+                                handleTriggerFetch();
+                              }}
                               xmlns="http://www.w3.org/2000/svg"
                               height="24px"
                               viewBox="0 -960 960 960"
@@ -260,8 +288,14 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                         )}
                       </div>
                     </div>
+                    <button
+        className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
+        onClick={() => handleSearchClick()} 
+      >
+        Search 
+      </button>
                   </div>
-                  <h1 className="resume-data-heading">Shared Profile Data</h1>
+                  <h1 className="resume-data-heading newclassnameforpageheader">Shared Profile Data</h1>
                   <div className="rl-btn-div">
                     <button
                       style={{ marginRight: "20px" }}
@@ -299,7 +333,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                 </div>
                 {/* Swapnil_Rokade_ResumeList_CreateExcel_18/07/2024 */}
                 <div>
-                  {showFilterSection && (
+                  {/* {showFilterSection && (
                     <div className="filter-section">
                       {limitedOptions.map(([optionKey, optionLabel]) => {
                         const uniqueValues = Array.from(
@@ -382,7 +416,91 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                         );
                       })}
                     </div>
-                  )}
+                  )} */}
+
+{showFilterSection && (
+                  <div ref={filterRef} className="filter-section">
+                    {limitedOptions.map(([optionKey, optionLabel]) => {
+                      
+                      const uniqueValues = Array.from(
+                        new Set(
+                          data
+                            .map((item) =>
+                              item[optionKey]?.toString().toLowerCase()
+                            )
+                            .filter(
+                              (value) =>
+                                value &&
+                                value !== "-" &&
+                                !(
+                                  optionKey === "alternateNumber" &&
+                                  value === "0"
+                                )
+                                
+
+                            )
+                            
+                        )
+                      );
+                        
+
+
+                      return (
+                        <div>
+                          {/* Rajlaxmi jagadle  Added countSelectedValues that code date 20-02-2025 line 987/1003 */}
+                        <div key={optionKey} className="filter-option">
+  <button
+    className={`white-Btn ${
+      (selectedFilters[optionKey] && selectedFilters[optionKey].length > 0) || activeFilterOption === optionKey
+        ? "selected glow"
+        : ""
+    }`}
+    onClick={() => handleFilterOptionClick(optionKey)}
+  >
+    {optionLabel}
+    {selectedFilters[optionKey]?.length > 0 && (
+      <span className="selected-count">
+        ({countSelectedValues(optionKey)})
+      </span>
+    )}
+    <span className="filter-icon">&#x25bc;</span>
+  </button>
+{/* rajlaxmi Jagadle Changes That code date 20-02-2025 line 1003/1027 */}
+
+  {activeFilterOption === optionKey && (
+    <div className="city-filter">
+      <div className="optionDiv">
+        {uniqueValues.length > 0 ? (
+          uniqueValues.map((value) => (
+            <label key={value} className="selfcalling-filter-value">
+              <input
+                type="checkbox"
+                checked={selectedFilters[optionKey]?.includes(value) || false}
+                onChange={() => handleFilterSelect(optionKey, value)}
+                style={{ marginRight: "5px" }}
+                
+              />
+              {value}
+            </label>
+          ))
+        ) : (
+          <div>No values</div>
+        )}
+      </div>
+    </div>
+  )}
+</div>
+
+                          
+                          </div>
+                          );
+                    })}
+                    
+                    <button className="clr-button lineUp-Filter-btn" onClick={handleClearAll}>Clear Filters</button>
+
+                  </div>
+                  
+                )}
                   {/* this modal added by sahil date 22-10-2024 */}
                 </div>
               </div>

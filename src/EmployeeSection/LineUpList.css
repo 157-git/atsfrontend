@@ -241,3 +241,9 @@
 .dropdown-content label {
   cursor: pointer;
 }
+.newsearchclassnameforalignment{
+  align-items: center;
+}
+.newSearchButtonMarginLeft{
+  margin-left: 10px;
+}

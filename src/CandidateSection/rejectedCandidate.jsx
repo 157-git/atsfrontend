@@ -678,13 +678,13 @@ const handleCancelcloseshare = ()=>{
                 </div>
               </div>
               <button
-        className="search-btns lineUp-share-btn"
+        className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
         onClick={() => handleSearchClick()} 
       >
         Search 
       </button>
             </div>
-            <h5 style={{ color: "gray" }}>Rejected Data </h5>
+            <h5 className="newclassnameforpageheader">Rejected Data </h5>
 
             <div
               style={{
@@ -987,7 +987,7 @@ const handleCancelcloseshare = ()=>{
                       <tr key={item.candidateId} className="attendancerows">
                         {(!showShareButton && userType === "TeamLeader") ||
                         (!showShareButton && userType === "Manager") ? (  
-                          <td className="tabledata" style={{ position: "sticky", backgroundColor:"white",left:0, zIndex: 10 }}>
+                          <td className="tabledata" style={{ position: "sticky", backgroundColor:"white",left:0, zIndex: 1 }}>
                             <input
                               type="checkbox"
                               checked={selectedRows.includes(item.candidateId)}
@@ -999,7 +999,7 @@ const handleCancelcloseshare = ()=>{
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
-                          style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10, backgroundColor: "white" }}
+                          style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1, backgroundColor: "white" }}
                         >
                           {calculateRowIndex(index)}
                           <div className="tooltip">
@@ -1013,7 +1013,7 @@ const handleCancelcloseshare = ()=>{
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
-                          style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10, backgroundColor: "white" }}
+                          style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1, backgroundColor: "white" }}
                         >
                           {highlightText(
                             item.candidateId.toString().toLowerCase() || "",
@@ -1051,7 +1051,7 @@ const handleCancelcloseshare = ()=>{
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
-                          style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 10, backgroundColor: "white" }}
+                          style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 1, backgroundColor: "white" }}
                         >
                           {highlightText(item.recruiterName || "", searchTerm)}
                           <div className="tooltip">

@@ -330,7 +330,7 @@ console.log(formData);
           <main className="job-desc">
             <section className="job-performance">
               {/* Align AddJobDescription name center and changing color to gray */}
-              <h3 className="text-center text-[18px] text-gray-500 py-2">
+              <h3 className="text-center text-[18px] text-gray-500 py-2 newclassnameforpageheader">
                 {" "}
                 Add Job Description
               </h3>

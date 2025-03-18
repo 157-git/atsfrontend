@@ -1701,7 +1701,7 @@ console.log(callingTracker);
                         className="gender"
                         // line number 538 added by sahil karnekar , suggestion from tester on date : 14-10-2024
                         value="Male"
-                        checked={callingTracker?.lineUp.gender === "Male"}
+                        checked={callingTracker?.lineUp.gender === ("Male" || "male")}
                         onChange={handleChange}
                       />
                     </div>
@@ -1714,7 +1714,7 @@ console.log(callingTracker);
                         name="lineUp.gender"
                         value="Female"
                         className="gender"
-                        checked={callingTracker?.lineUp.gender === "Female"}
+                        checked={callingTracker?.lineUp.gender === ("Female" || "female")}
                         onChange={handleChange}
                       />
                     </div>

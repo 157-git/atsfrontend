@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../Excel/callingExcelData.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,7 +15,7 @@ import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
 import limitedOptions from "../helper/limitedOptions";
 import FilterData from "../helper/filterData";
 import convertToDocumentLink from "../helper/convertToDocumentLink";
-import { Avatar, Card, List, Pagination } from "antd";
+import { Avatar, Badge, Card, List, Pagination } from "antd";
 import {Alert, Modal as AntdModal} from "antd";
 
 const CallingExcelList = ({
@@ -64,6 +64,7 @@ const CallingExcelList = ({
   const [totalRecords, setTotalRecords] = useState(0);
   const [socket, setSocket] = useState(null);
   const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
+    const filterRef=useRef(null);
 
   const fetchUpdatedData = (page, size) => {
     fetch(
@@ -399,6 +400,19 @@ const handleCancelcloseshare = ()=>{
       }
     }
   };
+   useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (filterRef.current && !filterRef.current.contains(event.target)) {
+          setActiveFilterOption(null); // Close filter dropdown when clicking outside
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+  
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
 
   const handleMouseOut = (event) => {
     const tooltip = event.currentTarget.querySelector(".tooltip");
@@ -413,13 +427,23 @@ const handleCancelcloseshare = ()=>{
 
   const handleSelectAll = () => {
     if (allSelected) {
-      setSelectedRows([]);
+      setSelectedRows((prevSelectedRows) => 
+        prevSelectedRows.filter((id) => !callingList.map((item) => item.candidateId).includes(id))
+      );
     } else {
-      const allRowIds = filteredCallingList.map((item) => item.candidateId);
-      setSelectedRows(allRowIds);
+      const allRowIds = callingList.map((item) => item.candidateId);
+      setSelectedRows((prevSelectedRows) => [...new Set([...prevSelectedRows, ...allRowIds])]);
     }
     setAllSelected(!allSelected);
   };
+
+     const areAllRowsSelectedOnPage = callingList.every((item) =>
+          selectedRows.includes(item.candidateId)
+        );
+      
+        useEffect(() => {
+          setAllSelected(areAllRowsSelectedOnPage);
+        }, [callingList, selectedRows]); 
 
   const handleSelectRow = (candidateId) => {
     setSelectedRows((prevSelectedRows) => {
@@ -616,7 +640,12 @@ const handleCancelcloseshare = ()=>{
     setRecruitersList(response.data);
     setDisplayRecruiters(true);
   };
-
+  const handleClearAll = () => {
+    setSelectedFilters({});
+  };
+  const countSelectedValues = (option) => {
+    return selectedFilters[option] ? selectedFilters[option].length : 0;
+  };
   const renderCard = (title, list) => (
     <Card
       hoverable
@@ -717,11 +746,22 @@ const handleCancelcloseshare = ()=>{
 
                   {/* )} */}
                 </div>
-                <h1 className="excel-calling-data-heading">Excel Data</h1>
+                <h1 className="excel-calling-data-heading newclassnameforpageheader">Excel Data</h1>
 
                 <div style={{ display: "flex", gap: "5px" }}>
                   {/* // Arshad Attar Added This Code On 18-11-2024
                     // Added New Share Data Frontend Logic line 1104 to 1144 */}
+                      {
+                    !showShareButton && (
+                      <Badge
+                  color="var(--notification-badge-background)"
+                  count={selectedRows.length}
+                  className="newBadgeselectedcandidatestyle"
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M222-200 80-342l56-56 85 85 170-170 56 57-225 226Zm0-320L80-662l56-56 85 85 170-170 56 57-225 226Zm298 240v-80h360v80H520Zm0-320v-80h360v80H520Z"/></svg>
+                </Badge>
+                    )
+                  }
                   {userType !== "Recruiters" && (
                     <div>
                       {showShareButton ? (
@@ -733,6 +773,7 @@ const handleCancelcloseshare = ()=>{
                         </button>
                       ) : (
                         <div style={{ display: "flex", gap: "5px" }}>
+
                           <button
                             className="lineUp-share-btn"
                             onClick={() => {
@@ -777,97 +818,89 @@ const handleCancelcloseshare = ()=>{
               {showFilterSection && (
                 <div className="filter-section">
                   <div className="filter-dropdowns">
-                    {showFilterSection && (
-                      <div className="filter-section">
-                        {/* updated by sahil karnekar date 22-10-2024 */}
-                        {limitedOptions.map(([optionKey, optionLabel]) => {
-                          const uniqueValues = Array.from(
-                            new Set(
-                              callingList
-                                .map((item) => {
-                                  const value = item[optionKey];
-                                  // Ensure the value is a string before converting to lowercase
-                                  return typeof value === "string"
-                                    ? value.toLowerCase()
-                                    : value;
-                                })
-                                .filter(
-                                  (value) =>
-                                    value !== undefined && value !== null
-                                ) // Remove null or undefined values
+                  {showFilterSection && (
+                  <div ref={filterRef} className="filter-section">
+                    {limitedOptions.map(([optionKey, optionLabel]) => {
+                      
+                      const uniqueValues = Array.from(
+                        new Set(
+                          callingList
+                            .map((item) =>
+                              item[optionKey]?.toString().toLowerCase()
                             )
-                          );
+                            .filter(
+                              (value) =>
+                                value &&
+                                value !== "-" &&
+                                !(
+                                  optionKey === "alternateNumber" &&
+                                  value === "0"
+                                )
+                                
 
-                          return (
-                            <div key={optionKey} className="filter-option">
-                              <button
-                                className="white-Btn"
-                                onClick={() =>
-                                  handleFilterOptionClick(optionKey)
-                                }
-                              >
-                                {optionLabel}
-                                <span className="filter-icon">&#x25bc;</span>
-                              </button>
-                              {activeFilterOption === optionKey && (
-                                <div className="city-filter">
-                                  <div className="optionDiv">
-                                    {/* line number 492 to 513 added by sahil karnekar date : 14-10-2024 */}
-                                    {uniqueValues.filter(
-                                      (value) =>
-                                        value !== "" &&
-                                        value !== null &&
-                                        value !== "-" &&
-                                        value !== undefined &&
-                                        !(
-                                          optionKey === "alternateNumber" &&
-                                          value === 0
-                                        )
-                                    ).length > 0 ? (
-                                      uniqueValues.map(
-                                        (value) =>
-                                          value !== "" &&
-                                          value !== null &&
-                                          value !== "-" &&
-                                          value !== undefined &&
-                                          !(
-                                            optionKey === "alternateNumber" &&
-                                            value === 0
-                                          ) && (
-                                            <label
-                                              key={value}
-                                              className="selfcalling-filter-value"
-                                            >
-                                              <input
-                                                type="checkbox"
-                                                checked={
-                                                  selectedFilters[
-                                                    optionKey
-                                                  ]?.includes(value) || false
-                                                }
-                                                onChange={() =>
-                                                  handleFilterSelect(
-                                                    optionKey,
-                                                    value
-                                                  )
-                                                }
-                                                style={{ marginRight: "5px" }}
-                                              />
-                                              {value}
-                                            </label>
-                                          )
-                                      )
-                                    ) : (
-                                      <div>No values</div>
-                                    )}
-                                  </div>
-                                </div>
-                              )}
-                            </div>
+                            )
+                            
+                        )
+                      );
+                        
+
+
+                      return (
+                        <div>
+                          {/* Rajlaxmi jagadle  Added countSelectedValues that code date 20-02-2025 line 987/1003 */}
+                        <div key={optionKey} className="filter-option">
+  <button
+    className={`white-Btn ${
+      (selectedFilters[optionKey] && selectedFilters[optionKey].length > 0) || activeFilterOption === optionKey
+        ? "selected glow"
+        : ""
+    }`}
+    onClick={() => handleFilterOptionClick(optionKey)}
+  >
+    {optionLabel}
+    {selectedFilters[optionKey]?.length > 0 && (
+      <span className="selected-count">
+        ({countSelectedValues(optionKey)})
+      </span>
+    )}
+    <span className="filter-icon">&#x25bc;</span>
+  </button>
+{/* rajlaxmi Jagadle Changes That code date 20-02-2025 line 1003/1027 */}
+
+  {activeFilterOption === optionKey && (
+    <div className="city-filter">
+      <div className="optionDiv">
+        {uniqueValues.length > 0 ? (
+          uniqueValues.map((value) => (
+            <label key={value} className="selfcalling-filter-value">
+              <input
+                type="checkbox"
+                checked={selectedFilters[optionKey]?.includes(value) || false}
+                onChange={() => handleFilterSelect(optionKey, value)}
+                style={{ marginRight: "5px" }}
+                
+              />
+              {value}
+            </label>
+          ))
+        ) : (
+          <div>No values</div>
+        )}
+      </div>
+    </div>
+  )}
+</div>
+
+                          
+                          </div>
                           );
-                        })}
-                      </div>
-                    )}
+                    })}
+                    
+                    <button className="clr-button lineUp-Filter-btn" onClick={handleClearAll}>Clear Filters</button>
+
+                  </div>
+                  
+                )}
                   </div>
                 </div>
               )}
@@ -879,21 +912,21 @@ const handleCancelcloseshare = ()=>{
                      // Added New Share Data Frontend Logic line 1258 to 1268 */}
 
                       {!showShareButton ? (
-                        <th className="attendanceheading">
-                          <input
+                        <th className="attendanceheading" style={{ position: "sticky",left:0, zIndex: 10 }}>
+                           <input
                             type="checkbox"
                             onChange={handleSelectAll}
                             checked={
-                              selectedRows.length === filteredCallingList.length
+                              filteredCallingList.every((row) => selectedRows.includes(row.candidateId))
                             }
                             name="selectAll"
                           />
                         </th>
                       ) : null}
 
-                      <th className="attendanceheading">No.</th>
+                      <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>No.</th>
                       <th className="attendanceheading">Excel Upload Date</th>
-                      <th className="attendanceheading">Candidate Name</th>
+                      <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10}}>Candidate Name</th>
                       <th className="attendanceheading">Candidate Email</th>
                       <th className="attendanceheading">Contact Number</th>
                       <th className="attendanceheading">Designation</th>
@@ -911,7 +944,7 @@ const handleCancelcloseshare = ()=>{
                       // Added New Share Data Frontend Logic line 1286 to 1297 */}
                       <tr key={item.candidateId} className="attendancerows">
                         {!showShareButton ? (
-                          <td className="tabledata">
+                          <td className="tabledata" style={{ position: "sticky", backgroundColor:"white",left:0, zIndex: 1 }}>
                             <input
                               type="checkbox"
                               checked={selectedRows.includes(item.candidateId)}
@@ -923,6 +956,7 @@ const handleCancelcloseshare = ()=>{
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
+                          style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1, backgroundColor: "white" }}
                         >
                           {calculateRowIndex(index)}
                           <div className="tooltip">
@@ -954,6 +988,7 @@ const handleCancelcloseshare = ()=>{
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
+                          style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1, backgroundColor: "white" }}
                         >
                           {highlightText(item.candidateName || "", searchTerm)}
                           <div className="tooltip">

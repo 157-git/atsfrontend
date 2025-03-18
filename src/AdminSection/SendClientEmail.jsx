@@ -12,9 +12,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
-import { Pagination } from "antd";
+import { Badge, Pagination } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import { getSocket } from "../EmployeeDashboard/socket";
+import limitedOptions from "../helper/limitedOptions";
 
 // SwapnilRokade_SendClientEmail_ModifyFilters_11/07
 // SwapnilROkade_AddingErrorAndSuccessMessage_19/07
@@ -53,50 +54,6 @@ const SendClientEmail = ({ clientEmailSender }) => {
 
   const navigator = useNavigate();
 
-  // prachi parab sendClientEmail_filter_section 11/9
-  const limitedOptions = [
-    ["alternateNumber", "Alternate Number"],
-    ["availabilityForInterview", "Availability For Interview"],
-    ["callingFeedback", "Calling Feedback"],
-    ["candidateAddedTime", "Candidate Added Time"],
-    ["candidateEmail", "Candidate Email"],
-    ["candidateId", "Candidate Id"],
-    ["candidateName", "Candidate Name"],
-    ["communicationRating", "Communication Rating"],
-    ["companyName", "Company Name"],
-    ["contactNumber", "Contact Number"],
-    ["currentCtcLakh", "Current CTC Lakh"],
-    ["currentCtcThousand", "Current CTC Thousand"],
-    ["currentLocation", "Current Location"],
-    ["date", "Date"],
-    ["dateOfBirth", "Date Of Birth"],
-    ["empId", "Emp Id"],
-    ["expectedCtcLakh", "Expected CTC Lakh"],
-    ["expectedCtcThousand", "Expected CTC Thousand"],
-    ["experienceMonth", "Experience Month"],
-    ["experienceYear", "Experience Year"],
-    ["extraCertification", "Working Status"],
-    ["feedBack", "Feedback"],
-    ["finalStatus", "Final Status"],
-    ["fullAddress", "Full Address"],
-    ["gender", "Gender"],
-    ["holdingAnyOffer", "Holding Any Offer"],
-    ["incentive", "Incentive"],
-    ["interviewTime", "Interview Time"],
-    ["jobDesignation", "Job Designation"],
-    ["msgForTeamLeader", "Message For Team Leader"],
-    ["noticePeriod", "Notice Period"],
-    ["offerLetterMsg", "Offer Letter Message"],
-    ["oldEmployeeId", "Old Employee Id"],
-    ["qualification", "Qualification"],
-    ["recruiterName", "Recruiter Name"],
-    ["relevantExperience", "Relevant Experience"],
-    ["requirementCompany", "Applied Company"],
-    ["requirementId", "Job Id"],
-    ["selectYesOrNo", "Status"],
-    ["sourceName", "Source Name"],
-    ["yearOfPassing", "Year Of Passing"],
-  ];
 
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
@@ -121,8 +78,8 @@ const SendClientEmail = ({ clientEmailSender }) => {
 
   useEffect(() => {
     fetchCallingList(currentPage, pageSize);
-    setSelectedRows([]);
-    setAllSelected(false);
+    // setSelectedRows([]);
+    // setAllSelected(false);
   }, [employeeId,currentPage,pageSize, triggerFetch]);
 
   useEffect(() => {
@@ -460,18 +417,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
   };
 
   const handleSelectRow = (can) => {
+    const candidateId = can.candidateId;
     setSelectedRows((prevSelectedRows) => {
-      const candidateId = can.candidateId;
-      if (
-        prevSelectedRows.some(
-          (candidate) => candidate.candidateId === candidateId
-        )
-      ) {
-        return prevSelectedRows.filter(
-          (candidate) => candidate.candidateId !== candidateId
-        );
+      if (prevSelectedRows.includes(candidateId)) {
+        return prevSelectedRows.filter((id) => id !== candidateId);
       } else {
-        return [...prevSelectedRows, can];
+        return [...prevSelectedRows, candidateId];
       }
     });
   };
@@ -621,15 +572,25 @@ const SendClientEmail = ({ clientEmailSender }) => {
   // console.log(selectedRows.length);
   // console.log(filteredCallingList.length);
   
-  const handleSelectAll = () => {
+ const handleSelectAll = () => {
     if (allSelected) {
-      setSelectedRows([]);
+      setSelectedRows((prevSelectedRows) => 
+        prevSelectedRows.filter((id) => !filteredCallingList.map((item) => item.candidateId).includes(id))
+      );
     } else {
-      const allRowIds = filteredCallingList.map((item) => item);
-      setSelectedRows(allRowIds);
+      const allRowIds = filteredCallingList.map((item) => item.candidateId);
+      setSelectedRows((prevSelectedRows) => [...new Set([...prevSelectedRows, ...allRowIds])]);
     }
     setAllSelected(!allSelected);
   };
+
+    const areAllRowsSelectedOnPage = filteredCallingList.every((item) =>
+        selectedRows.includes(item.candidateId)
+      );
+    
+      useEffect(() => {
+        setAllSelected(areAllRowsSelectedOnPage);
+      }, [filteredCallingList, selectedRows]); 
   
   
   return (
@@ -648,7 +609,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
               className="fa-solid fa-magnifying-glass"
              
 
-              style={{ margin: "10px", width: "auto", fontSize: "15px" }}
+              style={{ alignContent:"center", marginRight:"10px"}}
             ></i>
                 <div
                     className="search-input-div"
@@ -675,13 +636,13 @@ const SendClientEmail = ({ clientEmailSender }) => {
                     </div>
                   </div>
                   <button
-        className="search-btns lineUp-share-btn"
+        className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
         onClick={() => handleSearchClick()} 
       >
         Search 
       </button>
             </div>
-            <h5 style={{ color: "gray", fontSize: "18px" }}>Candidate Data</h5>
+            <h5 className="newclassnameforpageheader">Candidate Data</h5>
 
             <div
               style={{
@@ -701,6 +662,17 @@ const SendClientEmail = ({ clientEmailSender }) => {
                 </button>
               ) : (
                 <div style={{ display: "flex", gap: "5px" }}>
+                   {
+                    !showShareButton && (
+                      <Badge
+                  color="var(--notification-badge-background)"
+                  count={selectedRows.length}
+                  className="newBadgeselectedcandidatestyle"
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M222-200 80-342l56-56 85 85 170-170 56 57-225 226Zm0-320L80-662l56-56 85 85 170-170 56 57-225 226Zm298 240v-80h360v80H520Zm0-320v-80h360v80H520Z"/></svg>
+                </Badge>
+                    )
+                  }
                   <button
                     className="SCE-share-close-btn"
                     onClick={() => {
@@ -859,14 +831,15 @@ const SendClientEmail = ({ clientEmailSender }) => {
                 <tr className="attendancerows-head">
                   {!showShareButton ? (
                     <th className="attendanceheading" style={{ position: "sticky",left:0, zIndex: 10 }}>
-                      <input
-                        type="checkbox"
-                        onChange={handleSelectAll}
-                        checked={
-                          selectedRows.length === filteredCallingList.length
-                        }
-                        name="selectAll"
-                      />
+                     
+                        <input
+                            type="checkbox"
+                            onChange={handleSelectAll}
+                            checked={
+                              filteredCallingList.every((row) => selectedRows.includes(row.candidateId))
+                            }
+                            name="selectAll"
+                          />
                     </th>
                   ) : null}
                   <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>No.</th>
@@ -938,12 +911,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
                 {filteredCallingList.map((item, index) => (
                   <tr key={item.candidateId} className="attendancerows">
                     {!showShareButton ? (
-                      <td className="tabledata" style={{ position: "sticky", backgroundColor:"white",left:0, zIndex: 10 }}>
+                      <td className="tabledata" style={{ position: "sticky", backgroundColor:"white",left:0, zIndex: 1 }}>
                         <input
-                          type="checkbox"
-                          checked={selectedRows.includes(item)}
-                          onChange={() => handleSelectRow(item)}
-                        />
+                              type="checkbox"
+                              checked={selectedRows.includes(item.candidateId)}
+                              onChange={() => handleSelectRow(item)}
+                            />
                       </td>
                     ) : null}
 
@@ -951,7 +924,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
-                          style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10, backgroundColor: "white" }}
+                          style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1, backgroundColor: "white" }}
                         >
                          {calculateRowIndex(index)}
                           <div className="tooltip">
@@ -977,7 +950,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
-                      style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10, backgroundColor: "white" }}
+                      style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1, backgroundColor: "white" }}
                     >
                      {highlightText(item.candidateId.toString().toLowerCase() || "", searchTerm)}
                           <div className="tooltip">
