@@ -911,7 +911,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                 {filteredCallingList.map((item, index) => (
                   <tr key={item.candidateId} className="attendancerows">
                     {!showShareButton ? (
-                      <td className="tabledata" style={{ position: "sticky", backgroundColor:"white",left:0, zIndex: 1 }}>
+                      <td className="tabledata" style={{ position: "sticky", left:0, zIndex: 1 }}>
                         <input
                               type="checkbox"
                               checked={selectedRows.includes(item.candidateId)}
@@ -924,7 +924,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
-                          style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1, backgroundColor: "white" }}
+                          style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1 }}
                         >
                          {calculateRowIndex(index)}
                           <div className="tooltip">
@@ -950,7 +950,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
-                      style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1, backgroundColor: "white" }}
+                      style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1 }}
                     >
                      {highlightText(item.candidateId.toString().toLowerCase() || "", searchTerm)}
                           <div className="tooltip">

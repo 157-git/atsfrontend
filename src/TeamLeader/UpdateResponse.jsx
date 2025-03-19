@@ -701,7 +701,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                               className="tabledata "
                               onMouseOver={handleMouseOver}
                               onMouseOut={handleMouseOut}
-                              style={{ position: "sticky", backgroundColor:"white",left:0, zIndex: 1 }}
+                              style={{ position: "sticky",left:0, zIndex: 1 }}
                             >
                               {calculateRowIndex(index)}
                               <div className="tooltip">
@@ -711,7 +711,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                               </div>
                             </td>
                             <td className="tabledata"
-                             style={{ position: "sticky", left: "35px", zIndex: 1, backgroundColor: "white" }}
+                             style={{ position: "sticky", left: "35px", zIndex: 1 }}
                             >
                               {highlightText(
                                 data.candidateId.toString().toLowerCase() || "",

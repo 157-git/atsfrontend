@@ -1054,7 +1054,7 @@ const forwardSelectedCandidate = (e) => {
                         {/* // Arshad Attar Added This Code On 03-12-2024
                         // Added New Share Data Frontend Logic, */}
                         {!showShareButton ? (
-                          <td className="tabledata" style={{ position: "sticky", backgroundColor:"white",left:0, zIndex: 1 }}>
+                          <td className="tabledata" style={{ position: "sticky",left:0, zIndex: 1 }}>
                             <input
                               type="checkbox"
                               checked={selectedRows.includes(item.candidateId)}
@@ -1067,7 +1067,7 @@ const forwardSelectedCandidate = (e) => {
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
-                          style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1, backgroundColor: "white" }}
+                          style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1,  }}
                         >
                           {calculateRowIndex(index)}
                           <div className="tooltip">
@@ -1108,7 +1108,7 @@ const forwardSelectedCandidate = (e) => {
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
-                          style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1, backgroundColor: "white" }}
+                          style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1 }}
                         >
                           {highlightText(item.candidateName || "", searchTerm)}
                           <div className="tooltip">

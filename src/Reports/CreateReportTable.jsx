@@ -83,6 +83,13 @@ const Attendance = ({
         newbarchartclassforsetstyles[0].style.width = "450px";
       }
 
+      const newClassnameForHideAndDisplay = document.getElementsByClassName(
+        "newClassnameForHideAndDisplay"
+      );
+      if (newClassnameForHideAndDisplay.length > 0) {
+        newClassnameForHideAndDisplay[0].style.display = "block";
+      }
+
       const setDisplayBlockNewChartPrint = document.getElementsByClassName(
         "setDisplayBlockNewChartPrint"
       );
@@ -119,7 +126,7 @@ const Attendance = ({
         forPieWidthContainer[0].style.width = "fit-content";
         // forPieWidthContainer[0].style.border = '2px solid black';
         forPieWidthContainer[0].style.padding = "10px";
-        forPieWidthContainer[0].style.marginTop = "150px";
+        forPieWidthContainer[0].style.marginTop = "50px";
       }
       const forPieWidthContainer1 =
         document.getElementsByClassName("tabledivmain");
@@ -169,6 +176,11 @@ const Attendance = ({
         forcharborderpage[0].style.border = "none";
         forcharborderpage[0].style.padding = "none";
       }
+
+      await delay(100);
+      if (newClassnameForHideAndDisplay.length > 0) {
+        newClassnameForHideAndDisplay[0].style.display = "none";
+      } 
       await delay(100);
       if (newclassforalignitemscenter.length > 0) {
         newclassforalignitemscenter[0].style.alignItems = "center";
@@ -434,6 +446,8 @@ const Attendance = ({
                       userName={userName}
                       finalStartDatePropState={finalStartDatePropState}
                       finalEndDatePropState={finalEndDatePropState}
+                      selectedRole={selectedRole}
+                      selectedIds={selectedIds}
                     />
                   )}
 

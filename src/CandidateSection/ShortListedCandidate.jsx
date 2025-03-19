@@ -960,7 +960,7 @@ const handleSearchClick = ()=>{
                         <tr key={item.candidateId} className="attendancerows">
                           {(!showShareButton && userType === "TeamLeader") ||
                           (!showShareButton && userType === "Manager") ? (
-                            <td style={{ position: "sticky", backgroundColor:"white",left:0, zIndex: 1 }} className="tabledata">
+                            <td style={{ position: "sticky",left:0, zIndex: 1 }} className="tabledata">
                               <input
                                 type="checkbox"
                                 checked={selectedRows.includes(
@@ -972,7 +972,7 @@ const handleSearchClick = ()=>{
                               />
                             </td>
                           ) : null}
-                           <td  style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1, backgroundColor: "white" }}
+                           <td  style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1 }}
                             className="tabledata "
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
@@ -984,7 +984,7 @@ const handleSearchClick = ()=>{
                               </span>
                             </div>
                           </td>
-                          <td style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1, backgroundColor: "white" }}
+                          <td style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1 }}
                             className="tabledata"
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
@@ -1022,7 +1022,7 @@ const handleSearchClick = ()=>{
                             </div>
                           </td>
 
-                          <td style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 1, backgroundColor: "white" }}
+                          <td style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 1}}
                             className="tabledata"
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}

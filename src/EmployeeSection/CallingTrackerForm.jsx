@@ -1581,6 +1581,7 @@ const CallingTrackerForm = ({
                         name="sourceNameOthers"
                         id=""
                         placeholder="Enter Source Name"
+                        value={callingTracker.sourceName === "others" ? "" : callingTracker.sourceName}
                         onChange={handleSourceNameOthers}
                         maxLength={50}
                       />
@@ -1807,6 +1808,7 @@ const CallingTrackerForm = ({
                         id=""
                         placeholder="Enter Calling Feedback"
                         onChange={handleCallingFeedBackOthers}
+                        value={callingTracker.callingFeedback === "others" ? "" : callingTracker.callingFeedback}
                         maxLength={50}
                       />
                     )}
@@ -2474,6 +2476,7 @@ const CallingTrackerForm = ({
                     style={{
                       display: "flex",
                       width: "100%",
+                   
                     }}
                     name="extraCertification"
                     value={lineUpData.extraCertification}
