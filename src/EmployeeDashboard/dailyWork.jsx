@@ -1436,7 +1436,7 @@ function DailyWork({
           >
             {contextHolder}
             <div className="daily-t-btn">
-              <button className="daily-tr-btn" style={{ whiteSpace: "nowrap" }}>
+              <button className="daily-tr-btn" style={{ whiteSpace: "nowrap" }} id="dailyTarget">
                 Target:{" "}
                 {dailyWorkDataNew?.dailyTarget !== null &&
                 dailyWorkDataNew?.dailyTarget !== undefined
@@ -1445,6 +1445,7 @@ function DailyWork({
               </button>
               <button
                 className="daily-tr-btn"
+                 id="dailyAchieved"
                 style={{
                   color: data.archived <= 3 ? "red" : "green",
                 }}
@@ -1457,6 +1458,7 @@ function DailyWork({
               </button>
               <button
                 className="daily-tr-btn"
+                id="dailyPending"
                 style={{
                   color: data.pending < 7 ? "green" : "red",
                 }}

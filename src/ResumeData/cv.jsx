@@ -380,7 +380,7 @@ function CvTemplate({ onClose }) {
   // Rajlaxmi Jagadale rename all classname
   return (
     <>
-      <div className="candidateidcvtemplete">
+      {/* <div className="candidateidcvtemplete">
         <input
           className="InputFieldsearchcvtemplete"
           type="text"
@@ -390,7 +390,8 @@ function CvTemplate({ onClose }) {
           Search Candidate
         </button>
         <button onClick={onClose} className="resume-close-btn">  &times;</button>
-      </div>
+      </div> */}
+      <div className="candidateidcvtemplete-top-close-div"></div>
       <div className="mainflexdivcvtemplete">
         {/* form staart */}
         <div className="formeditcvtemplete">
@@ -499,7 +500,7 @@ function CvTemplate({ onClose }) {
                 </div>
 
                 {/* Experience */}
-                <div className="form-group formexperience">
+                <div className="formexperience">
                   <p className="titlescvtemplete">
                     {profile.sectionTitles.experience}
                   </p>
@@ -623,7 +624,7 @@ function CvTemplate({ onClose }) {
                 </div>
 
                 {/* Certifications */}
-                <div className="certificationscvtemplete form-group sectioncvtemplete">
+                <div className="certificationscvtemplete">
                   {/* Editable Section Title for Certifications */}
                   <p
                     className="titlescvtemplete editable-text"
@@ -897,21 +898,25 @@ function CvTemplate({ onClose }) {
             </div>
           </div>
         </div>
-        {/* formend */}
         <div className="maincvtemeplete" id="profileContainercvtemplete">
           <div className="maindivcvtemplete">
-            {/* Contact Information */}
             <div className="contactcvtemplete sectioncvtemplete">
-              {/* Editable Name */}
-              <p
-                className="namecvtemplete editable-text"
-                contentEditable={true}
-                onBlur={(e) => handleChange(e, "name")}
-                suppressContentEditableWarning={true}
-              >
-                {profile.title.name}
-              </p>
-              {/* Editable Designation */}
+              
+              <div className="namecvtemplete-name-div">
+                <p
+                  className="namecvtemplete editable-text"
+                  contentEditable={true}
+                  onBlur={(e) => handleChange(e, "name")}
+                  suppressContentEditableWarning={true}
+                >
+                  {profile.title.name}
+                </p>
+                <button onClick={onClose} className="resume-close-btn">
+                  {" "}
+                  &times;
+                </button>
+              </div>
+
               <p
                 className="designationcvtemplete editable-text"
                 contentEditable={true}

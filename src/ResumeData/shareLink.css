@@ -1,9 +1,19 @@
 .shareLink-mainDiv {
   display: flex;
-
-  justify-content: space-evenly;
+  justify-content: space-around;
   align-content: center;
   margin-top: 20px;
+  /* border: 2px solid black; */
+}
+
+/* Media query for screen size below 1400px */
+@media (max-width: 1400px) {
+  .shareLink-mainDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
 }
 
 .shareLink-view-btn-Div,
@@ -80,9 +90,9 @@
 /* Grid layout */
 .gridcomponentdisplay {
   display: flex;
-  gap: 30px;
+  gap: 20px;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .resumebuilderheadingdisplay {
@@ -98,12 +108,13 @@
 
 /* Card styling */
 .cardcomponentdisplay {
-  width: 280px;
+  width: 320px;
   height: 430px;
   border: 1px solid black;
   border-radius: 10px;
   text-align: center;
   padding: 15px;
+  /* margin: 10px; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -125,7 +136,7 @@
 .buttonmaincomponentdisplay {
   background-color: white;
   color: grey;
-  border: 1px solid bisque;
+  border: 1px solid gray;
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;

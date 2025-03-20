@@ -3133,12 +3133,14 @@ tooltips={desc} value={callingTracker.communicationRating}
                         information ?
                       </p>
                       <p>{callingTracker.errors}</p>
-                      <Checkbox
-                        onChange={handleEmailCheckbox}
-                        checked={lineUpData.emailStatus === "yes"}
-                      >
-                        Do You Want Send Email To Candidate ?
-                      </Checkbox>
+                      {
+callingTracker.selectYesOrNo === "Interested" && (
+  <Checkbox onChange={handleEmailCheckbox} checked={lineUpData.emailStatus === "Yes"}>
+  Do You Want Send Email To Candidate ?
+</Checkbox>
+)
+                      }
+                    
                       <div
                         style={{
                           display: "flex",
@@ -3151,14 +3153,14 @@ tooltips={desc} value={callingTracker.communicationRating}
                           disabled={loading}
                           className="buttoncss"
                         >
-                          Yes
+                          Save
                         </button>
 
                         <button
                           onClick={() => setShowConfirmation(false)}
                           className="buttoncss"
                         >
-                          No
+                          Cancel
                         </button>
                       </div>
                     </Modal.Body>

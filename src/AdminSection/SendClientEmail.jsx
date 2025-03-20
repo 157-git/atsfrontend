@@ -48,7 +48,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [searchCount, setSearchCount] = useState(0);
-   const [allSelected, setAllSelected] = useState(false); // New state to track if all rows are selected
+  const [allSelected, setAllSelected] = useState(false); // New state to track if all rows are selected
 
   const navigator = useNavigate();
 
@@ -102,7 +102,9 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const [totalRecords, setTotalRecords] = useState(0);
 
   const fetchCallingList = (page, size) => {
-    fetch(`${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`)
+    fetch(
+      `${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
+    )
       .then((response) => response.json())
       .then((data) => {
         setFilteredCallingList(data.content);
@@ -121,7 +123,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
     fetchCallingList(currentPage, pageSize);
     setSelectedRows([]);
     setAllSelected(false);
-  }, [employeeId,currentPage,pageSize,searchTerm]);
+  }, [employeeId, currentPage, pageSize, searchTerm]);
 
   useEffect(() => {
     const options = limitedOptions
@@ -201,58 +203,127 @@ const SendClientEmail = ({ clientEmailSender }) => {
           item.personalFeedback.toLowerCase().includes(searchTermLower)) ||
         (item.callingFeedback &&
           item.callingFeedback.toLowerCase().includes(searchTermLower)) ||
-          (item.jobDesignation &&
-            item.jobDesignation.toString().toLowerCase().includes(searchTermLower)) ||
-            (item.requirementId &&
-              item.requirementId.toString().toLowerCase().includes(searchTermLower)) ||
-              (item.fullAddress &&
-                item.fullAddress.toString().toLowerCase().includes(searchTermLower)) ||
-                (item.experienceYear &&
-                  item.experienceYear.toString().toLowerCase().includes(searchTermLower)) ||
-                  (item.experienceMonth &&
-                    item.experienceMonth.toString().toLowerCase().includes(searchTermLower)) ||
-                    (item.relevantExperience &&
-                      item.relevantExperience.toString().toLowerCase().includes(searchTermLower)) ||
-                      (item.currentCTCLakh &&
-                        item.currentCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
-                        (item.currentCTCThousand &&
-                          item.currentCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
-                          (item.expectedCTCLakh &&
-                            item.expectedCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
-                            (item.expectedCTCThousand &&
-                              item.expectedCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
-                              (item.yearOfPassing &&
-                                item.yearOfPassing.toString().toLowerCase().includes(searchTermLower)) ||
-                                (item.extraCertification &&
-                                  item.extraCertification.toString().toLowerCase().includes(searchTermLower)) ||
-                                  (item.holdingAnyOffer &&
-                                    item.holdingAnyOffer.toString().toLowerCase().includes(searchTermLower)) ||
-                                    (item.offerLetterMsg &&
-                                      item.offerLetterMsg.toString().toLowerCase().includes(searchTermLower)) ||
-                                      (item.noticePeriod &&
-                                        item.noticePeriod.toString().toLowerCase().includes(searchTermLower)) ||
-                                        (item.msgForTeamLeader &&
-                                          item.msgForTeamLeader.toString().toLowerCase().includes(searchTermLower)) ||
-                                          (item.availabilityForInterview &&
-                                            item.availabilityForInterview.toString().toLowerCase().includes(searchTermLower)) ||
-                                            (item.interviewTime &&
-                                              item.interviewTime.toString().toLowerCase().includes(searchTermLower)) ||
-                                              (item.finalStatus &&
-                                                item.finalStatus.toString().toLowerCase().includes(searchTermLower)) ||
-                                                (item.dateOfBirth &&
-                                                  item.dateOfBirth.toString().toLowerCase().includes(searchTermLower)) ||
-                                                  (item.gender &&
-                                                    item.gender.toString().toLowerCase().includes(searchTermLower)) ||
-                                                    (item.qualification &&
-                                                      item.qualification.toString().toLowerCase().includes(searchTermLower)) ||
-                                                      (item.incentive &&
-                                                        item.incentive.toString().toLowerCase().includes(searchTermLower)) ||
-                                                        (item.candidateId &&
-                                                          item.candidateId.toString().toLowerCase().includes(searchTermLower)) ||
-                                                          (item.empId &&
-                                                            item.empId.toString().toLowerCase().includes(searchTermLower)) ||
-                                                            (item.teamLeaderId &&
-                                                              item.teamLeaderId.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.jobDesignation &&
+          item.jobDesignation
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.requirementId &&
+          item.requirementId
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.fullAddress &&
+          item.fullAddress
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.experienceYear &&
+          item.experienceYear
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.experienceMonth &&
+          item.experienceMonth
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.relevantExperience &&
+          item.relevantExperience
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.currentCTCLakh &&
+          item.currentCTCLakh
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.currentCTCThousand &&
+          item.currentCTCThousand
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.expectedCTCLakh &&
+          item.expectedCTCLakh
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.expectedCTCThousand &&
+          item.expectedCTCThousand
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.yearOfPassing &&
+          item.yearOfPassing
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.extraCertification &&
+          item.extraCertification
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.holdingAnyOffer &&
+          item.holdingAnyOffer
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.offerLetterMsg &&
+          item.offerLetterMsg
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.noticePeriod &&
+          item.noticePeriod
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.msgForTeamLeader &&
+          item.msgForTeamLeader
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.availabilityForInterview &&
+          item.availabilityForInterview
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.interviewTime &&
+          item.interviewTime
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.finalStatus &&
+          item.finalStatus
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.dateOfBirth &&
+          item.dateOfBirth
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.gender &&
+          item.gender.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.qualification &&
+          item.qualification
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.incentive &&
+          item.incentive.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.candidateId &&
+          item.candidateId
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
+        (item.empId &&
+          item.empId.toString().toLowerCase().includes(searchTermLower)) ||
+        (item.teamLeaderId &&
+          item.teamLeaderId
+            .toString()
+            .toLowerCase()
+            .includes(searchTermLower)) ||
         (item.selectYesOrNo &&
           item.selectYesOrNo.toLowerCase().includes(searchTermLower))
       );
@@ -595,7 +666,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
   // console.log(filteredCallingList);
   // console.log(selectedRows.length);
   // console.log(filteredCallingList.length);
-  
+
   const handleSelectAll = () => {
     if (allSelected) {
       setSelectedRows([]);
@@ -605,8 +676,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
     }
     setAllSelected(!allSelected);
   };
-  
-  
+
   return (
     <div className="SCE-list-container">
       {loading ? (
@@ -616,35 +686,39 @@ const SendClientEmail = ({ clientEmailSender }) => {
       ) : (
         <>
           <div className="search">
-            <div
-            style={{display:"flex"}}
-            >
-            <i
-              className="fa-solid fa-magnifying-glass"
-             
-
-              style={{ margin: "10px", width: "auto", fontSize: "15px" }}
-            ></i>
-                <div
-                    className="search-input-div"
-                    style={{ width: `${calculateWidth()}px` }}
-                  >
-                    <div className="forxmarkdiv">
-                    <input
-                      type="text"
-                      className="search-input removeBorderForSearchInput"
-                      placeholder="Search here..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    { searchTerm && (
-                      <div className="svgimagesetinInput">
-                    <svg onClick={(()=>setSearchTerm(""))} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+            <div style={{ display: "flex" }}>
+              <i
+                className="fa-solid fa-magnifying-glass"
+                style={{ margin: "10px", width: "auto", fontSize: "15px" }}
+              ></i>
+              <div
+                className="search-input-div"
+                style={{ width: `${calculateWidth()}px` }}
+              >
+                <div className="forxmarkdiv">
+                  <input
+                    type="text"
+                    className="search-input removeBorderForSearchInput"
+                    placeholder="Search here..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  {searchTerm && (
+                    <div className="svgimagesetinInput">
+                      <svg
+                        onClick={() => setSearchTerm("")}
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#000000"
+                      >
+                        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                      </svg>
                     </div>
-                    )}
-                    
-                    </div>
-                  </div>
+                  )}
+                </div>
+              </div>
             </div>
             <h5 style={{ color: "gray", fontSize: "18px" }}>Candidate Data</h5>
 
@@ -828,29 +902,17 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       </td>
                     ) : null}
 
-                     <td
-                          className="tabledata "
-                          onMouseOver={handleMouseOver}
-                          onMouseOut={handleMouseOut}
-                        >
-                         {calculateRowIndex(index)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{calculateRowIndex(index)}</span>
-                          </div>
-                        </td>
-
                     <td
-                      className="tabledata"
+                      className="tabledata "
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                      { highlightText(item.date || "", searchTerm)  } - {item.candidateAddedTime || "-"}
-                          <div className="tooltip">
-                            <span className="tooltiptext">{highlightText(
-                                item.date.toString().toLowerCase() || "",
-                                searchTerm
-                              )}  - {" "}  {item.candidateAddedTime}</span>
-                          </div>
+                      {calculateRowIndex(index)}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {calculateRowIndex(index)}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -858,15 +920,36 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(item.candidateId.toString().toLowerCase() || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.candidateId.toString().toLowerCase() || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      {highlightText(item.date || "", searchTerm)} -{" "}
+                      {item.candidateAddedTime || "-"}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(
+                            item.date.toString().toLowerCase() || "",
+                            searchTerm
+                          )}{" "}
+                          - {item.candidateAddedTime}
+                        </span>
+                      </div>
+                    </td>
+
+                    <td
+                      className="tabledata"
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    >
+                      {highlightText(
+                        item.candidateId.toString().toLowerCase() || "",
+                        searchTerm
+                      )}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(
+                            item.candidateId.toString().toLowerCase() || "",
+                            searchTerm
+                          )}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -875,14 +958,11 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOut={handleMouseOut}
                     >
                       {highlightText(item.recruiterName || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.recruiterName || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(item.recruiterName || "", searchTerm)}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -890,15 +970,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                    {highlightText(item.candidateName || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.candidateName || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      {highlightText(item.candidateName || "", searchTerm)}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(item.candidateName || "", searchTerm)}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -906,15 +983,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(item.candidateEmail || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.candidateEmail || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      {highlightText(item.candidateEmail || "", searchTerm)}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(item.candidateEmail || "", searchTerm)}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -923,14 +997,11 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOut={handleMouseOut}
                     >
                       {highlightText(item.contactNumber || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.contactNumber || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(item.contactNumber || "", searchTerm)}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -939,14 +1010,14 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOut={handleMouseOut}
                     >
                       {highlightText(item.alternateNumber || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.alternateNumber || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(
+                            item.alternateNumber || "",
+                            searchTerm
+                          )}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -955,14 +1026,11 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOut={handleMouseOut}
                     >
                       {highlightText(item.sourceName || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.sourceName || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(item.sourceName || "", searchTerm)}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -970,15 +1038,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(item.jobDesignation || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.jobDesignation || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      {highlightText(item.jobDesignation || "", searchTerm)}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(item.jobDesignation || "", searchTerm)}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -986,15 +1051,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(item.requirementId || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.requirementId || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      {highlightText(item.requirementId || "", searchTerm)}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(item.requirementId || "", searchTerm)}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -1002,15 +1064,15 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                    {highlightText(item.requirementCompany || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.requirementCompany || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      {highlightText(item.requirementCompany || "", searchTerm)}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(
+                            item.requirementCompany || "",
+                            searchTerm
+                          )}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -1018,15 +1080,18 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(item.communicationRating || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.communicationRating || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      {highlightText(
+                        item.communicationRating || "",
+                        searchTerm
+                      )}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(
+                            item.communicationRating || "",
+                            searchTerm
+                          )}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -1035,14 +1100,14 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOut={handleMouseOut}
                     >
                       {highlightText(item.currentLocation || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.currentLocation || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(
+                            item.currentLocation || "",
+                            searchTerm
+                          )}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -1050,15 +1115,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                    {highlightText(item.fullAddress || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.fullAddress || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      {highlightText(item.fullAddress || "", searchTerm)}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(item.fullAddress || "", searchTerm)}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -1066,15 +1128,15 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(item.callingFeedback || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.callingFeedback || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      {highlightText(item.callingFeedback || "", searchTerm)}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(
+                            item.callingFeedback || "",
+                            searchTerm
+                          )}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -1082,15 +1144,18 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                     {highlightText(item.incentive.toString().toLowerCase() || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.incentive.toString().toLowerCase() || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      {highlightText(
+                        item.incentive.toString().toLowerCase() || "",
+                        searchTerm
+                      )}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(
+                            item.incentive.toString().toLowerCase() || "",
+                            searchTerm
+                          )}
+                        </span>
+                      </div>
                     </td>
 
                     <td
@@ -1098,15 +1163,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     >
-                       {highlightText(item.selectYesOrNo || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.selectYesOrNo || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                      {highlightText(item.selectYesOrNo || "", searchTerm)}
+                      <div className="tooltip">
+                        <span className="tooltiptext">
+                          {highlightText(item.selectYesOrNo || "", searchTerm)}
+                        </span>
+                      </div>
                     </td>
 
                     <>
@@ -1115,15 +1177,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                          {highlightText(item.companyName || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.companyName || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                        {highlightText(item.companyName || "", searchTerm)}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
+                            {highlightText(item.companyName || "", searchTerm)}
+                          </span>
+                        </div>
                       </td>
 
                       <td
@@ -1146,15 +1205,18 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                          {highlightText(item.relevantExperience || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.relevantExperience || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                        {highlightText(
+                          item.relevantExperience || "",
+                          searchTerm
+                        )}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
+                            {highlightText(
+                              item.relevantExperience || "",
+                              searchTerm
+                            )}
+                          </span>
+                        </div>
                       </td>
 
                       <td
@@ -1196,15 +1258,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
+                        {highlightText(item.dateOfBirth || "", searchTerm)}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
                             {highlightText(item.dateOfBirth || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.dateOfBirth || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                          </span>
+                        </div>
                       </td>
 
                       <td
@@ -1212,15 +1271,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                          {highlightText(item.gender || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.gender || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                        {highlightText(item.gender || "", searchTerm)}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
+                            {highlightText(item.gender || "", searchTerm)}
+                          </span>
+                        </div>
                       </td>
 
                       <td
@@ -1228,15 +1284,15 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                          {highlightText(item.qualification || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.qualification || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                        {highlightText(item.qualification || "", searchTerm)}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
+                            {highlightText(
+                              item.qualification || "",
+                              searchTerm
+                            )}
+                          </span>
+                        </div>
                       </td>
 
                       <td
@@ -1244,15 +1300,15 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                            {highlightText(item.yearOfPassing || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.yearOfPassing || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                        {highlightText(item.yearOfPassing || "", searchTerm)}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
+                            {highlightText(
+                              item.yearOfPassing || "",
+                              searchTerm
+                            )}
+                          </span>
+                        </div>
                       </td>
 
                       <td
@@ -1260,15 +1316,18 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                           {highlightText(item.extraCertification || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.extraCertification || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                        {highlightText(
+                          item.extraCertification || "",
+                          searchTerm
+                        )}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
+                            {highlightText(
+                              item.extraCertification || "",
+                              searchTerm
+                            )}
+                          </span>
+                        </div>
                       </td>
 
                       {/* <td
@@ -1289,15 +1348,15 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                           {highlightText(item.holdingAnyOffer || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.holdingAnyOffer || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                        {highlightText(item.holdingAnyOffer || "", searchTerm)}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
+                            {highlightText(
+                              item.holdingAnyOffer || "",
+                              searchTerm
+                            )}
+                          </span>
+                        </div>
                       </td>
 
                       <td
@@ -1305,32 +1364,32 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                          {highlightText(item.offerLetterMsg || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.offerLetterMsg || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                        {highlightText(item.offerLetterMsg || "", searchTerm)}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
+                            {highlightText(
+                              item.offerLetterMsg || "",
+                              searchTerm
+                            )}
+                          </span>
+                        </div>
                       </td>
                       {/* Name:-Akash Pawar Component:-LineUpList
                   Subcategory:-ResumeViewButton(added) start LineNo:-993
                   Date:-02/07 */}
                       <td className="tabledata">
-                          <button
-                            onClick={() => openResumeModal(item.resume)}
-                            style={{ background: "none", border: "none" }}
-                          >
-                            <i
-                              className="fas fa-eye"
-                              style={{
-                                color: item.resume ? "green" : "inherit",
-                              }}
-                            ></i>
-                          </button>
-                        </td>
+                        <button
+                          onClick={() => openResumeModal(item.resume)}
+                          style={{ background: "none", border: "none" }}
+                        >
+                          <i
+                            className="fas fa-eye"
+                            style={{
+                              color: item.resume ? "green" : "inherit",
+                            }}
+                          ></i>
+                        </button>
+                      </td>
                       {/* Name:-Akash Pawar Component:-LineUpList
                   Subcategory:-ResumeViewButton(added) End LineNo:-1005
                   Date:-02/07 */}
@@ -1353,15 +1412,15 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                           {highlightText(item.msgForTeamLeader || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.msgForTeamLeader || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                        {highlightText(item.msgForTeamLeader || "", searchTerm)}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
+                            {highlightText(
+                              item.msgForTeamLeader || "",
+                              searchTerm
+                            )}
+                          </span>
+                        </div>
                       </td>
 
                       <td
@@ -1369,15 +1428,18 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                         {highlightText(item.availabilityForInterview || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.availabilityForInterview || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                        {highlightText(
+                          item.availabilityForInterview || "",
+                          searchTerm
+                        )}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
+                            {highlightText(
+                              item.availabilityForInterview || "",
+                              searchTerm
+                            )}
+                          </span>
+                        </div>
                       </td>
 
                       <td
@@ -1385,15 +1447,15 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                            {highlightText(item.interviewTime || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.interviewTime || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                        {highlightText(item.interviewTime || "", searchTerm)}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
+                            {highlightText(
+                              item.interviewTime || "",
+                              searchTerm
+                            )}
+                          </span>
+                        </div>
                       </td>
 
                       <td
@@ -1401,15 +1463,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       >
-                          {highlightText(item.finalStatus || "", searchTerm)}
-                          <div className="tooltip">
-                            <span className="tooltiptext">
-                              {highlightText(
-                                item.finalStatus || "",
-                                searchTerm
-                              )}
-                            </span>
-                          </div>
+                        {highlightText(item.finalStatus || "", searchTerm)}
+                        <div className="tooltip">
+                          <span className="tooltiptext">
+                            {highlightText(item.finalStatus || "", searchTerm)}
+                          </span>
+                        </div>
                       </td>
 
                       <td
@@ -1589,21 +1648,21 @@ const SendClientEmail = ({ clientEmailSender }) => {
           </div>
 
           <div className="search-count-last-div">
-        Search Results : {totalRecords}
-        </div>
+            Search Results : {totalRecords}
+          </div>
 
           <Pagination
-        current={currentPage}
-        total={totalRecords}
-        pageSize={pageSize}
-        showSizeChanger
-        showQuickJumper 
-        onShowSizeChange={handleSizeChange}
-        onChange={handlePageChange}
-        style={{
-          justifyContent: 'center',
-        }}
-      />
+            current={currentPage}
+            total={totalRecords}
+            pageSize={pageSize}
+            showSizeChanger
+            showQuickJumper
+            onShowSizeChange={handleSizeChange}
+            onChange={handlePageChange}
+            style={{
+              justifyContent: "center",
+            }}
+          />
         </>
       )}
     </div>
@@ -1617,14 +1676,13 @@ const SendEmailPopup = ({
   onSuccessFullEmailSend,
   clientEmailSender,
   fetchCallingList,
-  
 }) => {
   const [to, setTo] = useState("");
   const [cc, setCc] = useState("");
   const [bcc, setBcc] = useState("");
   const [emailFooter, setEmailFooter] = useState("Best Regards,\n157 Careers.");
   const [subject, setSubject] = useState("");
-  const {employeeId, userType} = useParams();
+  const { employeeId, userType } = useParams();
   const [signatureImage, setSignatureImage] = useState(
     "https://lh3.googleusercontent.com/fife/ALs6j_HDFuzYstiAW8Rt_7NmtAoegg6nGerpkvbiAITq-mNL70gNXONQuJwnZdbiAbsKMNAYMt9iBnvsFWx8EaOOWV43cjOjDvFOAiw1XacANQb0MDBtFO1ag1TuVwCbwbzrLDnOiniRQ5hD7kGCCVjTNGsNdx6RQLsrKyZlpJ6meA1NIT1vXloRcFwlfbTjDBG14YC809U_0FGn9pOII8lbH-I_ZZLBI6kfh0Q43j4evix8AbIxnvw0Soesevgycz4jRqrAA4Fjjd67Pb0vIVBkeEgSp_Sfz_v9joDcBiMe2sLP6_iEvB7N4il1qgBgTHBRM6qp6IuNFov7hMdcyx8Jp1oCfQX7753pO2x3FGg3tyW5RI0l-1h01JWKdybFECo19c7o3Z_01lJ-dF1TABxyPTdT9eztvkSfDXOvfoQIP_oEny3ORR-8wfjijnlUFylwT7MhsCwTcaeQR6tWaPYJ9rX7AQVGOmMyJbLS_0tFLn0_UzX7NuQx6-W2TeC9aXM0ajJYJ5cLPusvMlAhgFBB0WdZfbtuOat0-rd2qP_L0MqJPfTYBdTgYyO4LoTD0dV6QRo5UJhvyDW5Ru8IBz-bB4QWhPMjs2_PFnQ9K-GLvAPCOYIk4TQPhkCK4UgOyGL8bRE4bPBIYMddVxfWdePCOb6V5JhGmYfvsYzEhAwquNmsZkMv9lEJfQV-Frs0DrF63XWlD5ieprbz4CLMs3WHh42I06Kpw2aCXfQchCDoJawTYljfozJ_QHq58UIAdMniaLvrKKYRyYfZohAFVdekMzArxrobd4e3Pac9cHm1Orz2_lAob5diRJCZxapdTOPfiT_ro-1qhbtmKua4kXr5Z_TWgBV9CwaactlqLFMnnbN3TtDOqKNDEFBGhg1pKC2NUu2Jw6IyawDyCU6VCdrnhizrHhvhPY8u0uXOxspsqfvQaU_PT0e0v-f2RPDESxSwIz3H6DEzmk5hOrbOmXFCPG8Q9bUu_5I3kL11z_loIveKwfWD3YGIkOjOvXAUomdEqw7DIXIbjcfDQflq7L45gJ3-BWuTkRmicaQL3GAtwVpYbmNUi649NpUC5JvKN_iqIxeNzhKdn1jBXEGl2-rbmzYXbPolNUmrQWwaFYKBzVzgWIcCjaaKpgSR444mFTx3mFEuSJxfjMTJtumbYGZkGrFkEE1rNaXMvF6XFT6JO63BtAfQzd5nFl31OctaJ6nf7_UbshOlPFeUNoRFpc-gB9LWyZck_V9jIToDHY8mij11-IK-9DFLdZZfNxeOhbha8DYljvTj9R6spXM006lRZmBsP6WugvIvvG5Pv_kiXoORCBbrCFAIk3vpZIEx3zDoayqgUNwctyrf7cJvfSiyWokjM0NNHRTCy0eldMfb0LLX5X6BftzMt128n5f6-Q60zmQ_kyuHSnyLGJawrCATfhHu-_ABtuuTWopOBib9gG__Vsa06z5SKZs5LM8eD8TwgUMeIRfWGfZBAy2qobuMt9ZVDrQDlPejp1tBg3Dm8Ke85TK7HFFfDqA-dJ2jCwzOq2ipybePn2kxLg911_lfaHPIXpF0LJdNwNyzfH_6IuB3IGI0nelUgtPnQbxXFMYd8xLaiVhfx9f0GLlDLkalvTQ8UPk92nprBDiYn8GdmV3zoVuWZbXwqQ4nmLaB9LIxDieP2kLO7V2igrEsBxXZHT309KauEgReDc1p7ahNkSiDjAOt3cDoEnlXhXjLXiBy"
   );
@@ -1675,10 +1733,10 @@ const SendEmailPopup = ({
 
   const [socket, setSocket] = useState(null);
 
-  useEffect(()=>{
-const newSocket = getSocket();
-setSocket(newSocket);
-  },[]);
+  useEffect(() => {
+    const newSocket = getSocket();
+    setSocket(newSocket);
+  }, []);
 
   const handleSendEmail = () => {
     setIsMailSending(true);
@@ -1717,8 +1775,8 @@ setSocket(newSocket);
         perDayBillingSentToClient: "300",
       })),
       candidateIds: selectedCandidate.map((can) => can.candidateId),
-    };    
-    
+    };
+
     axios
       .post(`${API_BASE_URL}/send-email/${employeeId}/${userType}`, emailData)
       .then((response) => {
@@ -1730,7 +1788,6 @@ setSocket(newSocket);
           // socket.emit("share_profile", emailData);
         } else {
           toast.success(message); // For cases where profiles are shared successfully
-          
         }
 
         selectedCandidate.forEach(async (can) => {
@@ -1857,18 +1914,20 @@ setSocket(newSocket);
                 >
                   <thead>
                     <tr>
-                      <th>Sr.No</th>
-                      <th>Date</th>
-                      <th>Position</th>
-                      <th>Candidate Name</th>
-                      <th>Contact number</th>
-                      <th>Email Id</th>
-                      <th>Total Experience</th>
-                      <th>Current Company</th>
-                      <th>Notice Period(Days)</th>
-                      <th>Holding Any Offer</th>
-                      <th>Current Location</th>
-                      <th>Per Day Billing Sent To Client</th>
+                      <th className="share-data-th">Sr.No</th>
+                      <th className="share-data-th">Date</th>
+                      <th className="share-data-th">Position</th>
+                      <th className="share-data-th">Candidate Name</th>
+                      <th className="share-data-th">Contact number</th>
+                      <th className="share-data-th">Email Id</th>
+                      <th className="share-data-th">Total Experience</th>
+                      <th className="share-data-th">Current Company</th>
+                      <th className="share-data-th">Notice Period(Days)</th>
+                      <th className="share-data-th">Holding Any Offer</th>
+                      <th className="share-data-th">Current Location</th>
+                      <th className="share-data-th">
+                        Per Day Billing Sent To Client
+                      </th>
                     </tr>
                   </thead>
                   <tbody>

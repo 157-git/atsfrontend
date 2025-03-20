@@ -17,6 +17,15 @@
   border-radius: 15px;
 }
 
+.text-secondary{
+  white-space: nowrap;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.share-data-th{
+  text-align: center;
+}
 .select-button:hover {
   background-color: white;
   color: #ffcb9b;

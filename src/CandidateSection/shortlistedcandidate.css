@@ -389,3 +389,17 @@ text-align: center;
 .share-data-input-card{
   border: 1px solid red;
 }
+.newBadgeselectedcandidatestyle{
+  margin-right: 10px;
+  align-content: center;
+}
+.selected {
+  
+  border: 1 px #ffcb9b;
+  background: #ffcb9b;
+}
+.selected-count {
+  font-weight: bold;
+  margin-left: 3px;
+  color: black; /* Or any color you prefer */
+}

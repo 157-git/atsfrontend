@@ -816,10 +816,10 @@ const CandidateHistoryTracker = () => {
                   <table className="can-history-data-table">
                     <thead>
                       <tr>
-                        <th>{displayName}</th>
-                        <th>{openDropdown + " Count"}</th>
-                        <th>Total Count</th>
-                        <th>Percentage</th>
+                        <th className="history-tracker-th">{displayName}</th>
+                        <th className="history-tracker-th">{openDropdown + " Count"}</th>
+                        <th className="history-tracker-th">Total Count</th>
+                        <th className="history-tracker-th">Percentage</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1007,12 +1007,12 @@ const CandidateHistoryTracker = () => {
               <table className="can-history-data-table">
                 <thead className="theading">
                   <tr>
-                    <th>{getDisplayName(popupData.filter)}</th>
-                    <th style={{ textAlign: "center" }}>
+                    <th className="history-tracker-th">{getDisplayName(popupData.filter)}</th>
+                    <th className="history-tracker-th" style={{ textAlign: "center" }}>
                       {openDropdown + " " + "Count"}
                     </th>
-                    <th>Total Count</th>
-                    <th> Percentage</th>
+                    <th className="history-tracker-th">Total 09 Count</th>
+                    <th className="history-tracker-th"> Percentage</th>
                   </tr>
                 </thead>
                 <tbody>

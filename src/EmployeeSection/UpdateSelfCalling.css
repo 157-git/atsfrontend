@@ -342,3 +342,16 @@ width: 90%;
 .update-calling-tracker-field .update-calling-tracker-field-sub-div .css-dev-only-do-not-override-1htoz2s .css-dev-only-do-not-override-1htoz2s{
   border-right: none;
 }
+.newBorderClass {
+  border: 1px solid #f2f2f2;
+  border-radius: 5px;
+}
+.currentExpectedWidth{
+  width: 80%;
+}
+.whatsappdiv100{
+  width: 100%;
+}
+.whatsappwidthinput90{
+  width: 90%;
+}

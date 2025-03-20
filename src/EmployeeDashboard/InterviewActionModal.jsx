@@ -12,6 +12,7 @@ const InterviewActionModal = ({ open, onClose, interviewFormData, setInterviewFo
       open={open} 
       onOk={handleSubmit} 
       onCancel={onClose}
+      width={650}
     >
       <div className="infoMainDivMo">
         <Form labelCol={{ span: 10 }} labelAlign="left" wrapperCol={{ span: 20 }} layout="horizontal">

@@ -12,7 +12,7 @@ import { API_BASE_URL } from "../api/api";
 import { Button, Modal } from "react-bootstrap";
 import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker";
 // line 14 to 15 added by sahil karnekar date 17-10-2024
-import { Progress, Radio, TimePicker, Upload } from "antd";
+import { Checkbox, Progress, Radio, TimePicker, Upload } from "antd";
 import dayjs from "dayjs";
 import { getSocket } from "../EmployeeDashboard/socket";
 import uploadingResumeStatic from "../assets/uploadStaticPngFile.png";
@@ -58,6 +58,7 @@ const UpdateSelfCalling = ({
     communicationRating: "",
     selectYesOrNo: "No",
     callingFeedback: "",
+    emailStatus: "No",
     lineUp: {
       companyName: "",
       experienceYear: "",
@@ -67,6 +68,7 @@ const UpdateSelfCalling = ({
       currentCTCThousand: "",
       expectedCTCLakh: "",
       expectedCTCThousand: "",
+
       dateOfBirth: "",
       gender: "",
       qualification: "",
@@ -87,6 +89,7 @@ const UpdateSelfCalling = ({
     companyName: "",
     experienceYear: "",
     experienceMonth: "",
+    emailStatus: "No",
     relevantExperience: "",
     currentCTCLakh: "",
     currentCTCThousand: "",
@@ -124,7 +127,7 @@ const UpdateSelfCalling = ({
   const [lineUpData, setLineUpData] = useState(initialLineUpState);
   const { userType } = useParams();
   const [uploadingResumeNewState, setUploadingResumeNewState] = useState(false);
-  const [resumeFileName, setResumeFileName] = useState("");
+  const [resumeFileName, setResumeFileName] = usveState("");
   const [uploadProgress, setUploadProgress] = useState(0);
   const [displayProgress, setDisplayProgress] = useState(false);
   const [errors, setErrors] = useState({});
@@ -134,6 +137,11 @@ const UpdateSelfCalling = ({
   const [displaySourceOthersInput, setDisplaySourceOthersInput] =
     useState(false);
   const dispatch = useDispatch();
+  const [
+    displayOtherInputForCallingRemark,
+    setDisplayOtherInputForCallingRemark,
+  ] = useState(false);
+  const [displayEmailConfirm, setDisplayEmailConfirm] = useState(false);
   // updated by sahil karnekar date 18-10-2024
   const today = new Date();
   const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
@@ -151,7 +159,7 @@ const UpdateSelfCalling = ({
       newErrors.contactNumber = "Contact Number is required";
       newErrors.contactNumberStar = "*";
     }
-    if (!callingTracker.sourceName) {
+    if (!callingTracker.sourceName || callingTracker.sourceName === "others") {
       newErrors.sourceName = "Source Name is required";
       newErrors.sourceNameStar = "*";
     }
@@ -169,7 +177,10 @@ const UpdateSelfCalling = ({
       delete newErrors.candidateEmail;
       delete newErrors.candidateEmailStar;
     }
-    if (!callingTracker.callingFeedback) {
+    if (
+      !callingTracker.callingFeedback ||
+      callingTracker.callingFeedback === "others"
+    ) {
       newErrors.callingFeedback = "Calling Feedback is required";
       newErrors.callingFeedbackStar = "*";
     }
@@ -275,8 +286,23 @@ const UpdateSelfCalling = ({
         "Excel",
         "Friends",
       ];
+      const validCallRemarks = [
+        "Call Done",
+        "Asked for Call Back",
+        "No Answer",
+        "Network Issue",
+        "Invalid Number",
+        "Need to call back",
+        "Do not call again",
+      ];
       if (data.sourceName !== "" && !validSources.includes(data.sourceName)) {
         setDisplaySourceOthersInput(true);
+      }
+      if (
+        data.callingFeedback !== "" &&
+        !validCallRemarks.includes(data.callingFeedback)
+      ) {
+        setDisplayOtherInputForCallingRemark(true);
       }
 
       if (data.lineUp.resume !== "") {
@@ -315,6 +341,13 @@ const UpdateSelfCalling = ({
     } else if (name === "sourceName" && value !== "others") {
       setDisplaySourceOthersInput(false);
     }
+
+    if (name === "callingFeedback" && value === "others") {
+      setDisplayOtherInputForCallingRemark(true);
+    } else if (name === "callingFeedback" && value !== "others") {
+      setDisplayOtherInputForCallingRemark(false);
+    }
+
     // added by sahil karnekar date 16-12-2024
     const isNotInterested =
       name === "selectYesOrNo"
@@ -717,6 +750,10 @@ const UpdateSelfCalling = ({
     setSocket(newSocket);
   }, []);
 
+  const handleDisplayConfirmBox = () => {
+    setDisplayEmailConfirm(true);
+  };
+
   const [dailyWorkDataNew, setDailyWorkDataNew] = useState(null); // State to store getData
   const currentDateNewGlobal = getFormattedDateISOYMDformat();
   const getDailyworkDataFunc = async () => {
@@ -738,9 +775,8 @@ const UpdateSelfCalling = ({
   }, []);
 
   const handleSubmit = async (e) => {
+    setDisplayEmailConfirm(false);
     e.preventDefault();
-
-    // Display loginEmployeeName in the input field
     setCallingTracker({
       ...callingTracker,
       // recruiterName: loginEmployeeName,
@@ -784,6 +820,11 @@ const UpdateSelfCalling = ({
         candidateAddedTime: callingTracker.candidateAddedTime,
         lineUp: {
           ...callingTracker.lineUp,
+          emailStatus: callingTracker.lineUp.emailStatus
+            ? callingTracker.lineUp.emailStatus
+            : callingTracker.lineUp.emailStatus === null
+            ? "No"
+            : "No",
         },
       };
 
@@ -1001,6 +1042,16 @@ const UpdateSelfCalling = ({
 
     validateRealTime(name, value, isNotInterested);
   };
+  const handleCallingRemarkOthers = (e) => {
+    const { name, value } = e.target;
+    callingTracker.callingFeedback = value;
+    console.log(errors);
+
+    const isNotInterested =
+      callingTracker.selectYesOrNo !== "Interested" ? true : false;
+
+    validateRealTime(name, value, isNotInterested);
+  };
   const handleShow = () => {
     setShowModal(true);
   };
@@ -1064,7 +1115,17 @@ const UpdateSelfCalling = ({
     }
     setUploadProgress(100);
   };
+  const handleEmailCheckbox = (e) => {
+    const isChecked = e.target.checked;
 
+    setCallingTracker((prevState) => ({
+      ...prevState,
+      lineUp: {
+        ...prevState.lineUp,
+        emailStatus: isChecked ? "Yes" : "No",
+      },
+    }));
+  };
   return (
     <div className="update-main-div">
       {isModalOpen && (
@@ -1344,6 +1405,7 @@ const UpdateSelfCalling = ({
                     // required={callingTracker.selectYesOrNo !== "Interested"}
                     defaultCountry="IN"
                     maxLength={11}
+                    className="newBorderClass"
                   />
                   {errors.contactNumberStar && (
                     <div className="error-message">
@@ -1362,7 +1424,7 @@ const UpdateSelfCalling = ({
                 className="update-calling-tracker-field-sub-div"
                 onClick={handleDisplaySameAsContactText}
               >
-                <div className="newwrapperdivforwhatsapp">
+                <div className="newwrapperdivforwhatsapp whatsappdiv100">
                   <input
                     placeholder="Enter phone number"
                     name="alternateNumber"
@@ -1371,6 +1433,7 @@ const UpdateSelfCalling = ({
                     // required={callingTracker.selectYesOrNo !== "Interested"}
                     defaultCountry="IN"
                     maxLength={11}
+                    className="newBorderClass whatsappwidthinput90"
                   />
                   {displaySameAsContactField && (
                     <div className="inputsameascontact">
@@ -1541,7 +1604,7 @@ const UpdateSelfCalling = ({
                   type="text"
                   id="jobDesignation"
                   name="jobDesignation"
-                  className="calling-tracker-two-input"
+                  className="calling-tracker-two-input newBorderClass"
                   // className="form-control"
                   value={callingTracker?.jobDesignation || ""}
                   // readOnly
@@ -1555,6 +1618,7 @@ const UpdateSelfCalling = ({
                   value={callingTracker?.requirementCompany || ""}
                   // readOnly
                   onChange={handleChange}
+                  className="newBorderClass"
                 />
               </div>
             </div>
@@ -1570,7 +1634,7 @@ const UpdateSelfCalling = ({
                       value={callingTracker?.currentLocation || ""}
                       onChange={handleChange}
                       placeholder="Enter your location"
-                      className="update-calling-check-box-main-container-input"
+                      className="update-calling-check-box-main-container-input newBorderClass"
                     />
                     {errors.currentLocationStar && (
                       <div className="error-message">
@@ -1585,7 +1649,7 @@ const UpdateSelfCalling = ({
                   )}
                 </div>
                 <input
-                  className="update-calling-check-box-main-container-input"
+                  className="update-calling-check-box-main-container-input newBorderClass"
                   type="text"
                   name="fullAddress"
                   placeholder="Full Address"
@@ -1607,7 +1671,20 @@ const UpdateSelfCalling = ({
 
                     className="plain-input"
                     name="callingFeedback"
-                    value={callingTracker?.callingFeedback || ""}
+                    value={
+                      callingTracker.callingFeedback === "" ||
+                      callingTracker.callingFeedback === "Call Done" ||
+                      callingTracker.callingFeedback ===
+                        "Asked for Call Back" ||
+                      callingTracker.callingFeedback === "No Answer" ||
+                      callingTracker.callingFeedback === "Network Issue" ||
+                      callingTracker.callingFeedback === "Invalid Number" ||
+                      callingTracker.callingFeedback === "Need to call back" ||
+                      callingTracker.callingFeedback === "Do not call again" ||
+                      callingTracker.callingFeedback === "others"
+                        ? callingTracker.callingFeedback
+                        : "others"
+                    }
                     onChange={handleChange}
                   >
                     <option value="" disabled>
@@ -1622,8 +1699,23 @@ const UpdateSelfCalling = ({
                     <option value="Invalid Number">Invalid Number</option>
                     <option value="Need to call back">Need to call back</option>
                     <option value="Do not call again">Do not call again</option>
-                    <option value="Other">Other</option>
+                    <option value="others">others</option>
                   </select>
+                  {displayOtherInputForCallingRemark && (
+                    <input
+                      className="marginleftforothers"
+                      type="text"
+                      name="callingFeedback"
+                      id=""
+                      placeholder="Enter Calling Remark"
+                      value={
+                        callingTracker.callingFeedback !== "others"
+                          ? callingTracker.callingFeedback
+                          : callingTracker.callingFeedback === "others" && ""
+                      }
+                      onChange={handleCallingRemarkOthers}
+                    />
+                  )}
                   {errors.callingFeedbackStar && (
                     <div className="error-message">
                       {errors.callingFeedbackStar}
@@ -1711,6 +1803,7 @@ const UpdateSelfCalling = ({
                       onChange={handleEducationChange}
                       placeholder="Search...."
                       style={{ width: "-webkit-fill-available" }}
+                      className="newBorderClass"
                     />
 
                     <datalist id="educationListDropDown">
@@ -2146,6 +2239,7 @@ const UpdateSelfCalling = ({
                       value={callingTracker?.lineUp.yearOfPassing || ""}
                       // required={callingTracker.selectYesOrNo === "Interested"}
                       onChange={handleChange}
+                      className="newBorderClass"
                     />
                     {errors.yearOfPassingStar && (
                       <div className="error-message error-two-input-box">
@@ -2248,7 +2342,7 @@ const UpdateSelfCalling = ({
                       name="lineUp.experienceYear"
                       value={callingTracker?.lineUp.experienceYear || ""}
                       onChange={handleChange}
-                      className="update-calling-tracker-two-input"
+                      className="update-calling-tracker-two-input newBorderClass"
                       // required={callingTracker.selectYesOrNo === "Interested"}
                       placeholder="Years"
                       maxLength="2"
@@ -2279,6 +2373,7 @@ const UpdateSelfCalling = ({
                       maxLength="2"
                       min="0"
                       max="11"
+                      className="newBorderClass"
                     />
                     {callingTracker.lineUp.experienceMonth ? (
                       <span className="addtrnaslateproptospanForMonths">
@@ -2404,7 +2499,7 @@ const UpdateSelfCalling = ({
                         name="lineUp.currentCTCLakh"
                         value={callingTracker?.lineUp.currentCTCLakh || ""}
                         onChange={handleChange}
-                        className="update-calling-tracker-two-input"
+                        className="update-calling-tracker-two-input newBorderClass"
                         placeholder="Lakh"
                         maxLength="2"
                         // required={callingTracker.selectYesOrNo === "Interested"}
@@ -2429,7 +2524,7 @@ const UpdateSelfCalling = ({
                       name="lineUp.currentCTCThousand"
                       value={callingTracker?.lineUp.currentCTCThousand || ""}
                       onChange={handleChange}
-                      className="update-calling-tracker-two-input"
+                      className="update-calling-tracker-two-input newBorderClass"
                       placeholder="Thousand"
                       maxLength="2"
                       pattern="\d*"
@@ -2464,7 +2559,7 @@ const UpdateSelfCalling = ({
                         name="lineUp.expectedCTCLakh"
                         value={callingTracker?.lineUp.expectedCTCLakh || ""}
                         onChange={handleChange}
-                        className="update-calling-tracker-two-input"
+                        className="update-calling-tracker-two-input newBorderClass currentExpectedWidth"
                         placeholder="Lakh"
                         // required={callingTracker.selectYesOrNo === "Interested"}
                         maxLength="2"
@@ -2489,7 +2584,7 @@ const UpdateSelfCalling = ({
                       name="lineUp.expectedCTCThousand"
                       value={callingTracker?.lineUp.expectedCTCThousand || ""}
                       onChange={handleChange}
-                      className="update-calling-tracker-two-input"
+                      className="update-calling-tracker-two-input newBorderClass currentExpectedWidth"
                       placeholder="Thousand"
                       maxLength="2"
                       pattern="\d*"
@@ -2732,15 +2827,81 @@ const UpdateSelfCalling = ({
             </div>
           </div>
         </div>
-        <div className="buttonDiv" style={{ marginTop: "20px", gap: "10px" }}>
-          <button type="submit" className="ctf-btn">
-            Update Data
-          </button>
-          <button className="ctf-btn" onClick={onCancel} id="uploadbtn2">
-            Cancel
-          </button>
-        </div>
       </form>
+      <div className="buttonDiv" style={{ marginTop: "20px", gap: "10px" }}>
+        <button
+          type="submit"
+          className="ctf-btn"
+          onClick={handleDisplayConfirmBox}
+        >
+          Update Data
+        </button>
+        <button className="ctf-btn" onClick={onCancel} id="uploadbtn2">
+          Cancel
+        </button>
+      </div>
+      {displayEmailConfirm && (
+        <div
+          className="bg-black bg-opacity-50 modal show"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "fixed",
+            width: "100%",
+            height: "100vh",
+          }}
+        >
+          <Modal.Dialog
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Modal.Body
+              style={{
+                textAlign: "center",
+              }}
+            >
+              <p className="confirmation-text">
+                Are you sure you want to save this candidate's information ?
+              </p>
+              {callingTracker.selectYesOrNo === "Interested" && (
+                <Checkbox
+                  onChange={handleEmailCheckbox}
+                  checked={callingTracker.lineUp.emailStatus === "Yes"}
+                >
+                  Do You Want to Send Email to Candidate?
+                </Checkbox>
+              )}
+
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <button
+                  type="submit"
+                  onClick={handleSubmit}
+                  className="buttoncss"
+                >
+                  Save
+                </button>
+
+                <button
+                  onClick={() => setDisplayEmailConfirm(false)}
+                  className="buttoncss"
+                >
+                  Cancel
+                </button>
+              </div>
+            </Modal.Body>
+          </Modal.Dialog>
+        </div>
+      )}
       <ModalComponent
         show={showModal}
         handleClose={handleClose}

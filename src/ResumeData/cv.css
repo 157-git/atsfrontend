@@ -1,7 +1,3 @@
-* {
-  margin: 0;
-  padding: 0;
-}
 /* Rajlaxmijagadale rename all tag classname */
 @media print {
   @page {
@@ -47,13 +43,14 @@
 /* General layout for the profile container */
 #profileContainercvtemplete {
   width: 100%;
+  height: 100%;
   /* height: 1800px; */
   /* height: 100%; */
   padding: 20px;
   box-sizing: border-box;
   margin-bottom: 0; /* Remove any unnecessary bottom margin */
   overflow: visible;
-  /* overflow-y: auto;  */
+  overflow-y: auto;
 }
 
 /* Force page breaks only between major sections */
@@ -302,15 +299,6 @@
   text-align: center;
 }
 
-.formeditcvtemplete {
-  background-color: #fff;
-  width: 50%;
-  margin: 0 auto;
-}
-.mainflexdivcvtemplete {
-  display: flex;
-  justify-content: space-around;
-}
 .maincvtemeplete {
   width: 50%;
   margin: 0 auto;
@@ -333,6 +321,16 @@
   max-width: 900px;
   margin: 40px auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  width: 50%;
+  margin: 0 auto;
+  flex: 1; /* Form takes up 50% of the width */
+  overflow-y: auto;
+  max-height: 100vh;
+  padding: 20px;
+  background-color: #f5f5f5;
+  max-height: 95vh; /* Allow the form part to scroll if content overflows */
+  /* border: 2px solid red; */
 }
 
 /* Title */
@@ -353,7 +351,7 @@
 
 /* Form Group */
 .form-groupcvtemplete {
-  margin-bottom: 20px; /* Increased space between form groups */
+  margin-bottom: 20px; 
 }
 
 /* Labels within Form Group */
@@ -422,7 +420,7 @@
 /* Horizontal Line */
 .form-groupcvtemplete .hrformgroupcvtemplete {
   border: 1px solid #ddd;
-  margin: 10px 0;
+  /* margin: 10px 0; */
 }
 
 /* Personal Details Section */
@@ -477,16 +475,10 @@
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
+  /* border: 1px solid black; */
 }
 
 /* Form Section Styling */
-.formeditcvtemplete {
-  flex: 1; /* Form takes up 50% of the width */
-  overflow-y: auto;
-  max-height: 100vh;
-  padding: 20px;
-  background-color: #f5f5f5;
-}
 
 /* Resume Section */
 .maincvtemeplete {
@@ -497,33 +489,27 @@
 }
 
 /* Make PDF Button fixed at the bottom */
-/*.download-button{
-    position: sticky;
-    bottom: 0;  /* This ensures the button stays at the bottom of the screen 
-    left: 0;    /* Align the button to the bottom-left corner
-    right: 0;   /* Make the button stretch across the full width 
-    background-color: #1d5fa6;
-    color: white;
-    padding: 15px;
-    text-align: center;
-    border-radius: 0;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 100; /* Keeps it above other content 
-  }
-  */
+.download-button {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #1d5fa6;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  border-radius: 0;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
 
-/* .download-button:hover {
-    background-color: #155b8a;
-  }
-  
-  .download-button:active {
-    background-color: #0f3d63;
-  } */
+.download-button:hover {
+  background-color: #155b8a;
+}
 
-/* For testing the scrolling area */
-.formeditcvtemplete {
-  max-height: 75vh; /* Allow the form part to scroll if content overflows */
+.download-button:active {
+  background-color: #0f3d63;
 }
 
 .maincvtemeplete {
@@ -584,8 +570,19 @@
   cursor: not-allowed;
 }
 
-.resume-close-btn{
-    font-size: bold;
-    font-size: 40px;
-    flex-direction: end;
+
+.resume-close-btn {
+  font-weight: bold; /* Makes the button text bold */
+  font-size: 30px; /* Font size for the button */
+  background: none; /* Removes background styling */
+  border: none; /* Removes border */
+  cursor: pointer; /* Ensures the button has a pointer cursor */
+  color: black; /* Customizes button text color */
+}
+
+.namecvtemplete-name-div {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  /* border: 1px solid red;  */
 }

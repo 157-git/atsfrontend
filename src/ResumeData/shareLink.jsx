@@ -114,9 +114,8 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
   const handleBackToMain = () => {
     setActiveComponent("main");
   };
-  
-  return (
 
+  return (
     <div className="shareLink-mainDiv">
       {displayCopyBtn && activeComponent === "main" && (
         <div className="shareLink-share-btn-Div">
@@ -147,7 +146,7 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
         </div>
       )}
 
-      <div>
+      <div className="shareLink-url-div-top-div">
         {activeComponent === "main" && (
           <div className="maincontainercvredisplay">
             <h2 className="resumebuilderheadingdisplay">Resume Builder</h2>
@@ -182,7 +181,9 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
         )}
 
         {activeComponent === "cv" && <CvTemplate onClose={handleBackToMain} />}
-        {activeComponent === "resume" && <ResumeCopy onClose={handleBackToMain}  />}
+        {activeComponent === "resume" && (
+          <ResumeCopy onClose={handleBackToMain} />
+        )}
       </div>
     </div>
   );

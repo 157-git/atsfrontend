@@ -701,6 +701,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData, loginEmployeeName 
     employeeId: "",
     jobRole: "",
     updatedBy: `${loginEmployeeName}`,
+    reminderId:""
   });
   const getInterviewReminderDataByCanId = async(candidateId)=>{
     const response =await axios.get(`${API_BASE_URL}/get-reminder-data/${candidateId}`);
@@ -708,9 +709,9 @@ const InterviewDates = ({ toggleShowShortListedCandidateData, loginEmployeeName 
     
     setInterviewFormData((prev)=>({
     ...prev,
-    callingRemark: response.data.callingRemark,
-    attendingStatus: response.data.attendingStatus,
-    comment: response.data.comment,
+    callingRemark: response.data.callingRemark ? response.data.callingRemark : "",
+    attendingStatus: response.data.attendingStatus ? response.data.attendingStatus : "",
+    comment: response.data.comment ? response.data.comment : "" ,
     reminderId : response.data.reminderId ? response.data.reminderId : "",
     }))
     
@@ -766,6 +767,7 @@ const InterviewDates = ({ toggleShowShortListedCandidateData, loginEmployeeName 
           toast.error(error.response?.data?.message || "Something went wrong");
         });
     } else {
+      console.log(interviewFormData); 
       axios
         .put(`${API_BASE_URL}/update-reminder-data/${interviewFormData.candidateId}`, interviewFormData)
         .then((response) => {

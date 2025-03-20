@@ -3,14 +3,18 @@ import "./resumeCopy.css";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import html2pdf from "html2pdf.js";
+import resumephoto from "../photos/resumephoto.jpg";
+import penPhoto from "../photos/pen.png";
+import callImg from "../photos/call.png";
+import emailImg from "../photos/email.png";
+import pinImg from "../photos/pin.png";
 
 // Afreen Sanaulla
 // title: Resume
 // Description: Single page resucdme with character limit, id completely editable and has option of downloading as pdf
 // Lines: 971
 
-const ResumeCopy =({ onClose }) => {
-
+const ResumeCopy = ({ onClose }) => {
   const printPDF = () => {
     window.print();
   };
@@ -44,7 +48,7 @@ const ResumeCopy =({ onClose }) => {
       address: "Camp, Pune, Maharashtra - 411037",
     },
 
-    imageSrc: "./src/image/resumephoto.jpg",
+    imageSrc: resumephoto,
 
     education: {
       college: "Ness Wadia College",
@@ -62,8 +66,8 @@ const ResumeCopy =({ onClose }) => {
       ],
     },
     sectionHeadings: {
-      technical: "Technical", // Heading for the technical skills section
-      soft: "Soft Skills", // Heading for the soft skills section
+      technical: "Technical",
+      soft: "Soft Skills",
     },
     experience: [
       {
@@ -92,10 +96,6 @@ const ResumeCopy =({ onClose }) => {
         description:
           "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque quibusdam modi id cumque, ducimus pariatur, veniam, iure autem ipsa ipsam sunt animi.",
       },
-      // {
-      //   title: "E-commerce",
-      //   description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque quibusdam modi id cumque, ducimus pariatur, veniam, iure autem ipsa ipsam sunt animi."
-      // },
     ],
     personalDetails: {
       dob: "1/2/2000",
@@ -343,7 +343,7 @@ const ResumeCopy =({ onClose }) => {
 
   return (
     <>
-      <div className="candidateidresumecopytemplete">
+      {/* <div className="candidateidresumecopytemplete">
         <input
           className="inputfieldresumecopytemplete"
           type="text"
@@ -354,11 +354,17 @@ const ResumeCopy =({ onClose }) => {
         </button>
         <button onClick={onClose} className="resume-close-btn">  &times;</button>
 
-      </div>    
+      </div>     */}
       <div className="mainflexdivresumecopytemplete">
         <div className="formdivresumecopytemplete" ref={formRef}>
           <div className="formresumecopytemplete">
-            <h2 className="resumeheaderresumecopytemplete">Resume Form</h2>
+            <div className="namecvtemplete-name-div">
+              <h2 className="resumeheaderresumecopytemplete">Resume Form</h2>
+              <button onClick={onClose} className="resume-close-btn">
+                {" "}
+                &times;
+              </button>
+            </div>
 
             {/* Personal Details */}
             <h3 className="pdeatilsresumecopytemplete">Personal Details</h3>
@@ -576,6 +582,7 @@ const ResumeCopy =({ onClose }) => {
         <div
           className="resumemainresumecopytemplete"
           id="profilecontainerresumecopytemplete"
+          // style={{border:"1px solid black"}}
         >
           <div
             className="mainresumecopytemplete"
@@ -602,7 +609,8 @@ const ResumeCopy =({ onClose }) => {
                       </p>
                       <img
                         className="imgresumetemplete"
-                        src="./photos/pen.png"
+                        // src="./photos/pen.png"
+                        src={penPhoto}
                         alt="Edit"
                         height={35}
                         width={35}
@@ -671,12 +679,7 @@ const ResumeCopy =({ onClose }) => {
                     <div className="contactmainresumecopytemplete">
                       <div className="contactresumecopytemplete">
                         <div>
-                          <img
-                            src="./src//image/call.png"
-                            alt=""
-                            height={16}
-                            width={16}
-                          />
+                          <img src={callImg} alt="" height={16} width={16} />
                         </div>
                         <p
                           contentEditable={true}
@@ -688,12 +691,7 @@ const ResumeCopy =({ onClose }) => {
                       </div>
                       <div className="contactresumecopytemplete">
                         <div>
-                          <img
-                            src="./src//image/email.png"
-                            alt=""
-                            height={16}
-                            width={16}
-                          />
+                          <img src={emailImg} alt="" height={16} width={16} />
                         </div>
                         <p
                           contentEditable={true}
@@ -705,12 +703,7 @@ const ResumeCopy =({ onClose }) => {
                       </div>
                       <div className="contactresumecopytemplete">
                         <div>
-                          <img
-                            src="./src//image/pin.png"
-                            alt=""
-                            height={16}
-                            width={16}
-                          />
+                          <img src={pinImg} alt="" height={16} width={16} />
                         </div>
                         <p
                           contentEditable={true}
