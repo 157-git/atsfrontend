@@ -22,6 +22,9 @@ import { getDailyworkData, putDailyworkData } from "../HandlerFunctions/getDaily
 import { getFormattedDateISOYMDformat } from "./getFormattedDateTime";
 import { useDispatch } from "react-redux";
 import { setTriggerFetch } from "../sclices/triggerSlice";
+import startPointImg from "../photos/start-line.png";
+import endpointImg from "../photos/finish.png";
+import InterviewPreviousQuestion from "./interviewPreviousQuestion";
 // this line added by sahil karnekar on date 14-01-2024
 
 const UpdateSelfCalling = ({
@@ -135,6 +138,9 @@ const UpdateSelfCalling = ({
   const dispatch = useDispatch();
   const [displayOtherInputForCallingRemark, setDisplayOtherInputForCallingRemark] = useState(false);
   const [displayEmailConfirm, setDisplayEmailConfirm] = useState(false);
+  const [initialSelecteYesNoState, setInitialYesNoState] = useState("");
+console.log(initialSelecteYesNoState);
+
   // updated by sahil karnekar date 18-10-2024
   const today = new Date();
   const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
@@ -266,6 +272,7 @@ console.log(errors);
       );
       const data = await response.json();
       setCallingTracker(data);
+      setInitialYesNoState(data.selectYesOrNo);
       console.log(data);
       const validSources = ["LinkedIn", "Naukri", "Indeed", "Times", "Social Media", "Company Page", "Excel", "Friends"];
       const validCallRemarks = ["Call Done", "Asked for Call Back", "No Answer", "Network Issue", "Invalid Number", "Need to call back", "Do not call again"];
@@ -305,6 +312,9 @@ console.log(errors);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "fullAddress") {
+      setStartPoint(value);
+    }
     if (name === "sourceName" && value === "others") {
       setDisplaySourceOthersInput(true);
     } else if (name === "sourceName" && value !== "others") {
@@ -880,36 +890,43 @@ const handleDisplayConfirmBox = ()=>{
       if (callingTracker.selectYesOrNo === "Interested") {
         console.log("emit called", callingTrackerObjectForEmit);
         socket.emit("update_candidate", callingTrackerObjectForEmit);
-            try {
-                  if (!dailyWorkDataNew) {
-                    throw new Error("dailyWorkDataNew is null or undefined");
-                  }
-                
-                  const getDataForUpdate = {
-                    attendanceRole: {
-                      ...(userType === "Recruiters" && { employee: { employeeId } }),
-                      ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
-                      ...(userType === "Manager" && { manager: { employeeId } })
-                    },
-                    dailyArchived: (dailyWorkDataNew?.dailyArchived || 0) + 1, // Prevents NaN if value is null
-                    dailyPending: (dailyWorkDataNew?.dailyPending || 0) - 1,
-                    dayPresentStatus: ((dailyWorkDataNew?.dailyArchived ?? 0) + 1) >= 5 ? "Yes" : "No"
-                  };
-                
-                  console.log(getDataForUpdate);
-                
-                  const putData = await putDailyworkData(
-                    employeeId,
-                    userType,
-                    currentDateNewGlobal,
-                    getDataForUpdate
-                  );
-                  dispatch(setTriggerFetch());
-                  getDailyworkDataFunc();
-                } catch (error) {
-                  console.error("Error in updating daily work data:", error);
-                }
+           
       }
+
+if (response.ok) {
+  if (initialSelecteYesNoState !== "Interested") {
+    try {
+      if (!dailyWorkDataNew) {
+        throw new Error("dailyWorkDataNew is null or undefined");
+      }
+    
+      const getDataForUpdate = {
+        attendanceRole: {
+          ...(userType === "Recruiters" && { employee: { employeeId } }),
+          ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
+          ...(userType === "Manager" && { manager: { employeeId } })
+        },
+        dailyArchived: (dailyWorkDataNew?.dailyArchived || 0) + 1, // Prevents NaN if value is null
+        dailyPending: (dailyWorkDataNew?.dailyPending || 0) - 1,
+        dayPresentStatus: ((dailyWorkDataNew?.dailyArchived ?? 0) + 1) >= 5 ? "Yes" : "No"
+      };
+    
+      console.log(getDataForUpdate);
+    
+      const putData = await putDailyworkData(
+        employeeId,
+        userType,
+        currentDateNewGlobal,
+        getDataForUpdate
+      );
+      dispatch(setTriggerFetch());
+      getDailyworkDataFunc();
+    } catch (error) {
+      console.error("Error in updating daily work data:", error);
+    }
+  }
+}
+
       if (response.ok) {
         if (callingTracker.selectYesOrNo === "Interested") {
           if (fromCallingList) {
@@ -998,6 +1015,7 @@ console.log(callingTracker);
         incentive: "",
       }));
     }
+    setendPoint(selectedRequirement.detailAddress);
   };
   const handleSourceNameOthers = (e) => {
     const { name, value } = e.target;
@@ -2855,10 +2873,10 @@ style={{
         handleClose={handleClose}
         startingPoint={startpoint}
         endingPoint={endpoint}
-        currentCTCInLakh={lineUpData.currentCTCLakh}
-        currentCTCInThousand={lineUpData.currentCTCThousand}
-        expectedCTCInLakh={lineUpData.expectedCTCLakh}
-        expectedCTCInThousand={lineUpData.expectedCTCThousand}
+        currentCTCInLakh={callingTracker?.lineUp.currentCTCLakh}
+        currentCTCInThousand={callingTracker?.lineUp.currentCTCThousand}
+        expectedCTCInLakh={callingTracker?.lineUp.expectedCTCLakh}
+        expectedCTCInThousand={callingTracker?.lineUp.expectedCTCThousand}
         convertedCurrentCTC={convertedCurrentCTC}
         convertedExpectedCTC={convertedExpectedCTC}
         onUpdateExpectedCTCLakh={handleUpdateExpectedCTCLakh}
@@ -2873,12 +2891,17 @@ const ModalComponent = ({
   handleClose,
   startingPoint,
   endingPoint,
+  // props added by sahil karnekar date 25-10-2024
+  currentCTCInLakh,
+  currentCTCInThousand,
   expectedCTCInLakh = "",
   expectedCTCInThousand = "",
   convertedCurrentCTC,
   onUpdateExpectedCTCLakh,
   onUpdateExpectedCTCThousand,
 }) => {
+  console.log(currentCTCInLakh);
+  
   const [activeField, setActiveField] = useState("distance");
   const [origin, setOrigin] = useState(startingPoint);
   const [destination, setDestination] = useState(endingPoint);
@@ -2886,49 +2909,230 @@ const ModalComponent = ({
   const [calculatedHike, setCalculatedHike] = useState("");
   const [expectedCTC, setExpectedCTC] = useState("");
   const [expectedCTCLakh, setExpectedCTCLakh] = useState(expectedCTCInLakh);
+  // updated by sahil karnekar date 25-10-2024
   const [expectedCTCThousand, setExpectedCTCThousand] = useState(
     expectedCTCInThousand
   );
   const [showHikeInput, setShowHikeInput] = useState(false);
+  // this 2 states are added by sahil karnekar date 25-10-2024
+  const [currentCTCInLakhState, setCurrentCTCInLakhState] =
+    useState(currentCTCInLakh);
+  const [currentCTCInThousandState, setCurrentCTCInThousandState] =
+    useState(currentCTCInThousand);
+
+  const [currentCTCInLakhState1, setCurrentCTCInLakhState1] =
+    useState(currentCTCInLakh);
+  const [currentCTCInThousandState1, setCurrentCTCInThousandState1] =
+    useState(currentCTCInThousand);
+
+  // Use useEffect to update state when props change
+  useEffect(() => {
+    setCurrentCTCInLakhState(currentCTCInLakh);
+    setCurrentCTCInThousandState(currentCTCInThousand);
+    setCurrentCTCInLakhState1(currentCTCInLakh);
+    setCurrentCTCInThousandState1(currentCTCInThousand);
+  }, [currentCTCInLakh, currentCTCInThousand]);
 
   useEffect(() => {
     setOrigin(startingPoint);
     setDestination(endingPoint);
     setExpectedCTCLakh(expectedCTCInLakh);
     setExpectedCTCThousand(expectedCTCInThousand);
-    setExpectedCTC("");
-    setShowHikeInput(true); // Reset hike input visibility on prop change
+
+    // this line updated by sahil karnekar date 25-10-2024
+    setShowHikeInput(true);
   }, [startingPoint, endingPoint, expectedCTCInLakh, expectedCTCInThousand]);
 
-  useEffect(() => {
-    if (expectedHike) {
-      const currentCTCNum = parseFloat(convertedCurrentCTC);
-      const expectedHikeNum = parseFloat(expectedHike);
-      const expectedCTCNum =
-        currentCTCNum + (currentCTCNum * expectedHikeNum) / 100;
-      setExpectedCTC(expectedCTCNum.toFixed(2));
-      setCalculatedHike("");
+  const formatNumberToWords = (num) => {
+    const lakh = Math.floor(num / 100000);
+    const thousand = Math.floor((num % 100000) / 1000);
+    const hundred = Math.floor((num % 1000) / 100);
+    const tensAndOnes = num % 100;
+
+    let result = "";
+    if (lakh) result += `${lakh} lakh `;
+    if (thousand) result += `${thousand} thousand `;
+    if (hundred) result += `${hundred} hundred `;
+
+    // Handle tens and ones, keeping "and" for readability when needed
+    if (tensAndOnes) {
+      if (result) result += "and ";
+      result += `${tensAndOnes} Indian Rupees `;
     }
-    setCalculatedHike("");
-  }, [expectedHike, convertedCurrentCTC]);
+
+    return result.trim();
+  };
 
   useEffect(() => {
-    if (expectedCTCLakh || expectedCTCThousand) {
-      const lakhValue = parseFloat(expectedCTCLakh) || 0;
-      const thousandValue = parseFloat(expectedCTCThousand) || 0;
-      const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
-      const currentCTCNum = parseFloat(convertedCurrentCTC);
-      const expectedCTCNum = parseFloat(combinedCTC);
-      const hikePercentage =
-        ((expectedCTCNum - currentCTCNum) / currentCTCNum) * 100;
+    if (
+      expectedHike &&
+      (parseFloat(currentCTCInLakhState) > 0 || parseFloat(currentCTCInThousandState) > 0)
+    ) {
+      const currentCTCNum =
+        (parseFloat(currentCTCInLakhState) || 0) * 100000 +
+        (parseFloat(currentCTCInThousandState) || 0) * 1000;
+
+      const expectedHikeNum = parseFloat(expectedHike) || 0;
+      const hikeAmount = (currentCTCNum * expectedHikeNum) / 100;
+      const expectedCTCNum = currentCTCNum + hikeAmount;
+
+      setExpectedCTC(formatNumberToWords(expectedCTCNum));
+
+      setCalculationSteps(`
+        Salary Calculation 
+        1. Current CTC: - ${currentCTCInLakhState > 0 ? `${currentCTCInLakhState} Lakh` : ""}    ${currentCTCInThousandState > 0 ? `${currentCTCInThousandState} Thousand` : ""}  
+        2. Hike Percentage : -  ${expectedHikeNum}%
+        3. Hike Amount: - (Current CTC * Hike %) / 100
+              = (${currentCTCNum} * ${expectedHikeNum}) / 100 = ₹ ${hikeAmount.toLocaleString()}
+        4. Expected CTC:  Current CTC + Hike Amount
+              = ₹ ${currentCTCNum.toLocaleString()} + ₹ ${hikeAmount.toLocaleString()} =  ₹ ${expectedCTCNum.toLocaleString()}
+       
+              Total Expected CTC  ${formatNumberToWords(expectedCTCNum)}
+      `);
+    }else{
+      setExpectedCTC("");
+    setCalculationSteps("");
+    }
+  }, [expectedHike, currentCTCInLakhState, currentCTCInThousandState]);
+
+  useEffect(() => {
+    const lakhValue = parseFloat(expectedCTCLakh) || 0;
+    const thousandValue = parseFloat(expectedCTCThousand) || 0;
+    const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
+  
+    const currentLakhValue = parseFloat(currentCTCInLakhState1) || 0;
+    const currentThousandValue = parseFloat(currentCTCInThousandState1) || 0;
+    const currentCTCNum = currentLakhValue * 100000 + currentThousandValue * 1000;
+  
+    // Ensure calculation only happens when necessary
+    if (combinedCTC > 0 && currentCTCNum > 0) {
+      const hikePercentage = ((combinedCTC - currentCTCNum) / currentCTCNum) * 100;
+  
       setCalculatedHike(hikePercentage.toFixed(2));
+  
+      setCalculationSteps(`
+        Salary Calculation 
+  
+        1. Current CTC: ${currentLakhValue > 0 ? `${currentLakhValue} Lakh` : ""}   
+           ${currentThousandValue > 0 ? `${currentThousandValue} Thousand` : ""} 
+  
+        2. Expected CTC: ${lakhValue > 0 ? `${lakhValue} Lakh` : ""}   
+           ${thousandValue > 0 ? `${thousandValue} Thousand` : ""} 
+  
+        3. Hike Calculation: Hike % = ((Expected CTC - Current CTC) / Current CTC) * 100
+           = (${combinedCTC.toLocaleString()} - ${currentCTCNum.toLocaleString()}) / ${currentCTCNum.toLocaleString()} * 100
+  
+        Total Hike Percentage: ${hikePercentage.toFixed(2)} %
+      `);
+    } else {
+      // Reset values when inputs are invalid
+      setCalculatedHike("");
+      setCalculationSteps("");
     }
-  }, [expectedCTCLakh, expectedCTCThousand, convertedCurrentCTC]);
+  }, [
+    expectedCTCLakh,
+    expectedCTCThousand,
+    currentCTCInLakhState1,
+    currentCTCInThousandState1,
+  ]);  
 
+  const handleNumericChange = (setter) => (event) => {
+    const value = event.target.value;
+    if (!/^\d*$/.test(value)) {
+      return; // Prevent update if value is not numeric
+    }
+    setter(value); // Update state if value is numeric
+  };
+
+  const [isLakhFocused, setIsLakhFocused] = useState(false);
+  const [isThousandFocused, setIsThousandFocused] = useState(false);
+  const [isExpectedLakhFocused, setIsExpectedLakhFocused] = useState(false);
+  const [isExpectedThousandFocused, setIsExpectedThousandFocused] =
+    useState(false);
+  const [isLakhFocused1, setIsLakhFocused1] = useState(false);
+  const [isThousandFocused1, setIsThousandFocused1] = useState(false);
+
+  const handleLakhChange = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, ""); // Allow only numbers
+    setCurrentCTCInLakhState(value);
+  };
+  const handleLakhFocus = () => {
+    setIsLakhFocused(true);
+  };
+  const handleLakhBlur = () => {
+    setIsLakhFocused(false);
+  };
+
+  const handleThousandChange = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, ""); // Allow only numbers
+    setCurrentCTCInThousandState(value);
+  };
+  const handleThousandFocus = () => {
+    setIsThousandFocused(true);
+  };
+  const handleThousandBlur = () => {
+    setIsThousandFocused(false);
+  };
+
+  const handleLakhChange1 = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, ""); // Allow only numbers
+    setCurrentCTCInLakhState1(value);
+  };
+  const handleLakhFocus1 = () => {
+    setIsLakhFocused1(true);
+  };
+  const handleLakhBlur1 = () => {
+    setIsLakhFocused1(false);
+  };
+  const handleThousandChange1 = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, ""); // Allow only numbers
+    setCurrentCTCInThousandState1(value);
+  };
+  const handleThousandFocus1 = () => {
+    setIsThousandFocused1(true);
+  };
+  const handleThousandBlur1 = () => {
+    setIsThousandFocused1(false);
+  };
+  const handleExpectedLakhChange = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, ""); // Allow only numbers
+    setExpectedCTCLakh(value);
+    onUpdateExpectedCTCLakh(value);
+  };
+  const handleExpectedLakhFocus = () => {
+    setIsExpectedLakhFocused(true);
+  };
+  const handleExpectedLakhBlur = () => {
+    setIsExpectedLakhFocused(false);
+  };
+
+  const handleExpectedThousandChange = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, ""); // Allow only numbers
+    setExpectedCTCThousand(value);
+    onUpdateExpectedCTCThousand(value);
+  };
+  const handleExpectedThousandFocus = () => {
+    setIsExpectedThousandFocused(true);
+  };
+  const handleExpectedThousandBlur = () => {
+    setIsExpectedThousandFocused(false);
+  };
+
+  const [isHikeFocused, setIsHikeFocused] = useState(false);
+
+  const handleHikeFocus = () => {
+    setIsHikeFocused(true);
+  };
+
+  const handleHikeBlur = () => {
+    setIsHikeFocused(false);
+  };
+
+  const [calculationSteps, setCalculationSteps] = useState("");
 
   return (
     <Modal size="xl" centered show={show} onHide={handleClose}>
-      <Modal.Body className="p-0">
+      <Modal.Body className="calling-tracker-modal">
         <div className="calling-tracker-popup">
           <div className="calling-tracker-popup-sidebar">
             <p
@@ -2947,15 +3151,7 @@ const ModalComponent = ({
             >
               Salary Calculation
             </p>
-            {/* Arshad Attar Commented this on 09-12-2024 */}
-            {/* <p
-             className={`sidebar-item ${
-               activeField === "historyTracker" ? "active" : ""
-             }`}
-             onClick={() => setActiveField("historyTracker")}
-           >
-             History Tracker
-           </p> */}
+
             <p
               className={`sidebar-item ${
                 activeField === "previousQuestion" ? "active" : ""
@@ -2968,40 +3164,48 @@ const ModalComponent = ({
           <div className="calling-tracker-popup-dashboard">
             {activeField === "distance" && (
               <div className="distance-calculation">
-                <h5>Distance Calculation</h5>
-                <div className="form-group">
-                  <label htmlFor="origin">Origin</label>
-                  <input
-                    type="text"
-                    id="origin"
-                    className="form-control"
-                    placeholder="Enter origin"
-                    value={origin}
-                    onChange={(e) => setOrigin(e.target.value)}
-                  />
+                <div className="distance-calculation-top-div">
+                  <div className="help-form-group">
+                    <label htmlFor="origin">Origin</label>
+                    <img src={startPointImg} className="start-Point-Img" />
+                    <input
+                      type="text"
+                      id="origin"
+                      className="help-form-control"
+                      placeholder="Enter origin"
+                      value={origin}
+                      onChange={(e) => setOrigin(e.target.value)}
+                    />
+                  </div>
+                  <div className="help-form-group">
+                    <label htmlFor="destination">Destination</label>
+                    <img src={endpointImg} className="start-Point-Img" />
+                    <input
+                      type="text"
+                      id="destination"
+                      className="help-form-control"
+                      placeholder="Enter destination"
+                      value={destination}
+                      onChange={(e) => setDestination(e.target.value)}
+                    />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label htmlFor="destination">Destination</label>
-                  <input
-                    type="text"
-                    id="destination"
-                    className="form-control"
-                    placeholder="Enter destination"
-                    value={destination}
-                    onChange={(e) => setDestination(e.target.value)}
-                  />
-                </div>
-                {origin && destination && (
+                <div className="distance-calculation-bottom-div">
                   <iframe
+                    id="idfortesteriframe"
                     title="Google Maps"
                     width="100%"
                     height="450"
                     frameBorder="0"
                     style={{ border: 0 }}
-                    src={`https://maps.google.com/maps?q=${origin}+to+${destination}&output=embed`}
+                    src={
+                      origin && destination
+                        ? `https://maps.google.com/maps?q=${origin}+to+${destination}&output=embed`
+                        : "https://maps.google.com/maps?q=India&output=embed"
+                    }
                     allowFullScreen
                   ></iframe>
-                )}
+                </div>
               </div>
             )}
             {activeField === "salary" && (
@@ -3017,36 +3221,79 @@ const ModalComponent = ({
                   <tbody>
                     <tr>
                       <td className="text-secondary">
-                        <div className="form-group">
-                          {/* <label htmlFor="currentCTCLakh"></label> */}
-                          <input
-                            type="number"
-                            id="currentCTCLakh"
-                            name="currentCTCLack"
-                            className="form-control"
-                            placeholder="Enter current CTC in lakh"
-                            value={convertedCurrentCTC}
-                            // readOnly
-                          />
+                        <div className="help-salary-top-div">
+                          <div className="help-salary-input-div">
+                            <input
+                              type="text"
+                              id="currentCTCLakh"
+                              className="help-form-control"
+                              placeholder="Enter current CTC in Lakh"
+                              value={
+                                isLakhFocused
+                                  ? currentCTCInLakhState
+                                  : currentCTCInLakhState
+                                  ? `${currentCTCInLakhState} Lakh`
+                                  : ""
+                              }
+                              onChange={handleLakhChange}
+                              onFocus={handleLakhFocus}
+                              onBlur={handleLakhBlur}
+                            />
+                          </div>
+
+                          <div className="help-salary-input-div">
+                            <input
+                              type="text"
+                              id="currentCTCThousand"
+                              maxLength="2"
+                              pattern="\d*"
+                              inputMode="numeric"
+                              className="help-form-control"
+                              placeholder="Enter current CTC in Thousand"
+                              value={
+                                isThousandFocused
+                                  ? currentCTCInThousandState
+                                  : currentCTCInThousandState
+                                  ? `${currentCTCInThousandState} Thousand`
+                                  : ""
+                              }
+                              onChange={handleThousandChange}
+                              onFocus={handleThousandFocus}
+                              onBlur={handleThousandBlur}
+                            />
+                          </div>
                         </div>
                       </td>
                       <td className="text-secondary">
-                        <div className="form-group">
-                          {/* <label htmlFor="expectedHike">Hike (%)</label> */}
-                          <input
-                            type="number"
-                            id="expectedHike"
-                            className="form-control"
-                            placeholder="Enter expected hike percentage"
-                            value={expectedHike}
-                            onChange={(e) => setExpectedHike(e.target.value)}
-                          />
+                        <div className="help-salary-top-div">
+                          <div className="help-salary-input-div">
+                            <input
+                              type="text"
+                              id="expectedHike"
+                              maxLength="3"
+                              pattern="\d*"
+                              inputMode="numeric"
+                              className="help-form-control"
+                              placeholder="Enter expected hike percentage"
+                              value={
+                                isHikeFocused
+                                  ? expectedHike
+                                  : expectedHike
+                                  ? `${expectedHike}%`
+                                  : ""
+                              }
+                              onChange={handleNumericChange(setExpectedHike)}
+                              onFocus={handleHikeFocus}
+                              onBlur={handleHikeBlur}
+                            />
+                          </div>
                         </div>
                       </td>
                       <td className="text-secondary">
                         <input
+                          placeholder="Result..."
                           type="text"
-                          className="form-control"
+                          className="help-form-control"
                           readOnly
                           value={expectedCTC}
                         />
@@ -3054,6 +3301,7 @@ const ModalComponent = ({
                     </tr>
                   </tbody>
                 </table>
+
                 <table className="table table-bordered">
                   <thead>
                     <tr>
@@ -3065,140 +3313,140 @@ const ModalComponent = ({
                   <tbody>
                     <tr>
                       <td className="text-secondary">
-                        <input
-                          type="number"
-                          id="currentCTCLakh"
-                          name="currentCTCLakh"
-                          className="form-control"
-                          placeholder="Enter current CTC in lakh"
-                          value={convertedCurrentCTC}
-                          // readOnly
-                        />
+                        <div className="help-salary-top-div">
+                          <div className="help-salary-input-div">
+                            <input
+                              type="text"
+                              id="currentCTCLakh"
+                              maxLength="2"
+                              pattern="\d*"
+                              inputMode="numeric"
+                              className="help-form-control"
+                              placeholder="Enter current CTC in Lakh"
+                              value={
+                                isLakhFocused1
+                                  ? currentCTCInLakhState1
+                                  : currentCTCInLakhState1
+                                  ? `${currentCTCInLakhState1} Lakh`
+                                  : ""
+                              }
+                              onChange={handleLakhChange1}
+                              onFocus={handleLakhFocus1}
+                              onBlur={handleLakhBlur1}
+                            />
+                          </div>
+
+                          <div className="help-salary-input-div">
+                            <input
+                              type="text"
+                              id="currentCTCThousand"
+                              maxLength="2"
+                              pattern="\d*"
+                              inputMode="numeric"
+                              className="help-form-control"
+                              placeholder="Enter current CTC in Thousand"
+                              value={
+                                isThousandFocused1
+                                  ? currentCTCInThousandState1
+                                  : currentCTCInThousandState1
+                                  ? `${currentCTCInThousandState1} Thousand`
+                                  : ""
+                              }
+                              onChange={handleThousandChange1}
+                              onFocus={handleThousandFocus1}
+                              onBlur={handleThousandBlur1}
+                            />
+                          </div>
+                        </div>
                       </td>
                       <td className="text-secondary">
-                        <div>
-                          <div className="form-group">
-                            {/* <label htmlFor="expectedCTCLakh">Lakh</label> */}
+                        <div className="help-salary-top-div">
+                          <div className="help-salary-input-div">
                             <input
                               type="text"
                               id="expectedCTCLakh"
-                              name="enterexpectedCTCLakh"
-                              className="form-control"
-                              placeholder="Enter expected CTC in lakh"
-                              value={expectedCTCLakh}
+                              className="help-form-control"
+                              placeholder="Enter expected CTC in Lakh"
                               maxLength="2"
                               pattern="\d*"
                               inputMode="numeric"
-                              onChange={(e) => {
-                                const value = e.target.value;
-                                setExpectedCTCLakh(value);
-                                onUpdateExpectedCTCLakh(value); // Send to parent
-                              }}
+                              value={
+                                isExpectedLakhFocused
+                                  ? expectedCTCLakh
+                                  : expectedCTCLakh
+                                  ? `${expectedCTCLakh} Lakh`
+                                  : ""
+                              }
+                              onChange={handleExpectedLakhChange}
+                              onFocus={handleExpectedLakhFocus}
+                              onBlur={handleExpectedLakhBlur}
                             />
                           </div>
-                          <div className="form-group">
-                            {/* <label htmlFor="expectedCTCThousand">
-                             Thousand
-                           </label> */}
-                            <input
-                              type="text"
-                              id="expectedCTCThousand"
-                              name="expectedCTCLakh"
-                              className="form-control"
-                              placeholder="Enter expected CTC in thousand"
-                              maxLength="2"
-                              pattern="\d*"
-                              inputMode="numeric"
-                              value={expectedCTCThousand}
-                              onChange={(e) => {
-                                const value = e.target.value;
-                                setExpectedCTCThousand(value);
-                                onUpdateExpectedCTCThousand(value); // Send to parent
-                              }}
-                            />
+                          <div className="help-salary-top-div">
+                            <div className="help-salary-input-div">
+                              <input
+                                type="text"
+                                id="expectedCTCThousand"
+                                className="help-form-control"
+                                placeholder="Enter expected CTC in Thousand"
+                                maxLength="2"
+                                pattern="\d*"
+                                inputMode="numeric"
+                                value={
+                                  isExpectedThousandFocused
+                                    ? expectedCTCThousand
+                                    : expectedCTCThousand
+                                    ? `${expectedCTCThousand} Thousand`
+                                    : ""
+                                }
+                                onChange={handleExpectedThousandChange}
+                                onFocus={handleExpectedThousandFocus}
+                                onBlur={handleExpectedThousandBlur}
+                              />
+                            </div>
                           </div>
                         </div>
                       </td>
                       <td className="text-secondary">
                         <input
                           type="text"
-                          name="hike"
-                          className="form-control"
-                          // readOnly
-                          value={calculatedHike}
+                          className="help-form-control"
+                          readOnly
+                          value={
+                            calculatedHike && !isNaN(calculatedHike)
+                              ? `${calculatedHike} %`
+                              : ""
+                          }
                         />
                       </td>
                     </tr>
                   </tbody>
                 </table>
+                <div className="salary-calculation-bottom-div">
+                  {calculationSteps.split("\n").map((step, index) => (
+                    <p
+                      key={index}
+                      style={{ fontWeight: "600", paddingLeft: "20px" }}
+                    >
+                      {step}
+                    </p>
+                  ))}
+                </div>
               </div>
             )}
             {activeField === "historyTracker" && (
               <div className="history-Tracker">
-                <div className="form-group">
+                <div className="help-form-group">
                   <CandidateHistoryTracker />
-                  <div></div>
                 </div>
               </div>
             )}
             {activeField === "previousQuestion" && (
-              <div className="previousQuestion">
-                <h5>Previous Question</h5>
-                <div className="form-group">
-                  <label htmlFor="jobId">Job Id</label>
-                  <input
-                    type="text"
-                    id="jobId"
-                    className="form-control"
-                    placeholder="Enter Job Id"
-                  />
+              <>
+                <div>
+                  <InterviewPreviousQuestion />
                 </div>
-
-                <div className="card">
-                  <h2 className="card-title">Previous Question</h2>
-                  <p className="card-content">
-                    Q.1. What is Java Full Stack Development?
-                  </p>
-                  <p className="card-content">
-                    Q.2. Explain the difference between front-end and back-end
-                    development.
-                  </p>
-                  <p className="card-content">
-                    Q.3. What do you need to build a typical web application?
-                  </p>
-                  <p className="card-content">
-                    Q.4. What is the Java Virtual Machine (JVM), and why is it
-                    important?
-                  </p>
-                  <p className="card-content">
-                    Q.5. What's a servlet, and why is it used in Java web
-                    development?
-                  </p>
-                </div>
-                <div className="card">
-                  <h2 className="card-title">Previous Question</h2>
-                  <p className="card-content">
-                    Q.1. What's the Spring Framework, and why is it useful for
-                    Java?
-                  </p>
-                  <p className="card-content">
-                    Q.2. What are RESTful web services, and why are they
-                    important in Java?
-                  </p>
-                  <p className="card-content">
-                    Q.3. What's Hibernate, and how does it help with databases
-                    in Java?
-                  </p>
-                  <p className="card-content">
-                    Q.4. Can you explain what dependency injection means in
-                    Spring?
-                  </p>
-                  <p className="card-content">
-                    Q.5. What's a singleton pattern, and why does it matter in
-                    Java?
-                  </p>
-                </div>
-              </div>
+              </>
             )}
           </div>
         </div>

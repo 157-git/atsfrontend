@@ -92,9 +92,25 @@ const SendClientEmail = ({ clientEmailSender }) => {
     setFilterOptions(options);
   }, [filteredCallingList]);
 
+  // const handleFilterOptionClick = (key) => {
+  //   setActiveFilterOption(activeFilterOption === key ? null : key);
+  //   setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
+  // };
   const handleFilterOptionClick = (key) => {
-    setActiveFilterOption(activeFilterOption === key ? null : key);
-    setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
+    if (activeFilterOption === key) {
+      setActiveFilterOption(null); // Close the current filter
+    } else {
+      setActiveFilterOption(key); // Open a new filter section
+    }
+
+    // Initialize the selected filter array if it doesn't exist
+    setSelectedFilters((prev) => {
+      const newSelectedFilters = { ...prev };
+      if (!newSelectedFilters[key]) {
+        newSelectedFilters[key] = []; // Create an empty array for values
+      }
+      return newSelectedFilters;
+    });
   };
 
   const handleMouseOver = (event) => {
@@ -741,7 +757,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
             )} */}
 
 {showFilterSection && (
-                  <div ref={filterRef} className="filter-section">
+                  <div className="filter-section">
                     {limitedOptions.map(([optionKey, optionLabel]) => {
                       
                       const uniqueValues = Array.from(
@@ -790,7 +806,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
 {/* rajlaxmi Jagadle Changes That code date 20-02-2025 line 1003/1027 */}
 
   {activeFilterOption === optionKey && (
-    <div className="city-filter">
+    <div ref={filterRef} className="city-filter">
       <div className="optionDiv">
         {uniqueValues.length > 0 ? (
           uniqueValues.map((value) => (

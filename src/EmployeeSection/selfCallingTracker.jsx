@@ -843,7 +843,7 @@ const CallingList = ({
             <div className="filter-dropdowns">
               {/* updated this filter section by sahil karnekar date 22-10-2024 */}
 {showFilterSection && (
-                  <div ref={filterRef} className="filter-section">
+                  <div className="filter-section">
                     {limitedOptions.map(([optionKey, optionLabel]) => {
                       
                       const uniqueValues = Array.from(
@@ -892,7 +892,7 @@ const CallingList = ({
 {/* rajlaxmi Jagadle Changes That code date 20-02-2025 line 1003/1027 */}
 
   {activeFilterOption === optionKey && (
-    <div className="city-filter">
+    <div ref={filterRef} className="city-filter">
       <div className="optionDiv">
         {uniqueValues.length > 0 ? (
           uniqueValues.map((value) => (

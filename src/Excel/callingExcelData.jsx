@@ -819,7 +819,7 @@ const handleCancelcloseshare = ()=>{
                 <div className="filter-section">
                   <div className="filter-dropdowns">
                   {showFilterSection && (
-                  <div ref={filterRef} className="filter-section">
+                  <div className="filter-section">
                     {limitedOptions.map(([optionKey, optionLabel]) => {
                       
                       const uniqueValues = Array.from(
@@ -868,7 +868,7 @@ const handleCancelcloseshare = ()=>{
 {/* rajlaxmi Jagadle Changes That code date 20-02-2025 line 1003/1027 */}
 
   {activeFilterOption === optionKey && (
-    <div className="city-filter">
+    <div ref={filterRef} className="city-filter">
       <div className="optionDiv">
         {uniqueValues.length > 0 ? (
           uniqueValues.map((value) => (

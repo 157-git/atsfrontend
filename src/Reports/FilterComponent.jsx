@@ -75,7 +75,7 @@ const FilterComponent = ({ filteredLineUpItems, onFilterChange }) => {
     <div className='newsetPositionrelative'>
 
         <div className="filter-dropdowns">
-          <div className="filter-section" ref={filterRef}>
+          <div className="filter-section">
             {Object.keys(categories).map((category) => (
               <div className='filter-option' key={category}>
                 <button className="white-Btn" onClick={() => handleCategorySelect(category)}>
@@ -83,7 +83,7 @@ const FilterComponent = ({ filteredLineUpItems, onFilterChange }) => {
                 </button>
 
                 {activeFilterOption === category && selectedCategory && (
-                  <div className="city-filter">
+                  <div ref={filterRef} className="city-filter">
                     <div className="optionDiv">
                       {uniqueValues.map((option) => (
                         <label className='selfcalling-filter-value' key={option}>

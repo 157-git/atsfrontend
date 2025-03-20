@@ -66,6 +66,7 @@
  
     margin: 5px;
     align-items: center;
+    overflow: scroll;
   }
      .question-divider {
     border: none;
@@ -151,6 +152,7 @@
     display: flex;
     margin: 5px;
     align-items: center;
+    overflow: scroll;
   }
      .reference-divider {
     border: none;

@@ -41,6 +41,8 @@
   --notification-ribben-color:#27374D;
   --active-button1-bg : #eef2f6;
   --selected-form-bg: #eef2f6;
+  --mainDashboard-card-txt: white;
+  --mainDashboard-card-txt-hover: gray;
 }
 
 .accordion {

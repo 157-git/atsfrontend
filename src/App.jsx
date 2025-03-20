@@ -80,6 +80,9 @@ const applySavedColors = () => {
     { variable: "--notification-ribben-color" },
     { variable: "--active-button1-bg" },
     { variable: "--selected-form-bg" },
+    { variable: "--mainDashboard-card-txt" },
+    { variable: "--mainDashboard-card-txt-hover" },
+   
   ];
 
   if (bgColor)
