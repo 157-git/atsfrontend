@@ -23,6 +23,12 @@
 .table-striped th {
   color: gray;
 }
+.whitespacenorp{
+  white-space: nowrap;
+}
+.newclassforwhitespace{
+  white-space: nowrap;
+}
 
 .update-page-head {
   width: 100%;

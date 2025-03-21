@@ -122,13 +122,16 @@ const ShortListedCandidates = ({
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (filterRef.current && !filterRef.current.contains(event.target)) {
-        setActiveFilterOption(null); // Close filter dropdown when clicking outside
+      if (
+        filterRef.current &&
+        !filterRef.current.contains(event.target) &&
+        !event.target.closest(".filter-option button") // Prevent closing when clicking inside the button
+      ) {
+        setActiveFilterOption(null);
       }
     };
-
+  
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -573,6 +576,7 @@ const handleSearchClick = ()=>{
                       alignItems: "center",
                       paddingTop: "3px",
                     }}
+                    className="forZindexAdjustement"
                   >
                     {/* line 565 to 571 added by sahil karnekar date 24-10-2024 */}
                     <i
@@ -650,6 +654,7 @@ const handleSearchClick = ()=>{
                       alignItems: "center",
                       paddingTop: "3px",
                     }}
+                      className="forZindexAdjustement"
                   >
                     {userType !== "Recruiters" && (
                       <div>

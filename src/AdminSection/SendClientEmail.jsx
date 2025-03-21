@@ -1563,7 +1563,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
               <SendEmailPopup
                 show={showModal}
                 handleClose={handleClose}
-                selectedCandidate={selectedRows}
+                selectedCandidateIds={selectedRows}
                 onSuccessFullEmailSend={handleSuccessEmailSend}
                 clientEmailSender={clientEmailSender}
                 fetchCallingList={fetchCallingList}
@@ -1723,7 +1723,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
 const SendEmailPopup = ({
   show,
   handleClose,
-  selectedCandidate,
+  selectedCandidateIds,
   onSuccessFullEmailSend,
   clientEmailSender,
   fetchCallingList,
@@ -1739,11 +1739,35 @@ const SendEmailPopup = ({
     "https://lh3.googleusercontent.com/fife/ALs6j_HDFuzYstiAW8Rt_7NmtAoegg6nGerpkvbiAITq-mNL70gNXONQuJwnZdbiAbsKMNAYMt9iBnvsFWx8EaOOWV43cjOjDvFOAiw1XacANQb0MDBtFO1ag1TuVwCbwbzrLDnOiniRQ5hD7kGCCVjTNGsNdx6RQLsrKyZlpJ6meA1NIT1vXloRcFwlfbTjDBG14YC809U_0FGn9pOII8lbH-I_ZZLBI6kfh0Q43j4evix8AbIxnvw0Soesevgycz4jRqrAA4Fjjd67Pb0vIVBkeEgSp_Sfz_v9joDcBiMe2sLP6_iEvB7N4il1qgBgTHBRM6qp6IuNFov7hMdcyx8Jp1oCfQX7753pO2x3FGg3tyW5RI0l-1h01JWKdybFECo19c7o3Z_01lJ-dF1TABxyPTdT9eztvkSfDXOvfoQIP_oEny3ORR-8wfjijnlUFylwT7MhsCwTcaeQR6tWaPYJ9rX7AQVGOmMyJbLS_0tFLn0_UzX7NuQx6-W2TeC9aXM0ajJYJ5cLPusvMlAhgFBB0WdZfbtuOat0-rd2qP_L0MqJPfTYBdTgYyO4LoTD0dV6QRo5UJhvyDW5Ru8IBz-bB4QWhPMjs2_PFnQ9K-GLvAPCOYIk4TQPhkCK4UgOyGL8bRE4bPBIYMddVxfWdePCOb6V5JhGmYfvsYzEhAwquNmsZkMv9lEJfQV-Frs0DrF63XWlD5ieprbz4CLMs3WHh42I06Kpw2aCXfQchCDoJawTYljfozJ_QHq58UIAdMniaLvrKKYRyYfZohAFVdekMzArxrobd4e3Pac9cHm1Orz2_lAob5diRJCZxapdTOPfiT_ro-1qhbtmKua4kXr5Z_TWgBV9CwaactlqLFMnnbN3TtDOqKNDEFBGhg1pKC2NUu2Jw6IyawDyCU6VCdrnhizrHhvhPY8u0uXOxspsqfvQaU_PT0e0v-f2RPDESxSwIz3H6DEzmk5hOrbOmXFCPG8Q9bUu_5I3kL11z_loIveKwfWD3YGIkOjOvXAUomdEqw7DIXIbjcfDQflq7L45gJ3-BWuTkRmicaQL3GAtwVpYbmNUi649NpUC5JvKN_iqIxeNzhKdn1jBXEGl2-rbmzYXbPolNUmrQWwaFYKBzVzgWIcCjaaKpgSR444mFTx3mFEuSJxfjMTJtumbYGZkGrFkEE1rNaXMvF6XFT6JO63BtAfQzd5nFl31OctaJ6nf7_UbshOlPFeUNoRFpc-gB9LWyZck_V9jIToDHY8mij11-IK-9DFLdZZfNxeOhbha8DYljvTj9R6spXM006lRZmBsP6WugvIvvG5Pv_kiXoORCBbrCFAIk3vpZIEx3zDoayqgUNwctyrf7cJvfSiyWokjM0NNHRTCy0eldMfb0LLX5X6BftzMt128n5f6-Q60zmQ_kyuHSnyLGJawrCATfhHu-_ABtuuTWopOBib9gG__Vsa06z5SKZs5LM8eD8TwgUMeIRfWGfZBAy2qobuMt9ZVDrQDlPejp1tBg3Dm8Ke85TK7HFFfDqA-dJ2jCwzOq2ipybePn2kxLg911_lfaHPIXpF0LJdNwNyzfH_6IuB3IGI0nelUgtPnQbxXFMYd8xLaiVhfx9f0GLlDLkalvTQ8UPk92nprBDiYn8GdmV3zoVuWZbXwqQ4nmLaB9LIxDieP2kLO7V2igrEsBxXZHT309KauEgReDc1p7ahNkSiDjAOt3cDoEnlXhXjLXiBy"
   );
   const [isMailSending, setIsMailSending] = useState(false);
+  const [selectedCandidate, setSelectedCandidate] = useState([]);
   const [getResponse, setResponse] = useState("");
   const [emailBody, setEmailBody] = useState(
     "hi Deepak,\n\nSharing 2 more profiles: Dotnet+Azure Developer."
   );
   const [difference, setDifference] = useState([]);
+
+  const fetchCandidateData = async (selectedCandidateIds = []) => {
+    const newIdsMultipleData = selectedCandidateIds?.join(",");
+  
+    try {
+      const response = await axios.get(`${API_BASE_URL}/get-candidates-details?ids=${newIdsMultipleData}`);
+
+      console.log(response);
+      
+  
+      setSelectedCandidate(response.data);
+    } catch (error) {
+      console.log("Error fetching candidate data:", error);
+    }
+  };
+  
+  // Call API when component mounts
+  useEffect(() => {
+    fetchCandidateData(selectedCandidateIds);
+  }, []);
+  
+  
+
 
   const handleStoreClientInformation = async () => {
     try {
@@ -1966,7 +1990,7 @@ setSocket(newSocket);
                   className="mt-4 text-secondary"
                 >
                   <thead>
-                    <tr>
+                    <tr className="newclassforwhitespace">
                       <th>Sr.No</th>
                       <th>Date</th>
                       <th>Position</th>
@@ -1983,7 +2007,7 @@ setSocket(newSocket);
                   </thead>
                   <tbody>
                     {selectedCandidate.map((can, index) => (
-                      <tr key={index}>
+                      <tr key={index} className="newclassforwhitespace">
                         <td className="text-secondary">{index + 1}</td>
                         <td className="text-secondary">{can.date}</td>
                         <td className="text-secondary">{can.jobDesignation}</td>

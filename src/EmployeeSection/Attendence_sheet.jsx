@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import Calendar from "react-calendar";
 import axios from "axios";
 import {
@@ -28,6 +28,8 @@ import { getUserImageFromApiForReport } from "../Reports/getUserImageFromApiForR
 const Attendance = ({loginEmployeeName,onCloseIncentive}) => {
   const { employeeId, userType } = useParams();
   const [attendanceData, setAttendanceData] = useState([]);
+  const [attendanceDataNew, setAttendanceDataNew] = useState([]);
+  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showCustomDiv, setShowCustomDiv] = useState(false);
@@ -52,6 +54,7 @@ const Attendance = ({loginEmployeeName,onCloseIncentive}) => {
   const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState({});
   const [filteredData, setFilteredData] = useState(attendanceData);
+   const filterRef=useRef(null);
   const [summary, setSummary] = useState({
     workingDays: 0,
     totalTarget: 0,
@@ -204,6 +207,7 @@ const Attendance = ({loginEmployeeName,onCloseIncentive}) => {
 
       const data = await response.json();
       setAttendanceData(data);
+      setAttendanceDataNew(data);
       console.log(data);
       setShowCalculation(true);
       setLoading(false);
@@ -331,6 +335,19 @@ const Attendance = ({loginEmployeeName,onCloseIncentive}) => {
     fetchData(ids, role, startDate, endDate);
   };
   
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+          if (filterRef.current && !filterRef.current.contains(event.target)) {
+            setActiveFilterOption(null); // Close filter dropdown when clicking outside
+          }
+        };
+    
+        document.addEventListener("mousedown", handleClickOutside);
+    
+        return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+        };
+      }, []);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -382,7 +399,12 @@ const Attendance = ({loginEmployeeName,onCloseIncentive}) => {
           ]
     );
   };
-
+  const handleClearAll = () => {
+    setSelectedFilters({});
+  };
+  const countSelectedValues = (option) => {
+    return selectedFilters[option] ? selectedFilters[option].length : 0;
+  };
   const getStatusClassName = (status) => {
     switch (status) {
       case "Poor":
@@ -490,30 +512,34 @@ const Attendance = ({loginEmployeeName,onCloseIncentive}) => {
   ];
 
   const filterData = () => {
-    let filteredData = [...attendanceData];
-  
-    // Apply all selected filters
-    Object.entries(selectedFilters).forEach(([optionKey, values]) => {
+    let filteredData = [...attendanceDataNew];
+
+    Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
-        filteredData = filteredData.filter((item) =>
-          values.some((value) =>
-            item[optionKey]?.toString().toLowerCase().includes(value.toLowerCase())
-          )
-        );
+        filteredData = filteredData.filter((item) => {
+          const itemValue = item[option]?.toString().toLowerCase(); // normalize the field value to lowercase
+          return values.some(
+            (value) => itemValue === value.toLowerCase() // exact match
+          );
+        });
       }
     });
-    setAttendanceData(filteredData); // Update the displayed data
+    setAttendanceData(filteredData);
   };
 
 // Arshad Added This 09-10-2024
 
-useEffect(() => {
-  if (Object.keys(selectedFilters).length > 0) {
-    filterData(); // Apply filters if any are selected
-  } else {
-    setAttendanceData(attendanceData); // Show full data if no filters are selected
-  }
-}, [selectedFilters]);
+// useEffect(() => {
+//   if (Object.keys(selectedFilters).length > 0) {
+//     filterData(); // Apply filters if any are selected
+//   } else {
+//     setAttendanceData(attendanceData); // Show full data if no filters are selected
+//   }
+// }, [selectedFilters]);
+
+ useEffect(() => {
+    filterData();
+  }, [selectedFilters, attendanceData]);
 
 const toggleFilterSection = () => {
   setShowFilterSection(!showFilterSection);
@@ -521,32 +547,52 @@ const toggleFilterSection = () => {
 };
 
 
+// const handleFilterSelect = (key, value) => {
+//   setSelectedFilters((prev) => {
+//     const currentSelections = prev[key] || [];
+
+//     // Toggle selection
+//     const newSelections = currentSelections.includes(value)
+//       ? currentSelections.filter((item) => item !== value) // Remove if already selected
+//       : [...currentSelections, value]; // Add if not selected
+
+//     const updatedFilters = { ...prev, [key]: newSelections };
+
+//     // If all selections for this key are removed, remove the key from filters
+//     if (newSelections.length === 0) {
+//       delete updatedFilters[key];
+//     }
+
+//     return updatedFilters;
+//   });
+// };
+
 const handleFilterSelect = (key, value) => {
-  setSelectedFilters((prev) => {
-    const currentSelections = prev[key] || [];
-
-    // Toggle selection
-    const newSelections = currentSelections.includes(value)
-      ? currentSelections.filter((item) => item !== value) // Remove if already selected
-      : [...currentSelections, value]; // Add if not selected
-
-    const updatedFilters = { ...prev, [key]: newSelections };
-
-    // If all selections for this key are removed, remove the key from filters
-    if (newSelections.length === 0) {
-      delete updatedFilters[key];
-    }
-
-    return updatedFilters;
-  });
+  setSelectedFilters((prev) => ({
+    ...prev,
+    [key]: prev[key].includes(value)
+      ? prev[key].filter((item) => item !== value.toLowerCase())
+      : [...prev[key], value.toLowerCase()], // store filter values in lowercase
+  }));
 };
 
 const handleFilterOptionClick = (key) => {
   if (activeFilterOption === key) {
-    setActiveFilterOption(null); // Close the dropdown if clicked again
+    setActiveFilterOption(null);
   } else {
-    setActiveFilterOption(key); // Open the dropdown for the clicked filter
+    setActiveFilterOption(key);
   }
+
+  setSelectedFilters((prev) => {
+    const newSelectedFilters = { ...prev };
+
+    if (key in newSelectedFilters) {
+    } else {
+      newSelectedFilters[key] = [];
+    }
+
+    return newSelectedFilters;
+  });
 };
 
 
@@ -962,44 +1008,88 @@ const [allImagesForRecruiters, setAllImagesForRecruiters] = useState([]); // Ini
 
 
         <div className="filter-dropdowns">
-                {showFilterSection && (
+        {showFilterSection && (
                   <div className="filter-section">
-                  {limitedOptions.map(([optionKey, optionLabel]) => {
-                    const uniqueValues = Array.from(
-                      new Set(attendanceData.map((item) => item[optionKey]))
-                    );
-          
-                    return (
-                      <div key={optionKey} className="filter-option">
-                        <button
-                          className="white-Btn"
-                          onClick={() => handleFilterOptionClick(optionKey)}
-                        >
-                          {optionLabel}
-                          <span className="filter-icon">&#x25bc;</span>
-                        </button>
-          
-                        {/* Show dropdown if this option is active */}
-                        {activeFilterOption === optionKey && (
-                          <div className="city-filter">
-                            <div className="optionDiv">
-                              {uniqueValues.map((value) => (
-                                <label key={value} className="selfcalling-filter-value">
-                                  <input
-                                    type="checkbox"
-                                    checked={selectedFilters[optionKey]?.includes(value) || false}
-                                    onChange={() => handleFilterSelect(optionKey, value)}
-                                  />
-                                  {value}
-                                </label>
-                              ))}
-                            </div>
+                    {limitedOptions.map(([optionKey, optionLabel]) => {
+                      
+                      const uniqueValues = Array.from(
+                        new Set(
+                          attendanceDataNew
+                            .map((item) =>
+                              item[optionKey]?.toString().toLowerCase()
+                            )
+                            .filter(
+                              (value) =>
+                                value &&
+                                value !== "-" &&
+                                !(
+                                  optionKey === "alternateNumber" &&
+                                  value === "0"
+                                )
+                                
+
+                            )
+                            
+                        )
+                      );
+                        
+
+
+                      return (
+                        <div>
+                          {/* Rajlaxmi jagadle  Added countSelectedValues that code date 20-02-2025 line 987/1003 */}
+                        <div key={optionKey} className="filter-option">
+  <button
+    className={`white-Btn ${
+      (selectedFilters[optionKey] && selectedFilters[optionKey].length > 0) || activeFilterOption === optionKey
+        ? "selected glow"
+        : ""
+    }`}
+    onClick={() => handleFilterOptionClick(optionKey)}
+  >
+    {optionLabel}
+    {selectedFilters[optionKey]?.length > 0 && (
+      <span className="selected-count">
+        ({countSelectedValues(optionKey)})
+      </span>
+    )}
+    <span className="filter-icon">&#x25bc;</span>
+  </button>
+{/* rajlaxmi Jagadle Changes That code date 20-02-2025 line 1003/1027 */}
+
+  {activeFilterOption === optionKey && (
+    <div ref={filterRef} className="city-filter">
+      <div className="optionDiv">
+        {uniqueValues.length > 0 ? (
+          uniqueValues.map((value) => (
+            <label key={value} className="selfcalling-filter-value">
+              <input
+                type="checkbox"
+                checked={selectedFilters[optionKey]?.includes(value) || false}
+                onChange={() => handleFilterSelect(optionKey, value)}
+                style={{ marginRight: "5px" }}
+                
+              />
+              {value}
+            </label>
+          ))
+        ) : (
+          <div>No values</div>
+        )}
+      </div>
+    </div>
+  )}
+</div>
+
+                          
                           </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+                          );
+                    })}
+                    
+                    <button className="clr-button lineUp-Filter-btn" onClick={handleClearAll}>Clear Filters</button>
+
+                  </div>
+                  
                 )}
               </div>
       </div>
