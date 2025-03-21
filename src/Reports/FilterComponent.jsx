@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from 'antd';
 import { BarChartOutlined } from '@ant-design/icons';
 
@@ -7,6 +7,7 @@ const FilterComponent = ({ filteredLineUpItems, onFilterChange }) => {
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
   const [displaySelectCategories, setDisplaySelectCategories] = useState(false);
   const [activeFilterOption, setActiveFilterOption] = useState(null);
+  const filterRef=useRef(null);
 
   const categories = {
     "Source Name": "sourceName",
@@ -56,11 +57,25 @@ const FilterComponent = ({ filteredLineUpItems, onFilterChange }) => {
         });
       };
 
+        useEffect(() => {
+            const handleClickOutside = (event) => {
+              if (filterRef.current && !filterRef.current.contains(event.target)) {
+                setActiveFilterOption(null); // Close filter dropdown when clicking outside
+              }
+            };
+        
+            document.addEventListener("mousedown", handleClickOutside);
+        
+            return () => {
+              document.removeEventListener("mousedown", handleClickOutside);
+            };
+          }, []);
+
   return (
     <div className='newsetPositionrelative'>
 
         <div className="filter-dropdowns">
-          <div className="filter-section">
+          <div className="filter-section" ref={filterRef}>
             {Object.keys(categories).map((category) => (
               <div className='filter-option' key={category}>
                 <button className="white-Btn" onClick={() => handleCategorySelect(category)}>

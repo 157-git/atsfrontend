@@ -892,3 +892,9 @@ strong {
   border: 1px solid #f2f2f2;
   border-radius: 5px;
 }
+.calling-tracker-field-sub-div .ant-radio-group .ant-radio-wrapper{
+  border-right: none;
+}
+.update-calling-tracker-field-sub-div .ant-radio-group .ant-radio-wrapper{
+  border-right: none;
+}

@@ -403,3 +403,7 @@ text-align: center;
   margin-left: 3px;
   color: black; /* Or any color you prefer */
 }
+.newclassnameforpageheader{
+  font-weight: bold;
+  color: black;
+}

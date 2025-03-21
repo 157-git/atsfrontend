@@ -144,7 +144,7 @@ const EmployeeDetails = () => {
           {!showEmployee ? (
             <div className="attendanceTableData">
               <center>
-                <h1 className="emp-details-heading">Team Details</h1>
+                <h1 className="emp-details-heading newclassnameforpageheader">Team Details</h1>
               </center>
               <table className="attendance-table">
                 <thead>

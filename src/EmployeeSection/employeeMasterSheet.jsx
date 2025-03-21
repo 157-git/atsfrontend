@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -7,7 +7,7 @@ import "./EmployeeMasterSheet.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
-import {Alert, Modal as AntdModal} from "antd";
+import {Alert, Modal as AntdModal, Badge} from "antd";
 import Loader from "../EmployeeSection/loader";
 import { Pagination } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
@@ -176,6 +176,8 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
+   const [triggerFetch, setTriggerFetch] = useState(false);
+    const filterRef=useRef(null);
 
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_39
   const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
@@ -210,7 +212,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
 
   useEffect(() => {
     fetchData(currentPage, pageSize);
-  }, [employeeId, currentPage, pageSize,searchTerm]);
+  }, [employeeId, currentPage, pageSize, triggerFetch]);
 
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_54
   const fetchManager = async () => {
@@ -254,6 +256,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   }, []);
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_98
   const fetchData = async (page, size) => {
+    setLoading(true);
     try {
       const response = await fetch(
         // sahil karnekar line 244 set employeeId and usertType in Api at the time of deployement this url is just for testing
@@ -268,6 +271,8 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
+      setLoading(false);
+    }finally{
       setLoading(false);
     }
   };
@@ -298,15 +303,27 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
     }
   };
 
-  const handleSelectAll = () => {
-    if (allSelected) {
-      setSelectedRows([]);
-    } else {
-      const allRowIds = data.map((item) => item[0]); // Assuming candidateId is the first element
-      setSelectedRows(allRowIds);
-    }
-    setAllSelected(!allSelected);
-  };
+ 
+
+    const handleSelectAll = () => {
+      if (allSelected) {
+        setSelectedRows((prevSelectedRows) => 
+          prevSelectedRows.filter((id) => !data.map((item) => item[0]).includes(id))
+        );
+      } else {
+        const allRowIds = data.map((item) => item[0]);
+        setSelectedRows((prevSelectedRows) => [...new Set([...prevSelectedRows, ...allRowIds])]);
+      }
+      setAllSelected(!allSelected);
+    };
+  
+      const areAllRowsSelectedOnPage = data.every((item) =>
+          selectedRows.includes(item[0])
+        );
+      
+        useEffect(() => {
+          setAllSelected(areAllRowsSelectedOnPage);
+        }, [data, selectedRows]);  
 
   const handleSelectRow = (candidateId) => {
     setSelectedRows((prevSelectedRows) => {
@@ -340,6 +357,9 @@ const forwardSelectedCandidate = (e) => {
     }
 };
 
+const handleSearchClick = ()=>{
+  fetchData(currentPage, pageSize);
+}
 
   const handleShare = async () => {
     if (userType === "TeamLeader") {
@@ -427,7 +447,9 @@ const forwardSelectedCandidate = (e) => {
     }
   };
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_243
-
+  const handleTriggerFetch = () => {
+    setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
+  };
   //Name:-Akash Pawar Component:-EmployeeMarksheet Subcategory:-ResumeViewButton(added) start LineNo:-135 Date:-02/07
   const convertToDocumentLink = (byteCode, fileName) => {
     if (byteCode) {
@@ -547,33 +569,33 @@ const forwardSelectedCandidate = (e) => {
   const applyFilters = (data) => {
     let filtered = data;
     // line 525 to 535 added by sahil karnekar date 30-10-2024
-    if (searchTerm.trim()) {
-      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    // if (searchTerm.trim()) {
+    //   const lowerCaseSearchTerm = searchTerm.toLowerCase();
 
-      filtered = filtered.filter((item) => {
-        return Object.keys(fieldIndexMap).some((field) => {
-          const fieldIndex = fieldIndexMap[field];
-          return String(item[fieldIndex])
-            .toLowerCase()
-            .includes(lowerCaseSearchTerm);
-        });
-      });
-    }
+    //   filtered = filtered.filter((item) => {
+    //     return Object.keys(fieldIndexMap).some((field) => {
+    //       const fieldIndex = fieldIndexMap[field];
+    //       return String(item[fieldIndex])
+    //         .toLowerCase()
+    //         .includes(lowerCaseSearchTerm);
+    //     });
+    //   });
+    // }
 
-    Object.keys(selectedFilters).forEach((field) => {
-      const fieldValues = selectedFilters[field];
-      if (fieldValues.length > 0) {
-        const fieldIndex = fieldIndexMap[field];
+    // Object.keys(selectedFilters).forEach((field) => {
+    //   const fieldValues = selectedFilters[field];
+    //   if (fieldValues.length > 0) {
+    //     const fieldIndex = fieldIndexMap[field];
 
-        filtered = filtered.filter((item) => {
-          const dataValueLowerCase = String(item[fieldIndex]).toLowerCase();
-          const selectedValuesLowerCase = fieldValues.map((v) =>
-            String(v).toLowerCase()
-          );
-          return selectedValuesLowerCase.includes(dataValueLowerCase);
-        });
-      }
-    });
+    //     filtered = filtered.filter((item) => {
+    //       const dataValueLowerCase = String(item[fieldIndex]).toLowerCase();
+    //       const selectedValuesLowerCase = fieldValues.map((v) =>
+    //         String(v).toLowerCase()
+    //       );
+    //       return selectedValuesLowerCase.includes(dataValueLowerCase);
+    //     });
+    //   }
+    // });
     return filtered;
   };
 
@@ -600,7 +622,19 @@ const forwardSelectedCandidate = (e) => {
       }
     }
   };
-
+   useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (filterRef.current && !filterRef.current.contains(event.target)) {
+          setExpandedFilters({}); // Close filter dropdown when clicking outside
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+  
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
   const handleMouseOut = (event) => {
     const tooltip = event.currentTarget.querySelector(".tooltip");
     if (tooltip) {
@@ -634,7 +668,53 @@ const forwardSelectedCandidate = (e) => {
       setSearchCount(applyFilters(data).length);
     }
   }, [applyFilters]);
-
+  const clearAllFilters = () => {
+    setSelectedFilters({
+      candidateId: [],
+      alternateNumber: [],
+      callingFeedback: [],
+      candidateEmail: [],
+      candidateName: [],
+      communicationRating: [],
+      contactNumber: [],
+      currentLocation: [],
+      date: [],
+      jobDesignation: [],
+      recruiterName: [],
+      applyingCompany: [],
+      jobId: [],
+      interestedOrNot: [],
+      sourceName: [],
+      empId: [],
+      lineupId: [],
+      addedTime: [],
+      fullAddress: [],
+      incentive: [],
+      oldEmployeeId: [],
+      availabilityForInterview: [],
+      companyName: [],
+      DateOfBirth: [],
+      extraCertification: [],
+      feedBack: [],
+      finalStatus: [],
+      gender: [],
+      holdingAnyOffer: [],
+      messageForUser: [],
+      noticePeriod: [],
+      qualification: [],
+      yearOfPassout: [],
+      interviewTime: [],
+      currentCtcLack: [],
+      currentCtcThousand: [],
+      expectedCtcLack: [],
+      expectedCtcThousand: [],
+      experienceInMonth: [],
+      experienceInYear: [],
+      offerLatterMessage: [],
+      relevantExperience: [],
+    }); // Reset all filters
+  };
+  
   return (
     <>
     <div className="calling-list-container">
@@ -668,7 +748,9 @@ const forwardSelectedCandidate = (e) => {
                   {searchTerm && (
                     <div className="svgimagesetinInput">
                       <svg
-                        onClick={() => setSearchTerm("")}
+                         onClick={() => {setSearchTerm("")
+                          handleTriggerFetch();
+                        }}
                         xmlns="http://www.w3.org/2000/svg"
                         height="24px"
                         viewBox="0 -960 960 960"
@@ -681,10 +763,16 @@ const forwardSelectedCandidate = (e) => {
                   )}
                 </div>
               </div>
+              <button
+        className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
+        onClick={() => handleSearchClick()} 
+      >
+        Search 
+      </button>
             </div>
 
             <div className="master-sheet-header">
-              <h3 style={{ color: "gray", fontSize: "18px" }}>
+              <h3 className="newclassnameforpageheader">
                 Employee Master Sheet
               </h3>
             </div>
@@ -702,6 +790,17 @@ const forwardSelectedCandidate = (e) => {
                     </button>
                   ) : (
                     <div style={{ display: "flex", gap: "5px" }}>
+                       {
+                    !showShareButton && (
+                      <Badge
+                  color="var(--notification-badge-background)"
+                  count={selectedRows.length}
+                  className="newBadgeselectedcandidatestyle"
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M222-200 80-342l56-56 85 85 170-170 56 57-225 226Zm0-320L80-662l56-56 85 85 170-170 56 57-225 226Zm298 240v-80h360v80H520Zm0-320v-80h360v80H520Z"/></svg>
+                </Badge>
+                    )
+                  }
                       <button
                         className="lineUp-share-close-btn"
                         onClick={() => setShowShareButton(true)}
@@ -740,62 +839,74 @@ const forwardSelectedCandidate = (e) => {
 
           {/* sahil karnekar line 593 to 573 */}
           <div className="filter-dropdowns">
-            {showFilterSection && (
-              <div className="filter-section">
-                {Object.keys(uniqueValues).map((field) => (
-                  <div className="filter-option" key={field}>
-                    <button
-                      className="white-Btn"
-                      onClick={() => toggleFilter(field)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      {displayNameMap[field] || field}
-                      <span className="filter-icon">&#x25bc;</span>
-                    </button>
-                    {expandedFilters[field] && (
-                      <div className="city-filter">
-                        {/* sahil karnekar filter edition line 552 to 567 date : 10-10-2024 */}
-                        {/* this complete optiondiv is updated by sahil karnekar date 22-10-2024 */}
-                        <div className="optionDiv">
-                          {uniqueValues[field] &&
-                            uniqueValues[field].map((value, index) => {
-                              // Check if the field is "alternateNumber" and value is 0, or if value is falsy (null, undefined)
-                              if (
-                                (field === "alternateNumber" && value === 0) ||
-                                value === null ||
-                                value === undefined ||
-                                value === ""
-                              ) {
-                                return null; // Skip rendering for this value
-                              }
+          <div className="filter-dropdowns">
+  {showFilterSection && (
+    <div ref={filterRef} className="filter-section">
+      {Object.keys(uniqueValues).map((field) => {
+        const selectedCount = selectedFilters[field]?.length || 0;
 
-                              return (
-                                <label
-                                  className="selfcalling-filter-value"
-                                  key={index}
-                                >
-                                  <input
-                                    name="testName"
-                                    style={{ marginRight: "5px" }}
-                                    type="checkbox"
-                                    checked={selectedFilters[field].includes(
-                                      value
-                                    )}
-                                    onChange={() =>
-                                      handleFilterChange(field, value)
-                                    }
-                                  />
-                                  {value}
-                                </label>
-                              );
-                            })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
+        return (
+          <div className="filter-option" key={field}>
+            <button
+              className="white-Btn"
+              onClick={() => toggleFilter(field)}
+              style={{
+                cursor: "pointer",
+                backgroundColor: selectedCount > 0 ? "#d3d3d3" : "white",
+              }}
+            >
+              {displayNameMap[field] || field}
+              {selectedCount > 0 && <span> ({selectedCount})</span>}
+              <span className="filter-icon">&#x25bc;</span>
+            </button>
+            {expandedFilters[field] && (
+              <div className="city-filter">
+                <div className="optionDiv">
+                  {uniqueValues[field] &&
+                    uniqueValues[field].map((value, index) => {
+                      if (
+                        (field === "alternateNumber" && value === 0) ||
+                        value === null ||
+                        value === undefined ||
+                        value === ""
+                      ) {
+                        return null;
+                      }
+
+                      return (
+                        <label className="selfcalling-filter-value" key={index}>
+                          <input
+                            name="testName"
+                            style={{ marginRight: "5px" }}
+                            type="checkbox"
+                            checked={selectedFilters[field].includes(value)}
+                            onChange={() => handleFilterChange(field, value)}
+                          />
+                          {value}
+                        </label>
+                      );
+                    })}
+                </div>
               </div>
             )}
+          </div>
+        );
+      })}
+
+      {/* Clear Filters Button */}
+      <div style={{ marginTop: "10px", textAlign: "center" }}>
+        <button
+          className="clear-filters-btn lineUp-Filter-btn"
+          onClick={clearAllFilters}
+        
+        >
+          Clear Filters
+        </button>
+      </div>
+    </div>
+  )}
+</div>
+
           </div>
 
           {error && <div className="alert alert-danger">{error}</div>}
@@ -805,18 +916,21 @@ const forwardSelectedCandidate = (e) => {
               <thead>
                 <tr className="attendancerows-head">
                   {!showShareButton && userType === "TeamLeader" ? (
-                    <th className="attendanceheading">
-                      <input
-                        type="checkbox"
-                        onChange={handleSelectAll}
-                        checked={selectedRows.length === data.length}
-                        name="selectAll"
-                      />
+                    <th className="attendanceheading" style={{ position: "sticky",left:0, zIndex: 10 }}>
+                  
+                       <input
+                            type="checkbox"
+                            onChange={handleSelectAll}
+                            checked={
+                              data.every((row) => selectedRows.includes(row[0]))
+                            }
+                            name="selectAll"
+                          />
                     </th>
                   ) : null}
-                  <th className="attendanceheading">Sr No.</th>
+                  <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>Sr No.</th>
 
-                  <th className="attendanceheading">Candidate ID</th>
+                  <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10}}>Candidate ID</th>
                   <th className="attendanceheading">Candidate Name</th>
                   <th className="attendanceheading">Candidate Email</th>
                   <th className="attendanceheading">Contact Number</th>
@@ -830,7 +944,7 @@ const forwardSelectedCandidate = (e) => {
                     <th className="attendanceheading">Team Leader Id</th>
                   )}
                   <th className="attendanceheading">Emp ID</th>
-                  <th className="attendanceheading">Recruiter Name</th>
+                  <th className="attendanceheading"  style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 10 }}>Recruiter Name</th>
                   <th className="attendanceheading">Applying Company</th>
                   <th className="attendanceheading">Job Id</th>
                   <th className="attendanceheading">Interested Or Not</th>
@@ -924,18 +1038,20 @@ const forwardSelectedCandidate = (e) => {
                 {applyFilters(data).map((entry, index) => (
                   <tr key={index} className="attendancerows">
                     {!showShareButton && userType === "TeamLeader" ? (
-                      <td className="tabledata">
+                      <td className="tabledata" style={{ position: "sticky",left:0, zIndex: 1 }}>
+                       
                         <input
-                          type="checkbox"
-                          checked={selectedRows.includes(entry[0])}
-                          onChange={() => handleSelectRow(entry[0])}
-                        />
+                              type="checkbox"
+                              checked={selectedRows.includes(entry[0])}
+                              onChange={() => handleSelectRow(entry[0])}
+                            />
                       </td>
                     ) : null}
                     <td
                       className="tabledata "
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
+                      style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1 }}
                     >
                       {calculateRowIndex(index)}
                       <div className="tooltip">
@@ -948,6 +1064,7 @@ const forwardSelectedCandidate = (e) => {
                       className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
+                      style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1 }}
                     >
                       {highlightText(entry[0], searchTerm)}
                       <div className="tooltip">
@@ -1095,6 +1212,7 @@ const forwardSelectedCandidate = (e) => {
                       className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
+                      style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 1 }}
                     >
                       {highlightText(entry[10], searchTerm)}
                       <div className="tooltip">
@@ -1108,6 +1226,7 @@ const forwardSelectedCandidate = (e) => {
                       className="tabledata"
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
+                     
                     >
                       {highlightText(entry[11], searchTerm)}
                       <div className="tooltip">

@@ -37,8 +37,11 @@ import { API_BASE_URL } from "../api/api";
 import CryptoJS from "crypto-js";
 import { getSocket } from "../EmployeeDashboard/socket";
 import Loader from "../EmployeeSection/loader";
+import { message } from "antd";
 
 function ApplicantForm2({ loginEmployeeName }) {
+  const [messageApi, contextHolder] = message.useMessage();
+
   const { encodedParams } = useParams();
   const extractedParam = encodedParams?.split("+")[1];
   const [socket, setSocket] = useState(null);
@@ -56,6 +59,7 @@ function ApplicantForm2({ loginEmployeeName }) {
   };
 
   useEffect(() => {
+    messageApi.success('Mobile View Recommended !');
     getEmployeeDetails();
   }, []);
 
@@ -149,6 +153,17 @@ function ApplicantForm2({ loginEmployeeName }) {
         e.preventDefault(); // Prevents spaces from being entered
       }
     }
+    if (e.target.name === "lineUp.experienceYear" ||
+       e.target.name === "lineUp.experienceMonth" ||
+       e.target.name === "lineUp.currentCTCLakh" ||
+       e.target.name === "lineUp.currentCTCThousand" ||
+       e.target.name === "lineUp.expectedCTCLakh" ||
+       e.target.name === "lineUp.expectedCTCThousand"
+    ) {
+      if (e.key === "." || e.key === "-" || e.key === "e") {
+        e.preventDefault(); // Prevent decimal points, negative numbers, and exponent notation
+      }
+    }
     if (e.key === "Enter") {
       e.preventDefault();
 
@@ -171,12 +186,150 @@ function ApplicantForm2({ loginEmployeeName }) {
     }
   };
 
+  // const handleChange = (e) => {
+  //   const { name, type, files, value } = e.target;
+
+  //   const inputValue =
+  //     type === "file" ? (files && files.length > 0 ? files[0] : null) : value;
+
+  //   if (name === "lineUp.offersalary") {
+  //     if (!/^\d{0,2}$/.test(value)) {
+  //       return; // Prevent updating if the value is not numeric or exceeds 2 digits
+  //     }
+  //   }
+  //   if (name === "candidateEmail") {
+  //     if (!/^\S*$/.test(value)) {
+  //       return; // Prevent updating if there is a space
+  //     }
+  //   }
+
+  //   // Update the formData for nested objects like certificates
+  //   setFormData((prevData) => {
+  //     let updatedData = { ...prevData };
+
+  //     if (name === "lineUp.holdingAnyOffer") {
+  //       const isHoldingOffer = value === "true" || value === true;
+
+  //       updatedData.lineUp = {
+  //         ...prevData.lineUp,
+  //         holdingAnyOffer: isHoldingOffer,
+  //         ...(isHoldingOffer
+  //           ? {} // Keep existing values if "Yes" is selected
+  //           : {
+  //               companyName: "",
+  //               offersalary: "",
+  //               negotiation: "",
+  //               offerdetails: "",
+  //             }), // Clear values if "No" is selected
+  //       };
+  //     } else if (name.startsWith("lineUp.")) {
+  //       const nameParts = name.split(".");
+  //       if (name.startsWith("lineUp.certificates")) {
+  //         const nameParts = name.split(".");
+  //         const index = parseInt(nameParts[1].match(/\d+/)[0], 10);
+  //         const field = nameParts[2];
+  //         const updatedCertificates = [...prevData.lineUp.certificates];
+  //         updatedCertificates[index][field] = inputValue;
+
+  //         updatedData.lineUp = {
+  //           ...prevData.lineUp,
+  //           certificates: updatedCertificates,
+  //         };
+  //       } else {
+  //         const nestedField = nameParts[1];
+  //         updatedData.lineUp = {
+  //           ...prevData.lineUp,
+  //           [nestedField]: inputValue,
+  //         };
+  //       }
+  //     } else {
+  //       updatedData[name] = inputValue;
+  //     }
+  //     return updatedData;
+  //   });
+
+  //   // Reset the error for the field that was changed
+  //   setErrors((prevErrors) => ({
+  //     ...prevErrors,
+  //     [name]: undefined,
+  //   }));
+
+  //   // Optionally validate the input
+  //   const error = validateField(name, inputValue);
+  //   setErrors((prevErrors) => ({
+  //     ...prevErrors,
+  //     [name]: error,
+  //   }));
+
+  //   if (name === "lineUp.resume" && files.length > 0) {
+  //     const maxFileSize = 5 * 1024 * 1024;
+
+  //     if (files[0].size > maxFileSize) {
+  //       setErrors((prevErrors) => ({
+  //         ...prevErrors,
+  //         [name]: "File size should not exceed 5MB",
+  //       }));
+  //       return;
+  //     }
+
+  //     setResumeSelected(true);
+  //   }
+
+  //   if (name === "lineUp.photo" && files.length > 0) {
+  //     setPhotoSelected(true);
+  //   }
+
+  //   if (files && files.length > 0) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       const arrayBuffer = reader.result;
+  //       const byteArray = new Uint8Array(arrayBuffer);
+  //       const chunkSize = 0x8000;
+  //       let base64String = "";
+
+  //       for (let i = 0; i < byteArray.length; i += chunkSize) {
+  //         base64String += String.fromCharCode.apply(
+  //           null,
+  //           byteArray.subarray(i, i + chunkSize)
+  //         );
+  //       }
+  //       base64String = btoa(base64String);
+  //     };
+  //     reader.readAsArrayBuffer(files[0]);
+  //   }
+  // };
+
+  // const handleCertificateChange = (e, index, field) => {
+  //   const value =
+  //     field === "certificateFile" ? e.target.files[0] : e.target.value;
+
+  //   setFormData((prev) => {
+  //     const certificates = [...prev.lineUp.certificates];
+  //     certificates[index][field] = value;
+  //     return { ...prev, lineUp: { ...prev.lineUp, certificates } };
+  //   });
+  // };
+
+  // Attach the event listener for keydown event
+
+  // Function to get the next input element
+  
   const handleChange = (e) => {
     const { name, type, files, value } = e.target;
-
-    const inputValue =
+  
+    let inputValue =
       type === "file" ? (files && files.length > 0 ? files[0] : null) : value;
-
+  
+    if (name === "candidateName" ||
+      name === "jobDesignation" || 
+      name === "lineUp.noticePeriod" ||
+      name === "currentLocation" ||
+      name === "lineUp.preferredLocation"
+    ) {
+      // Replace multiple spaces with a single space
+      inputValue = inputValue.replace(/\s{2,}/g, " ");
+    }
+  
     if (name === "lineUp.offersalary") {
       if (!/^\d{0,2}$/.test(value)) {
         return; // Prevent updating if the value is not numeric or exceeds 2 digits
@@ -187,14 +340,14 @@ function ApplicantForm2({ loginEmployeeName }) {
         return; // Prevent updating if there is a space
       }
     }
-
+  
     // Update the formData for nested objects like certificates
     setFormData((prevData) => {
       let updatedData = { ...prevData };
-
+  
       if (name === "lineUp.holdingAnyOffer") {
         const isHoldingOffer = value === "true" || value === true;
-
+  
         updatedData.lineUp = {
           ...prevData.lineUp,
           holdingAnyOffer: isHoldingOffer,
@@ -210,12 +363,11 @@ function ApplicantForm2({ loginEmployeeName }) {
       } else if (name.startsWith("lineUp.")) {
         const nameParts = name.split(".");
         if (name.startsWith("lineUp.certificates")) {
-          const nameParts = name.split(".");
           const index = parseInt(nameParts[1].match(/\d+/)[0], 10);
           const field = nameParts[2];
           const updatedCertificates = [...prevData.lineUp.certificates];
           updatedCertificates[index][field] = inputValue;
-
+  
           updatedData.lineUp = {
             ...prevData.lineUp,
             certificates: updatedCertificates,
@@ -232,72 +384,22 @@ function ApplicantForm2({ loginEmployeeName }) {
       }
       return updatedData;
     });
-
+  
     // Reset the error for the field that was changed
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: undefined,
     }));
-
+  
     // Optionally validate the input
     const error = validateField(name, inputValue);
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: error,
     }));
-
-    if (name === "lineUp.resume" && files.length > 0) {
-      const maxFileSize = 5 * 1024 * 1024;
-
-      if (files[0].size > maxFileSize) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [name]: "File size should not exceed 5MB",
-        }));
-        return;
-      }
-
-      setResumeSelected(true);
-    }
-
-    if (name === "lineUp.photo" && files.length > 0) {
-      setPhotoSelected(true);
-    }
-
-    if (files && files.length > 0) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const arrayBuffer = reader.result;
-        const byteArray = new Uint8Array(arrayBuffer);
-        const chunkSize = 0x8000;
-        let base64String = "";
-
-        for (let i = 0; i < byteArray.length; i += chunkSize) {
-          base64String += String.fromCharCode.apply(
-            null,
-            byteArray.subarray(i, i + chunkSize)
-          );
-        }
-        base64String = btoa(base64String);
-      };
-      reader.readAsArrayBuffer(files[0]);
-    }
   };
+  
 
-  // const handleCertificateChange = (e, index, field) => {
-  //   const value =
-  //     field === "certificateFile" ? e.target.files[0] : e.target.value;
-
-  //   setFormData((prev) => {
-  //     const certificates = [...prev.lineUp.certificates];
-  //     certificates[index][field] = value;
-  //     return { ...prev, lineUp: { ...prev.lineUp, certificates } };
-  //   });
-  // };
-
-  // Attach the event listener for keydown event
-
-  // Function to get the next input element
   const getNextInput = (currentElement) => {
     let nextElement = currentElement;
     while (nextElement) {
@@ -454,7 +556,7 @@ function ApplicantForm2({ loginEmployeeName }) {
 
     if (month > 0) {
       if (words) words += " ";
-      words += numberToWords(month) + (month === 1 ? " Month" : " Month");
+      words += numberToWords(month) + (month === 1 ? " Month" : " Months");
     }
     return words || "Zero";
   };
@@ -558,6 +660,10 @@ function ApplicantForm2({ loginEmployeeName }) {
       ...formData,
       date: currentDate.toISOString().split("T")[0],
       candidateAddedTime: time,
+      candidateName: formData.candidateName.trim(),
+      jobDesignation: formData.jobDesignation.trim(),
+      currentLocation: formData.currentLocation.trim(),
+
     };
 
     // const certificates = updatedFormData.lineUp.certificates || [];
@@ -578,6 +684,10 @@ function ApplicantForm2({ loginEmployeeName }) {
           formData.lineUp.photo instanceof File
             ? await convertToBase64(formData.lineUp.photo)
             : formData.lineUp.photo,
+            
+            noticePeriod: formData.lineUp.noticePeriod.trim(),
+            preferredLocation : formData.lineUp.preferredLocation.trim(),
+
       },
       ...(userType === "Recruiters"
         ? { employee: { employeeId, teamLeaderId: employeeId } }
@@ -754,7 +864,7 @@ function ApplicantForm2({ loginEmployeeName }) {
       case "lineUp.currentCTCLakh":
         if (!/^\d+(\.\d{1,2})?$/.test(value)) {
           error =
-            "Please enter a valid salary amount with up to two decimal places.";
+            "Please enter a valid salary amount.";
         }
         break;
 
@@ -818,6 +928,7 @@ function ApplicantForm2({ loginEmployeeName }) {
   //Error msg Rajlaxmi jagadale 13-01-2025
   return (
     <div>
+      {contextHolder}
       <div className="form-container-December">
         <div className="form-heading-December-main-div">
           <h1 id="applicant-form-heading">Applicant Form</h1>
@@ -914,12 +1025,12 @@ function ApplicantForm2({ loginEmployeeName }) {
                       control={
                         <Radio
                           name="lineUp.gender"
-                          checked={formData.lineUp.gender === "male"}
+                          checked={formData.lineUp.gender === "Male"}
                           onChange={() =>
                             handleChange({
                               target: {
                                 name: "lineUp.gender",
-                                value: "male",
+                                value: "Male",
                               },
                             })
                           }
@@ -932,12 +1043,12 @@ function ApplicantForm2({ loginEmployeeName }) {
                       control={
                         <Radio
                           name="lineUp.gender"
-                          checked={formData.lineUp.gender === "female"}
+                          checked={formData.lineUp.gender === "Female"}
                           onChange={() =>
                             handleChange({
                               target: {
                                 name: "lineUp.gender",
-                                value: "female",
+                                value: "Female",
                               },
                             })
                           }
@@ -1071,7 +1182,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               <div className="form-group-December">
                 <label>
                   Current salary (LPA){" "}
-                  {/* <span className="setRequiredAstricColorRed">*</span> */}
+                  <span className="setRequiredAstricColorRed">*</span>
                 </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon
@@ -1129,7 +1240,7 @@ function ApplicantForm2({ loginEmployeeName }) {
               <div className="form-group-December">
                 <label>
                   Expected salary (LPA){" "}
-                  {/* <span className="setRequiredAstricColorRed">*</span> */}
+                  <span className="setRequiredAstricColorRed">*</span>
                 </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon

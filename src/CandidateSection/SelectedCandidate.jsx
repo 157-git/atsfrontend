@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import "./selectedcandidate.css";
 import AfterSelection from "./afterSelection";
@@ -14,7 +14,7 @@ import FilterData from "../helper/filterData";
 import limitedOptions from "../helper/limitedOptions";
 import convertToDocumentLink from "../helper/convertToDocumentLink";
 import axios from "axios";
-import {Alert, Modal as AntdModal} from "antd";
+import {Alert, Modal as AntdModal, Badge} from "antd";
 // added by sahil karnekar
 import { Avatar, Card, List, Pagination } from "antd";
 
@@ -53,6 +53,8 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
    const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
+    const [triggerFetch, setTriggerFetch] = useState(false);
+    const filterRef=useRef(null);
 
   const fetchSelectedCandidateData = async (page, size) => {
     try {
@@ -73,7 +75,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
 
   useEffect(() => {
     fetchSelectedCandidateData(currentPage, pageSize);
-  }, [employeeId, currentPage, pageSize, searchTerm]);
+  }, [employeeId, currentPage, pageSize, triggerFetch]);
 
   useEffect(() => {
     const options = limitedOptions
@@ -92,7 +94,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     const filtered = FilterData(callingList, searchTerm);
     setFilteredCallingList(filtered);
     setSearchCount(filtered.length);
-  }, [searchTerm, callingList]);
+  }, [callingList]);
 
   useEffect(() => {
     if (sortCriteria) {
@@ -130,6 +132,10 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     });
     setFilteredCallingList(filteredData);
   };
+
+  const handleSearchClick = ()=>{
+    fetchSelectedCandidateData(currentPage, pageSize);
+  }
   // updated this function sahil karnekar date : 22-10-2024
   const handleFilterSelect = (key, value) => {
     setSelectedFilters((prev) => ({
@@ -204,6 +210,19 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
       }
     }
   };
+   useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (filterRef.current && !filterRef.current.contains(event.target)) {
+          setActiveFilterOption(null); // Close filter dropdown when clicking outside
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+  
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
 
   const handleMouseOut = (event) => {
     const tooltip = event.currentTarget.querySelector(".tooltip");
@@ -212,15 +231,35 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     }
   };
 
+  // const handleSelectAll = () => {
+  //   if (allSelected) {
+  //     setSelectedRows([]);
+  //   } else {
+  //     const allRowIds = filteredCallingList.map((item) => item.candidateId);
+  //     setSelectedRows(allRowIds);
+  //   }
+  //   setAllSelected(!allSelected);
+  // };
   const handleSelectAll = () => {
     if (allSelected) {
-      setSelectedRows([]);
+      setSelectedRows((prevSelectedRows) => 
+        prevSelectedRows.filter((id) => !callingList.map((item) => item.candidateId).includes(id))
+      );
     } else {
-      const allRowIds = filteredCallingList.map((item) => item.candidateId);
-      setSelectedRows(allRowIds);
+      const allRowIds = callingList.map((item) => item.candidateId);
+      setSelectedRows((prevSelectedRows) => [...new Set([...prevSelectedRows, ...allRowIds])]);
     }
     setAllSelected(!allSelected);
   };
+
+    const areAllRowsSelectedOnPage = callingList.every((item) =>
+        selectedRows.includes(item.candidateId)
+      );
+    
+      useEffect(() => {
+        setAllSelected(areAllRowsSelectedOnPage);
+      }, [callingList, selectedRows]);  
+
   const handleDisplayShareConfirmClick = ()=>{
     setDisplayShareConfirm(true);
   }
@@ -266,6 +305,10 @@ const handleCancelcloseshare = ()=>{
   const closeResumeModal = () => {
     setSelectedCandidateResume("");
     setShowResumeModal(false);
+  };
+
+  const handleTriggerFetch = () => {
+    setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
   };
   //Name:-Akash Pawar Component:-ShortListedCandidate Subcategory:-ResumeViewButton(added) End LineNo:-353 Date:-02/07
 
@@ -527,7 +570,12 @@ const handleCancelcloseshare = ()=>{
     setRecruitersList(response.data);
     setDisplayRecruiters(true);
   };
-
+  const handleClearAll = () => {
+    setSelectedFilters({});
+  };
+  const countSelectedValues = (option) => {
+    return selectedFilters[option] ? selectedFilters[option].length : 0;
+  };
   const renderCard = (title, list) => (
     <Card
       hoverable
@@ -618,7 +666,9 @@ const handleCancelcloseshare = ()=>{
                   {searchTerm && (
                     <div className="svgimagesetinInput">
                       <svg
-                        onClick={() => setSearchTerm("")}
+                        onClick={() => {setSearchTerm("")
+                          handleTriggerFetch();
+                        }}
                         xmlns="http://www.w3.org/2000/svg"
                         height="24px"
                         viewBox="0 -960 960 960"
@@ -631,8 +681,14 @@ const handleCancelcloseshare = ()=>{
                   )}
                 </div>
               </div>
+              <button
+        className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
+        onClick={() => handleSearchClick()} 
+      >
+        Search 
+      </button>
             </div>
-            <h5 style={{ color: "grey", textAlign: "center" }}>
+            <h5 className="newclassnameforpageheader">
               Selected Candidates{" "}
             </h5>
 
@@ -646,6 +702,17 @@ const handleCancelcloseshare = ()=>{
               }}
             >
               <div>
+              {
+                    !showShareButton && (
+                      <Badge
+                  color="var(--notification-badge-background)"
+                  count={selectedRows.length}
+                  className="newBadgeselectedcandidatestyle"
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M222-200 80-342l56-56 85 85 170-170 56 57-225 226Zm0-320L80-662l56-56 85 85 170-170 56 57-225 226Zm298 240v-80h360v80H520Zm0-320v-80h360v80H520Z"/></svg>
+                </Badge>
+                    )
+                  }
                 {(userType === "Manager" || userType === "TeamLeader") && (
                   <button className="lineUp-share-btn" onClick={showPopup}>
                     Create Excel
@@ -718,7 +785,7 @@ const handleCancelcloseshare = ()=>{
           {/* line 795 to 844 added by sahil karnekar date 22-10-2024 */}
           <div className="filter-dropdowns">
             {/* updated this filter section by sahil karnekar date 22-10-2024 */}
-            {showFilterSection && (
+            {/* {showFilterSection && (
               <div className="filter-section">
                 {limitedOptions.map(([optionKey, optionLabel]) => {
                   const uniqueValues = Array.from(
@@ -780,7 +847,90 @@ const handleCancelcloseshare = ()=>{
                   );
                 })}
               </div>
-            )}
+            )} */}
+            {showFilterSection && (
+                  <div ref={filterRef} className="filter-section">
+                    {limitedOptions.map(([optionKey, optionLabel]) => {
+                      
+                      const uniqueValues = Array.from(
+                        new Set(
+                          callingList
+                            .map((item) =>
+                              item[optionKey]?.toString().toLowerCase()
+                            )
+                            .filter(
+                              (value) =>
+                                value &&
+                                value !== "-" &&
+                                !(
+                                  optionKey === "alternateNumber" &&
+                                  value === "0"
+                                )
+                                
+
+                            )
+                            
+                        )
+                      );
+                        
+
+
+                      return (
+                        <div>
+                          {/* Rajlaxmi jagadle  Added countSelectedValues that code date 20-02-2025 line 987/1003 */}
+                        <div key={optionKey} className="filter-option">
+  <button
+    className={`white-Btn ${
+      (selectedFilters[optionKey] && selectedFilters[optionKey].length > 0) || activeFilterOption === optionKey
+        ? "selected glow"
+        : ""
+    }`}
+    onClick={() => handleFilterOptionClick(optionKey)}
+  >
+    {optionLabel}
+    {selectedFilters[optionKey]?.length > 0 && (
+      <span className="selected-count">
+        ({countSelectedValues(optionKey)})
+      </span>
+    )}
+    <span className="filter-icon">&#x25bc;</span>
+  </button>
+{/* rajlaxmi Jagadle Changes That code date 20-02-2025 line 1003/1027 */}
+
+  {activeFilterOption === optionKey && (
+    <div className="city-filter">
+      <div className="optionDiv">
+        {uniqueValues.length > 0 ? (
+          uniqueValues.map((value) => (
+            <label key={value} className="selfcalling-filter-value">
+              <input
+                type="checkbox"
+                checked={selectedFilters[optionKey]?.includes(value) || false}
+                onChange={() => handleFilterSelect(optionKey, value)}
+                style={{ marginRight: "5px" }}
+                
+              />
+              {value}
+            </label>
+          ))
+        ) : (
+          <div>No values</div>
+        )}
+      </div>
+    </div>
+  )}
+</div>
+
+                          
+                          </div>
+                          );
+                    })}
+                    
+                    <button className="clr-button lineUp-Filter-btn" onClick={handleClearAll}>Clear Filters</button>
+
+                  </div>
+                  
+                )}
           </div>
           {/* updated by sahil karnekar date 17-12-2024 */}
         </>
@@ -800,19 +950,20 @@ const handleCancelcloseshare = ()=>{
                     <tr className="attendancerows-head">
                       {(!showShareButton && userType === "TeamLeader") ||
                       (!showShareButton && userType === "Manager") ? (
-                        <th className="attendanceheading">
-                          <input
+                        <th className="attendanceheading" style={{ position: "sticky",left:0, zIndex: 10 }}>
+                        
+                           <input
                             type="checkbox"
                             onChange={handleSelectAll}
                             checked={
-                              selectedRows.length === filteredCallingList.length
+                              filteredCallingList.every((row) => selectedRows.includes(row.candidateId))
                             }
                             name="selectAll"
                           />
                         </th>
                       ) : null}
-                      <th className="attendanceheading">Sr No.</th>
-                      <th className="attendanceheading">Candidate Id</th>
+                      <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>Sr No.</th>
+                      <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10}}>Candidate Id</th>
 
                       <th
                         className="attendanceheading"
@@ -823,6 +974,7 @@ const handleCancelcloseshare = ()=>{
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("recruiterName")}
+                        style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 10 }}
                       >
                         Recruiter's Name
                       </th>
@@ -907,7 +1059,7 @@ const handleCancelcloseshare = ()=>{
                       <tr key={item.candidateId} className="attendancerows">
                         {(!showShareButton && userType === "TeamLeader") ||
                         (!showShareButton && userType === "Manager") ? (
-                          <td className="tabledata">
+                          <td className="tabledata" style={{ position: "sticky",left:0, zIndex: 1 }}>
                             <input
                               type="checkbox"
                               checked={selectedRows.includes(item.candidateId)}
@@ -919,6 +1071,7 @@ const handleCancelcloseshare = ()=>{
                           className="tabledata "
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
+                          style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1 }}
                         >
                           {calculateRowIndex(index)}
                           <div className="tooltip">
@@ -932,6 +1085,7 @@ const handleCancelcloseshare = ()=>{
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
+                          style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1 }}
                         >
                           {highlightText(
                             item.candidateId.toString().toLowerCase() || "",
@@ -969,6 +1123,7 @@ const handleCancelcloseshare = ()=>{
                           className="tabledata"
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
+                          style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 1 }}
                         >
                           {highlightText(item.recruiterName || "", searchTerm)}
                           <div className="tooltip">
