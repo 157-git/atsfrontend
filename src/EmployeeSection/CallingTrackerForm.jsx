@@ -3273,7 +3273,10 @@ const ModalComponent = ({
   };
 
   useEffect(() => {
-    if (expectedHike) {
+    if (
+      expectedHike &&
+      (parseFloat(currentCTCInLakhState) > 0 || parseFloat(currentCTCInThousandState) > 0)
+    ) {
       const currentCTCNum =
         (parseFloat(currentCTCInLakhState) || 0) * 100000 +
         (parseFloat(currentCTCInThousandState) || 0) * 1000;
@@ -3286,7 +3289,7 @@ const ModalComponent = ({
 
       setCalculationSteps(`
         Salary Calculation 
-        1. Current CTC: - ${currentCTCInLakhState} Lakh   ${currentCTCInThousandState} Thousand 
+        1. Current CTC: - ${currentCTCInLakhState > 0 ? `${currentCTCInLakhState} Lakh` : ""}    ${currentCTCInThousandState > 0 ? `${currentCTCInThousandState} Thousand` : ""}  
         2. Hike Percentage : -  ${expectedHikeNum}%
         3. Hike Amount: - (Current CTC * Hike %) / 100
               = (${currentCTCNum} * ${expectedHikeNum}) / 100 = ₹ ${hikeAmount.toLocaleString()}
@@ -3295,49 +3298,52 @@ const ModalComponent = ({
        
               Total Expected CTC  ${formatNumberToWords(expectedCTCNum)}
       `);
+    }else{
+      setExpectedCTC("");
+    setCalculationSteps("");
     }
   }, [expectedHike, currentCTCInLakhState, currentCTCInThousandState]);
 
   useEffect(() => {
-    if (
-      expectedCTCLakh ||
-      expectedCTCThousand ||
-      currentCTCInLakhState1 ||
-      currentCTCInThousandState1
-    ) {
-      const lakhValue = parseFloat(expectedCTCLakh) || 0;
-      const thousandValue = parseFloat(expectedCTCThousand) || 0;
-      const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
-
-      const currentLakhValue = parseFloat(currentCTCInLakhState1) || 0;
-      const currentThousandValue = parseFloat(currentCTCInThousandState1) || 0;
-      const currentCTCNum =
-        currentLakhValue * 100000 + currentThousandValue * 1000;
-
-      let hikePercentage = 0;
-      if (currentCTCNum > 0) {
-        hikePercentage = ((combinedCTC - currentCTCNum) / currentCTCNum) * 100;
-      }
-
+    const lakhValue = parseFloat(expectedCTCLakh) || 0;
+    const thousandValue = parseFloat(expectedCTCThousand) || 0;
+    const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
+  
+    const currentLakhValue = parseFloat(currentCTCInLakhState1) || 0;
+    const currentThousandValue = parseFloat(currentCTCInThousandState1) || 0;
+    const currentCTCNum = currentLakhValue * 100000 + currentThousandValue * 1000;
+  
+    // Ensure calculation only happens when necessary
+    if (combinedCTC > 0 && currentCTCNum > 0) {
+      const hikePercentage = ((combinedCTC - currentCTCNum) / currentCTCNum) * 100;
+  
       setCalculatedHike(hikePercentage.toFixed(2));
-
+  
       setCalculationSteps(`
-         Salary Calculation 
-
-        1. Current CTC: ${currentCTCInLakhState1} Lakh  ${currentCTCInThousandState1} Thousand
-        2. Expected CTC:  ${expectedCTCLakh} Lakh  ${expectedCTCThousand} Thousand
-        3. Hike Calculation: Hike %  ((Expected CTC - Current CTC) / Current CTC) * 100
-           = (${combinedCTC} - ${currentCTCNum}) / ${currentCTCNum} * 100
-
+        Salary Calculation 
+  
+        1. Current CTC: ${currentLakhValue > 0 ? `${currentLakhValue} Lakh` : ""}   
+           ${currentThousandValue > 0 ? `${currentThousandValue} Thousand` : ""} 
+  
+        2. Expected CTC: ${lakhValue > 0 ? `${lakhValue} Lakh` : ""}   
+           ${thousandValue > 0 ? `${thousandValue} Thousand` : ""} 
+  
+        3. Hike Calculation: Hike % = ((Expected CTC - Current CTC) / Current CTC) * 100
+           = (${combinedCTC.toLocaleString()} - ${currentCTCNum.toLocaleString()}) / ${currentCTCNum.toLocaleString()} * 100
+  
         Total Hike Percentage: ${hikePercentage.toFixed(2)} %
       `);
+    } else {
+      // Reset values when inputs are invalid
+      setCalculatedHike("");
+      setCalculationSteps("");
     }
   }, [
     expectedCTCLakh,
     expectedCTCThousand,
     currentCTCInLakhState1,
     currentCTCInThousandState1,
-  ]);
+  ]);  
 
   const handleNumericChange = (setter) => (event) => {
     const value = event.target.value;

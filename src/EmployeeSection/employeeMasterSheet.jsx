@@ -841,7 +841,7 @@ const handleSearchClick = ()=>{
           <div className="filter-dropdowns">
           <div className="filter-dropdowns">
   {showFilterSection && (
-    <div ref={filterRef} className="filter-section">
+    <div className="filter-section">
       {Object.keys(uniqueValues).map((field) => {
         const selectedCount = selectedFilters[field]?.length || 0;
 
@@ -860,7 +860,7 @@ const handleSearchClick = ()=>{
               <span className="filter-icon">&#x25bc;</span>
             </button>
             {expandedFilters[field] && (
-              <div className="city-filter">
+              <div ref={filterRef} className="city-filter">
                 <div className="optionDiv">
                   {uniqueValues[field] &&
                     uniqueValues[field].map((value, index) => {

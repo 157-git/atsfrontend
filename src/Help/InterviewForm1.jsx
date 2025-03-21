@@ -182,7 +182,7 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
       <h2 className="title newclassfortitleform">Interview Details</h2>
       <div className="form-row">
         <div className="form-group small newformgroupforinterviewquestionsform">
-          <label>Job Id:</label>
+          <label>Job Id: <span className="setRequiredAstricColorRed">*</span></label>
           <select
             value={indexRequirment}
             onChange={handleJobChange}
@@ -215,7 +215,7 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
           />
         </div>
         <div className="form-group small newformgroupforinterviewquestionsform">
-          <label>Interview Round:</label>
+          <label>Interview Round: <span className="setRequiredAstricColorRed">*</span></label>
           <select
             value={interviewRound}
             onChange={(e) => setInterviewRound(e.target.value)}
@@ -232,7 +232,7 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
         <div className="form-group small newformgroupforinterviewquestionsform">
           <label>Attachment:</label>
           <input
-            value={questionAttachment ? "" : undefined}
+            // value={questionAttachment ? "" : undefined}
             type="file"
             accept=".pdf,.doc,.docx"
             onChange={handleFileChange}

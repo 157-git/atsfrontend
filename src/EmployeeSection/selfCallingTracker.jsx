@@ -64,7 +64,7 @@ const CallingList = ({
   const [errorForShare, setErrorForShare] = useState("");
   const [searchCount, setSearchCount] = useState(0);
   const [displayShareConfirm, setDisplayShareConfirm] = useState(false);
-  const filterRef = useRef(null);
+    const filterRef=useRef(null);
 
   const [selectedRecruiters, setSelectedRecruiters] = useState({
     index: "",
@@ -73,7 +73,7 @@ const CallingList = ({
   });
 
   console.log(filteredCallingList);
-
+  
   // added by sahil karnekar date 4-12-2024
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
@@ -153,19 +153,19 @@ const CallingList = ({
     }
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (filterRef.current && !filterRef.current.contains(event.target)) {
-        setActiveFilterOption(null); // Close filter dropdown when clicking outside
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (filterRef.current && !filterRef.current.contains(event.target)) {
+          setActiveFilterOption(null); // Close filter dropdown when clicking outside
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+  
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
 
   const handleMouseOut = (event) => {
     const tooltip = event.currentTarget.querySelector(".tooltip");
@@ -178,7 +178,7 @@ const CallingList = ({
     const filtered = FilterData(callingList, searchTerm);
     setFilteredCallingList(filtered);
     setSearchCount(filtered.length);
-  }, [callingList]);
+  }, [ callingList]);
 
   useEffect(() => {
     if (sortCriteria) {
@@ -216,6 +216,7 @@ const CallingList = ({
     });
     setFilteredCallingList(filteredData);
   };
+
 
   const handleDisplayShareConfirmClick = () => {
     setDisplayShareConfirm(true);
@@ -277,27 +278,23 @@ const CallingList = ({
   // Pranjali Raut_handleSelectAll (20-01-25)
   const handleSelectAll = () => {
     if (allSelected) {
-      setSelectedRows((prevSelectedRows) =>
-        prevSelectedRows.filter(
-          (id) => !callingList.map((item) => item.candidateId).includes(id)
-        )
+      setSelectedRows((prevSelectedRows) => 
+        prevSelectedRows.filter((id) => !callingList.map((item) => item.candidateId).includes(id))
       );
     } else {
       const allRowIds = callingList.map((item) => item.candidateId);
-      setSelectedRows((prevSelectedRows) => [
-        ...new Set([...prevSelectedRows, ...allRowIds]),
-      ]);
+      setSelectedRows((prevSelectedRows) => [...new Set([...prevSelectedRows, ...allRowIds])]);
     }
     setAllSelected(!allSelected);
   };
 
-  const areAllRowsSelectedOnPage = callingList.every((item) =>
-    selectedRows.includes(item.candidateId)
-  );
-
-  useEffect(() => {
-    setAllSelected(areAllRowsSelectedOnPage);
-  }, [callingList, selectedRows]);
+   const areAllRowsSelectedOnPage = callingList.every((item) =>
+      selectedRows.includes(item.candidateId)
+    );
+  
+    useEffect(() => {
+      setAllSelected(areAllRowsSelectedOnPage);
+    }, [callingList, selectedRows]);  
 
   // const handleSelectAll = () => {
   //   console.log(selectedRows);
@@ -320,9 +317,9 @@ const CallingList = ({
       }
     });
   };
-  const handleSearchClick = () => {
+  const handleSearchClick = ()=>{
     fetchCallingTrackerData(currentPage, pageSize);
-  };
+  }
   const forwardSelectedCandidate = (e) => {
     e.preventDefault();
     if (selectedRows.length >= 1) {
@@ -714,20 +711,20 @@ const CallingList = ({
                   style={{ width: `${calculateWidth()}px` }}
                 >
                   <div className="forxmarkdiv">
-                    <input
-                      type="text"
-                      className="search-input removeBorderForSearchInput"
-                      placeholder="Search here..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                  <input
+                          type="text"
+                          className="search-input removeBorderForSearchInput"
+                          placeholder="Search here..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                     {searchTerm && (
                       <div className="svgimagesetinInput">
                         <svg
-                          onClick={() => {
-                            setSearchTerm("");
+                          onClick={() => {setSearchTerm("")
                             handleTriggerFetch();
-                          }}
+                          }
+                          }
                           xmlns="http://www.w3.org/2000/svg"
                           height="24px"
                           viewBox="0 -960 960 960"
@@ -760,23 +757,17 @@ const CallingList = ({
                 }}
               >
                 <div>
-                  {!showShareButton && (
-                    <Badge
-                      color="var(--notification-badge-background)"
-                      count={selectedRows.length}
-                      className="newBadgeselectedcandidatestyle"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24px"
-                        viewBox="0 -960 960 960"
-                        width="24px"
-                        fill="#000000"
-                      >
-                        <path d="M222-200 80-342l56-56 85 85 170-170 56 57-225 226Zm0-320L80-662l56-56 85 85 170-170 56 57-225 226Zm298 240v-80h360v80H520Zm0-320v-80h360v80H520Z" />
-                      </svg>
-                    </Badge>
-                  )}
+                  {
+                    !showShareButton && (
+                      <Badge
+                  color="var(--notification-badge-background)"
+                  count={selectedRows.length}
+                  className="newBadgeselectedcandidatestyle"
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M222-200 80-342l56-56 85 85 170-170 56 57-225 226Zm0-320L80-662l56-56 85 85 170-170 56 57-225 226Zm298 240v-80h360v80H520Zm0-320v-80h360v80H520Z"/></svg>
+                </Badge>
+                    )
+                  }
                   {(userType === "Manager" || userType === "TeamLeader") && (
                     <button className="lineUp-share-btn" onClick={showPopup}>
                       Create Excel
@@ -821,14 +812,14 @@ const CallingList = ({
                         </button>
                         {/* akash_pawar_SelfCallingTracker_ShareFunctionality_17/07_793 */}
                         {(userType === "TeamLeader" ||
-                          userType === "Manager") && (
-                          <button
-                            className="lineUp-share-btn"
-                            onClick={handleSelectAll}
-                          >
-                            {allSelected ? "Deselect All" : "Select All"}
-                          </button>
-                        )}
+                              userType === "Manager") && (
+                              <button
+                                className="lineUp-share-btn"
+                                onClick={handleSelectAll}
+                              >
+                                {allSelected ? "Deselect All" : "Select All"}
+                              </button>
+                            )}
                         {/* akash_pawar_SelfCallingTracker_ShareFunctionality_17/07_801 */}
                         <button
                           className="lineUp-forward-btn"
@@ -851,93 +842,89 @@ const CallingList = ({
 
             <div className="filter-dropdowns">
               {/* updated this filter section by sahil karnekar date 22-10-2024 */}
-              {showFilterSection && (
-                <div ref={filterRef} className="filter-section">
-                  {limitedOptions.map(([optionKey, optionLabel]) => {
-                    const uniqueValues = Array.from(
-                      new Set(
-                        callingList
-                          .map((item) =>
-                            item[optionKey]?.toString().toLowerCase()
-                          )
-                          .filter(
-                            (value) =>
-                              value &&
-                              value !== "-" &&
-                              !(
-                                optionKey === "alternateNumber" && value === "0"
-                              )
-                          )
-                      )
-                    );
+{showFilterSection && (
+                  <div className="filter-section">
+                    {limitedOptions.map(([optionKey, optionLabel]) => {
+                      
+                      const uniqueValues = Array.from(
+                        new Set(
+                          callingList
+                            .map((item) =>
+                              item[optionKey]?.toString().toLowerCase()
+                            )
+                            .filter(
+                              (value) =>
+                                value &&
+                                value !== "-" &&
+                                !(
+                                  optionKey === "alternateNumber" &&
+                                  value === "0"
+                                )
+                                
 
-                    return (
-                      <div>
-                        {/* Rajlaxmi jagadle  Added countSelectedValues that code date 20-02-2025 line 987/1003 */}
+                            )
+                            
+                        )
+                      );
+                        
+
+
+                      return (
+                        <div>
+                          {/* Rajlaxmi jagadle  Added countSelectedValues that code date 20-02-2025 line 987/1003 */}
                         <div key={optionKey} className="filter-option">
-                          <button
-                            className={`white-Btn ${
-                              (selectedFilters[optionKey] &&
-                                selectedFilters[optionKey].length > 0) ||
-                              activeFilterOption === optionKey
-                                ? "selected glow"
-                                : ""
-                            }`}
-                            onClick={() => handleFilterOptionClick(optionKey)}
-                          >
-                            {optionLabel}
-                            {selectedFilters[optionKey]?.length > 0 && (
-                              <span className="selected-count">
-                                ({countSelectedValues(optionKey)})
-                              </span>
-                            )}
-                            <span className="filter-icon">&#x25bc;</span>
-                          </button>
-                          {/* rajlaxmi Jagadle Changes That code date 20-02-2025 line 1003/1027 */}
+  <button
+    className={`white-Btn ${
+      (selectedFilters[optionKey] && selectedFilters[optionKey].length > 0) || activeFilterOption === optionKey
+        ? "selected glow"
+        : ""
+    }`}
+    onClick={() => handleFilterOptionClick(optionKey)}
+  >
+    {optionLabel}
+    {selectedFilters[optionKey]?.length > 0 && (
+      <span className="selected-count">
+        ({countSelectedValues(optionKey)})
+      </span>
+    )}
+    <span className="filter-icon">&#x25bc;</span>
+  </button>
+{/* rajlaxmi Jagadle Changes That code date 20-02-2025 line 1003/1027 */}
 
-                          {activeFilterOption === optionKey && (
-                            <div className="city-filter">
-                              <div className="optionDiv">
-                                {uniqueValues.length > 0 ? (
-                                  uniqueValues.map((value) => (
-                                    <label
-                                      key={value}
-                                      className="selfcalling-filter-value"
-                                    >
-                                      <input
-                                        type="checkbox"
-                                        checked={
-                                          selectedFilters[optionKey]?.includes(
-                                            value
-                                          ) || false
-                                        }
-                                        onChange={() =>
-                                          handleFilterSelect(optionKey, value)
-                                        }
-                                        style={{ marginRight: "5px" }}
-                                      />
-                                      {value}
-                                    </label>
-                                  ))
-                                ) : (
-                                  <div>No values</div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
+  {activeFilterOption === optionKey && (
+    <div ref={filterRef} className="city-filter">
+      <div className="optionDiv">
+        {uniqueValues.length > 0 ? (
+          uniqueValues.map((value) => (
+            <label key={value} className="selfcalling-filter-value">
+              <input
+                type="checkbox"
+                checked={selectedFilters[optionKey]?.includes(value) || false}
+                onChange={() => handleFilterSelect(optionKey, value)}
+                style={{ marginRight: "5px" }}
+                
+              />
+              {value}
+            </label>
+          ))
+        ) : (
+          <div>No values</div>
+        )}
+      </div>
+    </div>
+  )}
+</div>
 
-                  <button
-                    className="clr-button lineUp-Filter-btn"
-                    onClick={handleClearAll}
-                  >
-                    Clear Filters
-                  </button>
-                </div>
-              )}
+                          
+                          </div>
+                          );
+                    })}
+                    
+                    <button className="clr-button lineUp-Filter-btn" onClick={handleClearAll}>Clear Filters</button>
+
+                  </div>
+                  
+                )}
             </div>
           </>
         )}
@@ -950,19 +937,16 @@ const CallingList = ({
                   <tr className="attendancerows-head">
                     {(!showShareButton && userType === "TeamLeader") ||
                     (!showShareButton && userType === "Manager") ? (
-                      <th
-                        className="attendanceheading"
-                        style={{ position: "sticky", left: 0, zIndex: 10 }}
-                      >
+                      <th className="attendanceheading" style={{ position: "sticky",left:0, zIndex: 10 }}>
                         {/* updatesd shortListeddata by Pranjali Raut data 20-01-2025 */}
                         <input
-                          type="checkbox"
-                          onChange={handleSelectAll}
-                          checked={filteredCallingList.every((row) =>
-                            selectedRows.includes(row.candidateId)
-                          )}
-                          name="selectAll"
-                        />
+                               type="checkbox"
+                               onChange={handleSelectAll}
+                               checked={
+                                 filteredCallingList.every((row) => selectedRows.includes(row.candidateId))
+                               }
+                               name="selectAll"
+                             />
                         {/* <input
                           type="checkbox"
                           onChange={handleSelectAll}
@@ -974,26 +958,8 @@ const CallingList = ({
                       </th>
                     ) : null}
 
-                    <th
-                      className="attendanceheading"
-                      style={{
-                        position: "sticky",
-                        left: showShareButton ? 0 : "25px",
-                        zIndex: 10,
-                      }}
-                    >
-                      Sr No.
-                    </th>
-                    <th
-                      className="attendanceheading"
-                      style={{
-                        position: "sticky",
-                        left: showShareButton ? "50px" : "75px",
-                        zIndex: 10,
-                      }}
-                    >
-                      Candidate Id
-                    </th>
+                    <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>Sr No.</th>
+                    <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10}}>Candidate Id</th>
 
                     <th
                       className="attendanceheading"
@@ -1004,11 +970,7 @@ const CallingList = ({
                     <th
                       className="attendanceheading"
                       onClick={() => handleSort("recruiterName")}
-                      style={{
-                        position: "sticky",
-                        left: showShareButton ? "120px" : "170px",
-                        zIndex: 10,
-                      }}
+                      style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 10 }}
                     >
                       Recruiter's Name
                     </th>
@@ -1041,7 +1003,9 @@ const CallingList = ({
                     <th className="attendanceheading">Gender</th>
                     <th className="attendanceheading">Education</th>
                     <th className="attendanceheading">Year Of Passing</th>
-                    <th className="attendanceheading">Working Status</th>
+                    <th className="attendanceheading">
+                    Working Status
+                    </th>
                     {/* <th className="attendanceheading">Feedback</th> */}
                     <th className="attendanceheading">Holding Any Offer</th>
                     <th className="attendanceheading">Offer Letter Msg</th>
