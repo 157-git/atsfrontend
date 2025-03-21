@@ -1,0 +1,588 @@
+/* Rajlaxmijagadale rename all tag classname */
+@media print {
+  @page {
+    margin-top: 15px;
+    margin-bottom: 0;
+  }
+  .bodycvtemplete {
+    visibility: visible;
+  }
+
+  /* Hide footer (URL is part of the footer in many browsers) */
+  /* footer {
+          display: none !important;
+        } */
+  .sectioncvtemplete {
+    page-break-inside: avoid; /* Prevent a section from breaking */
+  }
+
+  /* Force the experience section to stay together */
+  .experiencecvtemplete {
+    page-break-before: auto; /* Let it break if needed, otherwise it should stay */
+    page-break-after: auto; /* Prevent unwanted breaks after this section */
+  }
+
+  /* Specific example for when you want to ensure that experience doesn't break */
+  .skillscvtemplete {
+    page-break-before: auto; /* Let the browser decide if it should break before */
+    page-break-after: auto; /* Let the browser decide if it should break after */
+  }
+
+  /* Prevent any section from forcing a break, unless necessary */
+  .maincvtemeplete,
+  .maindivcvtemplete {
+    page-break-inside: avoid;
+  }
+
+  /* Sometimes, we may need to hide the header as well */
+  /* header {
+          display: none !important;
+        } */
+}
+
+/* General layout for the profile container */
+#profileContainercvtemplete {
+  width: 100%;
+  height: 100%;
+  /* height: 1800px; */
+  /* height: 100%; */
+  padding: 20px;
+  box-sizing: border-box;
+  margin-bottom: 0; /* Remove any unnecessary bottom margin */
+  overflow: visible;
+  overflow-y: auto;
+}
+
+/* Force page breaks only between major sections */
+.page-breakcvtemplete {
+  page-break-before: always;
+  break-before: page;
+}
+
+/* Prevent page breaks inside individual sections, keeping them together */
+.sectioncvtemplete,
+.experience-itemcvtemplete,
+.certificationcvtemplete-item {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  overflow: visible;
+}
+
+/* Prevent page breaks inside paragraphs, headings, and list items */
+/* p, li, h1, h2, h3, h4 {
+    page-break-inside: avoid; 
+    break-inside: avoid;      
+    overflow: visible;  
+  } */
+
+/* Section titles, name, designation, etc. */
+.titlescvtemplete,
+.personalcvtemplete,
+.namecvtemplete,
+.designationcvtemplete {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Make sure summary, details, and personal information are kept intact */
+.summarytextcvtemplete,
+.detailscvtemplete,
+.personal-infocvtemplete,
+.edu {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* For experience descriptions and certifications, ensure they stay together */
+.experience-descriptioncvtemplete,
+.certificationcvtemplete-description {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Adjust for printing (or PDF generation) */
+@media print {
+  .bodycvtemplete {
+    margin: 0;
+    padding: 0;
+    font-size: 12pt;
+  }
+
+  /* Hide buttons and unnecessary UI elements in the printed PDF */
+  .buttondivcvtemplete {
+    display: none;
+  }
+
+  /* Avoid adding extra margin on the first page */
+  #profileContainercvtemplete {
+    margin-top: 0;
+  }
+  /* Make sure the entire resume fits within the page without clipping */
+  .maincvtemeplete {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Prevent any additional margins that may create blank space at the top */
+  .page-breakcvtemplete {
+    page-break-before: always;
+  }
+}
+
+/* style.css */
+
+.maincvtemeplete {
+  padding: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+  /* background-color: white; Lighter dark blue background */
+  border-radius: 10px;
+}
+
+.maindivcvtemplete {
+  padding: 20px;
+}
+
+.titlescvtemplete {
+  color: #1d5fa6; /* Dark Blue Color for Section Titles */
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.hrcvtemplete {
+  border: 1px solid #1d5fa6;
+  margin: 5px 0;
+}
+
+.sectioncvtemplete {
+  margin-bottom: 30px;
+}
+
+.flex-columncvtemplete {
+  display: flex;
+  flex-direction: column;
+}
+
+.contactcvtemplete,
+.summarycvtemplete,
+.educationcvtemplete,
+.skillscvtemplete,
+.experiencecvtemplete,
+.personaldetailscvtemplete,
+.certificationscvtemplete {
+  margin-bottom: 30px;
+}
+
+.contactcvtemplete p,
+.summarycvtemplete p {
+  margin: 5px 0;
+}
+
+.contactcvtemplete div,
+.summarycvtemplete div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.contactcvtemplete img {
+  filter: invert(1);
+  margin-right: 10px;
+}
+
+.summarytextcvtemplete {
+  color: black;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.skillscvtemplete {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.skillscvtemplete .skill-setcvtemplete {
+  width: 48%;
+}
+
+.technicalskillulcvtemplete {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.skillslilistcvtemplete {
+  color: black;
+  margin-bottom: 6px;
+}
+
+.experience-itemcvtemplete,
+.project-itemcvtemplete {
+  margin-bottom: 20px;
+}
+
+.project-itemcvtemplete h3 {
+  color: #1d5fa6;
+}
+.experience-itemheadingcvtemplete {
+  color: #1d5fa6;
+}
+
+.experience-itemcvtemplete p,
+.project-itemcvtemplete p {
+  color: black;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.buttondivcvtemplete {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.downloadendingbuttoncvtemplete {
+  background-color: #1d5fa6;
+  color: #fff;
+  padding: 12px 25px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.downloadendingbuttoncvtemplete:hover {
+  background-color: #154d72;
+}
+.detailscvtemplete {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.namecvtemplete {
+  font-size: 25px;
+  letter-spacing: 1px;
+  font-weight: 600;
+  color: #1d5fa6;
+}
+.designationcvtemplete {
+  font-size: 18px;
+  letter-spacing: 0.5px;
+}
+
+.experience-descriptioncvtemplete {
+  list-style-type: disc; /* Display bullet points */
+  padding-left: 20px; /* Add some space before the bullet points */
+}
+
+.listinsertcvtemplete {
+  margin-bottom: 10px; /* Space between list items */
+}
+.listinsertcvtemplete {
+  margin-top: 10px;
+}
+.edu {
+  margin-top: 15px;
+}
+.personalcvtemplete {
+  margin-top: 10px;
+}
+.emailcvtemplete {
+  width: 50%;
+  margin: 0 auto;
+}
+.phonecvtemplete {
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.maincvtemeplete {
+  width: 50%;
+  margin: 0 auto;
+}
+
+/* form css Start */
+/* General Styles */
+.bodycvtemplete {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+/* Form Edit Container */
+.formeditcvtemplete {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 900px;
+  margin: 40px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  width: 50%;
+  margin: 0 auto;
+  flex: 1; /* Form takes up 50% of the width */
+  overflow-y: auto;
+  max-height: 100vh;
+  padding: 20px;
+  background-color: #f5f5f5;
+  max-height: 95vh; /* Allow the form part to scroll if content overflows */
+  /* border: 2px solid red; */
+}
+
+/* Title */
+.form-groupcvtemplete h1 {
+  color: #a61d24;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Section Titles */
+.form-groupcvtemplete h2,
+.form-groupcvtemplete h3 {
+  color: #1d5fa6;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Form Group */
+.form-groupcvtemplete {
+  margin-bottom: 20px; 
+}
+
+/* Labels within Form Group */
+.formlabelcvtemplete {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1d5fa6;
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* Input Fields within Form Group */
+.forminputfieldcvtemplete[type="text"],
+.forminputfieldcvtemplete[type="email"],
+.forminputfieldcvtemplete[type="tel"],
+.forminputfieldcvtemplete[type="date"],
+.forminputfieldcvtemplete,
+.formgrouptextarea {
+  width: 100%;
+  padding: 12px; /* Slightly larger padding for more space */
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  color: #000;
+  background-color: #f9f9f9;
+  margin-bottom: 10px;
+  box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+/* Textarea (specifically) within Form Group */
+.formgrouptextarea {
+  resize: vertical;
+  min-height: 120px; /* Increased height for better text area visibility */
+}
+
+/* Buttons within Form Group */
+.Forminsidebuttons {
+  background-color: #1d5fa6;
+  color: #fff;
+  border: none;
+  padding: 12px 20px; /* Adjusted padding for buttons */
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px; /* Added top margin for spacing from inputs */
+}
+
+.Forminsidebuttons:hover {
+  background-color: #155b8a;
+}
+
+.Forminsidebuttons:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Section Header (Editable) */
+.form-groupcvtemplete .editable-text {
+  color: #1d5fa6;
+  font-weight: bold;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Horizontal Line */
+.form-groupcvtemplete .hrformgroupcvtemplete {
+  border: 1px solid #ddd;
+  /* margin: 10px 0; */
+}
+
+/* Personal Details Section */
+.form-groupcvtemplete .personaldetailscvtemplete-sectioncvtemplete {
+  background-color: #f0f8ff;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+/* Form Inputs and Textareas focus */
+.forminputfieldcvtemplete:focus,
+.form-groupcvtemplete select:focus,
+.formgrouptextarea:focus {
+  outline: none;
+  border-color: #1d5fa6;
+  box-shadow: 0 0 5px rgba(29, 95, 166, 0.5);
+}
+
+/* Section Titles within Form Group */
+.form-groupcvtemplete h2,
+.form-groupcvtemplete h3 {
+  font-size: 1.75rem;
+  color: #1d5fa6;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .formeditcvtemplete {
+    padding: 15px;
+    max-width: 100%;
+  }
+
+  .form-groupcvtemplete h1 {
+    font-size: 1.5rem;
+  }
+
+  .form-groupcvtemplete h2,
+  .form-groupcvtemplete h3 {
+    font-size: 1.25rem;
+  }
+}
+
+.formexperience button {
+  margin-bottom: 15px;
+}
+
+/* position fix of resume */
+/* Main flex container */
+.mainflexdivcvtemplete {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  /* border: 1px solid black; */
+}
+
+/* Form Section Styling */
+
+/* Resume Section */
+.maincvtemeplete {
+  flex: 1; /* Resume also takes up 50% of the width */
+  padding: 20px;
+  max-height: calc(100vh - 70px);
+  overflow-y: auto;
+}
+
+/* Make PDF Button fixed at the bottom */
+.download-button {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #1d5fa6;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  border-radius: 0;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.download-button:hover {
+  background-color: #155b8a;
+}
+
+.download-button:active {
+  background-color: #0f3d63;
+}
+
+.maincvtemeplete {
+  max-height: calc(100vh - 70px);
+  overflow-y: auto;
+  margin-bottom: 60px; /* Space for the PDF button */
+}
+
+/* Optional: Add a margin to the form to avoid overlap with the resume */
+.form-sectioncvtemplete {
+  margin-bottom: 50px; /* Adjust this based on the height of the form */
+}
+
+/* Style for sections within the form */
+.form-groupcvtemplete {
+  margin-bottom: 20px;
+}
+.InputFieldsearchcvtemplete {
+  outline: none;
+  border-color: #1d5fa6;
+  box-shadow: 0 0 5px rgba(29, 95, 166, 0.5);
+  height: 50px;
+  width: 280px;
+  margin-top: 30px;
+  box-sizing: border-box;
+  /* border: none; */
+  text-align: center;
+}
+
+.candidateidcvtemplete {
+  width: 95%;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  /* border: 1px solid green; */
+}
+
+.candidatesearchbuttoncvtemplete {
+  background-color: #1d5fa6;
+  color: #fff;
+  border: none;
+  padding: 12px 20px; /* Adjusted padding for buttons */
+  /* border-radius: 5px; */
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px; /* Added top margin for spacing from inputs */
+  height: 50px;
+  box-sizing: border-box;
+}
+
+.candidatesearchbuttoncvtemplete:hover {
+  background-color: #155b8a;
+}
+
+.candidatesearchbuttoncvtemplete:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+
+.resume-close-btn {
+  font-weight: bold; /* Makes the button text bold */
+  font-size: 30px; /* Font size for the button */
+  background: none; /* Removes background styling */
+  border: none; /* Removes border */
+  cursor: pointer; /* Ensures the button has a pointer cursor */
+  color: black; /* Customizes button text color */
+}
+
+.namecvtemplete-name-div {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  /* border: 1px solid red;  */
+}

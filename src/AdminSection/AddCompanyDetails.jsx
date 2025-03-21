@@ -166,7 +166,8 @@ const AddCompanyDetails = () => {
     doc.text(`PF Certificate: ${formData.pfCertificateNumber || ""}`, 10, yPos);
     yPos += fontSize * lineHeightFactor;
     doc.text(
-      `Professional Tax Certificate: ${formData.professionalTaxCertificateNumber || ""
+      `Professional Tax Certificate: ${
+        formData.professionalTaxCertificateNumber || ""
       }`,
       10,
       yPos
@@ -221,7 +222,9 @@ const AddCompanyDetails = () => {
     console.log(initialFormData);
     try {
       // Send the form data to the backend
-      const response = await axios.post(`${API_BASE_URL}/save-our-company`, initialFormData,
+      const response = await axios.post(
+        `${API_BASE_URL}/save-our-company`,
+        initialFormData,
         {
           headers: {
             "Content-Type": "multipart/form-data", // Ensure correct content type for form data
@@ -257,7 +260,9 @@ const AddCompanyDetails = () => {
             </center> */}
             <div className="ACD-desc-form">
               {/* Align AddJob  Description name center and changing color to gray */}
-              <h2 className="text-center text-[20px] text-gray-500 py-2">Add  Client Details</h2>
+              <h2 className="text-center text-[20px] text-gray-500 py-2">
+                Add Client Details
+              </h2>
               <div className="ACD_Field-column">
                 <div className="ACD_Field-Row-white">
                   <div className="ACD_Field">
@@ -270,7 +275,7 @@ const AddCompanyDetails = () => {
                       onChange={handleChange}
                     />
                   </div>
-                  <div className="ACD_Field" >
+                  <div className="ACD_Field">
                     <label>Company Logo</label>
                     <input
                       type="file"
@@ -530,7 +535,7 @@ const AddCompanyDetails = () => {
 
                 <div className="ACD_Field-Row-white">
                   <div className="ACD_Field">
-                    <label>  Professional tax Certificate</label>
+                    <label> Professional tax Certificate</label>
 
                     <input
                       type="file"
@@ -729,7 +734,10 @@ const AddCompanyDetails = () => {
                     />
                   </div>
                 </div>
-                <div className="ACD_Field-Row-white" style={{ borderBottom: "1px solid gray" }}>
+                <div
+                  className="ACD_Field-Row-white"
+                  style={{ borderBottom: "1px solid gray" }}
+                >
                   <div className="ACD_Field">
                     <label htmlFor="">Branch Name</label>
                     <input
@@ -852,9 +860,13 @@ const SendEmailPopup = ({
     const fetchCompanyDetailsById = async () => {
       let response;
       if (onOptionChange != null) {
-        response = await axios.get(`${API_BASE_URL}/details-by-Id/${onOptionChange}`);
+        response = await axios.get(
+          `${API_BASE_URL}/details-by-Id/${onOptionChange}`
+        );
       } else {
-        response = await axios.get(`${API_BASE_URL}/details-by-Id/${latestAddedData}`);
+        response = await axios.get(
+          `${API_BASE_URL}/details-by-Id/${latestAddedData}`
+        );
       }
       setCompanyDetails(response.data);
     };
@@ -880,7 +892,10 @@ const SendEmailPopup = ({
         employeeId: parseInt(employeeId),
       };
 
-      const response = await axios.post(`${API_BASE_URL}/save-send-details`, clientData);
+      const response = await axios.post(
+        `${API_BASE_URL}/save-send-details`,
+        clientData
+      );
       if (response) {
         setIsMailSending(false);
         setResponse(response.data);
@@ -993,7 +1008,7 @@ const SendEmailPopup = ({
     setIsMailSending(true);
 
     axios
-      .post(`${API_BASE_URL}/company-detail-email`,emailData)
+      .post(`${API_BASE_URL}/company-detail-email`, emailData)
       .then((response) => {
         handleStoreClientInformation();
         setIsMailSending(false);

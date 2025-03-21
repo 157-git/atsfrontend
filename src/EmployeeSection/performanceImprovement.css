@@ -1,329 +1,680 @@
-.PIE-App{
-    padding: 10px;
-  }
-  .PIE-maintable{
-    overflow-x: auto;
-  }
-  .PIE-maintable::-webkit-scrollbar{
-    display: none;
-  }
-  .divlength100forperformancejoblist{
-    width: 100%;
-  }
-  .PIE-timetrackertable{
-    /* width: 100%; */
-    border-collapse: collapse !important;
-    margin-bottom: 20px;
-    color:var(--text-color);
-  }
-  .buttondivforchart{
-    display: flex;
-    width: 100%;
-    justify-content: end;
-  }
-  .tablefixheigt{
-    max-height: 800px;
-    overflow-y: scroll;
-  }
-  .PIE-timetrackertabledata {
-    border: 1px solid gray;
-    padding: 4px;
-    white-space: nowrap;
-    font-size: 16px;
-    text-align: center;
-    overflow: hidden;
-  }
-  
-  .PIE-timetrackertablehead {
-    white-space: nowrap;
-    width: auto !important;
-    color:var(--table-header-txt);
-    border: 1px solid gray;
-    padding: 0 10px;
-    font-size: 16px;
-    /* padding: 0%; */
-    background-color: var(--Bg-color);
-    text-align: center;
-    font-weight: 500;
-  }
-  .PIE-timetrackertable-heading{
-    padding: 0%;
-  }
-  
-  .PIE-timetrackre-btn{
-    font-size: 16px;
-        border-radius: 15px;
-        height: 30px;
-        color: white;
-        padding-left: 15px;
-        padding-right: 15px;
-        background-color: var(--button-color);
-        border: 1px solid gray;
-        cursor: pointer;
-  }
-  
-  .PIE-timetrackre-btn:hover{
-    background-color: var(--button-hover-color);
-    color: var(--text-hover-color);
-  opacity: 0.8;}
-  tr:hover {
-    background-color: #ddd;
-  }
-  
-  .PIE-Header-Section{
-    display: flex;
-    gap: 10px;
-  }
-  
-  .PIE-grid-dropdown{
-    /* grid-column: span 1 / span 1; */
-    /* background-color: #f2f2f2; */
-    padding: 10px;
-    border-radius: 15px;
-    /* border: 2px solid yellow; */
-    width: 300px;
-  }
+/* rajlaxmi Jagadale change all className and id */
 
-  .PIE-radio-group1 {
-    display: flex;
-    flex-direction: column;
-  }
-  .PIE-radio-group2{
-    display: flex;
-    flex-direction: column;
-  }
+.PIE-Appteamperformance {
+  /* padding: 10px; */
+  padding-top: 10px;
+}
+.PIE-maintableteamperformance {
+  overflow-x: auto;
+}
+.PIE-maintableteamperformance::-webkit-scrollbar {
+  display: none;
+}
+.divlength100forperformancejoblistteamperformance {
+  width: 100%;
+}
+.PIE-timetrackertableteamperformance {
+  width: 1500px;
+  border-collapse: collapse !important;
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+.buttondivforchartteamperformance {
+  display: flex;
+  width: 100%;
+  justify-content: end;
+}
+.tablefixheigtteamperformance {
+  max-height: 800px;
+  overflow-y: scroll;
+}
+.PIE-timetrackertabledatateamperformance {
+  border: 1px solid gray;
+  padding: 4px;
+  white-space: nowrap;
+  font-size: 16px;
+  text-align: center;
+  overflow: hidden;
+}
 
-  .PIE-grid-date{
-    width: 85%;
-    padding: 10px;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid gray;
-    margin-left: 10px;
-  }
-  
-  .PIE-date-container{
-    color:var(--text-color);
-    display: flex;
-  flex-wrap: wrap; 
-  gap: 5px; 
+.PIE-maintableteamperformance {
+  width: 100%;
+  max-height: 400px; /* Fixed height */
+  overflow: auto; /* Enables both horizontal and vertical scrollbars */
+}
+
+.PIE-timetrackertableheadteamperformance {
+  white-space: nowrap;
+  width: auto !important;
+  color: var(--table-header-txt);
+  background-color: var(--Bg-color);
+  border: 1px solid gray;
+  padding: 5px 10px;
+  font-size: 16px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.PIE-timetrackertable-headingteamperformance {
+  padding: 0%;
+}
+
+.PIE-timetrackre-btnteamperformance {
+  font-size: 16px;
+  border-radius: 15px;
+  height: 30px;
+  color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: var(--button-color);
+  border: 1px solid gray;
+  cursor: pointer;
+}
+
+.PIE-timetrackre-btnteamperformance:hover {
+  background-color: var(--button-hover-color);
+  color: var(--text-hover-color);
+  opacity: 0.8;
+}
+tr:hover {
+  background-color: #ddd;
+}
+
+.PIE-Header-Sectionteamperformance {
+  display: flex;
+  gap: 10px;
+}
+
+.PIE-grid-dropdownteamperformance {
+  /* grid-column: span 1 / span 1; */
+  /* background-color: #f2f2f2; */
+  padding: 10px;
+  border-radius: 10px;
+  /* border: 2px solid yellow; */
+  width: 270px;
+  /* margin-left: 10px; */
+  /* margin-right: 10px; */
+  border: 1px solid rgb(155, 152, 152);
+}
+
+.PIE-radio-group1teamperformance {
+  display: flex;
+  flex-direction: column;
+}
+.PIE-radio-group2teamperformance {
+  display: flex;
+  flex-direction: column;
+}
+
+.PIE-grid-dateteamperformance {
+  width: 48%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 8px;
+  display: flex;
+  height: auto;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid gray;
+}
+
+.PIE-date-containerteamperformance {
+  color: var(--text-color);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   justify-content: space-evenly;
+  /* border: 1px solid black; */
+}
 
-  }
+.PIE-radio-optionteamperformance {
+  margin-left: 5px;
+  border: 1px solid black;
+  width: auto;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .PIE-radio-option {
-   margin-left: 5px;
-   border: 1px solid black;
-   width: auto;
-   height: 30px;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-  }
+.PIT-headingteamperformance {
+  /* border: 1px solid red; */
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: center;
+  align-items: center;
+}
 
-  .PIT-heading{
-    /* border: 1px solid red; */
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-
-  /* .PIE-custom-date{
-    border: 1px solid black;
-  } */
-
-
-  .PIE-custom-date-input {
-    border: 1px solid gray;
-    margin: 5px 8px;
-    border-radius: 5px;
-  }
-  
-  .PIE-date-display {
-    background-color: #f9f9f9;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-  }
-  
-  .PIE-date-display p {
-    margin: 5px 0;
-  }
-  
-  .PIE-job-filter{
-    margin-top: 15px;
-    color:var(--text-color);
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .PIE-client-desg-role{
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    gap: 10px; 
-    align-items: center;
-  }
-  .PIE-client-desg-role p{
-    margin: 0;
-  }
-  .PIE-job-filter-options{
-    color:var(--text-color);
-    border: 1px solid #ccc;
-    display: inline-block;
-    width: 300px;
-  }
-  .PIE-Apply-Filter-Btn{
-    margin-top: 10px;
+.PIE-custom-dateteamperformance{
     /* border: 1px solid black; */
     display: flex;
     gap: 10px;
-  }
+  } 
 
-  .PIE-filter-Btn{
-    border-radius: 15px;
-    font-size: 16px;
-    height: 30px;
-    width: auto;
-    padding-left: 15px;
-    padding-right: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--primary-button-bg);
-    color: var(--button-txt-color);
-    border: 1px solid var(--primary-border);
-  }
-  .PIE-filter-Btn:hover{
-    background-color: var(--primary-button-hover);
-    color: var(--button-txt-hover-color);
-    border: 1px solid var(--button-border-color);
-  }
-  
-  .PIE-dropdown-container {
-    position: relative;
-    max-width: 250px;
-  }
-  
-  .PIE-Dropdown {
-    padding-right: 8px;
-    padding-left: 8px;
-    border-radius: 5px;
-    color:var(--text-color);
-    background-color: #f8f9fa;
-    border: 1px solid #ced4da;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid black;
-    width: 270px;
-    height: 30px;
-    /* max-width: 450px; */
-  }
-  
-  .PIE-dropdown-icon {
-    margin-left: 10px;
-    transition: transform 0.3s ease;
-  }
-  .PIE-process-dropdown-content {
-    border-radius: 15px;
-    color:var(--text-color);
-    background-color: white;
-    border: 1px solid #ced4da;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    max-height: 400px;
-    overflow-y: auto;
-    margin-top: 5px;
-    position: absolute;
-    width: 100%;
-    z-index: 10;
-    padding: 5px;
-  }
-  .PIE-process-dropdown-content-Okbtn,.PIE-process-dropdown-content-Resetbtn{
-    float: right;
-    margin-left: 5px;
-    background-color: var(--primary-button-bg);
-    border-radius: 15px;
-    padding: 0 10px;
-    /* margin: 5px; */
-    color: var(--button-txt-color);
-    border: 1px solid var(--primary-border);
-  }
-  .PIE-process-dropdown-content-Okbtn:hover,.PIE-process-dropdown-content-Resetbtn:hover{
-    /* margin: 5px; */
-    background-color: var(--primary-button-hover);
-    color: var(--button-txt-hover-color);
-   border: 1px solid var(--primary-border);
-  }
-  
-  .PIE-dropdown-section {
-    margin-bottom: 5px;
-    padding-left: 10px; /* Indent each hierarchy level */
-  }
-  
-  .PIE-dropdown-row {
-    /* padding: 5px 10px; */
-    display: flex;
-    align-items: center;
-  }
-  
-  .PIE-dropdown-column {
-    padding-left: 20px; /* Indent nested items */
-    border-left: 1px solid #ced4da; /* Optional: add a visual line to indicate hierarchy */
-    margin-top: 5px; /* Add space above nested items */
-  }
-  
-  .PIE-clickable-label {
-    cursor: pointer;
-    margin-left: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .PIE-dropdown-arrow {
-    margin-left: 5px;
-    font-size: 12px;
-  }
-  .PIE-employee-count{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-  }
-  .PIE-employee-count p{
-    color:var(--text-color);
-    font-size: 16px;
-  }
+.PIE-custom-date-inputteamperformance {
+  border: 1px solid gray;
+  /* margin: 5px 8px; */
+  border-radius: 5px;
+  padding: 4px;
+  margin-right: 5px;
+  /* gap: 10px; */
+  /* border: 1px solid green; */
+}
 
-  .procees-time-table-div {
-    border: 1px solid black;
-    padding: 5px;
-    display: flex;
-  }
 
-  .procees-time-table{
-    /* border: 1px solid red; */
-    padding: 5px;
-  }
 
-  .speedo-meter-charts{
-    /* border: 1px solid green; */
-    padding: 5px;
-  }
-.fixPerformanceprocesstable100{
+.PIE-start-date-1st-div{
+display: flex;
+align-items: center;
+}
+
+.date-labelteamperformance {
+  font-weight: 600;
+}
+.PIE-date-displayteamperformance {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.PIE-date-displayteamperformance p {
+  margin: 5px 0;
+}
+
+.PIE-job-filterteamperformance {
+  margin-top: 15px;
+  color: var(--text-color);
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.PIE-client-desg-roleteamperformance {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+.PIE-client-desg-roleteamperformance p {
+  margin: 0;
+}
+.PIE-job-filter-optionsteamperformance {
+  color: var(--text-color);
+  border: 1px solid #ccc;
+  display: inline-block;
+  width: 300px;
+}
+.PIE-Apply-Filter-Btnteamperformance {
+  margin-top: 10px;
+  /* border: 1px solid black; */
+  display: flex;
+  gap: 10px;
+}
+
+.PIE-filter-Btnteamperformance {
+  background-color: rgb(168, 165, 165);
+  color: #fff;
+  border: none;
+  padding: 6px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: justify;
+  text-align: center;
+  margin-left: 30%;
+  margin-top: 20px;
+  font-weight: 700;
+}
+.PIE-filter-Btnteamperformance:hover {
+  background-color: rgb(188, 181, 181);
+  color: var(--button-txt-hover-color);
+  border: 1px solid var(--button-border-color);
+}
+
+.PIE-dropdown-containerteamperformance {
+  position: relative;
+  max-width: 250px;
+}
+
+.PIE-Dropdownteamperformance {
+  padding-right: 8px;
+  padding-left: 8px;
+  border-radius: 5px;
+  color: var(--text-color);
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid black;
+  width: 230px;
+  margin-top: 5px;
+  height: 30px;
+  /* max-width: 450px; */
+}
+
+.PIE-dropdown-iconteamperformance {
+  margin-left: 10px;
+  transition: transform 0.3s ease;
+}
+.PIE-process-dropdown-contentteamperformance {
+  border-radius: 15px;
+  color: var(--text-color);
+  background-color: white;
+  border: 1px solid #ced4da;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 5px;
+  position: absolute;
   width: 100%;
+  z-index: 10;
+  padding: 5px;
+}
+.PIE-process-dropdown-content-Okbtnteamperformance,
+.PIE-process-dropdown-content-Resetbtnteamperformance {
+  float: right;
+  margin-left: 5px;
+  background-color: var(--primary-button-bg);
+  border-radius: 15px;
+  padding: 0 10px;
+  /* margin: 5px; */
+  color: var(--button-txt-color);
+  border: 1px solid var(--primary-border);
+}
+.PIE-process-dropdown-content-Okbtnteamperformance:hover,
+.PIE-process-dropdown-content-Resetbtnteamperformance:hover {
+  /* margin: 5px; */
+  background-color: var(--primary-button-hover);
+  color: var(--button-txt-hover-color);
+  border: var(--primary-border);
+}
+
+.PIE-dropdown-sectionteamperformance {
+  margin-bottom: 5px;
+  padding-left: 10px; /* Indent each hierarchy level */
+}
+
+.PIE-dropdown-rowteamperformance {
+  /* padding: 5px 10px; */
+  display: flex;
+  align-items: center;
+}
+
+.PIE-dropdown-columnteamperformance {
+  padding-left: 20px; /* Indent nested items */
+  border-left: 1px solid #ced4da; /* Optional: add a visual line to indicate hierarchy */
+  margin-top: 5px; /* Add space above nested items */
+}
+
+.PIE-clickable-labelteamperformance {
+  cursor: pointer;
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.PIE-dropdown-arrowteamperformance {
+  margin-left: 5px;
+  font-size: 12px;
+}
+.PIE-employee-countteamperformance {
+  display: flex;
+  flex-wrap: wrap;
+}
+.PIE-employee-countteamperformance p {
+  color: var(--text-color);
+  font-size: 16px;
+}
+
+.procees-time-table-divteamperformance {
+  border: 1px solid black;
+  padding: 5px;
+  display: flex;
+}
+
+.procees-time-tableteamperformance {
+  /* border: 1px solid red; */
+  padding: 5px;
+}
+
+.speedo-meter-chartsteamperformance {
+  /* border: 1px solid green; */
+  padding: 5px;
+}
+.fixPerformanceprocesstable100teamperformance {
+  width: 100%;
+  align-items: center;
+  text-align: center;
   overflow-x: scroll;
 }
-.fixperformanceclientsection{
+.fixperformanceclientsectionteamperformance {
   display: block;
-  max-height: 40vh;
+  max-height: 35vh;
   overflow-y: scroll;
+  /* border: 1px solid red; */
+  width: 33%;
 }
-.selectJobIdsForPerformance{
-  height: 50vh;
+.selectJobIdsForPerformanceteamperformance {
+  height: 40vh;
+  width: 100%;
+  padding-left: 20px;
   overflow-y: scroll;
+  font-size: 18px;
+  border-radius: 10px;
+  border: 1px solid rgb(228, 222, 222);
+}
+
+.PI-attendance-formattendanceformteamperformance {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 700px;
+  margin: 20px;
+}
+
+.PI-attendance-formattendanceformteamperformance {
+  width: 80%;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  border-radius: 8px;
+  display: flex;
+  margin-right: 20px;
+  margin-left: 15px;
+  height: auto;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid gray;
+}
+.PI-radio-buttonsattendanceformteamperformance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center; /* Centers the items */
+}
+.PI-radio-labelteamperformance {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  width: 150px;
+  border-radius: 5px;
+  padding: 4px;
+  color: gray;
+  gap: 5px;
+  padding-left: 10px;
+  box-shadow: 0px 0px 3px 0px #433b3b;
+}
+.PI-dropdown-container-mainattendanceformteamperformance {
+  border: 1px solid #ddd;
+  width: 20%;
+  padding-left: 10px;
+  border-radius: 10px;
+  padding-top: 10px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  background-color: #f9f9f9;
+}
+.PI-dropdown-containerattendanceformteamperformance {
+  position: relative;
+  width: 100%;
+}
+.PI-Dropdownattendanceformteamperformance {
+  width: 90%;
+  display: inline-block;
+  border: 1px solid gray;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 10px;
+  background-color: #fff;
+  cursor: pointer;
+}
+.PI-dropdownattendanceformteamperformance {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adds spacing between label and dropdown */
+}
+/* rajlaxmi jagadale added that code line 429/473 */
+.grid-containerteamperformance {
+  display: grid;
+  /* gap: 10px; */
+  background-color: #ffffff;
+  padding: 5px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  /* width: 70vh; */
+  width: 340px;
+  box-sizing: border-box;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
+.grid-itemteamperformance {
+  background-color: #f3f4f6;
+  text-align: left;
+  border-radius: 8px;
+  padding: 10px;
+  /* width: 270px; */
+  max-width: auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  border: 2px solid #e2e4e2;
+}
+
+.grid-itemteamperformance:hover {
+  transform: scale(1.01);
+  background-color: #e6f7ff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+strong {
+  color: #333;
+}
+.Toastify__toast {
+  background-color: #000;
+  color: #fff !important;
+}
+.Toastify__close-button--light {
+  color: #fff !important;
+  font-size: 20px;
+}
+
+/* New styles for the selection modal */
+.selection-modal-contentteamperformance {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.card-header-with-clearteamperformance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.highlight-itemteamperformance {
+  background-color: rgba(24, 144, 255, 0.1);
+}
+
+.team-leader-selectionteamperformance,
+.recruiter-selectionteamperformance {
+  margin-bottom: 20px;
+}
+.mainForListsteamperformance {
+  display: flex;
+}
+.mainForListsteamperformance {
+  margin-top: 15px;
+}
+.newclearbuttonaddclassteamperformance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.newcolorforcleariconteamperformance {
+  color: rgb(162, 161, 161);
+  font-size: 20px;
+}
+.highlight-itemteamperformance {
+  background-color: #f0f8ff; /* Light blue background */
+  border-left: 4px solid #1890ff; /* Blue border on the left */
+  margin-top: 5px;
+}
+.managersTeamRecruitersInputMarginteamperformance {
+  margin-right: 8px;
+}
+.newclearbuttonaddclassteamperformance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.clearbuttonReportteamperformance {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+}
+.clearbuttonReportteamperformance:hover {
+  background-color: #f0f0f0;
+}
+/* Rajlaxmi jagadale added that code */
+.anticon svg {
+  color: black;
+  font-size: 24px;
+}
+.rotate-iconteamperformance {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+.downloadbuttonforchartperformanceteamperformance {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 0px;
+}
+
+.chartDownloaddivteamperformance {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.containergridteamperformance {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+
+.PIE-Apply-Filter-Btnsteamperformance {
+  display: flex;
+  gap: 10px;
+}
+/* Rajlaxmi Jagadle Added that responcive code 554/640 */
+
+@media (max-width: 1200px) {
+  .PIE-Header-Sectionteamperformance {
+    flex-direction: column;
+  }
+
+  .PIE-start-date-1st-div{
+    flex-direction: column;
+    display: flex;
+  }
+
+  .PIE-grid-dateteamperformance {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .PIE-grid-dropdownteamperformance {
+    width: 90%;
+    margin: 0 auto 10px;
+  }
+
+  .grid-containerteamperformance {
+    width: 90%;
+    margin: 10px auto;
+  }
+
+  .grid-itemteamperformance {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .PIE-date-containerteamperformance {
+    gap: 15px;
+  }
+
+  .PI-radio-labelteamperformance {
+    width: 160px;
+  }
+
+  .PIE-filter-Btnteamperformance {
+    margin-left: 20%;
+  }
+
+  .mainForListsteamperformance {
+    flex-direction: column;
+  }
+
+  .Card {
+    width: 100% !important;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 800px) {
+  .PIE-date-containerteamperformance {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .PI-radio-labelteamperformance {
+    width: 220px;
+  }
+
+  .PIE-job-filterteamperformance {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .PIE-filter-Btnteamperformance {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .PIE-timetrackertableteamperformance {
+    width: 700px;
+  }
+
+  .PIE-employee-countteamperformance {
+    flex-direction: column;
+  }
+
+  .PIE-custom-dateteamperformance {
+    flex-direction: column;
+  }
+
+  .PIE-custom-date-inputteamperformance {
+    width: 90%;
+  }
 }

@@ -5,11 +5,17 @@ import CryptoJS from "crypto-js";
 import { Tag } from "antd";
 import axios from "axios";
 import { API_BASE_URL } from "../api/api";
+import CvTemplate from "./cv";
+import ResumeCopy from "./resumecopy";
+import cv3 from "../photos/cv3.jpeg";
+import resumecopy2 from "../photos/resumecopy2.jpeg";
 
 const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
   const { employeeId, userType } = useParams();
   const [copyMessage, setCopyMessage] = useState("");
   const [userUrlString, setUserUrlString] = useState("");
+  const [displayCopyBtn, setDisplayCopyBtn] = useState(false);
+  const [activeComponent, setActiveComponent] = useState("main");
 
   const getFirstName = () => {
     // If the string is empty, generate a random 3-character string
@@ -22,7 +28,6 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
       }
       return randomString;
     }
-
     // Check if there's a space before the 3rd character
     const spaceIndex = loginEmployeeName.indexOf(" ");
     if (spaceIndex !== -1 && spaceIndex < 3) {
@@ -34,7 +39,6 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
     }
   };
   const firstName = getFirstName(loginEmployeeName);
-  const [displayCopyBtn, setDisplayCopyBtn] = useState(false);
 
   const getEncodeUrlString = async () => {
     try {
@@ -42,13 +46,13 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
         employeeId: employeeId,
         userType: `${userType}`,
       });
-      console.log(response);
       setUserUrlString(response.data.shortenUrl);
       setDisplayCopyBtn(true);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getEncodeUrlString();
   }, []);
@@ -77,21 +81,19 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
     }
   };
 
-  // Copy URL to clipboard
   const handleCopyLink = () => {
     if (navigator.clipboard) {
       navigator.clipboard
         .writeText(shareUrl)
         .then(() => {
           setCopyMessage("The link has been copied to your clipboard.");
-          setTimeout(() => setCopyMessage(""), 3000); // Clear message after 3 seconds
+          setTimeout(() => setCopyMessage(""), 3000);
         })
         .catch((err) => {
           console.error("Copy failed: ", err);
           setCopyMessage("Failed to copy the link. Please try again.");
         });
     } else {
-      // Fallback for older browsers
       const textArea = document.createElement("textarea");
       textArea.value = shareUrl;
       document.body.appendChild(textArea);
@@ -109,9 +111,13 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
     }
   };
 
+  const handleBackToMain = () => {
+    setActiveComponent("main");
+  };
+
   return (
     <div className="shareLink-mainDiv">
-      {displayCopyBtn && (
+      {displayCopyBtn && activeComponent === "main" && (
         <div className="shareLink-share-btn-Div">
           <h1
             style={{
@@ -140,20 +146,44 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
         </div>
       )}
 
-      <div className="shareLink-view-btn-Div">
-        <h1
-          style={{
-            color: "var(--sidebar-txt)",
-          }}
-        >
-          Resume Builder
-        </h1>
-        <button className="shareLink-view-btn" onClick={toggleResumeLink}>
-          Create
-        </button>
-        <span style={{ color: "var(--sidebar-txt)", fontSize: "14px" }}>
-          If the candidate doesn't have a resume, they can create one here.
-        </span>
+      <div className="shareLink-url-div-top-div">
+        {activeComponent === "main" && (
+          <div className="maincontainercvredisplay">
+            <h2 className="resumebuilderheadingdisplay">Resume Builder</h2>
+            <div className="gridcomponentdisplay">
+              <div className="cardcomponentdisplay">
+                <img src={cv3} alt="Resume" className="preview-imgdisplay" />
+                <button
+                  className="buttonmaincomponentdisplay"
+                  onClick={() => setActiveComponent("cv")}
+                >
+                  Create CV
+                </button>
+              </div>
+              <div className="cardcomponentdisplay">
+                <img
+                  src={resumecopy2}
+                  alt="CV"
+                  className="preview-imgdisplay"
+                />
+                <button
+                  className="buttonmaincomponentdisplay"
+                  onClick={() => setActiveComponent("resume")}
+                >
+                  Create Resume
+                </button>
+              </div>
+            </div>
+            <p className="textresumebulderdisplay">
+              If the candidate doesn't have a resume, they can create one here.
+            </p>
+          </div>
+        )}
+
+        {activeComponent === "cv" && <CvTemplate onClose={handleBackToMain} />}
+        {activeComponent === "resume" && (
+          <ResumeCopy onClose={handleBackToMain} />
+        )}
       </div>
     </div>
   );

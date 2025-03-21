@@ -129,6 +129,27 @@
   border: 1px solid var(--button-border-color);
 }
 
+@media screen and (max-width: 1200px) {
+  #dailyTarget {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  #dailyTarget,
+  #dailyPending {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  #dailyTarget,
+  #dailyAchieved,
+  #dailyPending {
+    display: none;
+  }
+}
+
 .daily-timeanddate {
   display: flex;
   align-items: center;
