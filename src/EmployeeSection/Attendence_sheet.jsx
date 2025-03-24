@@ -21,7 +21,7 @@ import {
 import "../EmployeeSection/Attendence_sheet.css";
 import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { Avatar, Checkbox, Divider } from "antd";
+import { Avatar, Button, Checkbox, Divider } from "antd";
 import { getUserImageFromApiForReport } from "../Reports/getUserImageFromApiForReport";
 import { Card, List, Modal, Skeleton } from "antd";
 import { ClearOutlined } from "@ant-design/icons";
@@ -813,8 +813,12 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-          if (filterRef.current && !filterRef.current.contains(event.target)) {
-            setActiveFilterOption(null); // Close filter dropdown when clicking outside
+          if (
+            filterRef.current &&
+            !filterRef.current.contains(event.target) &&
+            !event.target.closest(".filter-option button")
+          ) {
+            setActiveFilterOption(null);
           }
         };
     
@@ -1109,7 +1113,28 @@ const handleFilterOptionClick = (key) => {
 
     fetchAllImagesForTeamLeaders();
   }, [teamLeaders]);
-
+  const handleSelectAllNew = (role) => {
+    console.log(role);
+    console.log(selectedRole);
+    
+    
+    let newIds = [];
+  
+    if (role === "Manager") {
+      newIds = managersList.map(manager => manager.managerId);
+    } else if (role === "TeamLeader") {
+      newIds = teamLeadersList.map(leader => leader.teamLeaderId);
+    } else if (role === "Recruiters") {
+      newIds = recruitersList.map(recruiter => recruiter.employeeId);
+    }
+  
+    setSelectedIds(prevIds => {
+      // Keep previous selections if the role was already selected
+      return selectedRole === role ? [...prevIds, ...newIds] : newIds;
+    });
+  
+    setSelectedRole(role);
+  };
   useEffect(() => {
     const fetchAllImagesForRecruiters = async () => {
       const images = await Promise.all(
@@ -1348,10 +1373,16 @@ const handleFilterOptionClick = (key) => {
                             overflowY: "scroll",
                           }}
                           title={
-                            selectedRole === "Manager" &&
-                            selectedIds.length > 0 ? (
+                           
                               <div className="newclearbuttonaddclassattendanceform">
                                 <span className="attendanceform">Managers</span>
+                                {!managersList.every(manager => selectedIds.includes(manager.managerId)) && (
+  <Button color="primary" variant="outlined" onClick={() => handleSelectAllNew("Manager")}>
+    Select All
+  </Button>
+)}
+{ selectedRole === "Manager" &&
+                            selectedIds.length > 0 && (
                                 <button
                                   className="clearbuttonReportattendanceform"
                                   onClick={() =>
@@ -1360,11 +1391,11 @@ const handleFilterOptionClick = (key) => {
                                 >
                                   <ClearOutlined className="newcolorforcleariconattendanceform" />
                                 </button>
+                                 )
+                                }
                               </div>
-                            ) : (
-                              "Managers"
-                            )
-                          }
+                           
+}
                         >
                           <List
                             itemLayout="horizontal"
@@ -1457,12 +1488,18 @@ const handleFilterOptionClick = (key) => {
                                 overflowY: "scroll",
                               }}
                               title={
-                                selectedRole === "TeamLeader" &&
-                                selectedIds.length > 0 ? (
+                               
                                   <div className="newclearbuttonaddclassattendanceform">
                                     <span className="attendanceform">
                                       Team Leaders
                                     </span>
+                                    {!teamLeadersList.every(teamLeader => selectedIds.includes(teamLeader.teamLeaderId)) && (
+                                    <Button color="primary" variant="outlined" onClick={() => handleSelectAllNew("TeamLeader")}>
+                                      Select All
+                                    </Button>
+                                  )}
+                                  { selectedRole === "TeamLeader" &&
+                                selectedIds.length > 0 && (
                                     <button
                                       className="clearbuttonReportattendanceform"
                                       onClick={() =>
@@ -1471,11 +1508,10 @@ const handleFilterOptionClick = (key) => {
                                     >
                                       <ClearOutlined className="newcolorforcleariconattendanceform" />
                                     </button>
+                                     )
+                                    }
                                   </div>
-                                ) : (
-                                  "Team Leaders"
-                                )
-                              }
+                                  }
                             >
                               <List
                                 itemLayout="horizontal"
@@ -1583,12 +1619,18 @@ const handleFilterOptionClick = (key) => {
                                 overflowY: "scroll",
                               }}
                               title={
-                                selectedRole === "Recruiters" &&
-                                selectedIds.length > 0 ? (
+                              
                                   <div className="newclearbuttonaddclassattendanceform">
                                     <span className="attendanceform">
                                       Recruiters
                                     </span>
+                                    {!recruitersList.every(recruiter => selectedIds.includes(recruiter.employeeId)) && (
+                                    <Button color="primary" variant="outlined" onClick={() => handleSelectAllNew("Recruiters")}>
+                                      Select All
+                                    </Button>
+                                  )}
+                                  {  selectedRole === "Recruiters" &&
+                                selectedIds.length > 0 && (
                                     <button
                                       className="clearbuttonReportattendanceform"
                                       onClick={() =>
@@ -1597,11 +1639,10 @@ const handleFilterOptionClick = (key) => {
                                     >
                                       <ClearOutlined className="newcolorforcleariconattendanceform" />
                                     </button>
+                                     )
+                                    }
                                   </div>
-                                ) : (
-                                  "Recruiters"
-                                )
-                              }
+                                  }
                             >
                               <List
                                 itemLayout="horizontal"

@@ -277,8 +277,12 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
 
    useEffect(() => {
       const handleClickOutside = (event) => {
-        if (filterRef.current && !filterRef.current.contains(event.target)) {
-          setActiveFilterOption(null); // Close filter dropdown when clicking outside
+        if (
+          filterRef.current &&
+          !filterRef.current.contains(event.target) &&
+          !event.target.closest(".filter-option button") // Prevent closing when clicking inside the button
+        ) {
+          setActiveFilterOption(null);
         }
       };
   
