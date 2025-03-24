@@ -180,10 +180,10 @@ const App = () => {
             path="/157industries/:employeeId/:userType/candidate-form"
             element={<ApplicationForm1 loginEmployeeName={loginEmployeeName}  />}
           ></Route> */}
-          <Route
+          {/* <Route
             path="/tempRoute"
             element={<ApplicationForm1></ApplicationForm1>}
-          ></Route>
+          ></Route> */}
         </Routes>
       </BrowserRouter>
       <ToastContainer />

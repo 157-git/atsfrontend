@@ -67,6 +67,7 @@ import ApplicantForm from "../Applicant/applicantFrom";
 import ShareProfileData from "../TeamLeader/shareProfileData";
 import { tr } from "date-fns/locale";
 import InterviewForm1 from "../Help/InterviewForm1";
+import IssueOfferLetter from "../TeamLeader/IssueOfferLetter";
 
 const EmpDashboard = ({ userGroup }) => {
   const { userType } = useParams();
@@ -157,7 +158,8 @@ const EmpDashboard = ({ userGroup }) => {
   const [showAddTeamLeader, setShowAddTeamLeader] = useState(false);
   const [callFunction, setCallFunction] = useState(false);
   const [showApplicantForm, setShowApplicantForm] = useState(false);
-  const [showSharedProfile,setShowSharedProfile] = useState(false)
+  const [showSharedProfile,setShowSharedProfile] = useState(false);
+  const [showIssueLetter,setShowIssueLetter] = useState(false);
 
 
   // Arshad Attar Added this 30-10-2024
@@ -618,6 +620,10 @@ const EmpDashboard = ({ userGroup }) => {
     resetAllToggles();
     setShowSharedProfile(true)
   };
+  const toggleIssueLetter = ()=>{
+    resetAllToggles();
+    setShowIssueLetter(true)
+  };
   const [triggerForChildTwo, setTriggerForChildTwo] = useState(false);
   const handleSetRefresPropForDailyWork = ()=>{
     setTriggerForChildTwo((prev) => !prev);
@@ -698,6 +704,7 @@ const EmpDashboard = ({ userGroup }) => {
         toggeleAddTeamLeader={toggeleAddTeamLeader}
         toggeleAddManager={toggeleAddManager}
         toggleSharedProfiles={toggleSharedProfiles}
+        toggleIssueLetter={toggleIssueLetter}
       />
 
       <div className="empDash-main-content">
@@ -940,6 +947,9 @@ const EmpDashboard = ({ userGroup }) => {
         <div>{showAddManager && <AddManager loginEmployeeName={loginEmployeeName}></AddManager>}</div>
         <div>
           {showSharedProfile && <ShareProfileData></ShareProfileData>}
+        </div>
+        <div>
+        {showIssueLetter && <IssueOfferLetter></IssueOfferLetter>}
         </div>
       </div>
     </div>

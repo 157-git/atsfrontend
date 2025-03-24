@@ -378,6 +378,25 @@ const CallingTrackerForm = ({
         availabilityForInterview: "",
         interviewTime: "",
       }));
+
+      setErrors((prevErrors) => {
+        const newErrors = { ...prevErrors };
+        delete newErrors.requirementId;
+        delete newErrors.experienceYear;
+        delete newErrors.experienceMonth;
+        delete newErrors.relevantExperience;
+        delete newErrors.currentLocation;
+        delete newErrors.qualification;
+        delete newErrors.communicationRating;
+        delete newErrors.expectedCTCLakh;
+        delete newErrors.currentCTCLakh;
+        delete newErrors.holdingAnyOffer;
+        delete newErrors.finalStatus;
+        delete newErrors.noticePeriod;
+        return newErrors;
+      });
+    } else  if (name === "selectYesOrNo" && value !== "Interested") {
+
     }
 
     // Rajlaxmi Jagadale Added Email Validation Date-24-01-25 line263 to 312
@@ -437,6 +456,7 @@ const CallingTrackerForm = ({
       setStartPoint(value);
     }
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+    
   };
 
   const handleIncentiveChange = (e) => {
@@ -2405,10 +2425,10 @@ const CallingTrackerForm = ({
                         }}
                         style={{ width: "inherit" }}
                       />
-                      {callingTracker.selectYesOrNo === "Interested" &&
+                      {/* {callingTracker.selectYesOrNo === "Interested" &&
                         !lineUpData.yearOfPassing && (
                           <span className="requiredFieldStar">*</span>
-                        )}
+                        )} */}
                     </div>
                     {errorForYOP && (
                       <div className="error-message error-two-input-box">
