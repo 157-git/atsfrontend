@@ -140,3 +140,7 @@
   border-bottom: 1px dashed #007bff;
   cursor: text;
 }
+.newBoldClassForOfferLetter{
+  font-weight: bold;
+  color: black;
+}
