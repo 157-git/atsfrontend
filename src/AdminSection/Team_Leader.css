@@ -219,6 +219,7 @@ html::-webkit-scrollbar {
 /* Style the filter section */
 .filter-section {
   margin-top: 5px;
+  align-items: center;
 }
 
 /* Style the filter dropdowns */

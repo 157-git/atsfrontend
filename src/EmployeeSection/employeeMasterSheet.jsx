@@ -178,7 +178,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   const [displayShareConfirm, setDisplayShareConfirm] = useState(false);
   const [triggerFetch, setTriggerFetch] = useState(false);
   const filterRef = useRef(null);
-  
+
 
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_39
   const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
@@ -301,15 +301,35 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
     }
   };
 
-  const handleSelectAll = () => {
-    if (allSelected) {
-      setSelectedRows([]);
-    } else {
-      const allRowIds = data.map((item) => item[0]); // Assuming candidateId is the first element
-      setSelectedRows(allRowIds);
-    }
-    setAllSelected(!allSelected);
-  };
+  // const handleSelectAll = () => {
+  //   if (allSelected) {
+  //     setSelectedRows([]);
+  //   } else {
+  //     const allRowIds = data.map((item) => item[0]); // Assuming candidateId is the first element
+  //     setSelectedRows(allRowIds);
+  //   }
+  //   setAllSelected(!allSelected);
+  // };
+
+    const handleSelectAll = () => {
+      if (allSelected) {
+        setSelectedRows((prevSelectedRows) => 
+          prevSelectedRows.filter((id) => !data.map((item) => item[0]).includes(id))
+        );
+      } else {
+        const allRowIds = data.map((item) => item[0]);
+        setSelectedRows((prevSelectedRows) => [...new Set([...prevSelectedRows, ...allRowIds])]);
+      }
+      setAllSelected(!allSelected);
+    };
+  
+      const areAllRowsSelectedOnPage = data.every((item) =>
+          selectedRows.includes(item[0])
+        );
+      
+        useEffect(() => {
+          setAllSelected(areAllRowsSelectedOnPage);
+        }, [data, selectedRows]);  
 
   const handleSelectRow = (candidateId) => {
     setSelectedRows((prevSelectedRows) => {
@@ -537,6 +557,54 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
     });
   };
 
+
+  const clearAllFilters = () => {
+    setSelectedFilters({
+      candidateId: [],
+      alternateNumber: [],
+      callingFeedback: [],
+      candidateEmail: [],
+      candidateName: [],
+      communicationRating: [],
+      contactNumber: [],
+      currentLocation: [],
+      date: [],
+      jobDesignation: [],
+      recruiterName: [],
+      applyingCompany: [],
+      jobId: [],
+      interestedOrNot: [],
+      sourceName: [],
+      empId: [],
+      lineupId: [],
+      addedTime: [],
+      fullAddress: [],
+      incentive: [],
+      oldEmployeeId: [],
+      availabilityForInterview: [],
+      companyName: [],
+      DateOfBirth: [],
+      extraCertification: [],
+      feedBack: [],
+      finalStatus: [],
+      gender: [],
+      holdingAnyOffer: [],
+      messageForUser: [],
+      noticePeriod: [],
+      qualification: [],
+      yearOfPassout: [],
+      interviewTime: [],
+      currentCtcLack: [],
+      currentCtcThousand: [],
+      expectedCtcLack: [],
+      expectedCtcThousand: [],
+      experienceInMonth: [],
+      experienceInYear: [],
+      offerLatterMessage: [],
+      relevantExperience: [],
+    });
+    applyFilters(); // Reapply filters to reset the list
+  };
   // sahil karnekar added line 478 to 489 date 11-10-2024
   const toggleFilter = (field) => {
     setExpandedFilters((prev) => {
@@ -551,35 +619,39 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
     });
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (filterRef.current && !filterRef.current.contains(event.target)) {
-        setExpandedFilters({});
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+   useEffect(() => {
+     const handleClickOutside = (event) => {
+       if (
+         filterRef.current &&
+         !filterRef.current.contains(event.target) &&
+         !event.target.closest(".filter-option button") // Prevent closing when clicking inside the button
+       ) {
+         setExpandedFilters({});
+       }
+     };
+   
+     document.addEventListener("mousedown", handleClickOutside);
+     return () => {
+       document.removeEventListener("mousedown", handleClickOutside);
+     };
+   }, []);
 
   // this applyFilters method updated by sahil karnekar date 22-10-2024
   const applyFilters = (data) => {
     let filtered = data;
     // line 525 to 535 added by sahil karnekar date 30-10-2024
-    if (searchTerm.trim()) {
-      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    // if (searchTerm.trim()) {
+    //   const lowerCaseSearchTerm = searchTerm.toLowerCase();
 
-      filtered = filtered.filter((item) => {
-        return Object.keys(fieldIndexMap).some((field) => {
-          const fieldIndex = fieldIndexMap[field];
-          return String(item[fieldIndex])
-            .toLowerCase()
-            .includes(lowerCaseSearchTerm);
-        });
-      });
-    }
+    //   filtered = filtered.filter((item) => {
+    //     return Object.keys(fieldIndexMap).some((field) => {
+    //       const fieldIndex = fieldIndexMap[field];
+    //       return String(item[fieldIndex])
+    //         .toLowerCase()
+    //         .includes(lowerCaseSearchTerm);
+    //     });
+    //   });
+    // }
 
     Object.keys(selectedFilters).forEach((field) => {
       const fieldValues = selectedFilters[field];
@@ -776,18 +848,18 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                 <div className="filter-section">
                   {Object.keys(uniqueValues).map((field) => (
                     <div className="filter-option" key={field}>
-                     <button
-  className="white-Btn"
-  onClick={() => toggleFilter(field)}
-  style={{ 
-    cursor: "pointer",
-    backgroundColor: selectedFilters[field]?.length > 0 ? "gray" : "transparent", 
-  }}
->
-  {displayNameMap[field] || field}  
-  <span className="filter-icon">&#x25bc;</span> 
-  {selectedFilters[field]?.length > 0 ? ` ${selectedFilters[field].length}` : ""}
-</button>
+                      <button
+                        className="white-Btn"
+                        onClick={() => toggleFilter(field)}
+                        style={{
+                          cursor: "pointer",
+                          backgroundColor: selectedFilters[field]?.length > 0 ? "gray" : "transparent",
+                        }}
+                      >
+                        {displayNameMap[field] || field}
+                        <span className="filter-icon">&#x25bc;</span>
+                        {selectedFilters[field]?.length > 0 ? ` ${selectedFilters[field].length}` : ""}
+                      </button>
 
                       {expandedFilters[field] && (
                         <div className="city-filter" ref={filterRef}>
@@ -831,6 +903,13 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       )}
                     </div>
                   ))}
+                  <button 
+      className="lineUp-Filter-btn" 
+      onClick={clearAllFilters} 
+  
+    >
+      Clear Filters
+    </button>
                 </div>
               )}
             </div>
@@ -844,12 +923,20 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                   <tr className="attendancerows-head">
                     {!showShareButton && userType === "TeamLeader" ? (
                       <th className="attendanceheading">
-                        <input
+                        {/* <input
                           type="checkbox"
                           onChange={handleSelectAll}
                           checked={selectedRows.length === data.length}
                           name="selectAll"
-                        />
+                        /> */}
+                        <input
+                            type="checkbox"
+                            onChange={handleSelectAll}
+                            checked={
+                              data.every((row) => selectedRows.includes(row[0]))
+                            }
+                            name="selectAll"
+                          />
 
                       </th>
                     ) : null}

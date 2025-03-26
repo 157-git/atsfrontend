@@ -1746,10 +1746,14 @@ const handleCancelcloseshare = ()=>{
                           )}
 
                           <td className="tabledata">
+                            <button className="table-icon-div">
+
+                            
                             <i
                               onClick={() => handleUpdate(item.candidateId)}
                               className="fa-regular fa-pen-to-square"
                             ></i>
+                            </button>
                           </td>
                         </>
                       </tr>
