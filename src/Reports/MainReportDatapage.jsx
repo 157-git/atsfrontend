@@ -11,7 +11,7 @@ import "../Reports/MainReportDatapage.css";
 import { API_BASE_URL } from "../api/api";
 import { data } from "autoprefixer";
 import Loader from "../EmployeeSection/loader";
-import { Avatar, Card, List, Modal, Skeleton } from "antd";
+import { Avatar, Button, Card, List, Modal, Skeleton } from "antd";
 import { getUserImageFromApiForReport } from "./getUserImageFromApiForReport";
 import { ClearOutlined, DownOutlined, UsergroupAddOutlined } from '@ant-design/icons';
 
@@ -41,7 +41,7 @@ const MonthReport = ({ loginEmployeeName }) => {
   const [activeManager, setActiveManager] = useState(null); // Tracks active manager dropdown
   const [activeTeamLeader, setActiveTeamLeader] = useState(null); // Tracks active team leader dropdown
   const [managerToTeamLeaders, setManagerToTeamLeaders] = useState({}); // Maps managerId to teamLeaderIds
-const [teamLeaderToRecruiters, setTeamLeaderToRecruiters] = useState({}); // Maps teamLeaderId to recruiterIds
+  const [teamLeaderToRecruiters, setTeamLeaderToRecruiters] = useState({}); // Maps teamLeaderId to recruiterIds
 
   const toggleManager = (managerId) => {
     if (activeManager === managerId) {
@@ -154,7 +154,20 @@ const [teamLeaderToRecruiters, setTeamLeaderToRecruiters] = useState({}); // Map
     return false;
   };
 
-  const handleOk = () => {
+  const handleOk = async() => {
+    setLoading(true);
+
+    try {
+       const response = await axios.get(
+        `${API_BASE_URL}/report-count/${selectedIds.join(",")}/${selectedRole}/${startDate1}/${endDate1}`
+      );
+      setReportDataDatewise(response.data);
+      setOpenReport(true);
+    } catch (error) {
+      console.error("Error fetching report data:", error);
+    } finally {
+      setLoading(false); // Ensures loading is disabled even if API fails
+    }
     setDisplayModalContainer(false);
   };
   const handleCancel = () => {
@@ -390,6 +403,31 @@ const [teamLeaderToRecruiters, setTeamLeaderToRecruiters] = useState({}); // Map
     }
   }
 
+
+  const handleSelectAllNew = (role) => {
+    console.log(role);
+    console.log(selectedRole);
+    
+    
+    let newIds = [];
+  
+    if (role === "Manager") {
+      newIds = managersList.map(manager => manager.managerId);
+    } else if (role === "TeamLeader") {
+      newIds = teamLeadersList.map(leader => leader.teamLeaderId);
+    } else if (role === "Recruiters") {
+      newIds = recruitersList.map(recruiter => recruiter.employeeId);
+    }
+  
+    setSelectedIds(prevIds => {
+      // Keep previous selections if the role was already selected
+      return selectedRole === role ? [...prevIds, ...newIds] : newIds;
+    });
+  
+    setSelectedRole(role);
+  };
+  
+
   return (
     <>
       <div className="listofButtons11">
@@ -455,14 +493,14 @@ const [teamLeaderToRecruiters, setTeamLeaderToRecruiters] = useState({}); // Map
         <div className="tracker-date-report-option">
           <div className="histry-date-div">
             {displayMoreButton && (
-             <button
-             className={`daily-tr-btn ${selectedIds.length > 0 ? "newclassforhighlightbutton" : ""}`}
-             onClick={handleDisplayManagers}
-           >
-             <UsergroupAddOutlined />
-             <DownOutlined />
-           </button>
-           
+              <button
+                className={`daily-tr-btn ${selectedIds.length > 0 ? "newclassforhighlightbutton" : ""}`}
+                onClick={handleDisplayManagers}
+              >
+                <UsergroupAddOutlined />
+                <DownOutlined />
+              </button>
+
             )}
 
             <label className="PI-radio-label"
@@ -599,29 +637,37 @@ const [teamLeaderToRecruiters, setTeamLeaderToRecruiters] = useState({}); // Map
                     overflowY: "scroll",
                   }}
                   title={
-                    selectedRole === "Manager" && selectedIds.length > 0 ? ( // Conditional rendering
-                      <div className="newclearbuttonaddclass">
-                        <span>Managers</span>
+                    <div className="newclearbuttonaddclass">
+                      <span>Managers</span>
+                      {!managersList.every(manager => selectedIds.includes(manager.managerId)) && (
+  <Button color="primary" variant="outlined" onClick={() => handleSelectAllNew("Manager")}>
+    Select All
+  </Button>
+)}
+
+                      {selectedRole === "Manager" && selectedIds.length > 0 && (
                         <button
                           className="clearbuttonReport"
                           onClick={() => handleClearSelection("Managers")}
                         >
                           <ClearOutlined className="newcolorforclearicon" />
                         </button>
-                      </div>
-                    ) : (
-                      "Managers"
-                    )
+                      )}
+
+                    </div>
                   }
                 >
+
+
+
                   <List
                     itemLayout="horizontal"
                     dataSource={managersList}
                     renderItem={(item, index) => (
                       <List.Item
-                      className={
-                        hasSelectedChildren(item.managerId, "Manager") ? "highlight-item" : ""
-                      }
+                        className={
+                          hasSelectedChildren(item.managerId, "Manager") ? "highlight-item" : ""
+                        }
                       >
                         <input
                           className="managersTeamRecruitersInputMargin"
@@ -695,19 +741,23 @@ const [teamLeaderToRecruiters, setTeamLeaderToRecruiters] = useState({}); // Map
                         overflowY: "scroll",
                       }}
                       title={
-                        selectedRole === "TeamLeader" && selectedIds.length > 0 ? ( // Conditional rendering
-                          <div className="newclearbuttonaddclass">
-                            <span>Team Leaders</span>
+
+                        <div className="newclearbuttonaddclass">
+                          <span>Team Leaders</span>
+                          {!teamLeadersList.every(teamLeader => selectedIds.includes(teamLeader.teamLeaderId)) && (
+  <Button color="primary" variant="outlined" onClick={() => handleSelectAllNew("TeamLeader")}>
+    Select All
+  </Button>
+)}
+                          {selectedRole === "TeamLeader" && selectedIds.length > 0 && (
                             <button
                               className="clearbuttonReport"
                               onClick={() => handleClearSelection("Team Leaders")}
                             >
                               <ClearOutlined className="newcolorforclearicon" />
                             </button>
-                          </div>
-                        ) : (
-                          "Team Leaders"
-                        )
+                          )}
+                        </div>
                       }
 
                     >
@@ -716,9 +766,9 @@ const [teamLeaderToRecruiters, setTeamLeaderToRecruiters] = useState({}); // Map
                         dataSource={teamLeadersList}
                         renderItem={(teamLeader, index) => (
                           <List.Item
-                          className={
-                            hasSelectedChildren(teamLeader.teamLeaderId, "TeamLeader") ? "highlight-item" : ""
-                          }
+                            className={
+                              hasSelectedChildren(teamLeader.teamLeaderId, "TeamLeader") ? "highlight-item" : ""
+                            }
                           >
                             <input
                               className="managersTeamRecruitersInputMargin"
@@ -794,20 +844,29 @@ const [teamLeaderToRecruiters, setTeamLeaderToRecruiters] = useState({}); // Map
                         overflowY: "scroll",
                       }}
                       title={
-                        selectedRole === "Recruiters" && selectedIds.length > 0 ? ( // Conditional rendering
-                          <div className="newclearbuttonaddclass">
-                            <span>Recruiters</span>
-                            <button
-                              className="clearbuttonReport"
-                              onClick={() => handleClearSelection("Recruiters")}
-                            >
-                              <ClearOutlined className="newcolorforclearicon" />
 
-                            </button>
-                          </div>
-                        ) : (
-                          "Recruiters"
-                        )
+                        <div className="newclearbuttonaddclass">
+                          <span>Recruiters</span>
+                          {!recruitersList.every(recruiter => selectedIds.includes(recruiter.employeeId)) && (
+  <Button color="primary" variant="outlined" onClick={() => handleSelectAllNew("Recruiters")}>
+    Select All
+  </Button>
+)}
+
+                          {selectedRole === "Recruiters" && selectedIds.length > 0 && ( // Conditional rendering
+                            <>
+                              <button
+                                className="clearbuttonReport"
+                                onClick={() => handleClearSelection("Recruiters")}
+                              >
+                                <ClearOutlined className="newcolorforclearicon" />
+
+                              </button>
+                            </>
+                          )
+                        }
+                            
+                        </div>
                       }
                     >
                       <List

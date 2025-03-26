@@ -334,9 +334,11 @@ console.log(errors);
         : callingTracker.selectYesOrNo !== "Interested";
         
 
+    // Rajlaxmi jagadale update taht code
     if (
       (name === "candidateName" || name === "currentLocation") &&
-      !/^[a-zA-Z\s]*$/.test(value)
+      value.length > 0 &&
+      (!/^[A-Za-z][A-Za-z\s]*$/.test(value) || /^\s/.test(value))
     ) {
       return;
     }
@@ -370,10 +372,10 @@ console.log(errors);
 
       // Check if the value is within the required range
       const year = parseInt(value, 10);
-      if (value.length === 4 && (year < 1947 || year > 2025)) {
+      if (value.length === 4 && (year < 1947 || year > 2027)) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          yearOfPassing: "Year of Passing must be between 1947 and 2025.",
+          yearOfPassing: "Year of Passing must be between 1947 and 2027.",
         }));
         return; // Prevent updating state if the year is out of range
       } else {
@@ -1524,7 +1526,9 @@ console.log(callingTracker);
                       value={callingTracker?.requirementId || ""}
                       onChange={handleRequirementChange}
                       //  required={callingTracker.selectYesOrNo === "Interested"}
-                      style={{ width: "80%" }}
+                      style={{ width: "80%", 
+                        flexDirection:"none"
+                       }}
                     >
                       <option value="">Select Job Id</option>
                       {requirementOptions.map((option) => (
@@ -2200,7 +2204,7 @@ console.log(callingTracker);
                       style={{ width: "100%" }}
                       type="number"
                       min="1947"
-                      max="2025"
+                      max="2027"
                       name="lineUp.yearOfPassing"
                       placeholder="Year Of PassOut"
                       value={callingTracker?.lineUp.yearOfPassing || ""}

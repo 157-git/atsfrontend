@@ -1,0 +1,138 @@
+/* Rajlaxmi jagadale Added that css date 18/03/2025 */
+.containerofferletter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .offer-offerletter {
+    width: 210mm;
+    min-height: auto;
+    margin: 0 auto;
+    padding: 10mm;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    background: #fff;
+    box-sizing: border-box;
+    page-break-after: always;
+    /* position: relative; */
+    margin-top: 10px;
+  }
+  
+  .titleofferletter {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .dateofferletter {
+    text-align: left;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  
+  .boldofferletter {
+    font-weight: bold;
+  }
+  
+  .salary-tableofferletter {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+  }
+  
+  .salary-tableofferletterth,
+  .salary-tableofferlettertd {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: left;
+  }
+  
+  .salary-tableofferletterth {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .salary-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .salary-table tbody tr:hover {
+    background-color: #e9ecef;
+  }
+  
+  
+  
+  .download-btn-containerofferletter {
+    margin-top: 30px;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .download-btnofferletter{
+    background-color: #a3a6a3;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  .download-btnofferletter:hover {
+    background-color: #9ba39c;
+  }
+  
+  .download-btnofferletter:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .page-breakofferletter {
+    display: none;
+  }
+  
+  @media print {
+    .offer-offerletter {
+      border: none;
+      padding: 0;
+      margin: 0;
+      width: 100%;
+      height: 100%;
+    }
+  
+    .page-breakofferletter {
+      display: block;
+      page-break-before: always;
+    }
+  
+    .download-btnofferletter-containerofferletter {
+      display: none;
+    }
+  }
+  /* Rajlaxmi jagadale added that code date 20/03/2025 */
+  .highlight-rowofferletter {
+    background-color: #ffffcc;
+  }
+  
+  .editable-span {
+    display: inline-block;
+    padding: 0 5px;
+    border-bottom: 1px dashed #007bff;
+    cursor: text;
+  }
+  
+  .editable-highlightofferletter {
+    background-color: #ffff9e;
+    padding: 0 2px;
+    border-bottom: 1px dashed #007bff;
+    cursor: text;
+  }
+  
+  

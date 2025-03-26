@@ -13,7 +13,7 @@ import {
   Legend,
 } from "chart.js";
 import { ToastContainer, toast } from "react-toastify";
-import { Avatar } from "antd";
+import { Avatar, Button } from "antd";
 import { getUserImageFromApiForReport } from "../Reports/getUserImageFromApiForReport";
 
 import {
@@ -774,6 +774,30 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
 
     setStartDate(format(start, "yyyy-MM-dd"));
     setEndDate(format(end, "yyyy-MM-dd"));
+  };
+
+
+  const handleSelectAllNew = (role) => {
+    console.log(role);
+    console.log(selectedRole);
+    
+    
+    let newIds = [];
+  
+    if (role === "Manager") {
+      newIds = managersList.map(manager => manager.managerId);
+    } else if (role === "TeamLeader") {
+      newIds = teamLeadersList.map(leader => leader.teamLeaderId);
+    } else if (role === "Recruiters") {
+      newIds = recruitersList.map(recruiter => recruiter.employeeId);
+    }
+  
+    setSelectedIds(prevIds => {
+      // Keep previous selections if the role was already selected
+      return selectedRole === role ? [...prevIds, ...newIds] : newIds;
+    });
+  
+    setSelectedRole(role);
   };
 
   const handleCustomStartDateChange = (event) => {
@@ -1741,20 +1765,27 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
                           overflowY: "scroll",
                         }}
                         title={
-                          selectedRole === "Manager" &&
-                          selectedIds.length > 0 ? ( // Conditional rendering
+                         
                             <div className="newclearbuttonaddclassteamperformance">
                               <span>Managers</span>
+                              {!managersList.every(manager => selectedIds.includes(manager.managerId)) && (
+  <Button color="primary" variant="outlined" onClick={() => handleSelectAllNew("Manager")}>
+    Select All
+  </Button>
+)}
+{
+   selectedRole === "Manager" &&
+   selectedIds.length > 0 && ( 
                               <button
                                 className="clearbuttonReportteamperformance"
                                 onClick={() => handleClearSelection("Managers")}
                               >
                                 <ClearOutlined className="newcolorforcleariconteamperformance" />
                               </button>
+   )
+  }
                             </div>
-                          ) : (
-                            "Managers"
-                          )
+                          
                         }
                       >
                         <List
@@ -1853,10 +1884,16 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
                               overflowY: "scroll",
                             }}
                             title={
-                              selectedRole === "TeamLeader" &&
-                              selectedIds.length > 0 ? ( // Conditional rendering
+                          
                                 <div className="newclearbuttonaddclassteamperformance">
                                   <span>Team Leaders</span>
+                                  {!teamLeadersList.every(teamLeader => selectedIds.includes(teamLeader.teamLeaderId)) && (
+                                    <Button color="primary" variant="outlined" onClick={() => handleSelectAllNew("TeamLeader")}>
+                                      Select All
+                                    </Button>
+                                  )}
+                                  {    selectedRole === "TeamLeader" &&
+                              selectedIds.length > 0 && ( // Conditional rendering
                                   <button
                                     className="clearbuttonReportteamperformance"
                                     onClick={() =>
@@ -1865,11 +1902,10 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
                                   >
                                     <ClearOutlined className="newcolorforcleariconteamperformance" />
                                   </button>
+                                   ) 
+                                  }
                                 </div>
-                              ) : (
-                                "Team Leaders"
-                              )
-                            }
+                                }
                           >
                             <List
                               itemLayout="horizontal"
@@ -1979,10 +2015,16 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
                               overflowY: "scroll",
                             }}
                             title={
-                              selectedRole === "Recruiters" &&
-                              selectedIds.length > 0 ? ( // Conditional rendering
+                            
                                 <div className="newclearbuttonaddclassteamperformance">
                                   <span>Recruiters</span>
+                                   {!recruitersList.every(recruiter => selectedIds.includes(recruiter.employeeId)) && (
+                                    <Button color="primary" variant="outlined" onClick={() => handleSelectAllNew("Recruiters")}>
+                                      Select All
+                                    </Button>
+                                  )}
+                                  {  selectedRole === "Recruiters" &&
+                              selectedIds.length > 0 && ( // Conditional rendering
                                   <button
                                     className="clearbuttonReportteamperformance"
                                     onClick={() =>
@@ -1991,11 +2033,10 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
                                   >
                                     <ClearOutlined className="newcolorforcleariconteamperformance" />
                                   </button>
+                                   )
+                                  }
                                 </div>
-                              ) : (
-                                "Recruiters"
-                              )
-                            }
+                                }
                           >
                             <List
                               itemLayout="horizontal"

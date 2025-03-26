@@ -114,6 +114,7 @@ function Sidebar({
   toggeleAddTeamLeader,
   toggeleAddManager,
   toggleSharedProfiles,
+  toggleIssueLetter
 }) {
   const [error, setError] = useState("");
   const [isActive, setIsActive] = useState(false);
@@ -446,6 +447,7 @@ function Sidebar({
     "sendCandidate",
     "updateResponse",
     "sharedProfiles",
+    "issueLetter",
     "payRoll",
     "questionPaper",
     "scheduleinterview",
@@ -457,6 +459,7 @@ function Sidebar({
     "sendCandidate",
     "updateResponse",
     "sharedProfiles",
+    "issueLetter",
     "payRoll",
     "scheduleinterview",
     "billing",
@@ -472,6 +475,7 @@ function Sidebar({
     "sendCandidate",
     "updateResponse",
     "sharedProfiles",
+    "issueLetter",
     "payRoll",
     "scheduleinterview",
     "billing",
@@ -1267,6 +1271,23 @@ function Sidebar({
 
                           <li
                             onClick={handleButtonClick(
+                              "issueLetter",
+                              toggleIssueLetter
+                            )}
+                            className={
+                              activeButton === "issueLetter" ? "active" : ""
+                            }
+                            style={{ marginLeft: "10px" }}
+                          >
+                            <a href="#">
+                              <span className="sidebar-text">
+                                Issue Letter
+                              </span>
+                            </a>
+                          </li>
+
+                          <li
+                            onClick={handleButtonClick(
                               "payRoll",
                               togglePayRoll
                             )}
@@ -1422,6 +1443,23 @@ function Sidebar({
                           <a href="#">
                             <span className="sidebar-text">
                               Shared Profiles
+                            </span>
+                          </a>
+                        </li>
+
+                        <li
+                          onClick={handleButtonClick(
+                            "issueLetter",
+                            toggleIssueLetter
+                          )}
+                          className={
+                            activeButton === "issueLetter" ? "active" : ""
+                          }
+                          style={{ marginLeft: "10px" }}
+                        >
+                          <a href="#">
+                            <span className="sidebar-text">
+                              Issue Letter
                             </span>
                           </a>
                         </li>
