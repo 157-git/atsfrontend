@@ -191,8 +191,8 @@ const OfferLetter = () => {
     <div className="offer-letter-container">
       <div className="offer-letter" ref={(el) => addPageRef(el, 0)}>
         {/* Heading Should be Changed While final deployment */}
-        <h2 className="title">APPOINTMENT LETTER </h2> 
-        <b>
+        <h2 className="title newBoldClassForOfferLetter">APPOINTMENT LETTER </h2> 
+        <span className="newBoldClassForOfferLetter">
           {" "}
           <p className="date">
             <EditableSpan field="date" />
@@ -200,33 +200,33 @@ const OfferLetter = () => {
           <p>
             <EditableSpan field="location" />
           </p>
-        </b>
+        </span>
        
-        <p>
+        <span className="newBoldClassForOfferLetter">
           <EditableSpan field="name" />,
-        </p>
+        </span>
         <p>
-          We are pleased to share with you an appointment letter to join <EditableSpan field="companyName" />
+          We are pleased to share with you an appointment letter to join <span className="newBoldClassForOfferLetter"> <EditableSpan field="companyName" /></span>
         </p>
         <p>
           As previously agreed, you have been appointed at{" "}
-          <b>
+          <span className="newBoldClassForOfferLetter">
             <EditableSpan field="companyNames" />
-          </b>
-          , <EditableSpan field="location" />, for the position of{" "}
-          <b>
+          </span>
+          , <span className="newBoldClassForOfferLetter"> <EditableSpan field="location" /> </span>, for the position of{" "}
+          <span className="newBoldClassForOfferLetter">
             <EditableSpan field="position" />
-          </b>
+          </span>
           , with a
-          <b>
+          <span className="newBoldClassForOfferLetter">
             {" "}
             tentative start date of <EditableSpan field="startDate" />
-          </b>
+          </span>
           , contingent upon the successful completion of your background check. You are requested to report to the
           specified address on{" "}
-          <b>
+          <span className="newBoldClassForOfferLetter">
             <EditableSpan field="specificadddate" />
-          </b>
+          </span>
           in Pune.In case of any changes to the joining date, you will be informed via email.
         </p>
         <p>
@@ -244,7 +244,7 @@ const OfferLetter = () => {
           all applicable regulations and policies, form the basis of your employment.
         </p>
         <p>
-          Your total annual CTC is <EditableSpan field="salary" />
+          Your total annual CTC is <span className="newBoldClassForOfferLetter"> <EditableSpan field="salary" /> </span>
           Your salary date will commence upon client onboarding..
         </p>
         <p>Apart from Provident Fund and Professional Tax, no other deductions will be made from our end.</p>
@@ -264,44 +264,44 @@ const OfferLetter = () => {
         <p>Please sign all pages of the offer letter to indicate your acceptance.</p>
         <p>We would like to extend a warm welcome and wish you a rewarding career with us!</p>
         <p>Best wishes,</p>
-        <b>
+        <span className="newBoldClassForOfferLetter">
           <EditableSpan field="directorname" />
-        </b>
+        </span>
         <p>
-          <b>Director</b>
+        <span className="newBoldClassForOfferLetter"> Director</span>
         </p>
         <p>
-          <b>
+        <span className="newBoldClassForOfferLetter">
             <EditableSpan field="companyName" />
-          </b>
+          </span>
         </p>
       </div>
 
       <div className="offer-letter" ref={(el) => addPageRef(el, 1)}>
-        <h3 className="title">TERMS AND CONDITIONS OF EMPLOYMENT</h3>
+        <h3 className="title newBoldClassForOfferLetter">TERMS AND CONDITIONS OF EMPLOYMENT</h3>
         <p>
-          <b>1. Commencement of employment</b>
+        <span className="newBoldClassForOfferLetter">1. Commencement of employment</span>
         </p>
         <p>
           You shall report to work at the Company's premises on{" "}
-          <b>
+          <span className="newBoldClassForOfferLetter">
             <EditableSpan field="startDate" />, or as informed over the call
-          </b>
+          </span>
           . In case you fail to join the company by the aforesaid date, you would be breaching the terms & conditions
           governing your employment with the company.
         </p>
         <p>
-          <b>2. Designation & Location</b>
+        <span className="newBoldClassForOfferLetter">2. Designation & Location</span>
         </p>
         <p>
           You will be designated as a{" "}
-          <b>
+          <span className="newBoldClassForOfferLetter">
             <EditableSpan field="position" />
-          </b>{" "}
-          with <EditableSpan field="companyName" />,<b>India</b>.
+          </span>{" "}
+          with    <span className="newBoldClassForOfferLetter"><EditableSpan field="companyName" /></span>,<b>India</b>.
         </p>
         <p>
-          <b>3. No other job commitment:</b>
+        <span className="newBoldClassForOfferLetter">3. No other job commitment:</span>
         </p>
         <p>
           a.You accept that you are being hired in accordance with the clayuses and terms set forth in this Agreement,
@@ -312,8 +312,8 @@ const OfferLetter = () => {
           breach in this regard.
         </p>
         <p>
-          b. While you are employed with <EditableSpan field="companyName" />, you will not engage in any other
-          employment, consulting, or other business activity <EditableSpan field="job" /> that would create a
+          b. While you are employed with    <span className="newBoldClassForOfferLetter"><EditableSpan field="companyName" /></span>, you will not engage in any other
+          employment, consulting, or other business activity    <span className="newBoldClassForOfferLetter"> <EditableSpan field="job" /></span> that would create a
           conflict of interest with the company. By signing this letter of agreement, you confirm that you have no
           contractual commitments or other legal obligations that would prohibit you from performing your duties for the
           Company.
@@ -323,14 +323,14 @@ const OfferLetter = () => {
           benefit in Client's line of business.
         </p>
         <p>
-          <b>4. Job Duties:</b>
+        <span className="newBoldClassForOfferLetter">4. Job Duties:</span>
         </p>
         <p>
           You agree to perform the assigned job and to do whatever else the Company instructs you to do, and to complete
           any assigned training.
         </p>
         <p>
-          <b>5. Working Hours:</b>
+        <span className="newBoldClassForOfferLetter">5. Working Hours:</span>
         </p>
         <p>
           You will be required to work as per the client's working hours. Further, depending on the workload and
@@ -338,39 +338,39 @@ const OfferLetter = () => {
           may also be expected to travel to other locations at times outside of your official hours of work.
         </p>
         <p>
-          <b>6. Probation period:</b>
+        <span className="newBoldClassForOfferLetter">6. Probation period:</span>
         </p>
         <p>
-          Your employment will be subject to a <EditableSpan field="month" />  probationary period with{" "}
-          <EditableSpan field="noticeperiod" /> of notice period. If your performance is not satisfactory, or if
+          Your employment will be subject to a    <span className="newBoldClassForOfferLetter"><EditableSpan field="month" /> </span> probationary period with{" "}
+          <span className="newBoldClassForOfferLetter"> <EditableSpan field="noticeperiod" /> </span> of notice period. If your performance is not satisfactory, or if
           any compliance issues arise while you are working, or any unethical practices are observed,
-          <EditableSpan field="companyName" /> may terminate your employment without any notice period.
+          <span className="newBoldClassForOfferLetter"> <EditableSpan field="companyName" /> </span> may terminate your employment without any notice period.
         </p>
         <p>
-          After the probation period, you will still be required to serve a <EditableSpan field="noticeperiod" />
+          After the probation period, you will still be required to serve a    <span className="newBoldClassForOfferLetter"><EditableSpan field="noticeperiod" /></span>
            notice period if you wish to leave the organization.
         </p>
         <p>
-          <b>7. Buy Out Notice period:</b>
+        <span className="newBoldClassForOfferLetter">7. Buy Out Notice period:</span>
         </p>
         <p>
-          If you are eligible for a buyout option in your current organization, <EditableSpan field="companyName" />{" "}
+          If you are eligible for a buyout option in your current organization,    <span className="newBoldClassForOfferLetter"><EditableSpan field="companyName" /></span>{" "}
           will not be liable to pay any amount for this. In this scenario, if you decide to terminate your employment at
-          any time during your tenure with <EditableSpan field="companyName" />, you will have to bear the buyout amount
-          yourself, and <EditableSpan field="companyName" /> will not be responsible for any payment in this case.
+          any time during your tenure with    <span className="newBoldClassForOfferLetter"><EditableSpan field="companyName" /></span>, you will have to bear the buyout amount
+          yourself, and    <span className="newBoldClassForOfferLetter"><EditableSpan field="companyName" /> </span> will not be responsible for any payment in this case.
         </p>
       </div>
 
       <div className="offer-letter" ref={(el) => addPageRef(el, 2)}>
         <p>
-          <b>8. Appraisals:</b>
+        <span className="newBoldClassForOfferLetter">8. Appraisals:</span>
         </p>
         <p>
           Your performance will be evaluated annually and based on your manager's feedback you may become eligible for
           an increment.
         </p>
         <p>
-          <b>9. Ownership of work:</b>
+        <span className="newBoldClassForOfferLetter">9. Ownership of work:</span>
         </p>
         <p>
           Any product created, service rendered during the course of your employment, including but not limited to any
@@ -380,27 +380,27 @@ const OfferLetter = () => {
           to the company and will remain the sole property of the company.
         </p>
         <p>
-          <b>10. Leave details:</b>
+        <span className="newBoldClassForOfferLetter">10. Leave details:</span>
         </p>
         <p>
-          Annual Leave - You will be entitled to paid leave from <EditableSpan field="Infosys" /> each calendar year, subject to <EditableSpan field="policy" />
+          Annual Leave - You will be entitled to paid leave from    <span className="newBoldClassForOfferLetter"><EditableSpan field="Infosys" /> </span> each calendar year, subject to    <span className="newBoldClassForOfferLetter"><EditableSpan field="policy" /></span>
         </p>
         <p>
-          <b>11. Termination of employment:</b>
+        <span className="newBoldClassForOfferLetter">11. Termination of employment:</span>
         </p>
         <p>
-          a. <b>Termination with Notice</b> - You are required to give advance notice of{" "}
-          <EditableSpan field="noticeperiod" /> in writing over email as your resignation from Employment. In the
+          a.    <span className="newBoldClassForOfferLetter">Termination with Notice</span> - You are required to give advance notice of{" "}
+          <span className="newBoldClassForOfferLetter"><EditableSpan field="noticeperiod" /></span> in writing over email as your resignation from Employment. In the
           event of separation, the notice period applicable to the organization as well as the employee is{" "}
-          <EditableSpan field="noticeperiod" />.
+          <span className="newBoldClassForOfferLetter"><EditableSpan field="noticeperiod" /></span>.
         </p>
         <p>
-          b. <b>Termination without Notice</b> - The company may terminate your employment immediately and without any
+          b.    <span className="newBoldClassForOfferLetter">Termination without Notice</span> - The company may terminate your employment immediately and without any
           notice due to serious misconduct or serious breach of employment rules. In that case, you are not eligible for
-          any kind of pay from <EditableSpan field="companyName" />.
+          any kind of pay from    <span className="newBoldClassForOfferLetter"><EditableSpan field="companyName" /></span>.
         </p>
         <p>
-          <b>12. Confidentiality:</b>
+        <span className="newBoldClassForOfferLetter">12. Confidentiality:</span>
         </p>
         <p>
           During your employment with the Company, you may learn trade secrets or confidential information, which
@@ -410,14 +410,14 @@ const OfferLetter = () => {
         </p>
         <p>
           You also agree that details of your employment contract are strictly confidential between you and{" "}
-          <EditableSpan field="companyName" />. If you are unsure about the confidential nature of specific information,
+          <span className="newBoldClassForOfferLetter"><EditableSpan field="companyName" /></span>. If you are unsure about the confidential nature of specific information,
           you must seek your manager's advice and clarification.
         </p>
         <p>
-          <b>13. Non-Competition and Non-Solicitation:</b>
+        <span className="newBoldClassForOfferLetter">13. Non-Competition and Non-Solicitation:</span>
         </p>
         <p>
-          During the period until one <EditableSpan field="year" /> following the termination of your employment for whatever reason (which
+          During the period until one    <span className="newBoldClassForOfferLetter"><EditableSpan field="year" /></span> following the termination of your employment for whatever reason (which
           time period shall be extended by the length of time during which you are in violation of this paragraph), you
           shall not directly or indirectly solicit the business (or otherwise deal in a manner adverse to the Company
           with) or provide any software engineering, consulting or programming services to any customer or end-user of
@@ -426,7 +426,7 @@ const OfferLetter = () => {
           with) any employee of the Company or induced such employee to terminate his or her employment.
         </p>
         <p>
-          During the term if you are assigned with CLIENTS and for a period of <EditableSpan field="months" /> after termination or expiration
+          During the term if you are assigned with CLIENTS and for a period of    <span className="newBoldClassForOfferLetter"><EditableSpan field="months" /></span> after termination or expiration
           of your employment with the Company, you agree that you will not in any manner, either on your own behalf or
           on behalf of any other person or entity, directly or indirectly compete with COMPANY by soliciting the CLIENT
           in any department or any location globally for any opportunities.
@@ -436,7 +436,7 @@ const OfferLetter = () => {
 
       <div className="offer-letter" ref={(el) => addPageRef(el, 3)}>
         <p>
-          <b>14. Safekeeping and Return of company property:</b>
+        <span className="newBoldClassForOfferLetter">14. Safekeeping and Return of company property:</span>
         </p>
         <p>
           You will be responsible for the safekeeping and return in good condition of all the Company's properties,
@@ -445,39 +445,39 @@ const OfferLetter = () => {
           them to the Company's satisfaction.
         </p>
         <p>
-          <b>15. Intellectual Property Rights:</b>
+        <span className="newBoldClassForOfferLetter">15. Intellectual Property Rights:</span>
         </p>
         <p>
-          You hereby agree that <EditableSpan field="companyName" /> shall own, on a perpetual, irrevocable, exclusive,
+          You hereby agree that    <span className="newBoldClassForOfferLetter"><EditableSpan field="companyName" /></span> shall own, on a perpetual, irrevocable, exclusive,
           royalty-free, fully paid up, and worldwide basis, all right, title, and interest in, to, and under, including
           all Intellectual Property Rights throughout the world therein, all work product, both tangible and intangible,
           performed for the CLIENT, its Affiliates, or its or their clients or customers.
         </p>
         <p>
           You acknowledge and agree that you may use the Client's Materials solely for the benefit of{" "}
-          <EditableSpan field="companyName" />, its Affiliates, and the Services Recipients pursuant to this Agreement.
+          <span className="newBoldClassForOfferLetter"><EditableSpan field="companyName" /></span>, its Affiliates, and the Services Recipients pursuant to this Agreement.
         </p>
         <p>
-          <b>16. Ownership of Client Data:</b>
+        <span className="newBoldClassForOfferLetter">16. Ownership of Client Data:</span>
         </p>
         <p>
-          All Client Data is and shall remain the sole and exclusive property of <EditableSpan field="companyName" /> /
+          All Client Data is and shall remain the sole and exclusive property of    <span className="newBoldClassForOfferLetter"><EditableSpan field="companyName" /></span> /
           Client. Without
-          <EditableSpan field="companyName" />
+          <span className="newBoldClassForOfferLetter"><EditableSpan field="companyName" /></span>
           's approval (in its sole discretion), Contractor shall not use Client Data for any purpose other than to
           provide the Services.
         </p>
         <p>
-          <b>17. Rights Granted:</b>
+        <span className="newBoldClassForOfferLetter">17. Rights Granted:</span>
         </p>
         <p>
           To the extent that any of the Services provided hereunder by you result in your creation of any works that may
-          be protected under the copyright law, including, but not limited to computer <EditableSpan field="companyName" />, (hereinafter "Work"), each such Work
-          shall be deemed specially commissioned by <EditableSpan field="companyName" /> and shall be considered a "work
+          be protected under the copyright law, including, but not limited to computer    <span className="newBoldClassForOfferLetter"><EditableSpan field="companyName" /></span>, (hereinafter "Work"), each such Work
+          shall be deemed specially commissioned by    <span className="newBoldClassForOfferLetter"><EditableSpan field="companyName" /></span> and shall be considered a "work
           made for hire", as defined in the India Copyright Act 1957.
         </p>
         <p>
-          <b>18. Compliance:</b>
+        <span className="newBoldClassForOfferLetter">18. Compliance:</span>
         </p>
         <p>
           The company's rules, regulations, and directions relating to employees, including the Group's Code of Conduct,
@@ -485,7 +485,7 @@ const OfferLetter = () => {
           should therefore acquaint yourself with all the Company rules and policies which are applicable to you.
         </p>
         <p>
-          <b>19. Data Protection:</b>
+        <span className="newBoldClassForOfferLetter">19. Data Protection:</span>
         </p>
         <p>
           By signing this statement, you acknowledge and agree that the Company is permitted to hold personal
@@ -498,7 +498,7 @@ const OfferLetter = () => {
           its associates. This Clause applies to information held, used, or disclosed in any medium.
         </p>
         <p>
-          <b>20. Code of Conduct and Policies:</b>
+        <span className="newBoldClassForOfferLetter">20. Code of Conduct and Policies:</span>
         </p>
         <p>
           You agree to read, follow, and perform your job in compliance with the Company's Code of Conduct and
@@ -512,14 +512,14 @@ const OfferLetter = () => {
 
       <div className="offer-letter" ref={(el) => addPageRef(el, 4)}>
         <p>
-          <b>21. No Waiver Survival:</b>
+        <span className="newBoldClassForOfferLetter">21. No Waiver Survival:</span>
         </p>
         <p>
           No delay by the Company in enforcing any Company right under this Agreement constitutes a waiver. Upon
           termination of this Agreement, some provisions will survive and will be enforceable going forward.
         </p>
         <p>
-          <b>22. Governing Law and Jurisdiction:</b>
+        <span className="newBoldClassForOfferLetter">22. Governing Law and Jurisdiction:</span>
         </p>
         <p>
           This Agreement is subject exclusively to the law of India, the courts at [insert location] depending on the
@@ -527,7 +527,7 @@ const OfferLetter = () => {
           under this Agreement and also over disputes that do not implicate provisions in this Agreement).
         </p>
         <p>
-          <b>23. Entire Agreement:</b>
+        <span className="newBoldClassForOfferLetter">23. Entire Agreement:</span>
         </p>
         <p>
           This Agreement represents the entire agreement of the parties and it supersedes all prior statements,
@@ -540,7 +540,7 @@ const OfferLetter = () => {
           letter. Kindly ensure that you also initial each page and any attachment here to.
         </p>
         <p>
-          <b>Acceptance:</b>
+        <span className="newBoldClassForOfferLetter">Acceptance:</span>
         </p>
         <p>
           I, __________________________________________________________ accept the employment on the above terms and
@@ -567,7 +567,7 @@ const OfferLetter = () => {
           <tbody>
             <tr>
               <td>
-                <b>Total Earning per month</b>
+              <span className="newBoldClassForOfferLetter">Total Earning per month</span>
               </td>
               <td></td>
               <td></td>
@@ -575,93 +575,93 @@ const OfferLetter = () => {
             <tr>
               <td>Basic</td>
               <td>
-                <EditableSpan field="basicpermonth" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="basicpermonth" /></span>
               </td>
               <td>
-                <EditableSpan field="basicperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="basicperyear" /></span>
               </td>
             </tr>
             <tr>
               <td>HRA</td>
               <td>
-                <EditableSpan field="hrapermonth" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="hrapermonth" /></span>
               </td>
               <td>
-                <EditableSpan field="hraperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="hraperyear" /></span>
               </td>
             </tr>
             <tr>
               <td>Conveyance</td>
               <td>
-                <EditableSpan field="conveyancepermonth" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="conveyancepermonth" /></span>
               </td>
               <td>
-                <EditableSpan field="Conveyanceperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="Conveyanceperyear" /></span>
               </td>
             </tr>
             <tr>
               <td>Medical Allowance</td>
               <td>
-                <EditableSpan field="medicalallowancepermonth" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="medicalallowancepermonth" /></span>
               </td>
               <td>
-                <EditableSpan field="medicalallowanceperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="medicalallowanceperyear" /></span>
               </td>
             </tr>
             <tr>
               <td>Other Allowance</td>
               <td>
-                <EditableSpan field="otherallowancepermonth" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="otherallowancepermonth" /></span>
               </td>
               <td>
-                <EditableSpan field="otherallowanceperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="otherallowanceperyear" /></span>
               </td>
             </tr>
             <tr>
               <td>Professional Allowance</td>
               <td>
-                <EditableSpan field="professionalallowancepermonth" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="professionalallowancepermonth" /></span>
               </td>
               <td>
-                <EditableSpan field="professionalallowanceperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="professionalallowanceperyear" /></span>
               </td>
             </tr>
             <tr>
               <td>LTA</td>
               <td>
-                <EditableSpan field="ltapermonth" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="ltapermonth" /></span>
               </td>
               <td>
-                <EditableSpan field="ltaperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="ltaperyear" /></span>
               </td>
             </tr>
             <tr>
               <td>Bonus</td>
               <td>
-                <EditableSpan field="bonuspermonth" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="bonuspermonth" /></span>
               </td>
               <td>
-                <EditableSpan field="bonusperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="bonusperyear" /></span>
               </td>
             </tr>
             <tr className="total-row">
               <td>
-                <b>Total A</b>
+              <span className="newBoldClassForOfferLetter">Total A</span>
               </td>
               <td>
                 <b>
-                  <EditableSpan field="totalapermonth" />
+                <span className="newBoldClassForOfferLetter"><EditableSpan field="totalapermonth" /></span>
                 </b>
               </td>
               <td>
                 <b>
-                  <EditableSpan field="totalaperyear" />
+                <span className="newBoldClassForOfferLetter"><EditableSpan field="totalaperyear" /></span>
                 </b>
               </td>
             </tr>
             <tr>
               <td>
-                <b>Additional payment as per government rule.</b>
+              <span className="newBoldClassForOfferLetter">Additional payment as per government rule.</span>
               </td>
               <td></td>
               <td></td>
@@ -669,81 +669,81 @@ const OfferLetter = () => {
             <tr>
               <td>Provident Fund - Employers 13%</td>
               <td>
-                <EditableSpan field="providentfundpermonth" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="providentfundpermonth" /></span>
               </td>
               <td>
-                <EditableSpan field="providentfundperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="providentfundperyear" /></span>
               </td>
             </tr>
             <tr>
               <td>ESIC Employees 3.75% </td>
               <td>
-                <EditableSpan field="esicpermonth" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="esicpermonth" /></span>
               </td>
               <td>
-                <EditableSpan field="esicperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="esicperyear" /></span>
               </td>
             </tr>
             <tr>
               <td>Leave</td>
               <td>
-                <EditableSpan field="leavepermonth" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="leavepermonth" /></span>
               </td>
               <td>
-                <EditableSpan field="leaveperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="leaveperyear" /></span>
               </td>
             </tr>
             <tr>
               <td>Bonus</td>
               <td>
-                <EditableSpan field="secondbonuspermonth" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="secondbonuspermonth" /></span>
               </td>
               <td>
-                <EditableSpan field="secondbonusperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="secondbonusperyear" /></span>
               </td>
             </tr>
             <tr>
               <td>Gratuity</td>
               <td>
-                <EditableSpan field="graduitypermont" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="graduitypermont" /></span>
               </td>
               <td>
-                <EditableSpan field="graduityperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="graduityperyear" /></span>
               </td>
             </tr>
             <tr className="total-row">
               <td>
-                <b>Total B</b>
+              <span className="newBoldClassForOfferLetter">Total B</span>
               </td>
               <td>
                 <b>
-                  <EditableSpan field="totalbpermonth" />
+                <span className="newBoldClassForOfferLetter"><EditableSpan field="totalbpermonth" /></span>
                 </b>
               </td>
               <td>
                 <b>
-                  <EditableSpan field="totalbperyear" />
+                <span className="newBoldClassForOfferLetter"><EditableSpan field="totalbperyear" /></span>
                 </b>
               </td>
             </tr>
             <tr className="highlight-row">
               <td>
-                <b>Total CTC per month salary A + B </b>
+              <span className="newBoldClassForOfferLetter">Total CTC per month salary A + B </span>
               </td>
               <td>
                 <b>
-                  <EditableSpan field="totalctcpermonth" />
+                <span className="newBoldClassForOfferLetter"><EditableSpan field="totalctcpermonth" /></span>
                 </b>
               </td>
               <td>
                 <b>
-                  <EditableSpan field="totalctcperyear" />
+                <span className="newBoldClassForOfferLetter"><EditableSpan field="totalctcperyear" /></span>
                 </b>
               </td>
             </tr>
             <tr>
               <td>
-                <b>Deductions as per government rule. </b>
+              <span className="newBoldClassForOfferLetter">Deductions as per government rule. </span>
               </td>
               <td></td>
               <td></td>
@@ -751,57 +751,57 @@ const OfferLetter = () => {
             <tr>
               <td>Provident Fund - Employees 12%</td>
               <td>
-                <EditableSpan field="secondprovidentfundpermonth" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="secondprovidentfundpermonth" /></span>
               </td>
               <td>
-                <EditableSpan field="secondprovidentfundperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="secondprovidentfundperyear" /></span>
               </td>
             </tr>
             <tr>
               <td>ESIC Employees 0.75% </td>
               <td>
-                <EditableSpan field="secondesicemppermonth" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="secondesicemppermonth" /></span>
               </td>
               <td>
-                <EditableSpan field="secondesicempperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="secondesicempperyear" /></span>
               </td>
             </tr>
             <tr>
               <td>Professional Tax</td>
               <td>
-                <EditableSpan field="professionaltaxpermonth" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="professionaltaxpermonth" /></span>
               </td>
               <td>
-                <EditableSpan field="professionaltaxperyear" />
+              <span className="newBoldClassForOfferLetter"><EditableSpan field="professionaltaxperyear" /></span>
               </td>
             </tr>
             <tr className="total-row">
               <td>
-                <b>Total Deduction C</b>
+              <span className="newBoldClassForOfferLetter">Total Deduction C</span>
               </td>
               <td>
                 <b>
-                  <EditableSpan field="totaldeductioncpermonth" />
+                <span className="newBoldClassForOfferLetter"><EditableSpan field="totaldeductioncpermonth" /></span>
                 </b>
               </td>
               <td>
                 <b>
-                  <EditableSpan field="totaldeductioncperyear" />
+                <span className="newBoldClassForOfferLetter"> <EditableSpan field="totaldeductioncperyear" /></span>
                 </b>
               </td>
             </tr>
             <tr className="highlight-row">
               <td>
-                <b>Net Salary For Month </b>
+              <span className="newBoldClassForOfferLetter">Net Salary For Month </span>
               </td>
               <td>
                 <b>
-                  <EditableSpan field="netsalarypermonth" />
+                <span className="newBoldClassForOfferLetter"><EditableSpan field="netsalarypermonth" /></span>
                 </b>
               </td>
               <td>
                 <b>
-                  <EditableSpan field="netsalaryperyear" />
+                <span className="newBoldClassForOfferLetter"><EditableSpan field="netsalaryperyear" /></span>
                 </b>
               </td>
             </tr>
@@ -813,16 +813,16 @@ const OfferLetter = () => {
         </p>
         <p>With the signature below, I accept this offer for employment.</p>
         <p>
-          <b>Authorized Signatory</b>
+        <span className="newBoldClassForOfferLetter">Authorized Signatory</span>
         </p>
         <p>
           <b>
-            <EditableSpan field="directorname" />
+          <span className="newBoldClassForOfferLetter"><EditableSpan field="directorname" /></span>
           </b>
         </p>
         <p>
           <b>
-            <EditableSpan field="companyName" />
+          <span className="newBoldClassForOfferLetter"><EditableSpan field="companyName" /></span>
           </b>
         </p>
       </div>

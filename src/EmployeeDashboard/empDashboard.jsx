@@ -353,7 +353,8 @@ const EmpDashboard = ({ userGroup }) => {
     setShowAddManager(false);
     setShowAddTeamLeader(false);
     setShowUpdateCallingTracker(false);
-    setShowSharedProfile(false)
+    setShowSharedProfile(false);
+    setShowIssueLetter(false);
   };
 
   /* ArshadAttar_EmpDashboa_Added_showProfitLoss_11/07/2024_LineNo_221-225 */
