@@ -66,6 +66,14 @@ const CallingExcelList = ({
   const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
   const filterRef=useRef(null);
 
+      const [isHorizontallyScrolling, setIsHorizontallyScrolling] = useState(false);
+     const tableContainerRef = useRef(null);
+   
+     const handleScroll = () => {
+       if (!tableContainerRef.current) return;
+       setIsHorizontallyScrolling(tableContainerRef.current.scrollLeft > 0);
+     };
+
   const fetchUpdatedData = (page, size) => {
     fetch(
       `${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
@@ -906,7 +914,10 @@ const CallingExcelList = ({
                   </div>
                 </div>
               )}
-              <div className="attendanceTableData">
+              <div className="attendanceTableData"
+               onScroll={handleScroll}
+               ref={tableContainerRef}
+              >
                 <table className="attendance-table">
                   <thead>
                     <tr className="attendancerows-head">
@@ -926,7 +937,7 @@ const CallingExcelList = ({
                         </th>
                       ) : null}
 
-                      <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>No.</th>
+                      <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>Sr No.</th>
                       <th className="attendanceheading">Excel Upload Date</th>
                       <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10}}>Candidate Name</th>
                       <th className="attendanceheading">Candidate Email</th>
@@ -946,7 +957,7 @@ const CallingExcelList = ({
                       // Added New Share Data Frontend Logic line 1286 to 1297 */}
                       <tr key={item.candidateId} className="attendancerows">
                         {!showShareButton ? (
-                          <td className="tabledata" style={{ position: "sticky",left:0, zIndex: 1 }}>
+                          <td className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`} style={{ position: "sticky",left:0, zIndex: 1 }}>
                             <input
                               type="checkbox"
                               checked={selectedRows.includes(item.candidateId)}
@@ -955,7 +966,7 @@ const CallingExcelList = ({
                           </td>
                         ) : null}
                         <td
-                          className="tabledata"
+                          className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                           style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1 }}
@@ -987,7 +998,7 @@ const CallingExcelList = ({
                           </div>
                         </td>
                         <td
-                          className="tabledata"
+                          className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                           style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1 }}

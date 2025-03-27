@@ -554,10 +554,11 @@ strong {
   background-color: #f0f0f0;
 }
 /* Rajlaxmi jagadale added that code */
-.anticon svg {
+/* commented by sahil karnekar */
+/* .anticon svg {
   color: black;
   font-size: 24px;
-}
+} */
 .rotate-iconteamperformance {
   transform: rotate(180deg);
   transition: transform 0.3s ease;

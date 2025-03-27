@@ -37,6 +37,14 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
   const filterRef=useRef(null);
     const [triggerFetch, setTriggerFetch] = useState(false);
 
+        const [isHorizontallyScrolling, setIsHorizontallyScrolling] = useState(false);
+       const tableContainerRef = useRef(null);
+     
+       const handleScroll = () => {
+         if (!tableContainerRef.current) return;
+         setIsHorizontallyScrolling(tableContainerRef.current.scrollLeft > 0);
+       };
+
 
   useEffect(() => {
     const options = limitedOptions
@@ -570,7 +578,10 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                     </div>
                   </div>
 
-                  <div className="attendanceTableData">
+                  <div className="attendanceTableData"
+                  onScroll={handleScroll}
+                  ref={tableContainerRef}
+                  >
                     <table className="attendance-table">
                       <thead>
                         <tr className="attendancerows-head">
@@ -615,7 +626,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                         {filteredCallingList.map((data, index) => (
                           <tr key={index} className="attendancerows">
                             <td
-                              className="tabledata "
+                              className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                               onMouseOver={handleMouseOver}
                               onMouseOut={handleMouseOut}
                               style={{ position: "sticky",left:0, zIndex: 1 }}
@@ -627,7 +638,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                                 </span>
                               </div>
                             </td>
-                            <td className="tabledata"
+                            <td className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                              style={{ position: "sticky", left: "35px", zIndex: 1 }}
                             >
                               {highlightText(

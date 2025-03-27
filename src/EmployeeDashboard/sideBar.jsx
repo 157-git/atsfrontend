@@ -114,7 +114,8 @@ function Sidebar({
   toggeleAddTeamLeader,
   toggeleAddManager,
   toggleSharedProfiles,
-  toggleIssueLetter
+  toggleIssueLetter,
+  toggleactiveTeamMembers
 }) {
   const [error, setError] = useState("");
   const [isActive, setIsActive] = useState(false);
@@ -824,6 +825,25 @@ function Sidebar({
                   ) : null}
 
                   <>
+                  {userType != "Recruiters" && (
+                  <li
+                        onClick={handleButtonClick(
+                          "activeTeamMembers",
+                          toggleactiveTeamMembers 
+                        )}
+                        className={
+                          activeButton === "activeTeamMembers" ? "active" : ""
+                        }
+                      >
+                        <a href="#">
+                          {/* <i className="icon ph-bold ph-house-simple"></i> */}
+
+                          <i className="fa fa-users" aria-hidden="true"></i>
+                          <span className="sidebar-text">Active Team Members </span>
+                        </a>
+                      </li>
+                  ) 
+                }
                     {userType != "SuperUser" && userType != "Vendor" ? (
                       <li
                         onClick={handleButtonClick(

@@ -35,6 +35,9 @@ import ShareLink from "../ResumeData/shareLink";
 import CandidateResumeLink from "../ResumeData/candidateResumeLink";
 import CallingExcelList from "../Excel/callingExcelData";
 import LineupExcelData from "../Excel/lineupExcelData";
+
+import { motion } from "framer-motion";
+import { useDrag } from "@use-gesture/react";
 import UpdateResponse from "../TeamLeader/UpdateResponse";
 import PayRollMain from "../PayRoll/payRollMain"; /* ArshadAttar_EmpDashboard_AddedPayrollToggeleFunction_10/07/2024_LineNo_198-202 */
 import SendClientEmail from "../AdminSection/SendClientEmail";
@@ -68,12 +71,27 @@ import ShareProfileData from "../TeamLeader/shareProfileData";
 import { tr } from "date-fns/locale";
 import InterviewForm1 from "../Help/InterviewForm1";
 import IssueOfferLetter from "../TeamLeader/IssueOfferLetter";
+import AttendanceLoginLogout from "../EmployeeSection/AttendanceLoginLogout";
+// import { Button, Popover } from "antd";
+// import { SearchOutlined } from "@ant-design/icons";
+// import AttendanceLoginLogout from "../EmployeeSection/AttendanceLoginLogout";
 
 const EmpDashboard = ({ userGroup }) => {
   const { userType } = useParams();
   const [showInterviewDate, setShowInterviewDate] = useState(
     userType === "SuperUser" ? false : true
   );
+  // const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  // const bindDrag = useDrag(({ offset: [x, y] }) => {
+  //   const maxX = window.innerWidth - 40; // Prevent overflow on right
+  //   const maxY = window.innerHeight - 30; // Prevent overflow on bottom
+
+  //   setPosition({
+  //     x: Math.max(0, Math.min(x, maxX)), // Clamp X between 0 and maxX
+  //     y: Math.max(0, Math.min(y, maxY)), // Clamp Y between 0 and maxY
+  //   });
+  // });
   const [addCandidate, setAddCandidate] = useState(false);
   const [candidateIdForUpdate, setCandidateIdForUpdate] = useState(0);
   const [selfCalling, setSelfCalling] = useState(false);
@@ -160,6 +178,7 @@ const EmpDashboard = ({ userGroup }) => {
   const [showApplicantForm, setShowApplicantForm] = useState(false);
   const [showSharedProfile,setShowSharedProfile] = useState(false);
   const [showIssueLetter,setShowIssueLetter] = useState(false);
+  const [showActiveTeamMemebers,setShowActiveTeamMEmbers] = useState(false);
 
 
   // Arshad Attar Added this 30-10-2024
@@ -355,6 +374,7 @@ const EmpDashboard = ({ userGroup }) => {
     setShowUpdateCallingTracker(false);
     setShowSharedProfile(false);
     setShowIssueLetter(false);
+    setShowActiveTeamMEmbers(false);
   };
 
   /* ArshadAttar_EmpDashboa_Added_showProfitLoss_11/07/2024_LineNo_221-225 */
@@ -625,6 +645,10 @@ const EmpDashboard = ({ userGroup }) => {
     resetAllToggles();
     setShowIssueLetter(true)
   };
+  const toggleactiveTeamMembers = () =>{
+    resetAllToggles();
+    setShowActiveTeamMEmbers(true)
+  }
   const [triggerForChildTwo, setTriggerForChildTwo] = useState(false);
   const handleSetRefresPropForDailyWork = ()=>{
     setTriggerForChildTwo((prev) => !prev);
@@ -706,6 +730,7 @@ const EmpDashboard = ({ userGroup }) => {
         toggeleAddManager={toggeleAddManager}
         toggleSharedProfiles={toggleSharedProfiles}
         toggleIssueLetter={toggleIssueLetter}
+        toggleactiveTeamMembers={toggleactiveTeamMembers}
       />
 
       <div className="empDash-main-content">
@@ -952,7 +977,37 @@ const EmpDashboard = ({ userGroup }) => {
         <div>
         {showIssueLetter && <IssueOfferLetter></IssueOfferLetter>}
         </div>
+        <div>
+          {showActiveTeamMemebers && <AttendanceLoginLogout></AttendanceLoginLogout> }
+        </div>
       </div>
+
+      {/* <motion.div drag style={{
+        width:"50px",
+        height:"50px",
+        background:"red",
+        position:"absolute",
+        zIndex:9999
+      }} /> */}
+
+{/* <Popover content={<AttendanceLoginLogout/>} title="Title" trigger="click">
+<motion.div
+      {...bindDrag()}
+      style={{
+        position: "absolute",
+        left: position.x,
+        top: position.y,
+        cursor: "grab",
+        zIndex: 9999,
+      }}
+    >
+      <Button style={{
+        width:"40px",
+        height:"40px"
+      }} type="primary" shape="circle" icon={<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm400-160q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0 320Zm0-400Z"/></svg>} />
+    </motion.div>
+    </Popover> */}
+
     </div>
   );
 };

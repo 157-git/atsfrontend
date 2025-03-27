@@ -977,7 +977,9 @@ const handleSearchClick = ()=>{
                         <tr key={item.candidateId} className="attendancerows">
                           {(!showShareButton && userType === "TeamLeader") ||
                           (!showShareButton && userType === "Manager") ? (
-                            <td style={{ position: "sticky",left:0, zIndex: 1,  }} className="tabledata">
+                            <td style={{ position: "sticky",left:0, zIndex: 1,  }} 
+                            className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
+                            >
                               <input
                                 type="checkbox"
                                 checked={selectedRows.includes(

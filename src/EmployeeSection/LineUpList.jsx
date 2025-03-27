@@ -66,6 +66,13 @@ const LineUpList = ({
    const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
      const filterRef=useRef(null);
 
+       const [isHorizontallyScrolling, setIsHorizontallyScrolling] = useState(false);
+        const tableContainerRef = useRef(null);
+      
+        const handleScroll = () => {
+          if (!tableContainerRef.current) return;
+          setIsHorizontallyScrolling(tableContainerRef.current.scrollLeft > 0);
+        };
   //akash_pawar_LineUpList_ShareFunctionality_16/07_128
   const fetchCallingTrackerData = async (page, size) => {
     try {
@@ -988,7 +995,10 @@ const handleCancelcloseshare = ()=>{
         <>
           {!showUpdateCallingTracker ? (
             <>
-              <div className="attendanceTableData">
+              <div className="attendanceTableData"
+              onScroll={handleScroll}
+              ref={tableContainerRef}
+              >
                 <table className="attendance-table">
                   <thead>
                     <tr className="attendancerows-head">
@@ -1099,7 +1109,7 @@ const handleCancelcloseshare = ()=>{
                       <tr key={item.candidateId} className="attendancerows">
                         {(!showShareButton && userType === "TeamLeader") ||
                         (!showShareButton && userType === "Manager") ? (
-                          <td className="tabledata" style={{ position: "sticky",left:0, zIndex: 1 }}>
+                          <td className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`} style={{ position: "sticky",left:0, zIndex: 1 }}>
                             <input
                               type="checkbox"
                               checked={selectedRows.includes(item.candidateId)}
@@ -1109,7 +1119,7 @@ const handleCancelcloseshare = ()=>{
                         ) : null}
 
                         <td
-                          className="tabledata "
+                         className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                           style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1 }}
@@ -1123,7 +1133,7 @@ const handleCancelcloseshare = ()=>{
                         </td>
 
                         <td
-                          className="tabledata"
+                         className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                           style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1 }}
@@ -1161,7 +1171,7 @@ const handleCancelcloseshare = ()=>{
                         </td>
 
                         <td
-                          className="tabledata"
+                         className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                           style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 1 }}
