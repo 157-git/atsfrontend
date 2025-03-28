@@ -838,7 +838,7 @@ function Sidebar({
                         <a href="#">
                           {/* <i className="icon ph-bold ph-house-simple"></i> */}
 
-                          <i className="fa fa-users" aria-hidden="true"></i>
+                          <i className="fa fa-user-circle" aria-hidden="true"></i>
                           <span className="sidebar-text">Active Team Members </span>
                         </a>
                       </li>

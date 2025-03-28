@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../EmployeeDashboard/JobList.css";
 import { bottom } from "@popperjs/core";
 import ShareDescription from "./shareDescription";
@@ -33,6 +33,7 @@ const JobListing = ({ loginEmployeeName }) => {
   const [requirementData, setRequirementData] = useState();
   const [showEDM, setShowEDM] = useState(false);
   const [showAddJobDescription, setShowAddJobDescription] = useState(false);
+  const filterRef=useRef(null);
   const [showAddJobDiscriptionNew, setShowAddJobDescriptionNew] =
     useState(false);
   const [searchQuery, setSearchQuery] = useState({
@@ -94,6 +95,8 @@ const JobListing = ({ loginEmployeeName }) => {
 
   const filterData = () => {
     let filtereddata = [...jobDescriptions];
+  
+    // Apply search query filters
     Object.entries(searchQuery).forEach(([key, value]) => {
       if (value) {
         filtereddata = filtereddata.filter((item) =>
@@ -101,10 +104,30 @@ const JobListing = ({ loginEmployeeName }) => {
         );
       }
     });
-
+  
+    // Apply selected filters
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
-        if (option === "requirementId") {
+        if (option === "jdStatus") {
+          // Ensure exact match for "active" without including "inactive"
+          if (values.includes("Active")) {
+            filtereddata = filtereddata.filter((item) => item[option] === "Active");
+          } else {
+            filtereddata = filtereddata.filter((item) =>
+              values.some((value) => item[option]?.toString().toLowerCase() === value.toLowerCase())
+            );
+          }
+        }  else if (option === "holdStatus") {
+          // Ensure exact match for "active" without including "inactive"
+          if (values.includes("Hold")) {
+            filtereddata = filtereddata.filter((item) => item[option] === "Hold");
+          } else {
+            filtereddata = filtereddata.filter((item) =>
+              values.some((value) => item[option]?.toString().toLowerCase() === value.toLowerCase())
+            );
+          }
+        }
+         else if (option === "requirementId") {
           filtereddata = filtereddata.filter((item) =>
             values.some((value) =>
               item[option]?.toString().toLowerCase().includes(value)
@@ -113,17 +136,17 @@ const JobListing = ({ loginEmployeeName }) => {
         } else {
           filtereddata = filtereddata.filter((item) =>
             values.some((value) =>
-              item[option]
-                ?.toString()
-                .toLowerCase()
-                .includes(value.toLowerCase())
+              item[option]?.toString().toLowerCase().includes(value.toLowerCase())
             )
           );
         }
       }
     });
+  
     setFilteredJobDescriptions(filtereddata);
   };
+  
+console.log(jobDescriptions);
 
   const handleFilterSelect = (option, value) => {
     setSelectedFilters((prev) => {
@@ -257,6 +280,23 @@ const JobListing = ({ loginEmployeeName }) => {
   const handleUpdateCompProp = (data) => {
     setShowAddJobDescriptionNew(data);
   };
+
+ useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        filterRef.current &&
+        !filterRef.current.contains(event.target) &&
+        !event.target.closest(".filter-option button") // Prevent closing when clicking inside the button
+      ) {
+        setActiveFilterOption(null);
+      }
+    };
+  
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Arshad Attar Added Code From Here 28-10-2024
   const handleToggleDropdown = (id) => {
@@ -394,6 +434,12 @@ const JobListing = ({ loginEmployeeName }) => {
     }));
   };
 
+  const handleClearAll = () => {
+    setSelectedFilters({});
+  };
+  const countSelectedValues = (option) => {
+    return selectedFilters[option] ? selectedFilters[option].length : 0;
+  };
   return (
     <>
       {!showAddJobDiscriptionNew ? (
@@ -451,17 +497,27 @@ const JobListing = ({ loginEmployeeName }) => {
                   return (
                     <div key={option} className="filter-option">
                       <button
-                        className="white-Btn"
+                        className={`white-Btn ${
+                          (selectedFilters[option] && selectedFilters[option].length > 0) || activeFilterOption === option
+                            ? "selected glow"
+                            : ""
+                        }`}
                         onClick={() => handleFilterOptionClick(option)}
                       >
                         {/* this line numeber 319 is added by sahil karnekar for saparating the word if it is in PascalCase naming convention */}
                         {formatOption(option)}{" "}
+
+                        {selectedFilters[option]?.length > 0 && (
+      <span className="selected-count">
+        ({countSelectedValues(option)})
+      </span>
+    )}
                         {/* Call the formatting function here */}
                         <span className="filter-icon">&#x25bc;</span>
                       </button>
                       {activeFilterOption === option && (
                         <div className="city-filter">
-                          <div className="optionDiv">
+                          <div className="optionDiv" ref={filterRef}>
                             {uniqueValues.map(
                               (value) =>
                                 // line 338 added by sahil karnekar date 23-10-2024
@@ -488,12 +544,17 @@ const JobListing = ({ loginEmployeeName }) => {
                                   // line 350 added by sahil karnekar date : 23-10-2024
                                 )
                             )}
+                            
                           </div>
+                          
                         </div>
+                        
                       )}
+                     
                     </div>
                   );
                 })}
+                  <button className="clr-button lineUp-Filter-btn" onClick={handleClearAll}>Clear Filters</button>
               </div>
             </div>
           </div>

@@ -1,10 +1,4 @@
-/* Rajlaxmi Jagadale createed this css file
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+/* Rajlaxmi Jagadale createed this css file */
   
   .main-wrapper {
     width: 100%;
@@ -28,7 +22,7 @@
     flex-wrap: nowrap;
   }
   
-  .search-input {
+  .search-inputAttedance {
     padding: 5px;
     width: 300px;
     border: 2px solid #ddd;
@@ -47,7 +41,7 @@
     white-space: nowrap;
   }
   
-  .logout-btn,
+  .logout-btnAttendance,
   .login-btn,
   .all-btn {
     background-color: #7d7f81;
@@ -60,7 +54,7 @@
     white-space: nowrap;
   }
   
-  .logout-btn.active,
+  .logout-btnAttendance.active,
   .login-btn.active,
   .all-btn.active {
     background-color: #4a4b4c;
@@ -68,7 +62,7 @@
   }
   
   .search-btn:hover,
-  .logout-btn:hover,
+  .logout-btnAttendance:hover,
   .login-btn:hover,
   .all-btn:hover {
     opacity: 0.9;
@@ -194,7 +188,7 @@
     background-color: #5a5b5c;
   }
   
-  .scroll-container {
+  .scroll-containerAttendance{
     width: 100%;
     flex: 1;
     display: flex !important;
@@ -303,13 +297,13 @@
   }
   
   @media (max-width: 850px) {
-    .search-input {
+    .search-inputAttedance {
       width: 250px;
     }
   }
   
   @media (max-width: 800px) {
-    .search-input {
+    .search-inputAttedance {
       width: 250px;
     }
   }
@@ -347,7 +341,7 @@
       flex-wrap: nowrap;
     }
   
-    .search-input {
+    .search-inputAttedance {
       width: 40%;
       min-width: 100px;
     }
@@ -428,12 +422,12 @@
       gap: 5px;
     }
   
-    .search-input {
+    .search-inputAttedance {
       width: 35%;
       min-width: 80px;
     }
   
-    .logout-btn,
+    .logout-btnAttendance,
     .login-btn,
     .all-btn {
       padding: 5px 8px;
@@ -458,7 +452,7 @@
     }
   
     .search-btn,
-    .logout-btn,
+    .logout-btnAttendance,
     .login-btn,
     .all-btn {
       padding: 4px 6px;
@@ -497,7 +491,7 @@
       flex-wrap: nowrap;
     }
   
-    .search-input {
+    .search-inputAttedance {
       width: 50%;
       min-width: 120px;
     }
@@ -561,12 +555,12 @@
       gap: 5px;
     }
   
-    .search-input {
+    .search-inputAttedance {
       width: 40%;
       min-width: 100px;
     }
   
-    .logout-btn,
+    .logout-btnAttendance,
     .login-btn {
       padding: 5px 10px;
       font-size: 13px;
@@ -589,7 +583,7 @@
     }
   
     .search-btn,
-    .logout-btn,
+    .logout-btnAttendance,
     .login-btn,
     .all-btn {
       padding: 5px 8px;
@@ -610,4 +604,4 @@
     }
   }
   
-   */
+  
