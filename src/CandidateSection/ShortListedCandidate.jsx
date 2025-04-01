@@ -913,7 +913,7 @@ const handleSearchClick = ()=>{
 
 <th style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10}} className="attendanceheading">Candidate Id</th>
 <th   className="attendanceheading">Added Date Time</th>
-<th style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 10 }}  className="attendanceheading">Recruiter's Name</th>
+<th style={{ position: "sticky", left: showShareButton ? "140px" : "190px", zIndex: 10 }}  className="attendanceheading">Recruiter's Name</th>
 <th className="attendanceheading">Candidate's Name</th>
 <th className="attendanceheading">Candidate's Email</th>
                         <th className="attendanceheading">Contact Number</th>
@@ -1041,7 +1041,7 @@ const handleSearchClick = ()=>{
                             </div>
                           </td>
 
-                          <td style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 1}}
+                          <td style={{ position: "sticky", left: showShareButton ? "140px" : "190px", zIndex: 1}}
                            className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}

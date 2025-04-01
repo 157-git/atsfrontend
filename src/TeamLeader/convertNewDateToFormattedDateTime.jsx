@@ -2,6 +2,8 @@ import { format } from "date-fns";
 
 
 export const convertNewDateToFormattedDateTime = (newDateObjectFormat) => {
+  console.log(newDateObjectFormat);
+  
   try {
     if (newDateObjectFormat === null) {
       return null;
