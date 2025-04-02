@@ -6,6 +6,7 @@ import dummyImage from "../EmployeeSection/dummy.jpg"
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 
+
 const AttendanceLoginLogout = () => {
   const [activeRecruiters, setActiveRecruiters] = useState([])
   const [inactiveRecruiters, setInactiveRecruiters] = useState([])
@@ -16,7 +17,6 @@ const AttendanceLoginLogout = () => {
   const [imageLoadErrors, setImageLoadErrors] = useState({})
 
  const { employeeId, userType } = useParams();
-  // superuser 390, manager 636, teamleader 430
 
   const getRoleButtons = () => {
     switch (userType) {
@@ -52,7 +52,6 @@ const AttendanceLoginLogout = () => {
   const fetchInfo = async (role = "Recruiters") => {
     try {
       const url = `${API_BASE_URL}/get-active-details/${userType}?employeeId=${employeeId}&currentDate=${getCurrentDate}&user=${role}`
-
       const response = await axios.get(url)
       console.log(`API Response for ${role}:`, response.data)
 
@@ -130,7 +129,7 @@ const AttendanceLoginLogout = () => {
 
   const displayData = () => {
     return (
-      <div className="scroll-container">
+      <div className="scroll-containerAttendance">
         <div className="card-wrapper">
           {filteredRecruiters().length > 0 ? (
             filteredRecruiters().map((user, index) => (
@@ -212,7 +211,7 @@ const AttendanceLoginLogout = () => {
           placeholder="Search Here..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
+          className="search-inputAttedance"
         />
         <button
           onClick={() => setFilterStatus("login")}
@@ -222,7 +221,7 @@ const AttendanceLoginLogout = () => {
         </button>
         <button
           onClick={() => setFilterStatus("logout")}
-          className={`logout-btn ${filterStatus === "logout" ? "active" : ""}`}
+          className={`logout-btnAttendance ${filterStatus === "logout" ? "active" : ""}`}
         >
           LogOut
         </button>

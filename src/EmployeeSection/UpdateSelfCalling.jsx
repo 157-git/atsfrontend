@@ -1487,7 +1487,7 @@ console.log(callingTracker);
                     <option value="Company Page">Company Page</option>
                     <option value="Excel">Excel</option>
                     <option value="Friends">Friends</option>
-                    <option value="others">others</option>
+                    <option value="others">Others</option>
                   </select>
 
                   {displaySourceOthersInput && (
@@ -1674,7 +1674,7 @@ console.log(callingTracker);
                     <option value="Invalid Number">Invalid Number</option>
                     <option value="Need to call back">Need to call back</option>
                     <option value="Do not call again">Do not call again</option>
-                    <option value="others">others</option>
+                    <option value="others">Others</option>
                   </select>
                   {displayOtherInputForCallingRemark && (
                       <input

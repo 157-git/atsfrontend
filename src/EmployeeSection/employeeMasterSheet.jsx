@@ -179,6 +179,14 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   const [triggerFetch, setTriggerFetch] = useState(false);
   const filterRef = useRef(null);
 
+   const [isHorizontallyScrolling, setIsHorizontallyScrolling] = useState(false);
+          const tableContainerRef = useRef(null);
+        
+          const handleScroll = () => {
+            if (!tableContainerRef.current) return;
+            setIsHorizontallyScrolling(tableContainerRef.current.scrollLeft > 0);
+          };
+
 
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_39
   const [oldselectedTeamLeader, setOldSelectedTeamLeader] = useState({
@@ -917,12 +925,15 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
 
             {error && <div className="alert alert-danger">{error}</div>}
 
-            <div className="attendanceTableData">
+            <div className="attendanceTableData"
+            onScroll={handleScroll}
+            ref={tableContainerRef}
+            >
               <table className="attendance-table">
                 <thead>
                   <tr className="attendancerows-head">
                     {!showShareButton && userType === "TeamLeader" ? (
-                      <th className="attendanceheading">
+                      <th className="attendanceheading" style={{ position: "sticky",left:0, zIndex: 10 }}>
                         {/* <input
                           type="checkbox"
                           onChange={handleSelectAll}
@@ -940,10 +951,10 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
 
                       </th>
                     ) : null}
-                    <th className="attendanceheading">Sr No.</th>
+                    <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>Sr No.</th>
 
-                    <th className="attendanceheading">Candidate ID</th>
-                    <th className="attendanceheading">Candidate Name</th>
+                    <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10}}>Candidate ID</th>
+                    <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 10 }}>Candidate Name</th>
                     <th className="attendanceheading">Candidate Email</th>
                     <th className="attendanceheading">Contact Number</th>
                     <th className="attendanceheading">Alternate Number</th>
@@ -1050,7 +1061,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                   {applyFilters(data).map((entry, index) => (
                     <tr key={index} className="attendancerows">
                       {!showShareButton && userType === "TeamLeader" ? (
-                        <td className="tabledata">
+                        <td className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`} style={{ position: "sticky",left:0, zIndex: 1 }} >
 
                           <input
                             type="checkbox"
@@ -1061,9 +1072,10 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                         </td>
                       ) : null}
                       <td
-                        className="tabledata "
+                     className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
+                        style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1 }}
                       >
                         {calculateRowIndex(index)}
                         <div className="tooltip">
@@ -1073,9 +1085,10 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                         </div>
                       </td>
                       <td
-                        className="tabledata"
+                      className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
+                        style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1 }}
                       >
                         {highlightText(entry[0], searchTerm)}
                         <div className="tooltip">
@@ -1086,9 +1099,10 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                       </td>
 
                       <td
-                        className="tabledata"
+                        className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
+                        style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 1 }}
                       >
                         {highlightText(entry[4], searchTerm)}
                         <div className="tooltip">
@@ -1731,15 +1745,17 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                  Date:-02/07 */}
                       <td
                         className="tabledata"
-                        style={{
-                          backgroundColor: entry[52] ? "#80ff80" : "transparent",
-                        }}
+                        // style={{
+                        //   backgroundColor: entry[52] ? "#80ff80" : "transparent",
+                        // }}
                       >
                         <button
                           className="text-secondary"
                           onClick={() => openDocumentModal(entry[52])}
                         >
-                          <i className="fas fa-eye"></i>
+                          <i className="fas fa-eye" style={{
+                          color: entry[52] ? "#80ff80" : "transparent",
+                        }}></i>
                         </button>
                       </td>
                       {/* Name:-Akash Pawar Component:-EmployeeMarkSheet

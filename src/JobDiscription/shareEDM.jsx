@@ -10,6 +10,7 @@ function ShareEDM({ Descriptions, onShareEdm }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const { employeeId, userType } = useParams();
+console.log(data);
 
   useEffect(() => {
     fetch(

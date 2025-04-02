@@ -776,20 +776,24 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
     setEndDate(format(end, "yyyy-MM-dd"));
   };
 
+console.log(selectedManagers);
+console.log(selectedTeamLeaders);
+console.log(selectedRecruiters);
 
   const handleSelectAllNew = (role) => {
     console.log(role);
     console.log(selectedRole);
-    
-    
     let newIds = [];
   
     if (role === "Manager") {
       newIds = managersList.map(manager => manager.managerId);
+      managersList.forEach((manager)=> handleCheckboxChange(role, manager.managerId, manager));
     } else if (role === "TeamLeader") {
       newIds = teamLeadersList.map(leader => leader.teamLeaderId);
+      teamLeadersList.forEach((leader)=> handleCheckboxChange(role, leader.teamLeaderId, leader));
     } else if (role === "Recruiters") {
       newIds = recruitersList.map(recruiter => recruiter.employeeId);
+      recruitersList.forEach((recruiter)=> handleCheckboxChange(role, recruiter.employeeId, recruiter));
     }
   
     setSelectedIds(prevIds => {
