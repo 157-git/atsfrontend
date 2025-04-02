@@ -61,6 +61,13 @@ const ResumeList = ({
     const [selectedRows, setSelectedRows] = useState([]);
       const [triggerFetch, setTriggerFetch] = useState(false);
          const filterRef=useRef(null);
+           const [isHorizontallyScrolling, setIsHorizontallyScrolling] = useState(false);
+            const tableContainerRef = useRef(null);
+          
+            const handleScroll = () => {
+              if (!tableContainerRef.current) return;
+              setIsHorizontallyScrolling(tableContainerRef.current.scrollLeft > 0);
+            };
 
 
   const fetchData = async (page, size) => {
@@ -1012,7 +1019,10 @@ const forwardSelectedCandidate = (e) => {
                 </div>
               </div>
 
-              <div className="attendanceTableData">
+              <div className="attendanceTableData"
+               onScroll={handleScroll}
+               ref={tableContainerRef}
+              >
                 <table className="selfcalling-table attendance-table">
                   <thead>
                     {/* this line updated by sahil date 22-10-2024 */}
@@ -1034,7 +1044,7 @@ const forwardSelectedCandidate = (e) => {
                           />
                         </th>
                       ) : null}
-                      <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>Sr No</th>
+                      <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>Sr No.</th>
                       <th className="attendanceheading"> Resume Upload Date</th>
                       <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10}}>Candidate Name</th>
                       <th className="attendanceheading">Candidate Email</th>
@@ -1058,7 +1068,7 @@ const forwardSelectedCandidate = (e) => {
                         {/* // Arshad Attar Added This Code On 03-12-2024
                         // Added New Share Data Frontend Logic, */}
                         {!showShareButton ? (
-                          <td className="tabledata" style={{ position: "sticky",left:0, zIndex: 1 }}>
+                          <td className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`} style={{ position: "sticky",left:0, zIndex: 1 }}>
                             <input
                               type="checkbox"
                               checked={selectedRows.includes(item.candidateId)}
@@ -1068,7 +1078,7 @@ const forwardSelectedCandidate = (e) => {
                         ) : null}
 
                         <td
-                          className="tabledata "
+                          className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                           style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1,  }}
@@ -1109,7 +1119,7 @@ const forwardSelectedCandidate = (e) => {
                           </div>
                         </td>
                         <td
-                          className="tabledata"
+                          className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                           style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1 }}

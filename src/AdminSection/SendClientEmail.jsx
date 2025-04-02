@@ -52,6 +52,14 @@ const SendClientEmail = ({ clientEmailSender }) => {
    const [allSelected, setAllSelected] = useState(false); // New state to track if all rows are selected
    const filterRef=useRef(null);
 
+       const [isHorizontallyScrolling, setIsHorizontallyScrolling] = useState(false);
+      const tableContainerRef = useRef(null);
+    
+      const handleScroll = () => {
+        if (!tableContainerRef.current) return;
+        setIsHorizontallyScrolling(tableContainerRef.current.scrollLeft > 0);
+      };
+
   const navigator = useNavigate();
 
   const [pageSize, setPageSize] = useState(20);
@@ -844,7 +852,9 @@ const SendClientEmail = ({ clientEmailSender }) => {
                 )}
           </div>
 
-          <div className="attendanceTableData">
+          <div className="attendanceTableData"
+          onScroll={handleScroll}
+          ref={tableContainerRef}>
             <table className="attendance-table">
               <thead>
                 <tr className="attendancerows-head">
@@ -861,7 +871,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                           />
                     </th>
                   ) : null}
-                  <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>No.</th>
+                  <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>Sr No.</th>
                   <th
                     className="attendanceheading"
                     onClick={() => handleSort("date")}
@@ -930,7 +940,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                 {filteredCallingList.map((item, index) => (
                   <tr key={item.candidateId} className="attendancerows">
                     {!showShareButton ? (
-                      <td className="tabledata" style={{ position: "sticky", left:0, zIndex: 1 }}>
+                      <td className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`} style={{ position: "sticky", left:0, zIndex: 1 }}>
                         <input
                               type="checkbox"
                               checked={selectedRows.includes(item.candidateId)}
@@ -940,7 +950,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                     ) : null}
 
                      <td
-                          className="tabledata "
+                         className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                           style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1 }}
@@ -966,7 +976,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
                     </td>
 
                     <td
-                      className="tabledata"
+                    className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                       style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1 }}

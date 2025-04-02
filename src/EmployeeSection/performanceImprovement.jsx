@@ -907,6 +907,9 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   };
   const handleGetFilteredData = async () => {
     if (
+
+
+
       selectedManagers.length === 0 &&
       selectedTeamLeaders.length === 0 &&
       selectedRecruiters.length === 0 &&

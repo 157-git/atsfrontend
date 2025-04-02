@@ -414,3 +414,18 @@ z-index: 1; */
 /* .forZindexAdjustement{
   z-index: 10;
 } */
+
+/* Base red background for scrolled state */
+.sticky-cell-scrolled {
+  background-color: white !important;
+}
+
+/* Row hover - will override red when hovering */
+.attendancerows:hover .tabledata {
+  background-color: var(--table-row-hover) !important;
+}
+
+/* Ensure sticky cells respect hover */
+.attendancerows:hover .sticky-cell {
+  background-color: var(--table-row-hover) !important;
+}

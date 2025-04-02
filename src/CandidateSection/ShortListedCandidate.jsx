@@ -60,6 +60,15 @@ const ShortListedCandidates = ({
   const [totalRecords, setTotalRecords] = useState(0);
   const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
 
+
+  const [isHorizontallyScrolling, setIsHorizontallyScrolling] = useState(false);
+  const tableContainerRef = useRef(null);
+
+  const handleScroll = () => {
+    if (!tableContainerRef.current) return;
+    setIsHorizontallyScrolling(tableContainerRef.current.scrollLeft > 0);
+  };
+
   // updated by sahil karnekar date 17-12-2024
   const [triggerFetch, setTriggerFetch] = useState(false);
   const handleTriggerFetch = () => {
@@ -879,7 +888,10 @@ const handleSearchClick = ()=>{
               <div>
                 {/* updated this filter section by sahil karnekar date 22-10-2024 */}
 
-                <div className="attendanceTableData">
+                <div className="attendanceTableData"
+                onScroll={handleScroll}
+                ref={tableContainerRef}
+                >
                   <table id="shortlisted-table-id" className="attendance-table">
                     <thead>
                       <tr className="attendancerows-head">
@@ -965,7 +977,9 @@ const handleSearchClick = ()=>{
                         <tr key={item.candidateId} className="attendancerows">
                           {(!showShareButton && userType === "TeamLeader") ||
                           (!showShareButton && userType === "Manager") ? (
-                            <td style={{ position: "sticky",left:0, zIndex: 1 }} className="tabledata">
+                            <td style={{ position: "sticky",left:0, zIndex: 1,  }} 
+                            className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
+                            >
                               <input
                                 type="checkbox"
                                 checked={selectedRows.includes(
@@ -978,7 +992,7 @@ const handleSearchClick = ()=>{
                             </td>
                           ) : null}
                            <td  style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1 }}
-                            className="tabledata "
+                           className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
@@ -990,7 +1004,7 @@ const handleSearchClick = ()=>{
                             </div>
                           </td>
                           <td style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1 }}
-                            className="tabledata"
+                          className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
@@ -1028,7 +1042,7 @@ const handleSearchClick = ()=>{
                           </td>
 
                           <td style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 1}}
-                            className="tabledata"
+                           className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                             onMouseOver={handleMouseOver}
                             onMouseOut={handleMouseOut}
                           >
