@@ -986,18 +986,18 @@ console.log(selectedRecruiters);
 
     if (selectedManagers.length > 0) {
       ids = selectedManagers.map((manager) => manager.managerId).join(",");
-      role = selectedManagers[0].managerJobRole;
+      role = "Manager";
     } else if (selectedTeamLeaders.length > 0) {
       // here multiple line updated by sahil karnekar date 24-10-2024
       ids = selectedTeamLeaders
         .map((teamLeader) => teamLeader.teamLeaderId)
         .join(",");
-      role = selectedTeamLeaders[0].teamLeaderJobRole;
+      role = "TeamLeader";
     } else if (selectedRecruiters.length > 0) {
       ids = selectedRecruiters
         .map((recruiter) => recruiter.recruiterId)
         .join(",");
-      role = selectedRecruiters[0].recruiterJobRole;
+      role = "Recruiters";
     } else if (userType === "Recruiters") {
       ids = employeeId;
       role = userType;
@@ -1020,6 +1020,9 @@ console.log(selectedRecruiters);
         }
       );
       console.log("Executing 2");
+      console.log(`${API_BASE_URL}/fetch-process-timings?employeeIds=${ids}&jobRole=${role}&startDate=${startDate}&endDate=${endDate}&jobIds=${jobId}`,
+      );
+
 
       const jsonData = response.data;
       console.log("Executing 2");
