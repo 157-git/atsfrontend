@@ -31,6 +31,7 @@ const JobListing = ({ loginEmployeeName }) => {
   const [filteredJobDescriptions, setFilteredJobDescriptions] = useState([]);
   const [selectedRequirementId, setSelectedRequirementId] = useState(null);
   const [requirementData, setRequirementData] = useState();
+  const [triggerFetch, setTriggerFetch] = useState(false);
   const [showEDM, setShowEDM] = useState(false);
   const [showAddJobDescription, setShowAddJobDescription] = useState(false);
   const filterRef=useRef(null);
@@ -84,14 +85,14 @@ const JobListing = ({ loginEmployeeName }) => {
       })
       .catch((error) => console.error("Error fetching data:", error));
     // sahil karnekar line 65 date : 10-10-2024
-  }, [showAddJobDiscriptionNew]);
+  }, [showAddJobDiscriptionNew, triggerFetch]);
 
   useEffect(() => {
     handleFilter();
   }, [searchQuery, selectedFilters, jobDescriptions]);
   useEffect(() => {
     filterData();
-  }, [selectedFilters, jobDescriptions]);
+  }, [selectedFilters, jobDescriptions, searchQuery]);
 
   const filterData = () => {
     let filtereddata = [...jobDescriptions];
@@ -434,6 +435,11 @@ console.log(jobDescriptions);
     }));
   };
 
+
+  const handleTriggerFetch = () => {
+    setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
+  };
+
   const handleClearAll = () => {
     setSelectedFilters({});
   };
@@ -446,40 +452,72 @@ console.log(jobDescriptions);
         <>
           <div className="jd-header-search">
             <div className="search-container">
-              <div className="search-bar">
-                <input
-                  className="search-input"
-                  placeholder="Designation"
-                  type="text"
-                  name="designation"
-                  value={searchQuery.designation}
-                  onChange={handleInputSearch}
-                />
-                <input
-                  className="search-input"
-                  list="experienceOptions"
-                  placeholder="  Select Experience"
-                  type="text"
-                  name="experience"
-                  value={searchQuery.experience}
-                  onChange={handleInputSearch}
-                />
-                <input
-                  className="search-input"
-                  placeholder="Enter Location"
-                  type="text"
-                  name="location"
-                  value={searchQuery.location}
-                  onChange={handleInputSearch}
-                />
-                <button className="daily-tr-btn" onClick={filterData}>
-                  <span className="search-icon">
-                    <div>
-                      <i className="fas fa-search"></i>
-                    </div>
-                    <div> Search </div>
-                  </span>
-                </button>
+              <div className="search-bar"
+              style={{
+                display:"block"
+              }}
+              >
+             <form
+  onSubmit={(event) => { event.preventDefault(); filterData(); }}
+  style={{
+    display: "flex",
+    justifyContent: "space-between"
+  }}
+> 
+  <input
+    className="search-input"
+    placeholder="Designation"
+    type="text"
+    name="designation"
+    value={searchQuery.designation}
+    onChange={handleInputSearch}
+  />
+  <input
+    className="search-input"
+    list="experienceOptions"
+    placeholder="Select Experience"
+    type="text"
+    name="experience"
+    value={searchQuery.experience}
+    onChange={handleInputSearch}
+  />
+  <input
+    className="search-input"
+    placeholder="Enter Location"
+    type="text"
+    name="location"
+    value={searchQuery.location}
+    onChange={handleInputSearch}
+  />
+
+{(searchQuery.designation || searchQuery.location || searchQuery.experience) && (
+                          <div className="svgimagesetinInput">
+                            <svg
+                              onClick={() => {
+                                setSearchQuery({
+                                  designation: "",
+                                  location: "",
+                                  experience: "",
+                                })
+                                handleTriggerFetch();
+                              }
+                              }
+                              xmlns="http://www.w3.org/2000/svg"
+                              height="24px"
+                              viewBox="0 -960 960 960"
+                              width="24px"
+                              fill="#000000"
+                            >
+                              <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                            </svg>
+                          </div>
+                        )}
+
+  <button className="daily-tr-btn" type="submit">
+    Search
+  </button>
+</form>
+
               </div>
             </div>
 

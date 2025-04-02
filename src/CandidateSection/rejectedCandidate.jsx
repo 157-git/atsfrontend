@@ -659,6 +659,7 @@ const handleCancelcloseshare = ()=>{
               ></i>
               {/* line 707 to 716 added by sahil karnekar date 24-10-2024 */}
 
+              <form onSubmit={() => handleSearchClick()}> 
               <div
                 className="search-input-div"
                 style={{ width: `${calculateWidth()}px` }}
@@ -695,6 +696,7 @@ const handleCancelcloseshare = ()=>{
       >
         Search 
       </button>
+      </form>
             </div>
             <h5 className="newclassnameforpageheader">Rejected Data </h5>
 

@@ -701,6 +701,7 @@ const handleCancelcloseshare = ()=>{
               ></i>
               {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
 
+              <form onSubmit={() => handleSearchClick()}> 
               <div
                 className="search-input-div"
                 style={{ width: `${calculateWidth()}px` }}
@@ -737,6 +738,7 @@ const handleCancelcloseshare = ()=>{
       >
         Search 
       </button>
+      </form>
             </div>
             <h5 className="newclassnameforpageheader">Lineup Tracker</h5>
 

@@ -3,8 +3,9 @@ import { useState, useEffect } from "react"
 import "../EmployeeSection/AttendanceLoginLogout.css"
 import axios from "axios"
 import dummyImage from "../EmployeeSection/dummy.jpg"
-import { useParams } from "react-router-dom"
-import { API_BASE_URL } from "../api/api"
+import { useParams } from "react-router-dom";
+import { API_BASE_URL } from "../api/api";
+
 
 const AttendanceLoginLogout = () => {
   const [activeRecruiters, setActiveRecruiters] = useState([])
@@ -15,18 +16,15 @@ const AttendanceLoginLogout = () => {
   const [selectedRole, setSelectedRole] = useState("Recruiter") // Default to Recruiter
   const [imageLoadErrors, setImageLoadErrors] = useState({})
 
-  const { userType} = useParams();
-  // const userType = "superuser"
-  const employeeId = 430
-  // superuser 390, manager 636, teamleader 430
+ const { employeeId, userType } = useParams();
 
   const getRoleButtons = () => {
     switch (userType) {
-      case "superuser":
+      case "SuperUser":
         return ["Recruiter", "Team Leader", "Manager"]
-      case "manager":
+      case "Manager":
         return ["Recruiter", "Team Leader"]
-      case "teamleader":
+      case "TeamLeader":
         return ["Recruiter"]
       default:
         return ["Recruiter"]
@@ -34,6 +32,16 @@ const AttendanceLoginLogout = () => {
   }
 
   const availableRoles = getRoleButtons()
+
+  const getCurrentDate = () => {
+    const today = new Date()
+    const year = today.getFullYear()
+    const month = String(today.getMonth() + 1).padStart(2, "0")
+    const day = String(today.getDate()).padStart(2, "0")
+    return `${year}-${month}-${day}`
+  }
+  console.log("Current Date in Attendance Login Page :", getCurrentDate());
+  
 
   useEffect(() => {
     if (userType === "teamleader") {
@@ -43,9 +51,8 @@ const AttendanceLoginLogout = () => {
 
   const fetchInfo = async (role = "Recruiters") => {
     try {
-      const url = `${API_BASE_URL}/get-active-details/${userType}?employeeId=${employeeId}&currentDate=2025-03-24&user=${role}`
-
-      const response = await axios.get(url)
+   
+      const response = await axios.get(`${API_BASE_URL}/get-active-details/${userType}?employeeId=${employeeId}&currentDate=${getCurrentDate()}&user=${role}`)
       console.log(`API Response for ${role}:`, response.data)
 
       if (response.data) {
@@ -140,10 +147,14 @@ const AttendanceLoginLogout = () => {
                   />
 
                   <div className="user-details">
-                    <p>
+                    <p style={{
+                      color:"black"
+                    }}>
                       <strong>Employee Id:</strong> {user.empId}
                     </p>
-                    <p>
+                    <p style={{
+                      color:"black"
+                    }}>
                       <strong>Name:</strong> {user.employeeName}
                     </p>
                   </div>
@@ -210,13 +221,13 @@ const AttendanceLoginLogout = () => {
           onClick={() => setFilterStatus("login")}
           className={`login-btn ${filterStatus === "login" ? "active" : ""}`}
         >
-          LogIn
+          Login
         </button>
         <button
           onClick={() => setFilterStatus("logout")}
           className={`logout-btnAttendance ${filterStatus === "logout" ? "active" : ""}`}
         >
-          LogOut
+          Logout
         </button>
       </div>
 

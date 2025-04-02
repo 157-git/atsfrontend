@@ -65,6 +65,7 @@ const CallingExcelList = ({
   const [socket, setSocket] = useState(null);
   const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
   const filterRef=useRef(null);
+  const [triggerFetch, setTriggerFetch] = useState(false);
 
       const [isHorizontallyScrolling, setIsHorizontallyScrolling] = useState(false);
      const tableContainerRef = useRef(null);
@@ -101,7 +102,7 @@ const CallingExcelList = ({
 
   useEffect(() => {
     fetchUpdatedData(currentPage, pageSize);
-  }, [employeeId, userType, currentPage, pageSize, searchTerm]);
+  }, [employeeId, userType, currentPage, pageSize, triggerFetch]);
 
   useEffect(() => {
     const options = Object.keys(filteredCallingList[0] || {}).filter(
@@ -153,7 +154,7 @@ const CallingExcelList = ({
     const filtered = FilterData(callingList, searchTerm);
     setFilteredCallingList(filtered);
     setSearchCount(filtered.length);
-  }, [searchTerm, callingList]);
+  }, [ callingList]);
   const handleDisplayShareConfirmClick = () => {
     setDisplayShareConfirm(true);
   };
@@ -533,7 +534,9 @@ const CallingExcelList = ({
       setLoading(false);
     }
   };
-
+  const handleSearchClick = ()=>{
+    fetchUpdatedData(currentPage, pageSize);
+  }
   const calculateWidth = () => {
     const baseWidth = 250;
     const increment = 10;
@@ -617,7 +620,10 @@ const CallingExcelList = ({
     setSelectedEmployeeId(null); // Clear the selected recruiter ID
     setSelectedRole(""); // Clear the selected role
   };
-
+ 
+  const handleTriggerFetch = () => {
+    setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
+  };
   useEffect(() => {
     handleDisplayManagers();
   }, []);
@@ -741,18 +747,54 @@ const CallingExcelList = ({
                   ></i>
                   {/* Arshad Comments This On 15-11-2024 */}
                   {/* {showSearchBar && ( */}
+                  <form onSubmit={() => handleSearchClick()}
+                      style={{
+                        display:"flex"
+                      }}
+                      > 
                   <div
                     className="search-input-div"
-                    style={{ width: `${calculateWidth()}px` }}
+                    style={{ width: `${calculateWidth()}px`, display:"flex" }}
                   >
+                   
                     <input
                       type="text"
                       className="search-input"
                       placeholder="Search here..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
+                      style={{
+                        marginRight:"0",
+                        border:"none"
+                      }}
                     />
+{searchTerm && (
+                          <div className="svgimagesetinInput">
+                            <svg
+                              onClick={() => {
+                                setSearchTerm("")
+                                handleTriggerFetch();
+                              }
+                              }
+                              xmlns="http://www.w3.org/2000/svg"
+                              height="24px"
+                              viewBox="0 -960 960 960"
+                              width="24px"
+                              fill="#000000"
+                            >
+                              <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                            </svg>
+                          </div>
+                        )}
                   </div>
+
+                  <button
+        className="search-btns lineUp-share-btn"
+        onClick={() => handleSearchClick()} 
+      >
+        Search 
+      </button>
+                    </form>
 
                   {/* )} */}
                 </div>

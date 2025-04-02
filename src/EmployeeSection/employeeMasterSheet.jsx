@@ -755,6 +755,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                 ></i>
                 {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
 
+                <form onSubmit={() => handleSearchClick()}> 
                 <div
                   className="search-input-div"
                   style={{ width: `${calculateWidth()}px` }}
@@ -792,6 +793,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                 >
                   Search
                 </button>
+                </form>
               </div>
 
               <div className="master-sheet-header">

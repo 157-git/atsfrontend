@@ -796,6 +796,9 @@ const forwardSelectedCandidate = (e) => {
                         fontSize: "15px",
                       }}
                     ></i>
+                    <form onSubmit={() => handleSearchClick()} style={{
+                      display:"flex"
+                    }}> 
                     <div
                       className="search-input-div"
                       style={{ width: `${calculateWidth()}px`, display:"flex" }}
@@ -839,6 +842,7 @@ const forwardSelectedCandidate = (e) => {
       >
         Search 
       </button>
+      </form>
                   </div>
                   <h1 className="resume-data-heading newclassnameforpageheader">Resume Data </h1>
 

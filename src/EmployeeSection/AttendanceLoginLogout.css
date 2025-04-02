@@ -1,234 +1,228 @@
-/* Rajlaxmi Jagadale createed this css file */
-  
-  .main-wrapper {
-    width: 100%;
-    height: 100vh;
-    text-align: center;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .search-container {
-    width: 100%;
-    background: white;
-    padding: 15px 20px;
-    z-index: 100;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    flex-wrap: nowrap;
-  }
-  
-  .search-inputAttedance {
-    padding: 5px;
-    width: 300px;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .search-btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 14px;
-    white-space: nowrap;
-  }
-  
-  .logout-btnAttendance,
-  .login-btn,
-  .all-btn {
-    background-color: #7d7f81;
-    color: white;
-    border: none;
-    padding: 5px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 14px;
-    white-space: nowrap;
-  }
-  
-  .logout-btnAttendance.active,
-  .login-btn.active,
-  .all-btn.active {
-    background-color: #4a4b4c;
-    font-weight: bold;
-  }
-  
-  .search-btn:hover,
-  .logout-btnAttendance:hover,
-  .login-btn:hover,
-  .all-btn:hover {
-    opacity: 0.9;
-  }
-  
-  .card-wrapper {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-    padding-top: 1px;
-    width: 90%;
-    max-width: 1100px;
-    margin-left: auto;
-    margin-right: auto;
-    overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    flex: 1;
-  }
-  
-  .card-wrapper::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .status-card {
-    background: rgb(187, 205, 212);
-    border-radius: 15px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 10px;
-    text-align: left;
-    position: relative;
-    transition: transform 0.3s ease-in-out;
-    height: 180px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .status-card:hover {
-    transform: scale(1.02);
-  }
-  
-  .status-indicator {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-weight: bold;
-    padding: 5px 10px;
-    border-radius: 10px;
-  }
-  
-  .info-section {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-  
-  .status-image {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: 3px solid #ddd;
-    object-fit: cover;
-    background-color: #f0f0f0;
-  }
-  
-  .user-details p {
-    font-size: 16px;
-    font-weight: bold;
-    text-align: left;
-    margin: 3px 0;
-  }
-  
-  .user-stats p {
-    font-size: 16px;
-    margin-top: 8px;
-    margin-bottom: 8px;
-  }
-  
-  .time-info,
-  .target-info {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .stat-item {
-    display: inline-block;
-    white-space: nowrap;
-    margin-left: 40px;
-  }
-  
-  .user-stats strong {
-    margin-right: 5px;
-  }
-  
-  .button-container {
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-  
-  .role-btn {
-    background-color: #7e8184;
-    color: white;
-    border: none;
-    padding: 8px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 14px;
-    margin-left: 5px;
-    transition: all 0.3s ease;
-  }
-  
-  .role-btn.active {
-    background-color: #4a4b4c;
-    font-weight: bold;
-    transform: scale(1.05);
-  }
-  
-  .role-btn:hover {
-    background-color: #5a5b5c;
-  }
-  
-  .scroll-containerAttendance{
+.main-wrapper {
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-container {
+  width: 100%;
+  background: white;
+  padding: 15px 20px;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  flex-wrap: nowrap;
+}
+.search-inputAttedance {
+  padding: 5px;
+  width: 300px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.search-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.logout-btnAttendance,
+   .login-btn,
+   .all-btn {
+     background-color: #7d7f81;
+     color: white;
+     border: none;
+     padding: 5px 15px;
+     cursor: pointer;
+     border-radius: 5px;
+     font-size: 14px;
+     white-space: nowrap;
+   }
+   .logout-btnAttendance.active,
+   .login-btn.active,
+   .all-btn.active {
+     background-color: #4a4b4c;
+     font-weight: bold;
+   }
+ 
+   .search-btn:hover,
+   .logout-btnAttendance:hover,
+   .login-btn:hover,
+   .all-btn:hover {
+     opacity: 0.9;
+   }
+ 
+   .card-wrapper {
+     display: grid;
+     grid-template-columns: repeat(2, 1fr);
+     gap: 20px;
+     justify-content: center;
+     padding: 20px;
+     padding-top: 1px;
+     width: 90%;
+     max-width: 1100px;
+     margin-left: auto;
+     margin-right: auto;
+     overflow-y: auto;
+     scrollbar-width: none;
+     -ms-overflow-style: none;
+     flex: 1;
+   }
+ 
+   .card-wrapper::-webkit-scrollbar {
+     display: none;
+   }
+ 
+   .status-card {
+     background: var(--attendance-card-bg-color);
+     border-radius: 15px;
+     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+     padding: 10px;
+     text-align: left;
+     position: relative;
+     transition: transform 0.3s ease-in-out;
+     height: 180px;
+     width: 100%;
+     display: flex;
+     flex-direction: column;
+   }
+ 
+   .status-card:hover {
+     transform: scale(1.02);
+   }
+ 
+   .status-indicator {
+     position: absolute;
+     top: 10px;
+     right: 15px;
+     font-weight: bold;
+     padding: 5px 10px;
+     border-radius: 10px;
+   }
+ 
+   .info-section {
+     display: flex;
+     align-items: center;
+     gap: 15px;
+   }
+ 
+   .status-image {
+     width: 80px;
+     height: 80px;
+     border-radius: 50%;
+     border: 3px solid #ddd;
+     object-fit: cover;
+     background-color: #f0f0f0;
+   }
+ 
+   .user-details p {
+     font-size: 16px;
+     font-weight: bold;
+     text-align: left;
+     margin: 3px 0;
+   }
+ 
+   .user-stats p {
+     font-size: 16px;
+     margin-top: 8px;
+     margin-bottom: 8px;
+   }
+ 
+   .time-info,
+   .target-info {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 20px;
+   }
+ 
+   .stat-item {
+     display: inline-block;
+     white-space: nowrap;
+     margin-left: 40px;
+   }
+ 
+   .user-stats strong {
+     margin-right: 5px;
+   }
+ 
+   .button-container {
+     margin-top: 20px;
+     margin-bottom: 20px;
+   }
+ 
+   .role-btn {
+     background-color: #7e8184;
+     color: white;
+     border: none;
+     padding: 8px 10px;
+     cursor: pointer;
+     border-radius: 5px;
+     font-size: 14px;
+     margin-left: 5px;
+     transition: all 0.3s ease;
+   }
+ 
+   .role-btn.active {
+     background-color: #4a4b4c;
+     font-weight: bold;
+     transform: scale(1.05);
+   }
+ 
+   .role-btn:hover {
+     background-color: #5a5b5c;
+   }
+   .scroll-containerAttendance{
     width: 100%;
     flex: 1;
     display: flex !important;
     justify-content: center;
     overflow: hidden;
   }
-  
+
   .no-data-message {
     margin-top: 30px;
     color: #dc3545;
     font-weight: bold;
     font-size: 18px;
   }
-  
+
   .role-buttons {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
   }
-  
+
   .user-type-indicator {
     font-size: 16px;
     margin-bottom: 10px;
     color: #333;
   }
-  
+
   .user-type {
     font-weight: bold;
     text-transform: uppercase;
     color: #007bff;
   }
-  
+
   .selected-role-title {
     margin-bottom: 15px;
     color: #333;
     font-size: 20px;
     font-weight: bold;
   }
-  
+
   @media (max-width: 1500px) {
     .card-wrapper {
       width: 85%;
@@ -236,39 +230,39 @@
       gap: 18px;
     }
   }
-  
+
   @media (max-width: 1200px) {
     .card-wrapper {
       width: 90%;
       grid-template-columns: repeat(2, 1fr);
     }
-  
+
     .status-card {
       min-height: 190px;
     }
   }
-  
+
   @media (max-width: 1100px) {
     .card-wrapper {
       width: 92%;
       gap: 20px;
     }
-  
+
     .search-container {
       padding: 12px 15px;
     }
   }
-  
+
   @media (max-width: 1050px) {
     .card-wrapper {
       width: 95%;
     }
-  
+
     .status-card {
       min-height: 200px;
     }
   }
-  
+
   @media (max-width: 1000px) {
     .card-wrapper {
       grid-template-columns: repeat(2, 1fr);
@@ -276,7 +270,7 @@
       gap: 15px;
     }
   }
-  
+
   @media (max-width: 940px) {
     .card-wrapper {
       grid-template-columns: repeat(2, 1fr);
@@ -284,45 +278,45 @@
       gap: 16px;
     }
   }
-  
+
   @media (max-width: 900px) {
     .card-wrapper {
       width: 95%;
       gap: 25px;
     }
-  
+
     .search-container {
       padding: 12px 15px;
     }
   }
-  
+
   @media (max-width: 850px) {
     .search-inputAttedance {
       width: 250px;
     }
   }
-  
+
   @media (max-width: 800px) {
     .search-inputAttedance {
       width: 250px;
     }
   }
-  
+
   @media (max-width: 700px) {
     .status-card {
       min-height: 230px;
     }
-  
+
     .user-stats p {
       font-size: 14px;
     }
-  
+
     .time-info,
     .target-info {
       gap: 10px;
     }
   }
-  
+
   @media (max-width: 600px) {
     .card-wrapper {
       grid-template-columns: 1fr;
@@ -330,31 +324,30 @@
       padding: 10px;
       gap: 15px;
     }
-  
+
     .status-card {
       height: 200px;
       padding: 8px;
     }
-  
+
     .search-container {
       padding: 10px;
       flex-wrap: nowrap;
     }
-  
     .search-inputAttedance {
       width: 40%;
       min-width: 100px;
     }
-  
+
     .button-container {
       margin-top: 20px;
     }
-  
+
     .role-buttons {
       padding-top: 10px;
     }
   }
-  
+
   @media (max-width: 589px) {
     .card-wrapper {
       grid-template-columns: repeat(2, 1fr);
@@ -362,71 +355,69 @@
       gap: 15px;
       width: 95%;
     }
-  
+
     .status-card {
       height: 200px;
       padding: 8px;
     }
-  
+
     .role-btn {
       margin: 5px;
     }
-  
+
     .button-container {
       margin-top: 20px;
     }
-  
+
     .role-buttons {
       padding-top: 10px;
     }
   }
-  
+
   @media (max-width: 500px) {
     .card-wrapper {
       gap: 10px;
     }
-  
+
     .status-card {
       height: 210px;
       padding: 8px;
     }
-  
+
     .info-section {
       gap: 8px;
     }
-  
+
     .user-details p {
       font-size: 14px;
       margin: 2px 0;
     }
-  
+
     .user-stats p {
       font-size: 14px;
       margin-top: 5px;
       gap: 5px;
     }
-  
+
     .status-image {
       width: 60px;
       height: 60px;
     }
-  
+
     .time-info,
     .target-info {
       gap: 8px;
     }
   }
-  
+
   @media (max-width: 450px) {
     .search-container {
       gap: 5px;
     }
-  
     .search-inputAttedance {
       width: 35%;
       min-width: 80px;
     }
-  
     .logout-btnAttendance,
     .login-btn,
     .all-btn {
@@ -434,77 +425,76 @@
       font-size: 12px;
     }
   }
-  
+
   @media (max-width: 400px) {
     .status-card {
       height: 220px;
       padding: 8px;
     }
-  
+
     .status-image {
       width: 50px;
       height: 50px;
     }
-  
+
     .user-details p,
     .user-stats p {
       font-size: 12px;
     }
-  
+
     .search-btn,
     .logout-btnAttendance,
-    .login-btn,
-    .all-btn {
-      padding: 4px 6px;
-      font-size: 11px;
-    }
-  
-    .time-info,
-    .target-info {
-      flex-direction: column;
-      gap: 5px;
-    }
-  }
-  
-  @media (max-width: 300px) {
-    .status-image {
-      width: 60px;
-      height: 60px;
-    }
-  
-    .user-stats strong,
-    .user-details strong {
-      display: block;
-      margin-bottom: 2px;
-    }
-  }
-  
-  @media (max-width: 600px) {
-    .card-wrapper {
-      grid-template-columns: 1fr;
-      width: 90%;
-      padding: 15px;
-    }
-  
-    .search-container {
-      padding: 10px;
-      flex-wrap: nowrap;
-    }
-  
-    .search-inputAttedance {
+     .login-btn,
+     .all-btn {
+       padding: 4px 6px;
+       font-size: 11px;
+     }
+ 
+     .time-info,
+     .target-info {
+       flex-direction: column;
+       gap: 5px;
+     }
+   }
+ 
+   @media (max-width: 300px) {
+     .status-image {
+       width: 60px;
+       height: 60px;
+     }
+ 
+     .user-stats strong,
+     .user-details strong {
+       display: block;
+       margin-bottom: 2px;
+     }
+   }
+ 
+   @media (max-width: 600px) {
+     .card-wrapper {
+       grid-template-columns: 1fr;
+       width: 90%;
+       padding: 15px;
+     }
+ 
+     .search-container {
+       padding: 10px;
+       flex-wrap: nowrap;
+     }
+     .search-inputAttedance {
       width: 50%;
       min-width: 120px;
     }
-  
+
     .button-container {
       margin-top: 20px;
     }
-  
+
     .role-buttons {
       padding-top: 10px;
     }
   }
-  
+
   @media (max-width: 589px) {
     .card-wrapper {
       grid-template-columns: 1fr;
@@ -512,96 +502,93 @@
       gap: 20px;
       width: 90%;
     }
-  
+
     .status-card {
       min-width: 100%;
       min-height: 210px;
     }
-  
+
     .role-btn {
       margin: 5px;
     }
-  
+
     .button-container {
       margin-top: 20px;
     }
-  
+
     .role-buttons {
       padding-top: 10px;
     }
   }
-  
+
   @media (max-width: 500px) {
     .status-card {
       min-width: 100%;
       padding: 15px;
     }
-  
+
     .info-section {
       gap: 10px;
     }
-  
+
     .user-details {
       margin-top: 5px;
     }
-  
+
     .role-btn {
       margin: 5px;
     }
   }
-  
+
   @media (max-width: 450px) {
     .search-container {
       gap: 5px;
     }
-  
     .search-inputAttedance {
       width: 40%;
       min-width: 100px;
     }
-  
     .logout-btnAttendance,
     .login-btn {
       padding: 5px 10px;
       font-size: 13px;
     }
   }
-  
+
   @media (max-width: 400px) {
     .status-card {
       padding: 12px;
     }
-  
+
     .status-image {
       width: 70px;
       height: 70px;
     }
-  
+
     .user-details p,
     .user-stats p {
       font-size: 13px;
     }
-  
+
     .search-btn,
     .logout-btnAttendance,
-    .login-btn,
-    .all-btn {
-      padding: 5px 8px;
-      font-size: 12px;
-    }
-  }
-  
-  @media (max-width: 300px) {
-    .status-image {
-      width: 60px;
-      height: 60px;
-    }
-  
-    .user-stats strong,
-    .user-details strong {
-      display: block;
-      margin-bottom: 2px;
-    }
-  }
-  
-  
+     .login-btn,
+     .all-btn {
+       padding: 5px 8px;
+       font-size: 12px;
+     }
+   }
+ 
+   @media (max-width: 300px) {
+     .status-image {
+       width: 60px;
+       height: 60px;
+     }
+ 
+     .user-stats strong,
+     .user-details strong {
+       display: block;
+       margin-bottom: 2px;
+     }
+   }
+   
