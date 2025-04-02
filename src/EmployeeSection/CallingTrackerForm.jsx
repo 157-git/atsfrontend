@@ -576,14 +576,21 @@ const CallingTrackerForm = ({
   }, []);
   // console.log(lineUpData);
 
+  // const handleEmailCheckbox = (e) => {
+  //   const checkornot = e.target.checked;
+  //   if (checkornot === true) {
+  //     lineUpData.emailStatus = "yes";
+  //   } else {
+  //     lineUpData.emailStatus = "no";
+  //   }
+  // };
   const handleEmailCheckbox = (e) => {
-    const checkornot = e.target.checked;
-    if (checkornot === true) {
-      lineUpData.emailStatus = "yes";
-    } else {
-      lineUpData.emailStatus = "no";
-    }
+    setLineUpData((prev) => ({
+      ...prev,
+      emailStatus: e.target.checked ? "Yes" : "No",
+    }));
   };
+
   const handleSubmit = async (e) => {
     setShowConfirmation(false);
     e.preventDefault();
@@ -3131,6 +3138,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                   Add To LineUp
                 </button>
               )}
+
               {showConfirmation && (
                 <div
                   className="bg-black bg-opacity-50 modal show"
@@ -3151,19 +3159,40 @@ tooltips={desc} value={callingTracker.communicationRating}
                     }}
                   >
                     <Modal.Body>
-                      <p className="confirmation-text">
+                      
+                      <p>{callingTracker.errors}</p>
+                      {callingTracker.selectYesOrNo === "Interested" && (
+  <div>
+    <strong>Do you want to send an email to the candidate ?</strong>
+    <div className="sendemailornot">
+      <label>
+        <input
+          type="radio"
+          name="emailStatus"
+          value="Yes"
+          checked={lineUpData.emailStatus === "Yes"}
+          onChange={() => setLineUpData({ ...lineUpData, emailStatus: "Yes" })}
+        />
+         Yes
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="emailStatus"
+          value="No"
+          checked={lineUpData.emailStatus === "No"}
+          onChange={() => setLineUpData({ ...lineUpData, emailStatus: "No" })}
+        />
+        No
+      </label>
+    </div>
+  </div>
+)}
+
+                    <p className="confirmation-text">
                         Are you sure you want to save this candidate's
                         information ?
                       </p>
-                      <p>{callingTracker.errors}</p>
-                      {
-callingTracker.selectYesOrNo === "Interested" && (
-  <Checkbox onChange={handleEmailCheckbox} checked={lineUpData.emailStatus === "Yes"}>
-  Do You Want Send Email To Candidate ?
-</Checkbox>
-)
-                      }
-                    
                       <div
                         style={{
                           display: "flex",
@@ -3189,6 +3218,7 @@ callingTracker.selectYesOrNo === "Interested" && (
                     </Modal.Body>
                   </Modal.Dialog>
                 </div>
+
               )}
             </div>
           </center>
