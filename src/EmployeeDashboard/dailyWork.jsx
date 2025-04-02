@@ -36,6 +36,7 @@ function DailyWork({
   successfulDataUpdation,
   loginEmployeeName,
   trigger,
+  sendOfficailMailToQr,
 }) {
   const { employeeId, userType } = useParams();
   const [fetchWorkId, setFetchWorkId] = useState(null);
@@ -115,7 +116,9 @@ function DailyWork({
         `${API_BASE_URL}/fetch-profile-details/${employeeId}/${userType}`
       );
 
+
       setEmployeeData(response.data);
+      sendOfficailMailToQr(response.data.officialMail);
       if (response.data) {
         saveUserDetails(response.data.name);
       }

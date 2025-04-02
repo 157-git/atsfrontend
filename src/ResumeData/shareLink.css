@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-around;
   align-content: center;
-  margin-top: 20px;
+  /* margin-top: 20px; */
   /* border: 2px solid black; */
 }
 
@@ -27,11 +27,13 @@
   border-radius: 10px;
   box-shadow: 0 7px 10px rgba(0, 0, 0, 0.1);
   width: 27vw;
-  height: 27vh;
+  height: fit-content;
   cursor: pointer;
   color: white;
-  gap: 20px;
+  /* gap: 20px; */
   background-color: var(--Bg-color);
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .shareLink-view-btn,
 .shareLink-share-btn {
@@ -68,6 +70,7 @@
   gap: 10px;
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 /* Arshad added this css for new resume and cv work */

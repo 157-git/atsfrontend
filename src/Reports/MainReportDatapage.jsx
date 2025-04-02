@@ -43,6 +43,9 @@ const MonthReport = ({ loginEmployeeName }) => {
   const [managerToTeamLeaders, setManagerToTeamLeaders] = useState({}); // Maps managerId to teamLeaderIds
   const [teamLeaderToRecruiters, setTeamLeaderToRecruiters] = useState({}); // Maps teamLeaderId to recruiterIds
 
+console.log(finalStartDatePropState);
+
+
   const toggleManager = (managerId) => {
     if (activeManager === managerId) {
       // If the same manager is clicked again, reverse the rotation
@@ -283,14 +286,7 @@ const MonthReport = ({ loginEmployeeName }) => {
       return;
     }
 
-    if (selectedRole === "" && selectedIds.length === 0) {
-      setDisplayModalContainer(true);
-      setShowCustomDiv(false);
-      handleDisplayManagers();
-      setDisplayMoreButton(true);
-    } else {
-      setDisplayModalContainer(false);
-    }
+   
 
     // Calculate date range for predefined options
     const { startDate, endDate } = calculateDateRange(value);
@@ -304,6 +300,22 @@ const MonthReport = ({ loginEmployeeName }) => {
 
     setStartDate1(formattedStartDate);
     setEndDate1(formattedEndDate);
+
+
+    const finalStartDate1 = showCustomDiv ? customStartDate : formattedStartDate;
+      const finalEndDate1 = showCustomDiv ? customEndDate : formattedEndDate;
+
+      setFinalStartDatePropState(finalStartDate1);
+      setFinalEndDatePropState(finalEndDate1);
+
+    if (selectedRole === "" && selectedIds.length === 0) {
+      setDisplayModalContainer(true);
+      setShowCustomDiv(false);
+      handleDisplayManagers();
+      setDisplayMoreButton(true);
+    } else {
+      setDisplayModalContainer(false);
+    }
 
     // API Call when role and IDs are selected
     if (selectedRole !== "" && selectedIds.length !== 0) {

@@ -131,6 +131,7 @@ const EmpDashboard = ({ userGroup }) => {
   const [showCallingExcelList, setShowCallingExcelList] = useState(false);
   const [showLineupExcelList, setShowLineupExcelList] = useState(false);
   const [showUpdateResponse, setShowUpdateResponse] = useState(false);
+  const [officialMail, setOfficialMail] = useState("");
   const [showPayRoll, setShowPayRoll] =
     useState(
       false
@@ -653,6 +654,10 @@ const EmpDashboard = ({ userGroup }) => {
   const handleSetRefresPropForDailyWork = ()=>{
     setTriggerForChildTwo((prev) => !prev);
   }
+  
+  const handleSendOfficailMailToQr = (mail)=>{
+    setOfficialMail(mail);
+  }
 
   return (
     <div
@@ -731,6 +736,7 @@ const EmpDashboard = ({ userGroup }) => {
         toggleSharedProfiles={toggleSharedProfiles}
         toggleIssueLetter={toggleIssueLetter}
         toggleactiveTeamMembers={toggleactiveTeamMembers}
+        sendOfficailMailForQr={officialMail}
       />
 
       <div className="empDash-main-content">
@@ -747,6 +753,7 @@ const EmpDashboard = ({ userGroup }) => {
             successfulDataUpdation={successfulDataUpdation}
             loginEmployeeName={loginEmployeeName}
             trigger={triggerForChildTwo}
+            sendOfficailMailToQr={handleSendOfficailMailToQr}
           />
         </div>
 
@@ -878,7 +885,7 @@ const EmpDashboard = ({ userGroup }) => {
         <div>{showMainReportDatapage && <MainReportDatapage loginEmployeeName={loginEmployeeName} />}</div>
         <div>{showChatRoom && <ChatRoom />}</div>
         <div>
-          {showShareLink && <ShareLink toggleResumeLink={toggleResumeLink} loginEmployeeName={loginEmployeeName}/>}
+          {showShareLink && <ShareLink toggleResumeLink={toggleResumeLink} loginEmployeeName={loginEmployeeName} sendOfficailMailForQr={officialMail}/>}
         </div>
         {resumeLink && <CandidateResumeLink />}
         <div>

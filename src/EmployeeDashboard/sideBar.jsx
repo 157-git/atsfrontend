@@ -115,7 +115,8 @@ function Sidebar({
   toggeleAddManager,
   toggleSharedProfiles,
   toggleIssueLetter,
-  toggleactiveTeamMembers
+  toggleactiveTeamMembers,
+  sendOfficailMailForQr
 }) {
   const [error, setError] = useState("");
   const [isActive, setIsActive] = useState(false);
