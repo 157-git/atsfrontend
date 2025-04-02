@@ -20,11 +20,11 @@ const AttendanceLoginLogout = () => {
 
   const getRoleButtons = () => {
     switch (userType) {
-      case "superuser":
+      case "SuperUser":
         return ["Recruiter", "Team Leader", "Manager"]
-      case "manager":
+      case "Manager":
         return ["Recruiter", "Team Leader"]
-      case "teamleader":
+      case "TeamLeader":
         return ["Recruiter"]
       default:
         return ["Recruiter"]
@@ -51,8 +51,8 @@ const AttendanceLoginLogout = () => {
 
   const fetchInfo = async (role = "Recruiters") => {
     try {
-      const url = `${API_BASE_URL}/get-active-details/${userType}?employeeId=${employeeId}&currentDate=${getCurrentDate}&user=${role}`
-      const response = await axios.get(url)
+   
+      const response = await axios.get(`${API_BASE_URL}/get-active-details/${userType}?employeeId=${employeeId}&currentDate=${getCurrentDate()}&user=${role}`)
       console.log(`API Response for ${role}:`, response.data)
 
       if (response.data) {
@@ -217,13 +217,13 @@ const AttendanceLoginLogout = () => {
           onClick={() => setFilterStatus("login")}
           className={`login-btn ${filterStatus === "login" ? "active" : ""}`}
         >
-          LogIn
+          Login
         </button>
         <button
           onClick={() => setFilterStatus("logout")}
           className={`logout-btnAttendance ${filterStatus === "logout" ? "active" : ""}`}
         >
-          LogOut
+          Logout
         </button>
       </div>
 
