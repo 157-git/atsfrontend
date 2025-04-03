@@ -1079,6 +1079,7 @@ const CallingTrackerForm = ({
         message: "Confirm Overwrite",
         description: "Existing data will be replaced. Do you want to proceed?",
         duration: 0, // Keep open until user decides
+        closeIcon: null,
         btn: (
           <div style={{ display: "flex", gap: "10px" }}>
             <Button
