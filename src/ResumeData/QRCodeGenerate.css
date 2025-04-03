@@ -1,0 +1,145 @@
+ /* Rajlaxmi Jagadale Added that QR code css Date 2/04/2025 */
+
+ /* body {
+    font-family: "Poppins", sans-serif;
+    background: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  } */
+  
+  .container56565 {
+    text-align: center;
+    /* background: white; */
+    padding: 10px;
+    border-radius: 20px;
+    /* box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.18); */
+    width: 90%;
+    max-width: 420px;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #37474f;
+    margin-bottom: 0;
+  }
+  
+  .qr-input {
+    padding: 10px;
+    font-size: 16px;
+    width: 95%;
+    border: 1px solid black;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 10px;
+    background-color: white;
+    color: black;
+  }
+  
+  /* QR Code Wrapper */
+  .qr-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 20px;
+    /* margin-bottom: 20px; */
+  }
+  
+  .qr-container {
+    background-color:#526d82;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 250px;
+    box-sizing: border-box;
+  }
+  
+  
+  .qr-inner-container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box; 
+  }
+  
+  .label767657 {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    /* margin-top: 2px;
+    padding: 5px 0; */
+  }
+  .label766543{
+    margin-bottom: 10px;
+  }
+  
+  
+  .button-group123 {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  
+  .download-btn,
+  .share-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+  .download-btn:hover,
+  .share-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  
+  .download-btn {
+    background:#27374d;
+    color: white;
+  }
+  
+  
+  .share-btn {
+    background:#27374d;
+    color: white;
+  }
+  
+  canvas {
+    border-radius: 8px;
+  }
+  

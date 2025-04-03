@@ -430,6 +430,11 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           className="TeamLead-main-filter-section-container"
                           style={{ width: "80%" }}
                         >
+                          <form onSubmit={() => handleSearchClick()}
+                            style={{
+                              display:"flex"
+                            }}
+                            > 
                           <div
                             className="search-input-div"
                             style={{ width: `${calculateWidth()}px` }}
@@ -466,6 +471,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
       >
         Search 
       </button>
+      </form>
                         </div>
                       </div>
                       <div

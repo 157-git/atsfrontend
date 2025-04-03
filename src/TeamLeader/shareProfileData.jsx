@@ -262,6 +262,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                       }}
                     ></i>
 
+<form onSubmit={() => handleSearchClick()}> 
                     <div
                       className="search-input-div"
                       style={{ width: `${calculateWidth()}px` }}
@@ -298,6 +299,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
       >
         Search 
       </button>
+      </form>
                   </div>
                   <h1 className="resume-data-heading newclassnameforpageheader">Shared Profile Data</h1>
                   <div className="rl-btn-div">

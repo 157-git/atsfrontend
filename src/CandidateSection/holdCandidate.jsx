@@ -671,6 +671,7 @@ const handleCancelcloseshare = ()=>{
               ></i>
               {/* line 711 to 720 added by sahil karnekar date 24-10-2024 */}
 
+              <form onSubmit={() => handleSearchClick()}> 
               <div
                 className="search-input-div"
                 style={{ width: `${calculateWidth()}px` }}
@@ -707,6 +708,7 @@ const handleCancelcloseshare = ()=>{
       >
         Search 
       </button>
+      </form>
             </div>
             <h5 className="newclassnameforpageheader">Hold Candidates</h5>
             <div

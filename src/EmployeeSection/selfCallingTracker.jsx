@@ -718,6 +718,7 @@ const CallingList = ({
                   ></i>
                   {/* this line 731 to 741 added by sahil karnekar date 24-10-2024 */}
                 </div>
+                <form onSubmit={() => handleSearchClick()}> 
                 <div
                   className="search-input-div"
                   style={{ width: `${calculateWidth()}px` }}
@@ -755,6 +756,7 @@ const CallingList = ({
       >
         Search 
       </button>
+      </form>
               </div>
 
               <h3 className="newclassnameforpageheader">Calling Tracker</h3>

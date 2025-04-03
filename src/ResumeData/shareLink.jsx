@@ -9,8 +9,9 @@ import CvTemplate from "./cv";
 import ResumeCopy from "./resumecopy";
 import cv3 from "../photos/cv3.jpeg";
 import resumecopy2 from "../photos/resumecopy2.jpeg";
+import QRCodeGenerate from "./QRCodeGenerate";
 
-const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
+const ShareLink = ({ toggleResumeLink, loginEmployeeName, sendOfficailMailForQr }) => {
   const { employeeId, userType } = useParams();
   const [copyMessage, setCopyMessage] = useState("");
   const [userUrlString, setUserUrlString] = useState("");
@@ -119,30 +120,29 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName }) => {
     <div className="shareLink-mainDiv">
       {displayCopyBtn && activeComponent === "main" && (
         <div className="shareLink-share-btn-Div">
-          <h1
-            style={{
-              color: "var(--sidebar-txt)",
-            }}
-          >
-            Share Link To Candidate
-          </h1>
-          <div className="share-copy-div">
-            <button className="shareLink-share-btn" onClick={handleShareLink}>
-              Share 🔗
-            </button>
-            <button className="shareLink-share-btn" onClick={handleCopyLink}>
-              Copy Link 🔗
-            </button>
-          </div>
-          <span style={{ color: "var(--sidebar-txt)", fontSize: "14px" }}>
+
+
+<QRCodeGenerate shareUrl={shareUrl} loginEmployeeName={loginEmployeeName} sendOfficailMailForQr={sendOfficailMailForQr}/>
+
+<span style={{ color: "var(--sidebar-txt)", fontSize: "14px" }}>
             Share this link with the candidate so they can fill in their
             information through the link.
           </span>
+<div className="share-copy-div">
+<button className="shareLink-share-btn" onClick={handleCopyLink}>
+              Copy Link 🔗
+            </button>
+            <button className="shareLink-share-btn" onClick={handleShareLink}>
+              Share Link 🔗
+            </button>
+            
+          </div>
           {copyMessage && (
             <div className="copyMessage">
               <Tag color="#87d068">{copyMessage}</Tag>
             </div>
           )}
+
         </div>
       )}
 

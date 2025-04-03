@@ -82,7 +82,8 @@ const applySavedColors = () => {
     { variable: "--selected-form-bg" },
     { variable: "--mainDashboard-card-txt" },
     { variable: "--mainDashboard-card-txt-hover" },
-   
+    { variable: "--attendance-card-bg-color" },
+    
   ];
 
   if (bgColor)

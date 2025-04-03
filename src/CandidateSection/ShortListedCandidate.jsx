@@ -605,6 +605,7 @@ const handleSearchClick = ()=>{
                     ></i>
                     {/* line 581 to 590 updated by sahil karnekar date 24-10-2024 */}
 
+<form onSubmit={() => handleSearchClick()}> 
                     <div
                       className="search-input-div"
                       style={{ width: `${calculateWidth()}px` }}
@@ -644,6 +645,7 @@ const handleSearchClick = ()=>{
       >
         Search 
       </button>
+      </form>
       {/* <button
         className="search-btns lineUp-share-btn"
         // onClick={handleClear} 

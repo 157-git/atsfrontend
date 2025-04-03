@@ -638,6 +638,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
 
               style={{ alignContent:"center", marginRight:"10px"}}
             ></i>
+            <form onSubmit={() => handleSearchClick()}> 
                 <div
                     className="search-input-div"
                     style={{ width: `${calculateWidth()}px` }}
@@ -668,6 +669,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
       >
         Search 
       </button>
+      </form>
             </div>
             <h5 className="newclassnameforpageheader">Candidate Data</h5>
 

@@ -147,10 +147,14 @@ const AttendanceLoginLogout = () => {
                   />
 
                   <div className="user-details">
-                    <p>
+                    <p style={{
+                      color:"black"
+                    }}>
                       <strong>Employee Id:</strong> {user.empId}
                     </p>
-                    <p>
+                    <p style={{
+                      color:"black"
+                    }}>
                       <strong>Name:</strong> {user.employeeName}
                     </p>
                   </div>

@@ -263,8 +263,9 @@ const Attendance = ({
     size = pageSize
   ) => {
     setLoading(true);
+    console.log(finalStartDatePropState);
     try {
-      console.log(category);
+     
       const response = await axios.get(
         `${API_BASE_URL}/candidate-category/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`,
         {
