@@ -83,7 +83,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.23.1",
     "react-spinner": "^0.2.7",
-    "react-spinners": "^0.13.8",
+    "react-spinners": "^0.15.0",
     "react-stomp": "^5.1.0",
     "react-time-picker": "^7.0.0",
     "react-timer-hook": "^4.0.1",

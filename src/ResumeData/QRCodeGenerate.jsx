@@ -134,7 +134,7 @@ function QRCodeGenerate({shareUrl, loginEmployeeName, sendOfficailMailForQr}) {
           <div className="qr-inner-container qr-inner-container1111">
             <QRCodeCanvas
               id="qrCode"
-              size={180}
+              size={200}
               bgColor="#FFFFFF"
               fgColor="#27374d"
               value={websiteURL}

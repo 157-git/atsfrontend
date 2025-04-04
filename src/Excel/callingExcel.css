@@ -254,3 +254,8 @@
   font-size: 24px;
   color: #007bff;
 }
+.wraploadersandprogress{
+  display: flex;
+  align-items: center;
+  align-content: center;
+}

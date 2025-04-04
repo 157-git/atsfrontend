@@ -11,7 +11,7 @@ import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import * as XLSX from "xlsx";
 import ClipLoader from "react-spinners/ClipLoader";
-import { Modal, Progress } from "antd";
+import { Modal, Progress, Spin } from "antd";
 import staticvector1 from "../assets/uploadingvectorhuman.svg"
 
 const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuccessfulDataAdditions}) => {
@@ -583,7 +583,14 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
         width={600} >
        <>
        <img src={staticvector1} alt="hvhg" />
-       <Progress percent={progressLength} />
+       <div className="wraploadersandprogress">
+       <Spin />
+        <Progress percent={progressLength} style={{
+          marginLeft:"20px"
+        }} />
+       </div>
+       
+       
        </>
       </Modal>
         }
