@@ -253,7 +253,7 @@ function Sidebar({
       } catch (error1) {
         console.log(error1);
       }
-
+localStorage.removeItem(`user_${userType}${employeeId}`);
       if (socket && typeof socket.emit === "function") {
         socket.emit("user_logout_event", requestBody);
         console.log(

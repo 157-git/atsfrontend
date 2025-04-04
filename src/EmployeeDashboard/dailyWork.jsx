@@ -21,6 +21,7 @@ import { getDailyworkData,putDailyworkData } from "../HandlerFunctions/getDailyW
 import { useSelector } from "react-redux";
 import { LogOut } from "lucide-react";
 import StopWatch from "./stopWatch.jsx";
+import { toast } from "react-toastify";
 
 
 //SwapnilRokade_DailyWork_LogoutFunctionalityWorking_31/07
@@ -96,6 +97,25 @@ function DailyWork({
         }
       : false,
   });
+
+  const getLoginLogoutStatus = ()=>{
+    try {
+      const response = axios.get(`${API_BASE_URL}/check-login-status/${employeeId}/${userType}`);
+      console.log(response);
+      
+      if (response.data === "Logout") {
+        toast.error("user logedout from database !");
+        navigate(`/login/${userType}`);
+      }
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+  useEffect(()=>{
+    getLoginLogoutStatus();
+  },[])
 
   const TIMER_DURATION = 15 * 60 * 1000;
   let timerId;
