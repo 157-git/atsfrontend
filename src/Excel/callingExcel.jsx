@@ -49,6 +49,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
   const [excelJobDesignation, setexcelJobDesignation] = useState("");
   const [loadingProgressBar,setLoadingProgressBar]= useState(false);
   const [progressLength, setprogressLength] = useState(0);
+  const [dataForUpdateResumes, setDataForUpdateResumes] = useState([]);
 
   // this code from line number 43 to 59 added by sahil karnekar methods are same as previous just added new code but all three methods complete code is required
   const handleFileChange = (e) => {
@@ -230,11 +231,31 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
         `${API_BASE_URL}/add-multiple-resume/${employeeId}/${userType}`,
         formData
       );
+      console.log(response);
+      
       setprogressLength(80)
       await new Promise((resolve) => setTimeout(resolve, 500)); // Simulated delay
 
       if (response.status === 200) {
+        const [canIds, setCanIds]=useState([]);
+        setCanIds(response.data.candidateIds);
+        const getAllCurrentData = async () => {
+          try {
+            const response1 = await axios.get(`${API_BASE_URL}/fetch-uploaded-resume-data/`, {
+              params: {
+                candidateIds: `${canIds.join(",")}`,
+              },
+            });
+        
+            console.log(response1);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+        
         const responseData = response.data;
+        console.log(responseData);
+        
 
         const uploadedCount = responseData["Uploaded Resume Count"] || 0;
         const replacedCount = responseData["Replaced Resume Count"] || 0;
@@ -582,7 +603,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
         maskClosable={false}
         width={600} >
        <>
-       <img src={staticvector1} alt="hvhg" />
+       <img src={staticvector1} alt="hvhg" className="setnewwidthheightforuploadingvector" />
        <div className="wraploadersandprogress">
        <Spin />
         <Progress percent={progressLength} style={{
@@ -623,6 +644,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
             onActionClick={handleActionClick} // Pass the handler to the table component
             loginEmployeeName={loginEmployeeName}
             onsuccessfulDataAdditions={onsuccessfulDataAdditions}
+            dataFromUploadResumes={dataForUpdateResumes}
             // viewsSearchTerm={viewsSearchTerm}
           />
         )}
