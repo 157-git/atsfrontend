@@ -58,8 +58,7 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName, sendOfficailMailForQr 
     getEncodeUrlString();
   }, []);
 
-  // updated code for strong encryption according to requirments
-  // exposing directly in file just for testing and normal use purpose, please set this secreat key in env file while deploying on server
+
   const secretKey = "157industries_pvt_ltd"; // Use a consistent key across components
 
   const shareUrl = `https://rg.157careers.in/applicant-form/${firstName}+${userUrlString}`;
