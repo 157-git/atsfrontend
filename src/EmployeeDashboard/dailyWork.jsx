@@ -274,20 +274,20 @@ function DailyWork({
           //   JSON.stringify(formData, null, 2)
           // );
 
-          if (response.data) {
-            fetchCurrentEmployerWorkId();
-          }
-          console.log("Login details saved successfully -- save-daily-work .");
-          localStorage.setItem(
-            `loginDetailsSaved_${employeeId}`,
-            JSON.stringify(true)
-          );
-          localStorage.setItem(
-            `loginTimeSaved_${employeeId}`,
-            JSON.stringify(loginTime)
-          );
-          setLoginDetailsSaved(true);
-          setShowAlreadyLoggedInMessage(true); // Show the message after saving
+          // if (response.data) {
+          //   fetchCurrentEmployerWorkId();
+          // }
+          // console.log("Login details saved successfully -- save-daily-work .");
+          // localStorage.setItem(
+          //   `loginDetailsSaved_${employeeId}`,
+          //   JSON.stringify(true)
+          // );
+          // localStorage.setItem(
+          //   `loginTimeSaved_${employeeId}`,
+          //   JSON.stringify(loginTime)
+          // );
+          // setLoginDetailsSaved(true);
+          // setShowAlreadyLoggedInMessage(true); // Show the message after saving
         } catch (error) {
           console.error("Error saving login details:", error);
         }
