@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose } from "@fortawesome/free-regular-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import bannerImage from '../assets/newImage-removebg-preview.png';
 import {
   faUser,
   faPhone,
@@ -123,6 +124,8 @@ function ApplicantForm2({ loginEmployeeName }) {
       yearOfPassing: "",
       disability: "",
       disabilityDetails: "",
+      candidateUanNumber : "",
+      candidateReference : ""
       // certificates: [{ certificateName: "", certificateFile: null }],
     },
   };
@@ -697,6 +700,7 @@ function ApplicantForm2({ loginEmployeeName }) {
         ? { manager: { managerId: employeeId } }
         : {}),
     };
+console.log(dataToSend);
 
     try {
       const response = await axios.post(
@@ -932,6 +936,21 @@ function ApplicantForm2({ loginEmployeeName }) {
       <div className="form-container-December">
         <div className="form-heading-December-main-div">
           <h1 id="applicant-form-heading">Applicant Form</h1>
+        </div>
+
+        <div className="maincontforimagediv">
+          <div className="banner-container-December">
+            {/* Banner Image on the Left */}
+            <img src={bannerImage} alt="Banner Image" />
+
+            {/* Description Next to the Image */}
+            <div className="banner-description">
+              <h1>157 Industries Private Limited</h1>
+              <h2>Recruitments</h2>
+              <h3>157 Carrers</h3>
+            </div>
+          </div>
+
         </div>
 
         <form onSubmit={handleSubmit} className="applicant-form-December">
@@ -1625,7 +1644,55 @@ function ApplicantForm2({ loginEmployeeName }) {
                   <span className="error">{errors["lineUp.photo"]}</span>
                 )}
               </div>
+
+<div className="forNewUanandRefFlex">
+
+
+              <div className="form-group-December forNewUanandRefFlexwidth50">
+                <label>
+                  UAN Number <span className="setRequiredAstricColorRed">*</span>
+                </label>
+                <div className="input-with-icon-December">
+
+                  <input
+                    type="text"
+                    name="lineUp.candidateUanNumber"
+                    id="uanNumber"
+                    placeholder="Enter UAN Number"
+                    value={formData.lineUp.candidateUanNumber}
+                    onChange={handleChange}
+
+                    maxLength={12} // Assuming UAN has 12 digits
+                  />
+                </div>
+                {errors.candidateUanNumber && <span className="error">{errors.candidateUanNumber}</span>}
+              </div>
+
+              <div className="form-group-December forNewUanandRefFlexwidth50">
+              <label>
+                Reference
+              </label>
+              <div className="input-with-icon-December">
+
+                <input
+                  type="text"
+                  name="lineUp.candidateReference"
+                  id="reference"
+                  placeholder="Enter reference name"
+                  value={formData.lineUp.candidateReference}
+                  onChange={handleChange}
+
+                  maxLength={100}
+                />
+              </div>
+
             </div>
+
+            </div>
+
+</div>
+           
+
           </div>
 
           {/* <div className="form-group-December">
@@ -1971,6 +2038,23 @@ function ApplicantForm2({ loginEmployeeName }) {
               {loading ? "Submitting..." : "Submit"}
             </button>
           </div>
+
+
+          <div className="reference-links">
+  <p>
+    Visit our website: {" "} 
+    <a href="https://157careers.in/" target="_blank" rel="noopener noreferrer">
+      www.157careers.in
+    </a>
+  </p>
+  <p>
+    Connect with us on LinkedIn:  {" "} 
+    <a href="https://www.linkedin.com/company/157careers/posts/?feedView=all" target="_blank" rel="noopener noreferrer">
+    157 Careers Profile
+    </a>
+  </p>
+</div>
+
 
         </form>
         {loading && (

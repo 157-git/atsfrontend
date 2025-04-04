@@ -121,7 +121,6 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   const [openReport, setOpenReport] = useState(false);
   const [imageLoadErrors, setImageLoadErrors] = useState({});
 
-  console.log(selectedJobId);
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -471,8 +470,6 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   }, []);
 
   const fetchEmployeeCount = async (ids, role) => {
-    console.log(ids);
-    console.log(role);
 
     try {
       const response = await axios.get(
@@ -501,7 +498,7 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
   }, [selectedManagers, selectedTeamLeaders]);
 
   const fetchJobIds = async (ids, startDate, endDate, role) => {
-    console.log(ids, startDate, endDate, role);
+    `${API_BASE_URL}/performance-jobIds?empIds=${ids}&startDate=${startDate}&endDate=${endDate}&jobRole=${role}`
     if (!ids || !startDate || !endDate || !role) {
       return;
     } else {
@@ -666,7 +663,7 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
     if (selectedValue) {
       const selectedItem = JSON.parse(selectedValue);
       setSelectedJobId(selectedItem);
-      console.log(selectedItem);
+
     } else {
       setSelectedJobId(null);
     }
@@ -719,7 +716,7 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
           ]
     );
   };
-  console.log(processes);
+
 
   const toggleManagerExpand = (managerId) => {
     setExpandedManagerId(expandedManagerId === managerId ? null : managerId);
@@ -776,33 +773,36 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
     setEndDate(format(end, "yyyy-MM-dd"));
   };
 
-console.log(selectedManagers);
-console.log(selectedTeamLeaders);
-console.log(selectedRecruiters);
+
 
   const handleSelectAllNew = (role) => {
-    console.log(role);
-    console.log(selectedRole);
+   
     let newIds = [];
   
     if (role === "Manager") {
       newIds = managersList.map(manager => manager.managerId);
       managersList.forEach((manager)=> handleCheckboxChange(role, manager.managerId, manager));
+      setSelectedManagers(managers)
     } else if (role === "TeamLeader") {
       newIds = teamLeadersList.map(leader => leader.teamLeaderId);
       teamLeadersList.forEach((leader)=> handleCheckboxChange(role, leader.teamLeaderId, leader));
+      setSelectedTeamLeaders(teamLeaders)
     } else if (role === "Recruiters") {
       newIds = recruitersList.map(recruiter => recruiter.employeeId);
       recruitersList.forEach((recruiter)=> handleCheckboxChange(role, recruiter.employeeId, recruiter));
+      setSelectedRecruiters(recruiters)
     }
   
     setSelectedIds(prevIds => {
-      // Keep previous selections if the role was already selected
-      return selectedRole === role ? [...prevIds, ...newIds] : newIds;
+      // If switching roles, remove previously selected IDs
+      const filteredPrevIds = prevIds.filter(id => !newIds.includes(id));
+      
+      return role === selectedRole ? [...filteredPrevIds, ...newIds] : newIds;
     });
   
     setSelectedRole(role);
   };
+console.log(selectedIds);
 
   const handleCustomStartDateChange = (event) => {
     const date = new Date(event.target.value);
@@ -838,7 +838,6 @@ console.log(selectedRecruiters);
     const totalMinutes2 = getTotalMinutes(
       convertMinutesToHours(data.length * 5)
     ); // Convert convertMinutesToHours result into minutes
-    console.log(totalMinutes1, totalMinutes2);
 
     const difference = totalMinutes2 - totalMinutes1; // Keep the difference with its sign
 
@@ -982,7 +981,6 @@ console.log(selectedRecruiters);
       selectedJobId.length > 0
         ? selectedJobId.map((job) => job.requirementId).join(",")
         : "";
-    console.log(jobId);
 
     if (selectedManagers.length > 0) {
       ids = selectedManagers.map((manager) => manager.managerId).join(",");
@@ -1002,10 +1000,9 @@ console.log(selectedRecruiters);
       ids = employeeId;
       role = userType;
     }
-    console.log(ids, role, startDate, endDate, jobId);
+
     try {
-      console.log("Executing 1");
-      console.log(jobId);
+
 
       const response = await axios.get(
         `${API_BASE_URL}/fetch-process-timings`,
@@ -1019,17 +1016,16 @@ console.log(selectedRecruiters);
           },
         }
       );
-      console.log("Executing 2");
       console.log(`${API_BASE_URL}/fetch-process-timings?employeeIds=${ids}&jobRole=${role}&startDate=${startDate}&endDate=${endDate}&jobIds=${jobId}`,
       );
 
 
       const jsonData = response.data;
-      console.log("Executing 2");
+
       setData(jsonData);
-      console.log("Executing 2");
+
       calculateFormFillingTotal(jsonData);
-      console.log("Executing 2");
+ 
     } catch (error) {
       console.error(error);
       toast.error("Something Went Wrong");
@@ -1037,7 +1033,7 @@ console.log(selectedRecruiters);
       setIsLoading(false);
     }
   };
-  console.log(data);
+
 
   const uniqueClientDetails = clientDetails.reduce((acc, current) => {
     const x = acc.find((item) => item.requirementId === current.requirementId);
@@ -1460,9 +1456,6 @@ console.log(selectedRecruiters);
     return 0;
   });
 
-  console.log(performanceChart);
-
-  console.log(spentTime);
 
   const chartData = {
     labels,
@@ -1629,6 +1622,9 @@ console.log(selectedRecruiters);
     if (selectedRole && selectedRole !== role) {
       setSelectedRole(role);
       updatedIds = [id]; // Reset selection for a new role
+      setSelectedManagers([])
+      setSelectedTeamLeaders([])
+      setSelectedRecruiters([])
     } else {
       updatedIds = selectedIds.includes(id)
         ? selectedIds.filter((selectedId) => selectedId !== id) // Remove unselected ID
@@ -1652,6 +1648,7 @@ console.log(selectedRecruiters);
               },
             ]
       );
+      setSelectedRole(role);
     } else if (role === "TeamLeader") {
       const teamLeader = completeValueObject;
       setSelectedTeamLeaders((prev) =>
@@ -1665,6 +1662,7 @@ console.log(selectedRecruiters);
               },
             ]
       );
+      setSelectedRole(role);
     } else if (role === "Recruiters") {
       const recruiter = completeValueObject;
       setSelectedRecruiters((prev) =>
@@ -1678,6 +1676,7 @@ console.log(selectedRecruiters);
               },
             ]
       );
+      setSelectedRole(role);
     }
   };
   const handleCheckboxChangeForJobIdsForPerformance = (event, item) => {

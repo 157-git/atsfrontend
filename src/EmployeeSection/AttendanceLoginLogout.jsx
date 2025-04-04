@@ -5,6 +5,7 @@ import axios from "axios"
 import dummyImage from "../EmployeeSection/dummy.jpg"
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
+import Loader from "./loader";
 
 
 const AttendanceLoginLogout = () => {
@@ -15,6 +16,7 @@ const AttendanceLoginLogout = () => {
   const [showRoles, setShowRoles] = useState(false)
   const [selectedRole, setSelectedRole] = useState("Recruiter") // Default to Recruiter
   const [imageLoadErrors, setImageLoadErrors] = useState({})
+  const [loading, setLoading] = useState(false);
 
  const { employeeId, userType } = useParams();
 
@@ -50,6 +52,7 @@ const AttendanceLoginLogout = () => {
   }, [userType])
 
   const fetchInfo = async (role = "Recruiters") => {
+    setLoading(true);
     try {
    
       const response = await axios.get(`${API_BASE_URL}/get-active-details/${userType}?employeeId=${employeeId}&currentDate=${getCurrentDate()}&user=${role}`)
@@ -67,6 +70,8 @@ const AttendanceLoginLogout = () => {
       console.error("Error fetching data:", error)
       setActiveRecruiters([])
       setInactiveRecruiters([])
+    }finally{
+      setLoading(false)
     }
   }
 
@@ -129,7 +134,13 @@ const AttendanceLoginLogout = () => {
 
   const displayData = () => {
     return (
+     
       <div className="scroll-containerAttendance">
+         {
+        loading && (
+          <Loader/>
+        )
+      }
         <div className="card-wrapper">
           {filteredRecruiters().length > 0 ? (
             filteredRecruiters().map((user, index) => (

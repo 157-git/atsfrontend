@@ -1353,7 +1353,7 @@ const handleFilterOptionClick = (key) => {
                   <Modal
                     className="modaldfattendanceform"
                     width={1000}
-                    open={displayModalContainer}
+                    open={displayModalContainer && userType !== "Recruiters"}
                     onOk={handleOk}
                     onCancel={handleCancel}
                     style={{
@@ -1716,7 +1716,11 @@ const handleFilterOptionClick = (key) => {
                 <div className="PI-superuser-divattendanceform">
                   <p className="attendanceform">
                     Manager :{" "}
-                    {selectedManagers.length || employeeCount.managerCount}
+                    {
+                      selectedRole === "Manager" ? 
+selectedIds.length : 0
+                    }
+                    
                   </p>
                   <p className="attendanceform">
                     Team Leader :{" "}
