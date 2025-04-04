@@ -1,17 +1,22 @@
 // Rajlaxmi Jagadale Added that QR code Date 2/04/2025
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { toPng } from "html-to-image"
 import { FaDownload, FaShareAlt } from "react-icons/fa"
 import { QRCodeCanvas } from "qrcode.react"
+import uploadingResumeGif from "../assets/icons8-download.gif";
+import SharingResumeGif from "../assets/icons8-connect.gif";
+
 
 import logoImage from "../assets/157logo_Circular.png"
 import "../ResumeData/QRCodeGenerate.css"
-import { DownloadOutlined, ShareAltOutlined } from "@ant-design/icons"
+import { DownloadOutlined, LoadingOutlined, ShareAltOutlined } from "@ant-design/icons"
+import { Spin } from "antd"
 
 function QRCodeGenerate({shareUrl, loginEmployeeName, sendOfficailMailForQr}) {
   const websiteURL = shareUrl;
   const qrRef = useRef(null)
+  const [loading, setLoading] = useState(false);
 
   const generateQRCode = async () => {
     if (qrRef.current) {
@@ -56,6 +61,7 @@ function QRCodeGenerate({shareUrl, loginEmployeeName, sendOfficailMailForQr}) {
 
   // Function to download QR Code
   const downloadQRCode = async () => {
+    setLoading(true);
     const qrWithLabel = await generateQRCode()
     if (qrWithLabel) {
       const link = document.createElement("a")
@@ -65,6 +71,7 @@ function QRCodeGenerate({shareUrl, loginEmployeeName, sendOfficailMailForQr}) {
       link.click()
       document.body.removeChild(link)
     }
+    setLoading(false);
   }
 
   const shareQRCode = async () => {
@@ -123,15 +130,12 @@ function QRCodeGenerate({shareUrl, loginEmployeeName, sendOfficailMailForQr}) {
                 src: logoImage,
                 x: undefined,
                 y: undefined,
-                height: 40,
-                width: 40,
-                excavate: true,
-                borderRadius: "50%", 
-    style: {
-      borderRadius: "50%", 
-      objectFit: "cover", 
-      overflow: "hidden", 
-    },
+                height: 50,
+                width: 50,
+                // excavate: true,
+                borderRadius: "50%",
+                
+                
               }}
               
 
@@ -145,12 +149,24 @@ function QRCodeGenerate({shareUrl, loginEmployeeName, sendOfficailMailForQr}) {
       <div className="button-group123">
         <button onClick={downloadQRCode} className="download-btn">
          {/* Download QR */}
-         <DownloadOutlined />
+        {
+          loading ? (
+             <img
+             className="removebackgroundfromimagedownloading"
+                      src={uploadingResumeGif}
+                      alt="Uploading"
+                      style={{ width: 20, height: 20 }}
+                    />
+          ):(
+<DownloadOutlined />
+          )
+        } 
+         
         </button>
-        <button onClick={shareQRCode} className="share-btn">
-         {/* Share QR */}
+        {/* <button onClick={shareQRCode} className="share-btn">
+
          <ShareAltOutlined />
-        </button>
+        </button> */}
       </div>
     </div>
   )

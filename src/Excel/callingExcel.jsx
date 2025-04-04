@@ -11,6 +11,8 @@ import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import * as XLSX from "xlsx";
 import ClipLoader from "react-spinners/ClipLoader";
+import { Modal, Progress } from "antd";
+import staticvector1 from "../assets/uploadingvectorhuman.svg"
 
 const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuccessfulDataAdditions}) => {
   const [file, setFile] = useState(null);
@@ -45,6 +47,8 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
   // State for jobDesignation
   const [resumeJobDesignation, setResumeJobDesignation] = useState("");
   const [excelJobDesignation, setexcelJobDesignation] = useState("");
+  const [loadingProgressBar,setLoadingProgressBar]= useState(false);
+  const [progressLength, setprogressLength] = useState(0);
 
   // this code from line number 43 to 59 added by sahil karnekar methods are same as previous just added new code but all three methods complete code is required
   const handleFileChange = (e) => {
@@ -213,13 +217,21 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
       resumeJobDesignation.trim() || "DEFAULT_JOB_DESIGNATION"
     );
 
-    setLoading(true);
+    setLoadingProgressBar(true);
     try {
+      setprogressLength(0);
+
+      for (let i = 20; i <= 60; i += 20) {
+        setprogressLength(i);
+        await new Promise((resolve) => setTimeout(resolve, 300)); // Simulated delay
+      }
       // Make the POST request
       const response = await axios.post(
         `${API_BASE_URL}/add-multiple-resume/${employeeId}/${userType}`,
         formData
       );
+      setprogressLength(80)
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulated delay
 
       if (response.status === 200) {
         const responseData = response.data;
@@ -244,10 +256,14 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
         resetFileInput(resumeFileInputRef);
         setHasErrorResume(false);
       }
+      setprogressLength(100);
+      await new Promise((resolve) => setTimeout(resolve, 200)); // Simulated delay
     } catch (error) {
+      console.log(error);
+      
       toast.error("Error uploading files.");
     } finally {
-      setLoading(false); // Hide loader
+      setLoadingProgressBar(false); // Hide loader
     }
   };
 
@@ -560,6 +576,17 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
 
       <div className="upload-tables-section">
         {loading && <Loader />}
+        {loadingProgressBar &&
+        <Modal open={loadingProgressBar} closable={false}
+        footer={null}
+        maskClosable={false}
+        width={600} >
+       <>
+       <img src={staticvector1} alt="hvhg" />
+       <Progress percent={progressLength} />
+       </>
+      </Modal>
+        }
         {activeTable === "CallingExcelList" && (
           <CallingExcelList
             onCloseTable={() => setActiveTable("")}
