@@ -898,3 +898,35 @@ strong {
 .update-calling-tracker-field-sub-div .ant-radio-group .ant-radio-wrapper{
   border-right: none;
 }
+
+.sendemailornot{
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  gap: 5px;
+  justify-content: center;
+}
+
+.radio-button-email-confirmation {
+  width: 18px;  
+  height: 20px; 
+  accent-color: #007bff; 
+  cursor: pointer; 
+}
+
+.sendemailornot label {
+  font-size: 16px; 
+  font-weight: 500; 
+  margin-right: 15px; 
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.enter-customer-location{
+  margin-top: 5px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding-left: 5px;
+}
+
