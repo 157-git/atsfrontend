@@ -239,19 +239,19 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
       if (response.status === 200) {
         const [canIds, setCanIds]=useState([]);
         setCanIds(response.data.candidateIds);
-        const getAllCurrentData = async () => {
-          try {
-            const response1 = await axios.get(`${API_BASE_URL}/fetch-uploaded-resume-data/`, {
-              params: {
-                candidateIds: `${canIds.join(",")}`,
-              },
-            });
+        // const getAllCurrentData = async () => {
+        //   try {
+        //     const response1 = await axios.get(`${API_BASE_URL}/fetch-uploaded-resume-data/`, {
+        //       params: {
+        //         candidateIds: `${canIds.join(",")}`,
+        //       },
+        //     });
         
-            console.log(response1);
-          } catch (error) {
-            console.error("Error fetching data:", error);
-          }
-        };
+        //     console.log(response1);
+        //   } catch (error) {
+        //     console.error("Error fetching data:", error);
+        //   }
+        // };
         
         const responseData = response.data;
         console.log(responseData);
