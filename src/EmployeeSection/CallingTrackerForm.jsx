@@ -97,7 +97,7 @@ const CallingTrackerForm = ({
     relevantExperience: "",
     currentCTCLakh: "",
     currentCTCThousand: "",
-    emailStatus: "",
+    emailStatus: "No",
     expectedCTCLakh: "",
     expectedCTCThousand: "",
     dateOfBirth: "",
@@ -1752,6 +1752,7 @@ const CallingTrackerForm = ({
                     </div>
                     {isOtherLocationSelected && (
                       <input
+                      className="enter-customer-location"
                         type="text"
                         name="currentLocation"
                         value={callingTracker.currentLocation}
@@ -1765,7 +1766,7 @@ const CallingTrackerForm = ({
                             return rest;
                           });
                         }}
-                        placeholder="Enter your location"
+                        placeholder="Please Enter location"
                       />
                     )}
 
@@ -3163,13 +3164,14 @@ tooltips={desc} value={callingTracker.communicationRating}
                       <p>{callingTracker.errors}</p>
                       {callingTracker.selectYesOrNo === "Interested" && (
   <div>
-    <strong>Do you want to send an email to the candidate ?</strong>
+    <strong>Do you want to send an email to candidate  ?</strong>
     <div className="sendemailornot">
-      <label>
+      <label >
         <input
           type="radio"
           name="emailStatus"
           value="Yes"
+          className="radio-button-email-confirmation"
           checked={lineUpData.emailStatus === "Yes"}
           onChange={() => setLineUpData({ ...lineUpData, emailStatus: "Yes" })}
         />
@@ -3180,6 +3182,7 @@ tooltips={desc} value={callingTracker.communicationRating}
           type="radio"
           name="emailStatus"
           value="No"
+          className="radio-button-email-confirmation"
           checked={lineUpData.emailStatus === "No"}
           onChange={() => setLineUpData({ ...lineUpData, emailStatus: "No" })}
         />

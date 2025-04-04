@@ -896,14 +896,19 @@ console.log(jobDescriptions);
                           </button>
                         </div>
                       </span>
-
-                      <p>
-                        {/* simple spelling mistake Corrected */}
-                        <b>Job Id : </b>
-                        {requirementData.requirementId || "-"}
+                      <p style={{gap:"30px",display:"flex"}}>
+                       <div>
+                       <b>Job Id : </b>
+                       {requirementData.requirementId || "-"}
+                       </div>
+                        <div>
+                        <b>JD Added By : </b>
+                        {requirementData.employeeName || "-"}
+                        </div>
                       </p>
+                      <hr />
                       <p>
-                        <b>Company Name : </b>
+                        <b>Company Name  : </b>
                         {requirementData.companyName || "-"}
                       </p>
                       <p>
@@ -929,6 +934,7 @@ console.log(jobDescriptions);
                         <b>Location : </b>
                         {requirementData.location || "-"}
                       </p>
+                     
                     </div>
                     <div className="info">
                       <p>

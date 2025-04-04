@@ -763,7 +763,7 @@ const handleDisplayConfirmBox = ()=>{
     e.preventDefault();
     setCallingTracker({
       ...callingTracker,
-      // recruiterName: loginEmployeeName, 
+      recruiterName: userType === 'Recruiters' ? loginEmployeeName : callingTracker.recruiterName,
     });
 
     console.log("Recruiter Name to be sent:", callingTracker.recruiterName); // Print recruiterName
@@ -800,7 +800,7 @@ const handleDisplayConfirmBox = ()=>{
       const dataToUpdate = {
         ...callingTracker,
         candidateName: forTrimCandidateName,
-        // recruiterName: loginEmployeeName,
+        recruiterName: userType === 'Recruiters' ? loginEmployeeName : callingTracker.recruiterName,
         candidateAddedTime: callingTracker.candidateAddedTime,
         lineUp: {
           ...callingTracker.lineUp,
@@ -845,7 +845,7 @@ const handleDisplayConfirmBox = ()=>{
         date: callingTracker.date,
         candidateId: callingTracker.candidateId,
         candidateAddedTime: getFormattedDateTime(),
-        recruiterName: loginEmployeeName, 
+        recruiterName: userType === 'Recruiters' ? loginEmployeeName : callingTracker.recruiterName,
         candidateName: callingTracker.candidateName.trim(),
         candidateEmail: callingTracker.candidateEmail,
         jobDesignation: callingTracker.jobDesignation,
@@ -967,7 +967,8 @@ if (response.ok) {
       toast.error(`Error updating data: ${error.message}`);
     }
   };
-console.log(callingTracker);
+
+
 
   const handleRequirementChange = (e) => {
     const { value } = e.target;
