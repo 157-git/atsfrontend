@@ -12,6 +12,7 @@ import logoImage from "../assets/157logo_Circular.png"
 import "../ResumeData/QRCodeGenerate.css"
 import { DownloadOutlined, LoadingOutlined, ShareAltOutlined } from "@ant-design/icons"
 import { Spin } from "antd"
+import html2canvas from "html2canvas";
 
 function QRCodeGenerate({shareUrl, loginEmployeeName, sendOfficailMailForQr}) {
   const websiteURL = shareUrl;
@@ -75,26 +76,40 @@ function QRCodeGenerate({shareUrl, loginEmployeeName, sendOfficailMailForQr}) {
   }
 
   const shareQRCode = async () => {
+
+
     try {
-      const qrWithLabel = await generateQRCode()
-      if (!qrWithLabel) return
+      const input = document.getElementById("shareQR");
+      const canvas = await html2canvas(input, { scale: 2, logging: true });
 
-      const response = await fetch(qrWithLabel)
-      const blob = await response.blob()
-      const file = new File([blob], "qrcode.png", { type: "image/png" })
+      const imgName = `${loginEmployeeName}_QRcode.png`;
+      const blob = await new Promise((resolve) =>
+        canvas.toBlob(resolve, "image/png")
+      );
 
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      if (
+        navigator.canShare &&
+        navigator.canShare({ files: [new File([blob], imgName)] })
+      ) {
+        const file = new File([blob], imgName, { type: "image/png" });
         await navigator.share({
+          title: loginEmployeeName,
+          text: "Check out this QR.",
           files: [file],
-          title: "QR Code",
-          text: "Scan this QR code to visit the website.",
-        })
+        });
       } else {
-        alert("Sharing not supported on this device.")
+        console.warn("Sharing not supported, downloading the image instead.");
+        const imgData = canvas.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.href = imgData;
+        link.download = imgName;
+        link.click();
       }
+
     } catch (error) {
-      console.error("Error sharing QR Code:", error)
+      toast.error("Error generating image:", error);
     }
+
   }
 
   useEffect(() => {
@@ -113,7 +128,7 @@ function QRCodeGenerate({shareUrl, loginEmployeeName, sendOfficailMailForQr}) {
       <h2 className="title">🔗 QR Code Generator</h2>
       {/* <input type="text" value={websiteURL} readOnly className="qr-input" /> */}
       <div className="qr-wrapper">
-        <div ref={qrRef} className="qr-container">
+        <div ref={qrRef} className="qr-container"  id="shareQR">
         <div className="label767657">157 Careers</div>
         <div className="label767657 label766543">Applicant Form</div>
           <div className="qr-inner-container qr-inner-container1111">
@@ -163,10 +178,10 @@ function QRCodeGenerate({shareUrl, loginEmployeeName, sendOfficailMailForQr}) {
         } 
          
         </button>
-        {/* <button onClick={shareQRCode} className="share-btn">
+        <button onClick={shareQRCode} className="share-btn">
 
          <ShareAltOutlined />
-        </button> */}
+        </button>
       </div>
     </div>
   )
