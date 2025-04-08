@@ -1000,7 +1000,7 @@ const handleCancelcloseshare = ()=>{
                       <th
                         className="attendanceheading"
                         onClick={() => handleSort("recruiterName")}
-                        style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 10 }}
+                        style={{ position: "sticky", left: showShareButton ? "140px" : "190px", zIndex: 10 }}
                       >
                         Recruiter's Name
                       </th>
@@ -1148,7 +1148,7 @@ const handleCancelcloseshare = ()=>{
                           className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
-                          style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 1 }}
+                          style={{ position: "sticky", left: showShareButton ? "140px" : "190px", zIndex: 1 }}
                         >
                           {highlightText(item.recruiterName || "", searchTerm)}
                           <div className="tooltip">

@@ -182,7 +182,9 @@ const StopWatch = ({ startTimer: startProp, onStopClick, onStartClick, onResumeC
     setStartTime(Date.now() - elapsedTime);
     onStartClick(true);
   };
-
+  useEffect(() => {
+      startTimerFunc();
+  }, [onResumeClick]);
   const stopTimerFunc = () => {
     dispatch(stopTimer());
     onStopClick(millisecondsToTimeString(elapsedTime));
@@ -203,11 +205,9 @@ const StopWatch = ({ startTimer: startProp, onStopClick, onStartClick, onResumeC
   return (
     <div className="setDisplayFlexForLoginhrandbreak">
       <button className="loging-hr newclassforhrbutton">Login Time: {millisecondsToTimeString(elapsedTime)}</button>
-      {!isRunning ? (
-        <button className="timer-break-btn" onClick={startTimerFunc}>Resume</button>
-      ) : (
-        <button className="timer-break-btn" onClick={stopTimerFunc}>Pause</button>
-      )}
+
+      <button className="timer-break-btn" onClick={stopTimerFunc}>Pause</button>
+  
     </div>
   );
 };
