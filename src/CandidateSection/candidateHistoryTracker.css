@@ -209,7 +209,7 @@
   width: auto;
   padding-left: 60px;
 }
-.lineUp-Filter-btn {
+.lineUp-Filter-btnhistory {
   background-color: white;
   color: #a9a9a9;
   border: 1px solid skyblue;
@@ -286,7 +286,7 @@
 }
 
 .bhafilter-button.active {
-  background-color: #ffcb9b; /* Background color when active */
+  background-color: var(--active-button1-bg); /* Background color when active */
   color: var(--button-txt-hover-color);
 }
 
@@ -300,6 +300,21 @@
   /* border: 1px solid green; */
   width: 100%;
 }
+/* Rajlaxmi JAgadale Added taht code Date 08/04/2025*/
+.Toastify__toast {
+  background-color: #000;
+  color: #fff !important;
+}
+.Toastify__close-button--light {
+  color: #fff !important;
+  font-size: 20px;
+}
+
+/* New styles for the selection modal */
+.selection-modal-contentteamperformance {
+  max-height: 70vh;
+  overflow-y: auto;
+}
 
 @media (max-width: 768px) {
   .history-button-container {
@@ -307,7 +322,7 @@
     align-items: center;
   }
 }
-.handlePrintDiv {
+.handlePrintDivhistory {
   float: inline-end;
 }
 
@@ -335,23 +350,157 @@
 .margin-left-set {
   margin-left: 13px;
 }
-@media print {
-  .can-history-filter-data-section {
-    page-break-inside: avoid;
 
-    text-align: center;
-    border: none;
+/* Rajlaxmi Jagadale Added that code line 341/465 Date 28/03/2025 */
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+    background: white;
   }
-  .can-history-filter-data {
-    width: 100%;
-    page-break-after: always;
-    text-align: left;
-  }
+
   .can-history-filter-data-section {
-    display: block;
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
+
+  .can-history-filter-data {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+    padding: 10px !important;
+    border: 1px solid #ddd !important;
+    width: 90% !important;
+    box-sizing: border-box !important;
+    margin: 20px;
+    margin-left: 30px;
+    margin-top: 20px;
+    overflow: visible !important; /* Ensure content is visible */
+  }
+
+  .history-tracker-table-header {
+    margin-bottom: 10px !important;
+  }
+
+  table {
+    width: 90% !important;
+    font-size: 10px !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+    margin-left: 30px;
+    margin-right: 10px;
+    margin-top: 10px;
+  }
+
+  th,
+  td {
+    padding: 5px !important;
+    word-break: break-word !important;
+    border: 1px solid #ddd !important;
+    font-size: 9pt !important;
+  }
+
+  td:first-child {
+    text-align: left !important;
+    padding-left: 10px !important;
+  }
+
+  td:not(:first-child) {
+    text-align: center !important;
+  }
+
+  th {
+    background-color: #f2f2f2 !important;
+    font-weight: bold !important;
+    border: 1px solid #ddd !important;
+    word-break: break-word !important;
+    font-size: 9pt !important;
+    text-align: center !important;
+    color: black !important;
+    position: static !important;
+  }
+
+  tr {
+    page-break-inside: avoid !important;
+  }
+
+  thead {
+    display: table-header-group !important;
+  }
+
+  tfoot {
+    display: table-footer-group !important;
+  }
+
+  /* Ensure all rows are visible in the PDF */
+  .hidden-row,
+  tbody tr {
+    display: table-row !important;
+  }
+
+  .can-history-data-table {
+    min-width: auto !important;
+    white-space: normal !important;
+  }
+
+  .can-history-data-table-container {
+    overflow: visible !important;
+    width: 100% !important;
+  }
+
+  .can-history-data-table th,
+  .theading th {
+    position: static !important;
+    background-color: #f2f2f2 !important;
+    color: black !important;
+    border: 1px solid #ddd !important;
+  }
+
   @page {
-    margin-top: 100px; /* Set the top margin for the entire page */
+    margin-top: 50px;
+    margin-bottom: 50px;
+    size: portrait;
+    
+  }
+  @page :left {
+    @bottom-right {
+      content: counter(page) " / " counter(pages);
+      margin-right: 20px;
+    }
+  }
+  
+  @page :right {
+    @bottom-right {
+      content: counter(page) " / " counter(pages);
+      margin-right: 20px;
+    }
+  }
+
+  /* Hide elements not needed in PDF */
+  .handlePrintDivhistory,
+  .can-history-more-items,
+  .history-button-container,
+  .history-filtter-data-div,
+  .history-main-div,
+  button,
+  .HeadingHistory,
+  .setborderdiv,
+  .Candi-History-tracker-div,
+  .pdf-loading-overlay,
+  .pdf-error-message {
+    display: none !important;
+  }
+
+  /* Ensure content doesn't get cut off */
+  * {
+    overflow: visible !important;
+  }
+
+  /* Make sure all expanded filters are visible */
+  .can-history-filter-data-content {
+    display: block !important;
+    overflow: visible !important;
   }
 }
 
@@ -425,7 +574,7 @@
 }
 
 .PI-radio-label.selected {
-  background-color: #ffcb9b;
+  background-color: var(--active-button1-bg);
 }
 
 .filterDataButton {
@@ -537,4 +686,8 @@ input[type="radio"] {
   /* background-color: var(--Bg-color);
   color:var(--table-header-txt); */
   color: black;
+}
+.newclassforpaddingdata{
+  padding: 3px;
+  border-color: var(--primary-border);
 }
