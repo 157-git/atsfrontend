@@ -198,28 +198,37 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
                   <h3 className="share-edm-black-skill">For Details</h3>
                   <h4 className="share-edm-contact">Contact - 157 Careers</h4>
                   <div className="share-edm-contact-detaisl">
-                    <input
-                      id="employeeName"
-                      value={data.employeeName}
-                      onChange={(e) => handleInputChange(e, "employeeName")}
-                      className="share-edm-input"
-                    />{" | "}
-                    <input
-                      id="officialMail"
-                      value={data.officialMail}
-                      onChange={(e) => handleInputChange(e, "officialMail")}
-                      className="share-edm-input"
-                    />{" | "}
-                    <input
-                      type="tel"
-                      id="officialContactNo"
-                      value={data.officialContactNo}
-                      onChange={(e) =>
-                        handleInputChange(e, "officialContactNo")
-                      }
-                      className="share-edm-input"
-                    />
-                   </div>
+  <div
+    id="employeeName"
+    contentEditable
+    suppressContentEditableWarning
+    onInput={(e) => handleInputChange(e, "employeeName")}
+    className="share-edm-input newClassnameForSolveSoniaMaanProblem"
+  >
+    {data.employeeName}
+  </div>
+  {" | "}
+  <div
+    id="officialMail"
+    contentEditable
+    suppressContentEditableWarning
+    onInput={(e) => handleInputChange(e, "officialMail")}
+    className="share-edm-input newClassnameForSolveSoniaMaanProblem"
+  >
+    {data.officialMail}
+  </div>
+  {" | "}
+  <div
+    id="officialContactNo"
+    contentEditable
+    suppressContentEditableWarning
+    onInput={(e) => handleInputChange(e, "officialContactNo")}
+    className="share-edm-input newClassnameForSolveSoniaMaanProblem"
+  >
+    {data.officialContactNo}
+  </div>
+</div>
+
                 </div>
               </div>
             </div>

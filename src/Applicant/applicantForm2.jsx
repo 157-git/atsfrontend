@@ -2042,14 +2042,14 @@ console.log(dataToSend);
 
           <div className="reference-links">
   <p>
-    Visit our website: {" "} 
-    <a href="https://157careers.in/" target="_blank" rel="noopener noreferrer">
+    <b>Visit our website: {" "} </b>
+    <a href="https://157careers.in/" target="_blank" rel="noopener noreferrer" className="newclassnameforlinkblue">
       www.157careers.in
     </a>
   </p>
   <p>
-    Connect with us on LinkedIn:  {" "} 
-    <a href="https://www.linkedin.com/company/157careers/posts/?feedView=all" target="_blank" rel="noopener noreferrer">
+    <b>Connect with us on LinkedIn:  {" "} </b>
+    <a href="https://www.linkedin.com/company/157careers/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="newclassnameforlinkblue">
     157 Careers Profile
     </a>
   </p>

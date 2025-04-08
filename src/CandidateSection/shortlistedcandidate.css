@@ -419,7 +419,9 @@ z-index: 1; */
 .sticky-cell-scrolled {
   background-color: white !important;
 }
-
+.search-btns{
+  margin-left: 10px;
+}
 /* Row hover - will override red when hovering */
 .attendancerows:hover .tabledata {
   background-color: var(--table-row-hover) !important;

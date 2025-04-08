@@ -7,7 +7,16 @@
     height: 100%;
     width: 100%;
   }
-  
+  .forNewUanandRefFlexwidth50{
+    width: 50%;
+  }
+  .newclassnameforlinkblue{
+    color: #0000FF;
+  }
+  .forNewUanandRefFlex{
+    width: 100%;
+    display: flex;
+  }
   .form-heading-December-main-div {
     height: 45px;
     background: #1d3a5d;
@@ -109,7 +118,7 @@
       text-align: center;
     }
     .forNewUanandRefFlexwidth50{
-      width: 50%;
+      width: 100%;
     }
   
     .banner-container-December img {
@@ -125,12 +134,15 @@
   }
   /* Fix for mobile view */
   @media (max-width: 768px) {
+    .forNewUanandRefFlex{
+      display: block;
+    }
    .maincontforimagediv{
     display: flow;
   
     }
     .forNewUanandRefFlexwidth50{
-      width: 50%;
+      width: 100%;
     }
   
     .banner-container-December {
@@ -399,7 +411,7 @@
       flex-direction: column;
     }
     .forNewUanandRefFlexwidth50{
-      width: 50%;
+      width: 100%;
     }
   
     .form-column-December {
@@ -415,12 +427,15 @@
   
   /* For mobile screens (max-width: 768px) */
   @media (max-width: 768px) {
+    .forNewUanandRefFlex{
+      display: block;
+    }
     .form-grid-December {
       flex-direction: column;
       gap: 10px;
     }
     .forNewUanandRefFlexwidth50{
-      width: 50%;
+      width: 100%;
     }
   
     .form-column-December {
@@ -441,12 +456,15 @@
   
   /* For small mobile screens (max-width: 500px) */
   @media (max-width: 500px) {
+    .forNewUanandRefFlex{
+      display: block;
+    }
     .form-grid-December {
       flex-direction: column;
       /* margin-top: 15px; */
     }
     .forNewUanandRefFlexwidth50{
-      width: 50%;
+      width: 100%;
     }
     #input-with-icon-December-certificates {
       width: 100%;
@@ -498,11 +516,14 @@
   }
   
   @media (max-width: 768px) {
+    .forNewUanandRefFlex{
+      display: block;
+    }
     .form-grid-December {
       flex-direction: column;
     }
     .forNewUanandRefFlexwidth50{
-      width: 50%;
+      width: 100%;
     }
   
     .form-column-December {
@@ -557,10 +578,4 @@
     background-color: #0077b5;
     text-decoration: underline;
   }
-  .forNewUanandRefFlex{
-    width: 100%;
-    display: flex;
-  }
-  .forNewUanandRefFlexwidth50{
-    width: 50%;
-  }
+  
