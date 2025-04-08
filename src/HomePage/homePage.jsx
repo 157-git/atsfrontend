@@ -94,7 +94,7 @@ const HomePage = () => {
               <div className="tagline">
                 <p className="taglineDesc">
                   Like a superhero needs their suit, you need Recruiter’s Gear
-                  to boost hiring power!
+                  to boost hiring power !!!!!!!
                 </p>
               </div>
 
