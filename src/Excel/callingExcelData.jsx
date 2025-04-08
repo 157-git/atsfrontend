@@ -28,6 +28,7 @@ const CallingExcelList = ({
   onsuccessfulDataAdditions,
   // toggleSection,
   viewsSearchTerm,
+  dataFromUploadExcelCalling,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOptions, setFilterOptions] = useState([]);
@@ -76,22 +77,31 @@ const CallingExcelList = ({
      };
 
   const fetchUpdatedData = (page, size) => {
-    fetch(
-      `${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setCallingList(data.content);
-        setFilteredCallingList(data.content);
-        setTotalRecords(data.totalElements);
-        setSearchCount(data.length);
-        setLoading(false); // Set loading to false when data is successfully fetched
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false); // Set loading to false in case of an error
-      });
+
+    if (dataFromUploadExcelCalling?.length > 0) {
+      setCallingList(dataFromUploadExcelCalling);
+        setFilteredCallingList(dataFromUploadExcelCalling);
+        setTotalRecords(dataFromUploadExcelCalling?.length);
+    }else{
+      fetch(
+        `${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setCallingList(data.content);
+          setFilteredCallingList(data.content);
+          setTotalRecords(data.totalElements);
+          setSearchCount(data.length);
+          setLoading(false); // Set loading to false when data is successfully fetched
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          setLoading(false); // Set loading to false in case of an error
+        });
+    }
+
+ 
   };
 
   // establishing socket for emmiting event
@@ -102,7 +112,7 @@ const CallingExcelList = ({
 
   useEffect(() => {
     fetchUpdatedData(currentPage, pageSize);
-  }, [employeeId, userType, currentPage, pageSize, triggerFetch]);
+  }, [employeeId, userType, currentPage, pageSize, triggerFetch, dataFromUploadExcelCalling, callingList]);
 
   useEffect(() => {
     const options = Object.keys(filteredCallingList[0] || {}).filter(
@@ -154,7 +164,7 @@ const CallingExcelList = ({
     const filtered = FilterData(callingList, searchTerm);
     setFilteredCallingList(filtered);
     setSearchCount(filtered.length);
-  }, [ callingList]);
+  }, [ callingList, searchTerm]);
   const handleDisplayShareConfirmClick = () => {
     setDisplayShareConfirm(true);
   };
@@ -375,6 +385,11 @@ const CallingExcelList = ({
   };
 
   const handleUpdateSuccess = (page, size) => {
+    if (dataFromUploadExcelCalling?.length > 0) {
+      setCallingList(dataFromUploadExcelCalling);
+        setFilteredCallingList(dataFromUploadExcelCalling);
+        setTotalRecords(dataFromUploadExcelCalling?.length);
+    }else{
     fetch(
       `${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?page=${page}&size=${size}`
     )
@@ -387,6 +402,7 @@ const CallingExcelList = ({
         setLoading(false);
       })
       .catch((error) => console.error("Error fetching data:", error));
+    }
     setLoading(false);
   };
 
@@ -788,12 +804,17 @@ const CallingExcelList = ({
                         )}
                   </div>
 
-                  <button
-        className="search-btns lineUp-share-btn"
-        onClick={() => handleSearchClick()} 
-      >
-        Search 
-      </button>
+{
+  !dataFromUploadExcelCalling && (
+    <button
+    className="search-btns lineUp-share-btn"
+    onClick={() => handleSearchClick()} 
+  >
+    Search 
+  </button>
+  )
+}
+               
                     </form>
 
                   {/* )} */}

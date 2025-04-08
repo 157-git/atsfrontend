@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Modal as BootstrapModal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useParams } from "react-router-dom";
+import zoomPlugin from "chartjs-plugin-zoom";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -59,7 +60,9 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  zoomPlugin
+
 );
 
 const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
@@ -782,15 +785,18 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
     if (role === "Manager") {
       newIds = managersList.map(manager => manager.managerId);
       managersList.forEach((manager)=> handleCheckboxChange(role, manager.managerId, manager));
-      setSelectedManagers(managers)
+      // setSelectedManagers(managers)
+      fetchEmployeeCount(newIds, role);
     } else if (role === "TeamLeader") {
       newIds = teamLeadersList.map(leader => leader.teamLeaderId);
       teamLeadersList.forEach((leader)=> handleCheckboxChange(role, leader.teamLeaderId, leader));
-      setSelectedTeamLeaders(teamLeaders)
+      fetchEmployeeCount(newIds, role);
+      // setSelectedTeamLeaders(teamLeaders)
     } else if (role === "Recruiters") {
       newIds = recruitersList.map(recruiter => recruiter.employeeId);
       recruitersList.forEach((recruiter)=> handleCheckboxChange(role, recruiter.employeeId, recruiter));
-      setSelectedRecruiters(recruiters)
+      fetchEmployeeCount(newIds, role);
+      // setSelectedRecruiters(recruiters)
     }
   
     setSelectedIds(prevIds => {
@@ -1497,6 +1503,21 @@ console.log(selectedIds);
       title: {
         display: true,
         text: "Time Tracker - Required vs Spent Time",
+      },
+      zoom: {
+        zoom: {
+          wheel: {
+            enabled: true, // Enable zooming with mouse wheel
+          },
+          pinch: {
+            enabled: true, // Enable zooming on touch devices
+          },
+          mode: 'x', // or 'y' or 'xy'
+        },
+        pan: {
+          enabled: true,
+          mode: 'x',
+        },
       },
     },
     scales: {

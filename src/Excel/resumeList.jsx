@@ -26,6 +26,7 @@ const ResumeList = ({
   loginEmployeeName,
   onsuccessfulDataAdditions,
   viewsSearchTerm,
+  dataFromUploadResumes,
 }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,6 +43,7 @@ const ResumeList = ({
   const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState({});
   const [showSearchBar, setShowSearchBar] = useState(false);
+console.log(dataFromUploadResumes);
 
   // Arshad Attar Added This Code On 03-12-2024
   // Added New Share Data Frontend Logic
@@ -72,18 +74,28 @@ const ResumeList = ({
 
   const fetchData = async (page, size) => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/fetch-resumes-data/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+
+      if (dataFromUploadResumes?.length > 0) {
+        console.log("running");
+        
+        setData(dataFromUploadResumes);
+      setFilteredData(dataFromUploadResumes);
+      setTotalRecords(dataFromUploadResumes.length);
+      } else{
+        console.log("running Api");
+        const response = await fetch(
+          `${API_BASE_URL}/fetch-resumes-data/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const result = await response.json();
+        setData(result.content);
+        setFilteredData(result.content);
+        setTotalRecords(result.totalElements);
+        setSearchCount(result.length);
+        console.log(filteredData);
       }
-      const result = await response.json();
-      setData(result.content);
-      setFilteredData(result.content);
-      setTotalRecords(result.totalElements);
-      setSearchCount(result.length);
-      console.log(filteredData);
     } catch (error) {
       setError(error);
     } finally {
@@ -98,7 +110,7 @@ const ResumeList = ({
 
   useEffect(() => {
     fetchData(currentPage, pageSize);
-  }, [employeeId, currentPage, pageSize, triggerFetch]);
+  }, [employeeId, currentPage, pageSize, triggerFetch, dataFromUploadResumes]);
 
 
   useEffect(() => {
@@ -311,7 +323,7 @@ const handleCancelcloseshare = ()=>{
 
   const applyFilters = () => {
     const lowerSearchTerm = searchTerm.toLowerCase();
-    let filteredResults = data.filter((item) => {
+    let filteredResults = (dataFromUploadResumes?.length > 0 ? dataFromUploadResumes : data).filter((item) => {
       return (
         item.candidateName?.toLowerCase().includes(lowerSearchTerm) ||
         item.candidateEmail?.toLowerCase().includes(lowerSearchTerm) ||
@@ -836,12 +848,17 @@ const forwardSelectedCandidate = (e) => {
                     // </div>
                   )}
                     </div>
-                    <button
-        className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
-        onClick={() => handleSearchClick()} 
-      >
-        Search 
-      </button>
+                    {
+                      !dataFromUploadResumes && (
+                        <button
+                        className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
+                        onClick={() => handleSearchClick()} 
+                      >
+                        Search 
+                      </button>
+                      )
+                    }
+                 
       </form>
                   </div>
                   <h1 className="resume-data-heading newclassnameforpageheader">Resume Data </h1>
@@ -1067,7 +1084,7 @@ const forwardSelectedCandidate = (e) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredData.map((item, index) => (
+                  {filteredData.map((item, index) => (
                       <tr key={item.candidateId} className="attendancerows">
                         {/* // Arshad Attar Added This Code On 03-12-2024
                         // Added New Share Data Frontend Logic, */}
@@ -1353,21 +1370,26 @@ const forwardSelectedCandidate = (e) => {
               </div>
 
               <div className="search-count-last-div">
-                Total Results : {totalRecords}
+                Total Results : {dataFromUploadResumes?.length > 0 ? dataFromUploadResumes.length :  totalRecords}
               </div>
 
-              <Pagination
-                current={currentPage}
-                total={totalRecords}
-                pageSize={pageSize}
-                showSizeChanger
-                showQuickJumper
-                onShowSizeChange={handleSizeChange}
-                onChange={handlePageChange}
-                style={{
-                  justifyContent: "center",
-                }}
-              />
+{
+  !dataFromUploadResumes && (
+    <Pagination
+    current={currentPage}
+    total={totalRecords}
+    pageSize={pageSize}
+    showSizeChanger
+    showQuickJumper
+    onShowSizeChange={handleSizeChange}
+    onChange={handlePageChange}
+    style={{
+      justifyContent: "center",
+    }}
+  />
+  )
+}
+             
 
               {/*Arshad Attar Added This Code On 20-01-205*/}
               {showForwardPopup ? (

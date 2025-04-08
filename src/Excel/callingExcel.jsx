@@ -49,6 +49,9 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
   const [excelJobDesignation, setexcelJobDesignation] = useState("");
   const [loadingProgressBar,setLoadingProgressBar]= useState(false);
   const [progressLength, setprogressLength] = useState(0);
+  const [dataForUpdateResumes, setDataForUpdateResumes] = useState([]);
+  const [dataForUpdateExcelCalling, setDataForUpdateExcelCalling] = useState([]);
+console.log(dataForUpdateExcelCalling);
 
   // this code from line number 43 to 59 added by sahil karnekar methods are same as previous just added new code but all three methods complete code is required
   const handleFileChange = (e) => {
@@ -126,7 +129,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
 
   const handleUpload = async () => {
     setActiveTable("");
-    setLoading(true);
+    // setLoading(true);
 
     // Check if a file is selected
     if (!file) {
@@ -157,15 +160,48 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
       "jobDesignation",
       excelJobDesignation.trim() || "DEFAULT_JOB_DESIGNATION"
     );
-
+    setLoadingProgressBar(true);
     try {
-      // Upload file to API
+      setprogressLength(0);
+
+      for (let i = 20; i <= 60; i += 20) {
+        setprogressLength(i);
+        await new Promise((resolve) => setTimeout(resolve, 300)); // Simulated delay
+      }
       console.log("Link come here 001");
-      await axios.post(
+     const responseUploadExcel = await axios.post(
         `${API_BASE_URL}/upload-excel-files/${employeeId}/${userType}`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
+console.log(responseUploadExcel);
+setprogressLength(80)
+await new Promise((resolve) => setTimeout(resolve, 500)); // Simulated delay
+if (responseUploadExcel.status === 200) {
+  const canIdsForUploadExcel = responseUploadExcel.data.UploadedCandidateIDs;
+  console.log(canIdsForUploadExcel);
+ const IsArray = Array.isArray(canIdsForUploadExcel);
+ let joinedIds;
+ if (IsArray) {
+  joinedIds = canIdsForUploadExcel.join(",");
+ }
+  const getAllCurrentData = async () => {
+    try {
+      const response1 = await axios.get(`${API_BASE_URL}/fetch-uploaded-excel-data`, {
+        params: {
+          candidateIds: `${joinedIds}`,
+        },
+      });
+  console.log(response1);
+  
+  setDataForUpdateExcelCalling(response1.data);
+  await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulated delay
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  getAllCurrentData();
+}
 
       // Success: reset states and show success toast
       console.log("Link come here 002");
@@ -186,11 +222,13 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
       // if (fileInputRef.current) {
       //   fileInputRef.current.value = "";
       // }
+      setprogressLength(100);
+      await new Promise((resolve) => setTimeout(resolve, 200)); // Simulated delay
     } catch (error) {
       // Error: show error toast but keep the file selected
       toast.error(`Upload error 009 : ${error.message}`);
     } finally {
-      setLoading(false);
+      setLoadingProgressBar(false);
     }
   };
 
@@ -230,11 +268,39 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
         `${API_BASE_URL}/add-multiple-resume/${employeeId}/${userType}`,
         formData
       );
+      console.log(response);
+      
       setprogressLength(80)
       await new Promise((resolve) => setTimeout(resolve, 500)); // Simulated delay
 
       if (response.status === 200) {
+
+        const canIds = response.data.UploadedCandidateIDs;
+        console.log(canIds);
+       const IsArray = Array.isArray(canIds);
+       let joinedIds;
+       if (IsArray) {
+        joinedIds = canIds.join(",");
+       }
+        const getAllCurrentData = async () => {
+          try {
+            const response1 = await axios.get(`${API_BASE_URL}/fetch-uploaded-resume-data`, {
+              params: {
+                candidateIds: `${joinedIds}`,
+              },
+            });
+        
+            setDataForUpdateResumes(response1.data);
+            await new Promise((resolve) => setTimeout(resolve, 100)); // Simulated delay
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+        getAllCurrentData();
+        
         const responseData = response.data;
+        console.log(responseData);
+        
 
         const uploadedCount = responseData["Uploaded Resume Count"] || 0;
         const replacedCount = responseData["Replaced Resume Count"] || 0;
@@ -508,9 +574,10 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
                   >
                     Download Excel Format
                   </button> */}
-                  <button onClick={() => handleTableChange("CallingExcelList")}>
+                  {/* button commented by sahil karnekar on date 7-4-2025 */}
+                  {/* <button onClick={() => handleTableChange("CallingExcelList")}>
                     View
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>
@@ -564,9 +631,10 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
                 </div>
                 <div className="gap-2 d-grid">
                   <button onClick={handleUploadResume}>Upload Resumes</button>
-                  <button onClick={() => handleTableChange("ResumeList")}>
+                  {/* button commented by sahil karnekar on date 7-4-2025 */}
+                  {/* <button onClick={() => handleTableChange("ResumeList")}>
                     View
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>
@@ -582,7 +650,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
         maskClosable={false}
         width={600} >
        <>
-       <img src={staticvector1} alt="hvhg" />
+       <img src={staticvector1} alt="hvhg" className="setnewwidthheightforuploadingvector" />
        <div className="wraploadersandprogress">
        <Spin />
         <Progress percent={progressLength} style={{
@@ -602,10 +670,12 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
             toggleSection={toggleSection}
             loginEmployeeName={loginEmployeeName}
             onsuccessfulDataAdditions={onsuccessfulDataAdditions}
+            dataFromUploadExcelCalling = {dataForUpdateExcelCalling}
             // viewsSearchTerm={viewsSearchTerm}
             // this line added by sahil karnekar line 302
           />
-        )}
+        )
+        }
 
         {activeTable === "LineupExcelData" && (
           <LineupExcelData
@@ -623,6 +693,7 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
             onActionClick={handleActionClick} // Pass the handler to the table component
             loginEmployeeName={loginEmployeeName}
             onsuccessfulDataAdditions={onsuccessfulDataAdditions}
+            dataFromUploadResumes={dataForUpdateResumes}
             // viewsSearchTerm={viewsSearchTerm}
           />
         )}
