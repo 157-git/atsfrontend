@@ -222,11 +222,11 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
             className="newinputforinterviewquestions"
           >
             <option value="">Select Round</option>
-            <option value="Round 1">HR Round</option>
-            <option value="Round 2">Technical Round</option>
-            <option value="Round 3">L1 Round</option>
-            <option value="Round 4">L2 Round</option>
-            <option value="Final Round">L3 Round</option>
+            <option value="HR Round">HR Round</option>
+            <option value="Technical Round">Technical Round</option>
+            <option value="L1 Round">L1 Round</option>
+            <option value="L2 Round">L2 Round</option>
+            <option value="L3 Round">L3 Round</option>
           </select>
         </div>
         <div className="form-group small newformgroupforinterviewquestionsform">

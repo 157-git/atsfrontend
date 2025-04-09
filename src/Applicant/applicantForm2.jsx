@@ -7,7 +7,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose } from "@fortawesome/free-regular-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import bannerImage from '../assets/newImage-removebg-preview.png';
-import newLogoHead from '../assets/newApplicantFormLogo.png';
+import newLogoHead from '../assets/newGraylogo.png';
 import {
   faUser,
   faPhone,
@@ -40,6 +40,8 @@ import CryptoJS from "crypto-js";
 import { getSocket } from "../EmployeeDashboard/socket";
 import Loader from "../EmployeeSection/loader";
 import { message } from "antd";
+import { Radio as AntdRadio } from 'antd';
+
 
 function ApplicantForm2({ loginEmployeeName }) {
   const [messageApi, contextHolder] = message.useMessage();
@@ -943,15 +945,18 @@ console.log(dataToSend);
     <div>
       {contextHolder}
       <div className="form-container-December">
+        <div className="maindivheadapplicant">
         <div className="form-heading-December-main-div">
           {/* <h1 id="applicant-form-heading">Applicant Form</h1> */}
           <img className="classnameforsetwidthforlogpimage" src={newLogoHead} alt=''/>
-          <div className="headingDivForApplicantNewHeading">
+          {/* <div className="headingDivForApplicantNewHeading">
           <h3 className="newclassnamefor157header">157 Careers</h3>
           <h3 className="newclassheadapplicantfor">Applicant Form</h3>
-          </div>
+          </div> */}
          
         </div>
+        </div>
+       
 
         {/* <div className="maincontforimagediv">
           <div className="banner-container-December">
@@ -1048,14 +1053,14 @@ console.log(dataToSend);
               </div>
 
               <div className="form-group-December">
-                <div className="gender">
+                <div className="gender newclasstosetthisasdisplayflex">
                   <label>
                     Gender <span className="setRequiredAstricColorRed">*</span>
                   </label>
-                  <div className="radio-group" id="genderid">
+                  <div className="radio-group newclassforradiogrouantd" id="genderid">
                     <FormControlLabel
                       control={
-                        <Radio
+                        <AntdRadio
                           name="lineUp.gender"
                           checked={formData.lineUp.gender === "Male"}
                           onChange={() =>
@@ -1073,7 +1078,7 @@ console.log(dataToSend);
 
                     <FormControlLabel
                       control={
-                        <Radio
+                        <AntdRadio
                           name="lineUp.gender"
                           checked={formData.lineUp.gender === "Female"}
                           onChange={() =>
@@ -2086,15 +2091,15 @@ console.log(dataToSend);
 
 
           <div className="reference-links">
-  <p>
-    <b>Visit our website: {" "} </b>
-    <a href="https://157careers.in/" target="_blank" rel="noopener noreferrer" className="newclassnameforlinkblue">
+          <p>
+    {/* <b className="newclassforfontsizechnges">Visit: {" "} </b>
+    <a href="https://157careers.in/" target="_blank" rel="noopener noreferrer" className="newclassnameforlinkblue newclassforfontsizechnges">
       www.157careers.in
-    </a>
-  </p>
-  <p>
-    <b>Connect with us on LinkedIn:  {" "} </b>
-    <a href="https://www.linkedin.com/company/157careers/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="newclassnameforlinkblue">
+    </a> */}
+  
+ 
+    <b className="newclassforfontsizechnges">Follow LinkedIn Page:  {" "} </b>
+    <a href="https://www.linkedin.com/company/157careers/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="newclassnameforlinkblue newclassforfontsizechnges">
     157 Careers Profile
     </a>
   </p>

@@ -474,6 +474,8 @@ const CallingTrackerForm = ({
           : sanitizedValue,
     }));
   };
+  const [selectedCountry, setSelectedCountry] = useState("IN");
+  const [selectedCountryWP, setSelectedCountryWP] = useState("IN");
 
   const handlePhoneNumberChange = (value, name) => {
     const sanitizedValue =
@@ -1521,7 +1523,8 @@ const CallingTrackerForm = ({
                       }
                       defaultCountry="IN"
                       // sahil karnekar line 712
-                      maxLength={20}
+                      maxLength={selectedCountry === "IN" ? 11 : 20}
+                      onCountryChange={(country) => setSelectedCountry(country)}
                     />
                     {/* this line added by sahil date 22-10-2024 */}
                     {!callingTracker.contactNumber && (
@@ -1551,7 +1554,8 @@ const CallingTrackerForm = ({
                     }}
                     defaultCountry="IN"
                     // sahil karnekar line 732
-                    maxLength={20}
+                    maxLength={selectedCountryWP === "IN" ? 11 : 20}
+                    onCountryChange={(country) => setSelectedCountryWP(country)}
                   />
                   {displaySameAsContactField && (
                     <div className="inputsameascontact">
