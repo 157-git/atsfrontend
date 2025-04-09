@@ -74,7 +74,7 @@ const JobListing = ({ loginEmployeeName }) => {
 
   useEffect(() => {
     // replaced base url with actual url just for testing by sahil karnekar please replace it with base url at the time of deployment
-    fetch(`${API_BASE_URL}/all-job-descriptions`)
+    fetch(`${API_BASE_URL}/fetch-all-job-descriptions`)
       .then((response) => response.json())
       .then((data) => {
         const sortedData = data.sort(
