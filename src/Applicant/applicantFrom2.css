@@ -4,14 +4,31 @@
    .form-container-December {
     position: fixed;
     top: 0%;
-    height: 100%;
+    height: 100vh;
     width: 100%;
+    overflow-y: scroll;
+  }
+  .headingDivForApplicantNewHeading{
+    margin-left: 5px;
+  }
+  .classnameforsetwidthforlogpimage{
+    width: 50px;
+  }
+  .newclassnamefor157header{
+    color: white;
+  }
+  .newclassheadapplicantfor{
+    color: white;
   }
   .forNewUanandRefFlexwidth50{
     width: 50%;
   }
+  .makeDisplayFlexForYopApplicantForm{
+    display: flex;
+  }
   .newclassnameforlinkblue{
     color: #0000FF;
+    text-decoration: underline;
   }
   .forNewUanandRefFlex{
     width: 100%;
@@ -117,6 +134,9 @@
       align-items: center;
       text-align: center;
     }
+    .makeDisplayFlexForYopApplicantForm{
+      display: block;
+    }
     .forNewUanandRefFlexwidth50{
       width: 100%;
     }
@@ -135,6 +155,9 @@
   /* Fix for mobile view */
   @media (max-width: 768px) {
     .forNewUanandRefFlex{
+      display: block;
+    }
+    .makeDisplayFlexForYopApplicantForm{
       display: block;
     }
    .maincontforimagediv{
@@ -410,6 +433,9 @@
     .form-grid-December {
       flex-direction: column;
     }
+    .makeDisplayFlexForYopApplicantForm{
+      display: block;
+    }
     .forNewUanandRefFlexwidth50{
       width: 100%;
     }
@@ -428,6 +454,9 @@
   /* For mobile screens (max-width: 768px) */
   @media (max-width: 768px) {
     .forNewUanandRefFlex{
+      display: block;
+    }
+    .makeDisplayFlexForYopApplicantForm{
       display: block;
     }
     .form-grid-December {
@@ -457,6 +486,9 @@
   /* For small mobile screens (max-width: 500px) */
   @media (max-width: 500px) {
     .forNewUanandRefFlex{
+      display: block;
+    }
+    .makeDisplayFlexForYopApplicantForm{
       display: block;
     }
     .form-grid-December {
@@ -519,6 +551,9 @@
     .forNewUanandRefFlex{
       display: block;
     }
+    .makeDisplayFlexForYopApplicantForm{
+      display: block;
+    }
     .form-grid-December {
       flex-direction: column;
     }
@@ -578,4 +613,3 @@
     background-color: #0077b5;
     text-decoration: underline;
   }
-  

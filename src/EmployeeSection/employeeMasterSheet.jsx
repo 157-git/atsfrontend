@@ -956,7 +956,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                     <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>Sr No.</th>
 
                     <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10}}>Candidate ID</th>
-                    <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 10 }}>Candidate Name</th>
+                    <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "140px" : "190px", zIndex: 10 }}>Candidate Name</th>
                     <th className="attendanceheading">Candidate Email</th>
                     <th className="attendanceheading">Contact Number</th>
                     <th className="attendanceheading">Alternate Number</th>
@@ -1104,7 +1104,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                         className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
-                        style={{ position: "sticky", left: showShareButton ? "120px" : "170px", zIndex: 1 }}
+                        style={{ position: "sticky", left: showShareButton ? "140px" : "190px", zIndex: 1 }}
                       >
                         {highlightText(entry[4], searchTerm)}
                         <div className="tooltip">

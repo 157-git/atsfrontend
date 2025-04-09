@@ -7,6 +7,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose } from "@fortawesome/free-regular-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import bannerImage from '../assets/newImage-removebg-preview.png';
+import newLogoHead from '../assets/newApplicantFormLogo.png';
 import {
   faUser,
   faPhone,
@@ -599,6 +600,7 @@ function ApplicantForm2({ loginEmployeeName }) {
       "lineUp.gender",
       "lineUp.qualification",
       "jobDesignation",
+      "lineUp.yearOfPassing",
       "lineUp.experienceYear",
       "lineUp.currentCTCLakh",
       "lineUp.expectedCTCLakh",
@@ -632,6 +634,7 @@ function ApplicantForm2({ loginEmployeeName }) {
         isFormValid = false;
       }
     });
+console.log(newErrors);
 
     setErrors(newErrors);
 
@@ -840,6 +843,12 @@ console.log(dataToSend);
         // }
         break;
 
+        case "lineUp.yearOfPassing":
+        if (!stringValue) {
+          error = "Enter your Year Of Passing";
+        }
+        break;
+
       case "lineUp.experienceYear":
         if (!stringValue) {
           error = "Experience year is required.";
@@ -935,15 +944,19 @@ console.log(dataToSend);
       {contextHolder}
       <div className="form-container-December">
         <div className="form-heading-December-main-div">
-          <h1 id="applicant-form-heading">Applicant Form</h1>
+          {/* <h1 id="applicant-form-heading">Applicant Form</h1> */}
+          <img className="classnameforsetwidthforlogpimage" src={newLogoHead} alt=''/>
+          <div className="headingDivForApplicantNewHeading">
+          <h3 className="newclassnamefor157header">157 Careers</h3>
+          <h3 className="newclassheadapplicantfor">Applicant Form</h3>
+          </div>
+         
         </div>
 
-        <div className="maincontforimagediv">
+        {/* <div className="maincontforimagediv">
           <div className="banner-container-December">
-            {/* Banner Image on the Left */}
             <img src={bannerImage} alt="Banner Image" />
 
-            {/* Description Next to the Image */}
             <div className="banner-description">
               <h1>157 Industries Private Limited</h1>
               <h2>Recruitments</h2>
@@ -951,7 +964,7 @@ console.log(dataToSend);
             </div>
           </div>
 
-        </div>
+        </div> */}
 
         <form onSubmit={handleSubmit} className="applicant-form-December">
           <div className="form-grid-December">
@@ -1109,6 +1122,7 @@ console.log(dataToSend);
               </div>
             </div>
             <div className="form-column-December">
+              <div className="makeDisplayFlexForYopApplicantForm">
               <div className="form-group-December">
                 <label>
                   Job designation{" "}
@@ -1134,6 +1148,36 @@ console.log(dataToSend);
                   <span className="error">{errors.jobDesignation}</span>
                 )}
               </div>
+              <div className="form-group-December">
+                <label>
+                  Year Of Passout{" "}
+                  <span className="setRequiredAstricColorRed">*</span>
+                </label>
+                <div className="input-with-icon-December">
+                  <FontAwesomeIcon
+                    icon={faUserTie}
+                    className="input-icon-December"
+                  />
+                   <input
+                    type="text"
+                    name="lineUp.yearOfPassing"
+                    Highest
+                    id="lineUp.yearOfPassing"
+                    placeholder="Enter yearOfPassing"
+                    value={formData.lineUp.yearOfPassing}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    maxLength={100}
+                  />
+                </div>
+                {errors["lineUp.yearOfPassing"] && (
+                  <span className="error">
+                    {errors["lineUp.yearOfPassing"]}
+                  </span>
+                )}
+              </div>
+              </div>
+             
               <div className="form-group-December">
                 <label>
                   Total experience{" "}
@@ -1585,9 +1629,10 @@ console.log(dataToSend);
                     className="input-icon-December"
                   />
                   <input
+                  className="paddingtopbottomforinputfilesonly"
                     style={{
                       color: "var(--text-color)",
-                      padding: "10px 10px 10px 35px",
+                      padding: "7px 10px 7px 35px",
                       border: "1px solid #1d3a5d",
                       borderRadius: "10px",
                     }}
@@ -1623,7 +1668,7 @@ console.log(dataToSend);
                   <input
                     style={{
                       color: "var(--text-color)",
-                      padding: "10px 10px 10px 35px",
+                      padding: "7px 10px 7px 35px",
                     }}
                     type="file"
                     name="lineUp.photo"
@@ -1650,7 +1695,7 @@ console.log(dataToSend);
 
               <div className="form-group-December forNewUanandRefFlexwidth50">
                 <label>
-                  UAN Number <span className="setRequiredAstricColorRed">*</span>
+                  UAN Number 
                 </label>
                 <div className="input-with-icon-December">
 

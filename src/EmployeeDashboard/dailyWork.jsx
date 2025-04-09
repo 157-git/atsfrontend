@@ -482,7 +482,8 @@ function DailyWork({
     setAllowCloseModal(true); // Allow modal to close
     setShowPauseModal(false); // Close the modal
 
-    setStartResumeNewTimer(true);
+    setStartResumeNewTimer(prev => !prev);
+
   };
 
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-handleLogoutLocal(changed) Start LineNo:-530 Date:-01/07
