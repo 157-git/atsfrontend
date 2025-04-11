@@ -47,7 +47,7 @@
     align-items: center;
     display: flex;
     justify-content: center;
-    border: 4px solid #f2f2f2;
+    /* border: 4px solid #f2f2f2; */
     width: 100%;
   }
   
@@ -143,6 +143,9 @@
       align-items: center;
       text-align: center;
     }
+    .newmargintop10pxformobile{
+      margin-top: 10px;
+    }
     .newclassforfontsizechnges{
       font-size: 11px;
     }
@@ -176,6 +179,9 @@
   @media (max-width: 768px) {
     .forNewUanandRefFlex{
       display: block;
+    }
+    .newmargintop10pxformobile{
+      margin-top: 10px;
     }
     .newclassforfontsizechnges{
       font-size: 11px;
@@ -464,6 +470,9 @@
     .form-grid-December {
       flex-direction: column;
     }
+    .newmargintop10pxformobile{
+      margin-top: 10px;
+    }
     .newclassforfontsizechnges{
       font-size: 11px;
     }
@@ -497,6 +506,9 @@
   @media (max-width: 768px) {
     .forNewUanandRefFlex{
       display: block;
+    }
+    .newmargintop10pxformobile{
+      margin-top: 10px;
     }
     .newclassforfontsizechnges{
       font-size: 11px;
@@ -543,6 +555,9 @@
     }
     .newclassforfontsizechnges{
       font-size: 11px;
+    }
+    .newmargintop10pxformobile{
+      margin-top: 10px;
     }
     .form-heading-December-main-div {
       justify-content: left;
@@ -617,6 +632,9 @@
     }
     .newclassforfontsizechnges{
       font-size: 11px;
+    }
+    .newmargintop10pxformobile{
+      margin-top: 10px;
     }
     .form-heading-December-main-div {
       justify-content: left;

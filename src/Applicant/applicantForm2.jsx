@@ -1153,7 +1153,7 @@ console.log(dataToSend);
                   <span className="error">{errors.jobDesignation}</span>
                 )}
               </div>
-              <div className="form-group-December">
+              <div className="form-group-December newmargintop10pxformobile">
                 <label>
                   Year Of Passout{" "}
                   <span className="setRequiredAstricColorRed">*</span>
@@ -1168,7 +1168,7 @@ console.log(dataToSend);
                     name="lineUp.yearOfPassing"
                     Highest
                     id="lineUp.yearOfPassing"
-                    placeholder="Enter yearOfPassing"
+                    placeholder="Enter Year Of Passout"
                     value={formData.lineUp.yearOfPassing}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}

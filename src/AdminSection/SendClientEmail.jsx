@@ -1832,7 +1832,7 @@ console.log(selectedRowsPermissionIds);
 
 
 <AntdModal title="Select Recruiter" open={showSelectPermissionRecruiters} >
-<p>Sahil Karnekar</p>
+<p>Module In Development Process</p>
 </AntdModal>
         </>
       )}
