@@ -1831,10 +1831,8 @@ console.log(selectedRowsPermissionIds);
 </AntdModal>
 
 
-<AntdModal title="Select Recruiter" open={showSelectPermissionRecruiters} 
-onCancel={()=> setShowSelectPermissionRecruiters(false)}
->
-<p>In Progress !</p>
+<AntdModal title="Select Recruiter" open={showSelectPermissionRecruiters} >
+<p>Sahil Karnekar</p>
 </AntdModal>
         </>
       )}
