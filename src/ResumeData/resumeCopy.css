@@ -537,3 +537,8 @@ button {
   color: white;
   font-size: 15px;
 }
+.editwhiteafreen{
+  color: white;
+  position: relative;
+  z-index: 1000;
+}

@@ -16,6 +16,8 @@ import { Badge, Pagination } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import { getSocket } from "../EmployeeDashboard/socket";
 import limitedOptions from "../helper/limitedOptions";
+import { Modal as AntdModal } from 'antd';
+
 
 // SwapnilRokade_SendClientEmail_ModifyFilters_11/07
 // SwapnilROkade_AddingErrorAndSuccessMessage_19/07
@@ -42,6 +44,8 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const [loading, setLoading] = useState(true); // Add loading state
   const [activeFilterOption, setActiveFilterOption] = useState(null);
   const [showShareButton, setShowShareButton] = useState(true);
+  const [showPermissionModal, setShowPermissionModal] = useState(false);
+  
   const [selectedRows, setSelectedRows] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [difference, setDifference] = useState();
@@ -618,8 +622,42 @@ const SendClientEmail = ({ clientEmailSender }) => {
       useEffect(() => {
         setAllSelected(areAllRowsSelectedOnPage);
       }, [filteredCallingList, selectedRows]); 
-  
-  
+  const [newAllJobIdsForPermission, setNewAllJobIdsForPermission] = useState([]);
+  const [showSelectPermissionRecruiters, setShowSelectPermissionRecruiters] = useState(false);
+  const getAllJobs = async () => {
+  const responseGetAllJobs = await axios.get(`${API_BASE_URL}/fetch-all-job-descriptions`);
+
+  const sortedJobs = responseGetAllJobs.data.sort((a, b) => b.requirementId - a.requirementId); // descending order
+
+  setNewAllJobIdsForPermission(sortedJobs);
+  console.log(sortedJobs); // optional for debugging
+  }
+useEffect(()=>{
+  if (userType === "Manager") {
+  getAllJobs();
+  }
+},[])
+console.log(newAllJobIdsForPermission);
+const [selectedRowsPermissionIds, setSelectedRowsPermissionIds] = useState([]);
+const handleSelectAllJobIds = (e) => {
+  if (e.target.checked) {
+    const allIds = newAllJobIdsForPermission.map(item => item.requirementId);
+    setSelectedRowsPermissionIds(allIds);
+  } else {
+    setSelectedRowsPermissionIds([]);
+  }
+};
+const handleCheckboxChangeSelectRow = (id) => {
+  setSelectedRowsPermissionIds((prevSelected) => {
+    if (prevSelected.includes(id)) {
+      return prevSelected.filter(item => item !== id);
+    } else {
+      return [...prevSelected, id];
+    }
+  });
+};
+console.log(selectedRowsPermissionIds);
+
   return (
     <div className="SCE-list-container">
       {loading ? (
@@ -682,6 +720,12 @@ const SendClientEmail = ({ clientEmailSender }) => {
                 padding: "10px",
               }}
             >
+               <button
+                  className="SCE-share-btn"
+                  onClick={() => setShowPermissionModal(true)}
+                >
+                  Permission Recruiter
+                </button>
               {showShareButton ? (
                 <button
                   className="SCE-share-btn"
@@ -1729,6 +1773,69 @@ const SendClientEmail = ({ clientEmailSender }) => {
           justifyContent: 'center',
         }}
       />
+      <AntdModal title="Send Clients Permission To Recruiter" open={showPermissionModal} 
+      onOk={()=>{
+        setShowSelectPermissionRecruiters(true);
+        setShowPermissionModal(false);
+      }}
+       onCancel={()=> setShowPermissionModal(false)}
+      >
+        <div className="attendanceTableData"
+        style={{
+          height:"50vh"
+        }}
+        >
+        <table className="attendance-table">
+  <thead>
+    <tr className="attendancerows-head">
+    <th className="attendanceheading" style={{ position: "sticky",left:0, zIndex: 10 }}>
+                        {/* updatesd shortListeddata by Pranjali Raut data 20-01-2025 */}
+                        <input
+                               type="checkbox"
+                               onChange={handleSelectAllJobIds}
+                               checked={
+                                newAllJobIdsForPermission.every((row) => selectedRowsPermissionIds.includes(row.requirementId))
+                               }
+                               name="selectAll"
+                             />
+                     
+                      </th>
+      <th className="attendanceheading">Job Id</th>
+      <th className="attendanceheading">Company Name</th>
+      <th className="attendanceheading">Job Designation</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+    newAllJobIdsForPermission.map((item, index) => (
+      <tr key={index} className="attendancerows">
+        <td className="tabledata">
+        <input
+                              type="checkbox"
+                              checked={selectedRowsPermissionIds.includes(item.requirementId)}
+                              onChange={() => handleCheckboxChangeSelectRow(item.requirementId)}
+                            />
+        </td>
+        <td className="tabledata">{item.requirementId}</td>
+        <td  className="tabledata">{item.companyName}</td>
+        <td  className="tabledata">{item.designation}</td>
+      </tr>
+    ))
+    }
+  </tbody>
+</table>
+        </div>
+
+
+
+</AntdModal>
+
+
+<AntdModal title="Select Recruiter" open={showSelectPermissionRecruiters} 
+onCancel={()=> setShowSelectPermissionRecruiters(false)}
+>
+<p>In Progress !</p>
+</AntdModal>
         </>
       )}
     </div>
@@ -2129,7 +2236,7 @@ setSocket(newSocket);
         <div className="SCE_Loading_Animation">
           <Loader size={50} color="#ffb281" />
         </div>
-      )}
+      )}      
     </>
   );
 };

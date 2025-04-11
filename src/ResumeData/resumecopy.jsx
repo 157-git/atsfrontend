@@ -604,7 +604,7 @@ const ResumeCopy = ({ onClose }) => {
                     >
                       <p>
                         <u>
-                          <b>Edit</b>
+                          <b classname="editwhiteafreen" >Edit</b>
                         </u>
                       </p>
                       <img
