@@ -106,6 +106,7 @@ const EmpDashboard = ({ userGroup }) => {
   const [showCallingExcel, setShowCallingExcel] = useState(false);
   const [showResumeData, setShowResumeData] = useState(false);
   const [showJobDiscriptions, setShowJobDiscriptions] = useState(false);
+  const [showAccessedSentProfile, setShowAccessedSentProfile] = useState(false);
   const [showCallingTrackerForm, setShowCallingTrackerForm] = useState(false);
   const [showHome, setShowHome] = useState(false);
   const [openSidebarToggle, setOpenSidebarToggle] = useState(true);
@@ -376,6 +377,7 @@ const EmpDashboard = ({ userGroup }) => {
     setShowSharedProfile(false);
     setShowIssueLetter(false);
     setShowActiveTeamMEmbers(false);
+    setShowAccessedSentProfile(false);
   };
 
   /* ArshadAttar_EmpDashboa_Added_showProfitLoss_11/07/2024_LineNo_221-225 */
@@ -453,6 +455,11 @@ const EmpDashboard = ({ userGroup }) => {
   const toggleJobDescription = () => {
     resetAllToggles();
     setShowJobDiscriptions(true);
+  };
+
+  const toggleSentProfileAccess = () => {
+    resetAllToggles();
+    setShowAccessedSentProfile(true);
   };
 
   const toggleSelfCalling = () => {
@@ -682,6 +689,7 @@ const EmpDashboard = ({ userGroup }) => {
         toggleExcelCalling={toggleExcelCalling}
         toggleResumeData={toggelResumeData}
         toggleJobDescription={toggleJobDescription} 
+        toggleSentProfileAccess={toggleSentProfileAccess}
         toggleEmployeeMasterSheet={toggleEmployeeMasterSheet}
         toggleShortListedCandidates={toggleShortListedCandidates}
         toggleAddJobDescription={toggleAddJobDescription}
@@ -900,6 +908,11 @@ const EmpDashboard = ({ userGroup }) => {
 
         <div>{addJobDescription && <AddJobDescription  loginEmployeeName={loginEmployeeName}  />}</div>
         <div>{showJobDiscriptions && <Home loginEmployeeName={loginEmployeeName}  />}</div>
+        <div>
+          {showAccessedSentProfile && (
+            <SendClientEmail clientEmailSender={clientEmailSender} />
+          )}
+        </div>
         <div>{showHome && <Home loginEmployeeName={loginEmployeeName}  />}</div>
         <div>{showAddedResumes && <AddResumes></AddResumes>}</div>
         <div>{showInvoice && <InvoiceTable />}</div>

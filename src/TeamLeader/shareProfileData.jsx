@@ -125,7 +125,8 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
   const toggleFilterSection = () => {
     setShowFilterSection(!showFilterSection);
   };
-  const handleSearchClick = ()=>{
+  const handleSearchClick = (e)=>{
+    e.preventDefault();
     fetchData(currentPage, pageSize);
   }
   const handleClearAll = () => {
@@ -262,7 +263,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                       }}
                     ></i>
 
-<form onSubmit={() => handleSearchClick()}> 
+<form onSubmit={(e) => handleSearchClick(e)}> 
                     <div
                       className="search-input-div"
                       style={{ width: `${calculateWidth()}px` }}
@@ -295,7 +296,7 @@ const ShareProfileData = ({ loginEmployeeName, onsuccessfulDataAdditions }) => {
                     </div>
                     <button
         className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
-        onClick={() => handleSearchClick()} 
+       type="submit"
       >
         Search 
       </button>

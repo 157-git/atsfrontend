@@ -416,7 +416,8 @@ const handleCancelcloseshare = ()=>{
     const maxWidth = 600;
     return Math.min(baseWidth + searchTerm.length * increment, maxWidth);
   };
-  const handleSearchClick = ()=>{
+  const handleSearchClick = (e)=>{
+    e.preventDefault();
     fetchData(currentPage, pageSize);
   }
 
@@ -808,7 +809,7 @@ const forwardSelectedCandidate = (e) => {
                         fontSize: "15px",
                       }}
                     ></i>
-                    <form onSubmit={() => handleSearchClick()} style={{
+                    <form onSubmit={(e) => handleSearchClick(e)} style={{
                       display:"flex"
                     }}> 
                     <div
@@ -852,7 +853,7 @@ const forwardSelectedCandidate = (e) => {
                       !dataFromUploadResumes && (
                         <button
                         className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
-                        onClick={() => handleSearchClick()} 
+                    type="submit"
                       >
                         Search 
                       </button>

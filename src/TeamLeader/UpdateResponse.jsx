@@ -174,7 +174,8 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
     setFilteredCallingList(filteredResults);
     setSearchCount(filteredResults.length);
   };
-  const handleSearchClick = ()=>{
+  const handleSearchClick = (e)=>{
+    e.preventDefault();
     fetchUpdateResponseList(currentPage, pageSize);
   }
   const handleFilterTypeChange = (e) => {
@@ -430,7 +431,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           className="TeamLead-main-filter-section-container"
                           style={{ width: "80%" }}
                         >
-                          <form onSubmit={() => handleSearchClick()}
+                          <form onSubmit={(e) => handleSearchClick(e)}
                             style={{
                               display:"flex"
                             }}
@@ -467,7 +468,7 @@ const UpdateResponse = ({ onSuccessAdd, date }) => {
                           </div>
                           <button
         className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
-        onClick={() => handleSearchClick()} 
+              type="submit"
       >
         Search 
       </button>

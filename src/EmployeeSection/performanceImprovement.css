@@ -1,3 +1,4 @@
+
 /* rajlaxmi Jagadale change all className and id */
 
 .PIE-Appteamperformance {
@@ -678,4 +679,21 @@ strong {
   .PIE-custom-date-inputteamperformance {
     width: 90%;
   }
+}
+/* Rajlaxmi Jagadale Updated taht code 11/04/2025 */
+.chart-display {
+  width: 70%;
+  max-width: 1000px; 
+  margin: 0 auto; 
+  padding: 30px;
+  border: 2px solid #ccc; 
+  border-radius: 10px; 
+  box-sizing: border-box; 
+  background-color: #fff; 
+}
+
+.chartdispaly {
+  width: 100%; 
+  height: 400px; 
+  object-fit: contain; 
 }

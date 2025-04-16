@@ -310,7 +310,8 @@ const forwardSelectedCandidate = (e) => {
     setShowResumeModal(false);
   };
   //Name:-Akash Pawar Component:-RejectedCandidate Subcategory:-ResumeViewButton(added) End LineNo:-356 Date:-02/07
-  const handleSearchClick = ()=>{
+  const handleSearchClick = (e)=>{
+    e.preventDefault();
     fetchRejectedData(currentPage, pageSize);
   }
   //Swapnil_Rokade_SelectedCandidate_columnsToInclude_columnsToExclude_17/07/2024//
@@ -659,7 +660,7 @@ const handleCancelcloseshare = ()=>{
               ></i>
               {/* line 707 to 716 added by sahil karnekar date 24-10-2024 */}
 
-              <form onSubmit={() => handleSearchClick()}> 
+              <form onSubmit={(e) => handleSearchClick(e)}> 
               <div
                 className="search-input-div"
                 style={{ width: `${calculateWidth()}px` }}
@@ -692,7 +693,7 @@ const handleCancelcloseshare = ()=>{
               </div>
               <button
         className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
-        onClick={() => handleSearchClick()} 
+      type="submit"
       >
         Search 
       </button>

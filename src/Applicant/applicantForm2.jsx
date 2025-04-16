@@ -7,7 +7,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose } from "@fortawesome/free-regular-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import bannerImage from '../assets/newImage-removebg-preview.png';
-import newLogoHead from '../assets/newGraylogo.png';
+import newLogoHead from '../assets/ApplicantFormLogo.png';
 import {
   faUser,
   faPhone,
@@ -949,6 +949,7 @@ console.log(dataToSend);
         <div className="form-heading-December-main-div">
           {/* <h1 id="applicant-form-heading">Applicant Form</h1> */}
           <img className="classnameforsetwidthforlogpimage" src={newLogoHead} alt=''/>
+          <div><p>157 Careers</p><p>Applicant Form</p><br/></div>
           {/* <div className="headingDivForApplicantNewHeading">
           <h3 className="newclassnamefor157header">157 Careers</h3>
           <h3 className="newclassheadapplicantfor">Applicant Form</h3>
@@ -1374,7 +1375,7 @@ console.log(dataToSend);
                   <input
                     type="text"
                     name="lineUp.noticePeriod"
-                    placeholder="Enter notice period "
+                    placeholder="Notice Period In Days"
                     value={formData.lineUp.noticePeriod}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
@@ -1718,7 +1719,7 @@ console.log(dataToSend);
                 {errors.candidateUanNumber && <span className="error">{errors.candidateUanNumber}</span>}
               </div>
 
-              <div className="form-group-December forNewUanandRefFlexwidth50">
+              <div className="form-group-December forNewUanandRefFlexwidth50 setMargintop10pxforref">
               <label>
                 Reference
               </label>
@@ -2083,6 +2084,10 @@ console.log(dataToSend);
               type="submit"
               onKeyDown={handleKeyDown}
               disabled={loading}
+              style={{
+                backgroundColor: loading ? "#ffffff" : "#1d3a5d",
+                color: loading ? "#1d3a5d" : "#ffffff",
+              }}
             >
               {" "}
               {loading ? "Submitting..." : "Submit"}

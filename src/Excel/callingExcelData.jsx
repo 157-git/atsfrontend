@@ -550,7 +550,8 @@ const CallingExcelList = ({
       setLoading(false);
     }
   };
-  const handleSearchClick = ()=>{
+  const handleSearchClick = (e)=>{
+    e.preventDefault();
     fetchUpdatedData(currentPage, pageSize);
   }
   const calculateWidth = () => {
@@ -763,7 +764,7 @@ const CallingExcelList = ({
                   ></i>
                   {/* Arshad Comments This On 15-11-2024 */}
                   {/* {showSearchBar && ( */}
-                  <form onSubmit={() => handleSearchClick()}
+                  <form onSubmit={(e) => handleSearchClick(e)}
                       style={{
                         display:"flex"
                       }}
@@ -808,7 +809,7 @@ const CallingExcelList = ({
   !dataFromUploadExcelCalling && (
     <button
     className="search-btns lineUp-share-btn"
-    onClick={() => handleSearchClick()} 
+     type="submit"
   >
     Search 
   </button>

@@ -234,7 +234,8 @@ const LineUpList = ({
     });
     setFilteredCallingList(filteredData);
   };
-  const handleSearchClick = ()=>{
+  const handleSearchClick = (e)=>{
+    e.preventDefault(); // Prevents the form from submitting and causing the page to refresh
     fetchCallingTrackerData(currentPage, pageSize);
   }
   // updated this function sahil karnekar date : 22-10-2024
@@ -701,7 +702,7 @@ const handleCancelcloseshare = ()=>{
               ></i>
               {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
 
-              <form onSubmit={() => handleSearchClick()}> 
+              <form onSubmit={(e) => handleSearchClick(e)}> 
               <div
                 className="search-input-div"
                 style={{ width: `${calculateWidth()}px` }}
@@ -734,7 +735,7 @@ const handleCancelcloseshare = ()=>{
               </div>
               <button
         className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
-        onClick={() => handleSearchClick()} 
+  type="submit"
       >
         Search 
       </button>

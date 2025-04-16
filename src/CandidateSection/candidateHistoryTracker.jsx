@@ -432,11 +432,11 @@ const CandidateHistoryTracker = () => {
   // }
 
   // conditional case created by sahil karnekar date 18-11-2024
-
+// Rajlaxmi JAgadale Chanegs here date 14/04/2025
   const getDisplayName = (filter) => {
     switch (filter) {
       case "extraCertificationCounts":
-        return "Extra Certification"
+        return "Currently Working"
       case "onRoleCounts":
         return "On Role"
       case "distanceCounts":
@@ -650,13 +650,13 @@ const CandidateHistoryTracker = () => {
           <div className="Candi-History-tracker-div">
             <div className="history-filtter-data-div">
               <div className="history-main-div">
-                <button onClick={handleButtonClick} className="lineUp-Filter-btnhistory newclassforpaddingdata">
+                <button onClick={handleButtonClick} className="lineUp-Filter-btnhistory">
                   {isVisible ? "Hide Filters" : "Show Filters"}
                 </button>
                 &nbsp; &nbsp;
                 {/* Rajlaxmi jagadale UPdated taht code */}
                 {isVisible && selectedFilters.length !== allFilters.length && (
-                  <button onClick={selectAllFilters} className="lineUp-Filter-btnhistory newclassforpaddingdata">
+                  <button onClick={selectAllFilters} className="lineUp-Filter-btnhistory">
                     {selectAll ? "Select All" : "Deselect All"}
                   </button>
                 )}
@@ -680,7 +680,7 @@ const CandidateHistoryTracker = () => {
             {/* Rajlaxmi jagadale updated taht code */}
               {isVisible && selectedFilters.length > 0 && (
                 <span className="handlePrintDivhistory">
-                  <button className="lineUp-Filter-btnhistory margin-left-set newclassforpaddingdata" onClick={handleClearAll}>
+                  <button className="lineUp-Filter-btnhistory margin-left-set" onClick={handleClearAll}>
                     Clear Filters
                   </button>
                 </span>
@@ -691,7 +691,7 @@ const CandidateHistoryTracker = () => {
                 {selectedFilters.length > 0 && (
                   <span className="handlePrintDivhistory">
                     <button
-                      className={`newclassforpaddingdata lineUp-Filter-btnhistory margin-left-set ${isPdfGenerating ? "pdf-generating" : ""}`}
+                      className={`lineUp-Filter-btnhistory margin-left-set ${isPdfGenerating ? "pdf-generating" : ""}`}
                       onClick={handleExportPDF}
                       disabled={isPdfGenerating}
                     >
@@ -712,7 +712,7 @@ const CandidateHistoryTracker = () => {
                       checked={selectedFilters.includes("extraCertificationCounts")}
                       onChange={handleFilterChange}
                     />{" "}
-                    Extra Certification
+                    Currently Working
                   </label>
                   <label className="checkbox-label">
                     <input

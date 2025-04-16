@@ -95,57 +95,87 @@ const JobListing = ({ loginEmployeeName }) => {
   }, [selectedFilters, jobDescriptions, searchQuery]);
 
   const filterData = () => {
-    let filtereddata = [...jobDescriptions];
-  
-    // Apply search query filters
+    let filtereddata = [...jobDescriptions]
+
     Object.entries(searchQuery).forEach(([key, value]) => {
       if (value) {
-        filtereddata = filtereddata.filter((item) =>
-          item[key]?.toString().toLowerCase().includes(value.toLowerCase())
-        );
+        if (key === "experience") {
+          const expValue = value.trim().toLowerCase()
+
+          if (expValue.includes("-")) {
+            const [min, max] = expValue.split("-").map((num) => Number.parseFloat(num))
+            filtereddata = filtereddata.filter((item) => {
+              const itemExp = item[key]?.toString().toLowerCase()
+              if (!itemExp) return false
+
+              const expNumber = Number.parseFloat(itemExp.match(/\d+(\.\d+)?/)?.[0] || "0")
+              return expNumber >= min && expNumber <= max
+            })
+          }
+          else if (expValue.endsWith("+")) {
+            const minExp = Number.parseFloat(expValue.replace("+", ""))
+            filtereddata = filtereddata.filter((item) => {
+              const itemExp = item[key]?.toString().toLowerCase()
+              if (!itemExp) return false
+
+              const expNumber = Number.parseFloat(itemExp.match(/\d+(\.\d+)?/)?.[0] || "0")
+              return expNumber >= minExp
+            })
+          }
+          else {
+            const exactExp = Number.parseFloat(expValue)
+            if (!isNaN(exactExp)) {
+              filtereddata = filtereddata.filter((item) => {
+                const itemExp = item[key]?.toString().toLowerCase()
+                if (!itemExp) return false
+
+                const expNumber = Number.parseFloat(itemExp.match(/\d+(\.\d+)?/)?.[0] || "0")
+                return Math.abs(expNumber - exactExp) < 0.1 // Allow small difference for floating point comparison
+              })
+            } else {
+              filtereddata = filtereddata.filter((item) => item[key]?.toString().toLowerCase().includes(expValue))
+            }
+          }
+        } else {
+          filtereddata = filtereddata.filter((item) =>
+            item[key]?.toString().toLowerCase().includes(value.toLowerCase()),
+          )
+        }
       }
-    });
-  
-    // Apply selected filters
+    })
+
     Object.entries(selectedFilters).forEach(([option, values]) => {
       if (values.length > 0) {
         if (option === "jdStatus") {
-          // Ensure exact match for "active" without including "inactive"
           if (values.includes("Active")) {
-            filtereddata = filtereddata.filter((item) => item[option] === "Active");
+            filtereddata = filtereddata.filter((item) => item[option] === "Active")
           } else {
             filtereddata = filtereddata.filter((item) =>
-              values.some((value) => item[option]?.toString().toLowerCase() === value.toLowerCase())
-            );
-          }
-        }  else if (option === "holdStatus") {
-          // Ensure exact match for "active" without including "inactive"
-          if (values.includes("Hold")) {
-            filtereddata = filtereddata.filter((item) => item[option] === "Hold");
-          } else {
-            filtereddata = filtereddata.filter((item) =>
-              values.some((value) => item[option]?.toString().toLowerCase() === value.toLowerCase())
-            );
-          }
-        }
-         else if (option === "requirementId") {
-          filtereddata = filtereddata.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value)
+              values.some((value) => item[option]?.toString().toLowerCase() === value.toLowerCase()),
             )
-          );
+          }
+        } else if (option === "holdStatus") {
+          if (values.includes("Hold")) {
+            filtereddata = filtereddata.filter((item) => item[option] === "Hold")
+          } else {
+            filtereddata = filtereddata.filter((item) =>
+              values.some((value) => item[option]?.toString().toLowerCase() === value.toLowerCase()),
+            )
+          }
+        } else if (option === "requirementId") {
+          filtereddata = filtereddata.filter((item) =>
+            values.some((value) => item[option]?.toString().toLowerCase().includes(value)),
+          )
         } else {
           filtereddata = filtereddata.filter((item) =>
-            values.some((value) =>
-              item[option]?.toString().toLowerCase().includes(value.toLowerCase())
-            )
-          );
+            values.some((value) => item[option]?.toString().toLowerCase().includes(value.toLowerCase())),
+          )
         }
       }
-    });
-  
-    setFilteredJobDescriptions(filtereddata);
-  };
+    })
+
+    setFilteredJobDescriptions(filtereddata)
+  }
   
 console.log(jobDescriptions);
 
@@ -475,7 +505,7 @@ console.log(jobDescriptions);
   <input
     className="search-input"
     list="experienceOptions"
-    placeholder="Select Experience"
+    placeholder="Select Experience e.g.(2, 2-6, 5+)"
     type="text"
     name="experience"
     value={searchQuery.experience}
@@ -513,9 +543,9 @@ console.log(jobDescriptions);
                           </div>
                         )}
 
-  <button className="daily-tr-btn" type="submit">
+  {/* <button className="daily-tr-btn" type="submit">
     Search
-  </button>
+  </button> */}
 </form>
 
               </div>

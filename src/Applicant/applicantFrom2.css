@@ -14,12 +14,14 @@
   }
   .newclassforfontsizechnges{
     font-size: 16px;
+    color: #333;
   }
   .classnameforsetwidthforlogpimage{
     width: 170px;
-    margin-top: 20px;
+
     height: 38px;
-    margin-bottom: 14px;
+
+    margin: 0;
   }
   .newclassnamefor157header{
     color: white;
@@ -143,6 +145,9 @@
       align-items: center;
       text-align: center;
     }
+    .setMargintop10pxforref{
+      margin-top: 10px;
+    }
     .newmargintop10pxformobile{
       margin-top: 10px;
     }
@@ -179,6 +184,9 @@
   @media (max-width: 768px) {
     .forNewUanandRefFlex{
       display: block;
+    }
+    .setMargintop10pxforref{
+      margin-top: 10px;
     }
     .newmargintop10pxformobile{
       margin-top: 10px;
@@ -280,7 +288,7 @@
   
   .form-group-December label {
     font-weight: bold;
-    font-size: 14px;
+    font-size: 16px;
     font-family: "Roboto", sans-serif;
     color: black;
   }
@@ -553,6 +561,9 @@
     .forNewUanandRefFlex{
       display: block;
     }
+    .setMargintop10pxforref{
+      margin-top: 10px;
+    }
     .newclassforfontsizechnges{
       font-size: 11px;
     }
@@ -586,7 +597,7 @@
       padding: 2px;
     }
     .form-group-December label {
-      font-size: 12px;
+      font-size: 16px;
     }
   
     .input-with-icon-December input {
@@ -629,6 +640,9 @@
   @media (max-width: 768px) {
     .forNewUanandRefFlex{
       display: block;
+    }
+    .setMargintop10pxforref{
+      margin-top: 10px;
     }
     .newclassforfontsizechnges{
       font-size: 11px;
@@ -690,6 +704,7 @@
 
     text-align: center;
     font-size: 16px;
+    margin-top: 10px;
   }
  
   .newclassforradiogrouantd{
@@ -711,4 +726,35 @@
     color: white;
     background-color: #0077b5;
     text-decoration: underline;
+  }
+  .classnameforsetwidthforlogpimage{
+    width: 80px;
+
+    height: 48px;
+
+  }
+  .classnameforsetwidthforlogpimage {
+    width: 80px;
+    height: 48px;
+    margin-right: 10px;
+  }
+  .form-heading-December-main-div div {
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    line-height: normal;
+  }
+  
+  .form-heading-December-main-div p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color:#6c6c6c;
+  }
+  
+  .form-heading-December-main-div br {
+    content: "";
+    display: block;
+    margin: 5px 0;
   }

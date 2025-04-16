@@ -578,16 +578,20 @@ html::-webkit-scrollbar {
 }
 
 .lineUp-Filter-btnattendanceform {
-  border: 1px solid gray;
-  border-radius: 5px;
-  background-color: #f0f0f0;
+  border: 1px solid var(--primary-border);
+  border-radius: 15px;
+  background-color: var(--primary-button-bg);
   font-size: 14px;
-  color: black;
-  height: 33px;
+  color: var(--button-txt-color);
+  height: 30px;
   width: 8vh;
   cursor: pointer;
   margin-right: 10px;
   margin-bottom: 20px;
+}
+.newjustifycontentendforbackbutton{
+  justify-content: end;
+  margin-bottom: 5px;
 }
 .clr-buttonattendanceform {
   border: 1px solid gray;

@@ -141,7 +141,8 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     setFilteredCallingList(filteredData);
   };
 
-  const handleSearchClick = ()=>{
+  const handleSearchClick = (e)=>{
+    e.preventDefault();
     fetchSelectedCandidateData(currentPage, pageSize);
   }
   // updated this function sahil karnekar date : 22-10-2024
@@ -663,7 +664,7 @@ const handleCancelcloseshare = ()=>{
               ></i>
               {/* line 698 to 708 added by sahil karnekar date 24-10-2024 */}
 
-              <form onSubmit={() => handleSearchClick()}> 
+              <form onSubmit={(e) => handleSearchClick(e)}> 
               <div
                 className="search-input-div"
                 style={{ width: `${calculateWidth()}px` }}
@@ -696,7 +697,7 @@ const handleCancelcloseshare = ()=>{
               </div>
               <button
         className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
-        onClick={() => handleSearchClick()} 
+       type="submit"
       >
         Search 
       </button>

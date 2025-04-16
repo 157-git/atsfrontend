@@ -146,7 +146,7 @@ const AttendanceLoginLogout = () => {
             filteredRecruiters().map((user, index) => (
               <div className="status-card" key={index}>
                 <div className="status-indicator" style={{ color: user.loginStatus === "LoggedIn" ? "green" : "red" }}>
-                  {user.loginStatus === "LoggedIn" ? "Login" : "Logout"}
+                  {user.loginStatus === "LoggedIn" ? "Login" : "Logged Out"}
                 </div>
 
                 <div className="info-section">
@@ -178,7 +178,7 @@ const AttendanceLoginLogout = () => {
                         <strong>Login:</strong> {user.loginTime || "-"}
                       </span>
                       <span className="stat-item">
-                        <strong>Logout:</strong> {user.logoutTime || "-"}
+                        <strong>Logged Out:</strong> {user.logoutTime || "-"}
                       </span>
                     </p>
                     <p className="target-info">

@@ -262,9 +262,10 @@ const handleCancelcloseshare = ()=>{
       setDisplayShareConfirm(false);
     }
   };
-const handleSearchClick = ()=>{
-  fetchShortListedData(currentPage, pageSize);
-}
+  const handleSearchClick = (e) => {
+    e.preventDefault(); // Prevents the form from submitting and causing the page to refresh
+    fetchShortListedData(currentPage, pageSize);
+  };
   const resetSelections = () => {
     setSelectedEmployeeId(null); // Clear the selected recruiter ID
     setSelectedRole(""); // Clear the selected role
@@ -605,7 +606,7 @@ const handleSearchClick = ()=>{
                     ></i>
                     {/* line 581 to 590 updated by sahil karnekar date 24-10-2024 */}
 
-<form onSubmit={() => handleSearchClick()}> 
+                    <form onSubmit={(e) => handleSearchClick(e)}> 
                     <div
                       className="search-input-div"
                       style={{ width: `${calculateWidth()}px` }}
@@ -641,7 +642,7 @@ const handleSearchClick = ()=>{
                     </div>
                     <button
         className="search-btns lineUp-share-btn"
-        onClick={() => handleSearchClick()} 
+      type="submit"
       >
         Search 
       </button>

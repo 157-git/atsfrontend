@@ -212,7 +212,8 @@
 .lineUp-Filter-btnhistory {
   background-color: white;
   color: #a9a9a9;
-  border: 1px solid skyblue;
+  border: 1px solid var(--primary-border);
+  padding: 2px;
   font-size: 16px;
   cursor: pointer;
   border-radius: 15px;

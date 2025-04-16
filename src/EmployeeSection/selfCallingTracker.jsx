@@ -329,9 +329,11 @@ const CallingList = ({
       }
     });
   };
-  const handleSearchClick = ()=>{
-    fetchCallingTrackerData(currentPage, pageSize);
-  }
+//   Rajlaxmi JAgadale Update that function date 10/04/2025
+const handleSearchClick = (e) => {
+  e.preventDefault(); // Prevents the form from submitting and causing the page to refresh
+  fetchCallingTrackerData(currentPage, pageSize);
+};
   const forwardSelectedCandidate = (e) => {
     e.preventDefault();
     if (selectedRows.length >= 1) {
@@ -718,45 +720,45 @@ const CallingList = ({
                   ></i>
                   {/* this line 731 to 741 added by sahil karnekar date 24-10-2024 */}
                 </div>
-                <form onSubmit={() => handleSearchClick()}> 
-                <div
-                  className="search-input-div"
-                  style={{ width: `${calculateWidth()}px` }}
-                >
-                  <div className="forxmarkdiv">
-                  <input
-                          type="text"
-                          className="search-input removeBorderForSearchInput"
-                          placeholder="Search here..."
-                          value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    {searchTerm && (
-                      <div className="svgimagesetinInput">
-                        <svg
-                          onClick={() => {setSearchTerm("")
-                            handleTriggerFetch();
-                          }
-                          }
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="24px"
-                          viewBox="0 -960 960 960"
-                          width="24px"
-                          fill="#000000"
-                        >
-                          <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <button
-        className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
-        onClick={() => handleSearchClick()} 
-      >
-        Search 
-      </button>
-      </form>
+                <form onSubmit={(e) => handleSearchClick(e)}> 
+  <div
+    className="search-input-div"
+    style={{ width: `${calculateWidth()}px` }}
+  >
+    <div className="forxmarkdiv">
+      <input
+        type="text"
+        className="search-input removeBorderForSearchInput"
+        placeholder="Search here..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      {searchTerm && (
+        <div className="svgimagesetinInput">
+          <svg
+            onClick={() => {
+              setSearchTerm("");
+              handleTriggerFetch();
+            }}
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#000000"
+          >
+            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+          </svg>
+        </div>
+      )}
+    </div>
+  </div>
+  <button
+    className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
+    type="submit"
+  >
+    Search 
+  </button>
+</form>
               </div>
 
               <h3 className="newclassnameforpageheader">Calling Tracker</h3>

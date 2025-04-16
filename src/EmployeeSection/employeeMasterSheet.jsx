@@ -371,7 +371,8 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
     }
   };
 
-  const handleSearchClick = () => {
+  const handleSearchClick = (e)=>{
+    e.preventDefault();
     fetchData(currentPage, pageSize);
   }
 
@@ -755,7 +756,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                 ></i>
                 {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
 
-                <form onSubmit={() => handleSearchClick()}> 
+                <form onSubmit={(e) => handleSearchClick(e)}> 
                 <div
                   className="search-input-div"
                   style={{ width: `${calculateWidth()}px` }}
@@ -789,7 +790,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                 </div>
                 <button
                   className="search-btns lineUp-share-btn"
-                  onClick={() => handleSearchClick()}
+                 type="submit"
                 >
                   Search
                 </button>

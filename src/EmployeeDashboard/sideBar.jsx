@@ -68,6 +68,7 @@ function Sidebar({
   toggleExcelCalling,
   toggleResumeData,
   toggleJobDescription,
+  toggleSentProfileAccess,
   toggleIncentive,
   toggleAttendance,
   toggleAllMasterSheet,
@@ -1126,6 +1127,29 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                         </span>
                       </a>
                     </li>
+
+                    {
+                      userType === "Recruiters" && (
+                        <li
+                        style={{ marginLeft: "10px" }}
+                        onClick={handleButtonClick(
+                          "sentProfileAccess",
+                          toggleSentProfileAccess
+                        )}
+                        className={
+                          activeButton === "sentProfileAccess" ? "active" : ""
+                        }
+                      >
+                        <a href="#">
+                          {/* <img src={Circle} style={{ width: "10px" }} alt="" /> */}
+                          <span className="sidebar-text">
+                            {" "}
+                           Permited Profiles
+                          </span>
+                        </a>
+                      </li>
+                      )
+                    }
 
                     {(userType != "Recruiters" &&
                       userType != "SuperUser" &&
