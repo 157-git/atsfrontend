@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./shareEDM.css";
 import profileImage from "../assets/157logo.jpeg";
+import profileImageRtempus from "../assets/rtempus.jpeg";
 import { useParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
@@ -179,7 +180,11 @@ console.log(data);
             </div>
             <div className="job-posting" id="shareEMD">
               <div className="image-container">
-                <img src={profileImage} alt="Profile Image" />
+              <img 
+  src={(employeeId === "3148" && userType === "TeamLeader") ? profileImageRtempus : profileImage} 
+  alt="Profile Image" 
+/>
+
               </div>
               {/* here are some code updated by sahil karnekar from line 114 to 330 date 30-10-2024 */}
               <div style={{ marginLeft: "10px", marginRight: "10px" }}>

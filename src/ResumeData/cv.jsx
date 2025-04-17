@@ -10,8 +10,9 @@ import "./cv.css";
 // Title: CV
 // Description : Completely edidatable cv with inputs and option od pdf download
 // Lines: 1213
-function CvTemplate({ onClose }) {
+function CvTemplate({cvFromApplicantForm, onClose }) {
   const [isEditing, setIsEditing] = useState(false); // This is necessary for toggling between view/edit
+  const [stateForCvFromApplicantsForm, setStateForCvFromApplicantsForm] = useState(cvFromApplicantForm ? cvFromApplicantForm : null)
 
   const [profile, setProfile] = useState({
     sectionTitles: {

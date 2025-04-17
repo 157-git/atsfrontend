@@ -4,6 +4,7 @@ import html2canvas from "html2canvas";
 import { API_BASE_URL } from "../api/api";
 import { useParams } from "react-router-dom";
 import LoginImage from "../assets/157logo.jpeg";
+import profileImageRtempus from "../assets/rtempus.jpeg";
 
 const ShareDescription = ({ Descriptions }) => {
   const [data, setData] = useState(null);
@@ -114,7 +115,12 @@ const ShareDescription = ({ Descriptions }) => {
           &#10006;
         </button>
       </section>
-      <div className="job-post-share" id="job-description-share">
+      <div className="job-post-share" id="job-description-share"
+       style={{
+        backgroundColor: (employeeId === "3148" && userType === "TeamLeader")
+          && "#7f9a40"
+      }}
+      >
         <section className="job-details-section-share">
           {Descriptions.designation && (
             <div className="job-title-share">
@@ -141,7 +147,13 @@ const ShareDescription = ({ Descriptions }) => {
             </div>
 
             <div className="setDisplayFlexForEdm">
-              <div className="job-details-firstsection-share">
+              <div className="job-details-firstsection-share"
+             style={{
+              borderRight: (employeeId === "3148" && userType === "TeamLeader")
+                && "2px solid #c11f21"
+            }}
+            
+              >
                 {/* {Descriptions.companyName && (
               <p
               contentEditable
@@ -219,7 +231,11 @@ const ShareDescription = ({ Descriptions }) => {
 
               <div className="job-details-secondsection-share">
                 <div className="jd-logo-div">
-                  <img src={LoginImage} alt="Logo" className="jd-logo" />
+                   <img 
+                   className="jd-logo"
+                                src={(employeeId === "3148" && userType === "TeamLeader") ? profileImageRtempus : LoginImage} 
+                                alt="Profile Image" 
+                              />
                 </div>
                 <div className="jd-logo-below-div">
                   {Descriptions.weekOff && (

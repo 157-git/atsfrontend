@@ -39,8 +39,9 @@ import { API_BASE_URL } from "../api/api";
 import CryptoJS from "crypto-js";
 import { getSocket } from "../EmployeeDashboard/socket";
 import Loader from "../EmployeeSection/loader";
-import { message } from "antd";
+import { message, Modal } from "antd";
 import { Radio as AntdRadio } from 'antd';
+import CvTemplate from "../ResumeData/cv";
 
 
 function ApplicantForm2({ loginEmployeeName }) {
@@ -75,6 +76,8 @@ function ApplicantForm2({ loginEmployeeName }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [whatsappSelected, setWhatsappSelected] = useState(false);
   const [doneAnyCertification, SetDoneAnyCertification] = useState(false);
+  const [showCreateResumeModule, setShowCreateResumeModule] = useState(false);
+  const [cvFromApplicantsForm, setCvFromApplicantsForm] = useState(true);
 
   const initialFormData = {
     date: "",
@@ -1128,8 +1131,8 @@ console.log(dataToSend);
               </div>
             </div>
             <div className="form-column-December">
-              <div className="makeDisplayFlexForYopApplicantForm">
-              <div className="form-group-December">
+              <div className="makeDisplayFlexForYopApplicantForm setWidth100formakesubdives50">
+              <div className="form-group-December setwidth50onlyforthis2">
                 <label>
                   Job designation{" "}
                   <span className="setRequiredAstricColorRed">*</span>
@@ -1154,7 +1157,7 @@ console.log(dataToSend);
                   <span className="error">{errors.jobDesignation}</span>
                 )}
               </div>
-              <div className="form-group-December newmargintop10pxformobile">
+              <div className="form-group-December newmargintop10pxformobile setwidth50onlyforthis2">
                 <label>
                   Year Of Passout{" "}
                   <span className="setRequiredAstricColorRed">*</span>
@@ -1655,6 +1658,9 @@ console.log(dataToSend);
                       className="success-December"
                     />
                   )}
+<div className="createresumebutton">
+<div onClick={()=>setShowCreateResumeModule(true)} >Create Resume</div>
+</div>
                 </div>
                 {errors["lineUp.resume"] && (
                   <span className="error">{errors["lineUp.resume"]}</span>
@@ -2103,11 +2109,13 @@ console.log(dataToSend);
     </a> */}
   
  
-    <b className="newclassforfontsizechnges">Follow LinkedIn Page:  {" "} </b>
+    <b className="newclassforfontsizechnges"
+    >Follow LinkedIn Page:  {" "} </b>
     <a href="https://www.linkedin.com/company/157careers/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="newclassnameforlinkblue newclassforfontsizechnges">
     157 Careers Profile
     </a>
   </p>
+  {/* <p>© 2025 157 Industries PVT. LTD. All rights reserved.</p> */}
 </div>
 
 
@@ -2119,6 +2127,18 @@ console.log(dataToSend);
         )}
         <br />
       </div>
+
+      <Modal title="Create Resume" open={showCreateResumeModule} 
+      // onOk={handleOk} 
+      onCancel={()=>setShowCreateResumeModule(false)}
+   width={"auto"}
+      >
+      <>
+      <div className="cvtemplatemaindivinapplicantfor">
+        <CvTemplate cvFromApplicantForm ={cvFromApplicantsForm} />
+      </div>
+      </>
+      </Modal>
     </div>
   );
 }

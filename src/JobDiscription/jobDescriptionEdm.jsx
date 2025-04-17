@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import html2canvas from "html2canvas";
 import profileImage from '../assets/157logo.jpeg';
 import { API_BASE_URL } from "../api/api";
-import "./jobDescriptionEdm.css"
+import "./jobDescriptionEdm.css";
+import profileImageRtempus from "../assets/rtempus.jpeg";
 
 
 
@@ -161,7 +162,10 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
         <div className="main-description-share2">
           <div className="job-posting" id="shareEMD">
             <div className="image-container">
-              <img src={profileImage} alt="Profile Image" />
+             <img 
+               src={(employeeId === "3148" && userType === "TeamLeader") ? profileImageRtempus : profileImage} 
+               alt="Profile Image" 
+             />
             </div>
             <h3 className="share-edm-black-bold"> We are Hiring</h3>
             <h2 className="short-edm-heading"> "{data.designation}"</h2>

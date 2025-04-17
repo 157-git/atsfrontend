@@ -4,7 +4,7 @@
    .form-container-December {
     position: fixed;
     top: 0%;
-    height: 100vh;
+    /* height: 100vh; */
     width: 100%;
     overflow-y: scroll;
     border: 8px solid #f2f2f2;
@@ -12,9 +12,15 @@
   .headingDivForApplicantNewHeading{
     margin-left: 5px;
   }
+  .setWidth100formakesubdives50{
+    width: 100%;
+  }
+  .setwidth50onlyforthis2{
+    width: 50%;
+  }
   .newclassforfontsizechnges{
     font-size: 16px;
-    color: #333;
+    color: #000000;
   }
   .classnameforsetwidthforlogpimage{
     width: 170px;
@@ -145,6 +151,9 @@
       align-items: center;
       text-align: center;
     }
+    .setwidth50onlyforthis2{
+      width: 100%;
+    }
     .setMargintop10pxforref{
       margin-top: 10px;
     }
@@ -184,6 +193,9 @@
   @media (max-width: 768px) {
     .forNewUanandRefFlex{
       display: block;
+    }
+    .setwidth50onlyforthis2{
+      width: 100%;
     }
     .setMargintop10pxforref{
       margin-top: 10px;
@@ -478,6 +490,9 @@
     .form-grid-December {
       flex-direction: column;
     }
+    .setwidth50onlyforthis2{
+      width: 100%;
+    }
     .newmargintop10pxformobile{
       margin-top: 10px;
     }
@@ -517,6 +532,9 @@
     }
     .newmargintop10pxformobile{
       margin-top: 10px;
+    }
+    .setwidth50onlyforthis2{
+      width: 100%;
     }
     .newclassforfontsizechnges{
       font-size: 11px;
@@ -563,6 +581,9 @@
     }
     .setMargintop10pxforref{
       margin-top: 10px;
+    }
+    .setwidth50onlyforthis2{
+      width: 100%;
     }
     .newclassforfontsizechnges{
       font-size: 11px;
@@ -646,6 +667,9 @@
     }
     .newclassforfontsizechnges{
       font-size: 11px;
+    }
+    .setwidth50onlyforthis2{
+      width: 100%;
     }
     .newmargintop10pxformobile{
       margin-top: 10px;

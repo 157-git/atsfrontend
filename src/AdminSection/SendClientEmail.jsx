@@ -17,6 +17,7 @@ import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import { getSocket } from "../EmployeeDashboard/socket";
 import limitedOptions from "../helper/limitedOptions";
 import { Modal as AntdModal } from 'antd';
+import profileImageRtempus from "../assets/rtempus.jpeg";
 
 
 // SwapnilRokade_SendClientEmail_ModifyFilters_11/07
@@ -260,6 +261,18 @@ const SendClientEmail = ({ clientEmailSender }) => {
         toast.error("Please select at least one job")
         return
       }
+console.log(selectedRowsPermissionIds);
+
+      const response = await axios.post(`http://localhost:9090/permissions`,[
+        {
+          empId: 1,
+          jobIds: [1],
+          managerId: 1
+        }
+      ])
+
+      console.log(response);
+      
 
       // Here you would typically make an API call to grant permissions
       // For example:
@@ -1794,7 +1807,9 @@ const SendClientEmail = ({ clientEmailSender }) => {
               setShowSelectPermissionRecruiters(true)
               setShowPermissionModal(false)
             }}
-            onCancel={() => setShowPermissionModal(false)}
+            onCancel={() => {
+              setSelectedRowsPermissionIds([])
+              setShowPermissionModal(false)}}
            
           >
             <div
@@ -1846,7 +1861,9 @@ const SendClientEmail = ({ clientEmailSender }) => {
             title="Select Recruiter"
             open={showSelectPermissionRecruiters}
             onOk={handleOkey}
-            onCancel={() => setShowSelectPermissionRecruiters(false)}
+            onCancel={() => {
+              setSelectedRowsPermissionIds([])
+              setShowSelectPermissionRecruiters(false)}}
             width={800}
           >
             <div className="mainForListsteamperformance">
@@ -2309,7 +2326,7 @@ setSocket(newSocket);
                 <strong>Signature:</strong>
                 <br />
                 <img
-                  src={signatureImage}
+                  src={(employeeId === "3148" && userType === "TeamLeader") ? profileImageRtempus : signatureImage}
                   alt="Signature"
                   style={{ maxWidth: "100%", maxHeight: "200px" }}
                 />
