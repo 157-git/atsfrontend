@@ -1658,9 +1658,9 @@ console.log(dataToSend);
                       className="success-December"
                     />
                   )}
-<div className="createresumebutton">
+{/* <div className="createresumebutton">
 <div onClick={()=>setShowCreateResumeModule(true)} >Create Resume</div>
-</div>
+</div> */}
                 </div>
                 {errors["lineUp.resume"] && (
                   <span className="error">{errors["lineUp.resume"]}</span>
