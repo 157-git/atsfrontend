@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
+import profileImageVelocity from "../assets/velocityHr.png";
 
 function ShareEDM({ Descriptions, onShareEdm }) {
   const [data, setData] = useState(null);
@@ -180,9 +181,19 @@ console.log(data);
             </div>
             <div className="job-posting" id="shareEMD">
               <div className="image-container">
-              <img 
+              {/* <img 
   src={(employeeId === "3148" && userType === "TeamLeader") ? profileImageRtempus : profileImage} 
   alt="Profile Image" 
+/> */}
+ <img 
+  src={
+    employeeId === "3148" && userType === "TeamLeader"
+      ? profileImageRtempus
+      : employeeId === "3691" && userType === "TeamLeader"
+      ? profileImageVelocity
+      : profileImage
+  }
+  alt="Profile Image"
 />
 
               </div>

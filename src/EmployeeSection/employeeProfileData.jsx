@@ -7,8 +7,9 @@ import Modal from "react-bootstrap/Modal";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../EmployeeSection/employeeProfile.css";
-import { API_BASE_URL } from "../api/api";
+import axios, { API_BASE_URL } from "../api/api";
 import dummyUserImg from "../photos/DummyUserImg.png";
+import { toast } from "react-toastify";
 
 const EmployeeProfileData = ({
   onClose,
@@ -51,7 +52,15 @@ const EmployeeProfileData = ({
   const arrowPosition = (value / 100) * 600;
   //Arshad Attar Added This code  :- 17-10-2024
   //Line End57
-
+const handleUpdateName = async()=>{
+  const response = await axios.put(`${API_BASE_URL}/update-user-data/${employeeId}/${userType}?newName=${employeeData.name}`);
+  console.log(response.data);
+  if (response.status ) {
+    toast.success("Name updated successfully");
+  } else {
+    toast.error("Failed to update name");
+  }
+}
   useEffect(() => {
     fetch(`${API_BASE_URL}/fetch-profile-details/${employeeId}/${userType}`)
       .then((response) => response.json())
@@ -566,9 +575,18 @@ const EmployeeProfileData = ({
               />
             </div>
             <div>
-              <p className="m-1" style={{ color: "gray" }}>
+              {/* <p className="m-1" style={{ color: "gray" }}>
                 Name : {employeeData.name}
-              </p>
+              </p> */}
+              <input
+  type="text"
+  className="m-0 border px-2 py-1 rounded"
+  value={employeeData?.name || ""}
+  onChange={(e) =>
+    setEmployeeData({ ...employeeData, name: e.target.value })
+  }
+/>
+
               <p className="m-1">Job Role : {employeeData.jobRole}</p>
               <p className="m-1">
                 Official Email : {employeeData.officialMail}
@@ -599,6 +617,13 @@ const EmployeeProfileData = ({
               className="display-more-profile-btn daily-tr-btn"
             >
               View More
+            </button>
+
+            <button
+              onClick={handleUpdateName}
+              className="display-more-profile-btn daily-tr-btn"
+            >
+            Update Name
             </button>
           </Modal.Footer>
         </Modal.Dialog>

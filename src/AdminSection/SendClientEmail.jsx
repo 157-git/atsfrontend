@@ -18,6 +18,7 @@ import { getSocket } from "../EmployeeDashboard/socket";
 import limitedOptions from "../helper/limitedOptions";
 import { Modal as AntdModal } from 'antd';
 import profileImageRtempus from "../assets/rtempus.jpeg";
+import profileImageVelocity from "../assets/velocityHr.png";
 
 
 // SwapnilRokade_SendClientEmail_ModifyFilters_11/07
@@ -2326,10 +2327,17 @@ setSocket(newSocket);
                 <strong>Signature:</strong>
                 <br />
                 <img
-                  src={(employeeId === "3148" && userType === "TeamLeader") ? profileImageRtempus : signatureImage}
-                  alt="Signature"
-                  style={{ maxWidth: "100%", maxHeight: "200px" }}
-                />
+  src={
+    employeeId === "3148" && userType === "TeamLeader"
+      ? profileImageRtempus
+      : employeeId === "3691" && userType === "TeamLeader"
+      ? profileImageVelocity
+      : signatureImage
+  }
+  alt="Signature"
+  style={{ maxWidth: "100%", maxHeight: "200px" }}
+/>
+
               </div>
             )}
             {/* <Form.Group>

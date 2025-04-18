@@ -5,6 +5,7 @@ import { API_BASE_URL } from "../api/api";
 import { useParams } from "react-router-dom";
 import LoginImage from "../assets/157logo.jpeg";
 import profileImageRtempus from "../assets/rtempus.jpeg";
+import profileImageVelocity from "../assets/velocityHr.png";
 
 const ShareDescription = ({ Descriptions }) => {
   const [data, setData] = useState(null);
@@ -118,7 +119,9 @@ const ShareDescription = ({ Descriptions }) => {
       <div className="job-post-share" id="job-description-share"
        style={{
         backgroundColor: (employeeId === "3148" && userType === "TeamLeader")
-          && "#7f9a40"
+          ? "#7f9a40"
+          : (employeeId === "3691" && userType === "TeamLeader") 
+          && "#b3a55b"
       }}
       >
         <section className="job-details-section-share">
@@ -148,10 +151,15 @@ const ShareDescription = ({ Descriptions }) => {
 
             <div className="setDisplayFlexForEdm">
               <div className="job-details-firstsection-share"
-             style={{
-              borderRight: (employeeId === "3148" && userType === "TeamLeader")
-                && "2px solid #c11f21"
+            style={{
+              borderRight:
+                employeeId === "3148" && userType === "TeamLeader"
+                  ? "2px solid #c11f21"
+                  : employeeId === "3691" && userType === "TeamLeader"
+                  ? "2px solid #3b3823"
+                  : "none"
             }}
+            
             
               >
                 {/* {Descriptions.companyName && (
@@ -231,10 +239,21 @@ const ShareDescription = ({ Descriptions }) => {
 
               <div className="job-details-secondsection-share">
                 <div className="jd-logo-div">
-                   <img 
+                   {/* <img 
                    className="jd-logo"
                                 src={(employeeId === "3148" && userType === "TeamLeader") ? profileImageRtempus : LoginImage} 
                                 alt="Profile Image" 
+                              /> */}
+                               <img 
+                               className="jd-logo"
+                                src={
+                                  employeeId === "3148" && userType === "TeamLeader"
+                                    ? profileImageRtempus
+                                    : employeeId === "3691" && userType === "TeamLeader"
+                                    ? profileImageVelocity
+                                    : LoginImage
+                                }
+                                alt="Profile Image"
                               />
                 </div>
                 <div className="jd-logo-below-div">
