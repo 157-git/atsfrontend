@@ -7,6 +7,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose } from "@fortawesome/free-regular-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import bannerImage from '../assets/newImage-removebg-preview.png';
+import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import newLogoHead from '../assets/ApplicantFormLogo.png';
 import {
   faUser,
@@ -39,46 +40,54 @@ import { API_BASE_URL } from "../api/api";
 import CryptoJS from "crypto-js";
 import { getSocket } from "../EmployeeDashboard/socket";
 import Loader from "../EmployeeSection/loader";
-import { message, Modal } from "antd";
+import { Button, message, Modal } from "antd";
 import { Radio as AntdRadio } from 'antd';
 import CvTemplate from "../ResumeData/cv";
+import ResumeCopy from "../ResumeData/resumecopy";
 
 
 function ApplicantForm2({ loginEmployeeName }) {
-  const [messageApi, contextHolder] = message.useMessage();
+  const [messageApi, contextHolder] = message.useMessage()
 
-  const { encodedParams } = useParams();
-  const extractedParam = encodedParams?.split("+")[1];
-  const [socket, setSocket] = useState(null);
-  const [salaryInWords, setSalaryInWords] = useState("");
+  const { encodedParams } = useParams()
+  const extractedParam = encodedParams?.split("+")[1]
+  const [socket, setSocket] = useState(null)
+  const [salaryInWords, setSalaryInWords] = useState("")
   // const { employeeId, userType } = getEmployeeDetails();
-  const [employeeId, setEmployeeId] = useState();
-  const [userType, setUserType] = useState();
+  const [employeeId, setEmployeeId] = useState()
+  const [userType, setUserType] = useState()
 
   const getEmployeeDetails = async () => {
     const response = await axios.post(`${API_BASE_URL}/get-shorten-details`, {
-      shortenUrl: `${extractedParam}`,
-    });
-    setEmployeeId(response.data.employeeId);
-    setUserType(response.data.userType);
-  };
+        shortenUrl: `${extractedParam}`,
+    })
+    setEmployeeId(response.data.employeeId)
+    setUserType(response.data.userType)
+  }
 
   useEffect(() => {
-    messageApi.success('Mobile View Recommended !');
-    getEmployeeDetails();
-  }, []);
+    messageApi.success("Mobile View Recommended !")
+    getEmployeeDetails()
+  }, [])
 
-  const [loading, setLoading] = useState(false);
-  const [resumeSelected, setResumeSelected] = useState(false);
-  const [fileSelected, setSelected] = useState("");
-  const [photoSelected, setPhotoSelected] = useState(false);
-  const dateInputRef = useRef(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [whatsappSelected, setWhatsappSelected] = useState(false);
-  const [doneAnyCertification, SetDoneAnyCertification] = useState(false);
-  const [showCreateResumeModule, setShowCreateResumeModule] = useState(false);
-  const [cvFromApplicantsForm, setCvFromApplicantsForm] = useState(true);
+  const [loading, setLoading] = useState(false)
+  const [resumeSelected, setResumeSelected] = useState(false)
+  const [fileSelected, setSelected] = useState("")
+  const [photoSelected, setPhotoSelected] = useState(false)
+  const dateInputRef = useRef(null)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [whatsappSelected, setWhatsappSelected] = useState(false)
+  const [doneAnyCertification, SetDoneAnyCertification] = useState(false)
+  const [showCreateResumeModule, setShowCreateResumeModule] = useState(false)
+  const [showCreatecvModule, setShowCreatecvModule] = useState(false)
+  const [modalHistory, setModalHistory] = useState([])
 
+  const [cvFromApplicantsForm, setCvFromApplicantsForm] = useState(true)
+  const [cv2FromApplicantsForm, setCv2FromApplicantsForm] = useState(true)
+
+  const [showResumeCVOptions, setShowResumeCVOptions] = useState(false)
+  const [showResumeModal, setShowResumeModal] = useState(false)
+  const [showCVModal, setShowCVModal] = useState(false)
   const initialFormData = {
     date: "",
     candidateName: "",
@@ -130,70 +139,130 @@ function ApplicantForm2({ loginEmployeeName }) {
       yearOfPassing: "",
       disability: "",
       disabilityDetails: "",
-      candidateUanNumber : "",
-      candidateReference : ""
+      candidateUanNumber: "",
+      candidateReference: "",
       // certificates: [{ certificateName: "", certificateFile: null }],
     },
-  };
+  }
+  // Rajlaxmi JAadale Added that code line 138/202
+  const handleOpen = () => {
+    setShowCreateResumeModule(true)
+    setSelectedOption(null) // reset when opening
+    setModalHistory([]) // Clear history when opening the main modal
+  }
 
-  const [formData, setFormData] = useState(initialFormData);
-  const inputRefs = useRef([]);
-  const [type, settype] = useState("");
-  const navigator = useNavigate();
+  const handleSelect = (option) => {
+    setModalHistory((prev) => [...prev, selectedOption]) // Store current option in history
+    setSelectedOption(option)
+  }
+
+  const handleBack = () => {
+    if (modalHistory.length > 0) {
+      // Get the last option from history
+      const previousOption = modalHistory[modalHistory.length - 1]
+      // Remove the last option from history
+      setModalHistory((prev) => prev.slice(0, -1))
+      // Set the previous option as current
+      setSelectedOption(previousOption)
+    } else {
+      // If no history, go back to option selection
+      setSelectedOption(null)
+    }
+  }
+  const handleClose = () => {
+    setShowCreateResumeModule(false)
+    setSelectedOption(null)
+  }
+
+  const handleCVDownload = async (cvData) => {
+    try {
+      // Create a blob from the CV data
+      const response = await fetch(cvData)
+      const blob = await response.blob()
+
+      // Create a File object from the blob with a proper name
+      const filename = `generated`
+      const file = new File([blob], filename, { type: "application/pdf" })
+
+      // Update the form data with the file
+      setFormData((prevData) => ({
+        ...prevData,
+        lineUp: {
+          ...prevData.lineUp,
+          resume: file,
+        },
+      }))
+
+      // Set resume selected state to true
+      setResumeSelected(true)
+
+      // Close the modal
+      setShowCreateResumeModule(false)
+
+      // Show success message
+      messageApi.success("CV successfully generated and added to your application!")
+    } catch (error) {
+      console.error("Error handling CV download:", error)
+      messageApi.error("Failed to process the CV. Please try again.")
+    }
+  }
+  const [formData, setFormData] = useState(initialFormData)
+  const inputRefs = useRef([])
+  const [type, settype] = useState("")
+    const navigator = useNavigate();
 
   // establishing socket for emmiting event
-  useEffect(() => {
-    const newSocket = getSocket();
-    setSocket(newSocket);
-  }, []);
+  //   useEffect(() => {
+  //     const newSocket = getSocket();
+  //     setSocket(newSocket);
+  //   }, []);
 
   useEffect(() => {
     if (loginEmployeeName) {
       setFormData((prevData) => ({
         ...prevData,
         recruiterName: loginEmployeeName,
-      }));
+      }))
     }
-  }, [loginEmployeeName]);
+  }, [loginEmployeeName])
 
   const handleKeyDown = (e) => {
     if (e.target.name === "candidateEmail") {
       if (e.key === " ") {
-        e.preventDefault(); // Prevents spaces from being entered
+        e.preventDefault() // Prevents spaces from being entered
       }
     }
-    if (e.target.name === "lineUp.experienceYear" ||
-       e.target.name === "lineUp.experienceMonth" ||
-       e.target.name === "lineUp.currentCTCLakh" ||
-       e.target.name === "lineUp.currentCTCThousand" ||
-       e.target.name === "lineUp.expectedCTCLakh" ||
-       e.target.name === "lineUp.expectedCTCThousand"
+    if (
+      e.target.name === "lineUp.experienceYear" ||
+      e.target.name === "lineUp.experienceMonth" ||
+      e.target.name === "lineUp.currentCTCLakh" ||
+      e.target.name === "lineUp.currentCTCThousand" ||
+      e.target.name === "lineUp.expectedCTCLakh" ||
+      e.target.name === "lineUp.expectedCTCThousand"
     ) {
       if (e.key === "." || e.key === "-" || e.key === "e") {
-        e.preventDefault(); // Prevent decimal points, negative numbers, and exponent notation
+        e.preventDefault() // Prevent decimal points, negative numbers, and exponent notation
       }
     }
     if (e.key === "Enter") {
-      e.preventDefault();
+      e.preventDefault()
 
-      const currentField = e.target;
-      const currentClassName = currentField.className;
+      const currentField = e.target
+      const currentClassName = currentField.className
 
       if (currentClassName.includes("contact-number")) {
-        return;
+        return
       }
 
-      const inputs = Array.from(
-        document.querySelectorAll("input, select, textarea")
-      );
+      const inputs = Array.from(document.querySelectorAll("input, select, textarea"))
 
-      const currentIndex = inputs.indexOf(currentField);
+      const currentIndex = inputs.indexOf(currentField)
 
       if (currentIndex > -1 && currentIndex < inputs.length - 1) {
-        inputs[currentIndex + 1].focus();
+        inputs[currentIndex + 1].focus()
       }
     }
-  };
+  }
 
   // const handleChange = (e) => {
   //   const { name, type, files, value } = e.target;
@@ -322,41 +391,79 @@ function ApplicantForm2({ loginEmployeeName }) {
   // Attach the event listener for keydown event
 
   // Function to get the next input element
-  
+  // Add some CSS for the new buttons
+  const styles = `
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-back-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.modal-back-button {
+  background-color: #f0f0f0;
+  border: 1px solid #d9d9d9;
+  padding: 5px 15px;
+}
+
+.back-button {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #d9d9d9;
+}
+`
+
+  // Add this style tag to the component
+  useEffect(() => {
+    const styleElement = document.createElement("style")
+    styleElement.innerHTML = styles
+    document.head.appendChild(styleElement)
+
+    return () => {
+      document.head.removeChild(styleElement)
+    }
+  }, [])
+
   const handleChange = (e) => {
-    const { name, type, files, value } = e.target;
-  
-    let inputValue =
-      type === "file" ? (files && files.length > 0 ? files[0] : null) : value;
-  
-    if (name === "candidateName" ||
-      name === "jobDesignation" || 
+    const { name, type, files, value } = e.target
+
+    let inputValue = type === "file" ? (files && files.length > 0 ? files[0] : null) : value
+
+    if (
+      name === "candidateName" ||
+      name === "jobDesignation" ||
       name === "lineUp.noticePeriod" ||
       name === "currentLocation" ||
       name === "lineUp.preferredLocation"
     ) {
       // Replace multiple spaces with a single space
-      inputValue = inputValue.replace(/\s{2,}/g, " ");
+      inputValue = inputValue.replace(/\s{2,}/g, " ")
     }
-  
+
     if (name === "lineUp.offersalary") {
       if (!/^\d{0,2}$/.test(value)) {
-        return; // Prevent updating if the value is not numeric or exceeds 2 digits
+        return // Prevent updating if the value is not numeric or exceeds 2 digits
       }
     }
     if (name === "candidateEmail") {
       if (!/^\S*$/.test(value)) {
-        return; // Prevent updating if there is a space
+        return // Prevent updating if there is a space
       }
     }
-  
+
     // Update the formData for nested objects like certificates
     setFormData((prevData) => {
-      let updatedData = { ...prevData };
-  
+      const updatedData = { ...prevData }
+
       if (name === "lineUp.holdingAnyOffer") {
-        const isHoldingOffer = value === "true" || value === true;
-  
+        const isHoldingOffer = value === "true" || value === true
+
         updatedData.lineUp = {
           ...prevData.lineUp,
           holdingAnyOffer: isHoldingOffer,
@@ -368,61 +475,60 @@ function ApplicantForm2({ loginEmployeeName }) {
                 negotiation: "",
                 offerdetails: "",
               }), // Clear values if "No" is selected
-        };
+        }
       } else if (name.startsWith("lineUp.")) {
-        const nameParts = name.split(".");
+        const nameParts = name.split(".")
         if (name.startsWith("lineUp.certificates")) {
-          const index = parseInt(nameParts[1].match(/\d+/)[0], 10);
-          const field = nameParts[2];
-          const updatedCertificates = [...prevData.lineUp.certificates];
-          updatedCertificates[index][field] = inputValue;
-  
+          const index = Number.parseInt(nameParts[1].match(/\d+/)[0], 10)
+          const field = nameParts[2]
+          const updatedCertificates = [...prevData.lineUp.certificates]
+          updatedCertificates[index][field] = inputValue
+
           updatedData.lineUp = {
             ...prevData.lineUp,
             certificates: updatedCertificates,
-          };
+          }
         } else {
-          const nestedField = nameParts[1];
+          const nestedField = nameParts[1]
           updatedData.lineUp = {
             ...prevData.lineUp,
             [nestedField]: inputValue,
-          };
+          }
         }
       } else {
-        updatedData[name] = inputValue;
+        updatedData[name] = inputValue
       }
-      return updatedData;
-    });
-  
+      return updatedData
+    })
+
     // Reset the error for the field that was changed
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: undefined,
-    }));
-  
+    }))
+
     // Optionally validate the input
-    const error = validateField(name, inputValue);
+    const error = validateField(name, inputValue)
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: error,
-    }));
-  };
-  
+    }))
+  }
 
   const getNextInput = (currentElement) => {
-    let nextElement = currentElement;
+    let nextElement = currentElement
     while (nextElement) {
-      nextElement = nextElement.nextElementSibling;
+      nextElement = nextElement.nextElementSibling
       if (
         (nextElement && nextElement.tagName === "INPUT") ||
         nextElement.tagName === "TEXTAREA" ||
         nextElement.tagName === "SELECT"
       ) {
-        return nextElement;
+        return nextElement
       }
     }
-    return null;
-  };
+    return null
+  }
 
   // const handleAddCertificate = () => {
   //   setFormData((prev) => ({
@@ -461,29 +567,29 @@ function ApplicantForm2({ loginEmployeeName }) {
   //rajalxmi JAgadale 10-01-2025
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
       reader.onload = () => {
-        const base64String = reader.result.split(",")[1]; // Extract base64 content only
-        resolve(base64String);
-      };
-      reader.onerror = (error) => reject(error);
-    });
-  };
+        const base64String = reader.result.split(",")[1] // Extract base64 content only
+        resolve(base64String)
+      }
+      reader.onerror = (error) => reject(error)
+    })
+  }
 
   const getNestedValue = (obj, path) => {
     return path.split(".").reduce((acc, key) => {
-      return acc && acc[key] !== undefined ? acc[key] : undefined;
-    }, obj);
-  };
+      return acc && acc[key] !== undefined ? acc[key] : undefined
+    }, obj)
+  }
 
   const handleInputInterview = (e) => {
-    const inputValue = e.target.value;
+    const inputValue = e.target.value
 
     if (inputValue.length > 2) {
-      e.target.value = inputValue.slice(0, 5);
+      e.target.value = inputValue.slice(0, 5)
     }
-  };
+  }
 
   const numberToWords = (num) => {
     const ones = [
@@ -507,77 +613,56 @@ function ApplicantForm2({ loginEmployeeName }) {
       "Seventeen",
       "Eighteen",
       "Nineteen",
-    ];
-    const tens = [
-      "",
-      "",
-      "Twenty",
-      "Thirty",
-      "Forty",
-      "Fifty",
-      "Sixty",
-      "Seventy",
-      "Eighty",
-      "Ninety",
-    ];
+    ]
+    const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"]
 
-    if (num < 20) return ones[num];
-    if (num < 100)
-      return (
-        tens[Math.floor(num / 10)] +
-        (num % 10 !== 0 ? " " + ones[num % 10] : "")
-      );
+    if (num < 20) return ones[num]
+    if (num < 100) return tens[Math.floor(num / 10)] + (num % 10 !== 0 ? " " + ones[num % 10] : "")
 
-    return (
-      ones[Math.floor(num / 100)] +
-      " Hundred" +
-      (num % 100 !== 0 ? " " + numberToWords(num % 100) : "")
-    );
-  };
+    return ones[Math.floor(num / 100)] + " Hundred" + (num % 100 !== 0 ? " " + numberToWords(num % 100) : "")
+  }
 
   const convertNumberToWords = (currentCTCLakh, currentCTCThousand) => {
-    let lakhPart = parseInt(currentCTCLakh, 10);
-    let thousandPart = parseInt(currentCTCThousand, 10);
-    let words = "";
+    const lakhPart = Number.parseInt(currentCTCLakh, 10)
+    const thousandPart = Number.parseInt(currentCTCThousand, 10)
+    let words = ""
 
     if (lakhPart > 0) {
-      words += numberToWords(lakhPart) + (lakhPart === 1 ? " Lakh" : " Lakhs");
+      words += numberToWords(lakhPart) + (lakhPart === 1 ? " Lakh" : " Lakhs")
     }
 
     if (thousandPart > 0) {
-      if (words) words += " ";
-      words +=
-        numberToWords(thousandPart) +
-        (thousandPart === 1 ? " Thousand" : " Thousand");
+      if (words) words += " "
+      words += numberToWords(thousandPart) + (thousandPart === 1 ? " Thousand" : " Thousand")
     }
 
-    return words || "Zero";
-  };
+    return words || "Zero"
+  }
 
   const convertNumberToWordsYesr = (experienceYear, experienceMonth) => {
-    let year = parseInt(experienceYear, 10);
-    let month = parseInt(experienceMonth, 10);
-    let words = "";
+    const year = Number.parseInt(experienceYear, 10)
+    const month = Number.parseInt(experienceMonth, 10)
+    let words = ""
 
     if (year > 0) {
-      words += numberToWords(year) + (year === 1 ? " Year" : " Years");
+      words += numberToWords(year) + (year === 1 ? " Year" : " Years")
     }
 
     if (month > 0) {
-      if (words) words += " ";
-      words += numberToWords(month) + (month === 1 ? " Month" : " Months");
+      if (words) words += " "
+      words += numberToWords(month) + (month === 1 ? " Month" : " Months")
     }
-    return words || "Zero";
-  };
+    return words || "Zero"
+  }
 
-  const currentDate = new Date();
-  const minDate = new Date();
-  minDate.setFullYear(currentDate.getFullYear() - 18);
-  const minDateString = minDate.toISOString().split("T")[0];
+  const currentDate = new Date()
+  const minDate = new Date()
+  minDate.setFullYear(currentDate.getFullYear() - 18)
+  const minDateString = minDate.toISOString().split("T")[0]
 
-  const startYear = 1947;
-  const calendarStartDate = new Date(startYear, 0, 1);
-  const calendarStartDateString = calendarStartDate.toISOString().split("T")[0];
+  const startYear = 1947
+  const calendarStartDate = new Date(startYear, 0, 1)
+  const calendarStartDateString = calendarStartDate.toISOString().split("T")[0]
 
   // const handleFileChange = async (e, index) => {
   //   const file = e.target.files[0];
@@ -596,7 +681,7 @@ function ApplicantForm2({ loginEmployeeName }) {
   // };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const requiredFields = [
       "candidateName",
@@ -623,50 +708,46 @@ function ApplicantForm2({ loginEmployeeName }) {
       // "lineUp.companyName",
       // "lineUp.offersalary",
       // "lineUp.offerdetails",
-    ];
+    ]
 
-    let isFormValid = true;
-    let newErrors = {};
+    let isFormValid = true
+    const newErrors = {}
 
     requiredFields.forEach((field) => {
-      let value = field.includes(".")
-        ? getNestedValue(formData, field)
-        : formData[field];
+      const value = field.includes(".") ? getNestedValue(formData, field) : formData[field]
 
-      let error = validateField(field, value || "");
+      const error = validateField(field, value || "")
       if (error) {
-        newErrors[field] = error;
-        isFormValid = false;
+        newErrors[field] = error
+        isFormValid = false
       }
-    });
-console.log(newErrors);
+    })
+    console.log(newErrors)
 
-    setErrors(newErrors);
+    setErrors(newErrors)
 
     if (!isFormValid) {
-      const firstErrorField = Object.keys(newErrors)[0];
-      const errorElement = document.querySelector(
-        `[name="${firstErrorField}"]`
-      );
+      const firstErrorField = Object.keys(newErrors)[0]
+      const errorElement = document.querySelector(`[name="${firstErrorField}"]`)
       if (errorElement) {
-        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
-        errorElement.focus();
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" })
+        errorElement.focus()
       }
-      toast.error("Please Fill All Required Fields.");
-      return;
+      toast.error("Please Fill All Required Fields.")
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
 
-    const currentDate = new Date();
+    const currentDate = new Date()
     if (formData.alternateNumber === "No") {
-      formData.alternateNumber = 0;
+      formData.alternateNumber = 0
     }
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const seconds = String(now.getSeconds()).padStart(2, "0");
-    const time = `${hours}:${minutes}:${seconds}`;
+    const now = new Date()
+    const hours = String(now.getHours()).padStart(2, "0")
+    const minutes = String(now.getMinutes()).padStart(2, "0")
+    const seconds = String(now.getSeconds()).padStart(2, "0")
+    const time = `${hours}:${minutes}:${seconds}`
     const updatedFormData = {
       ...formData,
       date: currentDate.toISOString().split("T")[0],
@@ -674,8 +755,7 @@ console.log(newErrors);
       candidateName: formData.candidateName.trim(),
       jobDesignation: formData.jobDesignation.trim(),
       currentLocation: formData.currentLocation.trim(),
-
-    };
+    }
 
     // const certificates = updatedFormData.lineUp.certificates || [];
 
@@ -692,153 +772,177 @@ console.log(newErrors);
             ? await convertToBase64(formData.lineUp.resume)
             : formData.lineUp.resume,
         photo:
-          formData.lineUp.photo instanceof File
-            ? await convertToBase64(formData.lineUp.photo)
-            : formData.lineUp.photo,
-            
-            noticePeriod: formData.lineUp.noticePeriod.trim(),
-            preferredLocation : formData.lineUp.preferredLocation.trim(),
+          formData.lineUp.photo instanceof File ? await convertToBase64(formData.lineUp.photo) : formData.lineUp.photo,
 
+        noticePeriod: formData.lineUp.noticePeriod.trim(),
+        preferredLocation: formData.lineUp.preferredLocation.trim(),
       },
       ...(userType === "Recruiters"
         ? { employee: { employeeId, teamLeaderId: employeeId } }
         : userType === "TeamLeader"
-        ? { teamLeader: { teamLeaderId: employeeId } }
-        : userType === "Manager"
-        ? { manager: { managerId: employeeId } }
-        : {}),
-    };
-console.log(dataToSend);
+          ? { teamLeader: { teamLeaderId: employeeId } }
+          : userType === "Manager"
+            ? { manager: { managerId: employeeId } }
+            : {}),
+    }
+    console.log(dataToSend)
 
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/save-applicant/${userType}`,
-        dataToSend,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.post(`${API_BASE_URL}/save-applicant/${userType}`, dataToSend, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
 
       if (response.status === 200) {
-        toast.success("Form submitted successfully!");
-        setIsSubmitted(true);
-        navigator("/thank-you");
+        toast.success("Form submitted successfully!")
+        setIsSubmitted(true)
+        navigator("/thank-you")
         setTimeout(() => {
-          setFormData(initialFormData);
-          setResumeSelected(false);
-          setPhotoSelected(false);
-          setIsSubmitted(false);
-        }, 3000);
+          setFormData(initialFormData)
+          setResumeSelected(false)
+          setPhotoSelected(false)
+          setIsSubmitted(false)
+        }, 3000)
       } else {
-        toast.error("Error submitting form.");
+        toast.error("Error submitting form.")
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("Error submitting form.");
-      setLoading(false);
+      console.error("Error submitting form:", error)
+      toast.error("Error submitting form.")
+      setLoading(false)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
+  const [selectedOption, setSelectedOption] = useState(null) 
 
-  const [lastScrollPos, setLastScrollPos] = useState(0);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [scrollingUp, setScrollingUp] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [lastScrollPos, setLastScrollPos] = useState(0)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [scrollingUp, setScrollingUp] = useState(false)
+  const [errors, setErrors] = useState({})
 
   useEffect(() => {
-    let lastScrollY = window.scrollY;
+    let lastScrollY = window.scrollY
 
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
+      const currentScrollY = window.scrollY
 
       if (currentScrollY > 50) {
-        setIsScrolled(true);
-        setScrollingUp(lastScrollY > currentScrollY);
+        setIsScrolled(true)
+        setScrollingUp(lastScrollY > currentScrollY)
       } else {
-        setIsScrolled(false);
-        setScrollingUp(false);
+        setIsScrolled(false)
+        setScrollingUp(false)
       }
 
-      lastScrollY = currentScrollY;
-    };
+      lastScrollY = currentScrollY
+    }
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll)
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
+  // Rajlaxmi jaadale added that code line 841/872
+  const handleSetCV = async (cvData) => {
+    try {
+      // Create a blob from the CV data
+      const response = await fetch(cvData)
+      const blob = await response.blob()
 
+      // Create a File object from the blob with a proper name
+      const filename = `generated`
+      const file = new File([blob], filename, { type: "application/pdf" })
+
+      // Update the form data with the file
+      setFormData((prevData) => ({
+        ...prevData,
+        lineUp: {
+          ...prevData.lineUp,
+          resume: file,
+        },
+      }))
+
+      // Set resume selected state to true
+      setResumeSelected(true)
+
+      // Close the modal
+      setShowCreateResumeModule(false)
+
+      // Show success message
+      messageApi.success("CV successfully added to your application!")
+    } catch (error) {
+      console.error("Error setting CV:", error)
+      messageApi.error("Failed to add the CV to your application. Please try again.")
+    }
+  }
   //Validation Rajlaxmi Jagadale 10-01-2025/13-01-2025
   const validateField = (name, value) => {
-    let error = "";
-    const stringValue = value ? String(value).trim() : "";
+    let error = ""
+    const stringValue = value ? String(value).trim() : ""
 
     switch (name) {
       case "candidateName":
         if (!stringValue) {
-          error = "Enter your name.";
+          error = "Enter your name."
         } else if (/[^a-zA-Z\s]/.test(value)) {
-          error = "Only alphabets and spaces are allowed.";
+          error = "Only alphabets and spaces are allowed."
         } else if (stringValue.length > 100) {
-          error = "Name cannot exceed 100 characters.";
+          error = "Name cannot exceed 100 characters."
         }
-        break;
+        break
       case "currentLocation":
         if (!stringValue) {
-          error = "Enter your current location.";
+          error = "Enter your current location."
         } else if (stringValue.length > 100) {
-          error = "Name cannot exceed 100 characters.";
+          error = "Name cannot exceed 100 characters."
         }
-        break;
+        break
 
       case "contactNumber":
         if (!stringValue) {
-          error = "Enter your contact number";
+          error = "Enter your contact number"
         } else if (!/^\d{6,16}$/.test(value)) {
-          error = "Contact Number must be between 6 and 16 digits.";
+          error = "Contact Number must be between 6 and 16 digits."
         }
-        break;
+        break
 
       case "lineUp.dateOfBirth":
         if (!stringValue) {
-          error = "Enter your date of birth";
+          error = "Enter your date of birth"
         } else {
-          const dob = new Date(value);
-          const today = new Date();
-          let age = today.getFullYear() - dob.getFullYear();
-          const month = today.getMonth() - dob.getMonth();
+          const dob = new Date(value)
+          const today = new Date()
+          let age = today.getFullYear() - dob.getFullYear()
+          const month = today.getMonth() - dob.getMonth()
 
           if (month < 0 || (month === 0 && today.getDate() < dob.getDate())) {
-            age--;
+            age--
           }
 
           if (age < 18) {
-            error = "You must be at least 18 years old to apply.";
+            error = "You must be at least 18 years old to apply."
           } else if (isNaN(dob.getTime())) {
-            error = "Enter a valid Birth Date";
+            error = "Enter a valid Birth Date"
           }
         }
-        break;
+        break
 
       case "candidateEmail":
         if (!stringValue) {
-          error = "Enter your email address";
-        } else if (
-          !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
-        ) {
-          error = "Enter a valid Email Address";
+          error = "Enter your email address"
+        } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) {
+          error = "Enter a valid Email Address"
         } else if (value.length > 100) {
-          error = "Email cannot exceed 100 characters.";
+          error = "Email cannot exceed 100 characters."
         }
-        break;
+        break
 
       case "jobDesignation":
         if (!stringValue) {
-          error = "Enter your job designation";
+          error = "Enter your job designation"
         }
         // else if (!/^[a-zA-Z\s]+$/.test(value)) {
         //   error = "Job designation must contain only letters and spaces.";
@@ -846,102 +950,82 @@ console.log(dataToSend);
         // else if (value.length >= 100) {
         //   error = "Job designation cannot exceed 100 characters.";
         // }
-        break;
 
-        case "lineUp.yearOfPassing":
+        break
+
+      case "lineUp.yearOfPassing":
         if (!stringValue) {
-          error = "Enter your Year Of Passing";
+          error = "Enter your Year Of Passing"
         }
-        break;
+        break
 
       case "lineUp.experienceYear":
         if (!stringValue) {
-          error = "Experience year is required.";
+          error = "Experience year is required."
         }
         // else if (value < 0 || value > 12) {
         //   error = "Experience must be between 0 and 12 years.";
         // }
-        break;
+        break
 
       case "lineUp.photo":
         if (!value || value.length === 0) {
-          error = "Upload the photo";
+          error = "Upload the photo"
         }
-        break;
+        break
 
       case "lineUp.resume":
         if (!value || value.length === 0) {
-          error = "Please upload your resume";
+          error = "Please upload your resume"
         } else if (!(value instanceof File)) {
-          error = "Invalid file format";
+          error = "Invalid file format"
         } else if (value.size > 5 * 1024 * 1024) {
-          error = "File size must not exceed 5 MB";
+          error = "File size must not exceed 5 MB"
         }
-        break;
+        break
 
       case "lineUp.currentCTCLakh":
         if (!/^\d+(\.\d{1,2})?$/.test(value)) {
-          error =
-            "Please enter a valid salary amount.";
+          error = "Please enter a valid salary amount."
         }
-        break;
+        break
 
       case "lineUp.expectedCTCLakh":
         if (value === "" || isNaN(value) || value < 0) {
-          error = "Please enter a valid expected salary";
+          error = "Please enter a valid expected salary"
         }
-        break;
+        break
 
       case "lineUp.preferredLocation":
         if (!stringValue) {
-          error = "Enter your preferred location";
+          error = "Enter your preferred location"
         } else if (!/^[a-zA-Z0-9\s,.'-]*$/.test(value)) {
-          error = "Only Alphabets and Spaces are allowed";
+          error = "Only Alphabets and Spaces are allowed"
         }
-        break;
+        break
 
       case "lineUp.noticePeriod":
         if (!stringValue) {
-          error = "Enter Your Notice Period";
+          error = "Enter Your Notice Period"
         } else if (!/^[a-zA-Z0-9\s,.'-]*$/.test(value)) {
-          error = "Invalid Notice Period";
+          error = "Invalid Notice Period"
         }
-        break;
+        break
 
       case "lineUp.availabilityForInterview":
-        const today = new Date().toISOString().split("T")[0];
+        const today = new Date().toISOString().split("T")[0]
         if (!stringValue) {
-          error = "Enter your available date for Interview ";
+          error = "Enter your available date for Interview "
         } else if (new Date(value) < new Date(today)) {
-          error = "Please select today's date or a future date.";
+          error = "Please select today's date or a future date."
         }
-        break;
-
-      case "lineUp.relevantExperience":
-        if (!stringValue) {
-          error = "Enter relevant experience";
-        } else if (!/^[a-zA-Z0-9\s,.'-]*$/.test(value)) {
-          error = "Enter Relevant Experience";
-        }
-        break;
-
-      case "lineUp.gender":
-        if (!stringValue) {
-          error = "Select Gender";
-        }
-        break;
-
-      case "lineUp.disability":
-        if (!stringValue) {
-          error = "Select Disability";
-        }
-        break;
+        break
 
       default:
-        break;
+        break
     }
-    return error;
-  };
+    return error
+  }
 
   //Error msg Rajlaxmi jagadale 13-01-2025
   return (
@@ -949,22 +1033,24 @@ console.log(dataToSend);
       {contextHolder}
       <div className="form-container-December">
         <div className="maindivheadapplicant">
-        <div className="form-heading-December-main-div">
-          {/* <h1 id="applicant-form-heading">Applicant Form</h1> */}
-          <img className="classnameforsetwidthforlogpimage" src={newLogoHead} alt=''/>
-          <div><p>157 Careers</p><p>Applicant Form</p><br/></div>
-          {/* <div className="headingDivForApplicantNewHeading">
+          <div className="form-heading-December-main-div">
+            {/* <h1 id="applicant-form-heading">Applicant Form</h1> */}
+            <img className="classnameforsetwidthforlogpimage" src={newLogoHead || "/placeholder.svg"} alt="" />
+            <div>
+              <p>157 Careers</p>
+              <p>Applicant Form</p>
+              <br />
+            </div>
+            {/* <div className="headingDivForApplicantNewHeading">
           <h3 className="newclassnamefor157header">157 Careers</h3>
           <h3 className="newclassheadapplicantfor">Applicant Form</h3>
           </div> */}
-         
+          </div>
         </div>
-        </div>
-       
 
         {/* <div className="maincontforimagediv">
           <div className="banner-container-December">
-            <img src={bannerImage} alt="Banner Image" />
+            <img src={bannerImage || "/placeholder.svg"} alt="Banner Image" />
 
             <div className="banner-description">
               <h1>157 Industries Private Limited</h1>
@@ -984,10 +1070,7 @@ console.log(dataToSend);
                   <span className="setRequiredAstricColorRed">*</span>
                 </label>
                 <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faUser}
-                    className="input-icon-December"
-                  />
+                  <FontAwesomeIcon icon={faUser} className="input-icon-December" />
                   <input
                     type="text"
                     placeholder="Enter full name"
@@ -999,21 +1082,15 @@ console.log(dataToSend);
                     onKeyDown={handleKeyDown}
                   />
                 </div>
-                {errors.candidateName && (
-                  <span className="error">{errors.candidateName}</span>
-                )}
+                {errors.candidateName && <span className="error">{errors.candidateName}</span>}
               </div>
 
               <div className="form-group-December">
                 <label>
-                  Email address{" "}
-                  <span className="setRequiredAstricColorRed">*</span>
+                  Email address <span className="setRequiredAstricColorRed">*</span>
                 </label>
                 <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faMailBulk}
-                    className="input-icon-December"
-                  />
+                  <FontAwesomeIcon icon={faMailBulk} className="input-icon-December" />
                   <input
                     type="email"
                     name="candidateEmail"
@@ -1025,21 +1102,15 @@ console.log(dataToSend);
                     onKeyDown={handleKeyDown}
                   />
                 </div>
-                {errors.candidateEmail && (
-                  <span className="error">{errors.candidateEmail}</span>
-                )}
+                {errors.candidateEmail && <span className="error">{errors.candidateEmail}</span>}
               </div>
 
               <div className="form-group-December">
                 <label>
-                  Contact number{" "}
-                  <span className="setRequiredAstricColorRed">*</span>
+                  Contact number <span className="setRequiredAstricColorRed">*</span>
                 </label>
                 <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faPhone}
-                    className="input-icon-December"
-                  />
+                  <FontAwesomeIcon icon={faPhone} className="input-icon-December" />
                   <input
                     type="number"
                     placeholder="Enter contact number"
@@ -1051,9 +1122,7 @@ console.log(dataToSend);
                     onKeyDown={handleKeyDown}
                   />
                 </div>
-                {errors.contactNumber && (
-                  <span className="error">{errors.contactNumber}</span>
-                )}
+                {errors.contactNumber && <span className="error">{errors.contactNumber}</span>}
               </div>
 
               <div className="form-group-December">
@@ -1098,19 +1167,14 @@ console.log(dataToSend);
                       label="Female"
                     />
                   </div>
-                  {errors["lineUp.gender"] && (
-                    <span className="error">{errors["lineUp.gender"]}</span>
-                  )}
+                  {errors["lineUp.gender"] && <span className="error">{errors["lineUp.gender"]}</span>}
                 </div>
               </div>
 
               <div className="form-group-December">
                 <label>Educational Qualification</label>
                 <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faFile}
-                    className="input-icon-December"
-                  />
+                  <FontAwesomeIcon icon={faFile} className="input-icon-December" />
                   <input
                     type="text"
                     name="lineUp.qualification"
@@ -1123,80 +1187,58 @@ console.log(dataToSend);
                     maxLength={100}
                   />
                 </div>
-                {errors["lineUp.qualification"] && (
-                  <span className="error">
-                    {errors["lineUp.qualification"]}
-                  </span>
-                )}
+                {errors["lineUp.qualification"] && <span className="error">{errors["lineUp.qualification"]}</span>}
               </div>
             </div>
             <div className="form-column-December">
               <div className="makeDisplayFlexForYopApplicantForm setWidth100formakesubdives50">
-              <div className="form-group-December setwidth50onlyforthis2">
-                <label>
-                  Job designation{" "}
-                  <span className="setRequiredAstricColorRed">*</span>
-                </label>
-                <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faUserTie}
-                    className="input-icon-December"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Enter designation"
-                    name="jobDesignation"
-                    id="jobDesignation"
-                    value={formData.jobDesignation}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    maxLength={150}
-                  />
+                <div className="form-group-December setwidth50onlyforthis2">
+                  <label>
+                    Job designation <span className="setRequiredAstricColorRed">*</span>
+                  </label>
+                  <div className="input-with-icon-December">
+                    <FontAwesomeIcon icon={faUserTie} className="input-icon-December" />
+                    <input
+                      type="text"
+                      placeholder="Enter designation"
+                      name="jobDesignation"
+                      id="jobDesignation"
+                      value={formData.jobDesignation}
+                      onChange={handleChange}
+                      onKeyDown={handleKeyDown}
+                      maxLength={150}
+                    />
+                  </div>
+                  {errors.jobDesignation && <span className="error">{errors.jobDesignation}</span>}
                 </div>
-                {errors.jobDesignation && (
-                  <span className="error">{errors.jobDesignation}</span>
-                )}
-              </div>
-              <div className="form-group-December newmargintop10pxformobile setwidth50onlyforthis2">
-                <label>
-                  Year Of Passout{" "}
-                  <span className="setRequiredAstricColorRed">*</span>
-                </label>
-                <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faUserTie}
-                    className="input-icon-December"
-                  />
-                   <input
-                    type="text"
-                    name="lineUp.yearOfPassing"
-                    Highest
-                    id="lineUp.yearOfPassing"
-                    placeholder="Enter Year Of Passout"
-                    value={formData.lineUp.yearOfPassing}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    maxLength={100}
-                  />
+                <div className="form-group-December newmargintop10pxformobile setwidth50onlyforthis2">
+                  <label>
+                    Year Of Passout <span className="setRequiredAstricColorRed">*</span>
+                  </label>
+                  <div className="input-with-icon-December">
+                    <FontAwesomeIcon icon={faUserTie} className="input-icon-December" />
+                    <input
+                      type="text"
+                      name="lineUp.yearOfPassing"
+                      Highest
+                      id="lineUp.yearOfPassing"
+                      placeholder="Enter Year Of Passout"
+                      value={formData.lineUp.yearOfPassing}
+                      onChange={handleChange}
+                      onKeyDown={handleKeyDown}
+                      maxLength={100}
+                    />
+                  </div>
+                  {errors["lineUp.yearOfPassing"] && <span className="error">{errors["lineUp.yearOfPassing"]}</span>}
                 </div>
-                {errors["lineUp.yearOfPassing"] && (
-                  <span className="error">
-                    {errors["lineUp.yearOfPassing"]}
-                  </span>
-                )}
               </div>
-              </div>
-             
+
               <div className="form-group-December">
                 <label>
-                  Total experience{" "}
-                  <span className="setRequiredAstricColorRed">*</span>
+                  Total experience <span className="setRequiredAstricColorRed">*</span>
                 </label>
                 <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faKeyboard}
-                    className="input-icon-December"
-                  />
+                  <FontAwesomeIcon icon={faKeyboard} className="input-icon-December" />
                   <input
                     type="number"
                     placeholder="Years"
@@ -1207,7 +1249,7 @@ console.log(dataToSend);
                     onKeyDown={handleKeyDown}
                     onInput={(e) => {
                       if (e.target.value.length > 2) {
-                        e.target.value = e.target.value.slice(0, 2);
+                        e.target.value = e.target.value.slice(0, 2)
                       }
                     }}
                   />
@@ -1222,45 +1264,33 @@ console.log(dataToSend);
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     onInput={(e) => {
-                      let monthValue = e.target.value;
+                      const monthValue = e.target.value
                       if (monthValue > 11) {
-                        e.target.value = 11;
+                        e.target.value = 11
                       } else if (monthValue < 0) {
-                        e.target.value = 0;
+                        e.target.value = 0
                       }
                       if (e.target.value.length > 2) {
-                        e.target.value = e.target.value.slice(0, 2);
+                        e.target.value = e.target.value.slice(0, 2)
                       }
                     }}
                   />
                 </div>
-                {errors["lineUp.experienceYear"] && (
-                  <span className="error">
-                    {errors["lineUp.experienceYear"]}
-                  </span>
-                )}
+                {errors["lineUp.experienceYear"] && <span className="error">{errors["lineUp.experienceYear"]}</span>}
 
-                {(formData.lineUp.experienceYear ||
-                  formData.lineUp.experienceMonth) && (
+                {(formData.lineUp.experienceYear || formData.lineUp.experienceMonth) && (
                   <span className="experience-words">
-                    {convertNumberToWordsYesr(
-                      formData.lineUp.experienceYear,
-                      formData.lineUp.experienceMonth
-                    )}
+                    {convertNumberToWordsYesr(formData.lineUp.experienceYear, formData.lineUp.experienceMonth)}
                   </span>
                 )}
               </div>
 
               <div className="form-group-December">
                 <label>
-                  Current salary (LPA){" "}
-                  <span className="setRequiredAstricColorRed">*</span>
+                  Current salary (LPA) <span className="setRequiredAstricColorRed">*</span>
                 </label>
                 <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faSackDollar}
-                    className="input-icon-December"
-                  />
+                  <FontAwesomeIcon icon={faSackDollar} className="input-icon-December" />
                   <input
                     type="number"
                     placeholder="Lakhs"
@@ -1271,7 +1301,7 @@ console.log(dataToSend);
                     onChange={handleChange}
                     onInput={(e) => {
                       if (e.target.value.length > 2) {
-                        e.target.value = e.target.value.slice(0, 2);
+                        e.target.value = e.target.value.slice(0, 2)
                       }
                     }}
                   />
@@ -1285,40 +1315,30 @@ console.log(dataToSend);
                     onKeyDown={handleKeyDown}
                     onInput={(e) => {
                       if (e.target.value.length > 2) {
-                        e.target.value = e.target.value.slice(0, 2);
+                        e.target.value = e.target.value.slice(0, 2)
                       }
                     }}
                   />
                 </div>
-                {(errors["lineUp.currentCTCLakh"] ||
-                  errors["lineUp.currentCTCThousand"]) && (
+                {(errors["lineUp.currentCTCLakh"] || errors["lineUp.currentCTCThousand"]) && (
                   <span className="error">
-                    {errors["lineUp.currentCTCLakh"] ||
-                      errors["lineUp.currentCTCThousand"]}
+                    {errors["lineUp.currentCTCLakh"] || errors["lineUp.currentCTCThousand"]}
                   </span>
                 )}
 
-                {(formData.lineUp.currentCTCLakh ||
-                  formData.lineUp.currentCTCThousand) && (
-                    <span className="experience-words">
-                    {convertNumberToWords(
-                      formData.lineUp.currentCTCLakh,
-                      formData.lineUp.currentCTCThousand
-                    )}
+                {(formData.lineUp.currentCTCLakh || formData.lineUp.currentCTCThousand) && (
+                  <span className="experience-words">
+                    {convertNumberToWords(formData.lineUp.currentCTCLakh, formData.lineUp.currentCTCThousand)}
                   </span>
                 )}
               </div>
 
               <div className="form-group-December">
                 <label>
-                  Expected salary (LPA){" "}
-                  <span className="setRequiredAstricColorRed">*</span>
+                  Expected salary (LPA) <span className="setRequiredAstricColorRed">*</span>
                 </label>
                 <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faMoneyCheck}
-                    className="input-icon-December"
-                  />
+                  <FontAwesomeIcon icon={faMoneyCheck} className="input-icon-December" />
                   <input
                     type="number"
                     name="lineUp.expectedCTCLakh"
@@ -1328,7 +1348,7 @@ console.log(dataToSend);
                     onKeyDown={handleKeyDown}
                     onInput={(e) => {
                       if (e.target.value.length > 2) {
-                        e.target.value = e.target.value.slice(0, 2);
+                        e.target.value = e.target.value.slice(0, 2)
                       }
                     }}
                   />
@@ -1342,39 +1362,29 @@ console.log(dataToSend);
                     onKeyDown={handleKeyDown}
                     onInput={(e) => {
                       if (e.target.value.length > 2) {
-                        e.target.value = e.target.value.slice(0, 2);
+                        e.target.value = e.target.value.slice(0, 2)
                       }
                     }}
                   />
                 </div>
-                {(errors["lineUp.expectedCTCLakh"] ||
-                  errors["lineUp.expectedCTCThousand"]) && (
+                {(errors["lineUp.expectedCTCLakh"] || errors["lineUp.expectedCTCThousand"]) && (
                   <span className="error">
-                    {errors["lineUp.expectedCTCLakh"] ||
-                      errors["lineUp.expectedCTCThousand"]}
+                    {errors["lineUp.expectedCTCLakh"] || errors["lineUp.expectedCTCThousand"]}
                   </span>
                 )}
-                {(formData.lineUp.expectedCTCLakh ||
-                  formData.lineUp.expectedCTCThousand) && (
-                    <span className="experience-words">
-                    {convertNumberToWords(
-                      formData.lineUp.expectedCTCLakh,
-                      formData.lineUp.expectedCTCThousand
-                    )}
+                {(formData.lineUp.expectedCTCLakh || formData.lineUp.expectedCTCThousand) && (
+                  <span className="experience-words">
+                    {convertNumberToWords(formData.lineUp.expectedCTCLakh, formData.lineUp.expectedCTCThousand)}
                   </span>
                 )}
               </div>
 
               <div className="form-group-December">
                 <label>
-                  Notice period{" "}
-                  <span className="setRequiredAstricColorRed">*</span>
+                  Notice period <span className="setRequiredAstricColorRed">*</span>
                 </label>
                 <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faHourglassHalf}
-                    className="input-icon-December"
-                  />
+                  <FontAwesomeIcon icon={faHourglassHalf} className="input-icon-December" />
                   <input
                     type="text"
                     name="lineUp.noticePeriod"
@@ -1385,9 +1395,7 @@ console.log(dataToSend);
                     maxLength={100}
                   />
                 </div>
-                {errors["lineUp.noticePeriod"] && (
-                  <div className="error">{errors["lineUp.noticePeriod"]}</div>
-                )}
+                {errors["lineUp.noticePeriod"] && <div className="error">{errors["lineUp.noticePeriod"]}</div>}
               </div>
             </div>
 
@@ -1579,10 +1587,7 @@ console.log(dataToSend);
                   <span className="setRequiredAstricColorRed">*</span>
                 </label>
                 <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faLocation}
-                    className="input-icon-December"
-                  />
+                  <FontAwesomeIcon icon={faLocation} className="input-icon-December" />
                   <input
                     type="text"
                     placeholder="Current location"
@@ -1594,21 +1599,15 @@ console.log(dataToSend);
                     maxLength={100}
                   />
                 </div>
-                {errors.currentLocation && (
-                  <span className="error">{errors.currentLocation}</span>
-                )}
+                {errors.currentLocation && <span className="error">{errors.currentLocation}</span>}
               </div>
 
               <div className="form-group-December">
                 <label>
-                  Preferred location{" "}
-                  <span className="setRequiredAstricColorRed">*</span>
+                  Preferred location <span className="setRequiredAstricColorRed">*</span>
                 </label>
                 <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faLocationPin}
-                    className="input-icon-December"
-                  />
+                  <FontAwesomeIcon icon={faLocationPin} className="input-icon-December" />
                   <input
                     type="text"
                     name="lineUp.preferredLocation"
@@ -1621,24 +1620,16 @@ console.log(dataToSend);
                   />
                 </div>
                 {errors["lineUp.preferredLocation"] && (
-                  <span className="error">
-                    {errors["lineUp.preferredLocation"]}
-                  </span>
+                  <span className="error">{errors["lineUp.preferredLocation"]}</span>
                 )}
               </div>
+
               <div className="form-group-December">
-                <label>
-                  {" "}
-                  Upload resume{" "}
-                  <span className="setRequiredAstricColorRed">*</span>
-                </label>
+                <label> Upload resume {/* <span className="setRequiredAstricColorRed">*</span> */}</label>
                 <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faUpload}
-                    className="input-icon-December"
-                  />
+                  <FontAwesomeIcon icon={faUpload} className="input-icon-December" />
                   <input
-                  className="paddingtopbottomforinputfilesonly"
+                    className="paddingtopbottomforinputfilesonly"
                     style={{
                       color: "var(--text-color)",
                       padding: "7px 10px 7px 35px",
@@ -1652,31 +1643,27 @@ console.log(dataToSend);
                     onKeyDown={handleKeyDown}
                     accept=".pdf,.doc,.docx"
                   />
-                  {resumeSelected && (
-                    <FontAwesomeIcon
-                      icon={faCheckCircle}
-                      className="success-December"
-                    />
+                  <br></br>
+                  {formData.lineUp.resume instanceof File && (
+                    <div className="file-selected-info">
+                      <FontAwesomeIcon icon={faCheckCircle} className="success-December" />
+                      <span className="file-name">{formData.lineUp.resume.name}</span>
+                    </div>
                   )}
-{/* <div className="createresumebutton">
-<div onClick={()=>setShowCreateResumeModule(true)} >Create Resume</div>
-</div> */}
+                  {resumeSelected && !formData.lineUp.resume && (
+                    <FontAwesomeIcon icon={faCheckCircle} className="success-December" />
+                  )}
+                  <button type="button" className="createresumebutton form-group-December newclassnameforremovemarginof" onClick={handleOpen}>
+                    <FontAwesomeIcon icon={faFilePdf} className="genratepdficon" />
+                    Generate
+                  </button>
                 </div>
-                {errors["lineUp.resume"] && (
-                  <span className="error">{errors["lineUp.resume"]}</span>
-                )}
+                {errors["lineUp.resume"] && <span className="error">{errors["lineUp.resume"]}</span>}
               </div>
-
               <div className="form-group-December">
-                <label>
-                  Upload profile photo{" "}
-                  {/* <span className="setRequiredAstricColorRed">*</span> */}
-                </label>
+                <label>Upload profile photo {/* <span className="setRequiredAstricColorRed">*</span> */}</label>
                 <div className="input-with-icon-December">
-                  <FontAwesomeIcon
-                    icon={faPhotoFilm}
-                    className="input-icon-December"
-                  />
+                  <FontAwesomeIcon icon={faPhotoFilm} className="input-icon-December" />
                   <input
                     style={{
                       color: "var(--text-color)",
@@ -1689,67 +1676,51 @@ console.log(dataToSend);
                     onKeyDown={handleKeyDown}
                     accept="image/*"
                   />
-                  {photoSelected && (
-                    <FontAwesomeIcon
-                      icon={faCheckCircle}
-                      className="success-December"
-                    />
+                  {formData.lineUp.photo instanceof File && (
+                    <div className="file-selected-info">
+                      <FontAwesomeIcon icon={faCheckCircle} className="success-December" />
+                      <span className="file-name">{formData.lineUp.photo.name}</span>
+                    </div>
                   )}
+                  {photoSelected && <FontAwesomeIcon icon={faCheckCircle} className="success-December" />}
                   <br></br>
                 </div>
-                {errors["lineUp.photo"] && (
-                  <span className="error">{errors["lineUp.photo"]}</span>
-                )}
+                {errors["lineUp.photo"] && <span className="error">{errors["lineUp.photo"]}</span>}
               </div>
 
-<div className="forNewUanandRefFlex">
-
-
-              <div className="form-group-December forNewUanandRefFlexwidth50">
-                <label>
-                  UAN Number 
-                </label>
-                <div className="input-with-icon-December">
-
-                  <input
-                    type="text"
-                    name="lineUp.candidateUanNumber"
-                    id="uanNumber"
-                    placeholder="Enter UAN Number"
-                    value={formData.lineUp.candidateUanNumber}
-                    onChange={handleChange}
-
-                    maxLength={12} // Assuming UAN has 12 digits
-                  />
+              <div className="forNewUanandRefFlex">
+                <div className="form-group-December forNewUanandRefFlexwidth50">
+                  <label>UAN Number</label>
+                  <div className="input-with-icon-December">
+                    <input
+                      type="text"
+                      name="lineUp.candidateUanNumber"
+                      id="uanNumber"
+                      placeholder="Enter UAN Number"
+                      value={formData.lineUp.candidateUanNumber}
+                      onChange={handleChange}
+                      maxLength={12} // Assuming UAN has 12 digits
+                    />
+                  </div>
+                  {errors.candidateUanNumber && <span className="error">{errors.candidateUanNumber}</span>}
                 </div>
-                {errors.candidateUanNumber && <span className="error">{errors.candidateUanNumber}</span>}
+
+                <div className="form-group-December forNewUanandRefFlexwidth50 setMargintop10pxforref">
+                  <label>Reference</label>
+                  <div className="input-with-icon-December">
+                    <input
+                      type="text"
+                      name="lineUp.candidateReference"
+                      id="reference"
+                      placeholder="Enter reference name"
+                      value={formData.lineUp.candidateReference}
+                      onChange={handleChange}
+                      maxLength={100}
+                    />
+                  </div>
+                </div>
               </div>
-
-              <div className="form-group-December forNewUanandRefFlexwidth50 setMargintop10pxforref">
-              <label>
-                Reference
-              </label>
-              <div className="input-with-icon-December">
-
-                <input
-                  type="text"
-                  name="lineUp.candidateReference"
-                  id="reference"
-                  placeholder="Enter reference name"
-                  value={formData.lineUp.candidateReference}
-                  onChange={handleChange}
-
-                  maxLength={100}
-                />
-              </div>
-
             </div>
-
-            </div>
-
-</div>
-           
-
           </div>
 
           {/* <div className="form-group-December">
@@ -2100,47 +2071,85 @@ console.log(dataToSend);
             </button>
           </div>
 
-
           <div className="reference-links">
-          <p>
-    {/* <b className="newclassforfontsizechnges">Visit: {" "} </b>
+            <p>
+              {/* <b className="newclassforfontsizechnges">Visit: {" "} </b>
     <a href="https://157careers.in/" target="_blank" rel="noopener noreferrer" className="newclassnameforlinkblue newclassforfontsizechnges">
       www.157careers.in
     </a> */}
-  
- 
-    <b className="newclassforfontsizechnges"
-    >Follow LinkedIn Page:  {" "} </b>
-    <a href="https://www.linkedin.com/company/157careers/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="newclassnameforlinkblue newclassforfontsizechnges">
-    157 Careers Profile
-    </a>
-  </p>
-  {/* <p>© 2025 157 Industries PVT. LTD. All rights reserved.</p> */}
-</div>
 
-
-        </form>
-        {loading && (
-          <div className="SCE_Loading_Animation">
-            <Loader size={50} color="#ffb281" />
+              <b className="newclassforfontsizechnges">Follow LinkedIn Page: </b>
+              <a
+                href="https://www.linkedin.com/company/157careers/posts/?feedView=all"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="newclassnameforlinkblue newclassforfontsizechnges"
+              >
+                157 Careers Profile
+              </a>
+            </p>
+            {/* <p>© 2025 157 Industries PVT. LTD. All rights reserved.</p> */}
           </div>
-        )}
+        </form>
+        {loading && <div className="SCE_Loading_Animation">{/* <Loader size={50} color="#ffb281" /> */}</div>}
         <br />
       </div>
-
-      <Modal title="Create Resume" open={showCreateResumeModule} 
-      // onOk={handleOk} 
-      onCancel={()=>setShowCreateResumeModule(false)}
-   width={"auto"}
+      {/* Rajlaxmi jaadale Added taht code line 2090/2142 */}
+      <Modal
+        open={showCreateResumeModule}
+        onCancel={handleClose}
+        width="50%"
+        bodyStyle={{
+          padding: "0px",
+          backgroundColor: "#ffffff",
+          borderRadius: "12px",
+        }}
+        centered
+        footer={null}
       >
-      <>
-      <div className="cvtemplatemaindivinapplicantfor">
-        <CvTemplate cvFromApplicantForm ={cvFromApplicantsForm} />
-      </div>
-      </>
+        {!selectedOption && (
+          <div className="modal-container">
+            <h2 className="modal-title">Select Your Format</h2>
+            <div className="button-container">
+              <Button type="primary" onClick={() => handleSelect("cv")} className="modal-button">
+                CV
+              </Button>
+              <Button type="primary" onClick={() => handleSelect("resume")} className="modal-button">
+                Resume
+              </Button>
+            </div>
+            {/* <div className="modal-back-button-container">
+              <Button onClick={handleClose} className="modal-back-button">
+                Back
+              </Button>
+            </div> */}
+          </div>
+        )}
+
+        {selectedOption === "cv" && (
+          <div className="cvtemplatemaindivinapplicantfor">
+            <CvTemplate
+              cvFromApplicantForm={cvFromApplicantsForm}
+              onCVDownload={handleCVDownload}
+              onSetCV={handleSetCV}
+              onBack={() => setSelectedOption(null)} // Go back to format selection
+            />
+          </div>
+        )}
+
+        {selectedOption === "resume" && (
+          <div className="cvtemplatemaindivinapplicantfor">
+            <ResumeCopy
+              ResumeFromApplicantForm={cv2FromApplicantsForm}
+              onCVDownload={handleCVDownload}
+              onSetCV={handleSetCV}
+              onBack={() => setSelectedOption(null)} // Go back to format selection
+            />
+          </div>
+        )}
       </Modal>
     </div>
-  );
+  )
 }
 
 export default ApplicantForm2;

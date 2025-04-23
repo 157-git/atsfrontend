@@ -57,6 +57,7 @@ const AddJobDescription = ({loginEmployeeName}) => {
   // states created by sahil karnekar date 3-12-2024
   const [errors, setErrors] = useState({});
   const [errorForOverView, setErrorForOverview] = useState("");
+  const [triggerForRequiredErrors, setTriggerForRequiredErrors] = useState(false);
 
     // establishing socket for emmiting event
     useEffect(() => {
@@ -196,6 +197,43 @@ if (name === "jobType" && value === "Hybrid") {
     }));
   };
 
+const setInitialErrorsRequired = ()=>{
+    // Revalidate all fields before submission
+    const newErrors = {};
+
+    // Validate top-level fields
+    Object.keys(formData).forEach((key) => {
+      if (!["responsibilities", "jobRequirements", "preferredQualifications"].includes(key)) {
+        const error = validateField(key, formData[key]);
+        if (error) newErrors[key] = error;
+      }
+    });
+
+    // Validate nested fields (responsibilities, jobRequirements, preferredQualifications)
+    ["responsibilities", "jobRequirements", "preferredQualifications"].forEach((field) => {
+      formData[field].forEach((item, index) => {
+        const errorsForField = {};
+        Object.keys(item).forEach((nestedKey) => {
+          const error = validateField(nestedKey, item[nestedKey]);
+          if (error) {
+            errorsForField[nestedKey] = error;
+          }
+        });
+        if (Object.keys(errorsForField).length > 0) {
+          if (!newErrors[field]) {
+            newErrors[field] = [];
+          }
+          newErrors[field][index] = errorsForField;
+        }
+      });
+    });
+
+    setErrors(newErrors);
+}
+useEffect(()=>{
+  setInitialErrorsRequired();
+},[triggerForRequiredErrors])
+
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
@@ -242,6 +280,7 @@ if (name === "jobType" && value === "Hybrid") {
     // If errors exist, prevent form submission
     if (Object.keys(newErrors).length > 0) {
       setLoading(false);
+      toast.error("Please Fill Required Fields !");
       return;
     }
     console.log("API Object:", JSON.stringify(formData, null, 2));
@@ -300,6 +339,9 @@ if (name === "jobType" && value === "Hybrid") {
             { employeeId: "", preferredQualificationMsg: "" },
           ],
         });
+        setTriggerForRequiredErrors(!triggerForRequiredErrors);
+      } else{
+        toast.error("Failed to add job description");
       }
     } catch (error) {
       toast.error(`Error: ${error}`);

@@ -10,8 +10,8 @@
 
   /* Hide footer (URL is part of the footer in many browsers) */
   /* footer {
-          display: none !important;
-        } */
+            display: none !important;
+          } */
   .sectioncvtemplete {
     page-break-inside: avoid; /* Prevent a section from breaking */
   }
@@ -36,8 +36,8 @@
 
   /* Sometimes, we may need to hide the header as well */
   /* header {
-          display: none !important;
-        } */
+            display: none !important;
+          } */
 }
 
 /* General layout for the profile container */
@@ -46,11 +46,9 @@
   height: 100%;
   /* height: 1800px; */
   /* height: 100%; */
-  padding: 20px;
   box-sizing: border-box;
   margin-bottom: 0; /* Remove any unnecessary bottom margin */
   overflow: visible;
-  overflow-y: auto;
 }
 
 /* Force page breaks only between major sections */
@@ -70,10 +68,10 @@
 
 /* Prevent page breaks inside paragraphs, headings, and list items */
 /* p, li, h1, h2, h3, h4 {
-    page-break-inside: avoid; 
-    break-inside: avoid;      
-    overflow: visible;  
-  } */
+      page-break-inside: avoid; 
+      break-inside: avoid;      
+      overflow: visible;  
+    } */
 
 /* Section titles, name, designation, etc. */
 .titlescvtemplete,
@@ -241,6 +239,40 @@
   text-align: center;
   margin-top: 40px;
 }
+/* Page Breaks */
+.page-break {
+  page-break-before: always;
+}
+@page {
+  margin-top: 20mm; /* Adjust the top margin */
+  margin-left: 10mm;
+  margin-right: 10mm;
+  margin-bottom: 50mm;
+  padding: 20px;
+}
+
+
+/* Footer Styles */
+@page {
+  margin-bottom: 50mm; /* Space for the footer */
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 80%;
+  text-align: center;
+  font-size: 10px;
+  color: #666;
+  padding: 5px;
+}
+header{
+  margin-top: 20px;
+}
+footer::after {
+  content: "Page " counter(page);
+}
+
 
 .downloadendingbuttoncvtemplete {
   background-color: #1d5fa6;
@@ -249,6 +281,7 @@
   font-size: 16px;
   border: none;
   border-radius: 5px;
+  margin-right: 20px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -325,7 +358,7 @@
   width: 50%;
   margin: 0 auto;
   flex: 1; /* Form takes up 50% of the width */
-  overflow-y: auto;
+  /* overflow-y: auto; */
   max-height: 100vh;
   padding: 20px;
   background-color: #f5f5f5;
@@ -351,7 +384,7 @@
 
 /* Form Group */
 .form-groupcvtemplete {
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
 
 /* Labels within Form Group */
@@ -476,6 +509,7 @@
   flex-wrap: nowrap;
   justify-content: space-between;
   /* border: 1px solid black; */
+  overflow: scroll;
 }
 
 /* Form Section Styling */
@@ -570,7 +604,6 @@
   cursor: not-allowed;
 }
 
-
 .resume-close-btn {
   font-weight: bold; /* Makes the button text bold */
   font-size: 30px; /* Font size for the button */
@@ -581,8 +614,256 @@
 }
 
 .namecvtemplete-name-div {
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   /* border: 1px solid red;  */
+}
+.previewresumebuttonforapplicantsform {
+  background-color: #154d72;
+  width: fit-content;
+  color: #ccc;
+}
+.previewresumebuttonforapplicantsform {
+  background-color: #1d5fa6; /* Blue */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.previewresumebuttonforapplicantsform:hover {
+  background-color: #154d72;
+}
+
+/* Add a class for when the button is in "Back" state */
+.back-button {
+  background-color: #6c757d !important;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1000px) {
+  .mainflexdivcvtemplete {
+    flex-direction: column;
+
+  }
+
+  .formeditcvtemplete,
+  .maincvtemeplete {
+    width: 100%;
+    max-width: 100%;
+    flex: none;
+    padding: 10px;
+    margin: 0;
+  }
+
+  .ant-modal .ant-modal-content {
+    margin: 0;
+    width: 100%;
+    max-width: none;
+    padding: 10px;
+  }
+
+  .detailscvtemplete {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .emailcvtemplete,
+  .phonecvtemplete {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Fix right side white space in mobile view */
+  body,
+  html {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .maindivcvtemplete {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .candidateidcvtemplete-top-close-div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .skillscvtemplete {
+    flex-direction: column;
+  }
+
+  .skillscvtemplete .skill-setcvtemplete {
+    width: 100%;
+  }
+
+  .namecvtemplete {
+    font-size: 22px;
+  }
+
+  .designationcvtemplete {
+    font-size: 16px;
+  }
+
+  .ant-modal {
+    padding: 0; 
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .ant-modal .ant-modal-content {
+    margin: 0;
+    width: 90%;
+    max-width: 100%;
+    margin-left: 30px;
+    padding: 10px;
+  }
+
+  .titlescvtemplete {
+    font-size: 18px;
+  }
+
+  /* Ensure no horizontal scrolling */
+  .maincvtemeplete {
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 500px) {
+  .maindivcvtemplete {
+    padding: 10px;
+  }
+
+  .headingtitlescvtemplete{
+    font-size: 10px;
+  }
+
+  .namecvtemplete {
+    font-size: 20px;
+  }
+  .titlescvtemplete{
+  font-size: 12px;
+  }
+  .previewresumebuttonforapplicantsform{
+    font-size: 15px;
+    padding: 5px;
+  }
+  .forminputfieldcvtemplete[type="text"], .forminputfieldcvtemplete[type="email"],.forminputfieldcvtemplete[type="tel"]{
+    font-size: 10px;
+  }
+
+  .ant-modal {
+    padding: 0; /* Remove default padding */
+  }
+  .forminputfieldcvtemplete[type="text"]{
+   font-size: 10px;
+  }
+  .formgrouptextarea{
+    font-size: 10px;
+  }
+  .Forminsidebuttons {
+    font-size: 10px;
+    padding: 7px;
+  }
+
+  .ant-modal .ant-modal-content {
+    margin: 0 auto;
+    max-width: none;
+  }
+
+  .mbformlabelcvtemplete {
+    font-size: 12px;
+  }
+
+  .headingtitlescvtemplete {
+    font-size: 14px;
+  }
+
+  .designationcvtemplete {
+    font-size: 14px;
+  }
+
+  .summarytextcvtemplete,
+  .experience-itemcvtemplete p,
+  .project-itemcvtemplete p {
+    font-size: 14px;
+  }
+
+  .experience-itemheadingcvtemplete {
+    font-size: 16px;
+  }
+
+  .downloadendingbuttoncvtemplete {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 400px) {
+  .maincvtemeplete {
+    padding: 15px;
+  }
+
+  .namecvtemplete {
+    font-size: 12px;
+  }
+  .ant-modal {
+    padding: 0; /* Remove default padding */
+  }
+
+  .ant-modal .ant-modal-content {
+    margin: 0 auto;
+    width: calc(90% - 10px); /* 10px margin on left and right */
+    margin-left: 30px;
+    max-width: none;
+  }
+
+  .titlescvtemplete {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 300px) {
+  .maincvtemeplete {
+    padding: 15px;
+  }
+
+  .namecvtemplete {
+    font-size: 12px;
+  }
+  .ant-modal {
+    padding: 0; /* Remove default padding */
+  }
+
+  .ant-modal .ant-modal-content {
+    margin: 0 auto;
+    width: calc(80% - 10px); /* 10px margin on left and right */
+    margin-left: 30px;
+    max-width: none;
+  }
+
+  .titlescvtemplete {
+    font-size: 16px;
+  }
+}
+.cvdownloadbutton{
+  margin-right: 20px;
+  margin-right:50px;
 }

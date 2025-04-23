@@ -414,8 +414,13 @@ console.log(data);
                       <br />
                       <h3 className="share-edm-black-skill">For Details</h3>
                       <h4 className="share-edm-contact">
-                        Contact - 157 Careers
-                      </h4>
+  {
+    (employeeId === "3148" && userType === "TeamLeader") 
+      ? "Contact - Rtempus Consulting Services" 
+      : "Contact - 157 Careers"
+  }
+</h4>
+
                       <div className="share-edm-contact-detaisl">
   <div
     id="employeeName"

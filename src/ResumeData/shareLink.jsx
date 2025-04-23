@@ -60,8 +60,19 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName, sendOfficailMailForQr 
 
 
   const secretKey = "157industries_pvt_ltd"; // Use a consistent key across components
+  const userTypeKey = ()=>{
+    if (userType === "Recruiters") {
+      return "R-";
+    } else if (userType === "TeamLeader") {
+      return "T-";
+    } else if (userType === "Manager") {
+      return "M-";
+    }else if (userType === "SuperUser") {
+      return "S-";
+    }
+  }
 
-  const shareUrl = `https://rg.157careers.in/applicant-form/${firstName}+${userUrlString}`;
+  const shareUrl = `https://rg.157careers.in/applicant-form/${userTypeKey()}${firstName}+${userUrlString}`;
 
   // Share using Web Share API
   const handleShareLink = async () => {
