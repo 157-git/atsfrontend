@@ -1653,11 +1653,11 @@ function ApplicantForm2({ loginEmployeeName }) {
                   {resumeSelected && !formData.lineUp.resume && (
                     <FontAwesomeIcon icon={faCheckCircle} className="success-December" />
                   )}
-                  <button type="button" className="createresumebutton form-group-December newclassnameforremovemarginof" onClick={handleOpen}>
+                  <button type="button" className="createresumebutton form-group-December newclassnameforremovemarginof newmargin0forbuttongenarate" onClick={handleOpen}>
                     <FontAwesomeIcon icon={faFilePdf} className="genratepdficon" />
                     Generate
                   </button>
-                </div>
+                </div>x
                 {errors["lineUp.resume"] && <span className="error">{errors["lineUp.resume"]}</span>}
               </div>
               <div className="form-group-December">

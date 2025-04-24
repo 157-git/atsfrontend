@@ -267,7 +267,7 @@ console.log(selectedRowsPermissionIds);
       const response = await axios.post(`http://localhost:9090/permissions`,[
         {
           empId: 1,
-          jobIds: [1],
+          jobIds: [1,2],
           managerId: 1
         }
       ])
