@@ -1657,7 +1657,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                     <FontAwesomeIcon icon={faFilePdf} className="genratepdficon" />
                     Generate
                   </button>
-                </div>x
+                </div>
                 {errors["lineUp.resume"] && <span className="error">{errors["lineUp.resume"]}</span>}
               </div>
               <div className="form-group-December">
