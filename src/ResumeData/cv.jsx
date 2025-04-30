@@ -2114,13 +2114,13 @@ function CvTemplate({ cvFromApplicantForm, onClose, onCVDownload, onSetCV, onBac
                     <strong>Phone:</strong> {profile.contact.phone}
                   </p>
                   {/* Editable Location */}
-                  {/* <p 
+                  <p 
           className="location editable-text" 
           contentEditable={true} 
           onBlur={(e) => handleChange(e, "address")}
         >
           <strong>Location:</strong> {profile.contact.address}
-        </p> */}
+        </p>
                 </div>
               </div>
 

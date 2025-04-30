@@ -12,13 +12,14 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
-import { Avatar, Badge, Card, List, Pagination, Skeleton } from "antd";
+import { Avatar, Badge, Card, List, Pagination, Popconfirm, Skeleton } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import { getSocket } from "../EmployeeDashboard/socket";
 import limitedOptions from "../helper/limitedOptions";
 import { Modal as AntdModal } from 'antd';
 import profileImageRtempus from "../assets/rtempus.jpeg";
 import profileImageVelocity from "../assets/velocityHr.png";
+import { DeleteOutlined } from "@ant-design/icons";
 
 
 // SwapnilRokade_SendClientEmail_ModifyFilters_11/07
@@ -65,12 +66,26 @@ const SendClientEmail = ({ clientEmailSender }) => {
 
   const [isHorizontallyScrolling, setIsHorizontallyScrolling] = useState(false)
   const tableContainerRef = useRef(null)
+  const [alreadyAssignedJids, setAlreadyAssignedJids] = useState([]);
 
+  const getAllAssignedIds = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/get-all-permissions`);
+      setAlreadyAssignedJids(response.data);
+    } catch (error) {
+      console.error('Error fetching assigned job IDs:', error);
+    }
+  };
+  useEffect(()=>{
+    if(userType === "Manager"){
+      getAllAssignedIds();
+    }
+
+  },[])
   const handleScroll = () => {
     if (!tableContainerRef.current) return
     setIsHorizontallyScrolling(tableContainerRef.current.scrollLeft > 0)
   }
-
   const navigator = useNavigate();
 // need to be changed after implementation of api
   const [pageSize, setPageSize] = useState(userType === "Recruiters" ? 100000 : 20);
@@ -96,8 +111,31 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const [showSelectionCards, setShowSelectionCards] = useState(false)
   const [imageLoadErrors, setImageLoadErrors] = useState({})
   const [selectedRecruiters, setSelectedRecruiters] = useState([])
-  const [accessedIds, setAccessedIds] = useState(["23","26","33"]);
+  const [accessedIds, setAccessedIds] = useState([]);
   const managerToTeamLeaders = {}
+
+
+  const fetchAccessedIds = async () => {
+    try {
+      const resp = await axios.get(`${API_BASE_URL}/employee-permissions/${employeeId}`);
+
+      if (resp.status === 200 && Array.isArray(resp.data)) {
+        const ids = resp.data.map(item => item.jobId.toString());
+        setAccessedIds(ids);
+      } else {
+        setAccessedIds([]); // fallback in case of unexpected response
+      }
+    } catch (error) {
+      console.error("Error fetching accessed IDs:", error);
+      setAccessedIds([]); // fallback in case of error
+    }
+  };
+  useEffect(()=>{
+if(userType === "Recruiters"){
+  fetchAccessedIds();
+}
+  },[])
+  
 
   const fetchCallingList = (page, size) => {
     fetch(`${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`)
@@ -159,7 +197,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
     fetchCallingList(currentPage, pageSize)
     // setSelectedRows([]);
     // setAllSelected(false);
-  }, [employeeId, currentPage, pageSize, triggerFetch])
+  }, [employeeId, currentPage, pageSize, triggerFetch, accessedIds])
 
   useEffect(() => {
     const options = limitedOptions
@@ -248,11 +286,6 @@ const SendClientEmail = ({ clientEmailSender }) => {
 // Rajlaxmi jagadale added taht code and Toastify Date 14/04/2025 
   const handleOkey = async () => {
     try {
-      console.log("Selected role:", selectedRole)
-      console.log("Selected team leaders:", selectedTeamLeaders)
-      console.log("Selected recruiters:", selectedRecruiters)
-      console.log("Team leaders list:", teamLeadersList)
-
       if (selectedRecruiters.length === 0) {
         toast.error("Please select at least one recruiter")
         return
@@ -262,17 +295,14 @@ const SendClientEmail = ({ clientEmailSender }) => {
         toast.error("Please select at least one job")
         return
       }
-console.log(selectedRowsPermissionIds);
 
-      const response = await axios.post(`http://localhost:9090/permissions`,[
+      const response = await axios.post(`${API_BASE_URL}/permissions`,[
         {
-          empId: 1,
-          jobIds: [1,2],
-          managerId: 1
+          empId: selectedRecruiters[0].recruiterId,
+          jobIds: selectedRowsPermissionIds,
+          managerId: employeeId
         }
       ])
-
-      console.log(response);
       
 
       // Here you would typically make an API call to grant permissions
@@ -293,7 +323,7 @@ console.log(selectedRowsPermissionIds);
       setSelectedRowsPermissionIds([])
 
       // Show success message
-      toast.success("This Module Is In Progress This Is Just A Prototype !")
+      toast.success(response.data)
 
       if (selectedCheckboxes.length > 0) {
         setShowSelectionCards(true)
@@ -794,11 +824,6 @@ console.log(selectedRowsPermissionIds);
     return (currentPage - 1) * pageSize + index + 1
   }
 
-  // console.log(selectedRows);
-  // console.log(filteredCallingList);
-  // console.log(selectedRows.length);
-  // console.log(filteredCallingList.length);
-
   const handleSelectAll = () => {
     if (allSelected) {
       setSelectedRows((prevSelectedRows) =>
@@ -821,26 +846,41 @@ console.log(selectedRowsPermissionIds);
   const getAllJobs = async () => {
     const responseGetAllJobs = await axios.get(`${API_BASE_URL}/fetch-all-job-descriptions`)
 
-    const sortedJobs = responseGetAllJobs.data.sort((a, b) => b.requirementId - a.requirementId) // descending order
+    if(responseGetAllJobs.data.length > 0){
+      const sortedJobs = responseGetAllJobs.data.sort((a, b) => b.requirementId - a.requirementId) // descending order
 
-    setNewAllJobIdsForPermission(sortedJobs)
-    console.log(sortedJobs) // optional for debugging
+      setNewAllJobIdsForPermission(sortedJobs)
+    }else{
+      toast.info("No jobs available for permission assignment.");
+    }
+  
   }
   useEffect(() => {
     if (userType === "Manager") {
       getAllJobs()
     }
   }, [])
-  console.log(newAllJobIdsForPermission)
   const [selectedRowsPermissionIds, setSelectedRowsPermissionIds] = useState([])
+  // const handleSelectAllJobIds = (e) => {
+  //   if (e.target.checked) {
+  //     const allIds = newAllJobIdsForPermission.map((item) => item.requirementId)
+  //     setSelectedRowsPermissionIds(allIds)
+  //   } else {
+  //     setSelectedRowsPermissionIds([])
+  //   }
+  // }
   const handleSelectAllJobIds = (e) => {
     if (e.target.checked) {
-      const allIds = newAllJobIdsForPermission.map((item) => item.requirementId)
-      setSelectedRowsPermissionIds(allIds)
+      const allEnabledIds = newAllJobIdsForPermission
+        .filter((item) => !alreadyAssignedJids.some(obj => obj.jobId === item.requirementId))
+        .map((item) => item.requirementId);
+      setSelectedRowsPermissionIds(allEnabledIds);
     } else {
-      setSelectedRowsPermissionIds([])
+      setSelectedRowsPermissionIds([]);
     }
-  }
+  };
+  
+  
 
   const handleCheckboxChange = (role, id, completeValueObject) => {
     const isSelected = selectedCheckboxes.some((item) => item.id === id && item.role === role)
@@ -958,7 +998,6 @@ console.log(selectedRowsPermissionIds);
       }
     })
   }
-  console.log(selectedRowsPermissionIds)
 
   // Fixed function to toggle team leader display
   const toggleTeamLeader = (teamLeaderId) => {
@@ -1007,18 +1046,24 @@ console.log(selectedRowsPermissionIds);
       return null
     }
   }
-
-  useEffect(() => {
-    console.log("Current teamLeadersList:", teamLeadersList)
-  }, [teamLeadersList])
-
-  // Add a useEffect to initialize employeeCount state
   useEffect(() => {
     setEmployeeCount({
       teamLeaderCount: 0,
       employeeCount: 0,
     })
   }, [])
+  const handleDeletePermission = async(permissionId)=>{
+    setLoading(true);
+    try {
+      const response = await axios.delete(`${API_BASE_URL}/delete-permission/${permissionId}`);
+getAllAssignedIds();
+toast.success(response.data);
+    } catch (error) {
+      toast.error(error);
+    }finally{
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="SCE-list-container">
@@ -1081,6 +1126,7 @@ console.log(selectedRowsPermissionIds);
   <button
   className="SCE-share-btn"
   onClick={() => {
+    getAllAssignedIds();
     setShowPermissionModal(true)
     handleDisplayManagers() // Fetch team leaders when opening the modal
   }}
@@ -1802,9 +1848,15 @@ console.log(selectedRowsPermissionIds);
             }}
           />
           <AntdModal
+          width={1000}
             title="Send Clients Permission To Recruiter"
             open={showPermissionModal}
+            okText="Give Permission !"
             onOk={() => {
+              if (selectedRowsPermissionIds.length === 0) {
+                toast.error("Please select at least one job id.")
+                return
+              }
               setShowSelectPermissionRecruiters(true)
               setShowPermissionModal(false)
             }}
@@ -1824,18 +1876,31 @@ console.log(selectedRowsPermissionIds);
                   <tr className="attendancerows-head">
                     <th className="attendanceheading" style={{ position: "sticky", left: 0, zIndex: 10 }}>
                       {/* updatesd shortListeddata by Pranjali Raut data 20-01-2025 */}
-                      <input
+                      {/* <input
                         type="checkbox"
                         onChange={handleSelectAllJobIds}
                         checked={newAllJobIdsForPermission.every((row) =>
                           selectedRowsPermissionIds.includes(row.requirementId),
                         )}
                         name="selectAll"
-                      />
+                      /> */}
+                      <input
+  type="checkbox"
+  onChange={handleSelectAllJobIds}
+  checked={
+    newAllJobIdsForPermission
+      .filter((item) => !alreadyAssignedJids.some(obj => obj.jobId === item.requirementId))
+      .every((row) => selectedRowsPermissionIds.includes(row.requirementId))
+  }  
+  name="selectAll"
+/>
+
                     </th>
                     <th className="attendanceheading">Job Id</th>
                     <th className="attendanceheading">Company Name</th>
                     <th className="attendanceheading">Job Designation</th>
+                    <th className="attendanceheading">Recruiter Name</th>
+                    <th className="attendanceheading">Delete Permission</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1846,11 +1911,41 @@ console.log(selectedRowsPermissionIds);
                           type="checkbox"
                           checked={selectedRowsPermissionIds.includes(item.requirementId)}
                           onChange={() => handleCheckboxChangeSelectRow(item.requirementId)}
+                          disabled={alreadyAssignedJids.some(obj => obj.jobId === item.requirementId)}
+
                         />
                       </td>
                       <td className="tabledata">{item.requirementId}</td>
                       <td className="tabledata">{item.companyName}</td>
                       <td className="tabledata">{item.designation}</td>
+                      <td className="tabledata">{(() => {
+  const matched = alreadyAssignedJids.find(obj => obj.jobId === item.requirementId);
+  return matched && (
+      <span>{matched.employeeName}</span>
+  );
+})()}
+
+</td>
+                      <td className="tabledata">{(() => {
+  const matched = alreadyAssignedJids.find(obj => obj.jobId === item.requirementId);
+  return matched ? (
+
+        <Popconfirm
+          placement="bottomRight"
+          title="Delete Permission !"
+          description="Are you sure to delete this permission?"
+          okText="Delete"
+          cancelText="Cancel"
+          onConfirm={() => {
+            handleDeletePermission(matched.id)
+          }}
+        >
+        < DeleteOutlined />
+        </Popconfirm>
+  ) : null;
+})()}
+
+</td>
                     </tr>
                   ))}
                 </tbody>
@@ -2004,10 +2099,6 @@ const SendEmailPopup = ({
   
     try {
       const response = await axios.get(`${API_BASE_URL}/get-candidates-details?ids=${newIdsMultipleData}`);
-
-      console.log(response);
-      
-  
       setSelectedCandidate(response.data);
     } catch (error) {
       console.log("Error fetching candidate data:", error);
@@ -2069,8 +2160,6 @@ setSocket(newSocket);
 
   const handleSendEmail = () => {
     setIsMailSending(true);
-    console.log(selectedCandidate + " ---------- 00001");
-
     const filteredAttachments = selectedCandidate
       .filter((can) => can.resume) // Include only candidates with resumes
       .map((can) => ({
@@ -2145,12 +2234,10 @@ setSocket(newSocket);
       const additionalData = {
         mailToClient: new Date(),
       };
-      // console.log("Sending additional data:", additionalData);
       const response1 = await axios.put(
         `${API_BASE_URL}/update-performance/${id}`,
         additionalData
       );
-      console.log("Second API Response:", response1.data);
     } catch (error) {
       console.log(error);
     }

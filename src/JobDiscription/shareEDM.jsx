@@ -8,27 +8,32 @@ import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import profileImageVelocity from "../assets/velocityHr.png";
 
-function ShareEDM({ Descriptions, onShareEdm }) {
+function ShareEDM({ Descriptions, onShareEdm, descriptionFromTempGen }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const { employeeId, userType } = useParams();
 console.log(data);
 
   useEffect(() => {
-    fetch(
-      `${API_BASE_URL}/edm-details/${Descriptions}/${employeeId}/${userType}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setData(data);
-        setData({
-          ...data,
-          employeeName: data.employeeName.split(" ")[0],
-        });
-      })
-
-      .catch((error) => console.error("Error fetching data:", error));
+    if((Descriptions || employeeId || userType) === undefined){
+      setData(descriptionFromTempGen);
+    }else{
+      fetch(
+        `${API_BASE_URL}/edm-details/${Descriptions}/${employeeId}/${userType}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setData(data);
+          setData({
+            ...data,
+            employeeName: data.employeeName.split(" ")[0],
+          });
+        })
+  
+        .catch((error) => console.error("Error fetching data:", error));
+    }
+  
   }, []);
 
   // line 27 to 49 added by sahil karnekar date 30-10-2024
@@ -170,7 +175,7 @@ console.log(data);
     <div>
       {data && (
         <div className="shareEDMdiv">
-          <div className="main-description-share2">
+          <div className="main-description-share2 newpositionfixedtosharedescriptionedms">
             <div className="setCloseDivEdtSmall">
               <button
                 onClick={closeJobDescrptionShare}
@@ -191,6 +196,8 @@ console.log(data);
       ? profileImageRtempus
       : employeeId === "3691" && userType === "TeamLeader"
       ? profileImageVelocity
+       : data.image
+      ? `${data.image}`
       : profileImage
   }
   alt="Profile Image"

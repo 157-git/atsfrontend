@@ -476,6 +476,12 @@ console.log(jobDescriptions);
   const countSelectedValues = (option) => {
     return selectedFilters[option] ? selectedFilters[option].length : 0;
   };
+  const copyLinkToClipboard = () => {
+    navigator.clipboard.writeText("https://rg.157careers.in/jdTempGen")
+      .then(() => toast.success("Link copied to clipboard!"))
+      .catch((err) => toast.error("Clipboard error:", err));
+  };
+  
   return (
     <>
       {!showAddJobDiscriptionNew ? (
@@ -495,7 +501,7 @@ console.log(jobDescriptions);
   }}
 > 
   <input
-    className="search-input"
+    className="search-input newstyleforjdinputsinjoblists"
     placeholder="Designation"
     type="text"
     name="designation"
@@ -503,7 +509,7 @@ console.log(jobDescriptions);
     onChange={handleInputSearch}
   />
   <input
-    className="search-input"
+    className="search-input newstyleforjdinputsinjoblists"
     list="experienceOptions"
     placeholder="Select Experience e.g.(2, 2-6, 5+)"
     type="text"
@@ -512,13 +518,17 @@ console.log(jobDescriptions);
     onChange={handleInputSearch}
   />
   <input
-    className="search-input"
+    className="search-input newstyleforjdinputsinjoblists"
     placeholder="Enter Location"
     type="text"
     name="location"
     value={searchQuery.location}
     onChange={handleInputSearch}
   />
+
+<button className="lineUp-Filter-btn" onClick={copyLinkToClipboard}>
+  JD Template Generator
+</button>
 
 {(searchQuery.designation || searchQuery.location || searchQuery.experience) && (
                           <div className="svgimagesetinInput">

@@ -251,6 +251,8 @@ const ShareDescription = ({ Descriptions }) => {
                                     ? profileImageRtempus
                                     : employeeId === "3691" && userType === "TeamLeader"
                                     ? profileImageVelocity
+                                    : Descriptions.image
+                                    ? `${Descriptions.image}`
                                     : LoginImage
                                 }
                                 alt="Profile Image"
@@ -380,7 +382,7 @@ const ShareDescription = ({ Descriptions }) => {
                 Name :{" "}
               </span>
               <input
-                value={data?.name.split(" ")[0]}
+                value={data?.name.split(" ")[0] || Descriptions.employeeName}
                 onChange={(e) => handleInputChange(e, "name")}
                 className="share-edm-input"
               />
@@ -390,7 +392,7 @@ const ShareDescription = ({ Descriptions }) => {
                 Email :{" "}
               </span>
               <input
-                value={data?.email}
+                value={data?.email || Descriptions.officialContactNo}
                 onChange={(e) => handleInputChange(e, "email")}
                 className="share-edm-input"
                 style={{ width: "220px" }}
@@ -402,7 +404,7 @@ const ShareDescription = ({ Descriptions }) => {
               </span>
               <input
                 type="tel"
-                value={data?.contact}
+                value={data?.contact || Descriptions.officialMail}
                 onChange={(e) => handleInputChange(e, "contact")}
                 className="share-edm-input"
               />

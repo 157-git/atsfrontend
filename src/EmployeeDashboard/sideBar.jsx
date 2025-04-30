@@ -1144,7 +1144,7 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                           {/* <img src={Circle} style={{ width: "10px" }} alt="" /> */}
                           <span className="sidebar-text">
                             {" "}
-                           Permited Profiles
+                           Permited Sent Profiles
                           </span>
                         </a>
                       </li>

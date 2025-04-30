@@ -9,7 +9,7 @@ import profileImageVelocity from "../assets/velocityHr.png";
 
 
 
-function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
+function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm, descriptionFromTempGen }) {
   const [data, setData] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const synth = window.speechSynthesis;
@@ -17,9 +17,14 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
   const [voices, setVoices] = useState([]);
   const [voiceLoaded, setVoiceLoaded] = useState(false);
   const { employeeId, userType } = useParams()
+console.log(Descriptions);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/edm-details/${Descriptions}/${employeeId}/${userType}`)
+
+    if((Descriptions || employeeId || userType) === undefined){
+      setData(descriptionFromTempGen);
+    }else{
+      fetch(`${API_BASE_URL}/edm-details/${Descriptions}/${employeeId}/${userType}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -30,8 +35,10 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
         });
       })
       .catch((error) => console.error("Error fetching data:", error));
+    }
   }, []);
 
+console.log(data);
 
 
   useEffect(() => {
@@ -160,7 +167,7 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
   return (
     <div>
       <div className="shareEDMdiv">
-        <div className="main-description-share2">
+        <div className="main-description-share2 newpositionfixedtosharedescriptionedms">
           <div className="job-posting" id="shareEMD">
             <div className="image-container">
             <img 
@@ -169,6 +176,8 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
       ? profileImageRtempus
       : employeeId === "3691" && userType === "TeamLeader"
       ? profileImageVelocity
+       : data.image
+      ? `${data.image}`
       : profileImage
   }
   alt="Profile Image"
@@ -275,7 +284,7 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm }) {
              onClick={closeJobDescrptionShare}
               className="apply-button-share"
             >
-              Close
+              &#10006;
             </button>
           </section>
           
