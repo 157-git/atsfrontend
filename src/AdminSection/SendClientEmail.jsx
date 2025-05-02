@@ -1833,20 +1833,27 @@ toast.success(response.data);
             </Modal>
           </div>
 
-          <div className="search-count-last-div">Search Results : {totalRecords}</div>
+{
+  userType !== "Recruiters" && (
+    <>
+       <div className="search-count-last-div">Search Results : {totalRecords}</div>
 
-          <Pagination
-            current={currentPage}
-            total={totalRecords}
-            pageSize={pageSize}
-            showSizeChanger
-            showQuickJumper
-            onShowSizeChange={handleSizeChange}
-            onChange={handlePageChange}
-            style={{
-              justifyContent: "center",
-            }}
-          />
+<Pagination
+  current={currentPage}
+  total={totalRecords}
+  pageSize={pageSize}
+  showSizeChanger
+  showQuickJumper
+  onShowSizeChange={handleSizeChange}
+  onChange={handlePageChange}
+  style={{
+    justifyContent: "center",
+  }}
+/>
+    </>
+  )
+}
+       
           <AntdModal
           width={1000}
             title="Send Clients Permission To Recruiter"

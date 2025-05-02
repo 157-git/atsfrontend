@@ -85,6 +85,7 @@ function Sidebar({
   toggeExcelCallingData,
   toggelExcelLineup,
   toggleShareLink,
+  toggleDataUse,
   toggleUpdateResponse,
   togglescheduleinterview,
   successAddUpdateResponse,
@@ -1976,6 +1977,16 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                       >
                         <a href="#">
                           <span className="sidebar-text">Send Link</span>
+                        </a>
+                      </li>
+
+                      <li
+                        style={{ marginLeft: "10px" }}
+                        onClick={handleButtonClick("dataUse", toggleDataUse)}
+                        className={activeButton === "dataUse" ? "active" : ""}
+                      >
+                        <a href="#">
+                          <span className="sidebar-text">Data Use</span>
                         </a>
                       </li>
                     </ul>

@@ -32,6 +32,7 @@ import AddResumes from "../ResumeData/addMultipleResumes";
 import ChatRoom from "../ChatRoom/chatRoom";
 import Team_Leader from "../AdminSection/Team_Leader";
 import ShareLink from "../ResumeData/shareLink";
+import UserDataUse from "../Excel/userDataUse";
 import CandidateResumeLink from "../ResumeData/candidateResumeLink";
 import CallingExcelList from "../Excel/callingExcelData";
 import LineupExcelData from "../Excel/lineupExcelData";
@@ -128,6 +129,7 @@ const EmpDashboard = ({ userGroup }) => {
   const [showChatRoom, setShowChatRoom] = useState(false);
   const [assignColumns, setAssignColumns] = useState(false);
   const [showShareLink, setShowShareLink] = useState(false);
+  const [showDataUse, setShowDataUse] = useState(false);
   const [resumeLink, setResumeLink] = useState(false);
   const [showCallingExcelList, setShowCallingExcelList] = useState(false);
   const [showLineupExcelList, setShowLineupExcelList] = useState(false);
@@ -333,6 +335,7 @@ const EmpDashboard = ({ userGroup }) => {
     setAssignColumns(false);
     setShowChatRoom(false);
     setShowShareLink(false);
+    setShowDataUse(false);
     setShowUpdateResponse(false);
     setResumeLink(false);
     setShowResumeData(false);
@@ -511,6 +514,10 @@ const EmpDashboard = ({ userGroup }) => {
   const toggleShareLink = () => {
     resetAllToggles();
     setShowShareLink(true);
+  };
+  const toggleDataUse = () => {
+    resetAllToggles();
+    setShowDataUse(true);
   };
   const toggleUpdateCallingTracker = () => {
     resetAllToggles();
@@ -703,6 +710,7 @@ const EmpDashboard = ({ userGroup }) => {
         toggleIncentive={toggleIncentive}
         toggleAssigncolumns={toggleAssigncolumns}
         toggleShareLink={toggleShareLink}
+        toggleDataUse={toggleDataUse}
         onLogout={handleLogoutTime}
         toggeExcelCallingData={toggeExcelCallingData}
         toggelExcelLineup={toggelExcelLineup}
@@ -894,6 +902,9 @@ const EmpDashboard = ({ userGroup }) => {
         <div>{showChatRoom && <ChatRoom />}</div>
         <div>
           {showShareLink && <ShareLink toggleResumeLink={toggleResumeLink} loginEmployeeName={loginEmployeeName} sendOfficailMailForQr={officialMail}/>}
+        </div>
+        <div>
+          {showDataUse && <UserDataUse loginEmployeeName={loginEmployeeName} />}
         </div>
         {resumeLink && <CandidateResumeLink />}
         <div>
