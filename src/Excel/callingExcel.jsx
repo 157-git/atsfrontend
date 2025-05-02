@@ -224,6 +224,8 @@ if (responseUploadExcel.status === 200) {
       // }
       setprogressLength(100);
       await new Promise((resolve) => setTimeout(resolve, 200)); // Simulated delay
+      console.log("executed");
+      
     } catch (error) {
       // Error: show error toast but keep the file selected
       toast.error(`Upload error 009 : ${error.message}`);

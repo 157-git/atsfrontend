@@ -75,14 +75,19 @@ const CallingExcelList = ({
        if (!tableContainerRef.current) return;
        setIsHorizontallyScrolling(tableContainerRef.current.scrollLeft > 0);
      };
-
+     console.log(dataFromUploadExcelCalling);
   const fetchUpdatedData = (page, size) => {
+console.log(dataFromUploadExcelCalling);
 
     if (dataFromUploadExcelCalling?.length > 0) {
       setCallingList(dataFromUploadExcelCalling);
         setFilteredCallingList(dataFromUploadExcelCalling);
         setTotalRecords(dataFromUploadExcelCalling?.length);
-    }else{
+        console.log("running first");
+        
+    }else if (dataFromUploadExcelCalling === undefined) {
+      console.log("running second");
+      
       fetch(
         `${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
       )
@@ -100,7 +105,7 @@ const CallingExcelList = ({
           setLoading(false); // Set loading to false in case of an error
         });
     }
-
+setLoading(false);
  
   };
 
@@ -112,7 +117,7 @@ const CallingExcelList = ({
 
   useEffect(() => {
     fetchUpdatedData(currentPage, pageSize);
-  }, [employeeId, userType, currentPage, pageSize, triggerFetch, dataFromUploadExcelCalling, callingList]);
+  }, [employeeId, userType, currentPage, pageSize, triggerFetch, dataFromUploadExcelCalling]);
 
   useEffect(() => {
     const options = Object.keys(filteredCallingList[0] || {}).filter(
