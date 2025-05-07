@@ -138,21 +138,17 @@ if(userType === "Recruiters"){
   
 
   const fetchCallingList = (page, size) => {
-    fetch(`${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`)
+    const newRequirmentIds = accessedIds.length > 0 ? accessedIds.join(',') : "";
+    fetch(`${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?searchTerm=${searchTerm}&requirementIds=${newRequirmentIds}&page=${page}&size=${size}`)
       .then((response) => response.json())
       .then((data) => {
-        if (userType === "Recruiters") {
-          const filteredData = data.content.filter((item) => accessedIds.includes(item.requirementId.toString()))
-          setFilteredCallingList(filteredData)
-          setCallingList(filteredData)
-          setTotalRecords(data.totalElements)
-          setSearchCount(filteredData.length)
-        } else {
+     console.log(data);
+     
           setFilteredCallingList(data.content)
           setCallingList(data.content)
           setTotalRecords(data.totalElements)
           setSearchCount(data.content.length)
-        }
+        
       
         setLoading(false)
       })

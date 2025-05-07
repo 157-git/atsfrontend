@@ -73,6 +73,7 @@ import { tr } from "date-fns/locale";
 import InterviewForm1 from "../Help/InterviewForm1";
 import IssueOfferLetter from "../TeamLeader/IssueOfferLetter";
 import AttendanceLoginLogout from "../EmployeeSection/AttendanceLoginLogout";
+import CompanyOfferForm from "../EmployeeSection/CompanyOfferForm";
 // import { Button, Popover } from "antd";
 // import { SearchOutlined } from "@ant-design/icons";
 // import AttendanceLoginLogout from "../EmployeeSection/AttendanceLoginLogout";
@@ -182,6 +183,7 @@ const EmpDashboard = ({ userGroup }) => {
   const [showApplicantForm, setShowApplicantForm] = useState(false);
   const [showSharedProfile,setShowSharedProfile] = useState(false);
   const [showIssueLetter,setShowIssueLetter] = useState(false);
+  const [showCompanyOfferForm,setShowCompanyOfferForm] = useState(false);
   const [showActiveTeamMemebers,setShowActiveTeamMEmbers] = useState(false);
 
 
@@ -379,6 +381,7 @@ const EmpDashboard = ({ userGroup }) => {
     setShowUpdateCallingTracker(false);
     setShowSharedProfile(false);
     setShowIssueLetter(false);
+    setShowCompanyOfferForm(false);
     setShowActiveTeamMEmbers(false);
     setShowAccessedSentProfile(false);
   };
@@ -658,8 +661,12 @@ const EmpDashboard = ({ userGroup }) => {
   };
   const toggleIssueLetter = ()=>{
     resetAllToggles();
-    setShowIssueLetter(true)
+    setShowIssueLetter(true);
   };
+  const toggleCompanyOfferForm = ()=>{
+    resetAllToggles();
+    setShowCompanyOfferForm(true)
+  }
   const toggleactiveTeamMembers = () =>{
     resetAllToggles();
     setShowActiveTeamMEmbers(true)
@@ -751,6 +758,7 @@ const EmpDashboard = ({ userGroup }) => {
         toggeleAddManager={toggeleAddManager}
         toggleSharedProfiles={toggleSharedProfiles}
         toggleIssueLetter={toggleIssueLetter}
+        toggleCompanyOfferForm={toggleCompanyOfferForm}
         toggleactiveTeamMembers={toggleactiveTeamMembers}
         sendOfficailMailForQr={officialMail}
       />
@@ -1007,6 +1015,7 @@ const EmpDashboard = ({ userGroup }) => {
         </div>
         <div>
         {showIssueLetter && <IssueOfferLetter></IssueOfferLetter>}
+        {showCompanyOfferForm && <CompanyOfferForm></CompanyOfferForm>}
         </div>
         <div>
           {showActiveTeamMemebers && <AttendanceLoginLogout></AttendanceLoginLogout> }

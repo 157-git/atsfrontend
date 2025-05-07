@@ -117,6 +117,7 @@ function Sidebar({
   toggeleAddManager,
   toggleSharedProfiles,
   toggleIssueLetter,
+  toggleCompanyOfferForm,
   toggleactiveTeamMembers,
   sendOfficailMailForQr
 }) {
@@ -464,6 +465,7 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
     "updateResponse",
     "sharedProfiles",
     "issueLetter",
+    "companyOfferForm",
     "payRoll",
     "scheduleinterview",
     "billing",
@@ -1506,6 +1508,23 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                           <a href="#">
                             <span className="sidebar-text">
                               Issue Letter
+                            </span>
+                          </a>
+                        </li>
+
+                        <li
+                          onClick={handleButtonClick(
+                            "companyOfferForm",
+                            toggleCompanyOfferForm
+                          )}
+                          className={
+                            activeButton === "companyOfferForm" ? "active" : ""
+                          }
+                          style={{ marginLeft: "10px" }}
+                        >
+                          <a href="#">
+                            <span className="sidebar-text">
+                            Company Offer Form
                             </span>
                           </a>
                         </li>

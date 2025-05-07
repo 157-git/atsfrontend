@@ -1,0 +1,55 @@
+.form_maincompanyofferformmaindiv{
+    width: 100%;
+    margin-bottom: 20px;
+    border: 1px solid #f2f2f2;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 1200px;
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.flex-divformforcompanyofferform{
+    display: flex;
+    justify-content: space-around;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+.flex1formforcompanyofferform{
+    width: 50%;
+    flex: 1 1 400px;
+}
+.flex2formforcompanyofferform{
+    width: 50%;
+    flex: 1 1 400px;
+}
+.h2classnameforformcomapnyofferform {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+  }
+  .formlabelforcompanyofferform {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: 500;
+  }
+  .inputantsametextareastyleforcompanyofferform{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 5px;
+    background-color: #f5f5f5;
+    color: #000;
+    font-size: 14px;
+  }
+  .textareaclassnameforcompanyofferform {
+    resize: vertical;
+    min-height: 80px;
+  }
+  .inputtypecheckboxesclassforcompanyofferform{
+    margin-left: 10px;
+    width: fit-content;
+  }
