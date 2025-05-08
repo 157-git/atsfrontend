@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import "./CompanyOfferForm.css"
+import Loader from "../EmployeeSection/loader"
 
 const UnifiedFormComponent = () => {
     const [data, setData] = useState([]);
@@ -138,7 +139,7 @@ pfEcr: null,
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader/>;
   }
 
   const handleSubmit = async (e) => {
@@ -475,6 +476,7 @@ console.log(formData.pfChallan);
       <table className="attendance-table">
         <thead>
           <tr className="attendancerows-head">
+          <th  className="attendanceheading">Sr. No.</th>
           <th  className="attendanceheading">Paid Days</th>
             <th  className="attendanceheading">Absent Days</th>
             <th  className="attendanceheading">Effort Days</th>
@@ -544,6 +546,7 @@ console.log(formData.pfChallan);
           {data.length > 0 ? (
             data.map((row, index) => (
               <tr key={index} className="attendancerows">
+                <td  className="tabledata">{index+1}</td>
                 <td  className="tabledata">{row.paidDays}</td>
                 <td  className="tabledata ">{row.absentDays}</td>
                 <td  className="tabledata ">{row.effortDays}</td>

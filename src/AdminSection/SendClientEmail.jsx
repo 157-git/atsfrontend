@@ -139,7 +139,7 @@ if(userType === "Recruiters"){
 
   const fetchCallingList = (page, size) => {
     const newRequirmentIds = accessedIds.length > 0 ? accessedIds.join(',') : "";
-    fetch(`${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?searchTerm=${searchTerm}&requirementIds=${newRequirmentIds}&page=${page}&size=${size}`)
+    fetch(`${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?searchTerm=${searchTerm}&requirementIds=${newRequirmentIds}&requirmentParamKey=${userType === "Recruiters" ? "yes" : "no"}&page=${page}&size=${size}`)
       .then((response) => response.json())
       .then((data) => {
      console.log(data);

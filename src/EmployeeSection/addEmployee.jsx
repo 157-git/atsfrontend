@@ -5,8 +5,9 @@ import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "./getFormattedDateTime";
+import { fetchCompleteProfileData } from "../HandlerFunctions/fetchCompleteProfileData";
 
-const AddEmployee = ({ loginEmployeeName }) => {
+const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
   const { employeeId, userType } = useParams();
   const [socket, setSocket] = useState(null);
   const [formData, setFormData] = useState({
@@ -80,6 +81,22 @@ const AddEmployee = ({ loginEmployeeName }) => {
   const [passwordError, setPasswordError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (updateEmployeeIdForForm) {
+        try {
+          const resp = await fetchCompleteProfileData(employeeId, userType);
+          console.log("Response from API:", resp);
+        } catch (error) {
+          console.error("Error fetching employee data:", error);
+        }
+      }
+    };
+  
+    fetchData();
+  }, [updateEmployeeIdForForm, employeeId, userType]);
+  
 
   const handleInputChange = (e) => {
     const { name, value, type, files } = e.target;

@@ -7,6 +7,9 @@ import UpdateEmployee from "./UpdateEmployee";
 import HashLoader from "react-spinners/HashLoader";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
+import AddEmployee from "../EmployeeSection/addEmployee";
+import AddTeamLeader from "../EmployeeSection/addTeamLeader";
+import AddManager from "../EmployeeSection/addManager";
 
 // SwapnilRokade_UpdateEmployee_fetchingData From DataBase_16/07
 const EmployeeDetails = () => {
@@ -18,8 +21,13 @@ const EmployeeDetails = () => {
   const [blockedEmployees, setBlockedEmployees] = useState([]);
   const [Loading, setLoading] = useState(true);
   const [employeeRole, setEmployeeRole] = useState("");
-  const [showEmployee, setShowEmployee] = useState(false);
+
   const { employeeId, userType } = useParams();
+  const [showEmployee, setShowEmployee] = useState(false);
+
+  const [showEmployeeUpdate, setShowEmployeeUpdate] = useState(false);
+  const [updateJobRole, setUpdateJobRole] = useState("");
+  const [updateEmployeeIdForForm, setUpdateEmployeeIdForForm] = useState(null);
 
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,11 +59,15 @@ const EmployeeDetails = () => {
     }
   };
 
-  const handleUpdate = (employeeId, employeerole) => {
-    setEmployeeId(employeeId);
-    setEmployeeRole(employeerole);
-    setShowEmployee(true);
+  const handleUpdate = (employeeIdForUpdate, employeeroleForUpdate) => {
+    console.log(`Updating employee with ID: ${employeeIdForUpdate}`);
+    console.log(`Updating employee with role: ${employeeroleForUpdate}`);
+setUpdateJobRole(employeeroleForUpdate);
+setShowEmployee(true);
+setUpdateEmployeeIdForForm(employeeIdForUpdate);
+
   };
+console.log(employeeData);
 
   const isDeleted = (employeeId) => deletedEmployees.includes(employeeId);
   const isBlocked = (employeeId) => blockedEmployees.includes(employeeId);
@@ -315,12 +327,31 @@ const EmployeeDetails = () => {
               </table>
             </div>
           ) : (
-            <>
-              <div>
-                <UpdateEmployee id={employeeId} userType={employeeRole} />
-              </div>
-            </>
-          )}{" "}
+            showEmployee && updateEmployeeIdForForm && (
+              updateJobRole === "Manager" ? (
+                <AddManager updateEmployeeIdForForm = {updateEmployeeIdForForm} />
+              ) : updateJobRole === "TeamLeader" ? (
+                <AddTeamLeader updateEmployeeIdForForm={updateEmployeeIdForForm} />
+              ) : updateJobRole === "Recruiters" ? (
+                <AddEmployee updateEmployeeIdForForm={updateEmployeeIdForForm} />
+              ) : null
+            )
+          )
+          
+          
+          
+          // (
+          //   <>
+          //     <div>
+          //       <UpdateEmployee id={employeeId} userType={employeeRole} />
+          //     </div>
+          //   </>
+          // )
+          
+          }
+          
+          
+          {" "}
         </>
       ) : (
         <div className="register">
