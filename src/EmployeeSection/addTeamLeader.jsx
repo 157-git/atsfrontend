@@ -5,8 +5,10 @@ import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "./getFormattedDateTime";
+import { fetchCompleteProfileData } from "../HandlerFunctions/fetchCompleteProfileData";
+import Loader from "./loader";
 
-const AddTeamLeader = ({loginEmployeeName}) => {
+const AddTeamLeader = ({loginEmployeeName, updateEmployeeIdForForm = 977}) => {
   const { employeeId, userType } = useParams();
   const [formData, setFormData] = useState({
     teamLeaderId:"0",
@@ -79,6 +81,85 @@ const AddTeamLeader = ({loginEmployeeName}) => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errors, setErrors] = useState({});
    const [socket, setSocket] = useState(null);
+   const [loading, setLoading] = useState(false);
+
+
+     useEffect(() => {
+       const fetchData = async () => {
+         if (updateEmployeeIdForForm) {
+           setLoading(true);
+           try {
+             const resp = await fetchCompleteProfileData(updateEmployeeIdForForm, "TeamLeader");
+             setFormData((prevFormData) => ({
+               ...resp,
+               tlAadhaarNo: resp.aadhaarNo,
+               tlAddress : resp.address,
+               tlAlternateContactNo: resp.alternateContactNo,
+               tlAnniversaryDate : resp.anniversaryDate,
+               tlCompanyMobileNo: resp.companyMobileNo,
+               tlConfirmPassword: resp.confirmPassword,
+               tlDateOfBirth : resp.dateOfBirth,
+               tlDateOfJoining: resp.dateOfJoining,
+               tlDepartment: resp.department,
+               tlDesignation : resp.designation,
+               editDeleteAuthority: resp.editDeleteAuthority,
+               tlEmergencyContactNo: resp.emergencyContactNo,
+               tlEmergencyContactPerson: resp.emergencyContactPerson,
+               tlEmergencyPersonRelation: resp.emergencyPersonRelation,
+               tlEntrySource: resp.entrySource,
+               esIcNo: resp.esIcNo,
+               tlExperience: resp.experience,
+               faceBookURL: resp.faceBookURL,
+               tlGender: resp.gender,
+               tlInductionComment: resp.inductionComment,
+               tlInductionYesOrNo: resp.inductionYesOrNo,
+               tlInsuranceNumber: resp.insuranceNumber,
+               tlInterviewTakenPerson: resp.interviewTakenPerson,
+               jobLevel: resp.jobRole,
+               tlLastCompany: resp.lastCompany,
+               linkedInURL: resp.linkedInURL,
+               tlMaritalStatus: resp.maritalStatus,
+               messageForAdmin: resp.messageForAdmin,
+               teamLeaderName: resp.name,
+               tlOfficialContactNo: resp.officialContactNo,
+               tlOfficialMail: resp.officialMail,
+               tlPanNo: resp.panNo,
+               tlPassword: resp.password,
+               tlPerformanceIndicator: resp.performanceIndicator,
+               tlPerks: resp.perks,
+               tlPersonalEmailId: resp.personalEmailId,
+               tlPresentAddress: resp.presentAddress,
+               professionalPtNo: resp.professionalPtNo,
+               tlQualification: resp.qualification,
+               tlReasonForLeaving: resp.reasonForLeaving,
+               reportingAdminDesignation: resp.reportingPersonDesignation,
+               reportingAdminName: resp.reportingPersonName,
+               tlRoundsOfInterview: resp.roundsOfInterview,
+               tlSalary: resp.salary,
+               teamLeaderStatus: resp.status,
+               tlTrainingCompleted:resp.trainingCompletedYesOrNo,
+               tlTrainingSource: resp.trainingSource,
+               tlTrainingTakenCount: resp.trainingTakenCount,
+               tlTShirtSize: resp.tshirtSize,
+               twitterURL: resp.twitterURL,
+               tlWarningComments: resp.warningComments,
+               tlWhatsAppNo: resp.whatsAppNo,
+               tlWorkLocation: resp.workLocation,
+               lastWorkingDate: resp.workingDate
+
+           }));
+             console.log("Response from API:", resp);
+           } catch (error) {
+             console.error("Error fetching employee data:", error);
+           }finally{
+             setLoading(false);
+           }
+         }
+       };
+     
+       fetchData();
+     }, [updateEmployeeIdForForm, employeeId, userType]);
+
 
   const handleInputChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -1088,24 +1169,50 @@ const emitData = {
         </div>
         <div className="addRec-form-row">
           <label>Upload Resume:</label>
+          <div className="wraptickindiv">
           <input type="file"
             multiple
             name="resumeFile" onChange={handleInputChange} />
+             {
+              formData.resumeFile && (
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg>
+              )
+            }
+          </div>
+          
         </div>
         <div className="addRec-form-row">
           <label>Upload Profile Image:</label>
-          <input
+          
+<div className="wraptickindiv">
+<input
             type="file"
             name="profileImage"
             onChange={handleInputChange}
           />
+
+            {
+              formData.profileImage && (
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg>
+              )
+            }
+            </div>
         </div>
 
         <div className="addRec-form-row">
           <label>Upload Document:</label>
-          <input type="file"
+        
+
+<div className="wraptickindiv">
+<input type="file"
             multiple
             name="document" onChange={handleInputChange} />
+            {
+              formData.document && (
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg>
+              )
+            }
+            </div>
         </div>
 
         <div className="addRec-form-row">
@@ -1150,14 +1257,24 @@ const emitData = {
 
         <div className="add-employee-submit-div">
           <button type="submit" className="submit-button-add-emp">
-            Submit
+            {
+          updateEmployeeIdForForm ? "Update" : "Submit"
+          }
           </button>
         </div>
         {successMessage && (
           <div className="success-message">{successMessage}</div>
         )}
       </form>
+
+       {
+              loading && (
+                <Loader/>
+              )
+            }
     </div>
+
+    
   );
 };
 

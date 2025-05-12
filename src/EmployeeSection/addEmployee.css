@@ -14,7 +14,10 @@
   text-align: center;
   padding-top: 10px;
 }
-
+.wraptickindiv{
+  display: flex;
+  align-items: center;
+}
 .AddRec-form-group {
   display: flex;
   flex-wrap: wrap;

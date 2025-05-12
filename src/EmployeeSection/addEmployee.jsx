@@ -6,6 +6,7 @@ import { API_BASE_URL } from "../api/api";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "./getFormattedDateTime";
 import { fetchCompleteProfileData } from "../HandlerFunctions/fetchCompleteProfileData";
+import Loader from "../EmployeeSection/loader"
 
 const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
   const { employeeId, userType } = useParams();
@@ -81,15 +82,41 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
   const [passwordError, setPasswordError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       if (updateEmployeeIdForForm) {
+        setLoading(true);
         try {
-          const resp = await fetchCompleteProfileData(employeeId, userType);
+          const resp = await fetchCompleteProfileData(updateEmployeeIdForForm, "Recruiters");
+          setFormData((prevFormData) => ({
+            ...resp,
+          employeeName: resp.name,
+          employeeEmail: resp.personalEmailId,
+          officialContactNumber: resp.officialContactNo,
+          companyMobileNumber: resp.companyMobileNo,
+          whatsAppNumber: resp.whatsAppNo,
+          emergencyContactNumber: resp.emergencyContactNo,
+          educationalQualification : resp.qualification,
+          offeredSalary: resp.salary,
+          employeePresentAddress: resp.presentAddress,
+          employeeExperience: resp.experience,
+          employeeStatus: resp.status,
+          lastWorkingDate: resp.workingDate,
+          twitterURl: resp.twitterURL,
+          linkedInURl:resp.linkedInURL,
+          employeeAddress: resp.address,
+          reportingMangerName: resp.reportingPersonName,
+          reportingMangerDesignation: resp.reportingPersonDesignation,
+          employeePassword: resp.password,
+          teamLeaderMsg: resp.messageForAdmin
+        }));
           console.log("Response from API:", resp);
         } catch (error) {
           console.error("Error fetching employee data:", error);
+        }finally{
+          setLoading(false);
         }
       }
     };
@@ -615,8 +642,8 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
               <option value={""}>Select Marital Status</option>
               <option value="single">Single</option>
               <option value="married">Married</option>
-              <option value="divorced">Divorced</option>
-              <option value="widowed">Widowed</option>
+              <option value="Divorced">Divorced</option>
+              <option value="Widowed">Widowed</option>
             </select>
           </div>
 
@@ -1140,21 +1167,37 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
 
           <div className="addRec-form-row">
             <label>Upload Resume:</label>
+            <div className="wraptickindiv">
             <input
               type="file"
               multiple
               name="resumeFile"
               onChange={handleInputChange}
             />
+           {
+              formData.resumeFile && (
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg>
+              )
+            }
+            </div>
+         
           </div>
 
           <div className="addRec-form-row">
             <label>Upload Profile Image:</label>
+            <div className="wraptickindiv">
             <input
               type="file"
               name="profileImage"
               onChange={handleInputChange}
             />
+            {
+              formData.profileImage && (
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg>
+              )
+            }
+            </div>
+           
             {errors.profileImage && (
               <div className="error">{errors.profileImage}</div>
             )}
@@ -1162,12 +1205,21 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
 
           <div className="addRec-form-row">
             <label>Upload Document:</label>
+            <div className="wraptickindiv">
             <input
               type="file"
               multiple
               name="document"
               onChange={handleInputChange}
             />
+            {
+              formData.document && (
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg>
+              )
+            }
+           
+            </div>
+           
           </div>
 
           <div className="addRec-form-row">
@@ -1216,7 +1268,7 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
 
           <div className="add-employee-submit-div">
             <button type="submit" className="submit-button-add-emp">
-              Submit
+              {updateEmployeeIdForForm ? "Update" : "Submit"}
             </button>
           </div>
           {successMessage && (
@@ -1224,6 +1276,12 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
           )}
         </form>
       </div>
+
+      {
+        loading && (
+          <Loader/>
+        )
+      }
     </>
   );
 };

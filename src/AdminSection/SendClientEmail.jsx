@@ -1967,6 +1967,7 @@ toast.success(response.data);
           >
             <div className="mainForListsteamperformance">
               <Card
+              id="classforamit"
                 hoverable
                 style={{
                   width: 300,
@@ -2014,6 +2015,7 @@ toast.success(response.data);
 
               {displayRecruiters && (
                 <Card
+                id="classforamit"
                   hoverable
                   style={{
                     width: 300,
