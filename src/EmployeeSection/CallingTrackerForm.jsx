@@ -46,7 +46,7 @@ import {
   getDailyworkData,
   putDailyworkData,
 } from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable";
-import { getFormattedDateISOYMDformat } from "./getFormattedDateTime";
+import { getFormattedDateISOYMDformat, getFormattedDateTime } from "./getFormattedDateTime";
 
 const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
@@ -238,7 +238,7 @@ const CallingTrackerForm = ({
 
   const fetchRequirementOptions = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/company-details`);
+      const response = await axios.get(`${API_BASE_URL}/fetch-all-job-descriptions/${employeeId}/${userType}`);
       const { data } = response;
       setRequirementOptions(data);
     } catch (error) {
@@ -649,6 +649,7 @@ const CallingTrackerForm = ({
       let dataToUpdate = {
         callingTracker: {
           ...callingTracker,
+          updatedAt: getFormattedDateTime(),
           candidateName: callingTracker.candidateName.trim(), // Trim candidateName here
         },
         performanceIndicator: {
@@ -695,23 +696,7 @@ const CallingTrackerForm = ({
           },
         }
       );
-      // this code is implemented just for testing of socket transmission
-      const getFormattedDateTime = () => {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = now.getMonth() + 1; // Months are 0-based in JavaScript
-        const day = now.getDate();
-
-        const hours = now.getHours();
-        const minutes = now.getMinutes();
-        const period = hours >= 12 ? "PM" : "AM";
-        const formattedHours =
-          hours > 12 ? hours - 12 : hours === 0 ? 12 : hours;
-        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-
-        const formattedDate = `${year}-${month}-${day}`;
-        return `Date: ${formattedDate}, Time: ${formattedHours}:${formattedMinutes} ${period}`;
-      };
+    
       const updatedCallingTracker = {
         ...dataToUpdate.callingTracker,
         candidateAddedTime: getFormattedDateTime(),

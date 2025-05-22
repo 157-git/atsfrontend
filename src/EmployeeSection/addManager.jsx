@@ -8,7 +8,7 @@ import { getFormattedDateTime } from "./getFormattedDateTime";
 import Loader from "./loader";
 import { fetchCompleteProfileData } from "../HandlerFunctions/fetchCompleteProfileData";
 
-const AddManager = ({loginEmployeeName, updateEmployeeIdForForm = 1342}) => {
+const AddManager = ({loginEmployeeName, updateEmployeeIdForForm}) => {
     const { employeeId, userType } = useParams();
     const [socket, setSocket] = useState(null);
     const [formData, setFormData] = useState({

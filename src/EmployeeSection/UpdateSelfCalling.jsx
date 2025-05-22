@@ -302,7 +302,7 @@ console.log(errors);
 
   const fetchRequirementOptions = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/company-details`);
+      const response = await axios.get(`${API_BASE_URL}/fetch-all-job-descriptions/${employeeId}/${userType}`);
       const { data } = response;
       setRequirementOptions(data);
     } catch (error) {

@@ -840,7 +840,7 @@ if(userType === "Recruiters"){
   const [newAllJobIdsForPermission, setNewAllJobIdsForPermission] = useState([])
   const [showSelectPermissionRecruiters, setShowSelectPermissionRecruiters] = useState(false)
   const getAllJobs = async () => {
-    const responseGetAllJobs = await axios.get(`${API_BASE_URL}/fetch-all-job-descriptions`)
+    const responseGetAllJobs = await axios.get(`${API_BASE_URL}/fetch-all-job-descriptions/${employeeId}/${userType}`)
 
     if(responseGetAllJobs.data.length > 0){
       const sortedJobs = responseGetAllJobs.data.sort((a, b) => b.requirementId - a.requirementId) // descending order
@@ -1999,7 +1999,7 @@ toast.success(response.data);
                           viewBox="0 -960 960 960"
                           width="24px"
                           fill="#000000"
-                          className={activeTeamLeader === teamLeader.teamLeaderId ? "rotate-iconteamperformance" : ""}
+                          className={activeTeamLeader === teamLeader.teamLeaderId ? "rotate-iconteamperformance classnameforameettesting" : "classnameforameettesting"}
                         >
                           <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
                         </svg>

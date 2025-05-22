@@ -505,9 +505,9 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
      return;
    } else {
      try {
-
        const response = await axios.get(
-         `${API_BASE_URL}/performance-jobIds?empIds=${ids}&startDate=${startDate}&endDate=${endDate}&jobRole=${role}`
+        // `${API_BASE_URL}/fetch-all-job-descriptions/${employeeId}/${userType}`
+         `${API_BASE_URL}/performance-jobIds?empIds=1&startDate=${startDate}&endDate=${endDate}&jobRole=Recruiters`
        );
        setClientDetails(response.data);
      } catch (error) {
@@ -515,6 +515,7 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
      }
    }
  };
+console.log(clientDetails);
 
  useEffect(() => {
    let ids;

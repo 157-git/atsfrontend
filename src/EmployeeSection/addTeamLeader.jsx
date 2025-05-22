@@ -8,7 +8,7 @@ import { getFormattedDateTime } from "./getFormattedDateTime";
 import { fetchCompleteProfileData } from "../HandlerFunctions/fetchCompleteProfileData";
 import Loader from "./loader";
 
-const AddTeamLeader = ({loginEmployeeName, updateEmployeeIdForForm = 977}) => {
+const AddTeamLeader = ({loginEmployeeName, updateEmployeeIdForForm}) => {
   const { employeeId, userType } = useParams();
   const [formData, setFormData] = useState({
     teamLeaderId:"0",
