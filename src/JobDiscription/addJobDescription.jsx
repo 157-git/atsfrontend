@@ -12,6 +12,18 @@ const AddJobDescription = ({loginEmployeeName}) => {
   const { employeeId,userType } = useParams();
   const [socket, setSocket] = useState(null);
   const [loading, setLoading] = useState(false);
+
+   const formatDate = () => {
+      const date = new Date();
+      const day = date.getDate();
+      const month = date.toLocaleString("en-US", { month: "long" });
+      const year = date.getFullYear();
+      const hours = date.getHours() % 12 || 12;
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+      const ampm = date.getHours() >= 12 ? "PM" : "AM";
+      return `${day} ${month} ${year} ${hours}:${minutes} ${ampm}`;
+    };
+
   const [formData, setFormData] = useState({
     employeeId:employeeId,
     userType: userType,
@@ -43,7 +55,7 @@ const AddJobDescription = ({loginEmployeeName}) => {
     documentation: "",
     ageCriteria: "",
     note: "",
-    jdAddedDate: "",
+    jdAddedDate: formatDate(),
     jdType: "All Members",
     jdStatus: "Active",
     holdStatus: "Unhold",
@@ -54,6 +66,15 @@ const AddJobDescription = ({loginEmployeeName}) => {
       { employeeId: "", preferredQualificationMsg: "" },
     ],
   });
+
+  
+    useEffect(() => {
+    // Update `jdAddedDate` only once on mount
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      jdAddedDate: formatDate(),
+    }));
+  }, []); 
   // states created by sahil karnekar date 3-12-2024
   const [errors, setErrors] = useState({});
   const [errorForOverView, setErrorForOverview] = useState("");
@@ -64,25 +85,6 @@ const AddJobDescription = ({loginEmployeeName}) => {
       const newSocket = getSocket();
       setSocket(newSocket);
     }, []);
-
-  useEffect(() => {
-    const formatDate = () => {
-      const date = new Date();
-      const day = date.getDate();
-      const month = date.toLocaleString("en-US", { month: "long" });
-      const year = date.getFullYear();
-      const hours = date.getHours() % 12 || 12;
-      const minutes = date.getMinutes().toString().padStart(2, "0");
-      const ampm = date.getHours() >= 12 ? "PM" : "AM";
-      return `${day} ${month} ${year} ${hours}:${minutes} ${ampm}`;
-    };
-
-    // Update `jdAddedDate` only once on mount
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      jdAddedDate: formatDate(),
-    }));
-  }, []); 
 
   // Empty dependency array to run only once
   // Validate specific field
