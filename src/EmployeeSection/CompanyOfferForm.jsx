@@ -2,14 +2,19 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import "./CompanyOfferForm.css"
 import Loader from "../EmployeeSection/loader"
+import { API_BASE_URL } from "../api/api";
+import { DownCircleFilled, DownloadOutlined } from "@ant-design/icons";
+import { DownloadCloudIcon } from "lucide-react";
 
 const UnifiedFormComponent = () => {
+  const [editForm, setEditForm] = useState(null);
+
     const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
     // Attendance
-    
+     id: null,
     paidDays: "",
     absentDays: "",
     effortDays: "",
@@ -83,7 +88,8 @@ pfEcr: null,
     receivedAmount: "",
     gstPaidStatus: "",
   });
-
+  const userType = "manager";  // Example: could come from login info, context, or props
+  const userId = "1";
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     const val = type === "checkbox" ? checked : value;
@@ -126,8 +132,9 @@ pfEcr: null,
     link.click();
     document.body.removeChild(link);
   };
+
   useEffect(() => {
-    axios.get('http://localhost:9091/api/fullform')  // Adjust the URL based on your backend
+    axios.get(`${API_BASE_URL}/getAllForms`)  // Adjust the URL based on your backend
       .then((response) => {
         setData(response.data);
         setLoading(false);
@@ -147,51 +154,94 @@ pfEcr: null,
   
     try {
       const newFormData = { ...formData };
+if (!formData.id) {
+  delete newFormData.id; // Let the backend handle ID creation
+}
+
   
-      // Wrap files in { fileName, fileData } objects
-      if (formData.bankDocument) {
-        newFormData.bankDocument = await convertFileToBase64(formData.bankDocument);
-      }
+      // Handle file conversions
+      const convertIfPresent = async (key) => {
+        if (formData[key]) {
+          newFormData[key] = await convertFileToBase64(formData[key]);
+        }
+      };
   
-      if (formData.bgbReport) {
-        newFormData.bgbReport = await convertFileToBase64(formData.bgbReport);
-      }
+      await Promise.all([
+        convertIfPresent("bankDocument"),
+        convertIfPresent("bgbReport"),
+        convertIfPresent("insuranceCard"),
+        convertIfPresent("gstChallan"),
+        convertIfPresent("gstReceipt"),
+        convertIfPresent("pfChallan"),
+        convertIfPresent("pfReceipt"),
+        convertIfPresent("pfEcr"),
+      ]);
   
-      if (formData.insuranceCard) {
-        newFormData.insuranceCard = await convertFileToBase64(formData.insuranceCard);
-      }
-      if (formData.gstChallan) {
-        newFormData.gstChallan = await convertFileToBase64(formData.gstChallan);
-      }
-      if (formData.gstReceipt) {
-        newFormData.gstReceipt = await convertFileToBase64(formData.gstReceipt);
-      }
-      if (formData.pfChallan) {
-        newFormData.pfChallan = await convertFileToBase64(formData.pfChallan);
-      }
-      if (formData.pfReceipt) {
-        newFormData.pfReceipt = await convertFileToBase64(formData.pfReceipt);
-      }
-      if (formData.pfEcr) {
-        newFormData.pfEcr = await convertFileToBase64(formData.pfEcr);
-      }
-      
+      const isEditMode = !!formData.id; // Check if it's an update
   
-      console.log("Final Payload to Backend:", newFormData);
+      const url = isEditMode
+        ? `${API_BASE_URL}/updateFullFormByIdAndUser/${formData.id}/${userType}/${userId}`
+        : `${API_BASE_URL}/addFullForm/${userType}/${userId}`;
   
-      const response = await axios.post(
-        "http://localhost:9091/api/fullform",
-        newFormData
-      );
+      const response = isEditMode
+        ? await axios.put(url, newFormData)
+        : await axios.post(url, newFormData);
+        if (!isEditMode && response.data.id) {
+          console.log("Newly created ID:", response.data.id);}
+      alert(isEditMode ? "Form updated successfully!" : "Form submitted successfully!");
   
-      console.log("Form submitted successfully", response.data);
-      alert("Form submitted successfully!");
+      // Optionally reset
+      setFormData({});
+      setEditForm(null);
+  
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("There was an error submitting the form.");
     }
+
+    
+  };
+  const handleDelete = async (formData, userType, userId) => {
+    // Log the values before the API call
+    console.log("formData", formData);
+    console.log("userType", userType);
+    console.log("userId", userId); // This should be defined
+  
+    // Check if formData, userType, and userId are valid
+    if (!formData?.id || !userType || !userId) {
+      alert("Invalid form or user information. Deletion cannot proceed.");
+      return;
+    }
+  
+    // Confirm before deletion
+    if (!window.confirm('Are you sure you want to delete this form?')) return;
+  
+    try {
+      const url = `${API_BASE_URL}/deleteByFormIdAndUser/${formData.id}/${userType}/${userId}`;
+      console.log('Delete URL:', url); // Log the URL to ensure it's correct
+  
+      // Send DELETE request to the API
+      const response = await axios.delete(url);
+  
+      if (response.status === 200) {
+        alert('Form deleted successfully.');
+        // Optionally refresh data after deletion
+        // fetchForms(); // or update your state manually
+      } else {
+        alert('Failed to delete the form. Please try again later.');
+      }
+    } catch (error) {
+      console.error('Error deleting form:', error);
+      alert('Failed to delete the form.');
+    }
   };
   
+  
+  const handleUpdate = (row) => {
+    setFormData(row);       // Load row into form
+    setEditForm(row);       // Optionally track current editing row
+    window.scrollTo(0, 0);  // Scroll to form
+  };
 console.log(formData.pfChallan);
   return (
     <>
@@ -217,7 +267,7 @@ console.log(formData.pfChallan);
         value={formData[name]}
         onChange={handleInputChange}
         placeholder={`Enter ${label.toLowerCase()}`}
-        required
+       
       />
     </label>
   </div>
@@ -226,7 +276,7 @@ console.log(formData.pfChallan);
       
 <h2 className="h2classnameforformcomapnyofferform">Candidate Onboarding Form</h2>
 {[
-  { label: "Full Name", name: "fullName" },
+  { label: "Full Name", name: "fullName"},
   { label: "Date of Joining", name: "dateOfJoining", type: "date" },
   { label: "Last Day of Working", name: "lastDayOfJoining", type: "date" },
   { label: "Salary", name: "salary", type: "number" },
@@ -246,10 +296,10 @@ console.log(formData.pfChallan);
       <input className="inputantsametextareastyleforcompanyofferform"
         type={type}
         name={name}
-        value={formData[name]}
+        value={formData[name]?? ""}
         onChange={handleInputChange}
-        required={!["probationPeriod", "lastDayOfJoining"].includes(name)}
-      />
+        required={name === "fullName"}
+        />
     </label>
   </div>
 ))}
@@ -268,7 +318,7 @@ console.log(formData.pfChallan);
   Remarks:
   <textarea className="textareaclassnameforcompanyofferform inputantsametextareastyleforcompanyofferform"
     name="remarks"
-    value={formData.remarks}
+    value={formData.remarks ?? ""}
     onChange={handleInputChange}
   />
 </label>
@@ -286,9 +336,9 @@ console.log(formData.pfChallan);
       <input className="inputantsametextareastyleforcompanyofferform"
         type={type}
         name={name}
-        value={formData[name]}
+        value={formData[name] ?? ""}
         onChange={handleInputChange}
-        required
+        
       />
     </label>
         </div>
@@ -299,7 +349,7 @@ console.log(formData.pfChallan);
           type="file"
           name="bankDocument"
           onChange={handleFileChange}
-          required
+          
         />
       </label>
      
@@ -317,9 +367,9 @@ console.log(formData.pfChallan);
       <input className="inputantsametextareastyleforcompanyofferform"
         type={type}
         name={name}
-        value={formData[name]}
+        value={formData[name] ?? ""}
         onChange={handleInputChange}
-        required
+        
       />
     </label>
   </div>
@@ -329,9 +379,9 @@ console.log(formData.pfChallan);
         <input className="inputantsametextareastyleforcompanyofferform"
           type="text"
           name="recruiterName"
-          value={formData.recruiterName}
+          value={formData.recruiterName ?? ""}
           onChange={handleInputChange}
-          required
+          
         />
       </label>
       <label className="formlabelforcompanyofferform">
@@ -339,16 +389,16 @@ console.log(formData.pfChallan);
         <input className="inputantsametextareastyleforcompanyofferform"
           type="text"
           name="candidateName"
-          value={formData.candidateName}
+          value={formData.candidateName ?? ""}
           onChange={handleInputChange}
-          required
+          
         />
       </label>
       <label className="formlabelforcompanyofferform">
         BGB Comment:
         <textarea className="textareaclassnameforcompanyofferform inputantsametextareastyleforcompanyofferform"
           name="bgbComment"
-          value={formData.bgbComment}
+          value={formData.bgbComment ?? ""}
           onChange={handleInputChange}
         />
       </label>
@@ -404,9 +454,9 @@ console.log(formData.pfChallan);
       <input className="inputantsametextareastyleforcompanyofferform"
         type={type}
         name={name}
-        value={formData[name]}
+        value={formData[name] ?? ""}
         onChange={handleInputChange}
-        required
+        
       />
     </label>
   </div>
@@ -416,7 +466,7 @@ console.log(formData.pfChallan);
   Policy Terms:
   <textarea className="textareaclassnameforcompanyofferform inputantsametextareastyleforcompanyofferform"
     name="policyTerms"
-    value={formData.policyTerms}
+    value={formData.policyTerms ?? ""}
     onChange={handleInputChange}
   />
 </label>
@@ -427,7 +477,7 @@ console.log(formData.pfChallan);
     type="file"
     name="insuranceCard"
     onChange={handleFileChange}
-    required
+    
   />
 </label>
 
@@ -456,16 +506,18 @@ console.log(formData.pfChallan);
       <input className="inputantsametextareastyleforcompanyofferform"
         type={type}
         name={name}
-        value={formData[name]}
+        value={formData[name] ?? ""}
         onChange={handleInputChange}
-        required
+        
       />
     </label>
   </div>
 ))}
       </div>
  </div>
-      <button className="lineUp-Filter-btn" type="submit">Submit</button>
+      <button className="lineUp-Filter-btn" type="submit" onClick={handleSubmit}>Submit</button>
+      <button onClick={() => setFormData({})}>Cancel</button>
+
     </form>
     </div>
 
@@ -540,6 +592,8 @@ console.log(formData.pfChallan);
             <th  className="attendanceheading">Collection Date</th>
             <th  className="attendanceheading">Received Amount</th>
             <th  className="attendanceheading">GST Paid Status</th>
+            <th  className="attendanceheading">Update</th>
+            <th  className="attendanceheading">Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -579,7 +633,7 @@ console.log(formData.pfChallan);
         )
       }
     >
-      Download
+      <DownloadCloudIcon/>
     </button>
   )}
 </td>
@@ -599,7 +653,7 @@ console.log(formData.pfChallan);
         )
       }
     >
-      Download
+           <DownloadCloudIcon/>
     </button>
   )}
 </td>                
@@ -613,7 +667,7 @@ console.log(formData.pfChallan);
         )
       }
     >
-      Download
+           <DownloadCloudIcon/>
     </button>
   )}
 </td>                
@@ -627,7 +681,7 @@ console.log(formData.pfChallan);
         )
       }
     >
-      Download
+           <DownloadCloudIcon/>
     </button>
   )}
 </td>                
@@ -641,7 +695,7 @@ console.log(formData.pfChallan);
         )
       }
     >
-      Download
+           <DownloadCloudIcon/>
     </button>
   )}
 </td>                
@@ -655,7 +709,7 @@ console.log(formData.pfChallan);
         )
       }
     >
-      Download
+           <DownloadCloudIcon/>
     </button>
   )}
 </td>                
@@ -669,7 +723,7 @@ console.log(formData.pfChallan);
         )
       }
     >
-      Download
+           <DownloadCloudIcon/>
     </button>
   )}
 </td>                <td  className="tabledata">{row.policyNumber}</td>
@@ -693,7 +747,7 @@ console.log(formData.pfChallan);
         )
       }
     >
-      Download
+           <DownloadCloudIcon/>
     </button>
   )}
 </td>                <td  className="tabledata">{row.grnNumber}</td>
@@ -710,6 +764,12 @@ console.log(formData.pfChallan);
                 <td  className="tabledata">{row.collectionDate}</td>
                 <td  className="tabledata">{row.receivedAmount}</td>
                 <td  className="tabledata">{row.gstPaidStatus}</td>
+                <td className="tabledata">
+  <button onClick={() => handleUpdate(row)}>Update</button>
+</td>
+<td className="tabledata">
+  <button onClick={() => handleDelete(row, userType, user)}>Delete</button>
+</td>
               </tr> 
             ))
           ) : (
