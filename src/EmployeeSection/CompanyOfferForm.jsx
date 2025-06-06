@@ -5,9 +5,11 @@ import Loader from "../EmployeeSection/loader"
 import { API_BASE_URL } from "../api/api";
 import { DownCircleFilled, DownloadOutlined } from "@ant-design/icons";
 import { DownloadCloudIcon } from "lucide-react";
+import { useParams } from "react-router-dom";
 
 const UnifiedFormComponent = () => {
   const [editForm, setEditForm] = useState(null);
+  const {employeeId, userType} = useParams();
 
     const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -88,8 +90,7 @@ pfEcr: null,
     receivedAmount: "",
     gstPaidStatus: "",
   });
-  const userType = "manager";  // Example: could come from login info, context, or props
-  const userId = "1";
+  const userId = employeeId;
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     const val = type === "checkbox" ? checked : value;
@@ -132,6 +133,9 @@ pfEcr: null,
     link.click();
     document.body.removeChild(link);
   };
+console.log(
+  data
+);
 
   useEffect(() => {
     axios.get(`${API_BASE_URL}/getAllForms`)  // Adjust the URL based on your backend
@@ -203,20 +207,21 @@ if (!formData.id) {
   };
   const handleDelete = async (formData, userType, userId) => {
     // Log the values before the API call
+
     console.log("formData", formData);
     console.log("userType", userType);
     console.log("userId", userId); // This should be defined
-  
+  console.log(formData.id, userType, userId);
     // Check if formData, userType, and userId are valid
     if (!formData?.id || !userType || !userId) {
       alert("Invalid form or user information. Deletion cannot proceed.");
       return;
     }
-  
+    
     // Confirm before deletion
     if (!window.confirm('Are you sure you want to delete this form?')) return;
-  
-    try {
+
+    try {  
       const url = `${API_BASE_URL}/deleteByFormIdAndUser/${formData.id}/${userType}/${userId}`;
       console.log('Delete URL:', url); // Log the URL to ensure it's correct
   
@@ -768,7 +773,7 @@ console.log(formData.pfChallan);
   <button onClick={() => handleUpdate(row)}>Update</button>
 </td>
 <td className="tabledata">
-  <button onClick={() => handleDelete(row, userType, user)}>Delete</button>
+  <button onClick={() => handleDelete(row, userType, userId)}>Delete</button>
 </td>
               </tr> 
             ))

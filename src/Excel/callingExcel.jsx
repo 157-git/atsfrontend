@@ -40,6 +40,8 @@ const CallingExcel = ({ onClose, displayCandidateForm, loginEmployeeName , onsuc
   const [hasErrorResume, setHasErrorResume] = useState(false);
 
   const [sheetNames, setSheetNames] = useState([]);
+  console.log(sheetNames);
+  
   const [selectedSheets, setSelectedSheets] = useState({});
   const [displayLoader, setDisplayLoader] = useState(false);
   const [displayUploadButton, setDisplayUploadButton] = useState(false);
@@ -101,7 +103,7 @@ console.log(dataForUpdateExcelCalling);
 
         const sheetNamesList = workbook.SheetNames.map((name, index) => ({
           name,
-          index: index + 1, // Index starts at 1
+          index: index, // Index starts at 1
         }));
         setSheetNames(sheetNamesList);
 
@@ -121,6 +123,8 @@ console.log(dataForUpdateExcelCalling);
   };
 
   const handleCheckboxChange = (index) => {
+    console.log(index);
+    
     setSelectedSheets((prevSelected) => ({
       ...prevSelected,
       [index]: !prevSelected[index],
@@ -139,6 +143,7 @@ console.log(dataForUpdateExcelCalling);
       setLoading(false);
       return;
     }
+console.log(selectedSheets);
 
     // Get selected indices for sheets to upload
     const selectedIndices = Object.keys(selectedSheets)
@@ -153,13 +158,13 @@ console.log(dataForUpdateExcelCalling);
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("sheetIndices", selectedIndices);
+    // formData.append("sheetIndices", selectedIndices);
 
     // Add jobDesignation to the form data
-    formData.append(
-      "jobDesignation",
-      excelJobDesignation.trim() || "DEFAULT_JOB_DESIGNATION"
-    );
+    // formData.append(
+    //   "jobDesignation",
+    //   excelJobDesignation.trim() || "DEFAULT_JOB_DESIGNATION"
+    // );
     setLoadingProgressBar(true);
     try {
       setprogressLength(0);
@@ -170,28 +175,32 @@ console.log(dataForUpdateExcelCalling);
       }
       console.log("Link come here 001");
      const responseUploadExcel = await axios.post(
-        `${API_BASE_URL}/upload-excel-files/${employeeId}/${userType}`,
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
+  `${API_BASE_URL}/upload-excel-files1/${employeeId}/${userType}?sheetIndices=${selectedIndices}&jobDesignation=${excelJobDesignation || "DEFAULT_JOB_DESIGNATION"}`,
+  formData,
+  { headers: { "Content-Type": "multipart/form-data" } }
+);
 console.log(responseUploadExcel);
 setprogressLength(80)
 await new Promise((resolve) => setTimeout(resolve, 500)); // Simulated delay
 if (responseUploadExcel.status === 200) {
-  const canIdsForUploadExcel = responseUploadExcel.data.UploadedCandidateIDs;
-  console.log(canIdsForUploadExcel);
- const IsArray = Array.isArray(canIdsForUploadExcel);
+  const candidateIds = responseUploadExcel.data.UploadedCandidateIDs;
+ const IsArray = Array.isArray(candidateIds);
  let joinedIds;
  if (IsArray) {
-  joinedIds = canIdsForUploadExcel.join(",");
+  joinedIds = candidateIds.join(",");
  }
   const getAllCurrentData = async () => {
     try {
-      const response1 = await axios.get(`${API_BASE_URL}/fetch-uploaded-excel-data`, {
-        params: {
-          candidateIds: `${joinedIds}`,
-        },
-      });
+     const response1 = await axios.post(
+  `${API_BASE_URL}/fetch-uploaded-excel-data`,
+  candidateIds, // Array of candidate IDs
+  {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+);
+
   console.log(response1);
   
   setDataForUpdateExcelCalling(response1.data);
@@ -208,14 +217,16 @@ if (responseUploadExcel.status === 200) {
 
       setUploadSuccess(true);
       setexcelJobDesignation("");
-      toast.success("File Uploaded Successfully");
+     
 
-      const currentTime = getCurrentIndianTime();
-      setSearchTerm(currentTime);
+      // const currentTime = getCurrentIndianTime();
+      // setSearchTerm(currentTime);
       handleTableChange("CallingExcelList");
 
       // Reset file input and related state
       setFile(null);
+      setSelectedSheets({});
+      setSheetNames([]);
       // setSheetNames([]);
       // setSelectedSheets({});
 
@@ -225,6 +236,7 @@ if (responseUploadExcel.status === 200) {
       setprogressLength(100);
       await new Promise((resolve) => setTimeout(resolve, 200)); // Simulated delay
       console.log("executed");
+       toast.success("File Uploaded Successfully");
       
     } catch (error) {
       // Error: show error toast but keep the file selected
@@ -568,14 +580,15 @@ if (responseUploadExcel.status === 200) {
                   } */}
 
                   {/* download added by sahil karnekar line 275 to 277 */}
-                  {/* <button
+                  <button
                     onClick={() =>
                       handleDownloadButton("/files/Calling_Tracker_Format.xlsx")
                     }
                     title="To upload the data, download Excel format"
                   >
                     Download Excel Format
-                  </button> */}
+                  </button>
+                  <p>Note : Please Upload Excel In Above Excel Format</p>
                   {/* button commented by sahil karnekar on date 7-4-2025 */}
                   {/* <button onClick={() => handleTableChange("CallingExcelList")}>
                     View
@@ -593,7 +606,7 @@ if (responseUploadExcel.status === 200) {
                 backgroundColor: "#f2f2f2",
               }}
             >
-              <div className="card-header">
+              <div className="card-header newclassformarginforcarduploadexcel">
                 <h5 className="mb-0 card-title">Upload Resume </h5>
               </div>
               <div className="card-body">
@@ -618,7 +631,7 @@ if (responseUploadExcel.status === 200) {
                     />
                   )}
                 </div>
-                <span style={{ color: "black", fontSize: "13px" }}>
+                <span style={{ color: "black", fontSize: "18px" }}>
                   If you know the job designations of all the CVs, please
                   mention them below.
                 </span>
@@ -631,7 +644,7 @@ if (responseUploadExcel.status === 200) {
                     className="form-control"
                   />
                 </div>
-                <div className="gap-2 d-grid">
+                <div className="gap-2 d-grid newclassforuploadexcelbutton">
                   <button onClick={handleUploadResume}>Upload Resumes</button>
                   {/* button commented by sahil karnekar on date 7-4-2025 */}
                   {/* <button onClick={() => handleTableChange("ResumeList")}>
