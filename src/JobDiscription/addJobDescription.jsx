@@ -617,7 +617,7 @@ console.log(formData);
                             name="skills"
                             value={formData.skills}
                             onChange={handleChange}
-                            placeholder="Enter Skills"
+                            placeholder="Please Seperate Skill By , "
                           />
                           {errors.skills === "*" && (
                             <span className="setStarAsError setStarPaddingJd">

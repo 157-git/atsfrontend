@@ -6,6 +6,7 @@ import './applicantThankYou.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import confetti from 'canvas-confetti';
+import { UsergroupAddOutlined, WhatsAppOutlined } from '@ant-design/icons';
 
 function ThankYouPage() {
   // Trigger confetti animation when component mounts
@@ -35,6 +36,13 @@ function ThankYouPage() {
           <p>We sincerely appreciate your interest and the time you’ve taken to complete the form.</p>
           <p>Our team will review your application, and we will be in touch with you soon.</p>
           <p>Wishing you the very best in your journey!</p>
+          <p>
+  Join Our WhatsApp Channel 
+  <a href="https://whatsapp.com/channel/0029Vb6XhUcAu3aUGdCvsa0f" target="_blank">
+    <button className='joinnowbuttoninthankyoupage'>Join Now <WhatsAppOutlined /></button>
+  </a>
+</p>
+
         </div>
         
       </div>

@@ -332,7 +332,8 @@ const CallingList = ({
 //   Rajlaxmi JAgadale Update that function date 10/04/2025
 const handleSearchClick = (e) => {
   e.preventDefault(); // Prevents the form from submitting and causing the page to refresh
-  fetchCallingTrackerData(currentPage, pageSize);
+  setCurrentPage(1); // Reset to the first page when searching
+  fetchCallingTrackerData(1, pageSize);
 };
   const forwardSelectedCandidate = (e) => {
     e.preventDefault();

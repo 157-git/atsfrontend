@@ -29,6 +29,7 @@ import {
   Progress,
   Radio,
   Rate,
+  Select,
   TimePicker,
   Upload,
 } from "antd";
@@ -57,6 +58,7 @@ const CallingTrackerForm = ({
 }) => {
   const { employeeId, userType } = useParams();
   const [submited, setSubmited] = useState(false);
+  const [tags, setTags] = useState([]);
   const [showConfetti, setShowConfetti] = useState(false);
   const [uploadingResumeNewState, setUploadingResumeNewState] = useState(false);
   const [displaySourceOthersInput, setDisplaySourceOthersInput] =
@@ -76,6 +78,7 @@ const CallingTrackerForm = ({
     candidateEmail: "",
     jobDesignation: "",
     requirementId: "",
+    candidateSkills:"",
     requirementCompany: "",
     sourceName: "",
     contactNumber: "",
@@ -259,6 +262,9 @@ const CallingTrackerForm = ({
     }
     if (!callingTracker.contactNumber) {
       errors.contactNumber = "Contact Number is required";
+    }
+    if (!callingTracker.candidateSkills) {
+      errors.candidateSkills = "Candidate Skills are required";
     }
     if (!callingTracker.sourceName || callingTracker.sourceName === "others") {
       errors.sourceName = "Source Name is required";
@@ -761,6 +767,7 @@ const CallingTrackerForm = ({
         setTimeout(() => setShowConfetti(false), 4000);
         toast.success("Candidate Added Successfully..");
         setCallingTracker(initialCallingTrackerState);
+        setTags([]);
         setLineUpData(initialLineUpState);
       }
       setIsFormVisible(false);
@@ -985,7 +992,6 @@ const CallingTrackerForm = ({
       setUploadingResumeNewState(false);
     }
   };
-
   const predefinedLocations = ["Pune City", "PCMC"]; // Add any other options here
   // Utility function to parse and format dateOfBirth
   const formatDateString = (dateString) => {
@@ -1024,6 +1030,8 @@ const CallingTrackerForm = ({
     return gender === "Male" || gender === "Female" ? gender : "";
   };
   const setResumeResponse = (data) => {
+    console.log(data);
+    
     // Fields to check in existing state
     const hasExistingData =
       callingTracker.candidateName !== "" ||
@@ -1043,6 +1051,7 @@ const CallingTrackerForm = ({
         ...prevState,
         candidateName: data.candidateName,
         candidateEmail: data.candidateEmail,
+        candidateSkills: data.skills,
         currentLocation: data.currentLocation,
         contactNumber: `${data.contactNumber}`,
       }));
@@ -1109,6 +1118,30 @@ const CallingTrackerForm = ({
   const copyContactNumber = () => {
     callingTracker.alternateNumber = callingTracker.contactNumber;
   };
+
+// const handleChangeSkillsTags = (value) => {
+//   setTags(value);
+//   setCallingTracker(prev => {
+//     const prevSkillsArray = prev.candidateSkills
+//       ? prev.candidateSkills.split(',').map(s => s.trim())
+//       : [];
+//     const merged = Array.from(new Set([...prevSkillsArray, ...value]));
+//     return {
+//       ...prev,
+//       candidateSkills: merged.join(','),
+//     };
+//   });
+// };
+const handleChangeSkillsTags = (value) => {
+  setTags(value);
+  setCallingTracker(prev => ({
+    ...prev,
+    candidateSkills: value.join(','),
+  }));
+};
+
+
+console.log(callingTracker);
 
   // this fucntion is made by sahil karnekar on date 25-11-2024
   const handleResumeUploadBoth = async (e) => {
@@ -1216,15 +1249,27 @@ const CallingTrackerForm = ({
                   justifyContent: "center",
                 }}
               >
-                <div
-                  className="calling-tracker-field-sub-div"
-                  style={{
-                    width: "auto",
-                    fontSize: "14px",
-                    justifyContent: "center",
-                  }}
-                >
-                  Great talent won't wait - add them now, hire the best 👉
+              <label style={{
+                width:"27%"
+              }} >Date & Time:</label>
+                <div className="calling-tracker-two-input-container">
+                  <div className="calling-tracker-two-input">
+                    <input
+                      type="text"
+                      name="date"
+                      value={callingTracker.date}
+                      readOnly
+                    />
+                  </div>
+                  <div className="calling-tracker-two-input">
+                    <input
+                      type="text"
+                      id="candidateAddedTime"
+                      name="candidateAddedTime"
+                      value={candidateAddedTime}
+                      readOnly
+                    />
+                  </div>
                 </div>
               </div>
               <div className="calling-tracker-field">
@@ -1373,25 +1418,28 @@ const CallingTrackerForm = ({
             </div>
             <div className="calling-tracker-row-gray">
               <div className="calling-tracker-field">
-                <label>Date & Time:</label>
-                <div className="calling-tracker-two-input-container">
-                  <div className="calling-tracker-two-input">
+                <label>Candidate's Full Name</label>
+                <div className="calling-tracker-field-sub-div">
+                  {/* line number 684 to 696 added by sahil karnekar date 22-10-2024 */}
+                  <div className="setRequiredStarDiv">
                     <input
                       type="text"
-                      name="date"
-                      value={callingTracker.date}
-                      readOnly
+                      name="candidateName"
+                      // validation added by sahil karnekar date 19-11-2024
+                      value={callingTracker.candidateName}
+                      className={`plain-input`}
+                      onChange={handleChange}
+                      placeholder="Enter Candidate Name"
+                      // line 668 added by sahil karnekar date 21-10-2024
+                      maxLength="50"
                     />
+                    {!callingTracker.candidateName && (
+                      <span className="requiredFieldStar">*</span>
+                    )}
                   </div>
-                  <div className="calling-tracker-two-input">
-                    <input
-                      type="text"
-                      id="candidateAddedTime"
-                      name="candidateAddedTime"
-                      value={candidateAddedTime}
-                      readOnly
-                    />
-                  </div>
+                  {errors.candidateName && (
+                    <div className="error-message">{errors.candidateName}</div>
+                  )}
                 </div>
               </div>
               <div className="calling-tracker-field">
@@ -1432,27 +1480,30 @@ const CallingTrackerForm = ({
             </div>
             <div className="calling-tracker-row-white">
               <div className="calling-tracker-field">
-                <label>Candidate's Full Name</label>
+               <label>Contact Number</label>
                 <div className="calling-tracker-field-sub-div">
-                  {/* line number 684 to 696 added by sahil karnekar date 22-10-2024 */}
+                  {/* this line added by sahil date 22-10-2024 */}
                   <div className="setRequiredStarDiv">
-                    <input
-                      type="text"
-                      name="candidateName"
-                      // validation added by sahil karnekar date 19-11-2024
-                      value={callingTracker.candidateName}
-                      className={`plain-input`}
-                      onChange={handleChange}
-                      placeholder="Enter Candidate Name"
-                      // line 668 added by sahil karnekar date 21-10-2024
-                      maxLength="50"
+                    <PhoneInput
+                      placeholder="Enter phone number"
+                      name="contactNumber"
+                      className="plain-input"
+                      value={callingTracker.contactNumber}
+                      onChange={(value) =>
+                        handlePhoneNumberChange(value, "contactNumber")
+                      }
+                      defaultCountry="IN"
+                      // sahil karnekar line 712
+                      maxLength={selectedCountry === "IN" ? 11 : 20}
+                      onCountryChange={(country) => setSelectedCountry(country)}
                     />
-                    {!callingTracker.candidateName && (
+                    {/* this line added by sahil date 22-10-2024 */}
+                    {!callingTracker.contactNumber && (
                       <span className="requiredFieldStar">*</span>
                     )}
                   </div>
-                  {errors.candidateName && (
-                    <div className="error-message">{errors.candidateName}</div>
+                  {errors.contactNumber && (
+                    <div className="error-message">{errors.contactNumber}</div>
                   )}
                 </div>
               </div>
@@ -1494,34 +1545,6 @@ const CallingTrackerForm = ({
 
             <div className="calling-tracker-row-gray">
               <div className="calling-tracker-field">
-                <label>Contact Number</label>
-                <div className="calling-tracker-field-sub-div">
-                  {/* this line added by sahil date 22-10-2024 */}
-                  <div className="setRequiredStarDiv">
-                    <PhoneInput
-                      placeholder="Enter phone number"
-                      name="contactNumber"
-                      className="plain-input"
-                      value={callingTracker.contactNumber}
-                      onChange={(value) =>
-                        handlePhoneNumberChange(value, "contactNumber")
-                      }
-                      defaultCountry="IN"
-                      // sahil karnekar line 712
-                      maxLength={selectedCountry === "IN" ? 11 : 20}
-                      onCountryChange={(country) => setSelectedCountry(country)}
-                    />
-                    {/* this line added by sahil date 22-10-2024 */}
-                    {!callingTracker.contactNumber && (
-                      <span className="requiredFieldStar">*</span>
-                    )}
-                  </div>
-                  {errors.contactNumber && (
-                    <div className="error-message">{errors.contactNumber}</div>
-                  )}
-                </div>
-              </div>
-              <div className="calling-tracker-field">
                 <label>Whatsapp Number</label>
 
                 <div
@@ -1529,7 +1552,7 @@ const CallingTrackerForm = ({
                   onClick={handleDisplaySameAsContactText}
                 >
                   <PhoneInput
-                    placeholder="Enter phone number"
+                    placeholder="Enter WhatsApp number"
                     name="alternateNumber"
                     className="plain-input"
                     value={callingTracker.alternateNumber}
@@ -1562,6 +1585,42 @@ const CallingTrackerForm = ({
                         Same As Contact Number
                       </span>
                     </div>
+                  )}
+                </div>
+              </div>
+              <div className="calling-tracker-field">
+                
+                 <label>Skills</label>
+                <div className="calling-tracker-field-sub-div">
+                  {/* line number 684 to 696 added by sahil karnekar date 22-10-2024 */}
+                  <div className="setRequiredStarDiv">
+                    {/* <input
+                      type="text"
+                      name="candidateSkills"
+                      // validation added by sahil karnekar date 19-11-2024
+                      value={callingTracker.candidateSkills}
+                      className={`plain-input`}
+                      onChange={handleChange}
+                      placeholder="Enter Candidate Skills And Please Seperate By ,"
+                      // line 668 added by sahil karnekar date 21-10-2024
+                      maxLength="50"
+                    /> */}
+<Select
+        mode="tags"
+        style={{ width: '100%' }}
+        placeholder="Type and press Enter or comma to add"
+        onChange={handleChangeSkillsTags}
+        value={tags}
+        tokenSeparators={[',']}
+        maxTagCount="responsive"
+      />
+
+                    {!callingTracker.candidateSkills && (
+                      <span className="requiredFieldStar">*</span>
+                    )}
+                  </div>
+                  {errors.candidateSkills && (
+                    <div className="error-message">{errors.candidateSkills}</div>
                   )}
                 </div>
               </div>

@@ -701,6 +701,7 @@ console.log(jobDescriptions);
                             )}
                           </>
                         )}
+                        <> Candidates Matched : {item.matchedCandidateCount}</>
                       </div>
                     </div>
 

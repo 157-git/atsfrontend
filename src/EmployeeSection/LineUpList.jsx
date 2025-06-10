@@ -236,7 +236,8 @@ const LineUpList = ({
   };
   const handleSearchClick = (e)=>{
     e.preventDefault(); // Prevents the form from submitting and causing the page to refresh
-    fetchCallingTrackerData(currentPage, pageSize);
+    setCurrentPage(1); // Reset to the first page when a new search is performed
+    fetchCallingTrackerData(1, pageSize);
   }
   // updated this function sahil karnekar date : 22-10-2024
   const handleFilterSelect = (key, value) => {
