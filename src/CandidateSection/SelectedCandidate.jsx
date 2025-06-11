@@ -143,6 +143,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
 
   const handleSearchClick = (e)=>{
     e.preventDefault();
+    // setCurrentPage(1); // Reset to the first page on search
     fetchSelectedCandidateData(currentPage, pageSize);
   }
   // updated this function sahil karnekar date : 22-10-2024

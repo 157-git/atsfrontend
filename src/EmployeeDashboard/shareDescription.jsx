@@ -382,7 +382,7 @@ const ShareDescription = ({ Descriptions }) => {
                 Name :{" "}
               </span>
               <input
-                value={data?.name.split(" ")[0] || Descriptions.employeeName}
+                value={data?.name.split(" ")[0]}
                 onChange={(e) => handleInputChange(e, "name")}
                 className="share-edm-input"
               />
