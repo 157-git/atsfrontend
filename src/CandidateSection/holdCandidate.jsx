@@ -72,6 +72,7 @@ const HoldCandidate = ({
                 };
 
   const fetchHoldCandidateData = async (page, size) => {
+    setLoading(true);
     try {
       const response = await fetch(
         `${API_BASE_URL}/hold-candidate/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
@@ -86,6 +87,8 @@ const HoldCandidate = ({
       setLoading(false);
     } catch (error) {
       console.error("Error fetching hold candidate data:", error);
+      setLoading(false);
+    }finally{
       setLoading(false);
     }
   };
@@ -156,7 +159,8 @@ const HoldCandidate = ({
 
   const handleSearchClick = (e)=>{
     e.preventDefault();
-    fetchHoldCandidateData(currentPage, pageSize);
+    setCurrentPage(1); 
+    fetchHoldCandidateData(1, pageSize);
   }
 
   // updated this function sahil karnekar date : 22-10-2024

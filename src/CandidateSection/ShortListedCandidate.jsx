@@ -83,6 +83,7 @@ const ShortListedCandidates = ({
   //akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_116
 
   const fetchShortListedData = async (page, size) => {
+    setLoading(true);
     try {
       const response = await fetch(
         `${API_BASE_URL}/shortListed-data/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
@@ -95,6 +96,8 @@ const ShortListedCandidates = ({
       setLoading(false);
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
+      setLoading(false);
+    }finally{
       setLoading(false);
     }
   };
@@ -264,7 +267,8 @@ const handleCancelcloseshare = ()=>{
   };
   const handleSearchClick = (e) => {
     e.preventDefault(); // Prevents the form from submitting and causing the page to refresh
-    fetchShortListedData(currentPage, pageSize);
+    setCurrentPage(1); // Reset to the first page when searching
+    fetchShortListedData(1, pageSize);
   };
   const resetSelections = () => {
     setSelectedEmployeeId(null); // Clear the selected recruiter ID

@@ -72,6 +72,7 @@ const RejectedCandidate = ({
                    };
 
   const fetchRejectedData = async (page, size) => {
+    setLoading(true);
     try {
       const response = await fetch(
         `${API_BASE_URL}/rejected-candidate/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
@@ -84,6 +85,8 @@ const RejectedCandidate = ({
       setLoading(false);
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
+      setLoading(false);
+    }finally{
       setLoading(false);
     }
   };
@@ -312,7 +315,8 @@ const forwardSelectedCandidate = (e) => {
   //Name:-Akash Pawar Component:-RejectedCandidate Subcategory:-ResumeViewButton(added) End LineNo:-356 Date:-02/07
   const handleSearchClick = (e)=>{
     e.preventDefault();
-    fetchRejectedData(currentPage, pageSize);
+    setCurrentPage(1); 
+    fetchRejectedData(1, pageSize);
   }
   //Swapnil_Rokade_SelectedCandidate_columnsToInclude_columnsToExclude_17/07/2024//
   const handleExportToExcel = () => {

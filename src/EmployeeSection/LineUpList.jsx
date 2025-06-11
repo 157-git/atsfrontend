@@ -75,6 +75,7 @@ const LineUpList = ({
         };
   //akash_pawar_LineUpList_ShareFunctionality_16/07_128
   const fetchCallingTrackerData = async (page, size) => {
+    setLoading(true);
     try {
       const response = await fetch(
         `${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
@@ -91,6 +92,8 @@ const LineUpList = ({
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setLoading(false);
+    }finally{
       setLoading(false);
     }
   };

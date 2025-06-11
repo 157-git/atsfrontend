@@ -265,6 +265,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   }, []);
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_98
   const fetchData = async (page, size) => {
+    setLoading(true);
     try {
       const response = await fetch(
         // sahil karnekar line 244 set employeeId and usertType in Api at the time of deployement this url is just for testing
@@ -279,6 +280,8 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
+      setLoading(false);
+    }finally{
       setLoading(false);
     }
   };
@@ -373,7 +376,8 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
 
   const handleSearchClick = (e)=>{
     e.preventDefault();
-    fetchData(currentPage, pageSize);
+    setCurrentPage(1); 
+    fetchData(1, pageSize);
   }
 
   const handleShare = async () => {

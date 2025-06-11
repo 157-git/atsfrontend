@@ -65,6 +65,7 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
             };
 
   const fetchSelectedCandidateData = async (page, size) => {
+    setLoading(true);
     try {
       const response = await fetch(
         `${API_BASE_URL}/selected-candidate/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
@@ -77,6 +78,8 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching shortlisted data:", error);
+      setLoading(false);
+    }finally{
       setLoading(false);
     }
   };
@@ -143,8 +146,8 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
 
   const handleSearchClick = (e)=>{
     e.preventDefault();
-    // setCurrentPage(1); // Reset to the first page on search
-    fetchSelectedCandidateData(currentPage, pageSize);
+    setCurrentPage(1); // Reset to the first page on search
+    fetchSelectedCandidateData(1, pageSize);
   }
   // updated this function sahil karnekar date : 22-10-2024
   const handleFilterSelect = (key, value) => {
