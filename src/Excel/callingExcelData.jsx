@@ -77,7 +77,7 @@ const CallingExcelList = ({
      };
      console.log(dataFromUploadExcelCalling);
   const fetchUpdatedData = (page, size) => {
-console.log(dataFromUploadExcelCalling);
+setLoading(true);
 
     if (dataFromUploadExcelCalling?.length > 0) {
       setCallingList(dataFromUploadExcelCalling);
@@ -557,7 +557,8 @@ setLoading(false);
   };
   const handleSearchClick = (e)=>{
     e.preventDefault();
-    fetchUpdatedData(currentPage, pageSize);
+    setCurrentPage(1); // Reset to the first page when searching
+    fetchUpdatedData(1, pageSize);
   }
   const calculateWidth = () => {
     const baseWidth = 250;

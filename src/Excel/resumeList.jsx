@@ -418,7 +418,8 @@ const handleCancelcloseshare = ()=>{
   };
   const handleSearchClick = (e)=>{
     e.preventDefault();
-    fetchData(currentPage, pageSize);
+    setCurrentPage(1); // Reset to the first page when searching
+    fetchData(1, pageSize);
   }
 
 
