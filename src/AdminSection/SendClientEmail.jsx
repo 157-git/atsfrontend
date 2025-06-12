@@ -796,6 +796,7 @@ if(userType === "Recruiters"){
     if (res) {
       setSelectedRows([])
       setShowShareButton(true)
+      fetchCallingList(currentPage, pageSize) // Refresh the calling list after sending emails
     }
   }
 
