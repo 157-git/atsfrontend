@@ -9,7 +9,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
-import { Alert, Modal as AntdModal, Badge } from "antd";
+import { Alert, Modal as AntdModal, Badge, Empty } from "antd";
 import Loader from "./loader";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import { elements } from "chart.js";
@@ -112,6 +112,7 @@ const CallingList = ({
       setLoading(false);
     }
   };
+console.log(loading);
 
   useEffect(() => {
     fetchCallingTrackerData(currentPage, pageSize);
@@ -951,7 +952,9 @@ const handleSearchClick = (e) => {
           onScroll={handleScroll}
           ref={tableContainerRef}
           >
-            <table className="attendance-table">
+            {
+              !loading && !showUpdateCallingTracker && filteredCallingList.length > 0 ? (
+ <table className="attendance-table">
               {!loading && !showUpdateCallingTracker && (
                 <thead>
                   <tr className="attendancerows-head">
@@ -1060,7 +1063,7 @@ const handleSearchClick = (e) => {
                 </thead>
               )}
 
-              {!showUpdateCallingTracker && filteredCallingList.length > 0 ? (
+              {!showUpdateCallingTracker && (
                 <>
                   <tbody>
    
@@ -1792,16 +1795,13 @@ const handleSearchClick = (e) => {
                  
                   </tbody>
                 </>
-              ):(
-                <tbody>
-                  <tr>
-                    <td colSpan={showShareButton ? 3 : 2} className="no-data">
-                      No Data Found
-                    </td>
-                  </tr>
-                </tbody>
               )}
             </table>
+              ):(
+                <Empty/>
+              )
+            }
+           
 
             {showForwardPopup ? (
               <>
@@ -1942,7 +1942,7 @@ const handleSearchClick = (e) => {
         </div>
       )}
       {loading && (
-        <div className="register">{!searchTerm && <Loader></Loader>}</div>
+        <div className="register">{<Loader></Loader>}</div>
       )}
     </>
   );

@@ -10,7 +10,7 @@ import Loader from "../EmployeeSection/loader";
 import { toast } from "react-toastify";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import limitedOptions from "../helper/limitedOptions";
-import {Alert, Modal as AntdModal, Badge} from "antd";
+import {Alert, Modal as AntdModal, Badge, Empty} from "antd";
 import convertToDocumentLink from "../helper/convertToDocumentLink";
 import axios from "axios";
 // added by sahil karnekar
@@ -898,7 +898,11 @@ const handleCancelcloseshare = ()=>{
               onScroll={handleScroll}
               ref={tableContainerRef}
               >
-                <table className="attendance-table">
+                {
+                  filteredCallingList.length === 0 ? (
+                    <Empty/>
+                  ):(
+<table className="attendance-table">
                   <thead>
                     <tr className="attendancerows-head">
 
@@ -1702,6 +1706,9 @@ const handleCancelcloseshare = ()=>{
                     ))}
                   </tbody>
                 </table>
+                  )
+                }
+                
          
                {showForwardPopup ? (
                   <>

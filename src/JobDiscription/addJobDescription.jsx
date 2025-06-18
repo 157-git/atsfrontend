@@ -7,11 +7,13 @@ import Loader from "../EmployeeSection/loader";
 import {useParams } from "react-router-dom";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
+import { Select } from "antd";
 
 const AddJobDescription = ({loginEmployeeName}) => {
   const { employeeId,userType } = useParams();
   const [socket, setSocket] = useState(null);
   const [loading, setLoading] = useState(false);
+    const [tags, setTags] = useState([]);
 
    const formatDate = () => {
       const date = new Date();
@@ -142,6 +144,27 @@ if (name === "jobType" && value === "Hybrid") {
     console.log(value.length);
   };
 
+const handleChangeSkillsTags = (value) => {
+  setTags(value);
+
+  const updatedSkills = value.join(',');
+
+  // Update form data
+  setFormData(prev => ({
+    ...prev,
+    skills: updatedSkills,
+  }));
+
+  // Validate the 'skills' field and update the errors state
+  const error = validateField("skills", updatedSkills);
+
+  setErrors(prevErrors => ({
+    ...prevErrors,
+    skills: error, // Ensure it's not undefined
+  }));
+};
+
+
   const handleInputChange = (e, field, index) => {
     const { name, value } = e.target;
 
@@ -235,6 +258,7 @@ const setInitialErrorsRequired = ()=>{
 useEffect(()=>{
   setInitialErrorsRequired();
 },[triggerForRequiredErrors])
+console.log(errors);
 
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -341,6 +365,7 @@ useEffect(()=>{
             { employeeId: "", preferredQualificationMsg: "" },
           ],
         });
+        setTags([]);
         setTriggerForRequiredErrors(!triggerForRequiredErrors);
       } else{
         toast.error("Failed to add job description");
@@ -606,7 +631,7 @@ console.log(formData);
                           {errors.percentage && <div className="setStarAsError">{errors.percentage}</div>}
                         </div>
                       </div>
-                      <div className="field">
+                      {/* <div className="field">
                         <label>Skills:</label>
                         <div className="setDivDisplayBlockForJDValidation">
                           <input
@@ -618,6 +643,28 @@ console.log(formData);
                             value={formData.skills}
                             onChange={handleChange}
                             placeholder="Please Seperate Skill By , "
+                          />
+                          {errors.skills === "*" && (
+                            <span className="setStarAsError setStarPaddingJd">
+                              {errors.skills}
+                            </span>
+                          )}
+                          {errors.skills !== "*" && <div className="setStarAsError">{errors.skills}</div>}
+                        </div>
+
+                      </div> */}
+                       {/* added by shweta jagdale date 18-06-2025 line no-629 to 651*/}
+                      <div className="field">
+                        <label>Skills:</label>
+                        <div className="setDivDisplayBlockForJDValidation">
+                          <Select
+                            mode="tags"
+                            style={{ width: errors.skills === "*" ? "90%" : "100%", }}
+                            placeholder="Type and press Enter or comma to add"
+                            onChange={handleChangeSkillsTags}
+                            value={tags}
+                            tokenSeparators={[',']}
+                            maxTagCount="responsive"
                           />
                           {errors.skills === "*" && (
                             <span className="setStarAsError setStarPaddingJd">

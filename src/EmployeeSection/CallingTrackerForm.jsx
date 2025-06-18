@@ -1136,13 +1136,29 @@ const CallingTrackerForm = ({
 //   });
 // };
 const handleChangeSkillsTags = (value) => {
- 
   setTags(value);
+
+  const updatedSkills = value.join(',');
+
   setCallingTracker(prev => ({
     ...prev,
-    candidateSkills: value.join(','),
+    candidateSkills: updatedSkills,
   }));
+
+  // Validate only candidateSkills
+  if (!updatedSkills) {
+    setErrors(prev => ({
+      ...prev,
+      candidateSkills: "Candidate Skills are required",
+    }));
+  } else {
+    setErrors(prev => {
+      const { candidateSkills, ...rest } = prev;
+      return rest; // Remove candidateSkills error
+    });
+  }
 };
+
   // this fucntion is made by sahil karnekar on date 25-11-2024
   const handleResumeUploadBoth = async (e) => {
     const file = e.target.files[0];

@@ -7,7 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import HashLoader from "react-spinners/HashLoader";
 import ClipLoader from "react-spinners/ClipLoader";
-import {Alert, Modal as AntdModal, Badge} from "antd";
+import {Alert, Modal as AntdModal, Badge, Empty} from "antd";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
@@ -998,7 +998,7 @@ const handleCancelcloseshare = ()=>{
         <div className="register">
           <Loader></Loader>
         </div>
-      ) : (
+      ) : filteredCallingList.length > 0 ? (
         <>
           {!showUpdateCallingTracker ? (
             <>
@@ -1932,6 +1932,8 @@ const handleCancelcloseshare = ()=>{
             />
           )}
         </>
+      ) : filteredCallingList.length === 0 && (
+        <Empty/>
       )}
 
       {isDataSending && (

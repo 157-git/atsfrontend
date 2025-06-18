@@ -13,7 +13,7 @@ import FilterData from "../helper/filterData";
 import limitedOptions from "../helper/limitedOptions";
 import convertToDocumentLink from "../helper/convertToDocumentLink";
 import axios from "axios";
-import {Alert, Modal as AntdModal, Badge} from "antd";
+import {Alert, Modal as AntdModal, Badge, Empty} from "antd";
 // added by sahil karnekar
 import { Avatar, Card, List, Pagination } from "antd";
 
@@ -973,7 +973,11 @@ const handleCancelcloseshare = ()=>{
               onScroll={handleScroll}
               ref={tableContainerRef}
               >
-                <table className="attendance-table">
+                {
+                  filteredCallingList.length === 0 ? (
+<Empty/>
+                  ):(
+ <table className="attendance-table">
                   <thead>
                     <tr className="attendancerows-head">
                       
@@ -1778,6 +1782,9 @@ const handleCancelcloseshare = ()=>{
                     ))}
                   </tbody>
                 </table>
+                  )
+                }
+               
 
                 {showForwardPopup ? (
                   <>

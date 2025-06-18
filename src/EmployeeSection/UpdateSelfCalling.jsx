@@ -12,7 +12,7 @@ import { API_BASE_URL } from "../api/api";
 import { Button, Modal } from "react-bootstrap";
 import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker";
 // line 14 to 15 added by sahil karnekar date 17-10-2024
-import { Checkbox, Progress, Radio, TimePicker, Upload } from "antd";
+import { Checkbox, Progress, Radio, Select, TimePicker, Upload } from "antd";
 import dayjs from "dayjs";
 import { getSocket } from "../EmployeeDashboard/socket";
 import uploadingResumeStatic from "../assets/uploadStaticPngFile.png";
@@ -46,6 +46,7 @@ const UpdateSelfCalling = ({
     recruiterName: "",
     candidateName: "",
     candidateEmail: "",
+    candidateSkills: "",
     jobDesignation: "",
     requirementId: "",
     requirementCompany: "",
@@ -114,6 +115,7 @@ const UpdateSelfCalling = ({
   const { employeeId } = useParams();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [recruiterName, setRecruiterName] = useState("");
+    const [tags, setTags] = useState([]);
   const [resumeUploaded, setResumeUploaded] = useState(false);
   const [candidateFetched, setCandidateFetched] = useState(initialData);
   const [showAlert, setShowAlert] = useState(false);
@@ -157,6 +159,10 @@ console.log(initialSelecteYesNoState);
     if (!callingTracker.contactNumber) {
       newErrors.contactNumber = "Contact Number is required";
       newErrors.contactNumberStar = "*";
+    }
+     if (!callingTracker.candidateSkills) {
+      newErrors.candidateSkills = "Candidate Skills are required";
+      newErrors.candidateSkillsStar = "*";
     }
     if (!callingTracker.sourceName || callingTracker.sourceName === "others") {
       newErrors.sourceName = "Source Name is required";
@@ -427,7 +433,30 @@ console.log(errors);
 console.log(callingTracker.alternateNumber);
 console.log(callingTracker.contactNumber);
 
+const handleChangeSkillsTags = (value) => {
+  setTags(value);
 
+  const updatedSkills = value.join(',');
+
+  setCallingTracker(prev => ({
+    ...prev,
+    candidateSkills: updatedSkills,
+  }));
+
+  // Validate only candidateSkills
+  if (!updatedSkills) {
+    setErrors(prev => ({
+      ...prev,
+      candidateSkills: "Candidate Skills are required",
+      candidateSkillsStar: "*",
+    }));
+  } else {
+    setErrors(prev => {
+      const { candidateSkills, candidateSkillsStar, ...rest } = prev;
+      return rest; // Remove candidateSkills error
+    });
+  }
+};
   const validateRealTime = (name, value, isNotInterested) => {
     setErrors((prevErrors) => {
       let newErrors = { ...prevErrors };
@@ -1150,11 +1179,28 @@ if (response.ok) {
       <form onSubmit={handleSubmit} className="setFormAdjustmentTag">
         <div className="update-calling-tracker-form">
           <div className="update-calling-tracker-row-gray">
-            <div
-              className="update-calling-tracker-field"
-              style={{ justifyContent: "center" }}
-            >
-              Great talent won't wait - add them now, hire the best 👉
+            <div className="update-calling-tracker-field">
+              <label>Date & Time:</label>
+              <div className="update-calling-tracker-two-input-container">
+                <div className="update-calling-tracker-two-input">
+                  <input
+                    type="text"
+                    name="date"
+                    value={callingTracker?.date}
+                    className="update-update-calling-tracker-two-input"
+                    readOnly
+                  />
+                </div>
+
+                <input
+                  type="text"
+                  id="candidateAddedTime"
+                  name="candidateAddedTime"
+                  value={callingTracker?.candidateAddedTime}
+                  className="update-calling-tracker-two-input"
+                  readOnly
+                />
+              </div>
             </div>
             <div className="update-calling-tracker-field">
               <label>
@@ -1279,26 +1325,28 @@ if (response.ok) {
 
           <div className="update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
-              <label>Date & Time:</label>
-              <div className="update-calling-tracker-two-input-container">
-                <div className="update-calling-tracker-two-input">
+              <label>Candidate's Full Name</label>
+              {/* line 738 to 1844 added and updated by sahil karnekar date 18-10-2024 */}
+              <div className="update-calling-tracker-field-sub-div setInputBlock">
+                <div className="setDisplayFlexForUpdateForm">
                   <input
                     type="text"
-                    name="date"
-                    value={callingTracker?.date}
-                    className="update-update-calling-tracker-two-input"
-                    readOnly
+                    name="candidateName"
+                    className={`plain-input`}
+                    // validation added by sahil karnekar date 19-11-2024
+                    value={callingTracker.candidateName || ""}
+                    onChange={handleChange}
+                    maxlength="50"
                   />
+                  {errors.candidateNameStar && (
+                    <div className="error-message">
+                      {errors.candidateNameStar}
+                    </div>
+                  )}
                 </div>
-
-                <input
-                  type="text"
-                  id="candidateAddedTime"
-                  name="candidateAddedTime"
-                  value={callingTracker?.candidateAddedTime}
-                  className="update-calling-tracker-two-input"
-                  readOnly
-                />
+                {errors.candidateName && (
+                  <div className="error-message">{errors.candidateName}</div>
+                )}
               </div>
             </div>
             <div className="update-calling-tracker-field">
@@ -1334,27 +1382,27 @@ if (response.ok) {
           {/* here come required star changes done by sahil karnekar on date 16-12-2024 */}
           <div className="update-calling-tracker-row-gray">
             <div className="update-calling-tracker-field">
-              <label>Candidate's Full Name</label>
-              {/* line 738 to 1844 added and updated by sahil karnekar date 18-10-2024 */}
+              <label>Contact Number</label>
               <div className="update-calling-tracker-field-sub-div setInputBlock">
                 <div className="setDisplayFlexForUpdateForm">
                   <input
-                    type="text"
-                    name="candidateName"
-                    className={`plain-input`}
-                    // validation added by sahil karnekar date 19-11-2024
-                    value={callingTracker.candidateName || ""}
+                    style={{ width: "89%" }}
+                    name="contactNumber"
+                    value={callingTracker?.contactNumber || ""}
                     onChange={handleChange}
-                    maxlength="50"
+                    // required={callingTracker.selectYesOrNo !== "Interested"}
+                    defaultCountry="IN"
+                    maxLength={11}
+                    className="newBorderClass"
                   />
-                  {errors.candidateNameStar && (
+                  {errors.contactNumberStar && (
                     <div className="error-message">
-                      {errors.candidateNameStar}
+                      {errors.contactNumberStar}
                     </div>
                   )}
                 </div>
-                {errors.candidateName && (
-                  <div className="error-message">{errors.candidateName}</div>
+                {errors.contactNumber && (
+                  <div className="error-message">{errors.contactNumber}</div>
                 )}
               </div>
             </div>
@@ -1383,31 +1431,6 @@ if (response.ok) {
           </div>
 
           <div className="update-calling-tracker-row-white">
-            <div className="update-calling-tracker-field">
-              <label>Contact Number</label>
-              <div className="update-calling-tracker-field-sub-div setInputBlock">
-                <div className="setDisplayFlexForUpdateForm">
-                  <input
-                    style={{ width: "89%" }}
-                    name="contactNumber"
-                    value={callingTracker?.contactNumber || ""}
-                    onChange={handleChange}
-                    // required={callingTracker.selectYesOrNo !== "Interested"}
-                    defaultCountry="IN"
-                    maxLength={11}
-                    className="newBorderClass"
-                  />
-                  {errors.contactNumberStar && (
-                    <div className="error-message">
-                      {errors.contactNumberStar}
-                    </div>
-                  )}
-                </div>
-                {errors.contactNumber && (
-                  <div className="error-message">{errors.contactNumber}</div>
-                )}
-              </div>
-            </div>
             <div className="update-calling-tracker-field">
               <label>Whatsapp Number</label>
               <div className="update-calling-tracker-field-sub-div"
@@ -1452,6 +1475,31 @@ if (response.ok) {
                   )}
                 </div>
                
+              </div>
+            </div>
+             <div className="update-calling-tracker-field ">
+              <label>Skills</label>
+              {/* line 1535 to 1558 added by sahil karnekar date 17-10-2024 */}
+              <div className="update-calling-tracker-two-input-container">
+                <div style={{ width: '90%' }}>
+                  <div className="setDisplayFlexForUpdateForm">
+                    <Select
+                      mode="tags"
+                      style={{ width: '100%' }}
+                      placeholder="Type and press Enter or comma to add"
+                      onChange={handleChangeSkillsTags}
+                      value={tags}
+                      tokenSeparators={[',']}
+                      maxTagCount="responsive"
+                    />
+                  </div>
+                 {errors.candidateSkills && (
+                    <div className="error-message">{errors.candidateSkills}</div>
+                  )}
+                </div>
+                {errors.candidateSkillsStar && (
+                  <div className="error-message">{errors.candidateSkillsStar}</div>
+                )}
               </div>
             </div>
           </div>

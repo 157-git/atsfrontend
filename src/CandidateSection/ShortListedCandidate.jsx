@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 import { API_BASE_URL } from "../api/api";
 import Loader from "../EmployeeSection/loader";
 import { toast } from "react-toastify";
-import { Alert, Avatar, Badge, Card, List, Pagination, Skeleton } from "antd";
+import { Alert, Avatar, Badge, Card, Empty, List, Pagination, Skeleton } from "antd";
 import axios from "axios";
 import { highlightText } from "./HighlightTextHandlerFunc";
 import FilterData from "../helper/filterData";
@@ -899,7 +899,11 @@ const handleCancelcloseshare = ()=>{
                 onScroll={handleScroll}
                 ref={tableContainerRef}
                 >
-                  <table id="shortlisted-table-id" className="attendance-table">
+                  {
+                    filteredShortListed.length === 0 ? (
+                      <Empty/>
+                    ):(
+ <table id="shortlisted-table-id" className="attendance-table">
                     <thead>
                       <tr className="attendancerows-head">
                         {(!showShareButton && userType === "TeamLeader") ||
@@ -1663,6 +1667,9 @@ const handleCancelcloseshare = ()=>{
                       ))}
                     </tbody>
                   </table>
+                    )
+                  }
+                 
                 </div>
 
                 <div className="search-count-last-div">
