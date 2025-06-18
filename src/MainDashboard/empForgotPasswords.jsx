@@ -16,6 +16,7 @@ const ForgotPasswordForm = () => {
   const [checkOtpSendAndChangeState, setCheckOtpSendAndChangeState] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
 
 
   const handleSentOtpAndChangeState = async () => {
@@ -51,6 +52,38 @@ const ForgotPasswordForm = () => {
 
   const handleSubmitAndResetPassword = async () => {
     setLoading(true);
+const newErrors = {};
+
+// Check each field and assign errors if invalid
+if (email.trim() === "") {
+  newErrors.email = "Email is required";
+}
+
+if (otp.trim() === "") {
+  newErrors.otp = "OTP is required";
+}
+
+if (password.trim() === "") {
+  newErrors.password = "Password is required";
+}
+
+// If any field has an error, update only those
+if (Object.keys(newErrors).length > 0) {
+  setErrors((prevErrors) => ({
+    ...prevErrors,
+    ...newErrors,
+    // Clear errors for fields that are now valid
+    ...(email.trim() !== "" ? { email: undefined } : {}),
+    ...(otp.trim() !== "" ? { otp: undefined } : {}),
+    ...(password.trim() !== "" ? { password: undefined } : {}),
+  }));
+  setLoading(false);
+  return;
+}
+
+// If all valid, clear all errors
+setErrors({});
+
   
     try {
       const response = await axios.post(`${API_BASE_URL}/update-password`, {
@@ -88,7 +121,7 @@ const ForgotPasswordForm = () => {
 
           ) : (
             <div className="w-full max-w-md p-2 bg-white rounded-md">
-              <h1 className="text-xl font-bold text-[#ffc48d] text-center mb-2">
+              <h1 className="text-xl font-bold text-[#000] text-center mb-2">
                 Forgot Password
               </h1>
               <div className="space-y-4">
@@ -105,10 +138,13 @@ const ForgotPasswordForm = () => {
                     placeholder="Enter Email Id"
                     required
                   />
+                    {errors.email && (
+                      <div className="error-message">{errors.email}</div>
+                    )}
                   <div className="col-span-2 w-full flex justify-center items-center">
                     <button
-                      className="button-hover"
-                      style={{ marginTop: "10px" }}
+                      className="button-hover lineUp-share-btn"
+                      style={{ marginTop: "10px", height:"auto" }}
                       onClick={handleSentOtpAndChangeState}
                     >
                       Send OTP
@@ -132,6 +168,9 @@ const ForgotPasswordForm = () => {
                         placeholder="Enter OTP"
                         required
                       />
+                      {errors.otp && (
+                      <div className="error-message">{errors.otp}</div>
+                    )}
                       <label className="block text-sm font-medium text-gray-500">
                         Enter New Password
                       </label>
@@ -144,10 +183,13 @@ const ForgotPasswordForm = () => {
                         placeholder="Enter New Password"
                         required
                       />
+                      {errors.password && (
+                      <div className="error-message">{errors.password}</div>
+                    )}
                       <div className="col-span-2 w-full flex justify-center items-center">
                         <button
-                          className="button-hover"
-                          style={{ marginTop: "10px" }}
+                          className="button-hover lineUp-share-btn"
+                          style={{ marginTop: "10px", height:"auto" }}
                           onClick={handleSubmitAndResetPassword}
                         >
                           Reset Password

@@ -526,10 +526,6 @@ console.log(jobDescriptions);
     onChange={handleInputSearch}
   />
 
-<button className="lineUp-Filter-btn" onClick={copyLinkToClipboard}>
-  JD Template Generator
-</button>
-
 {(searchQuery.designation || searchQuery.location || searchQuery.experience) && (
                           <div className="svgimagesetinInput">
                             <svg
@@ -552,6 +548,13 @@ console.log(jobDescriptions);
                             </svg>
                           </div>
                         )}
+
+<div className="lineUp-Filter-btn" onClick={copyLinkToClipboard} style={{
+  fontSize: "10px",
+  alignContent: "center",
+}}>
+  JD Template Generator
+</div>
 
   {/* <button className="daily-tr-btn" type="submit">
     Search

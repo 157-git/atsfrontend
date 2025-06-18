@@ -374,7 +374,7 @@ scrollbar-width: none;  /* Firefox */
   border-radius: 10px;
   padding: 10px;
   /* margin-bottom: 10px; */
-  min-height: 210px;
+  height: 270px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--Bg-color);
   width: calc(33.33% - 20px);

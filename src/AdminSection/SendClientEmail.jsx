@@ -475,56 +475,56 @@ if(userType === "Recruiters"){
     filterData()
   }, [selectedFilters, callingList])
 
-  useEffect(() => {
-    const filtered = callingList.filter((item) => {
-      const searchTermLower = searchTerm.toLowerCase()
-      return (
-        (item.date && item.date.toLowerCase().includes(searchTermLower)) ||
-        (item.recruiterName && item.recruiterName.toLowerCase().includes(searchTermLower)) ||
-        (item.candidateName && item.candidateName.toLowerCase().includes(searchTermLower)) ||
-        (item.candidateEmail && item.candidateEmail.toLowerCase().includes(searchTermLower)) ||
-        (item.contactNumber && item.contactNumber.toString().includes(searchTermLower)) ||
-        (item.alternateNumber && item.alternateNumber.toString().includes(searchTermLower)) ||
-        (item.sourceName && item.sourceName.toLowerCase().includes(searchTermLower)) ||
-        (item.requirementId && item.requirementId.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.requirementCompany && item.requirementCompany.toLowerCase().includes(searchTermLower)) ||
-        (item.communicationRating && item.communicationRating.toLowerCase().includes(searchTermLower)) ||
-        (item.currentLocation && item.currentLocation.toLowerCase().includes(searchTermLower)) ||
-        (item.personalFeedback && item.personalFeedback.toLowerCase().includes(searchTermLower)) ||
-        (item.callingFeedback && item.callingFeedback.toLowerCase().includes(searchTermLower)) ||
-        (item.jobDesignation && item.jobDesignation.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.requirementId && item.requirementId.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.fullAddress && item.fullAddress.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.experienceYear && item.experienceYear.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.experienceMonth && item.experienceMonth.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.relevantExperience && item.relevantExperience.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.currentCTCLakh && item.currentCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.currentCTCThousand && item.currentCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.expectedCTCLakh && item.expectedCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.expectedCTCThousand && item.expectedCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.yearOfPassing && item.yearOfPassing.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.extraCertification && item.extraCertification.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.holdingAnyOffer && item.holdingAnyOffer.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.offerLetterMsg && item.offerLetterMsg.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.noticePeriod && item.noticePeriod.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.msgForTeamLeader && item.msgForTeamLeader.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.availabilityForInterview &&
-          item.availabilityForInterview.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.interviewTime && item.interviewTime.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.finalStatus && item.finalStatus.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.dateOfBirth && item.dateOfBirth.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.gender && item.gender.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.qualification && item.qualification.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.incentive && item.incentive.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.candidateId && item.candidateId.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.empId && item.empId.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.teamLeaderId && item.teamLeaderId.toString().toLowerCase().includes(searchTermLower)) ||
-        (item.selectYesOrNo && item.selectYesOrNo.toLowerCase().includes(searchTermLower))
-      )
-    })
-    setFilteredCallingList(filtered)
-    setSearchCount(filtered.length)
-  }, [callingList])
+  // useEffect(() => {
+  //   const filtered = callingList.filter((item) => {
+  //     const searchTermLower = searchTerm.toLowerCase()
+  //     return (
+  //       (item.date && item.date.toLowerCase().includes(searchTermLower)) ||
+  //       (item.recruiterName && item.recruiterName.toLowerCase().includes(searchTermLower)) ||
+  //       (item.candidateName && item.candidateName.toLowerCase().includes(searchTermLower)) ||
+  //       (item.candidateEmail && item.candidateEmail.toLowerCase().includes(searchTermLower)) ||
+  //       (item.contactNumber && item.contactNumber.toString().includes(searchTermLower)) ||
+  //       (item.alternateNumber && item.alternateNumber.toString().includes(searchTermLower)) ||
+  //       (item.sourceName && item.sourceName.toLowerCase().includes(searchTermLower)) ||
+  //       (item.requirementId && item.requirementId.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.requirementCompany && item.requirementCompany.toLowerCase().includes(searchTermLower)) ||
+  //       (item.communicationRating && item.communicationRating.toLowerCase().includes(searchTermLower)) ||
+  //       (item.currentLocation && item.currentLocation.toLowerCase().includes(searchTermLower)) ||
+  //       (item.personalFeedback && item.personalFeedback.toLowerCase().includes(searchTermLower)) ||
+  //       (item.callingFeedback && item.callingFeedback.toLowerCase().includes(searchTermLower)) ||
+  //       (item.jobDesignation && item.jobDesignation.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.requirementId && item.requirementId.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.fullAddress && item.fullAddress.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.experienceYear && item.experienceYear.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.experienceMonth && item.experienceMonth.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.relevantExperience && item.relevantExperience.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.currentCTCLakh && item.currentCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.currentCTCThousand && item.currentCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.expectedCTCLakh && item.expectedCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.expectedCTCThousand && item.expectedCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.yearOfPassing && item.yearOfPassing.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.extraCertification && item.extraCertification.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.holdingAnyOffer && item.holdingAnyOffer.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.offerLetterMsg && item.offerLetterMsg.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.noticePeriod && item.noticePeriod.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.msgForTeamLeader && item.msgForTeamLeader.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.availabilityForInterview &&
+  //         item.availabilityForInterview.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.interviewTime && item.interviewTime.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.finalStatus && item.finalStatus.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.dateOfBirth && item.dateOfBirth.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.gender && item.gender.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.qualification && item.qualification.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.incentive && item.incentive.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.candidateId && item.candidateId.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.empId && item.empId.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.teamLeaderId && item.teamLeaderId.toString().toLowerCase().includes(searchTermLower)) ||
+  //       (item.selectYesOrNo && item.selectYesOrNo.toLowerCase().includes(searchTermLower))
+  //     )
+  //   })
+  //   setFilteredCallingList(filtered)
+  //   setSearchCount(filtered.length)
+  // }, [callingList])
 
   useEffect(() => {
     if (sortCriteria) {
@@ -546,7 +546,8 @@ if(userType === "Recruiters"){
 
   const handleSearchClick = (e)=>{
     e.preventDefault();
-    fetchCallingList(currentPage, pageSize)
+    setCurrentPage(1) // Reset to the first page when searching
+    fetchCallingList(1, pageSize)
   }
   const handleTriggerFetch = () => {
     setTriggerFetch((prev) => !prev) // Toggle state to trigger the effect

@@ -985,6 +985,9 @@ const CallingTrackerForm = ({
 
       const data = await response.json();
       tempData = data;
+      console.log(data);
+      const skillsArray = data.skills.split(',').map(skill => skill.replace(/^\s*|\s*$/g, '').trim()).filter(skill => skill !== '');
+      setTags(skillsArray);
       setResumeResponse(data);
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -1133,16 +1136,13 @@ const CallingTrackerForm = ({
 //   });
 // };
 const handleChangeSkillsTags = (value) => {
+ 
   setTags(value);
   setCallingTracker(prev => ({
     ...prev,
     candidateSkills: value.join(','),
   }));
 };
-
-
-console.log(callingTracker);
-
   // this fucntion is made by sahil karnekar on date 25-11-2024
   const handleResumeUploadBoth = async (e) => {
     const file = e.target.files[0];
@@ -1193,6 +1193,7 @@ console.log(callingTracker);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resumeUrl, setResumeUrl] = useState(null);
+console.log(callingTracker);
 
   return (
     <div className="calling-tracker-main">

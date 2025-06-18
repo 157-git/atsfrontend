@@ -101,11 +101,11 @@ const SelectedCandidate = ({ loginEmployeeName }) => {
     filterData();
   }, [selectedFilters, callingList]);
 
-  useEffect(() => {
-    const filtered = FilterData(callingList, searchTerm);
-    setFilteredCallingList(filtered);
-    setSearchCount(filtered.length);
-  }, [callingList]);
+  // useEffect(() => {
+  //   const filtered = FilterData(callingList, searchTerm);
+  //   setFilteredCallingList(filtered);
+  //   setSearchCount(filtered.length);
+  // }, [callingList]);
 
   useEffect(() => {
     if (sortCriteria) {

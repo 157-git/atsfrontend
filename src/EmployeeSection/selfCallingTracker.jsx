@@ -1060,9 +1060,10 @@ const handleSearchClick = (e) => {
                 </thead>
               )}
 
-              {!showUpdateCallingTracker && (
+              {!showUpdateCallingTracker && filteredCallingList.length > 0 ? (
                 <>
                   <tbody>
+   
                     {filteredCallingList.map((item, index) => (
                       <tr key={item.candidateId} className="attendancerows">
                         {(!showShareButton && userType === "TeamLeader") ||
@@ -1788,8 +1789,17 @@ const handleSearchClick = (e) => {
                         </>
                       </tr>
                     ))}
+                 
                   </tbody>
                 </>
+              ):(
+                <tbody>
+                  <tr>
+                    <td colSpan={showShareButton ? 3 : 2} className="no-data">
+                      No Data Found
+                    </td>
+                  </tr>
+                </tbody>
               )}
             </table>
 

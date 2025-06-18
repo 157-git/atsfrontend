@@ -289,13 +289,13 @@ const handleCancelcloseshare = ()=>{
     filterData();
   }, [selectedFilters, shortListedData]);
 
-  useEffect(() => {
-    const filtered = FilterData(shortListedData, searchTerm);
-    console.log(filtered);
+  // useEffect(() => {
+  //   const filtered = FilterData(shortListedData, searchTerm);
+  //   console.log(filtered);
     
-    setFilteredShortListed(filtered);
-    setSearchCount(filtered.length);
-  }, [ shortListedData]);
+  //   setFilteredShortListed(filtered);
+  //   setSearchCount(filtered.length);
+  // }, [ shortListedData]);
   //  filter problem solved updated by sahil karnekar date 23-10-2024 complete  handleFilterOptionClick method
   const handleFilterOptionClick = (key) => {
     if (activeFilterOption === key) {

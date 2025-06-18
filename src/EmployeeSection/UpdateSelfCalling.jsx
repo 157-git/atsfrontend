@@ -332,6 +332,10 @@ console.log(errors);
       name === "selectYesOrNo"
         ? value !== "Interested"
         : callingTracker.selectYesOrNo !== "Interested";
+
+        if (name === "selectYesOrNo" && isNotInterested === true) {
+          callingTracker.lineUp.finalStatus = "";
+        }
         
 
     // Rajlaxmi jagadale update taht code
@@ -896,7 +900,7 @@ const handleDisplayConfirmBox = ()=>{
       }
 
 if (response.ok) {
-  if (initialSelecteYesNoState !== "Interested") {
+  if (initialSelecteYesNoState !== "Interested" && callingTracker.selectYesOrNo === "Interested") {
     try {
       if (!dailyWorkDataNew) {
         throw new Error("dailyWorkDataNew is null or undefined");

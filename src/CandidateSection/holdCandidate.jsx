@@ -114,11 +114,11 @@ const HoldCandidate = ({
     setTriggerFetch((prev) => !prev); // Toggle state to trigger the effect
   };
 
-  useEffect(() => {
-    const filtered = FilterData(callingList, searchTerm);
-    setFilteredCallingList(filtered);
-    setSearchCount(filtered.length);
-  }, [ callingList]);
+  // useEffect(() => {
+  //   const filtered = FilterData(callingList, searchTerm);
+  //   setFilteredCallingList(filtered);
+  //   setSearchCount(filtered.length);
+  // }, [ callingList]);
 
   useEffect(() => {
     if (sortCriteria) {
