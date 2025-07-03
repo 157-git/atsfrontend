@@ -1053,7 +1053,7 @@ const CallingTrackerForm = ({
       setCallingTracker((prevState) => ({
         ...prevState,
         candidateName: data.candidateName,
-        candidateEmail: data.candidateEmail,
+        candidateEmail: data.candidateEmail !== "email not found" ? data.candidateEmail : "" ,
         candidateSkills: data.skills,
         currentLocation: data.currentLocation,
         contactNumber: `${data.contactNumber}`,

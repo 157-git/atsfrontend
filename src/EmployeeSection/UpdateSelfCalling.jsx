@@ -277,6 +277,8 @@ console.log(errors);
         `${API_BASE_URL}/specific-data/${candidateId}`
       );
       const data = await response.json();
+     const skillsArray = data.candidateSkills?.split(",").map(skill => skill.trim());
+      setTags(skillsArray);
       setCallingTracker(data);
       setInitialYesNoState(data.selectYesOrNo);
       console.log(data);

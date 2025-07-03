@@ -1003,6 +1003,7 @@ const handleSearchClick = (e) => {
                     <th className="attendanceheading">Whatsapp Number</th>
                     <th className="attendanceheading">Source Name</th>
                     <th className="attendanceheading">Job Designation</th>
+                    <th className="attendanceheading">Candidate's Skills</th>
                     <th
                       className="attendanceheading"
                       onClick={() => handleSort("requirementId")}
@@ -1239,6 +1240,22 @@ const handleSearchClick = (e) => {
                             <span className="tooltiptext">
                               {highlightText(
                                 item.jobDesignation || "",
+                                searchTerm
+                              )}
+                            </span>
+                          </div>
+                        </td>
+
+                          <td
+                          className="tabledata"
+                          onMouseOver={handleMouseOver}
+                          onMouseOut={handleMouseOut}
+                        >
+                          {highlightText(item.candidateSkills || "", searchTerm)}
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+                              {highlightText(
+                                item.candidateSkills || "",
                                 searchTerm
                               )}
                             </span>

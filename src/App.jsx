@@ -26,6 +26,7 @@ import ApplicantForm2 from "./Applicant/applicantForm2.jsx";
 import ThankYouPage from "./Applicant/applicantThankYou.jsx";
 import InterviewForm1 from "./Help/InterviewForm1.jsx";
 import JDTemplateGen from "./HomePage/JDTemplateGen.jsx";
+import CandidateSubmitDoc from "./candidateDocSubmit/candidateSubmitDoc.jsx";
 
 const applySavedColors = () => {
   const bgColor = localStorage.getItem("bgColor");
@@ -170,6 +171,11 @@ const App = () => {
           <Route
             path="/thank-you"
             element={<ThankYouPage></ThankYouPage>}
+          ></Route>
+
+          <Route
+            path="/submit-documents/:candidateId/:employeeId/:userType"
+            element={<CandidateSubmitDoc/>}
           ></Route>
 
           {/* <Route

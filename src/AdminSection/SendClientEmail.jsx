@@ -2084,11 +2084,79 @@ const SendEmailPopup = ({
   fetchCallingList,
   
 }) => {
+
+//line number 2096 to 2167 added by Shweta Jagdale
   const [to, setTo] = useState("");
   const [cc, setCc] = useState("");
-  const [bcc, setBcc] = useState("");
+  const [bcc, setBcc] = useState("");  
+const [toError, setToError] = useState("");
+const [ccError, setCcError] = useState("");
+ const [bccError, setBccError] = useState("");
+ const [subject, setSubject] = useState("");
+const [subjectError, setSubjectError] = useState("");
+
+const handleChange = (e) => {
+  const { name, value } = e.target;
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    e.preventDefault();
+
+    if (name === "email") {
+      setTo(value);
+
+      if (!value.trim()) {
+        setToError("Email is required");
+      } else if (!emailPattern.test(value.trim())) {
+        setToError("Invalid email format");
+      } else {
+        setToError("");
+      }
+    }
+
+    if (name === "cc") {
+      setCc(value);
+
+      const emails = value.split(",").map((email) => email.trim());
+      const invalidEmails = emails.filter(
+        (email) => email && !emailPattern.test(email)
+      );
+
+      if (value.trim() === "") {
+        setCcError("");
+      } else if (invalidEmails.length > 0) {
+        setCcError("Invalid emails: " + invalidEmails.join(", "));
+      } else {
+        setCcError("");
+      }
+    }
+    if (name === "bcc") {
+      setBcc(value);
+
+      const emails = value.split(",").map((email) => email.trim());
+      const invalidEmails = emails.filter((email) => email && !emailPattern.test(email));
+
+      if (value.trim() === "") {
+        setBccError("");
+      } else if (invalidEmails.length > 0) {
+        setBccError("Invalid emails: " + invalidEmails.join(", "));
+      } else {
+        setBccError("");
+      }
+    }
+    if (name === "subject") {
+    setSubject(value);
+    if (!value.trim()) {
+      setSubjectError("Subject is required");
+    } else if (value.length > 100) {
+      setSubjectError("Subject cannot exceed 100 characters");
+    } else {
+      setSubjectError("");
+    }
+  }
+};
+
   const [emailFooter, setEmailFooter] = useState("Best Regards,\n157 Careers.");
-  const [subject, setSubject] = useState("");
+  // const [subject, setSubject] = useState("");
+
   const {employeeId, userType} = useParams();
   const [signatureImage, setSignatureImage] = useState(
     "https://lh3.googleusercontent.com/fife/ALs6j_HDFuzYstiAW8Rt_7NmtAoegg6nGerpkvbiAITq-mNL70gNXONQuJwnZdbiAbsKMNAYMt9iBnvsFWx8EaOOWV43cjOjDvFOAiw1XacANQb0MDBtFO1ag1TuVwCbwbzrLDnOiniRQ5hD7kGCCVjTNGsNdx6RQLsrKyZlpJ6meA1NIT1vXloRcFwlfbTjDBG14YC809U_0FGn9pOII8lbH-I_ZZLBI6kfh0Q43j4evix8AbIxnvw0Soesevgycz4jRqrAA4Fjjd67Pb0vIVBkeEgSp_Sfz_v9joDcBiMe2sLP6_iEvB7N4il1qgBgTHBRM6qp6IuNFov7hMdcyx8Jp1oCfQX7753pO2x3FGg3tyW5RI0l-1h01JWKdybFECo19c7o3Z_01lJ-dF1TABxyPTdT9eztvkSfDXOvfoQIP_oEny3ORR-8wfjijnlUFylwT7MhsCwTcaeQR6tWaPYJ9rX7AQVGOmMyJbLS_0tFLn0_UzX7NuQx6-W2TeC9aXM0ajJYJ5cLPusvMlAhgFBB0WdZfbtuOat0-rd2qP_L0MqJPfTYBdTgYyO4LoTD0dV6QRo5UJhvyDW5Ru8IBz-bB4QWhPMjs2_PFnQ9K-GLvAPCOYIk4TQPhkCK4UgOyGL8bRE4bPBIYMddVxfWdePCOb6V5JhGmYfvsYzEhAwquNmsZkMv9lEJfQV-Frs0DrF63XWlD5ieprbz4CLMs3WHh42I06Kpw2aCXfQchCDoJawTYljfozJ_QHq58UIAdMniaLvrKKYRyYfZohAFVdekMzArxrobd4e3Pac9cHm1Orz2_lAob5diRJCZxapdTOPfiT_ro-1qhbtmKua4kXr5Z_TWgBV9CwaactlqLFMnnbN3TtDOqKNDEFBGhg1pKC2NUu2Jw6IyawDyCU6VCdrnhizrHhvhPY8u0uXOxspsqfvQaU_PT0e0v-f2RPDESxSwIz3H6DEzmk5hOrbOmXFCPG8Q9bUu_5I3kL11z_loIveKwfWD3YGIkOjOvXAUomdEqw7DIXIbjcfDQflq7L45gJ3-BWuTkRmicaQL3GAtwVpYbmNUi649NpUC5JvKN_iqIxeNzhKdn1jBXEGl2-rbmzYXbPolNUmrQWwaFYKBzVzgWIcCjaaKpgSR444mFTx3mFEuSJxfjMTJtumbYGZkGrFkEE1rNaXMvF6XFT6JO63BtAfQzd5nFl31OctaJ6nf7_UbshOlPFeUNoRFpc-gB9LWyZck_V9jIToDHY8mij11-IK-9DFLdZZfNxeOhbha8DYljvTj9R6spXM006lRZmBsP6WugvIvvG5Pv_kiXoORCBbrCFAIk3vpZIEx3zDoayqgUNwctyrf7cJvfSiyWokjM0NNHRTCy0eldMfb0LLX5X6BftzMt128n5f6-Q60zmQ_kyuHSnyLGJawrCATfhHu-_ABtuuTWopOBib9gG__Vsa06z5SKZs5LM8eD8TwgUMeIRfWGfZBAy2qobuMt9ZVDrQDlPejp1tBg3Dm8Ke85TK7HFFfDqA-dJ2jCwzOq2ipybePn2kxLg911_lfaHPIXpF0LJdNwNyzfH_6IuB3IGI0nelUgtPnQbxXFMYd8xLaiVhfx9f0GLlDLkalvTQ8UPk92nprBDiYn8GdmV3zoVuWZbXwqQ4nmLaB9LIxDieP2kLO7V2igrEsBxXZHT309KauEgReDc1p7ahNkSiDjAOt3cDoEnlXhXjLXiBy"
@@ -2097,7 +2165,8 @@ const SendEmailPopup = ({
   const [selectedCandidate, setSelectedCandidate] = useState([]);
   const [getResponse, setResponse] = useState("");
   const [emailBody, setEmailBody] = useState(
-    "hi Deepak,\n\nSharing 2 more profiles: Dotnet+Azure Developer."
+    // line no 21 added by Shweta Jagdale
+    "--\n\nSend by 157 Careers Email"
   );
   const [difference, setDifference] = useState([]);
 
@@ -2166,13 +2235,23 @@ setSocket(newSocket);
   },[]);
 
   const handleSendEmail = () => {
+
+    //addded by shweta jagdale line no 2258 to 2262
+
+    if (!to || toError || subjectError || ccError || bccError) {
+      return;
+    }
+
     setIsMailSending(true);
-    const filteredAttachments = selectedCandidate
-      .filter((can) => can.resume) // Include only candidates with resumes
-      .map((can) => ({
-        fileName: `${can.candidateName}_${can.jobDesignation}.pdf`,
-        fileContent: can.resume,
-      }));
+
+    //addded by shweta jagdale line no 2266 to 2272
+   const filteredAttachments = selectedCandidate
+  .filter((can) => can.resume) // only include if resume exists
+  .map((can) => ({
+    fileName: `${can.candidateName}_${can.jobDesignation}.pdf`,
+    fileContent: can.resume,
+  }));
+
 
     const emailData = {
       to,
@@ -2210,7 +2289,7 @@ setSocket(newSocket);
         const message = response.data;
         if (message.includes("Already Shared")) {
           toast.info(message); // For cases where some profiles are already shared
-          // socket.emit("share_profile", emailData);
+          socket.emit("share_profile", emailData);
         } else {
           toast.success(message); // For cases where profiles are shared successfully
           
@@ -2258,56 +2337,88 @@ setSocket(newSocket);
         size="xl"
         className="text-secondary"
       >
+
         <Modal.Header closeButton>
           <Modal.Title>Send Candidate Data To Client</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Group style={{ display: "flex", gap: "5px" }}>
             <div style={{ width: "100%" }}>
-              <Form.Label>
-                <strong>TO:</strong>
-              </Form.Label>
-              <Form.Control
-                type="email"
-                className="text-secondary"
-                value={to}
-                onChange={(e) => setTo(e.target.value)}
-              />
+              {/*addded by shweta jagdale line no 2363 to 2437 */}
+             <Form.Label>
+          <strong><span style={{ color: "red" }}>*</span>TO:</strong>
+    </Form.Label>
+    <Form.Control
+      type="email"
+      className="text-secondary"
+      value={to}
+      name="email"
+      onChange={handleChange}
+      placeholder="Enter a valid email"
+    />
+    {toError && (
+      <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
+        {toError}
+      </div>
+        )}
+      
+
             </div>
             <div style={{ width: "100%" }}>
-              <Form.Label>
-                <strong>CC:</strong>
-              </Form.Label>
-              <Form.Control
-                type="email"
-                className="text-secondary"
-                value={cc}
-                onChange={(e) => setCc(e.target.value)}
-              />
-            </div>
+        <Form.Label>
+          <strong>CC:</strong>
+        </Form.Label>
+        <Form.Control
+          type="text" // Allow multiple emails
+          className="text-secondary"
+          value={cc}
+          name="cc"
+          onChange={handleChange}
+          placeholder="Ex:abc@gmail.com,xyz@gmail.com"
+        />
+        {ccError && (
+          <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
+            {ccError}
+          </div>
+        )}
+      </div>
           </Form.Group>
           <Form.Group style={{ display: "flex", gap: "5px" }}>
             <div style={{ width: "100%" }}>
-              <Form.Label>
-                <strong>BCC</strong>
-              </Form.Label>
-              <Form.Control
-                type="email"
-                value={bcc}
-                onChange={(e) => setBcc(e.target.value)}
-              />
+          <Form.Label><strong>BCC:</strong></Form.Label>
+          <Form.Control
+            type="text"
+            className="text-secondary"
+            value={bcc}
+            name="bcc"
+            onChange={handleChange}
+            placeholder="Ex:abc@gmail.com,xyz@gmail.com"
+          />
+          {bccError && (
+            <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
+              {bccError}
             </div>
+          )}
+        </div>
             <div style={{ width: "100%" }}>
-              <Form.Label>
-                <strong>Subject:</strong>
-              </Form.Label>
-              <Form.Control
-                type="text"
-                className="text-secondary"
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-              />
-            </div>
+            <Form.Label>
+      <strong><span style={{ color: "red" }}>*</span>Subject:</strong>
+    </Form.Label>
+    <Form.Control
+      type="text"
+      className="text-secondary"
+      value={subject}
+      name="subject"
+      onChange={handleChange}
+      placeholder="Enter subject (max 100 characters)"
+      maxLength={100}
+    />
+    {subjectError && (
+      <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
+        {subjectError}
+      </div>
+    )}
+  </div>
           </Form.Group>
           <Form.Label className="mt-2">
             <strong>Email Body:</strong>
@@ -2380,27 +2491,31 @@ setSocket(newSocket);
                 </Table>
               </div>
             </Form.Group>
+          {/* Added by Shweta Jagdale line no 2511 to 2534 */}
             <div className="flex-wrap gap-1 mt-3 d-flex">
               <Form.Label className="mr-1">
                 <strong>Attachments:</strong>{" "}
               </Form.Label>
-              {selectedCandidate.map((item, index) => (
-                <a
-                  style={{
-                    border: "1px solid gray",
-                    borderRadius: "15px",
-                    padding: "0px 4px",
-                  }}
-                  className="items-center justify-center d-flex"
-                  key={index}
-                  href={`data:application/pdf;base64,${item.resume}`}
-                  download={`${item.candidateName}_${item.jobDesignation}.pdf`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {`${item.candidateName}_${item.jobDesignation}.pdf`}
-                </a>
-              ))}
+             {selectedCandidate
+  .filter((item) => item.resume) // Only show if resume is present
+  .map((item, index) => (
+    <a
+      key={index}
+      className="items-center justify-center d-flex"
+      style={{
+        border: "1px solid gray",
+        borderRadius: "15px",
+        padding: "0px 4px",
+      }}
+      href={`data:application/pdf;base64,${item.resume}`}
+      download={`${item.candidateName}_${item.jobDesignation}.pdf`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {`${item.candidateName}_${item.jobDesignation}.pdf`}
+    </a>
+))}
+
             </div>
             <Form.Group controlId="formBasicFooter">
               <Form.Label>

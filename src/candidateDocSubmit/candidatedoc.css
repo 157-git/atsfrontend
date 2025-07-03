@@ -1,0 +1,118 @@
+
+.form-wrapperaddedbysakshinewclass {
+  max-width: 1040px;     /* similar to Bootstrap's container */
+  margin: 2rem auto;      /* mt-4 equivalent (top margin) */
+  padding: 1.5rem;        /* p-4 equivalent */
+  background-color: #a7b8d4; /* bg-light (Bootstrap light gray) */
+  border-radius: 0.5rem;  /* rounded */
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1); /* shadow */
+  box-sizing: border-box;
+  font-weight: 700;
+  font-size: 16px;
+  font-family: Roboto,sans-serif;
+  color: #000;
+  padding: 10px;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  background-color: #a7b8d4;
+  min-height: 70vh;
+
+ 
+}
+
+
+.border-styleaddedbysakshinewclassname{
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+  border-radius:15px
+}
+
+.form-container-outlinenewclassnameaddedbysakshi{
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  border: 8px solid #f2f2f2;
+  box-sizing: border-box;
+ 
+}
+
+.sakshilabeladdedclass {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.inputtypefileclassnameaddedbysakshi{
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border-radius: 15px;
+  border: 1px solid black;
+  background-color: #fff;
+  font-family: Roboto, sans-serif;
+  box-sizing: border-box;
+  appearance: none; /* for Chrome/Safari */
+  -webkit-appearance: none; /* iOS Safari */
+  -moz-appearance: none; /* Firefox */
+}
+
+
+.custom-selectaddedbysakshifornewclass {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: Roboto, sans-serif;
+  border-radius: 15px;
+  border: 1px solid black;
+  background-color: #fff;
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='black' d='M0 3l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
+}
+
+
+
+
+
+
+@media (max-width: 480px) {
+
+  .form-container-outlinenewclassnameaddedbysakshi {
+    padding: 10px;
+  }
+
+ .addedforresponsivebysakshi{
+    font-size: 16px;
+  }
+}
+
+
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .form-container-outlinenewclassnameaddedbysakshi {
+    max-width: 95%;
+    padding: 20px;
+  }
+}
+
+.submit-btnewclassbysakshi {
+  background-color:#1d3a5d;
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  border: 1px solid gray;
+  border-radius: 15px;
+}

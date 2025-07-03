@@ -11,6 +11,7 @@ import { Alert, Modal as AntdModal } from "antd";
 import Loader from "../EmployeeSection/loader";
 import { Pagination } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
+import UpdateCallingTracker from "./UpdateSelfCalling";
 
 const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   const [data, setData] = useState([]);
@@ -178,6 +179,9 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   const [displayShareConfirm, setDisplayShareConfirm] = useState(false);
   const [triggerFetch, setTriggerFetch] = useState(false);
   const filterRef = useRef(null);
+  //// line number 198 to 206 updated by Shweta Jagdale 18-06-2025
+const [selectedEntry, setSelectedEntry] = useState(null);
+const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
 
    const [isHorizontallyScrolling, setIsHorizontallyScrolling] = useState(false);
           const tableContainerRef = useRef(null);
@@ -254,6 +258,10 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
       console.error("Error fetching shortlisted data:", error);
     }
   };
+  const handleUpdate = (entry) => {
+  setSelectedEntry(entry); 
+  setShowUpdateCallingTracker(true);
+};
   useEffect(() => {
     if (userType === "SuperUser") {
       fetchManager();
@@ -744,6 +752,8 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
 
   return (
     <>
+    {
+      !selectedEntry && !showUpdateCallingTracker && (
       <div className="calling-list-container">
         {loading ? (
           <div className="register">
@@ -1060,7 +1070,7 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                     <th className="attendanceheading">Office Environment</th>
                     <th className="attendanceheading">Staff Behavior</th>
                     {/* <th className="attendanceheading">FollowUp History</th> */}
-                    {/* <th className="attendanceheading">Action</th> */}
+                    <th className="attendanceheading">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -2062,6 +2072,16 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
                         </div>
                       </td>
 
+                      <td className="tabledata">
+                            <button className="table-icon-div">
+                              {" "}
+                              <i
+                                onClick={() => handleUpdate(entry[0])}
+                                className="fa-regular fa-pen-to-square"
+                              ></i>
+                            </button>
+                          </td>
+
                       {/* <td className="tabledata">
                  <button className="FollowUp-History">View</button>
                </td> */}
@@ -2415,8 +2435,32 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
             )}
           </>
         )}
-
       </div>
+        )
+    }
+
+{/* //// line number 2460 to 2475 updated by Shweta Jagdale 18-06-2025
+ */}
+      {selectedEntry && showUpdateCallingTracker && (
+          <UpdateCallingTracker
+            candidateId={selectedEntry}
+            employeeId={employeeId}
+            // fromCallingList={true}
+            onSuccess={() => 
+            {
+              fetchData(1, 20)
+            setSelectedEntry(null);
+            setShowUpdateCallingTracker(false);
+            }
+            }
+            onCancel={() => setShowUpdateCallingTracker(false)}
+            // onsuccessfulDataUpdation={onsuccessfulDataUpdation}
+            loginEmployeeName={loginEmployeeName}
+            triggerFetch={handleTriggerFetch}
+          />
+
+)}
+
     </>
   );
 };

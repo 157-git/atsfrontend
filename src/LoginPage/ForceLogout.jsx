@@ -96,7 +96,7 @@ function ForcefullyLogoutTask() {
         />
       ) : (
         <div className="Force-Logout-main-div">
-          <h1 className="text-xl font-bold text-[#ffc48d] text-center mb-2">
+          <h1 className="text-xl font-bold text-[#000] text-center mb-2">
             Force Logout
           </h1>
           <div className="inputGroup">
@@ -114,7 +114,7 @@ function ForcefullyLogoutTask() {
             <div className="col-span-2 w-full flex justify-center items-center">
               <button
                 onClick={sendOtp}
-                className="button-hover"
+                className="lineUp-share-btn"
                 style={{ marginTop: "10px" }}
               >
                 Send OTP
@@ -139,7 +139,7 @@ function ForcefullyLogoutTask() {
               <div className="col-span-2 w-full flex justify-center items-center">
                 <button
                   onClick={verifyOtpAndLogout}
-                  className="button-hover"
+                  className="lineUp-share-btn"
                   style={{ marginTop: "10px" }}
                 >
                   Verify OTP
