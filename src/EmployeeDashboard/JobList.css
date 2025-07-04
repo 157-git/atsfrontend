@@ -677,3 +677,7 @@ flex-direction: row;
 .job-active-status{
   width: 100px;
 }
+.newjobskillsclassbysahil{
+  max-height: 135px;
+    overflow-y: scroll;
+}

@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import axios from "../api/api";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
+import { Badge } from "antd";
 
 // SwapnilRokade_JobListing_filter_option__18/07
 
@@ -664,48 +665,71 @@ console.log(jobDescriptions);
                         <i className="fas fa-calendar-alt"></i>
                         {item.experience}
                       </div>
-                      <div className="job-skills">
-                        <i className="fas fa-tags"></i>
-                        {expandedSkills[item.requirementId] ? (
-                          <>
-                            {item.skills}{" "}
-                            <span
-                              style={{
-                                color: "blue",
-                                cursor: "pointer",
-                                fontWeight: "bold",
-                              }}
-                              onClick={() =>
-                                toggleSkillExpansion(item.requirementId)
-                              }
-                            >
-                              Close
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            {item.skills.length > 50
-                              ? item.skills.substring(0, 50) + ""
-                              : item.skills}
-                            {item.skills.length > 50 && (
-                              <span
-                                style={{
-                                  color: "black",
-                                  cursor: "pointer",
-                                  fontWeight: "bold",
-                                }}
-                                onClick={() =>
-                                  toggleSkillExpansion(item.requirementId)
-                                }
-                              >
-                                {/* &#8226; &#8226; &#8226; &#8226; */}
-                                ....
-                              </span>
-                            )}
-                          </>
-                        )}
-                        <> Candidates Matched : {item.matchedCandidateCount}</>
-                      </div>
+                     <div className="job-skills newjobskillsclassbysahil">
+  <i className="fas fa-tags"></i>
+  {expandedSkills[item.requirementId] ? (
+    <>
+      {/* Show full list of skills with match count */}
+      {item.skillsMatchHandlerList?.map((skillObj, index) => (
+        <div key={index}>
+          {skillObj.skill} — 
+            <Badge
+        className="site-badge-count-109"
+        count={skillObj.skillMatchedCandidates > 0 ? skillObj.skillMatchedCandidates : 0}
+        style={{ backgroundColor: '#52c41a' }}
+      />
+
+        </div>
+      ))}
+
+      <span
+        style={{
+          color: "blue",
+          cursor: "pointer",
+          fontWeight: "bold",
+        }}
+        onClick={() => toggleSkillExpansion(item.requirementId)}
+      >
+        Close
+      </span>
+    </>
+  ) : (
+    <>
+      {/* Truncated view for collapsed state */}
+      {item.skillsMatchHandlerList?.length > 0 && (
+        <>
+          <span>
+            {item.skillsMatchHandlerList[0].skill.length > 50
+              ? item.skillsMatchHandlerList[0].skill.substring(0, 50) + "..."
+              : item.skillsMatchHandlerList[0].skill}
+          </span>
+          <span
+            style={{
+              color: "black",
+              cursor: "pointer",
+              fontWeight: "bold",
+              marginLeft: 5,
+            }}
+            onClick={() => toggleSkillExpansion(item.requirementId)}
+          >
+            ....
+          </span>
+        </>
+      )}
+    </>
+  )}
+
+  {/* Always show total matched count */}
+  <div>
+    Candidates Matched:{" "}
+     <Badge
+        className="site-badge-count-109"
+        count={item.matchedCandidateCount > 0 ? item.matchedCandidateCount : 0}
+        style={{ backgroundColor: '#52c41a' }}
+      />
+  </div>
+</div>
+
                     </div>
 
                     <div className="jd-card-right-div">
