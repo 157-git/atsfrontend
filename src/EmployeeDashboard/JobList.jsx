@@ -13,6 +13,8 @@ import axios from "../api/api";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
 import { Badge } from "antd";
+import Loader from "../EmployeeSection/loader";
+
 
 // SwapnilRokade_JobListing_filter_option__18/07
 
@@ -35,6 +37,7 @@ const JobListing = ({ loginEmployeeName }) => {
   const [triggerFetch, setTriggerFetch] = useState(false);
   const [showEDM, setShowEDM] = useState(false);
   const [showAddJobDescription, setShowAddJobDescription] = useState(false);
+  const [loading, setLoading] = useState(false);
   const filterRef=useRef(null);
   const [showAddJobDiscriptionNew, setShowAddJobDescriptionNew] =
     useState(false);
@@ -73,20 +76,46 @@ const JobListing = ({ loginEmployeeName }) => {
     setSocket(newSocket);
   }, []);
 
-  useEffect(() => {
-    // replaced base url with actual url just for testing by sahil karnekar please replace it with base url at the time of deployment
-    fetch(`${API_BASE_URL}/fetch-all-job-descriptions/${employeeId}/${userType}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const sortedData = data.sort(
-          (a, b) => b.requirementId - a.requirementId
-        );
+  // useEffect(() => {
+  //   // replaced base url with actual url just for testing by sahil karnekar please replace it with base url at the time of deployment
+  //   fetch(`${API_BASE_URL}/fetch-all-job-descriptions/${employeeId}/${userType}`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       const sortedData = data.sort(
+  //         (a, b) => b.requirementId - a.requirementId
+  //       );
+  //       setJobDescriptions(sortedData);
+  //       setFilteredJobDescriptions(sortedData); // Show all jobs initially
+  //     })
+  //     .catch((error) => console.error("Error fetching data:", error));
+  //   // sahil karnekar line 65 date : 10-10-2024
+  // }, [showAddJobDiscriptionNew, triggerFetch]);
+
+
+    useEffect(() => {
+    const fetchJobDescriptions = async () => {
+      setLoading(true); // Start loading
+      try {
+        // replaced base url with actual url just for testing by sahil karnekar please replace it with base url at the time of deployment
+        const response = await fetch(`${API_BASE_URL}/fetch-all-job-descriptions/${employeeId}/${userType}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        const sortedData = data.sort((a, b) => b.requirementId - a.requirementId);
         setJobDescriptions(sortedData);
         setFilteredJobDescriptions(sortedData); // Show all jobs initially
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-    // sahil karnekar line 65 date : 10-10-2024
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Stop loading in both success and error cases
+      }
+      // sahil karnekar line 65 date : 10-10-2024
+    };
+
+    fetchJobDescriptions();
   }, [showAddJobDiscriptionNew, triggerFetch]);
+
 
   useEffect(() => {
     handleFilter();
@@ -485,6 +514,13 @@ console.log(jobDescriptions);
   
   return (
     <>
+   {
+    loading 
+    && (
+      
+        <Loader/>
+    )
+   }
       {!showAddJobDiscriptionNew ? (
         <>
           <div className="jd-header-search">
@@ -723,9 +759,10 @@ console.log(jobDescriptions);
   <div>
     Candidates Matched:{" "}
      <Badge
+     showZero
         className="site-badge-count-109"
-        count={item.matchedCandidateCount > 0 ? item.matchedCandidateCount : 0}
-        style={{ backgroundColor: '#52c41a' }}
+        count={item.matchedCandidateCount}
+        style={{ backgroundColor: item.matchedCandidateCount === 0 ? 'red' : '#52c41a' }}
       />
   </div>
 </div>
