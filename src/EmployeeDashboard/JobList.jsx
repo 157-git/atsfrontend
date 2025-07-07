@@ -710,6 +710,7 @@ console.log(jobDescriptions);
         <div key={index}>
           {skillObj.skill} — 
             <Badge
+            showZero
         className="site-badge-count-109"
         count={skillObj.skillMatchedCandidates > 0 ? skillObj.skillMatchedCandidates : 0}
         style={{ backgroundColor: '#52c41a' }}
