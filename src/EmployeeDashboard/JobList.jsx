@@ -715,7 +715,6 @@ console.log(jobDescriptions);
         count={skillObj.skillMatchedCandidates > 0 ? skillObj.skillMatchedCandidates : 0}
         style={{ backgroundColor: item.matchedCandidateCount === 0 ? 'red' : '#52c41a' }}
       />
-
         </div>
       ))}
 

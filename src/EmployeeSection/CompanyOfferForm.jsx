@@ -6,10 +6,13 @@ import { API_BASE_URL } from "../api/api";
 import { DownCircleFilled, DownloadOutlined } from "@ant-design/icons";
 import { DownloadCloudIcon } from "lucide-react";
 import { useParams } from "react-router-dom";
+import IssueOfferLetter from "../TeamLeader/IssueOfferLetter";
 
 const UnifiedFormComponent = () => {
   const [editForm, setEditForm] = useState(null);
   const {employeeId, userType} = useParams();
+  const [displayOfferLetter, setDisplayOfferLetter] = useState(false);
+  const [offerLetterData, setOfferLetterData] = useState(null);
 
     const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -136,17 +139,20 @@ pfEcr: null,
 console.log(
   data
 );
-
+const getFormsData = async () =>{
+  setLoading(true);
+  try {
+     const url = userType === "SuperUser" ? `${API_BASE_URL}/getFormsBySuId/${employeeId}` : userType === "Manager" && `${API_BASE_URL}/getFormsByManagerId/${employeeId}`;
+     const response = await axios.get(`${url}`) ;
+     setData(response.data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }finally{
+        setLoading(false);
+  }
+}
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/getAllForms`)  // Adjust the URL based on your backend
-      .then((response) => {
-        setData(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      });
+   getFormsData();
   }, []);
 
   if (loading) {
@@ -197,7 +203,7 @@ if (!formData.id) {
       // Optionally reset
       setFormData({});
       setEditForm(null);
-  
+  getFormsData(); // Refresh data after submission
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("There was an error submitting the form.");
@@ -205,6 +211,10 @@ if (!formData.id) {
 
     
   };
+  const handleOpenOfferLetter = (row) =>{
+setOfferLetterData(row);
+setDisplayOfferLetter(true);
+  }
   const handleDelete = async (formData, userType, userId) => {
     // Log the values before the API call
 
@@ -250,7 +260,15 @@ if (!formData.id) {
 console.log(formData.pfChallan);
   return (
     <>
-    <div className="form_maincompanyofferformmaindiv">
+    {
+      loading && <Loader/> 
+}
+  {
+    displayOfferLetter ? (
+    <IssueOfferLetter propOfDataFromOfferForm={offerLetterData}/>
+    ) : (
+      <>
+          <div className="form_maincompanyofferformmaindiv">
     <h2 >Offer Letter Form</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="flex-divformforcompanyofferform">
@@ -597,6 +615,7 @@ console.log(formData.pfChallan);
             <th  className="attendanceheading">Collection Date</th>
             <th  className="attendanceheading">Received Amount</th>
             <th  className="attendanceheading">GST Paid Status</th>
+            <th  className="attendanceheading">Action</th>
             <th  className="attendanceheading">Update</th>
             <th  className="attendanceheading">Delete</th>
           </tr>
@@ -769,6 +788,7 @@ console.log(formData.pfChallan);
                 <td  className="tabledata">{row.collectionDate}</td>
                 <td  className="tabledata">{row.receivedAmount}</td>
                 <td  className="tabledata">{row.gstPaidStatus}</td>
+                 <td  className="tabledata" onClick={()=>handleOpenOfferLetter(row)}><i className="fa-regular fa-pen-to-square"></i></td>
                 <td className="tabledata">
   <button onClick={() => handleUpdate(row)}>Update</button>
 </td>
@@ -787,6 +807,9 @@ console.log(formData.pfChallan);
       </table>
       </div>
     </div>
+      </>
+    )
+  }
     </>
 
   );

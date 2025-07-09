@@ -2453,7 +2453,10 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
             setShowUpdateCallingTracker(false);
             }
             }
-            onCancel={() => setShowUpdateCallingTracker(false)}
+            onCancel={() => {
+              setShowUpdateCallingTracker(false)
+            setSelectedEntry(null);
+            }}
             // onsuccessfulDataUpdation={onsuccessfulDataUpdation}
             loginEmployeeName={loginEmployeeName}
             triggerFetch={handleTriggerFetch}

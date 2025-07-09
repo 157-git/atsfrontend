@@ -4,8 +4,10 @@ import OfferLetter from './OfferLetter';
 import AppointmentLetter from './AppointmentLetter';
 import "../TeamLeader/issueOfferLetter.css";
 
-const IssueOfferLetter = () => {
+const IssueOfferLetter = ({propOfDataFromOfferForm}) => {
     const [selectedLetter, setSelectedLetter] = useState('offer');
+    console.log(propOfDataFromOfferForm);
+    
 
     return (
         <div>
