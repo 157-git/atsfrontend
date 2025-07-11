@@ -7,11 +7,14 @@ import "./EmployeeMasterSheet.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
-import { Alert, Modal as AntdModal } from "antd";
+import { Alert, Modal as AntdModal, Steps } from "antd";
+const {Step}=Steps;
+import moment from "moment";
 import Loader from "../EmployeeSection/loader";
 import { Pagination } from "antd";
 import { highlightText } from "../CandidateSection/HighlightTextHandlerFunc";
 import UpdateCallingTracker from "./UpdateSelfCalling";
+import { EyeOutlined } from "@ant-design/icons";
 
 const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   const [data, setData] = useState([]);
@@ -19,6 +22,8 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   const [showFilterSection, setShowFilterSection] = useState(false);
   const [uniqueValues, setUniqueValues] = useState({});
   const [searchCount, setSearchCount] = useState(0);
+    const [showPerformanceModal, setShowPerformanceModal] = useState(true);
+    const [selectedPerformanceData, setSelectedPerformanceData] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState({
     candidateId: [],
     alternateNumber: [],
@@ -529,6 +534,69 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
     setShowDocumentModal(true);
   };
 
+
+  const getSteps = () => {
+    if (!selectedPerformanceData) return [];
+  
+    const processSteps = [
+      {
+        title: "Form Filled",
+        time: selectedPerformanceData.callingTacker,
+        description: `Duration: ${selectedPerformanceData.candidateFormFillingDuration || "N/A"}`
+      },
+      { title: "Calling Tracker", time: selectedPerformanceData.callingTacker },
+      { title: "Line-up", time: selectedPerformanceData.lineup },
+      { title: "Mail to Client", time: selectedPerformanceData.mailToClient },
+      { title: "Client Response", time: selectedPerformanceData.mailResponse },
+      { title: "Sent Documents", time: selectedPerformanceData.sendingDocument },
+      { title: "Issued Offer Letter", time: selectedPerformanceData.issuingLetter },
+      { title: "Letter Response", time: selectedPerformanceData.letterResponseUpdating },
+      { title: "Joining Process", time: selectedPerformanceData.joiningProcess },
+      { title: "Expected Join Date", time: selectedPerformanceData.joinDate }
+    ];
+  
+    const interviewSteps = (selectedPerformanceData.interviewRoundsList || []).map((round) => ({
+      title: round.round,
+      time: round.time,
+      response: round.response
+    }));
+  
+    // Combine all steps
+    const allSteps = [...processSteps, ...interviewSteps];
+  
+    // Safely parse and filter only valid dates
+    const parseDate = (val) => {
+      const date = moment(val);
+      return date.isValid() ? date : null;
+    };
+  
+    // Remove steps with invalid/missing dates
+    const validSteps = allSteps.filter((step) => parseDate(step.time));
+  
+    // Sort chronologically
+    validSteps.sort((a, b) => parseDate(a.time).diff(parseDate(b.time)));
+  
+    // Attach readable descriptions with diff between steps
+    for (let i = 0; i < validSteps.length; i++) {
+      const current = parseDate(validSteps[i].time);
+      const prev = i > 0 ? parseDate(validSteps[i - 1].time) : null;
+  
+      const diff = prev ? moment.duration(current.diff(prev)) : null;
+      console.log(diff);
+      
+      const diffStr = diff
+        ? `${diff.days()}d ${diff.hours()}h ${diff.minutes()}m ${diff.seconds()}s`
+        : "First step";
+  
+      validSteps[i].description =
+        (validSteps[i].response ? `Response: ${validSteps[i].response} | ` : "") +
+        `${current.format("DD MMM YYYY, hh:mm A")} | ⏱ ${diffStr} since last step`;
+    }
+  
+    return validSteps;
+  };
+  
+
   const closeDocumentModal = () => {
     setSelectedCandidateDocument("");
     setShowDocumentModal(false);
@@ -578,6 +646,25 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
     });
   };
 
+  const handleViewPerformance = async (candidate) => {  
+    try {
+      const response = await fetch(`${API_BASE_URL}/fetchPerformanceByCanId/${candidate[0]}`);
+  const text = await response.text();
+  
+  if (!response.ok) {
+    console.error("API Response Text:", text);
+    throw new Error(`HTTP ${response.status}: ${text}`);
+  }
+  
+  const data = JSON.parse(text);
+  
+      setSelectedPerformanceData(data);
+      setShowPerformanceModal(true);
+    } catch (error) {
+      console.error("Error fetching performance:", error);
+      toast.error("Failed to load performance data");
+    }
+  };
 
   const clearAllFilters = () => {
     setSelectedFilters({
@@ -1070,6 +1157,7 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
                     <th className="attendanceheading">Office Environment</th>
                     <th className="attendanceheading">Staff Behavior</th>
                     {/* <th className="attendanceheading">FollowUp History</th> */}
+                    <th className="attendanceheading">View Performance</th>
                     <th className="attendanceheading">Action</th>
                   </tr>
                 </thead>
@@ -2072,6 +2160,15 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
                         </div>
                       </td>
 
+                        <td className="tabledata">
+                            <button className="table-icon-div">
+                             
+                              <EyeOutlined onClick={() => handleViewPerformance(entry)} />
+                            
+
+                            </button>
+                          </td>
+
                       <td className="tabledata">
                             <button className="table-icon-div">
                               {" "}
@@ -2426,6 +2523,25 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
                 </Button>
               </Modal.Footer>
             </Modal>
+
+  {selectedPerformanceData && (
+  <AntdModal
+    title={`Performance Timeline - ${selectedPerformanceData?.candidateName}`}
+    open={showPerformanceModal}
+    onCancel={() => setShowPerformanceModal(false)}
+    footer={null}
+    width={800}
+  >
+    <Steps direction="vertical" size="small" current={getSteps().length - 1}>
+  {getSteps().map((step, index) => (
+    <Step key={index} title={step.title} description={step.description} />
+  ))}
+</Steps>
+
+
+  </AntdModal>
+)}
+
             {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
          Subcategory:-ResumeModel(added) End LineNo:-592 Date:-02/07 */}
             {isDataSending && (
