@@ -16,8 +16,10 @@ console.log(data);
 
   useEffect(() => {
     if((Descriptions || employeeId || userType) === undefined){
-      setData(descriptionFromTempGen);
-    }else{
+setData({
+  ...descriptionFromTempGen,
+  skills: descriptionFromTempGen.skills.join(", ")
+});    }else{
       fetch(
         `${API_BASE_URL}/edm-details/${Descriptions}/${employeeId}/${userType}`
       )

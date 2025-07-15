@@ -158,11 +158,18 @@ const userDataUse = ({ loginEmployeeName, onCloseIncentive }) => {
       // Fetch data for each selected ID
       const fetchPromises = selectedIds.map(async (selectedId) => {
         // Construct the correct API URL
-        const apiUrl = `${API_BASE_URL}/fetch-storage-data/${selectedId}/${roleParam}`
-        console.log(`Fetching data for ID ${selectedId} from: ${apiUrl}`)
+        const apiUrl = `${API_BASE_URL}/getHierarchyStorage/${employeeId}/${userType}`
+        console.log(`Fetching data for ID ${selectedIds} from: ${roleParam}`)
 
         try {
-          const response = await axios.get(apiUrl)
+          const response = await axios.get(apiUrl,{
+            headers:{
+              "Content-Type" : "application/json"
+            }
+          },{
+            employeeIds:selectedIds,
+            userType:roleParam
+          })
           if (response && response.data) {
             if (Array.isArray(response.data)) {
               return response.data

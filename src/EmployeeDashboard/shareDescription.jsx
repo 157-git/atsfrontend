@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import LoginImage from "../assets/157logo.jpeg";
 import profileImageRtempus from "../assets/rtempus.jpeg";
 import profileImageVelocity from "../assets/velocityHr.png";
+import Item from "antd/es/list/Item";
 
 const ShareDescription = ({ Descriptions }) => {
   const [data, setData] = useState(null);
@@ -206,7 +207,11 @@ const ShareDescription = ({ Descriptions }) => {
                 )}
                 {Descriptions.skills && (
                   <p contentEditable>
-                    <b contentEditable>Key Skills:</b> {Descriptions.skills}
+                    <b contentEditable>Key Skills:</b> {Descriptions.skills.length > 0 ? Descriptions.skills.map((item, index)=>(
+                      <>
+                      {item}{index < Descriptions.skills.length - 1 ? ", " : ""}
+                      </>
+                    ) ) : null}
                   </p>
                 )}
 

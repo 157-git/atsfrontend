@@ -17,12 +17,15 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm, descriptionFromT
   const [voices, setVoices] = useState([]);
   const [voiceLoaded, setVoiceLoaded] = useState(false);
   const { employeeId, userType } = useParams()
-console.log(Descriptions);
+console.log(descriptionFromTempGen);
 
   useEffect(() => {
 
     if((Descriptions || employeeId || userType) === undefined){
-      setData(descriptionFromTempGen);
+      setData({
+  ...descriptionFromTempGen,
+  skills: descriptionFromTempGen.skills.join(", ")
+});
     }else{
       fetch(`${API_BASE_URL}/edm-details/${Descriptions}/${employeeId}/${userType}`)
       .then((response) => response.json())
