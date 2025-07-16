@@ -398,7 +398,7 @@ console.log(Descriptions);
                 value={data?.email || Descriptions.officialContactNo}
                 onChange={(e) => handleInputChange(e, "email")}
                 className="share-edm-input"
-                style={{ width: "220px" }}
+                style={{ width: "266px" }}
               />
             </div>
             <div className="share-jd-contact-div">

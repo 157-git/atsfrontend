@@ -443,7 +443,8 @@ console.log(formData);
     employeeName: formData.contactPerson.name,
     officialContactNo: formData.contactPerson.mobile,
     officialMail: formData.contactPerson.email,
-    image: logoPreview
+    image: logoPreview,
+    skills:formData.skills.join(",")
   };
 
   return (
