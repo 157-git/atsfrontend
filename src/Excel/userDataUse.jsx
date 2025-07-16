@@ -154,44 +154,23 @@ const userDataUse = ({ loginEmployeeName, onCloseIncentive }) => {
 
       // Create an array to store all fetched data
       let allUserData = []
-
-      // Fetch data for each selected ID
-      const fetchPromises = selectedIds.map(async (selectedId) => {
         // Construct the correct API URL
         const apiUrl = `${API_BASE_URL}/getHierarchyStorage/${employeeId}/${userType}`
         console.log(`Fetching data for ID ${selectedIds} from: ${roleParam}`)
-
+    
         try {
-          const response = await axios.get(apiUrl,{
-            headers:{
-              "Content-Type" : "application/json"
-            }
-          },{
-            employeeIds:selectedIds,
-            userType:roleParam
-          })
-          if (response && response.data) {
-            if (Array.isArray(response.data)) {
-              return response.data
-            } else if (typeof response.data === "object") {
-              return [response.data]
-            }
-          }
-          return []
-        } catch (error) {
-          console.error(`Error fetching data for ID ${selectedId}:`, error)
-          return []
-        }
-      })
-
-      // Wait for all fetch operations to complete
-      const results = await Promise.all(fetchPromises)
-
-      // Combine all results into a single array
-      allUserData = results.flat()
-
-      console.log("Combined data from all selected IDs:", allUserData)
-      setUserData(allUserData)
+          const results = await axios.post(apiUrl, 
+  {
+    employeeIds: selectedIds,
+    userType: roleParam
+  }, 
+  {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+      // allUserData = results.flat()
+      setUserData(results.data)
 
       if (allUserData.length === 0) {
         toast.warning("No data received from the API for the selected users")
@@ -203,7 +182,11 @@ const userDataUse = ({ loginEmployeeName, onCloseIncentive }) => {
     } finally {
       setIsLoading(false)
     }
-  }
+    }
+    catch(error){
+      console.log(error);
+    }
+}
 
   // Function to handle cancel button click in the modal
   const handleCancels = () => {

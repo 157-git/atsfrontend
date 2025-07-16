@@ -11,9 +11,7 @@ import Item from "antd/es/list/Item";
 const ShareDescription = ({ Descriptions }) => {
   const [data, setData] = useState(null);
   const { employeeId, userType } = useParams();
-  useEffect(() => {
-    console.log(Descriptions);
-  });
+console.log(Descriptions);
 
   useEffect(() => {
     fetch(
@@ -207,9 +205,9 @@ const ShareDescription = ({ Descriptions }) => {
                 )}
                 {Descriptions.skills && (
                   <p contentEditable>
-                    <b contentEditable>Key Skills:</b> {Descriptions.skills.length > 0 ? Descriptions.skills.map((item, index)=>(
+                    <b contentEditable>Key Skills:</b> {Descriptions.skills.split(",").length > 0 ? Descriptions.skills.split(",").map((item, index)=>(
                       <>
-                      {item}{index < Descriptions.skills.length - 1 ? ", " : ""}
+                      {item}{index < Descriptions.skills.split(",").length - 1 ? ", " : ""}
                       </>
                     ) ) : null}
                   </p>

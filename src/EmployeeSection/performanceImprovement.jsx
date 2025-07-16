@@ -507,7 +507,7 @@ const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
      try {
        const response = await axios.get(
         // `${API_BASE_URL}/fetch-all-job-descriptions/${employeeId}/${userType}`
-         `${API_BASE_URL}/performance-jobIds?empIds=${ids}&startDate=${startDate}&endDate=${endDate}&jobRole=Recruiters`
+         `${API_BASE_URL}/performance-jobIds?empIds=${ids}&startDate=${startDate}&endDate=${endDate}&jobRole=${role}`
        );
        setClientDetails(response.data);
      } catch (error) {
