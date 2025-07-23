@@ -7,6 +7,8 @@ import { Form } from "react-bootstrap";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
+import { Empty } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 
 // const AddCompanyDetails = () => {
 //   /*Akash_Pawar_EmpDashboard_AddedAddCompanyFunction_11/07_LineNo_11*/
@@ -848,6 +850,7 @@ const AddCompanyDetails = () => {
   const [latestAddedData, setLatestAddedCompanyData] = useState();
   const [response, setResponse] = useState("");
   const [responseError, setResponseError] = useState("");
+  const [clientsList, setClientsList]= useState([]);
   const [initialFormData, setInitialFormData] = useState({
     companyName: "",
     companyLogoImg: null,
@@ -898,7 +901,7 @@ const AddCompanyDetails = () => {
   });
 
   const fetchPreviousCompanyDetailsId = async () => {
-    const response = await axios.get(`${API_BASE_URL}/save/{managerId}`);
+    const response = await axios.get(`${API_BASE_URL}/save/${employeeId}`);
     if (addedCompanyDetailsId < response.data.length) {
       setLatestAddedCompanyData(response.data[0]);
     }
@@ -1146,7 +1149,9 @@ const AddCompanyDetails = () => {
 
     if (res.status === 200 || res.status === 201) {
       alert("Client saved successfully!");
+      
       setInitialFormData({}); // Clear form
+      fetchClientDetailsList();
     }
   } catch (err) {
     console.error("Error:", err);
@@ -1159,6 +1164,24 @@ const AddCompanyDetails = () => {
     setShowModal(false);
     setOnOptionChange(null);
   };
+
+
+
+  const fetchClientDetailsList = async ()=>{
+    try {
+       const resp = await axios.get(`${API_BASE_URL}/getClientByManagerId/${employeeId}`);
+    if (resp.status === 200 || resp.status === 201) {
+      setClientsList(resp.data);
+    }
+    } catch (error) {
+      console.log(error);
+    }
+  }  
+  
+  useEffect(()=>{
+fetchClientDetailsList();
+  },[]);
+
   /*Akash_Pawar_EmpDashboard_AddedAddCompanyFunction_11/07_LineNo_170*/
   return (
     <>
@@ -1746,6 +1769,302 @@ const AddCompanyDetails = () => {
           employeeId={employeeId}
         />
       )}
+
+ {
+    clientsList.length > 0 ? (
+      <div className="attendanceTableData">
+
+     
+ <table className="attendance-table">
+                <thead>
+                  <tr className="attendancerows-head">
+                  
+                    <th className="attendanceheading">Company Name</th>
+
+                    <th className="attendanceheading">Company Address</th>
+                    <th className="attendanceheading">Company Website</th>
+                    <th className="attendanceheading">Company Charges</th>
+                    <th className="attendanceheading">Company Display Name</th>
+                    <th className="attendanceheading">Company Services</th>
+                    <th className="attendanceheading">companySOP</th>
+                    <th className="attendanceheading">Contact Number</th>
+                    <th className="attendanceheading">Company Email</th>
+                    <th className="attendanceheading">Pancard Number</th>
+                    <th className="attendanceheading">cinNumber</th>
+                    <th className="attendanceheading">dinNumber</th>
+                    <th className="attendanceheading">udyamNumber</th>
+                    <th className="attendanceheading">PF Number</th>
+                    <th className="attendanceheading">CGST</th>
+                    <th className="attendanceheading">SGST</th>
+                    <th className="attendanceheading">total Gst</th>
+                    <th className="attendanceheading">Manager Name</th>
+
+                    <th className="attendanceheading">Action</th>
+                  </tr>
+                </thead>
+
+               {
+               clientsList.map((item, index) => (
+                      <tr key={item.id} className="attendancerows">
+ <td
+                          className="tabledata"
+                        >
+                          {
+                            item.companyName
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.companyName 
+}                            </span>
+                          </div>
+                        </td>
+
+
+ <td
+                          className="tabledata"
+                        >
+                          {
+                            item.companyAddress
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.companyAddress 
+}                            </span>
+                          </div>
+                        </td>
+
+                         <td
+                          className="tabledata"
+                        >
+                          {
+                            item.companyWebsite
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.companyWebsite 
+}                            </span>
+                          </div>
+                        </td>
+
+                            <td
+                          className="tabledata"
+                        >
+                          {
+                            item.companyCharges
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.companyCharges 
+}                            </span>
+                          </div>
+                        </td>
+
+                             <td
+                          className="tabledata"
+                        >
+                          {
+                            item.companyDisplayName
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.companyDisplayName 
+}                            </span>
+                          </div>
+                        </td>
+
+                          <td
+                          className="tabledata"
+                        >
+                          {
+                            item.companyServices
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.companyServices 
+}                            </span>
+                          </div>
+                        </td>
+
+                         <td
+                          className="tabledata"
+                        >
+                          {
+                            item.companySOP
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.companySOP 
+}                            </span>
+                          </div>
+                        </td>
+
+                          <td
+                          className="tabledata"
+                        >
+                          {
+                            item.contactNumber
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.contactNumber 
+}                            </span>
+                          </div>
+                        </td>
+
+                         <td
+                          className="tabledata"
+                        >
+                          {
+                            item.companyEmail
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.companyEmail 
+}                            </span>
+                          </div>
+                        </td>
+
+                         <td
+                          className="tabledata"
+                        >
+                          {
+                            item.pancardNumber
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.pancardNumber 
+}                            </span>
+                          </div>
+                        </td>
+
+                          <td
+                          className="tabledata"
+                        >
+                          {
+                            item.cinNumber
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.cinNumber 
+}                            </span>
+                          </div>
+                        </td>
+
+                          <td
+                          className="tabledata"
+                        >
+                          {
+                            item.dinNumber
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.dinNumber 
+}                            </span>
+                          </div>
+                        </td>
+
+                          <td
+                          className="tabledata"
+                        >
+                          {
+                            item.udyamNumber
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.udyamNumber 
+}                            </span>
+                          </div>
+                        </td>
+
+                          <td
+                          className="tabledata"
+                        >
+                          {
+                            item.pfNumber
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.pfNumber 
+}                            </span>
+                          </div>
+                        </td>
+
+                          <td
+                          className="tabledata"
+                        >
+                          {
+                            item.cgst
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.cgst 
+}                            </span>
+                          </div>
+                        </td>
+
+                           <td
+                          className="tabledata"
+                        >
+                          {
+                            item.sgst
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.sgst 
+}                            </span>
+                          </div>
+                        </td>
+
+                           <td
+                          className="tabledata"
+                        >
+                          {
+                            item.totalGst
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.totalGst 
+}                            </span>
+                          </div>
+                        </td>
+
+                          <td
+                          className="tabledata"
+                        >
+                          {
+                            item.manager_name
+                          }
+                          <div className="tooltip">
+                            <span className="tooltiptext">
+{                                item.manager_name 
+}                            </span>
+                          </div>
+                        </td>
+
+
+                            <td
+                          className="tabledata"
+                        >
+<EditOutlined />                        
+                        </td>
+
+
+</tr>
+             )
+             )
+             
+               }
+            </table>
+
+             </div>
+              ):(
+                <Empty/>
+              )
+            }
+
+
+
+
     </>
   );
 };
