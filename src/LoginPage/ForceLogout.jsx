@@ -72,7 +72,8 @@ function ForcefullyLogoutTask() {
       setEmail("");
       setOtp("");
       setOtpSent(false);
-      navigate("/employee-login");
+      const newEmployeeId = response.data.employeeId
+      navigate(`/Dashboard/${newEmployeeId}/${userType}`);
     } catch (error) {
       // Handle error response from backend
       const errorMessage =
@@ -91,8 +92,8 @@ function ForcefullyLogoutTask() {
           // loading={loading}
           // cssOverride={override}
           size={70}
-          // aria-label="Loading Spinner"
-          // data-testid="loader"
+        // aria-label="Loading Spinner"
+        // data-testid="loader"
         />
       ) : (
         <div className="Force-Logout-main-div">

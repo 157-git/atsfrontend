@@ -98,6 +98,10 @@
   align-items: center;
 }
 
+.rating-suffix {
+  font-size: 14px;
+  color: #555;
+}
 .plain-input {
   width: 90%;
   color: var(--text-color);
@@ -288,6 +292,9 @@ strong {
 }
 .setDisplayFlexForUpdateForm{
   display: flex;
+  align-items: center;
+  white-space: nowrap;  /* ✅ ensures it stays on 1 line */
+  gap: 6px; 
 }
 .setwidthandmarginforratings{
   width: 50%;
@@ -326,14 +333,78 @@ width: 100%;
 .newhightforincentivesdivUpdateForm{
   width: 80%;
 }
-.newwidthforselectfinalstatus{
-  width: 85%;
+.newwidthforselectfinalstatus {
+  width: 28%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px; /* optional: adds spacing between label & select */
 }
+
+.status-type-wrapper {
+  display: flex;
+  gap: 10px; /* Adjust spacing between the selects */
+  width: 100%;
+  flex-wrap: wrap; /* optional: for responsiveness */
+}
+
+.status-type-wrapper select {
+  flex: 1;
+  min-width: 150px;
+  padding: 5px 30px 5px 10px; /* Add right padding for dropdown arrow */
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  appearance: none; /* optional: remove native arrow */
+  background: white;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+}
+
+.calling-tracker-popup-open-btn {
+  border: none;
+  padding: 2px 20px;
+  width: fit-content;
+  border-radius: 15px;
+  background-color: var(--primary-button-bg);
+  color: var(--button-txt-color);
+  border: 1px solid var(--primary-border);
+}
+
+/* .uniform-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 100px;
+  border-radius: 25px;
+  border: 1px solid #aaa;
+  background-color: #f8f8f8;
+  color: #666;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.uniform-button:hover {
+  background-color: #e0e0e0;
+} */
+
+
+.newwidthforintrestedselecttag {
+  width: 105%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+
 .intresteddiv{
   width: 50%;
-}
-.newwidthforintrestedselecttag{
-  width: 89%;
 }
 .ForEYEButtonInUpdate{
   align-content: center;

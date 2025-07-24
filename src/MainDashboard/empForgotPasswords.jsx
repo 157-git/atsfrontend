@@ -94,8 +94,11 @@ setErrors({});
       });
   
       if (response.status === 200) {
-        toast.success(response.data);
-        navigate("/employee-login");
+        console.log(response.data)
+        const newEmployeeId=response.data.employeeId
+        const newUserType=response.data.userType
+        toast.success("Password reset successfully!");
+        navigate(`/Dashboard/${newEmployeeId}/${newUserType}`);
       }
     } catch (error) {
       toast.error(

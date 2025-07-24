@@ -78,7 +78,7 @@ const CallingTrackerForm = ({
     candidateEmail: "",
     jobDesignation: "",
     requirementId: "",
-    candidateSkills:"",
+    candidateSkills: "",
     requirementCompany: "",
     sourceName: "",
     contactNumber: "",
@@ -401,7 +401,7 @@ const CallingTrackerForm = ({
         delete newErrors.noticePeriod;
         return newErrors;
       });
-    } else  if (name === "selectYesOrNo" && value !== "Interested") {
+    } else if (name === "selectYesOrNo" && value !== "Interested") {
 
     }
 
@@ -462,7 +462,7 @@ const CallingTrackerForm = ({
       setStartPoint(value);
     }
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
-    
+
   };
 
   const handleIncentiveChange = (e) => {
@@ -483,15 +483,33 @@ const CallingTrackerForm = ({
   const [selectedCountry, setSelectedCountry] = useState("IN");
   const [selectedCountryWP, setSelectedCountryWP] = useState("IN");
 
-  const handlePhoneNumberChange = (value, name) => {
-    const sanitizedValue =
-      typeof value === "string" ? value.replace(/\s+/g, "") : value;
-    setCallingTracker((prevState) => ({
-      ...prevState,
-      [name]: sanitizedValue,
-    }));
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
-  };
+const handlePhoneNumberChange = (value, name) => {
+  const sanitizedValue = typeof value === "string" ? value.replace(/\s+/g, "") : value;
+
+  // For Indian numbers, check the digit right after +91 (i.e., 3rd digit)
+  if (selectedCountry === "IN") {
+    const withoutPlus = sanitizedValue?.startsWith("+") ? sanitizedValue.slice(1) : sanitizedValue;
+    const nationalNumber = withoutPlus?.startsWith("91") ? withoutPlus.slice(2) : withoutPlus;
+
+    if (/^[0-6]/.test(nationalNumber)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "Indian mobile number must start with 7, 8, or 9",
+      }));
+      return;
+    }
+  }
+
+  setCallingTracker((prevState) => ({
+    ...prevState,
+    [name]: sanitizedValue,
+  }));
+
+  setErrors((prevErrors) => ({
+    ...prevErrors,
+    [name]: "",
+  }));
+};
 
   const handleLineUpChange = (e) => {
     const { name, value } = e.target;
@@ -615,6 +633,10 @@ const CallingTrackerForm = ({
       setErrorForDOB("Please select a valid date of birth.");
       return;
     }
+
+     if (errors.contactNumber!== "") {
+      return;
+    }
     // Validate fields
     let callingTrackerErrors = validateCallingTracker() || {};
     let lineUpDataErrors = validateLineUpData() || {};
@@ -702,7 +724,7 @@ const CallingTrackerForm = ({
           },
         }
       );
-    
+
       const updatedCallingTracker = {
         ...dataToUpdate.callingTracker,
         candidateAddedTime: getFormattedDateTime(),
@@ -1034,7 +1056,7 @@ const CallingTrackerForm = ({
   };
   const setResumeResponse = (data) => {
     console.log(data);
-    
+
     // Fields to check in existing state
     const hasExistingData =
       callingTracker.candidateName !== "" ||
@@ -1053,7 +1075,7 @@ const CallingTrackerForm = ({
       setCallingTracker((prevState) => ({
         ...prevState,
         candidateName: data.candidateName,
-        candidateEmail: data.candidateEmail !== "email not found" ? data.candidateEmail : "" ,
+        candidateEmail: data.candidateEmail !== "email not found" ? data.candidateEmail : "",
         candidateSkills: data.skills,
         currentLocation: data.currentLocation,
         contactNumber: `${data.contactNumber}`,
@@ -1122,42 +1144,42 @@ const CallingTrackerForm = ({
     callingTracker.alternateNumber = callingTracker.contactNumber;
   };
 
-// const handleChangeSkillsTags = (value) => {
-//   setTags(value);
-//   setCallingTracker(prev => {
-//     const prevSkillsArray = prev.candidateSkills
-//       ? prev.candidateSkills.split(',').map(s => s.trim())
-//       : [];
-//     const merged = Array.from(new Set([...prevSkillsArray, ...value]));
-//     return {
-//       ...prev,
-//       candidateSkills: merged.join(','),
-//     };
-//   });
-// };
-const handleChangeSkillsTags = (value) => {
-  setTags(value);
+  // const handleChangeSkillsTags = (value) => {
+  //   setTags(value);
+  //   setCallingTracker(prev => {
+  //     const prevSkillsArray = prev.candidateSkills
+  //       ? prev.candidateSkills.split(',').map(s => s.trim())
+  //       : [];
+  //     const merged = Array.from(new Set([...prevSkillsArray, ...value]));
+  //     return {
+  //       ...prev,
+  //       candidateSkills: merged.join(','),
+  //     };
+  //   });
+  // };
+  const handleChangeSkillsTags = (value) => {
+    setTags(value);
 
-  const updatedSkills = value.join(',');
+    const updatedSkills = value.join(',');
 
-  setCallingTracker(prev => ({
-    ...prev,
-    candidateSkills: updatedSkills,
-  }));
-
-  // Validate only candidateSkills
-  if (!updatedSkills) {
-    setErrors(prev => ({
+    setCallingTracker(prev => ({
       ...prev,
-      candidateSkills: "Candidate Skills are required",
+      candidateSkills: updatedSkills,
     }));
-  } else {
-    setErrors(prev => {
-      const { candidateSkills, ...rest } = prev;
-      return rest; // Remove candidateSkills error
-    });
-  }
-};
+
+    // Validate only candidateSkills
+    if (!updatedSkills) {
+      setErrors(prev => ({
+        ...prev,
+        candidateSkills: "Candidate Skills are required",
+      }));
+    } else {
+      setErrors(prev => {
+        const { candidateSkills, ...rest } = prev;
+        return rest; // Remove candidateSkills error
+      });
+    }
+  };
 
   // this fucntion is made by sahil karnekar on date 25-11-2024
   const handleResumeUploadBoth = async (e) => {
@@ -1209,7 +1231,7 @@ const handleChangeSkillsTags = (value) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resumeUrl, setResumeUrl] = useState(null);
-console.log(callingTracker);
+  console.log(callingTracker);
 
   return (
     <div className="calling-tracker-main">
@@ -1266,9 +1288,9 @@ console.log(callingTracker);
                   justifyContent: "center",
                 }}
               >
-              <label style={{
-                width:"27%"
-              }} >Date & Time:</label>
+                <label style={{
+                  width: "27%"
+                }} >Date & Time:</label>
                 <div className="calling-tracker-two-input-container">
                   <div className="calling-tracker-two-input">
                     <input
@@ -1323,58 +1345,58 @@ console.log(callingTracker);
                       }}
                     >
 
-                   <Upload
-  accept=".pdf,.doc,.docx"
-  showUploadList={false}
-  beforeUpload={async (file) => {
-    try {
-      if (!file) {
-        tostify.error("No file selected. Please upload a valid resume.");
-        return false;
-      }
+                      <Upload
+                        accept=".pdf,.doc,.docx"
+                        showUploadList={false}
+                        beforeUpload={async (file) => {
+                          try {
+                            if (!file) {
+                              tostify.error("No file selected. Please upload a valid resume.");
+                              return false;
+                            }
 
-      setUploadingResumeNewState(true);
-      setDisplayProgress(false);
-      setResumeFileName(file.name || '');
-      setDisplayProgress(true);
-      setUploadProgress(0);
+                            setUploadingResumeNewState(true);
+                            setDisplayProgress(false);
+                            setResumeFileName(file.name || '');
+                            setDisplayProgress(true);
+                            setUploadProgress(0);
 
-      // Create a synthetic event to match input file event structure
-      const syntheticEvent = { target: { files: [file] } };
+                            // Create a synthetic event to match input file event structure
+                            const syntheticEvent = { target: { files: [file] } };
 
-      // Call handleResumeUploadBoth function
-      await handleResumeUploadBoth(syntheticEvent);
-    } catch (error) {
-      console.error("Error uploading resume:", error);
-      tostify.error("There was an issue uploading the resume. Please try again.");
-    } finally {
-      setUploadingResumeNewState(false);
-    }
-    return false; // Prevent automatic upload
-  }}
->
-  <Button
-    icon={
-      uploadingResumeNewState ? (
-        <img
-          src={uploadingResumeGif}
-          alt="Uploading"
-          style={{ width: 20, height: 20 }}
-        />
-      ) : (
-        <img
-          src={uploadingResumeStatic}
-          alt="Static"
-          style={{ width: 20, height: 20 }}
-        />
-      )
-    }
-  >
-    {(resumeFileName && resumeFileName.length > 10)
-      ? `${resumeFileName.substring(0, 15)}...`
-      : resumeFileName || "Upload Resume"}
-  </Button>
-</Upload>
+                            // Call handleResumeUploadBoth function
+                            await handleResumeUploadBoth(syntheticEvent);
+                          } catch (error) {
+                            console.error("Error uploading resume:", error);
+                            tostify.error("There was an issue uploading the resume. Please try again.");
+                          } finally {
+                            setUploadingResumeNewState(false);
+                          }
+                          return false; // Prevent automatic upload
+                        }}
+                      >
+                        <Button
+                          icon={
+                            uploadingResumeNewState ? (
+                              <img
+                                src={uploadingResumeGif}
+                                alt="Uploading"
+                                style={{ width: 20, height: 20 }}
+                              />
+                            ) : (
+                              <img
+                                src={uploadingResumeStatic}
+                                alt="Static"
+                                style={{ width: 20, height: 20 }}
+                              />
+                            )
+                          }
+                        >
+                          {(resumeFileName && resumeFileName.length > 10)
+                            ? `${resumeFileName.substring(0, 15)}...`
+                            : resumeFileName || "Upload Resume"}
+                        </Button>
+                      </Upload>
 
 
                       {displayProgress && (
@@ -1398,6 +1420,9 @@ console.log(callingTracker);
                         width: "76px",
                         textAlign: "center",
                       }}
+
+
+
                     >
                       <i
                         className="fas fa-eye"
@@ -1497,7 +1522,7 @@ console.log(callingTracker);
             </div>
             <div className="calling-tracker-row-white">
               <div className="calling-tracker-field">
-               <label>Contact Number</label>
+                <label>Contact Number</label>
                 <div className="calling-tracker-field-sub-div">
                   {/* this line added by sahil date 22-10-2024 */}
                   <div className="setRequiredStarDiv">
@@ -1606,8 +1631,8 @@ console.log(callingTracker);
                 </div>
               </div>
               <div className="calling-tracker-field">
-                
-                 <label>Skills</label>
+
+                <label>Skills</label>
                 <div className="calling-tracker-field-sub-div">
                   {/* line number 684 to 696 added by sahil karnekar date 22-10-2024 */}
                   <div className="setRequiredStarDiv">
@@ -1622,15 +1647,15 @@ console.log(callingTracker);
                       // line 668 added by sahil karnekar date 21-10-2024
                       maxLength="50"
                     /> */}
-<Select
-        mode="tags"
-        style={{ width: '100%' }}
-        placeholder="Type and press Enter or comma to add"
-        onChange={handleChangeSkillsTags}
-        value={tags}
-        tokenSeparators={[',']}
-        maxTagCount="responsive"
-      />
+                    <Select
+                      mode="tags"
+                      style={{ width: '100%' }}
+                      placeholder="Type and press Enter or comma to add"
+                      onChange={handleChangeSkillsTags}
+                      value={tags}
+                      tokenSeparators={[',']}
+                      maxTagCount="responsive"
+                    />
 
                     {!callingTracker.candidateSkills && (
                       <span className="requiredFieldStar">*</span>
@@ -1654,15 +1679,15 @@ console.log(callingTracker);
                       name="sourceName"
                       value={
                         callingTracker.sourceName === "" ||
-                        callingTracker.sourceName === "LinkedIn" ||
-                        callingTracker.sourceName === "Naukri" ||
-                        callingTracker.sourceName === "Indeed" ||
-                        callingTracker.sourceName === "Times" ||
-                        callingTracker.sourceName === "Social Media" ||
-                        callingTracker.sourceName === "Company Page" ||
-                        callingTracker.sourceName === "Excel" ||
-                        callingTracker.sourceName === "Friends" ||
-                        callingTracker.sourceName === "others"
+                          callingTracker.sourceName === "LinkedIn" ||
+                          callingTracker.sourceName === "Naukri" ||
+                          callingTracker.sourceName === "Indeed" ||
+                          callingTracker.sourceName === "Times" ||
+                          callingTracker.sourceName === "Social Media" ||
+                          callingTracker.sourceName === "Company Page" ||
+                          callingTracker.sourceName === "Excel" ||
+                          callingTracker.sourceName === "Friends" ||
+                          callingTracker.sourceName === "others"
                           ? callingTracker.sourceName
                           : "others"
                       }
@@ -1698,8 +1723,8 @@ console.log(callingTracker);
                     {/* this line added by sahil date 22-10-2024 */}
                     {(!callingTracker.sourceName ||
                       callingTracker.sourceName === "others") && (
-                      <span className="requiredFieldStar">*</span>
-                    )}
+                        <span className="requiredFieldStar">*</span>
+                      )}
                   </div>
                   {errors.sourceName && (
                     <div className="error-message">{errors.sourceName}</div>
@@ -1796,8 +1821,8 @@ console.log(callingTracker);
                           callingTracker.currentLocation === "Pune City"
                             ? callingTracker.currentLocation
                             : callingTracker.currentLocation === "PCMC"
-                            ? callingTracker.currentLocation
-                            : ""
+                              ? callingTracker.currentLocation
+                              : ""
                         }
                         onChange={handleLocationChange}
                         style={{ width: "200px" }}
@@ -1818,7 +1843,7 @@ console.log(callingTracker);
                     </div>
                     {isOtherLocationSelected && (
                       <input
-                      className="enter-customer-location"
+                        className="enter-customer-location"
                         type="text"
                         name="currentLocation"
                         value={callingTracker.currentLocation}
@@ -1871,17 +1896,17 @@ console.log(callingTracker);
                       // value={callingTracker.callingFeedback}
                       value={
                         callingTracker.callingFeedback === "" ||
-                        callingTracker.callingFeedback === "Call Done" ||
-                        callingTracker.callingFeedback ===
+                          callingTracker.callingFeedback === "Call Done" ||
+                          callingTracker.callingFeedback ===
                           "Asked for Call Back" ||
-                        callingTracker.callingFeedback === "No Answer" ||
-                        callingTracker.callingFeedback === "Network Issue" ||
-                        callingTracker.callingFeedback === "Invalid Number" ||
-                        callingTracker.callingFeedback ===
+                          callingTracker.callingFeedback === "No Answer" ||
+                          callingTracker.callingFeedback === "Network Issue" ||
+                          callingTracker.callingFeedback === "Invalid Number" ||
+                          callingTracker.callingFeedback ===
                           "Need to call back" ||
-                        callingTracker.callingFeedback ===
+                          callingTracker.callingFeedback ===
                           "Do not call again" ||
-                        callingTracker.callingFeedback === "others"
+                          callingTracker.callingFeedback === "others"
                           ? callingTracker.callingFeedback
                           : "others"
                       }
@@ -1925,8 +1950,8 @@ console.log(callingTracker);
 
                     {(!callingTracker.callingFeedback ||
                       callingTracker.callingFeedback === "others") && (
-                      <span className="requiredFieldStar">*</span>
-                    )}
+                        <span className="requiredFieldStar">*</span>
+                      )}
                   </div>
                   {errors.callingFeedback && (
                     <div className="error-message">
@@ -2585,7 +2610,7 @@ console.log(callingTracker);
                     style={{
                       display: "flex",
                       width: "100%",
-                   
+
                     }}
                     name="extraCertification"
                     value={lineUpData.extraCertification}
@@ -2673,7 +2698,7 @@ console.log(callingTracker);
                         // line number 1563 added by sahil karnekar date : 15-10-2024
                         min="0"
                         max="11"
-                        //  {/* this line added by sahil date 22-10-2024 */}
+                      //  {/* this line added by sahil date 22-10-2024 */}
                       />
                       {lineUpData.experienceMonth && (
                         <span className="addtrnaslateproptospanForMonths">
@@ -2883,13 +2908,13 @@ tooltips={desc} value={callingTracker.communicationRating}
                   </div>
                   {(lineUpData.currentCTCLakh ||
                     lineUpData.currentCTCThousand) && (
-                    <span>
-                      {convertNumberToWords(
-                        lineUpData.currentCTCLakh,
-                        lineUpData.currentCTCThousand
-                      )}
-                    </span>
-                  )}
+                      <span>
+                        {convertNumberToWords(
+                          lineUpData.currentCTCLakh,
+                          lineUpData.currentCTCThousand
+                        )}
+                      </span>
+                    )}
                 </div>
               </div>
               <div className="calling-tracker-field">
@@ -2939,13 +2964,13 @@ tooltips={desc} value={callingTracker.communicationRating}
                   </div>
                   {(lineUpData.expectedCTCLakh ||
                     lineUpData.expectedCTCThousand) && (
-                    <span>
-                      {convertNumberToWords(
-                        lineUpData.expectedCTCLakh,
-                        lineUpData.expectedCTCThousand
-                      )}
-                    </span>
-                  )}
+                      <span>
+                        {convertNumberToWords(
+                          lineUpData.expectedCTCLakh,
+                          lineUpData.expectedCTCThousand
+                        )}
+                      </span>
+                    )}
                 </div>
               </div>
             </div>
@@ -3130,8 +3155,8 @@ tooltips={desc} value={callingTracker.communicationRating}
                           availabilityForInterview: e.target.value,
                         });
                       }}
-                      //Arshad Comment This On 21-10-2025
-                      // min={new Date().toISOString().split("T")[0]} // Allow today and future dates
+                    //Arshad Comment This On 21-10-2025
+                    // min={new Date().toISOString().split("T")[0]} // Allow today and future dates
                     />
                     {errorInterviewSlot && (
                       <div className="error-message">{errorInterviewSlot}</div>
@@ -3226,39 +3251,39 @@ tooltips={desc} value={callingTracker.communicationRating}
                     }}
                   >
                     <Modal.Body>
-                      
+
                       <p>{callingTracker.errors}</p>
                       {callingTracker.selectYesOrNo === "Interested" && (
-  <div>
-    <strong>Do you want to send an email to candidate  ?</strong>
-    <div className="sendemailornot">
-      <label >
-        <input
-          type="radio"
-          name="emailStatus"
-          value="Yes"
-          className="radio-button-email-confirmation"
-          checked={lineUpData.emailStatus === "Yes"}
-          onChange={() => setLineUpData({ ...lineUpData, emailStatus: "Yes" })}
-        />
-         Yes
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="emailStatus"
-          value="No"
-          className="radio-button-email-confirmation"
-          checked={lineUpData.emailStatus === "No"}
-          onChange={() => setLineUpData({ ...lineUpData, emailStatus: "No" })}
-        />
-        No
-      </label>
-    </div>
-  </div>
-)}
+                        <div>
+                          <strong>Do you want to send an email to candidate  ?</strong>
+                          <div className="sendemailornot">
+                            <label >
+                              <input
+                                type="radio"
+                                name="emailStatus"
+                                value="Yes"
+                                className="radio-button-email-confirmation"
+                                checked={lineUpData.emailStatus === "Yes"}
+                                onChange={() => setLineUpData({ ...lineUpData, emailStatus: "Yes" })}
+                              />
+                              Yes
+                            </label>
+                            <label>
+                              <input
+                                type="radio"
+                                name="emailStatus"
+                                value="No"
+                                className="radio-button-email-confirmation"
+                                checked={lineUpData.emailStatus === "No"}
+                                onChange={() => setLineUpData({ ...lineUpData, emailStatus: "No" })}
+                              />
+                              No
+                            </label>
+                          </div>
+                        </div>
+                      )}
 
-                    <p className="confirmation-text">
+                      <p className="confirmation-text">
                         Are you sure you want to save this candidate's
                         information ?
                       </p>
@@ -3417,9 +3442,9 @@ const ModalComponent = ({
        
               Total Expected CTC  ${formatNumberToWords(expectedCTCNum)}
       `);
-    }else{
+    } else {
       setExpectedCTC("");
-    setCalculationSteps("");
+      setCalculationSteps("");
     }
   }, [expectedHike, currentCTCInLakhState, currentCTCInThousandState]);
 
@@ -3427,17 +3452,17 @@ const ModalComponent = ({
     const lakhValue = parseFloat(expectedCTCLakh) || 0;
     const thousandValue = parseFloat(expectedCTCThousand) || 0;
     const combinedCTC = lakhValue * 100000 + thousandValue * 1000;
-  
+
     const currentLakhValue = parseFloat(currentCTCInLakhState1) || 0;
     const currentThousandValue = parseFloat(currentCTCInThousandState1) || 0;
     const currentCTCNum = currentLakhValue * 100000 + currentThousandValue * 1000;
-  
+
     // Ensure calculation only happens when necessary
     if (combinedCTC > 0 && currentCTCNum > 0) {
       const hikePercentage = ((combinedCTC - currentCTCNum) / currentCTCNum) * 100;
-  
+
       setCalculatedHike(hikePercentage.toFixed(2));
-  
+
       setCalculationSteps(`
         Salary Calculation 
   
@@ -3462,7 +3487,7 @@ const ModalComponent = ({
     expectedCTCThousand,
     currentCTCInLakhState1,
     currentCTCInThousandState1,
-  ]);  
+  ]);
 
   const handleNumericChange = (setter) => (event) => {
     const value = event.target.value;
@@ -3564,26 +3589,23 @@ const ModalComponent = ({
         <div className="calling-tracker-popup">
           <div className="calling-tracker-popup-sidebar">
             <p
-              className={`sidebar-item ${
-                activeField === "distance" ? "active" : ""
-              }`}
+              className={`sidebar-item ${activeField === "distance" ? "active" : ""
+                }`}
               onClick={() => setActiveField("distance")}
             >
               Distance Calculation
             </p>
             <p
-              className={`sidebar-item ${
-                activeField === "salary" ? "active" : ""
-              }`}
+              className={`sidebar-item ${activeField === "salary" ? "active" : ""
+                }`}
               onClick={() => setActiveField("salary")}
             >
               Salary Calculation
             </p>
 
             <p
-              className={`sidebar-item ${
-                activeField === "previousQuestion" ? "active" : ""
-              }`}
+              className={`sidebar-item ${activeField === "previousQuestion" ? "active" : ""
+                }`}
               onClick={() => setActiveField("previousQuestion")}
             >
               Previous Question
@@ -3660,8 +3682,8 @@ const ModalComponent = ({
                                 isLakhFocused
                                   ? currentCTCInLakhState
                                   : currentCTCInLakhState
-                                  ? `${currentCTCInLakhState} Lakh`
-                                  : ""
+                                    ? `${currentCTCInLakhState} Lakh`
+                                    : ""
                               }
                               onChange={handleLakhChange}
                               onFocus={handleLakhFocus}
@@ -3682,8 +3704,8 @@ const ModalComponent = ({
                                 isThousandFocused
                                   ? currentCTCInThousandState
                                   : currentCTCInThousandState
-                                  ? `${currentCTCInThousandState} Thousand`
-                                  : ""
+                                    ? `${currentCTCInThousandState} Thousand`
+                                    : ""
                               }
                               onChange={handleThousandChange}
                               onFocus={handleThousandFocus}
@@ -3707,8 +3729,8 @@ const ModalComponent = ({
                                 isHikeFocused
                                   ? expectedHike
                                   : expectedHike
-                                  ? `${expectedHike}%`
-                                  : ""
+                                    ? `${expectedHike}%`
+                                    : ""
                               }
                               onChange={handleNumericChange(setExpectedHike)}
                               onFocus={handleHikeFocus}
@@ -3755,8 +3777,8 @@ const ModalComponent = ({
                                 isLakhFocused1
                                   ? currentCTCInLakhState1
                                   : currentCTCInLakhState1
-                                  ? `${currentCTCInLakhState1} Lakh`
-                                  : ""
+                                    ? `${currentCTCInLakhState1} Lakh`
+                                    : ""
                               }
                               onChange={handleLakhChange1}
                               onFocus={handleLakhFocus1}
@@ -3777,8 +3799,8 @@ const ModalComponent = ({
                                 isThousandFocused1
                                   ? currentCTCInThousandState1
                                   : currentCTCInThousandState1
-                                  ? `${currentCTCInThousandState1} Thousand`
-                                  : ""
+                                    ? `${currentCTCInThousandState1} Thousand`
+                                    : ""
                               }
                               onChange={handleThousandChange1}
                               onFocus={handleThousandFocus1}
@@ -3802,8 +3824,8 @@ const ModalComponent = ({
                                 isExpectedLakhFocused
                                   ? expectedCTCLakh
                                   : expectedCTCLakh
-                                  ? `${expectedCTCLakh} Lakh`
-                                  : ""
+                                    ? `${expectedCTCLakh} Lakh`
+                                    : ""
                               }
                               onChange={handleExpectedLakhChange}
                               onFocus={handleExpectedLakhFocus}
@@ -3824,8 +3846,8 @@ const ModalComponent = ({
                                   isExpectedThousandFocused
                                     ? expectedCTCThousand
                                     : expectedCTCThousand
-                                    ? `${expectedCTCThousand} Thousand`
-                                    : ""
+                                      ? `${expectedCTCThousand} Thousand`
+                                      : ""
                                 }
                                 onChange={handleExpectedThousandChange}
                                 onFocus={handleExpectedThousandFocus}
