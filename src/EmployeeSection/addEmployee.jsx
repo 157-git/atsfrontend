@@ -92,38 +92,38 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
           const resp = await fetchCompleteProfileData(updateEmployeeIdForForm, "Recruiters");
           setFormData((prevFormData) => ({
             ...resp,
-          employeeName: resp.name,
-          employeeEmail: resp.personalEmailId,
-          officialContactNumber: resp.officialContactNo,
-          companyMobileNumber: resp.companyMobileNo,
-          whatsAppNumber: resp.whatsAppNo,
-          emergencyContactNumber: resp.emergencyContactNo,
-          educationalQualification : resp.qualification,
-          offeredSalary: resp.salary,
-          employeePresentAddress: resp.presentAddress,
-          employeeExperience: resp.experience,
-          employeeStatus: resp.status,
-          lastWorkingDate: resp.workingDate,
-          twitterURl: resp.twitterURL,
-          linkedInURl:resp.linkedInURL,
-          employeeAddress: resp.address,
-          reportingMangerName: resp.reportingPersonName,
-          reportingMangerDesignation: resp.reportingPersonDesignation,
-          employeePassword: resp.password,
-          teamLeaderMsg: resp.messageForAdmin
-        }));
+            employeeName: resp.name,
+            employeeEmail: resp.personalEmailId,
+            officialContactNumber: resp.officialContactNo,
+            companyMobileNumber: resp.companyMobileNo,
+            whatsAppNumber: resp.whatsAppNo,
+            emergencyContactNumber: resp.emergencyContactNo,
+            educationalQualification: resp.qualification,
+            offeredSalary: resp.salary,
+            employeePresentAddress: resp.presentAddress,
+            employeeExperience: resp.experience,
+            employeeStatus: resp.status,
+            lastWorkingDate: resp.workingDate,
+            twitterURl: resp.twitterURL,
+            linkedInURl: resp.linkedInURL,
+            employeeAddress: resp.address,
+            reportingMangerName: resp.reportingPersonName,
+            reportingMangerDesignation: resp.reportingPersonDesignation,
+            employeePassword: resp.password,
+            teamLeaderMsg: resp.messageForAdmin
+          }));
           console.log("Response from API:", resp);
         } catch (error) {
           console.error("Error fetching employee data:", error);
-        }finally{
+        } finally {
           setLoading(false);
         }
       }
     };
-  
+
     fetchData();
   }, [updateEmployeeIdForForm, employeeId, userType]);
-  
+
 
   const handleInputChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -202,7 +202,66 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
             [name]: value,
           }));
         }
-      } else {
+      } else if (name === "employeePassword") {
+  const cleaned = value.trim();
+
+  // Always update value so user can type
+  setFormData((prevFormData) => ({
+    ...prevFormData,
+    [name]: cleaned,
+  }));
+
+  // Password must be at least 8 characters
+  if (cleaned.length > 0 && cleaned.length < 8) {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      employeePassword: "Password must be at least 8 characters long.",
+    }));
+  } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&^])[A-Za-z\d@$!%*?#&^]{8,}$/.test(cleaned)) {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      employeePassword:
+        "Password must contain upper, lower, number, and special character.",
+    }));
+  } else {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      employeePassword: "",
+    }));
+  }
+}
+
+      else if (name === "userName") {
+        const cleaned = value.trim();
+
+        // Always update value so user can type
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [name]: cleaned,
+        }));
+
+        // Now validate input separately
+        if (cleaned.length > 0 && cleaned.length < 4) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            userName: "Username must be at least 4 characters long.",
+          }));
+        } else if (!/^[a-zA-Z0-9_.]*$/.test(cleaned)) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            userName:
+              "Only letters, numbers, underscore (_) and dot (.) allowed.",
+          }));
+        } else {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            userName: "",
+          }));
+        }
+      }
+
+
+      else {
         setFormData((prevFormData) => ({
           ...prevFormData,
           [name]: value,
@@ -545,11 +604,15 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
             <input
               type="text"
               name="userName"
-              placeholder="Enter User Name  "
+              placeholder="Enter User Name"
               value={formData.userName}
               onChange={handleInputChange}
             />
+            {errors.userName && (
+              <div className="error">{errors.userName}</div>
+            )}
           </div>
+
 
           <div className="addRec-form-row">
             <label>Alternate Mobile Number:</label>
@@ -1168,36 +1231,36 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
           <div className="addRec-form-row">
             <label>Upload Resume:</label>
             <div className="wraptickindiv">
-            <input
-              type="file"
-              multiple
-              name="resumeFile"
-              onChange={handleInputChange}
-            />
-           {
-              formData.resumeFile && (
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg>
-              )
-            }
+              <input
+                type="file"
+                multiple
+                name="resumeFile"
+                onChange={handleInputChange}
+              />
+              {
+                formData.resumeFile && (
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z" /></svg>
+                )
+              }
             </div>
-         
+
           </div>
 
           <div className="addRec-form-row">
             <label>Upload Profile Image:</label>
             <div className="wraptickindiv">
-            <input
-              type="file"
-              name="profileImage"
-              onChange={handleInputChange}
-            />
-            {
-              formData.profileImage && (
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg>
-              )
-            }
+              <input
+                type="file"
+                name="profileImage"
+                onChange={handleInputChange}
+              />
+              {
+                formData.profileImage && (
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z" /></svg>
+                )
+              }
             </div>
-           
+
             {errors.profileImage && (
               <div className="error">{errors.profileImage}</div>
             )}
@@ -1206,20 +1269,20 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
           <div className="addRec-form-row">
             <label>Upload Document:</label>
             <div className="wraptickindiv">
-            <input
-              type="file"
-              multiple
-              name="document"
-              onChange={handleInputChange}
-            />
-            {
-              formData.document && (
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg>
-              )
-            }
-           
+              <input
+                type="file"
+                multiple
+                name="document"
+                onChange={handleInputChange}
+              />
+              {
+                formData.document && (
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z" /></svg>
+                )
+              }
+
             </div>
-           
+
           </div>
 
           <div className="addRec-form-row">
@@ -1240,6 +1303,10 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
                 value={formData.employeePassword}
                 onChange={handleInputChange}
               />
+              {errors.employeePassword && (
+  <div className="error">{errors.employeePassword}</div>
+)}
+
             </div>
           </div>
 
@@ -1279,7 +1346,7 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
 
       {
         loading && (
-          <Loader/>
+          <Loader />
         )
       }
     </>

@@ -9,7 +9,7 @@ import Loader from "../EmployeeSection/loader";
 import { useParams } from "react-router-dom";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
-import { Modal, Popconfirm } from "antd";
+import { Button, Modal, Popconfirm } from "antd";
 
 // SwapnilRokade_UpdateResponseFrom_addedProcessImprovmentEvaluatorFunctionalityStoringInterviweResponse_08_to_486_29/07/2024
 // const UpdateResponseFrom = ({
@@ -78,7 +78,7 @@ import { Modal, Popconfirm } from "antd";
 //       }
 //     `;
 //     document.head.appendChild(style);
-    
+
 //     return () => {
 //       // Cleanup when component unmounts (optional)
 //       document.head.removeChild(style);
@@ -108,14 +108,14 @@ import { Modal, Popconfirm } from "antd";
 
 //   const fetchPerformanceId = async () => {
 //     console.log("candidateId  " + candidateId);
-    
+
 //     try {
 //       const performanceId = await axios.get(
 //         `${API_BASE_URL}/fetch-performance-id/${candidateId}`
 //       );
 //       setPerformanceId(performanceId.data);
 //       console.log(performanceId.data + "performanceId 0001");
-      
+
 //     } catch (error) {
 //       console.log(error);
 //     }
@@ -272,7 +272,7 @@ import { Modal, Popconfirm } from "antd";
 //             ],
 //           };
 //           try {
-      
+
 //             const response1 = await axios.put(
 //               `${API_BASE_URL}/update-performance/${performanceId}`,
 //               additionalData
@@ -313,20 +313,20 @@ import { Modal, Popconfirm } from "antd";
 //       });
 //     }
 //   };
-  
+
 //   const convertTo12HourFormat = (time) => {
 //     if (!time) return "";
-  
+
 //     let [hourMinute, period] = time.split(" ");
 //     let [hour, minute] = hourMinute.split(":");
-  
+
 //     hour = parseInt(hour, 10);
 //     if (period === "PM" && hour !== 12) {
 //       hour += 12;
 //     } else if (period === "AM" && hour === 12) {
 //       hour = 0;
 //     }
-  
+
 //     return `${String(hour).padStart(2, "0")}:${minute}`;
 //   };
 
@@ -740,7 +740,7 @@ import { Modal, Popconfirm } from "antd";
 //             </tbody>
 //           </table>
 //         </div>
-       
+
 //       </form>
 //       <div className="mt-4 flex gap-2 justify-end custompopconfirmUpdateResp1">
 //       {/* <Popconfirm
@@ -756,7 +756,7 @@ import { Modal, Popconfirm } from "antd";
 // {/* </Popconfirm> */}
 
 
-         
+
 //           <button className="lineUp-share-btn" onClick={onClose}>
 //             Close
 //           </button>
@@ -797,6 +797,12 @@ const UpdateResponseFrom = ({
   const [submited, setSubmited] = useState(false);
   const [errors, setErrors] = useState({});
   const [performanceId, setPerformanceId] = useState();
+  const [triggerPopConfirm, setTriggerPopConfirm] = useState(false);
+  const [displayEmailConfirm, setDisplayEmailConfirm] = useState(false);
+  const [showFinalPopConfirm, setShowFinalPopConfirm] = useState(false);
+
+
+
 
   const [formData, setFormData] = useState(() => {
     let baseFormData = {
@@ -809,7 +815,7 @@ const UpdateResponseFrom = ({
       interviewerName: "",
       requirementId,
       callingTracker: { candidateId: candidateId },
-      emailStatus:"No"
+      emailStatus: "No"
     };
 
     if (passedJobRole === "Recruiters") {
@@ -839,6 +845,7 @@ const UpdateResponseFrom = ({
     }
     return baseFormData;
   });
+  console.log(formData)
   useEffect(() => {
     // Apply background color when the component mounts
     const style = document.createElement("style");
@@ -848,7 +855,7 @@ const UpdateResponseFrom = ({
       }
     `;
     document.head.appendChild(style);
-    
+
     return () => {
       // Cleanup when component unmounts (optional)
       document.head.removeChild(style);
@@ -878,35 +885,35 @@ const UpdateResponseFrom = ({
 
   const fetchPerformanceId = async () => {
     console.log("candidateId  " + candidateId);
-    
+
     try {
       const performanceId = await axios.get(
         `${API_BASE_URL}/fetch-performance-id/${candidateId}`
       );
       setPerformanceId(performanceId.data);
       console.log(performanceId.data + "performanceId 0001");
-      
+
     } catch (error) {
       console.log(error);
     }
   };
 
-const validateForm = () => {
-  const excludedResponses = ["Back Out", "Selected", "Rejected"];
-  const isResponseExcluded = excludedResponses.includes(formData.interviewResponse);
+  const validateForm = () => {
+    const excludedResponses = ["Back Out", "Selected", "Rejected"];
+    const isResponseExcluded = excludedResponses.includes(formData.interviewResponse);
 
-  const isValid =
-    formData.interviewRound?.trim() &&
-    formData.responseUpdatedDate?.trim() &&
-    (isResponseExcluded ||
-      (
-        formData.interviewerName?.trim() &&
-        formData.nextInterviewDate?.trim() &&
-        formData.nextInterviewTiming?.trim()
-      ));
+    const isValid =
+      formData.interviewRound?.trim() &&
+      formData.responseUpdatedDate?.trim() &&
+      (isResponseExcluded ||
+        (
+          formData.interviewerName?.trim() &&
+          formData.nextInterviewDate?.trim() &&
+          formData.nextInterviewTiming?.trim()
+        ));
 
-  return Boolean(isValid); // ✅ force true/false
-};
+    return Boolean(isValid); // ✅ force true/false
+  };
 
   const formatDateToIST = (date) => {
     const options = {
@@ -923,6 +930,10 @@ const validateForm = () => {
 
   //changes by sakshi kashid on 30-06-2025
   const handleSubmit = async (e, status) => {
+    console.log(e)
+    // if (e && typeof e.preventDefault === "function") {
+    //   e.preventDefault();
+    // }
     setDisplayEmailConfirm(false);
     setSubmited(true);
     e.preventDefault();
@@ -970,8 +981,8 @@ const validateForm = () => {
         candidateName: candidateName, // Added candidateName from props
         employeeName: employeeName, // Added employeeName from props
       };
-formData.emailStatus = status === "Yes" ? "Yes" : "No";
-console.log(formData);
+      formData.emailStatus = status === "Yes" ? "Yes" : "No";
+      console.log(formData);
 
       const response = await axios.post(
         `${API_BASE_URL}/save-interview-response/${employeeId}/${userType}`,
@@ -1052,7 +1063,7 @@ console.log(formData);
             ],
           };
           try {
-      
+
             const response1 = await axios.put(
               `${API_BASE_URL}/update-performance/${performanceId}`,
               additionalData
@@ -1092,42 +1103,37 @@ console.log(formData);
       });
     }
   };
-  
+
   const convertTo12HourFormat = (time) => {
     if (!time) return "";
-  
+
     let [hourMinute, period] = time.split(" ");
     let [hour, minute] = hourMinute.split(":");
-  
+
     hour = parseInt(hour, 10);
     if (period === "PM" && hour !== 12) {
       hour += 12;
     } else if (period === "AM" && hour === 12) {
       hour = 0;
     }
-  
+
     return `${String(hour).padStart(2, "0")}:${minute}`;
   };
 
-const [displayEmailConfirm, setDisplayEmailConfirm]= useState(false);
 
-// changes by sakshi kashid on 30-06-25
-const displayModalForEmailConfirm = (e) => {
-  e.preventDefault();
-  console.log("Current formData:", formData);
+  // changes by sakshi kashid on 30-06-25
+  const displayModalForEmailConfirm = (e) => {
+    e.preventDefault();
 
-  const isValid = validateForm();
+    const isValid = validateForm();
+    if (!isValid) {
+      setSubmited(true);
+      return;
+    }
 
-  if (!isValid) {
-    setSubmited(true);
-    return;
-  }
-  console.log("Validation result:", isValid);
+    setDisplayEmailConfirm(true);
+  };
 
-
-  setSubmited(false);
-  setDisplayEmailConfirm(true); // ✅ show email modal
-};
 
 
 
@@ -1138,22 +1144,22 @@ const displayModalForEmailConfirm = (e) => {
   return (
     <div className="update-response-modal">
       <div
-  className="mb-4"
-  style={{
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexWrap: "wrap",
-  }}
->
-  <span className="section-title">
-    {data.length > 0 ? "Update Interview Response" : "Schedule Interview"}
-  </span>
+        className="mb-4"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        <span className="section-title">
+          {data.length > 0 ? "Update Interview Response" : "Schedule Interview"}
+        </span>
 
-  <div className="candidate">
-    Candidate ID: {candidateId} &nbsp;|&nbsp; Name: {candidateName}
-  </div>
-</div>
+        <div className="candidate">
+          Candidate ID: {candidateId} &nbsp;|&nbsp; Name: {candidateName}
+        </div>
+      </div>
 
 
       {/* line 222 to 233 updated by sahil karnekar date 14-11-2024 */}
@@ -1175,7 +1181,7 @@ const displayModalForEmailConfirm = (e) => {
               style={{
                 backgroundColor: "#546173",
                 lineHeight: "1",
-                color:"white"
+                color: "white"
               }}
             >
               <tr>
@@ -1221,14 +1227,14 @@ const displayModalForEmailConfirm = (e) => {
                       style={
                         index < data.length - 1
                           ? {
-                              backgroundImage: "none",
-                              boxShadow: `1px 1px 4px var(--Bg-color)`,
-                              lineHeight: "1",
-                            }
+                            backgroundImage: "none",
+                            boxShadow: `1px 1px 4px var(--Bg-color)`,
+                            lineHeight: "1",
+                          }
                           : {
-                              boxShadow: `1px 1px 4px var(--Bg-color)`,
-                              lineHeight: "1",
-                            }
+                            boxShadow: `1px 1px 4px var(--Bg-color)`,
+                            lineHeight: "1",
+                          }
                       }
                     >
                       <option value="">Select Interview</option>
@@ -1259,14 +1265,14 @@ const displayModalForEmailConfirm = (e) => {
                       style={
                         index < data.length - 1
                           ? {
-                              backgroundImage: "none",
-                              boxShadow: `1px 1px 4px var(--Bg-color)`,
-                              lineHeight: "1",
-                            }
+                            backgroundImage: "none",
+                            boxShadow: `1px 1px 4px var(--Bg-color)`,
+                            lineHeight: "1",
+                          }
                           : {
-                              boxShadow: `1px 1px 4px var(--Bg-color)`,
-                              lineHeight: "1",
-                            }
+                            boxShadow: `1px 1px 4px var(--Bg-color)`,
+                            lineHeight: "1",
+                          }
                       }
                     >
                       <option value="">Choose option</option>
@@ -1329,33 +1335,33 @@ const displayModalForEmailConfirm = (e) => {
                   </td>
                   {/* changes by sakshi kashid on 30-06-2025 */}
                   <td className="p-2">
-  <input
-    className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
-    type="date"
-    name="nextInterviewDate"
-    value={response.nextInterviewDate}
-    onChange={(e) => handleInputChange(e, index)}
-    disabled={index < data.length - 1}
-    style={{
-      boxShadow: `1px 1px 4px var(--Bg-color)`,
-      lineHeight: "1",
-    }}
-  />
-</td>
-<td className="p-2">
-  <input
-    className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
-    type="time"
-    name="nextInterviewTiming"
-    value={convertTo12HourFormat(response.nextInterviewTiming)}
-    onChange={(e) => handleInputChange(e, index)}
-    disabled={index < data.length - 1}
-    style={{
-      boxShadow: `1px 1px 4px var(--Bg-color)`,
-      lineHeight: "1",
-    }}
-  />
-</td>
+                    <input
+                      className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
+                      type="date"
+                      name="nextInterviewDate"
+                      value={response.nextInterviewDate}
+                      onChange={(e) => handleInputChange(e, index)}
+                      disabled={index < data.length - 1}
+                      style={{
+                        boxShadow: `1px 1px 4px var(--Bg-color)`,
+                        lineHeight: "1",
+                      }}
+                    />
+                  </td>
+                  <td className="p-2">
+                    <input
+                      className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
+                      type="time"
+                      name="nextInterviewTiming"
+                      value={convertTo12HourFormat(response.nextInterviewTiming)}
+                      onChange={(e) => handleInputChange(e, index)}
+                      disabled={index < data.length - 1}
+                      style={{
+                        boxShadow: `1px 1px 4px var(--Bg-color)`,
+                        lineHeight: "1",
+                      }}
+                    />
+                  </td>
 
 
                 </tr>
@@ -1513,113 +1519,165 @@ const displayModalForEmailConfirm = (e) => {
                 </td>
                 {/* changes by sakshi kashid on 30-06-2025 */}
                 {["Back Out", "Selected", "Rejected"].includes(formData.interviewResponse) ? (
-  <td colSpan={2} className="p-2 text-sm italic text-gray-500 text-center">
-    - No further interview -
-  </td>
-) : (
-                <>
-                <td className="p-2">
-                  <input
-                    className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
-                    type="text"
-                    name="interviewerName"
-                    value={formData.interviewerName}
-                    onChange={handleInputChange}
-                    placeholder="Enter Name"
-                    style={{
-                      boxShadow: `1px 1px 4px var(--Bg-color)`,
-                      lineHeight: "1",
-                    }}
-                  />
-                </td>
-    <td className="p-2">
-      <input
-        className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
-        type="date"
-        name="nextInterviewDate"
-        value={formData.nextInterviewDate}
-        onChange={handleInputChange}
-        style={{
-          boxShadow: `1px 1px 4px var(--Bg-color)`,
-          lineHeight: "1",
-        }}
-      />
-    </td>
-    <td className="p-2">
-      <input
-        className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
-        type="time"
-        name="nextInterviewTiming"
-        value={formData.nextInterviewTiming}
-        onChange={handleInputChange}
-        style={{
-          boxShadow: `1px 1px 4px var(--Bg-color)`,
-          lineHeight: "1",
-        }}
-      />
-    </td>
-  </>
-)}
+                  <td colSpan={2} className="p-2 text-sm italic text-gray-500 text-center">
+                    - No further interview -
+                  </td>
+                ) : (
+                  <>
+                    <td className="p-2">
+                      <input
+                        className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
+                        type="text"
+                        name="interviewerName"
+                        value={formData.interviewerName}
+                        onChange={handleInputChange}
+                        placeholder="Enter Name"
+                        style={{
+                          boxShadow: `1px 1px 4px var(--Bg-color)`,
+                          lineHeight: "1",
+                        }}
+                      />
+                    </td>
+                    <td className="p-2">
+                      <input
+                        className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
+                        type="date"
+                        name="nextInterviewDate"
+                        value={formData.nextInterviewDate}
+                        onChange={handleInputChange}
+                        style={{
+                          boxShadow: `1px 1px 4px var(--Bg-color)`,
+                          lineHeight: "1",
+                        }}
+                      />
+                    </td>
+                    <td className="p-2">
+                      <input
+                        className="w-full px-3 py-1.5 border rounded text-xs sm:text-base"
+                        type="time"
+                        name="nextInterviewTiming"
+                        value={formData.nextInterviewTiming}
+                        onChange={handleInputChange}
+                        style={{
+                          boxShadow: `1px 1px 4px var(--Bg-color)`,
+                          lineHeight: "1",
+                        }}
+                      />
+                    </td>
+                  </>
+                )}
 
               </tr>
             </tbody>
           </table>
           {/* Show common error message only if no individual errors are displayed */}
-{submited && (
-  <div
-    style={{
-      color: "red",
-      marginTop: "10px",
-      fontWeight: "500",
-      fontSize: "14px",
-      textAlign: "center",
-    }}
-  >
-    Please fill all required fields marked with <span style={{ color: "red" }}>*</span>
-  </div>
-)}
+          {submited && (
+            <div
+              style={{
+                color: "red",
+                marginTop: "10px",
+                fontWeight: "500",
+                fontSize: "14px",
+                textAlign: "center",
+              }}
+            >
+              Please fill all required fields marked with <span style={{ color: "red" }}>*</span>
+            </div>
+          )}
 
 
 
 
 
         </div>
-       
+
       </form>
       <div className="mt-4 flex gap-2 justify-end custompopconfirmUpdateResp1">
-      <Popconfirm
-  placement="leftTop"
-  title={"Do You Want to Send Email to Candidate?"}
-  onConfirm={(e) => handleSubmit(e, "Yes")}  // Calls handleSubmit with "Yes" when clicked
-  onCancel={(e) => handleSubmit(e, "No")}    // Calls handleSubmit with "No" when clicked
-  okText="Yes"
-  cancelText="No"
-  className="custompopconfirmUpdateResp"
->
-  <button className="btn btn-custom" onClick={displayModalForEmailConfirm}>Update</button>
-</Popconfirm>
+        <Popconfirm
+          placement="leftTop"
+          title={"Do You Want to Send Email to Candidate?"}
+          onConfirm={(e) => handleSubmit(e, "Yes")}  // Calls handleSubmit with "Yes" when clicked
+          onCancel={(e) => handleSubmit(e, "No")}    // Calls handleSubmit with "No" when clicked
+          okText="Yes"
+          cancelText="No"
+          className="custompopconfirmUpdateResp"
+        >
+        </Popconfirm>
+        {/* <button className="btn btn-custom" onClick={displayModalForEmailConfirm}>Update</button> */}
+        <Button onClick={displayModalForEmailConfirm}>Update</Button>
+        <Button onClick={onClose}>Close</Button>
 
-<button className="btn btn-custom" onClick={onClose}>
-            Close
-          </button>
-        </div>
+      </div>
       {submited && (
         <div className="SCE_Loading_Animation">
           <Loader size={50} color="#ffb281" />
         </div>
       )}
       {displayEmailConfirm && (
-  <Modal
-    title="Confirmation"
-    visible={displayEmailConfirm}
-    onOk={(e) => handleSubmit(e, "Yes")}
-    onCancel={() => setDisplayEmailConfirm(false)}
-    okText="Yes"
-    cancelText="No"
-  >
-    <p>Do you want to send email?</p>
-  </Modal>
-)}
+        <Modal
+          title="Send Email?"
+          open={displayEmailConfirm}
+          onCancel={(e) => {
+            setDisplayEmailConfirm(false);
+            handleSubmit(e, "No");
+          }}
+          footer={[
+            <Button
+              key="cancel"
+              onClick={(e) => {
+                setDisplayEmailConfirm(false);
+                handleSubmit(e, "No");
+              }}
+            >
+              No
+            </Button>,
+
+            // ✅ YES button wrapped in Popconfirm
+            <Popconfirm
+              key="confirm"
+              title="Are you sure you want to proceed?"
+              open={showFinalPopConfirm}
+              onConfirm={(e) => {
+                setShowFinalPopConfirm(false);
+                setDisplayEmailConfirm(false);
+                handleSubmit(e, "Yes");
+              }}
+              onCancel={() => setShowFinalPopConfirm(false)}
+              okText="Yes"
+              cancelText="No"
+              placement="bottomRight"
+            >
+              <Button
+                type="primary"
+                onClick={() => setShowFinalPopConfirm(true)}
+              >
+                Yes
+              </Button>
+            </Popconfirm>,
+          ]}
+        >
+          <p>Do you want to send email to the candidate?</p>
+        </Modal>
+
+      )}
+
+      {triggerPopConfirm && (
+        <Popconfirm
+          title="Are you sure you want to proceed?"
+          open={true}
+          onConfirm={(e) => {
+            setTriggerPopConfirm(false);
+            handleSubmit(e, "Yes");
+          }}
+          onCancel={() => setTriggerPopConfirm(false)}
+          okText="Yes"
+          cancelText="No"
+        >
+          {/* This empty span is just to anchor Popconfirm */}
+          <span></span>
+        </Popconfirm>
+      )}
+
 
 
     </div>
