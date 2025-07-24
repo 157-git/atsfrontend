@@ -484,6 +484,8 @@ const CallingTrackerForm = ({
   const [selectedCountryWP, setSelectedCountryWP] = useState("IN");
 
 const handlePhoneNumberChange = (value, name) => {
+  console.log(value);
+  
   const sanitizedValue = typeof value === "string" ? value.replace(/\s+/g, "") : value;
 
   // For Indian numbers, check the digit right after +91 (i.e., 3rd digit)
@@ -616,6 +618,7 @@ const handlePhoneNumberChange = (value, name) => {
       emailStatus: e.target.checked ? "Yes" : "No",
     }));
   };
+console.log(errors);
 
   const handleSubmit = async (e) => {
     setShowConfirmation(false);
@@ -635,6 +638,12 @@ const handlePhoneNumberChange = (value, name) => {
     }
 
      if (errors.contactNumber!== "") {
+      return;
+    }else   if (callingTracker.contactNumber === undefined || callingTracker.contactNumber === "") {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        contactNumber: "Contact Number is required",
+      }));
       return;
     }
     // Validate fields
@@ -1006,6 +1015,13 @@ const handlePhoneNumberChange = (value, name) => {
       }
 
       const data = await response.json();
+     if (
+  data.contactNumber !== "" &&
+  /^[789]/.test(data.contactNumber)
+) {
+  data.contactNumber = `+91${data.contactNumber}` // Remove +91 if present
+handlePhoneNumberChange(`+91${data.contactNumber}`, "contactNumber");
+}
       tempData = data;
       console.log(data);
       const skillsArray = data.skills.split(',').map(skill => skill.replace(/^\s*|\s*$/g, '').trim()).filter(skill => skill !== '');

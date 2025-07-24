@@ -830,7 +830,7 @@ const UpdateResponseFrom = ({
       console.log(" passedJobRole In TeamLeader " + passedJobRole);
       baseFormData = {
         ...baseFormData,
-        teamLeader: { teamLeaderId: employeeId },
+        teamLeader: { teamLeaderId: passedEmployeeId },
         employee: null,
         manager: null,
       };
