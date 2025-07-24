@@ -8,6 +8,9 @@ export const CHAT_BASE_URL = "https://rg.157careers.in";
 // export const API_BASE_URL = "http://192.168.1.50:9090/api/ats/157industries";
 // export const CHAT_BASE_URL = "http://192.168.1.50";
 
+// export const API_BASE_URL = "http://192.168.1.50:9090/api/ats/157industries";
+// export const CHAT_BASE_URL = "http://192.168.1.50";git 
+
 // export const API_BASE_URL = "http://localhost:9090/api/ats/157industries";
 // export const CHAT_BASE_URL = "http://localhost";
 
