@@ -493,7 +493,7 @@ const UpdateSelfCalling = ({
     }
   };
 
-  {/*console.log(errors) */}
+  console.log(errors) 
 
   const validateRealTime = (name, value, isNotInterested) => {
 
