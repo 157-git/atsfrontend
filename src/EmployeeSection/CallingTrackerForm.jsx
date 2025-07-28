@@ -1007,7 +1007,7 @@ const handlePhoneNumberChange = (value, name) => {
 
       const data = await response.json();
       tempData = data;
-      console.log(data);
+      // console.log(data);
       const skillsArray = data.skills.split(',').map(skill => skill.replace(/^\s*|\s*$/g, '').trim()).filter(skill => skill !== '');
       setTags(skillsArray);
       setResumeResponse(data);
@@ -1055,7 +1055,7 @@ const handlePhoneNumberChange = (value, name) => {
     return gender === "Male" || gender === "Female" ? gender : "";
   };
   const setResumeResponse = (data) => {
-    console.log(data);
+    // console.log(data);
 
     // Fields to check in existing state
     const hasExistingData =
@@ -1231,7 +1231,7 @@ const handlePhoneNumberChange = (value, name) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resumeUrl, setResumeUrl] = useState(null);
-  console.log(callingTracker);
+  // console.log(callingTracker);
 
   return (
     <div className="calling-tracker-main">
@@ -2843,7 +2843,7 @@ tooltips={desc} value={callingTracker.communicationRating}
                       })}
                     </select>
 
-                    <span className="ml-5">Out Of 5</span>
+                    <span className="ml-4">Out Of 5</span>
 
                     {/* this line added by sahil date 22-10-2024 */}
                     {callingTracker.selectYesOrNo === "Interested" &&

@@ -22,9 +22,9 @@ if (storedData) {
   storedData.employeeId === employeeId &&
   storedData.userType === userType;
 
-    console.log(isAuthenticated);
-    console.log(storedData.employeeId,employeeId);
-    console.log(storedData.userType , userType);
+    // console.log(isAuthenticated);
+    // console.log(storedData.employeeId,employeeId);
+    // console.log(storedData.userType , userType);
 }
 
 

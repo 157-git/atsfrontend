@@ -80,7 +80,7 @@ const CallingList = ({
     recruiterJobRole: "",
   });
 
-  console.log(filteredCallingList);
+  // console.log(filteredCallingList);
   
   // added by sahil karnekar date 4-12-2024
   const [pageSize, setPageSize] = useState(20);
@@ -112,7 +112,7 @@ const CallingList = ({
       setLoading(false);
     }
   };
-console.log(loading);
+// console.log(loading);
 
   useEffect(() => {
     fetchCallingTrackerData(currentPage, pageSize);

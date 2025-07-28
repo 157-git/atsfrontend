@@ -101,7 +101,7 @@ function DailyWork({
   const getLoginLogoutStatus = ()=>{
     try {
       const response = axios.get(`${API_BASE_URL}/check-login-status/${employeeId}/${userType}`);
-      console.log(response);
+      // console.log(response);
       
       if (response.data === "Logout") {
         toast.error("user logedout from database !");
@@ -438,7 +438,7 @@ function DailyWork({
 
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-updateArchieved(changed) Start LineNo:-334 Date:-01/07
   const updateArchieved = () => {
-    console.log(successfulDataUpdation);
+    // console.log(successfulDataUpdation);
 
     if (successfulDataAdditions || successfulDataUpdation) {
       // Assuming updateCount is a function that updates states like archived and pending
@@ -489,7 +489,7 @@ function DailyWork({
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-handleLogoutLocal(changed) Start LineNo:-530 Date:-01/07
   useEffect(() => {
     logoutTimestamp != null ? handleLogoutLocal() : null;
-    console.log("Logout clicked 04 In dailyWork");
+    // console.log("Logout clicked 04 In dailyWork");
   }, [logoutTimestamp]);
 
   const handleLogoutLocal = async () => {
@@ -901,7 +901,7 @@ function DailyWork({
         socket.disconnect();
       };
     }
-    console.log(messages);
+    // console.log(messages);
   }, [socket, employeeId]);
 
   const getMessageDescription = (message) => {
@@ -1285,14 +1285,14 @@ function DailyWork({
           setDisplayStopWatch(true);
         } catch (error1) {}
       } else if (typeof yesNo === "number") {
-        console.log("running put");
+        // console.log("running put");
         try {
           const getData = await getDailyworkData(
             employeeId,
             userType,
             currentDateNew
           );
-          console.log(getData);
+          // console.log(getData);
           setDailyWorkDataNew(getData);
 
           const loginHoursTimerString = getData.totalHoursWork;
@@ -1305,7 +1305,7 @@ function DailyWork({
               ...(userType === "Manager" && { manager: { employeeId } }),
             },
           };
-          console.log(getDataForUpdate);
+          // console.log(getDataForUpdate);
           try {
             const putData = await putDailyworkData(
               employeeId,
@@ -1313,7 +1313,7 @@ function DailyWork({
               currentDateNew,
               getDataForUpdate
             );
-            console.log(putData);
+            // console.log(putData);
           } catch (errorPut) {}
         } catch (errorget) {}
       }
@@ -1328,10 +1328,10 @@ function DailyWork({
 
   useEffect(() => {
     if (dailyWorkDataNew && dailyWorkDataNew.totalHoursWork) {
-      console.log(
-        "Updating loginHoursTimerStart:",
-        dailyWorkDataNew.totalHoursWork
-      );
+      // console.log(
+      //   "Updating loginHoursTimerStart:",
+      //   dailyWorkDataNew.totalHoursWork
+      // );
       setLoginHoursTimerStart(dailyWorkDataNew.totalHoursWork);
       setDisplayStopWatch(true);
     }
@@ -1382,7 +1382,7 @@ function DailyWork({
             },
           ],
         };
-        console.log(getDataForUpdate);
+        // console.log(getDataForUpdate);
 
         const startPutReq = await putDailyworkData(
           employeeId,
@@ -1390,7 +1390,7 @@ function DailyWork({
           currentDateNewGlobal,
           getDataForUpdate
         );
-        console.log(startPutReq);
+        // console.log(startPutReq);
       } catch (error) {}
     }
   };

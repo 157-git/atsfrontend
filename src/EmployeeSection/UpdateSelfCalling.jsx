@@ -141,7 +141,7 @@ const UpdateSelfCalling = ({
   const [displayOtherInputForCallingRemark, setDisplayOtherInputForCallingRemark] = useState(false);
   const [displayEmailConfirm, setDisplayEmailConfirm] = useState(false);
   const [initialSelecteYesNoState, setInitialYesNoState] = useState("");
-  console.log(initialSelecteYesNoState);
+  // console.log(initialSelecteYesNoState);
 
   // updated by sahil karnekar date 18-10-2024
   const today = new Date();
@@ -280,7 +280,7 @@ const UpdateSelfCalling = ({
 
     }
   }, [initialData]);
-  console.log(errors);
+  // console.log(errors);
 
   const fetchCandidateData = async (candidateId) => {
     try {
@@ -292,7 +292,7 @@ const UpdateSelfCalling = ({
       setTags(skillsArray);
       setCallingTracker(data);
       setInitialYesNoState(data.selectYesOrNo);
-      console.log(data);
+      // console.log(data);
       const validSources = ["LinkedIn", "Naukri", "Indeed", "Times", "Social Media", "Company Page", "Excel", "Friends"];
       const validCallRemarks = ["Call Done", "Asked for Call Back", "No Answer", "Network Issue", "Invalid Number", "Need to call back", "Do not call again"];
       if (data.sourceName !== "" && !validSources.includes(data.sourceName)) {
@@ -465,8 +465,8 @@ const UpdateSelfCalling = ({
       });
     }
   };
-  console.log(callingTracker.alternateNumber);
-  console.log(callingTracker.contactNumber);
+  // console.log(callingTracker.alternateNumber);
+  // console.log(callingTracker.contactNumber);
 
   const handleChangeSkillsTags = (value) => {
     setTags(value);
@@ -493,7 +493,7 @@ const UpdateSelfCalling = ({
     }
   };
 
-  console.log(errors)
+  {/*console.log(errors) */}
 
   const validateRealTime = (name, value, isNotInterested) => {
 
@@ -819,7 +819,7 @@ const UpdateSelfCalling = ({
   const getDailyworkDataFunc = async () => {
     try {
       const getData = await getDailyworkData(employeeId, userType, currentDateNewGlobal);
-      console.log(getData);
+      // console.log(getData);
 
       setDailyWorkDataNew(getData);
     } catch (error) {
@@ -1384,7 +1384,7 @@ const UpdateSelfCalling = ({
                     // validation added by sahil karnekar date 19-11-2024
                     value={callingTracker.candidateName || ""}
                     onChange={handleChange}
-                    maxlength="50"
+                    maxLength="50"
                   />
                   {errors.candidateNameStar && (
                     <div className="error-message">
@@ -1432,7 +1432,7 @@ const UpdateSelfCalling = ({
               <div className="update-calling-tracker-field-sub-div setInputBlock">
                 <div className="setDisplayFlexForUpdateForm">
                   <PhoneInput
-                    style={{ width: "89%" }}
+                    style={{ width: "89%" ,padding:"5px 10px"}}
                     name="contactNumber"
                     value={
                       callingTracker?.contactNumber?.toString().startsWith('+91')
@@ -1465,7 +1465,7 @@ const UpdateSelfCalling = ({
                     name="candidateEmail"
                     value={callingTracker?.candidateEmail || ""}
                     onChange={handleChange}
-                    className={`plain-input`}
+                    className="plain-input"
                   />
                   {errors.candidateEmailStar && (
                     <div className="error-message">
@@ -1489,7 +1489,11 @@ const UpdateSelfCalling = ({
                   <PhoneInput
                     placeholder="Enter phone number"
                     name="alternateNumber"
-                    value={callingTracker?.alternateNumber || ""}
+                    // value={callingTracker?.alternateNumber || ""}
+                    value={
+                      callingTracker?.alternateNumber?.toString().startsWith('+91')
+                        ? callingTracker.alternateNumber
+                        : `+91${callingTracker?.alternateNumber || ""}`}
                     onChange={handleChange}
                     // required={callingTracker.selectYesOrNo !== "Interested"}
                     defaultCountry="IN"
@@ -2310,7 +2314,7 @@ const UpdateSelfCalling = ({
                       min="1947"
                       max="2027"
                       name="lineUp.yearOfPassing"
-                      placeholder="Year Of PassOut"
+                      placeholder="Year Of Pass Out"
                       value={callingTracker?.lineUp.yearOfPassing || ""}
                       // required={callingTracker.selectYesOrNo === "Interested"}
                       onChange={handleChange}
@@ -2412,7 +2416,7 @@ const UpdateSelfCalling = ({
                 <div>
                   <div className="setDisplayFlexForUpdateForm">
                     <input
-                      style={{ width: "95%" }}
+                      style={{ width: "70%" }}
                       type="text"
                       name="lineUp.experienceYear"
                       value={callingTracker?.lineUp.experienceYear || ""}
@@ -2439,7 +2443,7 @@ const UpdateSelfCalling = ({
                 <div className="calling-tracker-two-input newwidthforthisdiv">
                   <div className="setDisplayFlexForUpdateForm">
                     <input
-                      style={{ width: "95%" }}
+                      style={{ width: "80%" }}
                       type="text"
                       name="lineUp.experienceMonth"
                       onChange={handleChange}
@@ -2543,7 +2547,7 @@ const UpdateSelfCalling = ({
                     })}
                   </select>
 
-                  <span  className="ml-4">Out of 5</span>
+                  <span className="ml-4">Out of 5</span>
 
 
                   {errors.communicationRatingStar && (
@@ -2633,7 +2637,7 @@ const UpdateSelfCalling = ({
                   <div>
                     <div className="setDisplayFlexForUpdateForm">
                       <input
-                        style={{ width: "100%" }}
+                        style={{ width: "75%" }}
                         type="text"
                         name="lineUp.expectedCTCLakh"
                         value={callingTracker?.lineUp.expectedCTCLakh || ""}
@@ -2658,7 +2662,7 @@ const UpdateSelfCalling = ({
                   </div>
                   <div>
                     <input
-                      style={{ width: "95%" }}
+                      style={{ width: "75%" }}
                       type="text"
                       name="lineUp.expectedCTCThousand"
                       value={callingTracker?.lineUp.expectedCTCThousand || ""}
@@ -2697,7 +2701,7 @@ const UpdateSelfCalling = ({
               >
                 <div
                   style={{
-                    width: "50%",
+                    width: "100%",
                   }}
                 >
                   <div
@@ -2707,7 +2711,7 @@ const UpdateSelfCalling = ({
                   >
                     <select
                       style={{
-                        width: "90%",
+                        width: "79%",
                       }}
                       className="update-calling-tracker-two-input"
                       type="text"
@@ -2733,12 +2737,12 @@ const UpdateSelfCalling = ({
                   )}
                 </div>
                 <div
-                  style={{
-                    width: "100%",
-                  }}
+                // style={{
+                //   width: "100%",
+                // }}
                 >
                   <input
-                    style={{ width: "85%" }}
+                    style={{borderRadius:"5px"}}
                     type="text"
                     name="lineUp.offerLetterMsg"
                     placeholder="Letter Message"
@@ -2766,6 +2770,7 @@ const UpdateSelfCalling = ({
           </div>
 
           <div className="update-calling-tracker-row-white">
+
             <div className="update-calling-tracker-field">
               <label>Status Type</label>
               <div
@@ -2799,10 +2804,10 @@ const UpdateSelfCalling = ({
                       Not Eligibel Not Interested
                     </option>
                   </select>
-                </div>
+                </div> */}
 
 
-                <div
+                {/* <div
                   style={{
                     width: "100%"
                   }}
@@ -2828,8 +2833,13 @@ const UpdateSelfCalling = ({
                 </div> */}
 
                 <div className="status-type-wrapper">
-                  <select value={callingTracker.selectYesOrNo} onChange={handleChange}>
-                    <option value="Yet To Confirm">Yet To Confirm</option>
+                  <select
+                    className="update-calling-tracker-two-input newwidthforintrestedselecttag"
+                    name="selectYesOrNo"
+                    placeholder="Candidate Interested"
+                    value={callingTracker?.selectYesOrNo}
+                    onChange={handleChange}
+                  >                    <option value="Yet To Confirm">Yet To Confirm</option>
                     <option value="Interested">Interested</option>
                     <option value="Not Interested">Not Interested</option>
                     <option value="Interested, will confirm later">
@@ -2847,13 +2857,36 @@ const UpdateSelfCalling = ({
                     </option>
                   </select>
 
-                  <select value={callingTracker.lineUp.finalStatus} onChange={handleChange}>
+                  {/* <select
+                    name="lineUp.finalStatus"
+                    value={callingTracker.lineUp.finalStatus || ""}
+                    onChange={handleChange}
+                    className="newwidthforselectfinalstatus"
+
+
+                  >
                     <option value="" disabled>Select</option>
                     <option value="Yet To Confirm">Yet To Confirm</option>
                     <option value="Available For Interview">Available For Interview</option>
                     <option value="Confirmed, but will be available later">
                       Confirmed, but will be available later.
                     </option>
+                  </select> */}
+                  <select
+                    name="lineUp.finalStatus"
+                    value={callingTracker.lineUp.finalStatus || ""}
+                    onChange={handleChange}
+
+                    disabled={
+                      ![ "interested"].includes(
+                        callingTracker.selectYesOrNo?.toLowerCase()
+                      )
+                    }
+                  >
+                    <option value="">Select Final Status</option>
+                    <option value="yet to confirm">Yet to Confirm</option>
+                    <option value="available for interview">Available for Interview</option>
+                    <option value="not available">Not Available</option>
                   </select>
                   {errors.finalStatus && (
                     <div className="error-message">{errors.finalStatus}</div>
@@ -3033,7 +3066,7 @@ const ModalComponent = ({
   onUpdateExpectedCTCLakh,
   onUpdateExpectedCTCThousand,
 }) => {
-  console.log(currentCTCInLakh);
+  // console.log(currentCTCInLakh);
 
   const [activeField, setActiveField] = useState("distance");
   const [origin, setOrigin] = useState(startingPoint);

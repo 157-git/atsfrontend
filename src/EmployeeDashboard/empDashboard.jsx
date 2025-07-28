@@ -214,7 +214,7 @@ const EmpDashboard = ({ userGroup }) => {
   };
 
   useEffect(() => {
-    console.log("------From Update.....003");
+    // console.log("------From Update.....003");
     setSuccessfulDataUpdation(false);
   }, [successfulDataUpdation]);
 

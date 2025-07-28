@@ -702,7 +702,7 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
       const response = await axios.get(
         `${API_BASE_URL}/today-interview/${getFormattedDateISOYMDformat()}/${employeeId}/${userType}`
       );
-      console.log(response);
+    {/*  console.log(response);*/}
 
       setInterviewsForToday(response.data);
     } catch (error) {

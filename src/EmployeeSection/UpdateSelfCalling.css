@@ -106,8 +106,8 @@
   width: 90%;
   color: var(--text-color);
   font-size: 16px;
-  padding: 1px;
-  border-radius: 5px;
+  padding: 5px 30px 5px 10px;
+  border-radius: 4px;
   border: 1px solid #f2f2f2;
 }
 
@@ -120,7 +120,7 @@
 }
 
 .update-calling-check-box-main-container-input {
-  width: 160px;
+  width: 177px;
 }
 
 .calling-check-box-container {
@@ -164,11 +164,12 @@
 
 .update-calling-tracker-two-input {
   width: 30%;
-  padding: 1px;
+  /* padding: 5px 10px; */
   color: rgba(128, 128, 128, 0.782);
   font-size: 16px;
   display: flex;
   flex-direction: column;
+  border-radius: 4px;
 }
 
 .calling-tracker-input-message {
@@ -180,10 +181,11 @@
 
 .update-calling-tracker-two-input-container {
   width: 69%;
-  padding: 5px 0px;
+  padding: 5px 30px 5px 10px;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  gap: 10px;
 }
 
 .buttons {
@@ -416,6 +418,7 @@ width: 100%;
 .newBorderClass {
   border: 1px solid #f2f2f2;
   border-radius: 5px;
+  padding: 5px 10px 5px 10px;
 }
 .currentExpectedWidth{
   width: 80%;
@@ -425,4 +428,13 @@ width: 100%;
 }
 .whatsappwidthinput90{
   width: 90%;
+}
+.nighlightincentivesinputnew {
+    color: black;
+    font-weight: bold;
+    border: 1px dashed black;
+    height: 30px;
+    /* background-color: rgb(244, 244, 5); */
+    padding: 5px 10px 5px 10px;
+    width: 152px;
 }

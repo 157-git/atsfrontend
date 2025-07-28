@@ -5,7 +5,7 @@ export const getDailyworkData = async (
   userType,
   currentDateNew
 ) => {
-  console.log("running get reusable");
+  // console.log("running get reusable");
 
   try {
     const getResp = await axios.get(
@@ -23,7 +23,7 @@ export const putDailyworkData = async (
   currentDateNew,
   putDataReqBody
 ) => {
-  console.log("running put reusable");
+  // console.log("running put reusable");
   try {
     const putResp = await axios.put(
       `${API_BASE_URL}/update-daily-work/${employeeId}/${userType}/${currentDateNew}`,
