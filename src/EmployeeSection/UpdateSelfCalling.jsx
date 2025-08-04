@@ -290,7 +290,16 @@ const UpdateSelfCalling = ({
       const data = await response.json();
       const skillsArray = data.candidateSkills?.split(",").map(skill => skill.trim());
       setTags(skillsArray);
-      setCallingTracker(data);
+setCallingTracker((prev) => ({
+  ...prev,
+  ...data,
+  contactNumber: data.contactNumber
+    ? data.contactNumber.toString().replace(/^\+?91/, "").slice(0, 10)
+    : "",
+  alternateNumber: data.alternateNumber
+    ? data.alternateNumber.toString().replace(/^\+?91/, "").slice(0, 10)
+    : "",
+}));
       setInitialYesNoState(data.selectYesOrNo);
       // console.log(data);
       const validSources = ["LinkedIn", "Naukri", "Indeed", "Times", "Social Media", "Company Page", "Excel", "Friends"];
@@ -342,6 +351,14 @@ const UpdateSelfCalling = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    // let updatedValue = value;
+// if (
+//   (name === "contactNumber" || name === "alternateNumber") &&
+//   !value.startsWith("+91")
+// ) {
+//   updatedValue = `+91${value.replace(/^(\+91)?/, "")}`;
+// }
+
     if (name === "fullAddress") {
       setStartPoint(value);
     }
@@ -376,19 +393,39 @@ const UpdateSelfCalling = ({
     ) {
       return;
     }
-    if (
-      (name === "contactNumber" ||
-        name === "alternateNumber" ||
-        name === "lineUp.experienceYear" ||
-        name === "lineUp.experienceMonth" ||
-        name === "lineUp.expectedCTCLakh" ||
-        name === "lineUp.expectedCTCThousand" ||
-        name === "lineUp.currentCTCLakh" ||
-        name === "lineUp.currentCTCThousand") &&
-      !/^\d*$/.test(value)
-    ) {
-      return;
-    }
+if (name === "contactNumber" || name === "alternateNumber") {
+  // Remove +91 or 91 if pasted by user
+  let trimmedValue = value.replace(/^\+?91/, "");
+
+  // Allow only digits
+  if (!/^\d*$/.test(trimmedValue)) return;
+
+  // Limit to 10 digits
+  if (trimmedValue.length > 10) return;
+
+  setCallingTracker((prev) => ({
+    ...prev,
+    [name]: trimmedValue,
+  }));
+
+  return;
+}
+
+
+
+
+if (
+  (name === "lineUp.experienceYear" ||
+    name === "lineUp.experienceMonth" ||
+    name === "lineUp.expectedCTCLakh" ||
+    name === "lineUp.expectedCTCThousand" ||
+    name === "lineUp.currentCTCLakh" ||
+    name === "lineUp.currentCTCThousand") &&
+  !/^\d*$/.test(value)
+) {
+  return;
+}
+
 
     if (name === "lineUp.dateOfBirth") {
       if (value > maxDate) {
@@ -435,22 +472,23 @@ const UpdateSelfCalling = ({
 
 
     setCallingTracker((prevState) => {
-      if (name.includes("lineUp")) {
-        const lineUpField = name.split(".")[1];
-        return {
-          ...prevState,
-          lineUp: {
-            ...prevState.lineUp,
-            [lineUpField]: value,
-          },
-        };
-      } else {
-        return {
-          ...prevState,
-          [name]: value,
-        };
-      }
-    });
+  if (name.includes("lineUp")) {
+    const lineUpField = name.split(".")[1];
+    return {
+      ...prevState,
+      lineUp: {
+        ...prevState.lineUp,
+        [lineUpField]: value,
+      },
+    };
+  } else {
+    return {
+      ...prevState,
+      [name]: value,
+    };
+  }
+});
+
 
 
 
@@ -1430,31 +1468,29 @@ const UpdateSelfCalling = ({
             <div className="update-calling-tracker-field">
               <label>Contact Number</label>
               <div className="update-calling-tracker-field-sub-div setInputBlock">
-                <div className="setDisplayFlexForUpdateForm">
-                  <PhoneInput
-                    style={{ width: "89%" ,padding:"5px 10px"}}
-                    name="contactNumber"
-                    value={
-                      callingTracker?.contactNumber?.toString().startsWith('+91')
-                        ? callingTracker.contactNumber
-                        : `+91${callingTracker?.contactNumber || ""}`}
-                    onChange={handleChange}
+  <div className="setDisplayFlexForUpdateForm">
+    <input
+      type="tel"
+      name="contactNumber"
+      placeholder="+91xxxxxxxxxx"
+      style={{ width: "89%", padding: "5px 10px" }}
+      className="newBorderClass"
+     value={callingTracker.contactNumber || ""}
 
-                    // required={callingTracker.selectYesOrNo !== "Interested"}
-                    defaultCountry="IN"
-                    maxLength={11}
-                    className="newBorderClass"
-                  />
-                  {errors.contactNumberStar && (
-                    <div className="error-message">
-                      {errors.contactNumberStar}
-                    </div>
-                  )}
-                </div>
-                {errors.contactNumber && (
-                  <div className="error-message">{errors.contactNumber}</div>
-                )}
-              </div>
+      onChange={handleChange}
+      maxLength={13} // +91 + 10 digits
+    />
+    {errors.contactNumberStar && (
+      <div className="error-message">
+        {errors.contactNumberStar}
+      </div>
+    )}
+  </div>
+  {errors.contactNumber && (
+    <div className="error-message">{errors.contactNumber}</div>
+  )}
+</div>
+
             </div>
             <div className="update-calling-tracker-field">
               <label>Candidate's Email</label>
@@ -1483,53 +1519,55 @@ const UpdateSelfCalling = ({
           <div className="update-calling-tracker-row-white">
             <div className="update-calling-tracker-field">
               <label>Whatsapp Number</label>
-              <div className="update-calling-tracker-field-sub-div"
-                onClick={handleDisplaySameAsContactText}>
-                <div className="newwrapperdivforwhatsapp whatsappdiv100">
-                  <PhoneInput
-                    placeholder="Enter phone number"
-                    name="alternateNumber"
-                    // value={callingTracker?.alternateNumber || ""}
-                    value={
-                      callingTracker?.alternateNumber?.toString().startsWith('+91')
-                        ? callingTracker.alternateNumber
-                        : `+91${callingTracker?.alternateNumber || ""}`}
-                    onChange={handleChange}
-                    // required={callingTracker.selectYesOrNo !== "Interested"}
-                    defaultCountry="IN"
-                    maxLength={11}
-                    className="newBorderClass whatsappwidthinput90"
-                  />
-                  {displaySameAsContactField && (
-                    <div className="inputsameascontact">
-                      <input
-                        type="checkbox"
-                        name="copyContactNumber"
-                        checked={callingTracker.alternateNumber === callingTracker.contactNumber}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            if (callingTracker?.contactNumber) {
-                              setCallingTracker((prev) => ({
-                                ...prev,
-                                alternateNumber: prev.contactNumber,
-                              }));
-                            }
-                          } else {
-                            setCallingTracker((prev) => ({
-                              ...prev,
-                              alternateNumber: "",
-                            }));
-                          }
-                        }}
-                      />
-                      <span className="sameascontactnumbersize">
-                        Same As Contact Number
-                      </span>
-                    </div>
-                  )}
-                </div>
+              <div
+  className="update-calling-tracker-field-sub-div"
+  onClick={handleDisplaySameAsContactText}
+>
+  <div className="newwrapperdivforwhatsapp whatsappdiv100">
+    <input
+      type="tel"
+      placeholder="Enter phone number"
+      name="alternateNumber"
+      className="newBorderClass whatsappwidthinput90"
+      style={{ padding: "5px 10px" }}
+      maxLength={13} // +91 + 10 digits
+      value={callingTracker.alternateNumber || ""}
 
-              </div>
+      onChange={handleChange}
+    />
+
+    {displaySameAsContactField && (
+      <div className="inputsameascontact">
+        <input
+          type="checkbox"
+          name="copyContactNumber"
+          checked={
+            callingTracker.alternateNumber === callingTracker.contactNumber
+          }
+          onChange={(e) => {
+            if (e.target.checked) {
+              if (callingTracker?.contactNumber) {
+                setCallingTracker((prev) => ({
+                  ...prev,
+                  alternateNumber: prev.contactNumber,
+                }));
+              }
+            } else {
+              setCallingTracker((prev) => ({
+                ...prev,
+                alternateNumber: "",
+              }));
+            }
+          }}
+        />
+        <span className="sameascontactnumbersize">
+          Same As Contact Number
+        </span>
+      </div>
+    )}
+  </div>
+</div>
+
             </div>
             <div className="update-calling-tracker-field ">
               <label>Skills</label>

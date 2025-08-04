@@ -493,10 +493,10 @@ const handlePhoneNumberChange = (value, name) => {
     const withoutPlus = sanitizedValue?.startsWith("+") ? sanitizedValue.slice(1) : sanitizedValue;
     const nationalNumber = withoutPlus?.startsWith("91") ? withoutPlus.slice(2) : withoutPlus;
 
-    if (/^[0-6]/.test(nationalNumber)) {
+    if (/^[0-5]/.test(nationalNumber)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        [name]: "Indian mobile number must start with 7, 8, or 9",
+        [name]: "Indian mobile number must start with 6, 7, 8, or 9",
       }));
       return;
     }
@@ -618,7 +618,7 @@ const handlePhoneNumberChange = (value, name) => {
       emailStatus: e.target.checked ? "Yes" : "No",
     }));
   };
-console.log(errors);
+// console.log(errors);
 
   const handleSubmit = async (e) => {
     setShowConfirmation(false);
