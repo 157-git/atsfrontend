@@ -8,11 +8,11 @@ import { getFormattedDateTime } from "./getFormattedDateTime";
 import Loader from "./loader";
 import { fetchCompleteProfileData } from "../HandlerFunctions/fetchCompleteProfileData";
 
-const AddManager = ({loginEmployeeName, updateEmployeeIdForForm}) => {
+const AddManager = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
     const { employeeId, userType } = useParams();
     const [socket, setSocket] = useState(null);
     const [formData, setFormData] = useState({
-        managerId: "0",
+        // managerId: "0",
         managerName: "",
         dateOfJoiningM: "",
         userName: "",
@@ -73,6 +73,9 @@ const AddManager = ({loginEmployeeName, updateEmployeeIdForForm}) => {
         profileImage: null,
         document: null,
         resumeFile: null,
+        maritalStatus: "",         // single/married/etc.
+        managerPassword: "",
+        managerConfirmPassword: ""
     });
 
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -84,166 +87,264 @@ const AddManager = ({loginEmployeeName, updateEmployeeIdForForm}) => {
     const [loading, setLoading] = useState(false);
 
 
-      useEffect(() => {
+    useEffect(() => {
         const fetchData = async () => {
-          if (updateEmployeeIdForForm) {
-            setLoading(true);
-            try {
-              const resp = await fetchCompleteProfileData(updateEmployeeIdForForm, "Manager");
-              setFormData((prevFormData) => ({
-                ...resp,
-                managerAadhaarNo: resp.aadhaarNo,
-                managerAddress: resp.address,
-                personalNumberM: resp.alternateContactNo,
-                anniversaryDateM: resp.anniversaryDate,
-                companyMobileNoM: resp.companyMobileNo,
-                managerConfirmPassword: resp.confirmPassword,
-                dateOfBirthM: resp.dateOfBirth,
-                dateOfJoiningM: resp.dateOfJoining,
-                departmentM: resp.department,
-                designationM: resp.designation,
-                editDeleteAuthority: resp.editDeleteAuthority,
-                emergencyContactNoM: resp.emergencyContactNo,
-                emergencyContactPersonM: resp.emergencyContactPerson,
-                emergencyPersonRelationM: resp.emergencyPersonRelation,
-                entrySourceM: resp.entrySource,
-                esIcNo: resp.esIcNo,
-                experienceM: resp.experience,
-                faceBookURL: resp.faceBookURL,
-                genderM: resp.gender,
-                inductionComment: resp.inductionComment,
-                inductionYesOrNo: resp.inductionYesOrNo,
-                managerInsuranceNumber: resp.insuranceNumber,
-                interviewTakenPerson: resp.interviewTakenPerson,
-                jobRole: resp.jobRole,
-                lastCompanyM: resp.lastCompany,
-                linkedInURL: resp.linkedInURL,
-                maritalStatusM: resp.maritalStatus,
-                messageForAdmin: resp.messageForAdmin,
-                managerName: resp.name,
-                officialNumberM: resp.officialContactNo,
-                officialMailM: resp.officialMail,
-                managerPanNo: resp.panNo,
-                managerPassword: resp.password,
-                performanceIndicator: resp.performanceIndicator,
-                perksM: resp.perks,
-                personalMaliM: resp.personalEmailId,
-                pfNo: resp.pfNo,
-                presentAddressM: resp.presentAddress,
-                professionalPtNo: resp.professionalPtNo,
-                managerQualification: resp.qualification,
-                reasonForLeaving: resp.reasonForLeaving,
-                reportingAdminDesignation: resp.reportingPersonDesignation,
-                reportingAdminName: resp.reportingPersonName,
-                roundsOfInterview: resp.roundsOfInterview,
-                managerStatus: resp.status,
-                trainingCompleted: resp.trainingCompletedYesOrNo,
-                trainingSource: resp.trainingSource,
-                trainingTakenCount: resp.trainingTakenCount,
-                tshirtSizeM: resp.tshirtSize,
-                twitterURL: resp.twitterURL,
-                warningComments: resp.warningComments,
-                whatsAppNoM: resp.whatsAppNo,
-                workLocationM: resp.workLocation,
-                lastWorkingDate: resp.workingDate,
-                managerSalary: resp.salary
-            }));
-              console.log("Response from API:", resp);
-            } catch (error) {
-              console.error("Error fetching employee data:", error);
-            }finally{
-              setLoading(false);
+            if (updateEmployeeIdForForm) {
+                setLoading(true);
+                try {
+                    const resp = await fetchCompleteProfileData(updateEmployeeIdForForm, "Manager");
+                    setFormData((prevFormData) => ({
+                        ...resp,
+                        managerAadhaarNo: resp.aadhaarNo,
+                        managerAddress: resp.address,
+                        personalNumberM: resp.alternateContactNo,
+                        anniversaryDateM: resp.anniversaryDate,
+                        companyMobileNoM: resp.companyMobileNo,
+                        managerConfirmPassword: resp.confirmPassword,
+                        dateOfBirthM: resp.dateOfBirth,
+                        dateOfJoiningM: resp.dateOfJoining,
+                        departmentM: resp.department,
+                        designationM: resp.designation,
+                        editDeleteAuthority: resp.editDeleteAuthority,
+                        emergencyContactNoM: resp.emergencyContactNo,
+                        emergencyContactPersonM: resp.emergencyContactPerson,
+                        emergencyPersonRelationM: resp.emergencyPersonRelation,
+                        entrySourceM: resp.entrySource,
+                        esIcNo: resp.esIcNo,
+                        experienceM: resp.experience,
+                        faceBookURL: resp.faceBookURL,
+                        genderM: resp.gender,
+                        inductionComment: resp.inductionComment,
+                        inductionYesOrNo: resp.inductionYesOrNo,
+                        managerInsuranceNumber: resp.insuranceNumber,
+                        interviewTakenPerson: resp.interviewTakenPerson,
+                        jobRole: resp.jobRole,
+                        lastCompanyM: resp.lastCompany,
+                        linkedInURL: resp.linkedInURL,
+                        maritalStatusM: resp.maritalStatus,
+                        messageForAdmin: resp.messageForAdmin,
+                        managerName: resp.name,
+                        officialNumberM: resp.officialContactNo,
+                        officialMailM: resp.officialMail,
+                        managerPanNo: resp.panNo,
+                        managerPassword: resp.password,
+                        performanceIndicator: resp.performanceIndicator,
+                        perksM: resp.perks,
+                        personalMaliM: resp.personalEmailId,
+                        pfNo: resp.pfNo,
+                        presentAddressM: resp.presentAddress,
+                        professionalPtNo: resp.professionalPtNo,
+                        managerQualification: resp.qualification,
+                        reasonForLeaving: resp.reasonForLeaving,
+                        reportingAdminDesignation: resp.reportingPersonDesignation,
+                        reportingAdminName: resp.reportingPersonName,
+                        roundsOfInterview: resp.roundsOfInterview,
+                        managerStatus: resp.status,
+                        trainingCompleted: resp.trainingCompletedYesOrNo,
+                        trainingSource: resp.trainingSource,
+                        trainingTakenCount: resp.trainingTakenCount,
+                        tshirtSizeM: resp.tshirtSize,
+                        twitterURL: resp.twitterURL,
+                        warningComments: resp.warningComments,
+                        whatsAppNoM: resp.whatsAppNo,
+                        workLocationM: resp.workLocation,
+                        lastWorkingDate: resp.workingDate,
+                        managerSalary: resp.salary
+                    }));
+                    console.log("Response from API:", resp);
+                } catch (error) {
+                    console.error("Error fetching employee data:", error);
+                } finally {
+                    setLoading(false);
+                }
             }
-          }
         };
-      
+
         fetchData();
-      }, [updateEmployeeIdForForm, employeeId, userType]);
+    }, [updateEmployeeIdForForm, employeeId, userType]);
+    //----------------------SAKSHI KASHID 09/07/2025---------------
+    const validateManagerField = (name, value, file = null, formData) => {
+        switch (name) {
+            case "managerName":
+                const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+                if (value.trim() !== value) return "No space at start or end.";
+                if (!nameRegex.test(value)) return "Only alphabets, one space between words, no special characters.";
+                if (value.length > 30) return "Max 30 characters allowed.";
+                break;
+
+            case "officialMailM":
+                const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
+                if (!emailRegex.test(value)) return "Invalid email format.";
+                break;
+
+            case "userName":
+                const userRegex = /^(?![.])[a-zA-Z0-9._]+(?<![.])$/;
+                if (value.trim() !== value) return "No space at start or end.";
+                if (!userRegex.test(value)) return "Only letters, numbers and symbols( . and _ ) allowed, . not allowed at start and end.";
+                if (value.length > 15) return "Max 15 characters allowed.";
+                break;
+
+            case "officialNumberM":
+                if (!/^\d{10}$/.test(value)) return "Must be exactly 10 digits.";
+                break;
+
+            case "managerAadhaarNo":
+                if (!/^\d{12}$/.test(value)) return "Must be exactly 12 digits.";
+                break;
+
+            case "managerPanNo":
+                if (!/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(value)) return "Format must be ABCDE1234F.";
+                break;
+
+            case "presentAddressM":
+                if (value.length > 100) return "Max 100 characters allowed.";
+                break;
+
+            case "profileImage":
+                const allowedImageTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif"];
+                if (file && !allowedImageTypes.includes(file.type)) return "Only PNG, JPG, JPEG, GIF allowed.";
+                break;
+
+            case "resumeFile":
+                const allowedDocTypes = [
+                    "application/pdf",
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                ];
+                if (file && !allowedDocTypes.includes(file.type)) return "Only PDF or Word files allowed.";
+                break;
+
+            case "managerPassword":
+                const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$/;
+                if (!passwordRegex.test(value)) return "Min 8 chars, 1 capital, 1 number, 1 special char.";
+                break;
+
+            case "managerConfirmPassword":
+                if (value !== formData.managerPassword) return "Passwords do not match.";
+                break;
+
+            case "designationM":
+                if (value.length > 30) return "Max 30 characters allowed.";
+                break;
+
+            case "personalNumberM":
+            case "companyMobileNoM":
+            case "whatsAppNoM":
+            case "emergencyContactNoM":
+                if (value && !/^\d{10}$/.test(value)) return "Must be exactly 10 digits.";
+                break;
+
+            case "managerInsuranceNumber":
+            case "professionalPtNo":
+            case "esIcNo":
+            case "pfNo":
+                if (value && !/^\d{6,20}$/.test(value)) return "Only digits allowed (6 to 20 digits).";
+                break;
+
+            case "trainingTakenCount":
+            case "roundsOfInterview":
+                if (value && !/^\d+$/.test(value)) return "Must be a valid number.";
+                break;
+
+            case "managerQualification":
+            case "bloodGroup":
+            case "reportingAdminName":
+            case "reportingAdminDesignation":
+                if (value && /\d/.test(value)) return "Numbers not allowed.";
+                break;
+
+            case "editDeleteAuthority":
+            case "messageForAdmin":
+                if (value && value.length > 100) return "Max 100 characters allowed.";
+                break;
+
+
+            default:
+                return "";
+        }
+    };
+
 
 
     const handleInputChange = (e) => {
         const { name, value, type, files } = e.target;
+
         if (type === "file") {
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                [name]: files[0],
-            }));
-        } else {
-            if (
-                name === "managerName" ||
-                name === "designationM" ||
-                name === "departmentM" ||
-                name === "perksM" ||
-                name === "lastCompanyM" ||
-                name === "workLocationM" ||
-                name === "entrySourceM" ||
-                name === "reasonForLeaving" ||
-                name === "inductionComment" ||
-                name === "trainingSource" ||
-                name === "emergencyContactPersonM" ||
-                name === "emergencyPersonRelationM" ||
-                name === "interviewTakenPerson" ||
-                name === "warningComments" ||
-                name === "performanceIndicator" ||
-                name === "messageForAdmin" ||
-                name === "editDeleteAuthority" ||
-                name === "bloodGroup" ||
-                name === "managerQualification" ||
-                name === "reportingAdminName" ||
-                name === "reportingAdminDesignation"
-            ) {
-                if (/\d/.test(value)) {
-                    setErrors((prevErrors) => ({
-                        ...prevErrors,
-                        [name]: "Please enter character value only.",
-                    }));
-                } else {
-                    setErrors((prevErrors) => ({
-                        ...prevErrors,
-                        [name]: "",
-                    }));
-                    setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        [name]: value,
-                    }));
-                }
-            } else if (
-                name === "officialNumberM" ||
-                name === "personalNumberM" ||
-                name === "companyMobileNoM" ||
-                name === "whatsAppNoM" ||
-                name === "emergencyContactNoM" ||
-                name === "managerInsuranceNumber" ||
-                name === "managerAadhaarNo" ||
-                name === "managerSalary" ||
-                name === "trainingTakenCount" ||
-                name === "professionalPtNo" ||
-                name === "esIcNo" ||
-                name === "pfNo" ||
-                name === "roundsOfInterview"
-            ) {
-                if (/[^0-9]/.test(value)) {
-                    setErrors((prevErrors) => ({
-                        ...prevErrors,
-                        [name]: "Please enter numeric value only.",
-                    }));
-                } else {
-                    setErrors((prevErrors) => ({
-                        ...prevErrors,
-                        [name]: "",
-                    }));
-                    setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        [name]: value,
-                    }));
-                }
+            const file = files[0];
+            if (!file) return;
+            //---------SAKSHI KASHID 09/07/2025--------
+            // File size limits (in bytes)
+            const maxSizes = {
+                profileImage: 2 * 1024 * 1024,     // 2 MB
+                resumeFile: 5 * 1024 * 1024,       // 5 MB
+                document: 5 * 1024 * 1024    // 5 MB
+            };
+
+            // Check size limit if applicable
+            if (maxSizes[name] && file.size > maxSizes[name]) {
+                const readableSize = maxSizes[name] / (1024 * 1024);
+                toast.error(`${name} should not exceed ${readableSize} MB.`);
+                setErrors((prev) => ({
+                    ...prev,
+                    [name]: `File size must be ≤ ${readableSize} MB.`,
+                }));
+                return;
+            }
+            const error = validateManagerField(name, "", file, formData);
+            if (error) {
+                setErrors((prev) => ({ ...prev, [name]: error }));
             } else {
-                setFormData((prevFormData) => ({
-                    ...prevFormData,
-                    [name]: value,
+                setErrors((prev) => ({ ...prev, [name]: "" }));
+                setFormData((prev) => ({ ...prev, [name]: file }));
+            }
+            return;
+        }
+
+        const error = validateManagerField(name, value, null, formData);
+        if (error) {
+            setErrors((prev) => ({ ...prev, [name]: error }));
+        } else {
+            setErrors((prev) => ({ ...prev, [name]: "" }));
+        }
+
+        // Optional: For text-only fields (prevent numbers)
+        const textOnlyFields = [
+            "managerName", "designationM", "departmentM", "perksM", "lastCompanyM", "workLocationM", "entrySourceM",
+            "reasonForLeaving", "inductionComment", "trainingSource", "emergencyContactPersonM",
+            "emergencyPersonRelationM", "interviewTakenPerson", "warningComments", "performanceIndicator",
+            "messageForAdmin", "editDeleteAuthority", "bloodGroup", "managerQualification", "reportingAdminName",
+            "reportingAdminDesignation"
+        ];
+
+        if (textOnlyFields.includes(name)) {
+            if (/\d/.test(value)) {
+                setErrors((prev) => ({
+                    ...prev,
+                    [name]: "Please enter character value only.",
                 }));
             }
         }
+
+        // Optional: For numeric-only fields
+        const numericOnlyFields = [
+            "officialNumberM", "personalNumberM", "companyMobileNoM", "whatsAppNoM", "emergencyContactNoM",
+            "managerInsuranceNumber", "managerAadhaarNo", "managerSalary", "trainingTakenCount",
+            "professionalPtNo", "esIcNo", "pfNo", "roundsOfInterview"
+        ];
+
+        if (numericOnlyFields.includes(name)) {
+            if (/[^0-9]/.test(value)) {
+                setErrors((prev) => ({
+                    ...prev,
+                    [name]: "Please enter numeric value only.",
+                }));
+            }
+        }
+
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
     };
 
 
@@ -256,10 +357,10 @@ const AddManager = ({loginEmployeeName, updateEmployeeIdForForm}) => {
             setPasswordError("");
         }
     };
-  useEffect(() => {
-    const newSocket = getSocket();
-    setSocket(newSocket);
-  }, []);
+    useEffect(() => {
+        const newSocket = getSocket();
+        setSocket(newSocket);
+    }, []);
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -268,26 +369,111 @@ const AddManager = ({loginEmployeeName, updateEmployeeIdForForm}) => {
             return;
         }
 
-        const formDataToSend = new FormData();
-        for (const key in formData) {
-            if (formData[key] instanceof File) {
-                formDataToSend.append(key, formData[key]);
-            } else {
-                formDataToSend.append(key, formData[key]);
+        const requiredFields = {
+            managerName: "Manager Name",
+            dateOfJoiningM: "Date of Joining",
+            jobRole: "Job Role",
+            officialMailM: "Official Email",
+            userName: "User Name",
+            officialNumberM: "Official Contact No.",
+            managerAadhaarNo: "Aadhaar Number",
+            managerPanNo: "PAN Number",
+            presentAddressM: "Present Address",
+            profileImage: "Profile Image",
+            resumeFile: "Resume",
+            managerPassword: "Password",
+            managerConfirmPassword: "Confirm Password",
+            designationM: "Designation"
+        };
+
+        let hasError = false;
+        const newErrors = {};
+
+        for (const [field, label] of Object.entries(requiredFields)) {
+            const value = formData[field];
+            if (
+                value === "" ||
+                value === null ||
+                value === undefined ||
+                (field.includes("Date") && !/^\d{4}-\d{2}-\d{2}$/.test(value))
+            ) {
+                newErrors[field] = `${label} is required.`;
+                hasError = true;
             }
         }
-        for (const pair of formDataToSend.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
+
+        if (hasError) {
+            setErrors(newErrors);
+            toast.error("Please fill all required fields.");
+            return;
         }
 
+
+        const numberFields = [
+            "officialNumberM",
+            "personalNumberM",
+            "companyMobileNoM",
+            "whatsAppNoM",
+            "emergencyContactNoM",
+            "managerAadhaarNo",
+            "managerSalary",
+            "professionalPtNo",
+            "esIcNo",
+            "pfNo",
+            "trainingTakenCount",
+            "managerInsuranceNumber"
+        ];
+
+
+        const formDataToSend = new FormData();
+
+        Object.entries(formData).forEach(([key, value]) => {
+            if (value === undefined || value === "undefined") return;
+
+            // ✅ Skip number fields with empty or invalid values
+            if (numberFields.includes(key)) {
+                // const trimmed = String(value).trim();
+                // // if (value === "" || value === null || isNaN(trimmed)) {
+                // //   return; // 🔥 Omit from formDataToSend
+                // // }
+
+                const num = Number(value);
+                if (!Number.isFinite(num)) {
+                    return; // Skip invalid number
+                }
+                formDataToSend.append(key, num);
+                return;
+            }
+
+            // ✅ Append File objects directly
+            if (value instanceof File) {
+                formDataToSend.append(key, value);
+                return;
+            }
+
+            // ✅ All other values — stringified and trimmed
+            formDataToSend.append(key, value?.toString().trim() ?? "");
+
+            for (const [key, val] of formDataToSend.entries()) {
+                if (val === "") {
+                    console.warn(`❗ Field '${key}' is being sent as empty string`);
+                }
+            }
+
+        });
+
+
         try {
+
             const response = await fetch(
+
                 `${API_BASE_URL}/save-managers/${employeeId}/${userType}`,
                 {
                     method: "POST",
                     body: formDataToSend,
                 }
             );
+
             const responseBody = await response.json();
             console.log('Response Body:', responseBody);
             let newId = responseBody.id;
@@ -297,22 +483,22 @@ const AddManager = ({loginEmployeeName, updateEmployeeIdForForm}) => {
                 toast.success( "Manager Data Added Successfully.");
 
 
-const emitData = {
-    managerName: formData.managerName,
-    dateOfJoiningM: getFormattedDateTime(),
-    userName: formData.userName,
-    jobRole: formData.jobRole,
-    reportingAdminName: loginEmployeeName,
-    employeeId:newId,
-    userType: "Manager",
-}
+                const emitData = {
+                    managerName: formData.managerName,
+                    dateOfJoiningM: getFormattedDateTime(),
+                    userName: formData.userName,
+                    jobRole: formData.jobRole,
+                    reportingAdminName: loginEmployeeName,
+                    employeeId: newId,
+                    userType: "Manager",
+                }
 
-console.log(emitData);
+                console.log(emitData);
 
 
                 socket.emit("add_manager_event", emitData);
                 setFormData({
-                    managerId: "0",
+                    // managerId: "0",
                     managerName: "",
                     dateOfJoiningM: "",
                     userName: "",
@@ -376,8 +562,13 @@ console.log(emitData);
 
                 })
             } else {
-                toast.error("All Fields Are Mandatory. Please Fill All Fields.");
+                Object.entries(formData).forEach(([key, value]) => {
+                    console.log(`${key}: ${value} (type: ${typeof value})`);
+                });
+                // console.log("Response body:",responseBody)
+                toast.error(responseBody.message && "Something went wrong. Please try again.");
             }
+
         } catch (error) {
             console.error("Error:", error);
             toast.error("Error occurred while adding employee data.");
@@ -405,7 +596,7 @@ console.log(emitData);
             >
                 <input type="text" name="managerId" value={formData.managerId} hidden readOnly id="" />
                 <div className="addRec-form-row">
-                    <label>Manager Name:</label>
+                    <label>Manager Name: <span style={{ color: "red" }}>&nbsp;*</span></label>
                     <input
                         type="text"
                         name="managerName"
@@ -420,17 +611,20 @@ console.log(emitData);
                 </div>
 
                 <div className="addRec-form-row">
-                    <label>Date of Joining:</label>
+                    <label>Date of Joining: <span style={{ color: "red" }}>&nbsp;*</span></label>
                     <input
                         type="date"
                         name="dateOfJoiningM"
                         value={formData.dateOfJoiningM}
                         onChange={handleInputChange}
                     />
+                    {errors.dateOfJoiningM && (
+                        <div className="error">{errors.dateOfJoiningM}</div>
+                    )}
                 </div>
 
                 <div className="addRec-form-row">
-                    <label>Designation:</label>
+                    <label>Designation: <span style={{ color: "red" }}>&nbsp;*</span></label>
                     <input
                         type="text"
                         name="designationM"
@@ -459,21 +653,24 @@ console.log(emitData);
 
 
                 <div className="addRec-form-row">
-  <label>Job Role:</label>
-  <select
-    name="jobRole"
-    value={formData.jobRole}
-    onChange={handleInputChange}
-    className="readonly-input"
-  >
-     <option value="" >Select</option>
-    <option value="Manager">Manager</option>
-  </select>
-</div>
+                    <label>Job Role: <span style={{ color: "red" }}>&nbsp;*</span></label>
+                    <select
+                        name="jobRole"
+                        value={formData.jobRole}
+                        onChange={handleInputChange}
+                        className="readonly-input"
+                    >
+                        <option value="" >Select</option>
+                        <option value="Manager">Manager</option>
+                    </select>
+                    {errors.jobRole && (
+                        <div className="error">{errors.jobRole}</div>
+                    )}
+                </div>
 
 
                 <div className="addRec-form-row">
-                    <label>Official Email:</label>
+                    <label>Official Email: <span style={{ color: "red" }}>&nbsp;*</span></label>
                     <input
                         type="email"
                         name="officialMailM"
@@ -481,6 +678,9 @@ console.log(emitData);
                         value={formData.officialMailM}
                         onChange={handleInputChange}
                     />
+                    {errors.officialMailM && (
+                        <div className="error">{errors.officialMailM}</div>
+                    )}
                 </div>
 
                 <div className="addRec-form-row">
@@ -495,7 +695,7 @@ console.log(emitData);
                 </div>
 
                 <div className="addRec-form-row">
-                    <label>User Name </label>
+                    <label>User Name: <span style={{ color: "red" }}>&nbsp;*</span></label>
                     <input
                         type="text"
                         name="userName"
@@ -503,6 +703,9 @@ console.log(emitData);
                         value={formData.userName}
                         onChange={handleInputChange}
                     />
+                    {errors.userName && (
+                        <div className="error">{errors.userName}</div>
+                    )}
 
                 </div>
 
@@ -522,7 +725,7 @@ console.log(emitData);
                 </div>
 
                 <div className="addRec-form-row">
-                    <label>Official Contact Number:</label>
+                    <label>Official Contact Number: <span style={{ color: "red" }}>&nbsp;*</span></label>
                     <input
                         type="text"
                         accept="0-9"
@@ -585,32 +788,42 @@ console.log(emitData);
                         <option value="">Select Gender</option>
                         <option value="Male">Male</option>
                         <option value="Femal">Female</option>
-                      
+
                     </select>
                 </div>
                 <div className="addRec-form-row">
                     <label>Marital Status:</label>
                     <select
-                        name="maritalStatusM"
-                        value={formData.maritalStatusM}
+                        name="maritalStatus"
+                        value={formData.maritalStatus}
                         onChange={handleInputChange}
+                        className="form-control"
                     >
-                        <option value={""}>Select Marital Status</option>
-                        <option value="single">Single</option>
-                        <option value="married">Married</option>
-                        <option value="divorced">Divorced</option>
-                        <option value="widowed">Widowed</option>
+                        <option value="">Select</option>
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                        <option value="Divorced">Divorced</option>
+                        <option value="Widowed">Widowed</option>
+
                     </select>
+
                 </div>
 
                 <div className="addRec-form-row">
-                    <label>Anniversary Date:</label>
-                    <input
-                        type="date"
-                        name="anniversaryDateM"
-                        value={formData.anniversaryDateM}
-                        onChange={handleInputChange}
-                    />
+                    {formData.maritalStatus === "Married" && (
+                        <div className="form-group">
+                            <label>Anniversary Date:</label>
+                            <input
+                                style={{ width: "456%" }}
+                                type="date"
+                                name="anniversaryDate"
+                                value={formData.anniversaryDateM}
+                                onChange={handleInputChange}
+                                className="form-control"
+                            />
+                        </div>
+                    )}
+
                 </div>
 
                 <div className="addRec-form-row">
@@ -684,9 +897,11 @@ console.log(emitData);
                         value={formData.bloodGroup}
                         onChange={handleInputChange}
                     />
+                    {errors.bloodGroup && <div className="error">{errors.bloodGroup}</div>}
+
                 </div>
                 <div className="addRec-form-row">
-                    <label>Aadhaar Number:</label>
+                    <label>Aadhaar Number: <span style={{ color: "red" }}>&nbsp;*</span></label>
                     <input
                         type="text"
                         name="managerAadhaarNo"
@@ -698,7 +913,7 @@ console.log(emitData);
                 </div>
 
                 <div className="addRec-form-row">
-                    <label>PAN Card Number:</label>
+                    <label>PAN Card Number: <span style={{ color: "red" }}>&nbsp;*</span></label>
                     <input
                         type="text"
                         name="managerPanNo"
@@ -706,6 +921,8 @@ console.log(emitData);
                         value={formData.managerPanNo}
                         onChange={handleInputChange}
                     />
+                    {errors.managerPanNo && <div className="error">{errors.managerPanNo}</div>}
+
                 </div>
 
                 <div className="addRec-form-row">
@@ -717,10 +934,12 @@ console.log(emitData);
                         value={formData.managerQualification}
                         onChange={handleInputChange}
                     />
+                    {errors.managerQualification && <div className="error">{errors.managerQualification}</div>}
+
                 </div>
 
                 <div className="addRec-form-row">
-                    <label>Gross Salary:</label>
+                    <label>Gross Salary (lpa):</label>
                     <input
                         type="text"
                         name="managerSalary"
@@ -734,7 +953,7 @@ console.log(emitData);
                 </div>
 
                 <div className="addRec-form-row">
-                    <label>Employee Present Address:</label>
+                    <label>Employee Present Address: <span style={{ color: "red" }}>&nbsp;*</span></label>
                     <input
                         type="text"
                         name="presentAddressM"
@@ -742,6 +961,9 @@ console.log(emitData);
                         value={formData.presentAddressM}
                         onChange={handleInputChange}
                     />
+                    {errors.presentAddressM && (
+                        <div className="error">{errors.presentAddressM}</div>
+                    )}
                 </div>
 
                 <div className="addRec-form-row">
@@ -1037,6 +1259,9 @@ console.log(emitData);
                         value={formData.managerAddress}
                         onChange={handleInputChange}
                     />
+                    {errors.managerAddress && (
+                        <div className="error">{errors.managerAddress}</div>
+                    )}
                 </div>
 
                 <div className="addRec-form-row">
@@ -1119,57 +1344,74 @@ console.log(emitData);
                     )}
                 </div>
                 <div className="addRec-form-row">
-                    <label>Upload Resume:</label>
-<div className="wraptickindiv">
-<input type="file"
-                        multiple
-                        name="resumeFile" onChange={handleInputChange} />
-            {
-              formData.resumeFile && (
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg>
-              )
-            }
-            </div>
-                </div>
-                <div className="addRec-form-row">
-                    <label>Upload Profile Image:</label>
-                  
+                    <label>Upload Resume (max size 5 mb): <span style={{ color: "red" }}>&nbsp;*</span></label>
                     <div className="wraptickindiv">
-                    <input
-                        type="file"
-                        name="profileImage"
-                        onChange={handleInputChange}
-                    />
-            {
-              formData.profileImage && (
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg>
-              )
-            }
-            </div>
+                        <input type="file"
+                            multiple
+                            name="resumeFile"
+                            accept=".pdf,.docx"
+                            onChange={handleInputChange} />
+                        {errors.resumeFile && (
+                            <div className="error">{errors.resumeFile}</div>
+                        )}
+
+                        {
+                            formData.resumeFile && (
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z" /></svg>
+                            )
+                        }
+                    </div>
+                </div>
+                <div className="addRec-form-row">
+                    <label>Upload Profile Image (max size 2 mb): <span style={{ color: "red" }}>&nbsp;*</span></label>
+
+                    <div className="wraptickindiv">
+                        <input
+                            type="file"
+                            name="profileImage"
+                            accept=".png,.jpg,.jpeg,.gif"
+
+                            onChange={handleInputChange}
+                        />
+                        {errors.profileImage && (
+                            <div className="error">{errors.profileImage}</div>
+                        )}
+                        {
+                            formData.profileImage && (
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z" /></svg>
+                            )
+                        }
+                    </div>
                 </div>
 
                 <div className="addRec-form-row">
-                    <label>Upload Document:</label>
-<div className="wraptickindiv">
-<input type="file"
-                        multiple
-                        name="document" onChange={handleInputChange} />
-            {
-              formData.document && (
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg>
-              )
-            }
-            </div>
+                    <label>Upload Document (max size 5 mb):</label>
+                    <div className="wraptickindiv">
+                        <input type="file"
+                            multiple
+                            name="document"
+                            accept=".pdf,.docx"
+
+                            onChange={handleInputChange} />
+                        {errors.document && (
+                            <div className="error">{errors.document}</div>
+                        )}
+                        {
+                            formData.document && (
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#78A75A"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z" /></svg>
+                            )
+                        }
+                    </div>
                 </div>
 
                 <div className="addRec-form-row">
-                    <label>Password:</label>
+                    <label>Password: <span style={{ color: "red" }}>&nbsp;*</span></label>
 
-                    <div class="wrapper-eye">
+                    <div className="wrapper-eye">
                         <div className="password-eye-icon"
                             onMouseEnter={showPassword}
                             onMouseLeave={hidePassword}>
-                            <i className="fas fa-eye"></i>
+                            <i className={`bi ${passwordVisible ? "bi-eye-slash" : "bi-eye"}`}></i>
                         </div>
                         <input
                             type={passwordVisible ? "text" : "password"}
@@ -1178,16 +1420,19 @@ console.log(emitData);
                             value={formData.managerPassword}
                             onChange={handleInputChange}
                         />
+                        {errors.managerPassword && (
+                            <div className="error">{errors.managerPassword}</div>
+                        )}
                     </div>
                 </div>
 
                 <div className="addRec-form-row">
-                    <label>Confirm Password:</label>
+                    <label>Confirm Password: <span style={{ color: "red" }}>&nbsp;*</span></label>
                     <div className="wrapper-eye">
                         <div className="password-eye-icon"
                             onMouseEnter={showPassword}
                             onMouseLeave={hidePassword}>
-                            <i className="fas fa-eye"></i>
+                            <i className={`bi ${passwordVisible ? "bi-eye-slash" : "bi-eye"}`}></i>
                         </div>
                         <input
                             type={passwordVisible ? "text" : "password"}
@@ -1197,9 +1442,12 @@ console.log(emitData);
                             onChange={handleInputChange}
                             onBlur={handleConfirmPasswordBlur}
                         />
+                        {errors.managerConfirmPassword && (
+                            <div className="error">{errors.managerConfirmPassword}</div>
+                        )}
                     </div>
 
-                    {!passwordMatch && <div className="error">{passwordError}</div>}
+                    {/* {!passwordMatch && <div className="error">{passwordError}</div>} */}
                 </div>
 
                 <div className="add-employee-submit-div">
@@ -1212,13 +1460,14 @@ console.log(emitData);
                 )}
             </form>
 
-             {
-                          loading && (
-                            <Loader/>
-                          )
-                        }
+            {
+                loading && (
+                    <Loader />
+                )
+            }
         </div>
     );
 };
+
 
 export default AddManager;

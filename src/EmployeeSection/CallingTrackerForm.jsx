@@ -1610,35 +1610,53 @@ handlePhoneNumberChange(`+91${data.contactNumber}`, "contactNumber");
                   onClick={handleDisplaySameAsContactText}
                 >
                   <PhoneInput
-                    placeholder="Enter WhatsApp number"
-                    name="alternateNumber"
-                    className="plain-input"
-                    value={callingTracker.alternateNumber}
-                    onChange={(value) => {
-                      setDisplaySameAsContactField(false);
-                      handlePhoneNumberChange(value, "alternateNumber");
-                    }}
-                    defaultCountry="IN"
-                    // sahil karnekar line 732
-                    maxLength={selectedCountryWP === "IN" ? 11 : 20}
-                    onCountryChange={(country) => setSelectedCountryWP(country)}
-                  />
+  name="alternateNumber"
+  placeholder="Enter WhatsApp number"
+  defaultCountry="IN"
+  international={false}
+  countryCallingCodeEditable={false}
+  value={callingTracker.alternateNumber || ""}
+  onChange={(value) => {
+    // Only store last 10 digits
+    const digitsOnly = value?.replace(/\D/g, "")?.slice(-10) || "";
+    setCallingTracker((prev) => ({
+      ...prev,
+      alternateNumber: digitsOnly,
+    }));
+  }}
+  className="newBorderClass whatsappwidthinput90"
+/>
+
                   {displaySameAsContactField && (
                     <div className="inputsameascontact">
-                      <input
-                        type="checkbox"
-                        name="copyContactNumber"
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            if (callingTracker.contactNumber) {
-                              callingTracker.alternateNumber =
-                                callingTracker.contactNumber;
-                            }
-                          } else {
-                            callingTracker.alternateNumber = "";
-                          }
-                        }}
-                      />
+                     <input
+  type="checkbox"
+  name="copyContactNumber"
+  checked={callingTracker.alternateNumber === callingTracker.contactNumber}
+  onChange={(e) => {
+    if (e.target.checked) {
+      if (callingTracker?.contactNumber) {
+        const contact = callingTracker.contactNumber;
+        const cleanContact = contact
+          .replace(/^\+?91/, "") // Remove +91 or 91 at the start
+          .replace(/\D/g, "")    // Remove any non-digit characters
+          .slice(-10);           // Keep only last 10 digits
+
+        setCallingTracker((prev) => ({
+          ...prev,
+          alternateNumber: cleanContact,
+        }));
+      }
+    } else {
+      setCallingTracker((prev) => ({
+        ...prev,
+        alternateNumber: "",
+      }));
+    }
+  }}
+/>
+
+
                       <span className="sameascontactnumbersize">
                         Same As Contact Number
                       </span>

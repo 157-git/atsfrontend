@@ -394,22 +394,24 @@ setCallingTracker((prev) => ({
       return;
     }
 if (name === "contactNumber" || name === "alternateNumber") {
-  // Remove +91 or 91 if pasted by user
-  let trimmedValue = value.replace(/^\+?91/, "");
+  // If user typed or pasted anything
+  const inputValue = value;
 
-  // Allow only digits
-  if (!/^\d*$/.test(trimmedValue)) return;
+  // Only allow digits
+  if (!/^\d*$/.test(inputValue)) return;
 
-  // Limit to 10 digits
-  if (trimmedValue.length > 10) return;
+  // Allow only up to 10 digits — don't trim, just block extra typing
+  if (inputValue.length > 15) return;
 
+  // Save the clean value
   setCallingTracker((prev) => ({
     ...prev,
-    [name]: trimmedValue,
+    [name]: inputValue,
   }));
 
   return;
 }
+
 
 
 
@@ -1478,7 +1480,7 @@ if (
      value={callingTracker.contactNumber || ""}
 
       onChange={handleChange}
-      maxLength={13} // +91 + 10 digits
+      maxLength={15} // +91 + 10 digits
     />
     {errors.contactNumberStar && (
       <div className="error-message">
@@ -1530,7 +1532,7 @@ if (
       name="alternateNumber"
       className="newBorderClass whatsappwidthinput90"
       style={{ padding: "5px 10px" }}
-      maxLength={13} // +91 + 10 digits
+      maxLength={15} // +91 + 10 digits
       value={callingTracker.alternateNumber || ""}
 
       onChange={handleChange}
