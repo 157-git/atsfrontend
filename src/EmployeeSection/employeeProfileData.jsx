@@ -7,14 +7,14 @@ import Modal from "react-bootstrap/Modal";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../EmployeeSection/employeeProfile.css";
-import axios, { API_BASE_URL } from "../api/api";
+import axios, { API_BASE_URL } from "../api/api.js";
 import dummyUserImg from "../photos/DummyUserImg.png";
 import { toast } from "react-toastify";
-import EmployeeProfileModal from "./employeeProfileModal";
-import EmployeeFullProfile from "./EmployeeFullProfile";
-import PerformanceImprovement from "./performanceImprovement";
-import Incentive from "./Incentive";
-import Attendance from "./Attendence_sheet";
+import EmployeeProfileModal from "./EmployeeProfileModal.jsx";
+import EmployeeFullProfile from "./EmployeeFullProfile.jsx";
+import PerformanceImprovement from "./performanceImprovement.jsx";
+import Incentive from "./Incentive.jsx";
+import Attendance from "./Attendence_sheet.jsx";
 
 
 const EmployeeProfileData = ({ onClose, toggleIncentive, toggleAttendance, togglePerformanceImprovement }) => {

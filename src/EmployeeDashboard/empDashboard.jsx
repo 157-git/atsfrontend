@@ -27,7 +27,7 @@ import AddJobDescription from "../JobDiscription/addJobDescription";
 import AddEmployee from "../EmployeeSection/addEmployee";
 import NotePad from "../notPad/notePad";
 import MainReportDatapage from "../Reports/MainReportDatapage";
-import EmployeeProfileData from "../EmployeeSection/employeeProfileData";
+import EmployeeProfileData from "../EmployeeProfileData.jsx"
 import AddResumes from "../ResumeData/addMultipleResumes";
 import ChatRoom from "../ChatRoom/chatRoom";
 import Team_Leader from "../AdminSection/Team_Leader";
