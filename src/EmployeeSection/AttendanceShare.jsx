@@ -5,6 +5,7 @@ import "../EmployeeSection/AttendanceLoginLogout.css";
 import dummyImage from "../assets/react.svg";
 import newLogoHead from '../assets/rgLogo.png';
 import CryptoJS from "crypto-js";
+import { API_BASE_URL } from "../api/api.js";
 
 const AttendanceShare = () => {
   // const API_BASE_URL = 'https://rg.157careers.in/api/ats/157industries';
@@ -15,11 +16,11 @@ const AttendanceShare = () => {
   const [selectedRole, setSelectedRole] = useState("Recruiter");
   const [imageLoadErrors, setImageLoadErrors] = useState({});
   const [loading, setLoading] = useState(false);
-const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-const toggleMenu = () => {
-  setIsOpen((prev) => !prev);
-};
+  const toggleMenu = () => {
+    setIsOpen((prev) => !prev);
+  };
 
   const navigate = useNavigate();
   const { employeeId: encryptedId } = useParams();
@@ -50,7 +51,7 @@ const toggleMenu = () => {
 
   const getCurrentDate = () => {
     const today = new Date();
-    return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
+    return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
   };
 
   const mapRoleToApiParam = (role) => {
@@ -80,8 +81,18 @@ const toggleMenu = () => {
   };
 
   useEffect(() => {
+    // fetch immediately when page loads or role changes
     fetchInfo(mapRoleToApiParam(selectedRole));
+
+    // set up auto-refresh every 30s
+    const interval = setInterval(() => {
+      fetchInfo(mapRoleToApiParam(selectedRole));
+    }, 30000);
+
+    // cleanup on unmount or when dependencies change
+    return () => clearInterval(interval);
   }, [selectedRole, employeeId]);
+
 
   const handleImageError = (empId) => {
     setImageLoadErrors((prev) => ({
@@ -120,35 +131,35 @@ const toggleMenu = () => {
   return (
     <div className="main-wrapper">
       {/* 🔹 Safe header block with its own styling */}
-    <div className="form-heading-December-main-div">
-      <div className="logo-text-wrapper">
-    <img
-      className="classnameforsetwidthforlogpimagen"
-      src={newLogoHead || "/assets/rgLogo.png"}
-      alt="logo"
-    />
-     </div>
-    <div className="heading-text">
-      <p>Recruiter's Gear</p>
-    {/* </div>
+      <div className="form-heading-December-main-div">
+        <div className="logo-text-wrapper">
+          <img
+            className="classnameforsetwidthforlogpimagen"
+            src={newLogoHead || "/assets/rgLogo.png"}
+            alt="logo"
+          />
+        </div>
+        <div className="heading-text">
+          <p>Recruiter's Gear</p>
+          {/* </div>
     <div className="heading-text2"> */}
-      <p>Active Team Members</p>
-    </div>
-   
-      {/* Right side: 3 dots menu */}
-  <div className="menu-container">
-<button onClick={toggleMenu} className="menu-dots">
-  ⋮
-</button>
-    {isOpen && (
-    <div className="menu-dropdown">
-      <button onClick={() => navigate(`/login/${userType || "user"}`)}>
-        Go to Login
-      </button>
-    </div>
-  )}
-  </div>
-  </div>
+          <p>Active Team Members</p>
+        </div>
+
+        {/* Right side: 3 dots menu */}
+        <div className="menu-container">
+          <button onClick={toggleMenu} className="menu-dots">
+            ⋮
+          </button>
+          {isOpen && (
+            <div className="menu-dropdown">
+              <button onClick={() => navigate(`/login/${userType || "user"}`)}>
+                Go to Login
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
 
       <div className="button-container">
         <div className="role-buttons">
@@ -175,7 +186,7 @@ const toggleMenu = () => {
                   className="status-indicator"
                   style={{ color: user.loginStatus === "LoggedIn" ? "green" : "red" }}
                 >
-                  {user.loginStatus === "LoggedIn" ? "Login" : "Logged Out"}
+                  {user.loginStatus === "LoggedIn" ? "Logged In" : "Logged Out"}
                 </div>
 
                 <div className="info-section">

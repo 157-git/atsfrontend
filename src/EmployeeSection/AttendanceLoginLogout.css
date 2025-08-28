@@ -5,6 +5,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  line-height: 20px;
 }
 
 .search-container {
@@ -460,8 +461,8 @@
  
    @media (max-width: 300px) {
      .status-image {
-       width: 60px;
-       height: 60px;
+       width: 45px;
+       height: 45px;
      }
  
      .user-stats strong,
@@ -556,42 +557,7 @@
     }
   }
 
-  @media (max-width: 400px) {
-    .status-card {
-      padding: 12px;
-    }
 
-    .status-image {
-      width: 70px;
-      height: 70px;
-    }
-
-    .user-details p,
-    .user-stats p {
-      font-size: 13px;
-    }
-
-    .search-btn,
-    .logout-btnAttendance,
-     .login-btn,
-     .all-btn {
-       padding: 5px 8px;
-       font-size: 12px;
-     }
-   }
- 
-   @media (max-width: 300px) {
-     .status-image {
-       width: 60px;
-       height: 60px;
-     }
- 
-     .user-stats strong,
-     .user-details strong {
-       display: block;
-       margin-bottom: 2px;
-     }
-   }
    
 /* ---------- HEADER ---------- */
 .form-heading-December-main-div {
@@ -728,3 +694,21 @@
     margin-top: -8px;
   }
 }
+
+.copy-link-btn {
+  background-color: #f6f6f6;
+  color: black;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 10px; /* space from other buttons */
+}
+
+.copy-link-btn:hover {
+  background-color: lightgray; /* darker blue on hover */
+  color: #27374d;
+}
+

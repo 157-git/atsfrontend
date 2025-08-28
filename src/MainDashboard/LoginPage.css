@@ -246,7 +246,8 @@
 
 @media (max-width: 666px) {
     .container22 {
-        flex-direction: column;
+        height:600px;
+        display: grid;
     }
 
     .left-panel,

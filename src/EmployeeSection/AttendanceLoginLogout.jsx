@@ -153,7 +153,7 @@ const AttendanceLoginLogout = () => {
             filteredRecruiters().map((user, index) => (
               <div className="status-card" key={index}>
                 <div className="status-indicator" style={{ color: user.loginStatus === "LoggedIn" ? "green" : "red" }}>
-                  {user.loginStatus === "LoggedIn" ? "Login" : "Logged Out"}
+                  {user.loginStatus === "LoggedIn" ? "Logged In" : "Logged Out"}
                 </div>
 
                 <div className="info-section">
@@ -239,16 +239,17 @@ const AttendanceLoginLogout = () => {
           onClick={() => setFilterStatus("login")}
           className={`login-btn ${filterStatus === "login" ? "active" : ""}`}
         >
-          Login
+          Logged In
         </button>
         <button
           onClick={() => setFilterStatus("logout")}
           className={`logout-btnAttendance ${filterStatus === "logout" ? "active" : ""}`}
         >
-          Logout
+          Logged Out
         </button>
 
         {/* Nikita Shirsath added button of Copy Link */}
+        {userType ==="SuperUser" &&(
         <button
           className="copy-link-btn"
           onClick={() => {
@@ -263,7 +264,7 @@ const AttendanceLoginLogout = () => {
         >
           Copy Link
         </button>
-
+        )}
 
       </div>
 
