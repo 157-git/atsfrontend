@@ -10,6 +10,8 @@ import CryptoJS from "crypto-js";
 
 
 const AttendanceLoginLogout = () => {
+    // const API_BASE_URL='https://rg.157careers.in/api/ats/157industries';
+
   const [activeRecruiters, setActiveRecruiters] = useState([])
   const [inactiveRecruiters, setInactiveRecruiters] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
@@ -20,6 +22,9 @@ const AttendanceLoginLogout = () => {
   const [loading, setLoading] = useState(false);
 
  const { employeeId, userType } = useParams();
+
+// const userType="SuperUser";
+// const employeeId=390
 
   const getRoleButtons = () => {
     switch (userType) {
