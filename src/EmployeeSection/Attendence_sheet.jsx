@@ -3029,7 +3029,11 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      const initialData = await response.json();
+      // VERIFY THIS LINE ********
+      const data = initialData.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+
       setAttendanceData(data);
       setAttendanceDataNew(data);
       console.log(data);
@@ -3075,9 +3079,9 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
       } else {
         workingDays += 1;
         totalTarget += 10;
-        totalWorkingHours += data.totalHoursWork || 0;
-        archived += data.dailyArchived || 0;
-        pending += data.dailyPending || 0;
+        totalWorkingHours += Number(data.totalHoursWork) || 0;
+        archived += Number(data.dailyArchived) || 0;
+        pending += Number(data.dailyPending) || 0;
         if (data.dayPresentStatus === "Present") {
           present += 1;
         } else {
@@ -4533,11 +4537,11 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
                   onMouseOut={handleMouseOut}
                 >
                   {data.date}
-                  {/* <div className="tooltipattendanceform">
+                  <div className="tooltipattendanceform">
                     <span className="tooltiptextattendanceform">
                       {data.date}
                     </span>
-                  </div> */}
+                  </div>
                 </td>
                 <td
                   className="tabledataattendanceform"
@@ -4545,11 +4549,11 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
                   onMouseOut={handleMouseOut}
                 >
                   {data.employeeName}
-                  {/* <div className="tooltipattendanceform">
+                  <div className="tooltipattendanceform">
                     <span className="tooltiptextattendanceform">
                       {data.employeeName}
                     </span>
-                  </div> */}
+                  </div>
                 </td>
                 <td
                   className="tabledataattendanceform"

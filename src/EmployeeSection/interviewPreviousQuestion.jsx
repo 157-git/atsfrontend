@@ -4,6 +4,7 @@ import { API_BASE_URL } from "../api/api";
 import "./interviewPreviousQuestion.css";
 import { DeleteOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const InterviewPreviousQuestion = () => {
   const [requirementOptions, setRequirementOptions] = useState([]); // Requirement dropdown options
@@ -103,7 +104,15 @@ console.log(interviewDetails);
   return (
     <div className="previousQuestion">
       <div className="Previous-Questions-Header">
-        <h5>Previous Questions</h5>
+        {/* <h5>Previous Questions</h5> */}
+        <h6>Share this link with the candidate so they can fill in their interview experience through the&nbsp;</h6>
+        <Link 
+        to="/previousQuestion"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ color: "blue", textDecoration: "underline" }}>
+        link.
+      </Link>
       </div>
 
       <div className="interview-previous-question-main-div">

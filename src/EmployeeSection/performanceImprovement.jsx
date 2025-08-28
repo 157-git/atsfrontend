@@ -65,7 +65,7 @@ ChartJS.register(
 
 );
 
-const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive }) => {
+const PerformanceImprovement = ({ loginEmployeeName, onCloseIncentive, onBack}) => {
    const { employeeId, userType } = useParams();
  const [data, setData] = useState([]);
  const [showModal, setShowModal] = useState(false);
@@ -2479,8 +2479,8 @@ console.log(selectedIds);
            <div className="PIE-Apply-Filter-Btnsteamperformance">
             
              <button
-               className="PIE-filter-Btnteamperformance"
-               onClick={onCloseIncentive}
+               className="PIE-filter-Btnteamperformance back-btn"
+               onClick={onBack}
              >
                {" "}
                Back

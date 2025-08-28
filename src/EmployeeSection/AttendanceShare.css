@@ -1,0 +1,260 @@
+/* =============================
+   MAIN CONTAINER
+============================= */
+.main-wrapper {
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  background-color: #5a5b5c;
+  overflow: hidden;
+}
+
+/* =============================
+   NAVBAR HEADER
+============================= */
+.form-heading-December-main-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: #111827;
+  color: #ffffff;
+  width: 100%;
+  height: 55px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.form-heading-December-main-div img {
+  height: 45px;
+  object-fit: contain;
+}
+
+.form-heading-December-main-div div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+  margin-top: 6px;
+}
+
+.form-heading-December-main-div p:first-child {
+  font-size: 15px;
+  font-weight: 600;
+  color: #f9fafb;
+}
+
+.form-heading-December-main-div p:last-child {
+  font-size: 22px;
+  color: #d1d5db;
+  margin-top: 2px;
+}
+
+.classnameforsetwidthforlogpimage {
+  width: 180px;
+  height: auto;
+  margin: 0;
+}
+
+/* Push content down below navbar */
+body {
+  margin: 0;
+  padding-top: 60px;
+}
+
+/* =============================
+   BUTTONS
+============================= */
+.login-button,
+.role-btn,
+.copy-link-btn {
+  background-color: #7d7f81;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.login-button:hover,
+.role-btn:hover,
+.copy-link-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.03);
+}
+
+.role-btn.active {
+  background-color: #4a4b4c;
+  font-weight: bold;
+  transform: scale(1.05);
+}
+
+.copy-link-btn {
+  background-color: #28a745;
+}
+
+/* =============================
+   ROLE BUTTON SECTION
+============================= */
+.button-container {
+  margin-top: 80px; /* since navbar is fixed */
+  margin-bottom: 15px;
+}
+
+.role-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* =============================
+   CARDS
+============================= */
+.card-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  padding: 15px;
+  width: 90%;
+  max-width: 1100px;
+  margin: auto;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex: 1;
+}
+
+.card-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.status-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  text-align: left;
+  position: relative;
+  transition: transform 0.3s ease-in-out;
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+}
+
+.status-card:hover {
+  transform: scale(1.02);
+}
+
+/* =============================
+   CARD CONTENT
+============================= */
+.status-indicator {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 10px;
+  color: white;
+  font-size: 13px;
+}
+
+.status-indicator[style*="green"] {
+  background-color: #28a745;
+}
+
+.status-indicator[style*="red"] {
+  background-color: #dc3545;
+}
+
+.info-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.status-image {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  border: 3px solid #ddd;
+  object-fit: cover;
+  background-color: #f0f0f0;
+}
+
+.user-details p {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 2px 0;
+}
+
+/* =============================
+   STATS
+============================= */
+.user-stats p {
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.time-info,
+.target-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.stat-item {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.no-data-message {
+  margin-top: 30px;
+  color: #dc3545;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* =============================
+   RESPONSIVE
+============================= */
+@media (max-width: 900px) {
+  .card-wrapper {
+    grid-template-columns: 1fr;
+    width: 95%;
+  }
+}
+
+@media (max-width: 600px) {
+  .status-card {
+    min-height: 210px;
+    padding: 10px;
+  }
+
+  .status-image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .user-details p,
+  .user-stats p {
+    font-size: 13px;
+  }
+
+  .form-heading-December-main-div img {
+    height: 35px;
+  }
+
+  .form-heading-December-main-div p:last-child {
+    font-size: 18px;
+  }
+}

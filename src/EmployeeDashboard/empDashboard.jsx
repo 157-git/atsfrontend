@@ -78,7 +78,7 @@ import CompanyOfferForm from "../EmployeeSection/CompanyOfferForm";
 // import { SearchOutlined } from "@ant-design/icons";
 // import AttendanceLoginLogout from "../EmployeeSection/AttendanceLoginLogout";
 
-const EmpDashboard = ({ userGroup }) => {
+const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => {
   const { userType } = useParams();
   const [showInterviewDate, setShowInterviewDate] = useState(
     userType === "SuperUser" ? false : true
@@ -233,7 +233,7 @@ const EmpDashboard = ({ userGroup }) => {
   };
   //Akash_Pawar_EmpDashboard_senderinformation_09/07_113
 
-  const [loginEmployeeName, setLoginEmployeeName] = useState("");
+  // const [loginEmployeeName, setLoginEmployeeName] = useState("");
   const [clientEmailSender, setClientEmailSender] = useState();
   const [showAllInterviewResponses, setShowAllInterviewResponses] =
     useState(false);

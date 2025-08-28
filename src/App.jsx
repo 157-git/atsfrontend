@@ -20,6 +20,12 @@ import ApplicantForm2 from "./Applicant/applicantForm2.jsx";
 import ThankYouPage from "./Applicant/applicantThankYou.jsx";
 import JDTemplateGen from "./HomePage/JDTemplateGen.jsx";
 import CandidateSubmitDoc from "../src/candidateDocSubmit/CandidateSubmitDoc.jsx";
+import PreviousQuestion from "./EmployeeSection/PreviousQuestion.jsx";
+// import BotImage from "./ChatBot/BotImage.jsx"
+// import ChatModal from "./ChatBot/ChatModal.jsx"
+import AttendanceShare from "./EmployeeSection/AttendanceShare.jsx";
+import ChatBot from "./ChatBot/ChatBot.jsx";
+
 
 const applySavedColors = () => {
   const bgColor = localStorage.getItem("bgColor");
@@ -78,7 +84,7 @@ const applySavedColors = () => {
     { variable: "--mainDashboard-card-txt" },
     { variable: "--mainDashboard-card-txt-hover" },
     { variable: "--attendance-card-bg-color" },
-    
+
   ];
 
   if (bgColor)
@@ -107,89 +113,98 @@ const App = () => {
   return (
     <div>
       <BrowserRouter>
-        <Routes>
-          {/* This is secured route  added by sahil karnekar*/}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/Main-Dashboard" element={<MainDashboard />} />
-          <Route path="/employee-login/:userType" element={<Login />} />
-          <Route path="/forgotPassword" element={<ForgotPasswordForm />} />
-          <Route
-            path="/Dashboard/:employeeId/:userType"
-            element={
-              // protected route created for the child or children Dashboard created by sahil karnekar
-              // ProtectedRoute is a component
-              <ProtectedRoute>
-                <EmpDashboard
-                  loginEmployeeName={loginEmployeeName}
-                  setLoginEmployeeName={setLoginEmployeeName}
-                />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/follow-up/:candidateId" element={<AfterSelection />} />
-          <Route
-            path="/admin-login"
-            element={<AdminLogin></AdminLogin>}
-          ></Route>
-          <Route
-            path="api/ats/157industries/verify"
-            element={<CandidateVerification></CandidateVerification>}
-          ></Route>
-          {/* this is commented by sahil karnekar please verify it at once before deployment */}
-          {/* <Route
+        <div className="App">
+
+          <Routes>
+            {/* This is secured route  added by sahil karnekar*/}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/Main-Dashboard" element={<MainDashboard />} />
+            <Route path="/employee-login/:userType" element={<Login />} />
+            <Route path="/forgotPassword" element={<ForgotPasswordForm />} />
+            <Route
+              path="/Dashboard/:employeeId/:userType"
+              element={
+                // protected route created for the child or children Dashboard created by sahil karnekar
+                // ProtectedRoute is a component
+                <ProtectedRoute>
+                  <EmpDashboard
+                    loginEmployeeName={loginEmployeeName}
+                    setLoginEmployeeName={setLoginEmployeeName}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/follow-up/:candidateId" element={<AfterSelection />} />
+            <Route
+              path="/admin-login"
+              element={<AdminLogin></AdminLogin>}
+            ></Route>
+            <Route
+              path="api/ats/157industries/verify"
+              element={<CandidateVerification></CandidateVerification>}
+            ></Route>
+            {/* this is commented by sahil karnekar please verify it at once before deployment */}
+            {/* <Route
             path="/callingtracker"
             element={<CallingTrackerForm />}
           ></Route> */}
-          <Route path="/employee-login" element={<RecruiterPage />} />
-          <Route path="/login/:userType" element={<LoginSignup />} />
-          <Route
-            path="/forgot-password/:userType"
-            element={<ForgotPasswordsForm />}
-          />
-          <Route path="/createAccount/Vendor" element={<AddVendor />}></Route>
-          <Route
-            path="/manager/technicalUser"
-            element={<SelfTechnicalUser />}
-          ></Route>
-          <Route
-            path="/create-account/:userType"
-            element={<AddEmployee />}
-          ></Route>
+            <Route path="/employee-login" element={<RecruiterPage />} />
+            <Route path="/login/:userType" element={<LoginSignup />} />
+            <Route path="/attendance-share/:employeeId" element={<AttendanceShare />} />
+            <Route
+              path="/forgot-password/:userType"
+              element={<ForgotPasswordsForm />}
+            />
+            <Route path="/createAccount/Vendor" element={<AddVendor />}></Route>
+            <Route
+              path="/manager/technicalUser"
+              element={<SelfTechnicalUser />}
+            ></Route>
+            <Route
+              path="/create-account/:userType"
+              element={<AddEmployee />}
+            ></Route>
 
-          <Route
-            path="/applicant-form/:encodedParams"
-            element={<ApplicantForm2 loginEmployeeName={loginEmployeeName} />}
-          ></Route>
+            <Route
+              path="/applicant-form/:encodedParams"
+              element={<ApplicantForm2 loginEmployeeName={loginEmployeeName} />}
+            ></Route>
 
-          <Route
-            path="/thank-you"
-            element={<ThankYouPage></ThankYouPage>}
-          ></Route>
+            <Route
+              path="/thank-you"
+              element={<ThankYouPage></ThankYouPage>}
+            ></Route>
 
-          <Route
-            path="/submit-documents/:candidateId/:employeeId/:userType"
-            element={<CandidateSubmitDoc/>}
-          ></Route>
+            <Route
+              path="/submit-documents/:candidateId/:employeeId/:userType"
+              element={<CandidateSubmitDoc />}
+            ></Route>
 
-          {/* <Route
+            {/* <Route
             path="/157industries/:encodedParams/candidate-form"
             element={<ApplicantForm loginEmployeeName={loginEmployeeName} />}
           ></Route> */}
 
-          {/* temporary route for the applicant registration sahil karnekar date 18-11-2024 */}
-          {/* <Route
+            {/* temporary route for the applicant registration sahil karnekar date 18-11-2024 */}
+            {/* <Route
             path="/157industries/:employeeId/:userType/candidate-form"
             element={<ApplicationForm1 loginEmployeeName={loginEmployeeName}  />}
           ></Route> */}
-          <Route
-            path="/jdTempGen"
-            element={<JDTemplateGen></JDTemplateGen>}
-          ></Route>
-           {/* <Route
+            <Route
+              path="/jdTempGen"
+              element={<JDTemplateGen></JDTemplateGen>}
+            ></Route>
+            {/* <Route
             path="/tempRoute"
             element={<JDTemplateGen></JDTemplateGen>}
           ></Route> */}
-        </Routes>
+            <Route path="/previousQuestion" element={<PreviousQuestion />} />
+          </Routes>
+
+          {loginEmployeeName && <ChatBot />}
+
+        </div>
+
       </BrowserRouter>
       <ToastContainer />
     </div>

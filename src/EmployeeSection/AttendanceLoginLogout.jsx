@@ -6,6 +6,7 @@ import dummyImage from "../EmployeeSection/dummy.jpg"
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
+import CryptoJS from "crypto-js";
 
 
 const AttendanceLoginLogout = () => {
@@ -136,11 +137,12 @@ const AttendanceLoginLogout = () => {
     return (
      
       <div className="scroll-containerAttendance">
-         {
+        {/* //nikita */}
+         {/* {
         loading && (
-          <Loader/>
+          // <Loader/>
         )
-      }
+      } */}
         <div className="card-wrapper">
           {filteredRecruiters().length > 0 ? (
             filteredRecruiters().map((user, index) => (
@@ -240,6 +242,24 @@ const AttendanceLoginLogout = () => {
         >
           Logout
         </button>
+
+        {/* Nikita Shirsath added button of Copy Link */}
+        <button
+          className="copy-link-btn"
+          onClick={() => {
+            const secretKey = "your-secret-key"; // 🔒 keep safe
+            const payload = JSON.stringify({ employeeId, userType }); // include both
+            const encrypted = CryptoJS.AES.encrypt(payload, secretKey).toString();
+
+            const shareUrl = `${window.location.origin}/attendance-share/${encodeURIComponent(encrypted)}`;
+            navigator.clipboard.writeText(shareUrl);
+            alert("Encrypted link copied to clipboard!");
+          }}
+        >
+          Copy Link
+        </button>
+
+
       </div>
 
       <div className="button-container">

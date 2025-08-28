@@ -6,8 +6,8 @@ export const CHAT_BASE_URL = "https://rg.157careers.in";
 
 
 //Use local system Ip address for testing
-// export const API_BASE_URL = "http://192.168.1.50:9090/api/ats/157industries";
-// export const CHAT_BASE_URL = "http://192.168.1.50";
+// export const API_BASE_URL = "http://192.168.1.40:9090/api/ats/157industries";
+// export const CHAT_BASE_URL = "http://192.168.1.40";
 
 // export const API_BASE_URL = "http://localhost:9090/api/ats/157industries";
 // export const CHAT_BASE_URL = "http://localhost";
@@ -18,7 +18,7 @@ export const addEmployee = (employee) => {
 
 export const getPasswordFromDB = (id) =>
   axios.post(`${API_BASE_URL}/fetch-pass/${id}`);
-
+ 
 export const fetchMasterSheetData = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/all-master-sheet`);

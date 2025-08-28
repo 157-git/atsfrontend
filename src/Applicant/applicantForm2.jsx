@@ -9,6 +9,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import bannerImage from '../assets/newImage-removebg-preview.png';
 import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import newLogoHead from '../assets/ApplicantFormLogo.png';
+import { faUserGear } from "@fortawesome/free-solid-svg-icons"; // 👈 New icon import
 import {
   faUser,
   faPhone,
@@ -41,13 +42,14 @@ import CryptoJS from "crypto-js";
 import { getSocket } from "../EmployeeDashboard/socket";
 import Loader from "../EmployeeSection/loader";
 import { Button, message, Modal } from "antd";
+import { Select, Space } from 'antd';
 import { Radio as AntdRadio } from 'antd';
 import CvTemplate from "../ResumeData/cv";
 import ResumeCopy from "../ResumeData/resumecopy";
 
 
 function ApplicantForm2({ loginEmployeeName }) {
-  const [messageApi, contextHolder] = message.useMessage()
+  {/*const [messageApi, contextHolder] = message.useMessage()*/ }
 
   const { encodedParams } = useParams()
   const extractedParam = encodedParams?.split("+")[1]
@@ -59,14 +61,14 @@ function ApplicantForm2({ loginEmployeeName }) {
 
   const getEmployeeDetails = async () => {
     const response = await axios.post(`${API_BASE_URL}/get-shorten-details`, {
-        shortenUrl: `${extractedParam}`,
+      shortenUrl: `${extractedParam}`,
     })
     setEmployeeId(response.data.employeeId)
     setUserType(response.data.userType)
   }
 
   useEffect(() => {
-    messageApi.success("Mobile View Recommended !")
+    {/*messageApi.success("Mobile View Recommended !")*/ }
     getEmployeeDetails()
   }, [])
 
@@ -174,6 +176,94 @@ function ApplicantForm2({ loginEmployeeName }) {
     setSelectedOption(null)
   }
 
+  const ApplicantForm2 = () => {
+    const [skillsArray, setSkillsArray] = useState([]);
+
+    // When selecting from dropdown
+    const handleSelect = (value) => {
+      if (value && !skillsArray.includes(value)) {
+        setSkillsArray([...skillsArray, value]);
+      }
+    };
+
+    const removeSkill = (skillToRemove) => {
+      setSkillsArray(skillsArray.filter((skill) => skill !== skillToRemove));
+    };
+
+    return (
+      <div className="form-group-December" style={{ width: "400px" }}>
+        <label>
+          Skills <span className="setRequiredAstricColorRed">*</span>
+        </label>
+
+        <div
+          className="input-with-icon-December"
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            padding: "5px",
+            border: "1px solid #ccc",
+            borderRadius: "6px",
+            minHeight: "45px",
+            boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+            gap: "5px",
+          }}
+        >
+          {/* Icon */}
+          <FontAwesomeIcon
+            icon={faUserGear}
+            className="input-icon-December"
+            style={{ marginRight: "5px" }}
+          />
+
+          {/* Skill Tags */}
+          {skillsArray.map((skill, index) => (
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "#f1f1f1",
+                padding: "4px 8px",
+                borderRadius: "4px",
+                boxShadow: "0px 1px 3px rgba(0,0,0,0.2)",
+                fontSize: "13px",
+              }}
+            >
+              {skill}
+              <span
+                style={{
+                  marginLeft: "6px",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  color: "#555",
+                }}
+                onClick={() => removeSkill(skill)}
+              >
+                ×
+              </span>
+            </div>
+          ))}
+
+          {/* Ant Design Select */}
+          <Select
+            defaultValue="lucy"
+            style={{ width: 120 }}
+            allowClear
+            placeholder="select it"
+            options={[
+              { value: "lucy", label: "Lucy" },
+              { value: "javascript", label: "JavaScript" },
+              { value: "python", label: "Python" },
+              { value: "react", label: "React" },
+            ]}
+            onSelect={handleSelect}
+          />
+        </div>
+      </div>
+    );
+  };
   const handleCVDownload = async (cvData) => {
     try {
       // Create a blob from the CV data
@@ -209,7 +299,7 @@ function ApplicantForm2({ loginEmployeeName }) {
   const [formData, setFormData] = useState(initialFormData)
   const inputRefs = useRef([])
   const [type, settype] = useState("")
-    const navigator = useNavigate();
+  const navigator = useNavigate();
 
   // establishing socket for emmiting event
   //   useEffect(() => {
@@ -470,11 +560,11 @@ function ApplicantForm2({ loginEmployeeName }) {
           ...(isHoldingOffer
             ? {} // Keep existing values if "Yes" is selected
             : {
-                companyName: "",
-                offersalary: "",
-                negotiation: "",
-                offerdetails: "",
-              }), // Clear values if "No" is selected
+              companyName: "",
+              offersalary: "",
+              negotiation: "",
+              offerdetails: "",
+            }), // Clear values if "No" is selected
         }
       } else if (name.startsWith("lineUp.")) {
         const nameParts = name.split(".")
@@ -815,7 +905,7 @@ function ApplicantForm2({ loginEmployeeName }) {
       setLoading(false)
     }
   }
-  const [selectedOption, setSelectedOption] = useState(null) 
+  const [selectedOption, setSelectedOption] = useState(null)
 
   const [lastScrollPos, setLastScrollPos] = useState(0)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -1030,12 +1120,12 @@ function ApplicantForm2({ loginEmployeeName }) {
   //Error msg Rajlaxmi jagadale 13-01-2025
   return (
     <div>
-      {contextHolder}
+      {/*{contextHolder}*/}
       <div className="form-container-December">
         <div className="maindivheadapplicant">
           <div className="form-heading-December-main-div">
             {/* <h1 id="applicant-form-heading">Applicant Form</h1> */}
-            <img className="classnameforsetwidthforlogpimage" src={newLogoHead || "/placeholder.svg"} alt="" />
+            {/*<img className="classnameforsetwidthforlogpimage" src={newLogoHead || "/placeholder.svg"} alt="" />*/}
             <div>
               <p>157 Careers</p>
               <p>Applicant Form</p>
@@ -1124,50 +1214,59 @@ function ApplicantForm2({ loginEmployeeName }) {
                 </div>
                 {errors.contactNumber && <span className="error">{errors.contactNumber}</span>}
               </div>
-
               <div className="form-group-December">
-                <div className="gender newclasstosetthisasdisplayflex">
-                  <label>
-                    Gender <span className="setRequiredAstricColorRed">*</span>
-                  </label>
-                  <div className="radio-group newclassforradiogrouantd" id="genderid">
-                    <FormControlLabel
-                      control={
-                        <AntdRadio
-                          name="lineUp.gender"
-                          checked={formData.lineUp.gender === "Male"}
-                          onChange={() =>
-                            handleChange({
-                              target: {
-                                name: "lineUp.gender",
-                                value: "Male",
-                              },
-                            })
-                          }
-                        />
-                      }
-                      label="Male"
-                    />
-
-                    <FormControlLabel
-                      control={
-                        <AntdRadio
-                          name="lineUp.gender"
-                          checked={formData.lineUp.gender === "Female"}
-                          onChange={() =>
-                            handleChange({
-                              target: {
-                                name: "lineUp.gender",
-                                value: "Female",
-                              },
-                            })
-                          }
-                        />
-                      }
-                      label="Female"
-                    />
+                <div className="notice-gender-row">
+                  {/* Notice Period */}
+                  <div className="form-group-December notice-box">
+                    <label>
+                      Notice period <span className="setRequiredAstricColorRed">*</span>
+                    </label>
+                    <div className="input-with-icon-December">
+                      <FontAwesomeIcon icon={faHourglassHalf} className="input-icon-December" />
+                      <input
+                        type="text"
+                        name="lineUp.noticePeriod"
+                        placeholder="Notice Period In Days"
+                        value={formData.lineUp.noticePeriod}
+                        onChange={handleChange}
+                        onKeyDown={handleKeyDown}
+                        maxLength={100}
+                      />
+                    </div>
+                    {errors["lineUp.noticePeriod"] && (
+                      <div className="error">{errors["lineUp.noticePeriod"]}</div>
+                    )}
                   </div>
-                  {errors["lineUp.gender"] && <span className="error">{errors["lineUp.gender"]}</span>}
+
+                  {/* Gender */}
+                  <div className="form-group-December gender-box">
+                    <label>
+                      Gender <span className="setRequiredAstricColorRed">*</span>
+                    </label>
+                    <div className="gender-radio-group">
+                      <label>
+                        <input
+                          type="radio"
+                          name="gender"
+                          value="Male"
+                          checked={formData.gender === "Male"}
+                          onChange={handleChange}
+                        />
+                        Male
+                      </label>
+                      <label style={{ marginLeft: "20px" }}>
+                        <input
+                          type="radio"
+                          name="gender"
+                          value="Female"
+                          checked={formData.gender === "Female"}
+                          onChange={handleChange}
+                        />
+                        Female
+                      </label>
+                    </div>
+                    {errors.gender && <div className="error">{errors.gender}</div>}
+                  </div>
                 </div>
               </div>
 
@@ -1378,8 +1477,49 @@ function ApplicantForm2({ loginEmployeeName }) {
                   </span>
                 )}
               </div>
-
               <div className="form-group-December">
+                <label>
+                  Skills <span className="setRequiredAstricColorRed">*</span>
+                </label>
+                <div className="input-with-icon-December">
+                  {/*<FontAwesomeIcon icon={faUserGear} className="input-icon-December" />*/}
+                  <FontAwesomeIcon
+                    icon={faUserGear}
+                    className="input-with-icon-December"
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "8px",
+                      transform: "translateY(-50%)",
+                      color: "rgba(92, 90, 90, 1)",
+                      zIndex: 1
+                    }}
+                  />
+
+                  <Select
+                    mode="tags"
+                    style={{ width: "100%" }}
+                    placeholder="Enter Skills"
+                    value={formData.lineUp.skills ? formData.lineUp.skills.split(",") : []}
+                    onChange={(values) => {
+                      handleChange({
+                        target: {
+                          name: "lineUp.skills",
+                          value: values.join(",")
+                        }
+                      });
+                    }}
+                    maxTagCount="responsive"
+                    // Custom input style so the icon is part of it
+                    className="skills-select"
+                  />
+
+                </div>
+                {errors["lineUp.skills"] && (
+                  <div className="error">{errors["lineUp.skills"]}</div>
+                )}
+              </div>
+              {/*<div className="form-group-December">
                 <label>
                   Notice period <span className="setRequiredAstricColorRed">*</span>
                 </label>
@@ -1396,7 +1536,7 @@ function ApplicantForm2({ loginEmployeeName }) {
                   />
                 </div>
                 {errors["lineUp.noticePeriod"] && <div className="error">{errors["lineUp.noticePeriod"]}</div>}
-              </div>
+              </div>*/}
             </div>
 
             {/* <div className="form-group-December">

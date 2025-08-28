@@ -92,7 +92,7 @@
      text-align: left;
      position: relative;
      transition: transform 0.3s ease-in-out;
-     height: 180px;
+     height: 204px;
      width: 100%;
      display: flex;
      flex-direction: column;
@@ -202,6 +202,7 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
+    padding-top: 5px;
   }
 
   .user-type-indicator {
@@ -592,3 +593,115 @@
      }
    }
    
+/* ---------- HEADER ---------- */
+.form-heading-December-main-div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f9fa;
+  padding: 15px 30px;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+  position: relative;
+  top: 0;
+  z-index: 1000;
+  gap: 1rem; 
+}
+
+/* Logo + text */
+.logo-text-wrapper {
+  display: flex;
+  align-items: center;   /* ✅ vertical centering */
+  gap: 12px;
+}
+
+.classnameforsetwidthforlogpimagen {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+  display: block;
+}
+
+.heading-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+}
+
+.heading-text p:first-child {
+  font-size: 18px;
+  margin: 0;
+  font-weight: bold;
+  color: #333;          /* main title */
+}
+
+.heading-text p:last-child {
+  font-size: 14px;
+  margin: 0;
+  color: #666;          /* subtitle softer */
+}
+
+/* Menu */
+.menu-container {
+  position:absolute;
+  /* padding-left: 125px; */
+  top: 0.5rem;   /* adjust as per your design */
+  right: 1rem;   /* keep it at the right corner */
+}
+
+.menu-dots {
+  background: transparent;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: #333;
+  transition: transform 0.2s ease;
+  padding-right: 12px;
+}
+
+/* .menu-dots:hover {
+  transform: rotate(90deg);
+} */
+
+.menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: 35px;
+  background: #2c2c2c;
+  border-radius: 6px;
+  min-width: 160px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  z-index: 200;
+}
+
+.menu-dropdown button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 12px;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu-dropdown button:hover {
+  background: #444;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  .form-heading-December-main-div {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .logo-text-wrapper {
+    justify-content: center;
+  }
+
+  .menu-container {
+    align-self: flex-end;
+  }
+}

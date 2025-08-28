@@ -74,8 +74,7 @@ const AddManager = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
         document: null,
         resumeFile: null,
         maritalStatus: "",         // single/married/etc.
-        managerPassword: "",
-        managerConfirmPassword: ""
+
     });
 
     const [passwordVisible, setPasswordVisible] = useState(false);
