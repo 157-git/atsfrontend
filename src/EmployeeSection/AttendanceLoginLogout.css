@@ -384,6 +384,7 @@
     .status-card {
       height: 210px;
       padding: 8px;
+      background-color: lightgray;
     }
 
     .info-section {
@@ -432,6 +433,7 @@
     .status-card {
       height: 220px;
       padding: 8px;
+      background-color: lig;
     }
 
     .status-image {

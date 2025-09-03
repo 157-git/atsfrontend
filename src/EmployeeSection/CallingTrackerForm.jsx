@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
-import { Form, json, useParams } from "react-router-dom";
+import { Form, json, useParams, useNavigate } from "react-router-dom";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -17,7 +17,7 @@ import Confetti from "react-confetti";
 // import ClipLoader from "react-spinners/ClipLoader";
 import CandidateHistoryTracker from "../CandidateSection/candidateHistoryTracker";
 import InterviewPreviousQuestion from "./interviewPreviousQuestion";
-import { API_BASE_URL } from "../api/api";
+import { API_BASE_URL } from "../api/api.js";
 import Loader from "./loader";
 // this libraries added by sahil karnekar date 21-10-2024
 import {
@@ -49,6 +49,20 @@ import {
 } from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable";
 import { getFormattedDateISOYMDformat, getFormattedDateTime } from "./getFormattedDateTime";
 
+const normalize = (num) => {
+  if (!num) return "";
+
+  let digits = num.replace(/\D/g, ""); // keep only numbers
+
+  // If it starts with '91' AND length > 10 → treat as country code
+  if (digits.startsWith("91") && digits.length > 10) {
+    digits = digits.slice(2); // drop leading 91
+  }
+
+  // Always return the last 10 digits
+  return digits.slice(-10);
+};
+
 const CallingTrackerForm = ({
   onsuccessfulDataAdditions,
   initialData = {},
@@ -61,10 +75,13 @@ const CallingTrackerForm = ({
   const [tags, setTags] = useState([]);
   const [showConfetti, setShowConfetti] = useState(false);
   const [uploadingResumeNewState, setUploadingResumeNewState] = useState(false);
-  const [displaySourceOthersInput, setDisplaySourceOthersInput] =
-    useState(false);
+  const [displaySourceOthersInput, setDisplaySourceOthersInput] = useState(false);
   const desc = ["terrible", "bad", "normal", "good", "wonderful"];
-
+  const [isSameAsContact, setIsSameAsContact] = useState(false);
+  const navigate = useNavigate();
+  const handleCancel = () => {
+    navigate(0);
+  }
   // sahil karnekar line 33 to 38 date 15-10-2024
   const today = new Date();
   const maxDate = new Date(today.setFullYear(today.getFullYear() - 18))
@@ -483,35 +500,44 @@ const CallingTrackerForm = ({
   const [selectedCountry, setSelectedCountry] = useState("IN");
   const [selectedCountryWP, setSelectedCountryWP] = useState("IN");
 
-const handlePhoneNumberChange = (value, name) => {
-  console.log(value);
-  
-  const sanitizedValue = typeof value === "string" ? value.replace(/\s+/g, "") : value;
+  const handlePhoneNumberChange = (value, name) => {
+    console.log(value);
 
-  // For Indian numbers, check the digit right after +91 (i.e., 3rd digit)
-  if (selectedCountry === "IN") {
-    const withoutPlus = sanitizedValue?.startsWith("+") ? sanitizedValue.slice(1) : sanitizedValue;
-    const nationalNumber = withoutPlus?.startsWith("91") ? withoutPlus.slice(2) : withoutPlus;
+    const sanitizedValue = typeof value === "string" ? value.replace(/\s+/g, "") : value;
 
-    if (/^[0-5]/.test(nationalNumber)) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: "Indian mobile number must start with 6, 7, 8, or 9",
-      }));
-      return;
+    let errorMessage = "";
+
+    let cleanValue = sanitizedValue;
+    if (name === "contactNumber") {
+      // normalize contact number the same way as alternateNumber
+      cleanValue = sanitizedValue
+        ?.replace(/^\+?91/, "") // remove +91 or 91
+        ?.replace(/\D/g, "")    // remove non-digits
+        ?.slice(-10);           // keep last 10 digits
     }
-  }
+    if (selectedCountry === "IN") {
+      const withoutPlus = sanitizedValue?.startsWith("+")
+        ? sanitizedValue.slice(1)
+        : sanitizedValue;
+      const nationalNumber = withoutPlus?.startsWith("91")
+        ? withoutPlus.slice(2)
+        : withoutPlus;
 
-  setCallingTracker((prevState) => ({
-    ...prevState,
-    [name]: sanitizedValue,
-  }));
+      if (/^[0-5]/.test(nationalNumber)) {
+        errorMessage = "Indian mobile number must start with 6, 7, 8, or 9";
+      }
+    }
 
-  setErrors((prevErrors) => ({
-    ...prevErrors,
-    [name]: "",
-  }));
-};
+    setCallingTracker((prevState) => ({
+      ...prevState,
+      [name]: sanitizedValue,
+    }));
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: errorMessage, // "" if valid, error text if invalid
+    }));
+  };
 
   const handleLineUpChange = (e) => {
     const { name, value } = e.target;
@@ -618,45 +644,60 @@ const handlePhoneNumberChange = (value, name) => {
       emailStatus: e.target.checked ? "Yes" : "No",
     }));
   };
-// console.log(errors);
+  // console.log(errors);
 
   const handleSubmit = async (e) => {
+    console.log(">>> handleSubmit started with:", callingTracker, lineUpData);
+
     setShowConfirmation(false);
     e.preventDefault();
     if (isConfirmationPending) {
+      console.warn("Blocked: confirmation pending");
       message.error("Please confirm overwrite before proceeding.");
       return;
     }
 
     if (errorForYOP !== "") {
+      console.warn("Blocked: invalid YOP");
       setErrorForYOP("Please select a valid year of passing.");
       return;
     }
+
     if (errorForDOB !== "") {
+      console.warn("Blocked: invalid DOB");
       setErrorForDOB("Please select a valid date of birth.");
       return;
     }
 
-     if (errors.contactNumber!== "") {
-      return;
-    }else   if (callingTracker.contactNumber === undefined || callingTracker.contactNumber === "") {
+    if (!callingTracker.contactNumber) {
+      console.warn("Blocked: contact number missing");
       setErrors((prevErrors) => ({
         ...prevErrors,
         contactNumber: "Contact Number is required",
       }));
       return;
     }
-    // Validate fields
-    let callingTrackerErrors = validateCallingTracker() || {};
-    let lineUpDataErrors = validateLineUpData() || {};
 
-    if (
-      Object.keys(callingTrackerErrors).length > 0 ||
-      Object.keys(lineUpDataErrors).length > 0
-    ) {
-      setErrors({ ...callingTrackerErrors, ...lineUpDataErrors });
+
+    // Validate fields
+    try {
+      let callingTrackerErrors = validateCallingTracker() || {};
+      let lineUpDataErrors = validateLineUpData() || {};
+      console.log(">>> validation errors:", callingTrackerErrors, lineUpDataErrors);
+
+      if (
+        Object.keys(callingTrackerErrors).length > 0 ||
+        Object.keys(lineUpDataErrors).length > 0
+      ) {
+        setErrors({ ...callingTrackerErrors, ...lineUpDataErrors });
+        return;
+      }
+    } catch (err) {
+      console.error(">>> error inside validation:", err);
       return;
     }
+
+
 
     // Ensure 'incentive' is a valid number (if it's invalid, default to 0.0)
     const incentiveValue = parseFloat(callingTracker.incentive);
@@ -1015,13 +1056,13 @@ const handlePhoneNumberChange = (value, name) => {
       }
 
       const data = await response.json();
-     if (
-  data.contactNumber !== "" &&
-  /^[789]/.test(data.contactNumber)
-) {
-  data.contactNumber = `+91${data.contactNumber}` // Remove +91 if present
-handlePhoneNumberChange(`+91${data.contactNumber}`, "contactNumber");
-}
+      if (
+        data.contactNumber !== "" &&
+        /^[789]/.test(data.contactNumber)
+      ) {
+        data.contactNumber = `+91${data.contactNumber}` // Remove +91 if present
+        handlePhoneNumberChange(`+91${data.contactNumber}`, "contactNumber");
+      }
       tempData = data;
       // console.log(data);
       const skillsArray = data.skills.split(',').map(skill => skill.replace(/^\s*|\s*$/g, '').trim()).filter(skill => skill !== '');
@@ -1610,56 +1651,51 @@ handlePhoneNumberChange(`+91${data.contactNumber}`, "contactNumber");
                   onClick={handleDisplaySameAsContactText}
                 >
                   <PhoneInput
-  name="alternateNumber"
-  placeholder="Enter WhatsApp number"
-  defaultCountry="IN"
-  international={false}
-  countryCallingCodeEditable={false}
-  value={callingTracker.alternateNumber || ""}
-  onChange={(value) => {
-    // Only store last 10 digits
-    const digitsOnly = value?.replace(/\D/g, "")?.slice(-10) || "";
-    setCallingTracker((prev) => ({
-      ...prev,
-      alternateNumber: digitsOnly,
-    }));
-  }}
-  className="newBorderClass whatsappwidthinput90"
-/>
+                    name="alternateNumber"
+                    placeholder="Enter WhatsApp number"
+                    defaultCountry="IN"
+                    international={false}
+                    countryCallingCodeEditable={false}
+                    value={callingTracker.alternateNumber || ""}
+                    onChange={(value) => {
+                      // Only store last 10 digits
+                      const digitsOnly = value?.replace(/\D/g, "")?.slice(-10) || "";
+                      setCallingTracker((prev) => ({
+                        ...prev,
+                        alternateNumber: digitsOnly,
+                      }));
+                    }}
+                    className="newBorderClass whatsappwidthinput90"
+                  />
 
                   {displaySameAsContactField && (
                     <div className="inputsameascontact">
-                     <input
-  type="checkbox"
-  name="copyContactNumber"
-  checked={callingTracker.alternateNumber === callingTracker.contactNumber}
-  onChange={(e) => {
-    if (e.target.checked) {
-      if (callingTracker?.contactNumber) {
-        const contact = callingTracker.contactNumber;
-        const cleanContact = contact
-          .replace(/^\+?91/, "") // Remove +91 or 91 at the start
-          .replace(/\D/g, "")    // Remove any non-digit characters
-          .slice(-10);           // Keep only last 10 digits
-
-        setCallingTracker((prev) => ({
-          ...prev,
-          alternateNumber: cleanContact,
-        }));
-      }
-    } else {
-      setCallingTracker((prev) => ({
-        ...prev,
-        alternateNumber: "",
-      }));
-    }
-  }}
-/>
-
-
+                      {console.log("COMPARE", callingTracker.contactNumber, callingTracker.alternateNumber)}
+                      <input
+                        type="checkbox"
+                        name="copyContactNumber"
+                        checked={normalize(callingTracker.alternateNumber) === normalize(callingTracker.contactNumber)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            if (callingTracker?.contactNumber) {
+                              const cleanContact = normalize(callingTracker.contactNumber);
+                              setCallingTracker((prev) => ({
+                                ...prev,
+                                alternateNumber: cleanContact,
+                              }));
+                            }
+                          } else {
+                            setCallingTracker((prev) => ({
+                              ...prev,
+                              alternateNumber: "",
+                            }));
+                          }
+                        }}
+                      />
                       <span className="sameascontactnumbersize">
                         Same As Contact Number
                       </span>
+
                     </div>
                   )}
                 </div>
@@ -3265,6 +3301,11 @@ tooltips={desc} value={callingTracker.communicationRating}
                 </button>
               )}
 
+              <button
+                type="button"
+                className="daily-tr-btn"
+                onClick={handleCancel}>Cancel</button>
+
               {showConfirmation && (
                 <div
                   className="bg-black bg-opacity-50 modal show"
@@ -3642,7 +3683,7 @@ const ModalComponent = ({
                 }`}
               onClick={() => setActiveField("previousQuestion")}
             >
-              Previous Question
+              Interview Q&A Form
             </p>
           </div>
           <div className="calling-tracker-popup-dashboard">
