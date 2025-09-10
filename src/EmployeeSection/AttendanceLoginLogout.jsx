@@ -10,7 +10,7 @@ import CryptoJS from "crypto-js";
 
 
 const AttendanceLoginLogout = () => {
-    // const API_BASE_URL='https://rg.157careers.in/api/ats/157industries';
+  // const API_BASE_URL='https://rg.157careers.in/api/ats/157industries';
 
   const [activeRecruiters, setActiveRecruiters] = useState([])
   const [inactiveRecruiters, setInactiveRecruiters] = useState([])
@@ -21,10 +21,33 @@ const AttendanceLoginLogout = () => {
   const [imageLoadErrors, setImageLoadErrors] = useState({})
   const [loading, setLoading] = useState(false);
 
- const { employeeId, userType } = useParams();
+  const { employeeId, userType } = useParams();
 
-// const userType="SuperUser";
-// const employeeId=390
+  // const userType="SuperUser";
+  // const employeeId=390
+
+  //Nikita Shirsath added handleCopyLink code - 9-09-2025
+  const handleCopyLink = async () => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/save-shorten-url`,
+        { employeeId, userType }
+      );
+
+      if (response.data.shortenUrl) {
+        const shortenUrl = response.data.shortenUrl;
+        const shareUrl = `${window.location.origin}/attendance-share/${shortenUrl}`;
+
+        await navigator.clipboard.writeText(shareUrl);
+        alert("Link copied: " + shareUrl);
+      } else {
+        alert("Failed to create shorten URL");
+      }
+    } catch (error) {
+      console.error("Error creating shorten URL:", error);
+      alert("Error creating shorten URL");
+    }
+  };
 
   const getRoleButtons = () => {
     switch (userType) {
@@ -49,7 +72,7 @@ const AttendanceLoginLogout = () => {
     return `${year}-${month}-${day}`
   }
   console.log("Current Date in Attendance Login Page :", getCurrentDate());
-  
+
 
   useEffect(() => {
     if (userType === "teamleader") {
@@ -60,7 +83,7 @@ const AttendanceLoginLogout = () => {
   const fetchInfo = async (role = "Recruiters") => {
     setLoading(true);
     try {
-   
+
       const response = await axios.get(`${API_BASE_URL}/get-active-details/${userType}?employeeId=${employeeId}&currentDate=${getCurrentDate()}&user=${role}`)
       console.log(`API Response for ${role}:`, response.data)
 
@@ -76,7 +99,7 @@ const AttendanceLoginLogout = () => {
       console.error("Error fetching data:", error)
       setActiveRecruiters([])
       setInactiveRecruiters([])
-    }finally{
+    } finally {
       setLoading(false)
     }
   }
@@ -136,14 +159,14 @@ const AttendanceLoginLogout = () => {
         (user.lastLogout && user.lastLogout.toString().includes(searchTerm)) ||
         (user.empId && user.empId.toString().includes(searchTerm)),
     )
-    }
+  }
 
   const displayData = () => {
     return (
-     
+
       <div className="scroll-containerAttendance">
         {/* //nikita */}
-         {/* {
+        {/* {
         loading && (
           // <Loader/>
         )
@@ -166,12 +189,12 @@ const AttendanceLoginLogout = () => {
 
                   <div className="user-details">
                     <p style={{
-                      color:"black"
+                      color: "black"
                     }}>
                       <strong>Employee Id:</strong> {user.empId}
                     </p>
                     <p style={{
-                      color:"black"
+                      color: "black"
                     }}>
                       <strong>Name:</strong> {user.employeeName}
                     </p>
@@ -249,22 +272,13 @@ const AttendanceLoginLogout = () => {
         </button>
 
         {/* Nikita Shirsath added button of Copy Link */}
-        {userType ==="SuperUser" &&(
         <button
           className="copy-link-btn"
-          onClick={() => {
-            const secretKey = "your-secret-key"; // 🔒 keep safe
-            const payload = JSON.stringify({ employeeId, userType }); // include both
-            const encrypted = CryptoJS.AES.encrypt(payload, secretKey).toString();
 
-            const shareUrl = `${window.location.origin}/attendance-share/${encodeURIComponent(encrypted)}`;
-            navigator.clipboard.writeText(shareUrl);
-            alert("Encrypted link copied to clipboard!");
-          }}
+          onClick={handleCopyLink}
         >
           Copy Link
         </button>
-        )}
 
       </div>
 

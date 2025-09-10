@@ -36,7 +36,7 @@
   .title {
     font-size: 24px;
     font-weight: 600;
-    color: #37474f;
+    color: wheat;
     margin-bottom: 0;
   }
   
@@ -145,3 +145,13 @@
   .removebackgroundfromimagedownloading{
     mix-blend-mode: darken;
   }
+
+  .qr-container canvas {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: 200px;  /* matches your JSX size={200} */
+  max-height: 200px;
+  display: block;
+  margin: 0 auto;
+}

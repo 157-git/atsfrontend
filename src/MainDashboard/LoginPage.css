@@ -5,10 +5,7 @@
     padding: 0;
     font-family: Arial, sans-serif;
 }
-.displayCaptchaFlex{
-    display: flex;
-  
-}
+
 /* General Styles */
 .main-body {
     background-color: var(--Bg-color);
@@ -121,7 +118,6 @@
 .right-panel {
     width: 50%;
     height: 100%;
-    background-color: #f2f2f2;
     padding: 15px;
     display: flex;
     flex-direction: column;
@@ -248,6 +244,7 @@
     .container22 {
         height:600px;
         display: grid;
+         flex-direction: column;
     }
 
     .left-panel,
@@ -297,3 +294,32 @@
     /* added by sahil */
     cursor: pointer;
 }
+
+.displayCaptchaFlex1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%; /* take full width like other inputs */
+  gap: 8px; /* space between canvas and refresh button */
+}
+
+#newCanvasIdForTester {
+  flex: 1;                /* let canvas resize proportionally */
+  height: 30px !important; /* same as input height */
+  border-radius: 15px;
+  /* object-fit: contain; */
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  z-index: auto !important;
+  pointer-events: auto !important;
+  margin-bottom: 10px;
+}
+
+.displayCaptchaFlex1 svg {
+  flex-shrink: 0;      /* prevent shrinking */
+  cursor: pointer;     /* make it look clickable */
+
+}
+
+

@@ -8,8 +8,11 @@ import { fileToBase64converter } from "../HandlerFunctions/fileToBase64converter
 import { toast } from "react-toastify";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
+import { Link } from "react-router-dom";
 
 const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
+    // const API_BASE_URL = 'https://rg.157careers.in/api/ats/157industries';
+
   const [jobId, setJobId] = useState("");
   const [designation, setDesignation] = useState("");
   const [fileName, setFileName] = useState("");
@@ -81,6 +84,7 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
   const fetchRequirementOptions = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/company-details`);
+      console.log("Response Data:-", response.data)
       const { data } = response;
       setRequirementOptions(data);
     } catch (error) {
@@ -90,6 +94,7 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
   useEffect(() => {
     fetchRequirementOptions();
   }, []);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!jobId) {
@@ -161,6 +166,7 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
   console.log(requirementOptions);
   const [openAttachmentModal, setOpenAttachmentModal] = useState(false);
   const [attachmentUrl, setAttachmentUrl] = useState("");
+  
   const handleViewAttachment = (attachmentBase64String) => {
     if (attachmentBase64String) {
       setOpenAttachmentModal(true);
@@ -180,6 +186,16 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
   return (
     <div className="container newcontainerclassforinterviewform">
       <h2 className="title newclassfortitleform">Interview Details</h2>
+      <div className="newClassForInterviewLink">
+        <Link
+          to="/previousQuestion"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Share Link
+        </Link>
+      </div>
+
       <div className="form-row">
         <div className="form-group small newformgroupforinterviewquestionsform">
           <label>Job Id: <span className="setRequiredAstricColorRed">*</span></label>
@@ -191,7 +207,7 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
             <option value="">Select Job ID</option>
             {requirementOptions.map((item, index) => (
               <option key={index} value={index}>
-              <strong>  {item.requirementId}</strong> : {item.companyName}
+                <strong>  {item.requirementId}</strong> : {item.companyName}
               </option>
             ))}
           </select>
@@ -346,11 +362,10 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
                           <div
                             className="classnamesetdisplayflexforinterviewtable"
                             style={{
-                              borderBottom: `${
-                                indexQues !==
-                                  item.interviewQuestion.length - 1 &&
+                              borderBottom: `${indexQues !==
+                                item.interviewQuestion.length - 1 &&
                                 "1px solid black"
-                              }`,
+                                }`,
                             }}
                           >
                             <p className="setmarginclassfortableptag">
@@ -370,11 +385,10 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
                           <div
                             className="classnamesetdisplayflexforinterviewtable"
                             style={{
-                              borderBottom: `${
-                                indexRef !==
-                                  item.interviewQuestion.length - 1 &&
+                              borderBottom: `${indexRef !==
+                                item.interviewQuestion.length - 1 &&
                                 "1px solid black"
-                              }`,
+                                }`,
                             }}
                           >
                             <p className="setmarginclassfortableptag">

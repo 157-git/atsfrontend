@@ -1006,9 +1006,17 @@ const CallingTrackerForm = ({
   };
 
   const handleShow = () => {
+    if (callingTracker.requirementId) {
+      localStorage.setItem("selectedJobId", callingTracker.requirementId);
+    }
     setShowModal(true);
   };
-  const handleClose = () => setShowModal(false);
+
+
+  const handleClose = () => {
+    localStorage.removeItem("selectedJobId"); // clear job id
+    setShowModal(false);
+  };
 
   const updateCurrentCTC = (lakh, thousand) => {
     const lakhValue = parseFloat(lakh) || 0;

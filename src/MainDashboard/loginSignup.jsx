@@ -130,13 +130,13 @@ const LoginSignup = ({ onLogin }) => {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Set font properties
-      ctx.font = "30px 'Pacifico', cursive";
+      ctx.font = "20px 'Pacifico', cursive";
       ctx.fillStyle = "#000";
 
       // Measure text width to center it
       const textWidth = ctx.measureText(captcha).width;
       const textX = (canvas.width - textWidth) / 2; // Center horizontally
-      const textY = canvas.height / 2 + 10; // Adjust to center vertically
+      const textY = canvas.height / 2 + 7; // Adjust to center vertically
 
       // Draw CAPTCHA text
       ctx.fillText(captcha, textX, textY);
@@ -312,24 +312,24 @@ const LoginSignup = ({ onLogin }) => {
 
   const handleRefreshCaptch = () => {
     const refreshIcon = document.getElementsByClassName('anticon-sync');
-  
+
     if (refreshIcon.length > 0) {
       // Apply rotation animation
       refreshIcon[0].style.transition = "transform 0.5s ease-in-out";
       refreshIcon[0].style.transform = "rotate(180deg)";
     }
-  
+
     // Generate a new CAPTCHA
     generateCaptcha();
-  
+
     setTimeout(() => {
       if (refreshIcon.length > 0) {
         refreshIcon[0].style.transition = "";
-      refreshIcon[0].style.transform = "";
+        refreshIcon[0].style.transform = "";
       }
     }, 500); // Reset after animation completes
   };
-  
+
 
   return (
     <div className="main-body">
@@ -454,27 +454,25 @@ const LoginSignup = ({ onLogin }) => {
 
                   <div className="input-group">
                     <div className="captcha-box">
-                      <div className="displayCaptchaFlex">
-                      <canvas
-                        id="newCanvasIdForTester"
-                        style={{
-                          borderRadius: "15px",
-                          height: "30px",
-                          width: "100%",
-                          marginBottom: "10px",
-                          marginRight:"10px"
+                      <div className="displayCaptchaFlex1">
+                        <canvas
+                          id="newCanvasIdForTester"
+                         
+                          onClick={handleRefreshCaptch}
+                          ref={canvasRef}
+                          width="150"
+                          height="30"
+                        />
 
-                        }}
-                        onClick={handleRefreshCaptch}
-                        ref={canvasRef} width="250" height="50"  />
-                        <SyncOutlined 
-                        style={{
-                          marginBottom:"10px",
-                        }}
-                        onClick={handleRefreshCaptch}
+                        <SyncOutlined
+                          style={{
+                            marginBottom: "10px"
+
+                          }}
+                          onClick={handleRefreshCaptch}
                         />
                       </div>
-                    
+
                       <div className="input-groups">
                         <i className="fa-solid fa-robot"></i>
                         <input

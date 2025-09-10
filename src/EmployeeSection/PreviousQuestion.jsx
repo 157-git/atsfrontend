@@ -1,13 +1,110 @@
-import React, { useState } from 'react'
+//Component created by Sakshi
+import React, { useEffect, useState } from 'react'
 import "bootstrap/dist/css/bootstrap.min.css";
 // import './PreviousQuestion.css'
 import companyLogo from '../LogoImages/logoweb2.png'
+import axios from 'axios';
+import { fileToBase64converter } from '../HandlerFunctions/fileToBase64converter';
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
+import { Modal } from 'antd';
+import { API_BASE_URL } from '../api/api';
+import { toast } from 'react-toastify';
 
 
 function PreviousQuestion() {
+  // const API_BASE_URL = 'https://rg.157careers.in/api/ats/157industries';
+
   const [companyName, setCompanyName] = useState("");
-  const [jobName, setJobName] = useState("");
+  const [interviewRound, setInterviewRound] = useState("");
+  const [questionAttachment, setQuestionAttachment] = useState(null);
+  const [interviewQuestions, setInterviewQuestions] = useState([]);
+  const [openAttachmentModal, setOpenAttachmentModal] = useState(false);
   const [questions, setQuestions] = useState([{ question: "", answer: "" }]);
+  const [jobIdOptions, setJobIdOptions] = useState([]);
+  const [designation, setDesignation] = useState("");
+  const [designationOptions, setDesignationOptions] = useState([]);
+  const [attachmentUrl, setAttachmentUrl] = useState("");
+  const [jobId, setJobId] = useState("");
+
+
+  const handleCompanyChange = (e) => {
+    const selectedCompany = e.target.value;
+    setCompanyName(selectedCompany);
+
+    // Filter designations for this company (unique only)
+    const filtered = [
+      ...new Set(
+        jobIdOptions
+          .filter((item) => item.companyName === selectedCompany)
+          .map((item) => item.designation)
+      ),
+    ];
+
+    setDesignationOptions(filtered);
+    setDesignation("");
+    setJobId(""); // reset jobId until designation is chosen
+  };
+
+  const handleDesignationChange = (e) => {
+    const selectedDesignation = e.target.value;
+    setDesignation(selectedDesignation);
+
+    // Find one job for this company + designation
+    const matchingJob = jobIdOptions.find(
+      (item) =>
+        item.companyName === companyName &&
+        item.designation === selectedDesignation
+    );
+
+    if (matchingJob) {
+      setJobId(matchingJob.requirementId); // pick any one jobId
+    }
+  };
+
+
+  const handleViewAttachment = (attachmentBase64String) => {
+    if (attachmentBase64String) {
+      setOpenAttachmentModal(true);
+      const newBase64Attachment = `data:application/pdf;base64,${attachmentBase64String}`;
+      setAttachmentUrl(newBase64Attachment);
+    } else {
+      setOpenAttachmentModal(false);
+    }
+  };
+
+  const handleOk = () => {
+    setOpenAttachmentModal(false);
+  };
+  const handleCancel = () => {
+    setOpenAttachmentModal(false);
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        const base64String = await fileToBase64converter(file);
+
+        setQuestionAttachment(base64String);
+      } catch (error) {
+        console.error("Error converting file:", error);
+      }
+    }
+  };
+
+  const fetchJobIds = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/company-details`);
+      const { data } = response;
+      setJobIdOptions(data);
+    } catch (error) {
+      console.error("Error fetching requirement options:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchJobIds();
+  }, []);
 
   const handleQuestionChange = (index, e) => {
     const updatedQuestions = [...questions];
@@ -23,19 +120,56 @@ function PreviousQuestion() {
     setQuestions(updatedQuestions);
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = {
-      companyName,
-      jobName,
-      questions
+    const questionAddedDate = new Date().toISOString().split("T")[0];
+
+    const dataToSubmit = {
+      questionAddedDate,
+      interviewRound,
+      questionAttachment,
+      interviewQuestion: questions.map((q) => ({
+        interviewQuestions: q.question,
+        answer: q.answer,   // send answer instead of unused 'reference'
+      })),
     };
-    console.log("Form submitted:", formData);
-    alert("Thank you! Your response has been recorded.");
-    setCompanyName("");
-    setJobName("");
-    setQuestions([{ question: "", answer: "" }]);
+
+
+    console.log("Submitted Data:", JSON.stringify(dataToSubmit, null, 2));
+
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/add-interview-details/${jobId}`,
+        dataToSubmit,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      toast.success(response.data);
+
+      // Clearing form fields after successful submission
+      setJobId("");
+      setCompanyName("");
+      setDesignation("");
+      setInterviewRound("");
+      setInterviewQuestions([]);
+      setQuestions([{ question: "", answer: "" }]);
+      setQuestionAttachment(null);
+    } catch (error) {
+      console.error("Error:", error);
+
+      if (error.response) {
+        console.error("Response error:", error.response.data);
+      } else if (error.request) {
+        console.error("Request error:", error.request);
+      } else {
+        console.error("Error message:", error.message);
+      }
+    }
   };
 
   return (
@@ -59,30 +193,84 @@ function PreviousQuestion() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Company Name */}
+          {/* Company Name Dropdown */}
           <div>
             <label className="block font-semibold mb-1 text-black">Company Name</label>
-            <input
-              type="text"
+            <select
               value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              placeholder="Enter company name"
+              onChange={handleCompanyChange}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               required
-            />
+            >
+              <option value="">Select Company</option>
+              {[...new Set(jobIdOptions.map((item) => item.companyName))].map(
+                (uniqueName, index) => (
+                  <option key={index} value={uniqueName}>
+                    {uniqueName}
+                  </option>
+                )
+              )}
+            </select>
           </div>
 
-          {/* Job Name */}
+          {/* Designation Dropdown */}
           <div>
-            <label className="block font-semibold mb-1 text-black">Job Title</label>
-            <input
-              type="text"
-              value={jobName}
-              onChange={(e) => setJobName(e.target.value)}
-              placeholder="Enter job title"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            <label className="block font-semibold mb-1 text-black">Designation</label>
+            <select
+              value={designation}
+              onChange={handleDesignationChange}
+              className={`w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none ${!companyName ? "bg-gray-200 cursor-not-allowed" : ""}`}
               required
-            />
+              disabled={!companyName}
+            >
+              <option value="">Select Designation</option>
+              {designationOptions.map((desig, index) => (
+                <option key={index} value={desig}>
+                  {desig}
+                </option>
+              ))}
+            </select>
+
+          </div>
+
+          <div>
+            <label className="block font-semibold mb-1 text-black">Attachment:</label>
+
+            <div className="flex items-center gap-2">
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx"
+                onChange={handleFileChange}
+                className="newinputforinterviewquestions"
+              />
+
+              <button
+                type="button"
+                onClick={() => handleViewAttachment(questionAttachment)}
+                className="p-1 text-gray-600 hover:text-blue-600"
+              >
+                {questionAttachment !== null ? (
+                  <EyeOutlined />
+                ) : (
+                  <EyeInvisibleOutlined />
+                )}
+              </button>
+            </div>
+            {openAttachmentModal && (
+              <Modal
+                title="Attachment"
+                open={openAttachmentModal}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                footer={null}
+              >
+                <iframe
+                  src={attachmentUrl}
+                  title="Questions"
+                  style={{ width: "100%", height: "500px" }}
+                ></iframe>
+              </Modal>
+            )}
           </div>
 
           {/* Dynamic Questions */}

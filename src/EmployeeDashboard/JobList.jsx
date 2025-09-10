@@ -756,7 +756,9 @@ console.log(jobDescriptions);
   )}
 
   {/* Always show total matched count */}
-  <div>
+
+  {/* TEMPORARILY COMMENTED "CANDIDATES MATCHED" BECAUSE ITS NOT WORKING --BY SAKSHI*/}
+  {/* <div>
     Candidates Matched:{" "}
      <Badge
      showZero
@@ -764,7 +766,7 @@ console.log(jobDescriptions);
         count={item.matchedCandidateCount}
         style={{ backgroundColor: item.matchedCandidateCount === 0 ? 'red' : '#52c41a' }}
       />
-  </div>
+  </div> */}
 </div>
 
                     </div>

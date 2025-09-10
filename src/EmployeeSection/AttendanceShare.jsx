@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../EmployeeSection/AttendanceLoginLogout.css";
@@ -17,26 +17,34 @@ const AttendanceShare = () => {
   const [imageLoadErrors, setImageLoadErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [data, setData] = useState(null);
+  const [error, setError] = useState("");
+  //Nikita Shirsath added Line no. 21 to 27
+  const { encryptedId, shortenId, id } = useParams();
+  const shortId = shortenId || id;
+  const [employeeId, setEmployeeId] = useState(null);
+  const [userType, setUserType] = useState(null);
+  const menuRef = useRef(null);
 
   const toggleMenu = () => {
     setIsOpen((prev) => !prev);
   };
 
   const navigate = useNavigate();
-  const { employeeId: encryptedId } = useParams();
-  const secretKey = "your-secret-key";
+  //Added by Sakshi on 10-09-25 from line 36 to line 47
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
 
-  let employeeId = null;
-  let userType = null;
-
-  try {
-    const bytes = CryptoJS.AES.decrypt(decodeURIComponent(encryptedId), secretKey);
-    const decrypted = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-    employeeId = decrypted.employeeId;
-    userType = decrypted.userType;
-  } catch (e) {
-    console.error("Invalid link or decryption failed", e);
-  }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const getRoleButtons = (userType) => {
     switch (userType) {
@@ -79,21 +87,53 @@ const AttendanceShare = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
-    // fetch immediately when page loads or role changes
     fetchInfo(mapRoleToApiParam(selectedRole));
-
-    // set up auto-refresh every 30s
-    const interval = setInterval(() => {
-      fetchInfo(mapRoleToApiParam(selectedRole));
-    }, 30000);
-
-    // cleanup on unmount or when dependencies change
-    return () => clearInterval(interval);
   }, [selectedRole, employeeId]);
 
 
+  //Nikita Shirsath added code from line no.76 to 116
+  useEffect(() => {
+    if (encryptedId) return;
+
+    if (!shortId) {
+      setError("Missing required parameter in URL");
+      setLoading(false);
+      return;
+    }
+
+    const fetchDetails = async () => {
+      try {
+        const response = await axios.post(
+          `${API_BASE_URL}/get-shorten-details`,
+          { shortenUrl: shortId }
+        );
+        console.log(response)
+        if (response.data.employeeId && response.data.userType) {
+          setEmployeeId(response.data.employeeId);
+          setUserType(response.data.userType);
+        } else {
+          setError("Invalid shorten details response");
+        }
+      } catch (err) {
+        console.error("Error fetching details:", err);
+        setError("Error fetching details from server");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDetails();
+  }, [shortId, encryptedId]);
+
+
+  if (loading) return <p>Loading...</p>;
+
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
+
+  if (!employeeId || !userType) {
+    return <p>Invalid or expired link.</p>;
+  }
   const handleImageError = (empId) => {
     setImageLoadErrors((prev) => ({
       ...prev,
@@ -147,18 +187,18 @@ const AttendanceShare = () => {
         </div>
 
         {/* Right side: 3 dots menu */}
-        <div className="menu-container">
-          <button onClick={toggleMenu} className="menu-dots">
-            ⋮
+<div ref={menuRef} className="menu-container">
+      <button onClick={toggleMenu} className="menu-dots">
+        ⋮
+      </button>
+      {isOpen && (
+        <div className="menu-dropdown">
+          <button onClick={() => navigate(`/login/${userType || "user"}`)}>
+            Go to Login
           </button>
-          {isOpen && (
-            <div className="menu-dropdown">
-              <button onClick={() => navigate(`/login/${userType || "user"}`)}>
-                Go to Login
-              </button>
-            </div>
-          )}
         </div>
+      )}
+    </div>
       </div>
 
       <div className="button-container">

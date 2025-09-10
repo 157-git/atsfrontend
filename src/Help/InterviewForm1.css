@@ -201,6 +201,8 @@
   .newthclassforinterviewtable{
     border: 1px solid black;
     text-align: center;
+    color: black;
+    background-color: white;
   }
   .newtableheadingrow{
     background-color: var(--Bg-color);
@@ -218,3 +220,35 @@ background-color:var(--table-row-hover);
     padding-left: 10px;
     padding-right: 10px;
   }
+
+.newClassForInterviewLink a {
+  all: unset;                /* reset Tailwind overrides */
+  display: inline-block;
+  padding: 6px 14px;         /* smaller padding */
+  font-size: 14px;           /* smaller text */
+  margin-left: 68rem;
+  border-radius: 6px;        /* compact rounded */
+  background-color: #4b5563; /* gray-600 */
+  color: white;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.newClassForInterviewLink a:hover {
+  background-color: #27374d; /* blue-700 */
+  color: white;
+}
+
+.newClassForInterviewLink a:active {
+  transform: scale(0.95);
+}
+
+/* 📱 Mobile view */
+@media (max-width: 768px) {
+  .newClassForInterviewLink {
+    justify-content: center;
+  }
+}
+

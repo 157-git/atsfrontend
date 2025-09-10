@@ -150,7 +150,7 @@ const App = () => {
           ></Route> */}
             <Route path="/employee-login" element={<RecruiterPage />} />
             <Route path="/login/:userType" element={<LoginSignup />} />
-            <Route path="/attendance-share/:employeeId" element={<AttendanceShare />} />
+            <Route path="/attendance-share/:shortenId" element={<AttendanceShare />} />
             <Route
               path="/forgot-password/:userType"
               element={<ForgotPasswordsForm />}
