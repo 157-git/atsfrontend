@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./ChatBot.css";
+import { API_BASE_URL } from "../api/api";
 
-const ChatBot=() =>{
+const ChatBot = () => {
   const [prompt, setPrompt] = useState("");          // current question
   const [response, setResponse] = useState("");      // bot's answer
   const [showChat, setShowChat] = useState(false);
@@ -13,7 +14,7 @@ const ChatBot=() =>{
 
     console.log("Question:", prompt); // log question
     try {
-      const res = await axios.post("http://localhost:8080/api/chat/ask", { prompt });
+      const res = await axios.post(`${API_BASE_URL}/ask`, { prompt });
       const answer = res.data.message;
       console.log("Answer:", answer);
 
@@ -56,8 +57,8 @@ const ChatBot=() =>{
           <div className="chatbox-header">
             <span className="chatbox-title">Chat</span>
             <div className="chatbox-icons">
-              <button className="chatbox-minimize" onClick={handleMinimize}>🗕</button>
-              <button className="chatbox-close-all" onClick={handleClose}>❌</button>
+              <button style={{ color: "white" }} onClick={handleMinimize}>_</button>
+              <button className="chatbox-close-all" style={{ color: "white" }} onClick={handleClose}>🗙</button>   {/* close symbol */}
             </div>
           </div>
 

@@ -178,7 +178,7 @@ const CallingExcelList = ({
     } catch (error) {
       console.error("Error importing data:", error);
       toast.error(
-        error.response?.data || "Something went wrong while importing data"
+        "No data present to be imported"
       );
     }
   };

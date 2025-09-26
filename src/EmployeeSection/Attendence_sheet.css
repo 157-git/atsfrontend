@@ -2,6 +2,12 @@
 .PI-attendance-tableattendanceform {
   border-collapse: collapse;
 }
+.attendance-headingattendanceform h1 {
+  color: white;
+  font-size: 28px;   /* 👈 change this value */
+  font-weight: bold;
+  margin: 0;
+}
 
 .status-poorattendanceform {
   border-radius: 10px;
@@ -251,6 +257,7 @@ html::-webkit-scrollbar {
   margin-bottom: 20px;
   margin-top: 20px;
   background-color: #f9f9f9;
+  margin-right: -1px;
 }
 
 .infoattendanceform {
@@ -2504,17 +2511,28 @@ font-weight: 600;
 .grid-itemattendanceform {
   background-color: #f3f4f6;
   text-align: center;
-  color: #2563eb;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  text-align: center;
-  transition: transform 0.2s ease-in-out;
-  /* border: 1px solid rgb(159, 155, 155); */
-  /* width: 130px; */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-radius: 6px;        /* slightly smaller corners */
+  padding: 1px 2px;          /* reduce inside spacing */
+  margin: 4px;               /* reduce space outside each block */
+  font-size: 0.75rem;        /* smaller text */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 70px;           /* prevent collapsing too much */
 }
 
+
+.grid-itemattendanceform p {
+  margin: 1px 0;
+  line-height: 1.2;       /* reduce vertical spacing */
+}
+
+
 .grid-itemattendanceform:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .item-titleattendanceform {
@@ -2528,6 +2546,7 @@ font-weight: 600;
   padding: 10px;
   max-width: 500px;
   margin: 20px;
+  /* margin-left: 40px;  */
 }
 
 /* .PI-dropdown-label {
@@ -2618,14 +2637,19 @@ font-weight: 600;
 /* Make the grid container responsive */
 .grid-containerattendanceform {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr) 2fr;
+  grid-auto-rows: minmax(80px, auto);  /* each row adjusts, but table spans both */
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #f9f9f9;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 8px 214px 8px 5px;      /* smaller padding */
+  font-size: 0.75rem;  
 }
+
 
 /* rajlaxmi jagadale update that code line 2646 to 2658 */
 @media (max-width: 1200px) {
@@ -2744,4 +2768,118 @@ font-weight: 600;
 }
 .setMarginleftnewbysahilinaattendance{
   margin-left: 10px;
+}
+
+/* samruddhi Patole   08/09 line 2774-2885*/
+.merged-box {
+  grid-column: 4;      
+  grid-row: 1 / span 2; 
+  display: flex;         
+  flex-direction: column;
+  justify-content: stretch;
+  height: 95%;          
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 1px;
+  padding-right: 5px; 
+  padding: 2px 5px;
+  width: 386%; 
+  margin-left: -5%; 
+}
+
+.merged-box:hover {
+  transform: scale(1.03);
+}
+
+.merged-box table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.attendance-summary-table {
+  width: 120%;
+  min-width: 00px; 
+  border-collapse: collapse;
+  table-layout: auto;  
+}
+
+/* Fixed header */
+.attendance-summary-table th {
+  background-color: #e2e8f0;
+  font-weight: 600;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 10px;
+  position: sticky;
+  top: 0;   
+  z-index: 5;
+  text-align: center;
+}
+
+
+.attendance-summary-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-sizing: border-box;
+  color: #333;
+  font-weight: 500;
+  text-align: center;
+  word-wrap: break-word;
+  font-weight: bold;
+  color: #333;
+
+}
+
+
+.attendance-summary-table th:first-child,
+.attendance-summary-table td:first-child {
+  width: 20px;         
+  min-width: 80px;
+  max-width: 150px;
+  text-align: left;
+  white-space: nowrap;  
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.attendance-summary-table th:nth-child(2),
+.attendance-summary-table td:nth-child(2),
+.attendance-summary-table th:nth-child(3),
+.attendance-summary-table td:nth-child(3) {
+  width:30%;
+  font-weight: bold;
+  color: #333;
+}
+
+
+.attendance-summary-table tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+
+.attendance-table-container {
+  max-height: 200px;   
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+
+
+  scrollbar-width: none;       
+  -ms-overflow-style: none;    
+}
+.attendance-table-container::-webkit-scrollbar {
+  display: none;  
+}
+
+.compact-block {
+  padding: 4px 6px;      
+  margin: 4px;         
+  font-size: 0.75rem;   
+  border-radius: 6px;    
+  flex: 1 1 auto;       
+  min-width: 97px;   
 }
