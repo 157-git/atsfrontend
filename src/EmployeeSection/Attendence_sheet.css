@@ -1,6 +1,8 @@
 /* rajlaxmi jagadale changes all name */
 .PI-attendance-tableattendanceform {
   border-collapse: collapse;
+    width: 100%;
+  min-width: 800px; /* force horizontal scroll if small screen */
 }
 .attendance-headingattendanceform h1 {
   color: white;
@@ -247,6 +249,7 @@ html::-webkit-scrollbar {
   padding-top: 5px;
   /* margin-left: 20px; */
   display: flex;
+  overflow-x: auto;
 }
 .PI-dropdown-container-mainattendanceform {
   border: 1px solid #ddd;
@@ -2835,25 +2838,31 @@ font-weight: 600;
 }
 
 
+/* ID column (make compact) */
 .attendance-summary-table th:first-child,
 .attendance-summary-table td:first-child {
-  width: 20px;         
-  min-width: 80px;
-  max-width: 150px;
-  text-align: left;
+  width: auto;            /* enough for small IDs */
+  min-width: 50px;        /* don’t let it collapse too much */
+  max-width: 70px;        /* tighter than before */
+  text-align: center;
   white-space: nowrap;  
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+/* Present / Absent columns */
 .attendance-summary-table th:nth-child(2),
 .attendance-summary-table td:nth-child(2),
 .attendance-summary-table th:nth-child(3),
 .attendance-summary-table td:nth-child(3) {
-  width:30%;
+  width: auto;            /* fixed width instead of 30% */
+  min-width: 70px;
+  max-width: 100px;
   font-weight: bold;
+  text-align: center;
   color: #333;
 }
+
 
 
 .attendance-summary-table tbody tr:hover {

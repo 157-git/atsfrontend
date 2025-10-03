@@ -721,7 +721,7 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
       const data = await response.json();
       setAttendanceData(data);
       setAttendanceDataNew(data);
-      console.log(data);
+      console.log("attendance data:", data);
       setShowCalculation(true);
       setLoading(false);
     } catch (error) {
@@ -2188,6 +2188,8 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
                     }
                   });
 
+                  const notLogin = summary.workingDays - present - absent;
+
                   return (
                     <>
                       <div className="grid-itemattendanceform compact-block">
@@ -2198,6 +2200,11 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
                         <p className="item-titleattendanceform">Absent</p>
                         <p className="attendanceform">{absent}</p>
                       </div>
+                      <div className="grid-itemattendanceform compact-block">
+                        <p className="item-titleattendanceform">Not Login Days</p>
+                        <p className="attendanceform">{notLogin}</p>
+                      </div>
+
                     </>
                   );
                 }
@@ -2211,6 +2218,8 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
                             <th>ID</th>
                             <th>Present</th>
                             <th>Absent</th>
+                            <th>Not Login Days</th>
+
                           </tr>
                         </thead>
                         <tbody>
@@ -2235,11 +2244,16 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
                                   absent++;
                                 }
                               });
+
+                              const notLogin = summary.workingDays - present - absent;
+
                               return (
                                 <tr key={id}>
                                   <td>{id}</td>
                                   <td>{present}</td>
                                   <td>{absent}</td>
+                                  <td>{notLogin}</td>
+
                                 </tr>
                               );
                             })}
