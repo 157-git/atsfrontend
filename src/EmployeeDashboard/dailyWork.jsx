@@ -17,7 +17,7 @@ import {
   getFormattedDateISOYMDformat,
   getLateMark,
 } from "../EmployeeSection/getFormattedDateTime.jsx";
-import { getDailyworkData,putDailyworkData } from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable.jsx";
+import { getDailyworkData, putDailyworkData } from "../HandlerFunctions/getDailyWorkDataByIdTypeDateReusable.jsx";
 import { useSelector } from "react-redux";
 import { LogOut } from "lucide-react";
 import StopWatch from "./stopWatch.jsx";
@@ -93,29 +93,29 @@ function DailyWork({
   const [messagesContext, contextHolder] = notification.useNotification({
     stack: true
       ? {
-          threshold: 1,
-        }
+        threshold: 1,
+      }
       : false,
   });
 
-  const getLoginLogoutStatus = ()=>{
+  const getLoginLogoutStatus = () => {
     try {
       const response = axios.get(`${API_BASE_URL}/check-login-status/${employeeId}/${userType}`);
       // console.log(response);
-      
+
       if (response.data === "Logout") {
         toast.error("user logedout from database !");
         navigate(`/login/${userType}`);
       }
     } catch (error) {
       console.log(error);
-      
+
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getLoginLogoutStatus();
-  },[])
+  }, [])
 
   const TIMER_DURATION = 15 * 60 * 1000;
   let timerId;
@@ -942,10 +942,10 @@ function DailyWork({
               interviewResponse === "Selected"
                 ? `Your candidate ${message.candidate.candidateName} has been Selected after the ${round} for Job ID ${jobId}.`
                 : interviewResponse === "Hold"
-                ? `Your candidate ${message.candidate.candidateName} is on Hold after the ${round} for Job ID ${jobId}.`
-                : interviewResponse === "Rejected"
-                ? `Your candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId}.`
-                : `Your candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId}.`,
+                  ? `Your candidate ${message.candidate.candidateName} is on Hold after the ${round} for Job ID ${jobId}.`
+                  : interviewResponse === "Rejected"
+                    ? `Your candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId}.`
+                    : `Your candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId}.`,
           };
         } else {
           return {
@@ -954,10 +954,10 @@ function DailyWork({
               interviewResponse === "Selected"
                 ? `Candidate ${message.candidate.candidateName} has been Selected after the ${round} for Job ID ${jobId}.`
                 : interviewResponse === "Hold"
-                ? `Candidate ${message.candidate.candidateName} is on Hold after the ${round} for Job ID ${jobId}.`
-                : interviewResponse === "Rejected"
-                ? `Candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId}.`
-                : `Candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId}.`,
+                  ? `Candidate ${message.candidate.candidateName} is on Hold after the ${round} for Job ID ${jobId}.`
+                  : interviewResponse === "Rejected"
+                    ? `Candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId}.`
+                    : `Candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId}.`,
           };
         }
 
@@ -1075,10 +1075,10 @@ function DailyWork({
               interviewResponse === "Selected"
                 ? `Your candidate ${message.candidate.candidateName} has been Selected after the ${round} for Job ID ${jobId} Further details will be shared soon.`
                 : interviewResponse === "Hold"
-                ? `Your candidate ${message.candidate.candidateName} is on Hold after the ${round} for Job ID ${jobId} The next steps will be communicated soon.`
-                : interviewResponse === "Rejected"
-                ? `Your candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId} Please review and plan accordingly.`
-                : `Your candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId} on ${message.candidate.nextInterviewDate} at ${message.candidate.nextInterviewTiming}.`,
+                  ? `Your candidate ${message.candidate.candidateName} is on Hold after the ${round} for Job ID ${jobId} The next steps will be communicated soon.`
+                  : interviewResponse === "Rejected"
+                    ? `Your candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId} Please review and plan accordingly.`
+                    : `Your candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId} on ${message.candidate.nextInterviewDate} at ${message.candidate.nextInterviewTiming}.`,
             // chaange this
             time: `${message.candidate.commentForTl}`,
           };
@@ -1089,10 +1089,10 @@ function DailyWork({
               interviewResponse === "Selected"
                 ? `Congratulations! Candidate ${message.candidate.candidateName} has been Selected after the ${round} for Job ID ${jobId} Further details will be shared soon.`
                 : interviewResponse === "Hold"
-                ? `Candidate ${message.candidate.candidateName} is on Hold after the ${round} for Job ID ${jobId} The next steps will be communicated soon.`
-                : interviewResponse === "Rejected"
-                ? `Candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId} Please review and plan accordingly.`
-                : `Candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId} on ${message.candidate.nextInterviewDate} at ${message.candidate.nextInterviewTiming}.`,
+                  ? `Candidate ${message.candidate.candidateName} is on Hold after the ${round} for Job ID ${jobId} The next steps will be communicated soon.`
+                  : interviewResponse === "Rejected"
+                    ? `Candidate ${message.candidate.candidateName} has been Rejected after the ${round} for Job ID ${jobId} Please review and plan accordingly.`
+                    : `Candidate ${message.candidate.candidateName} has been ${interviewResponse} for Job ID ${jobId} on ${message.candidate.nextInterviewDate} at ${message.candidate.nextInterviewTiming}.`,
             // we will change this letter
             time: `${message.candidate.commentForTl}`,
           };
@@ -1250,15 +1250,21 @@ function DailyWork({
   const fetchNewWorkId = async () => {
     try {
       const currentDateNew = getFormattedDateISOYMDformat();
+
       const resp = await axios.get(
         `${API_BASE_URL}/fetch-work-id/${employeeId}/${userType}/${currentDateNew}`
       );
+      console.log("EMPLOYEE NAME:--", loginEmployeeName)
+
+      console.log("gtng", resp.data)
       const yesNo = resp.data;
 
       if (typeof yesNo === "string") {
         console.log("running post");
 
         try {
+                console.log("EMPLOYEE NAME222:--", loginEmployeeName)
+
           const respPost = await axios.post(
             `${API_BASE_URL}/save-daily-work/${employeeId}/${userType}`,
             {
@@ -1283,7 +1289,7 @@ function DailyWork({
           console.log(respPost);
           setLoginHoursTimerStart("00:00:00");
           setDisplayStopWatch(true);
-        } catch (error1) {}
+        } catch (error1) { }
       } else if (typeof yesNo === "number") {
         // console.log("running put");
         try {
@@ -1314,8 +1320,8 @@ function DailyWork({
               getDataForUpdate
             );
             // console.log(putData);
-          } catch (errorPut) {}
-        } catch (errorget) {}
+          } catch (errorPut) { }
+        } catch (errorget) { }
       }
     } catch (error) {
       console.error(error);
@@ -1365,35 +1371,57 @@ function DailyWork({
       }
     }
   };
-  const handleStartClick = async (value) => {
-    if (value === true) {
-      const breakEndTime = getCurrentTimeForUpdateData();
-      try {
-        const getDataForUpdate = {
-          attendanceRole: {
-            ...(userType === "Recruiters" && { employee: { employeeId } }),
-            ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
-            ...(userType === "Manager" && { manager: { employeeId } }),
-          },
-          dailyHours: [
-            {
-              breakStartTime,
-              breakEndTime,
-            },
-          ],
-        };
-        // console.log(getDataForUpdate);
+const handleStartClick = async (value) => {
+  if (value === true) {
+    const breakEndTime = getCurrentTimeForUpdateData();
 
-        const startPutReq = await putDailyworkData(
-          employeeId,
-          userType,
-          currentDateNewGlobal,
-          getDataForUpdate
-        );
-        // console.log(startPutReq);
-      } catch (error) {}
+    // Wait for name availability
+    let empName = loginEmployeeName || employeeData?.name;
+
+    if (!empName) {
+      console.warn("Employee name not ready yet — retrying in 5 second...");
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      empName = loginEmployeeName || employeeData?.name;
     }
-  };
+
+    if (!empName) {
+      console.error("Employee name still missing! Aborting startPutReq.");
+      return;
+    }
+
+    try {
+      const getDataForUpdate = {
+        attendanceRole: {
+          ...(userType === "Recruiters" && { employee: { employeeId } }),
+          ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
+          ...(userType === "Manager" && { manager: { employeeId } }),
+        },
+        employeeName: empName, // guaranteed non-empty now
+        dailyHours: [
+          {
+            breakStartTime,
+            breakEndTime,
+          },
+        ],
+      };
+
+      console.log("putDataReqBody", getDataForUpdate);
+
+      const startPutReq = await putDailyworkData(
+        employeeId,
+        userType,
+        currentDateNewGlobal,
+        getDataForUpdate
+      );
+
+      console.log("startPutReq success:", startPutReq);
+    } catch (error) {
+      console.error(" Error in startPutReq:", error);
+    }
+  }
+};
+
+
   const fetchDailyworkGetPendingAchivedData = async () => {
     try {
       const getData = await getDailyworkData(
@@ -1463,20 +1491,20 @@ function DailyWork({
               <button className="daily-tr-btn" style={{ whiteSpace: "nowrap" }} id="dailyTarget">
                 Target:{" "}
                 {dailyWorkDataNew?.dailyTarget !== null &&
-                dailyWorkDataNew?.dailyTarget !== undefined
+                  dailyWorkDataNew?.dailyTarget !== undefined
                   ? dailyWorkDataNew.dailyTarget
                   : 20}
               </button>
               <button
                 className="daily-tr-btn"
-                 id="dailyAchieved"
+                id="dailyAchieved"
                 style={{
                   color: data.archived <= 3 ? "red" : "green",
                 }}
               >
                 Achieved :{" "}
                 {dailyWorkDataNew?.dailyArchived !== null &&
-                dailyWorkDataNew?.dailyArchived !== undefined
+                  dailyWorkDataNew?.dailyArchived !== undefined
                   ? dailyWorkDataNew.dailyArchived
                   : 0}
               </button>
@@ -1489,7 +1517,7 @@ function DailyWork({
               >
                 Pending :{" "}
                 {dailyWorkDataNew?.dailyPending !== null &&
-                dailyWorkDataNew?.dailyPending !== undefined
+                  dailyWorkDataNew?.dailyPending !== undefined
                   ? dailyWorkDataNew.dailyPending
                   : 20}
               </button>
@@ -1571,8 +1599,8 @@ function DailyWork({
                               text={
                                 getTitleDescription(message).time
                                   ? extractTimeOnly(
-                                      getTitleDescription(message).time
-                                    )
+                                    getTitleDescription(message).time
+                                  )
                                   : ""
                               }
                               style={{
