@@ -18,6 +18,7 @@ import {
   endOfDay,
   isWeekend,
   parseISO,
+  isValid
 } from "date-fns";
 
 import "../EmployeeSection/Attendence_sheet.css";
@@ -747,78 +748,70 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
     setWeekendCount(weekendCount);
   };
   //samruddhi Patole 03/09 
-  const calculateSummary = () => {
-    let workingDays = 0;
-    let weekends = 0;
-    let present = 0;
-    let absent = 0;
-    let totalWorkingHours = 0;
+const calculateSummary = () => {
+  let workingDays = 0;
+  let weekends = 0;
+  let present = 0;
+  let absent = 0;
+  let totalWorkingHours = 0;
 
-    const getHoursWorked = (loginTime, logoutTime) => {
-      if (!loginTime || !logoutTime) return 0;
+  const getHoursWorked = (loginTime, logoutTime) => {
+    if (!loginTime || !logoutTime) return 0;
 
-      const toMinutes = (timeStr) => {
-        try {
-          const [time, modifier] = timeStr.split(" ");
-          let [hours, minutes, seconds] = time.split(":").map(Number);
+    const toMinutes = (timeStr) => {
+      try {
+        const [time, modifier] = timeStr.split(" ");
+        let [hours, minutes, seconds] = time.split(":").map(Number);
 
-          if (modifier.toLowerCase() === "pm" && hours < 12) {
-            hours += 12;
-          }
-          if (modifier.toLowerCase() === "am" && hours === 12) {
-            hours = 0;
-          }
-
-          return hours * 60 + minutes;
-        } catch (e) {
-          return 0;
+        if (modifier && modifier.toLowerCase() === "pm" && hours < 12) {
+          hours += 12;
         }
-      };
+        if (modifier && modifier.toLowerCase() === "am" && hours === 12) {
+          hours = 0;
+        }
 
-      const loginMinutes = toMinutes(loginTime);
-      const logoutMinutes = toMinutes(logoutTime);
-
-      if (logoutMinutes <= loginMinutes) return 0;
-
-      const diffMinutes = logoutMinutes - loginMinutes;
-
-      let hours = Math.floor(diffMinutes / 60);
-      let mins = diffMinutes % 60;
-
-      if (mins >= 30) hours += 1;
-
-      return hours;
+        return hours * 60 + minutes;
+      } catch (e) {
+        return 0;
+      }
     };
 
-    if (startDate && endDate) {
-      const interval = eachDayOfInterval({
-        start: parseISO(startDate),
-        end: parseISO(endDate),
-      });
+    const loginMinutes = toMinutes(loginTime);
+    const logoutMinutes = toMinutes(logoutTime);
+
+    if (logoutMinutes <= loginMinutes) return 0;
+
+    const diffMinutes = logoutMinutes - loginMinutes;
+
+    let hours = Math.floor(diffMinutes / 60);
+    let mins = diffMinutes % 60;
+
+    if (mins >= 30) hours += 1;
+
+    return hours;
+  };
+
+  if (startDate && endDate) {
+    const start = parseISO(startDate);
+    const end = parseISO(endDate);
+
+    //  safe guard for invalid or reversed dates
+    if (isValid(start) && isValid(end) && end >= start) {
+      const interval = eachDayOfInterval({ start, end });
 
       workingDays = interval.filter((date) => !isWeekend(date)).length;
       weekends = interval.filter((date) => isWeekend(date)).length;
 
       const selectedAttendance = attendanceData.filter((data) => {
         const dataDate = parseISO(data.date);
-        return dataDate >= parseISO(startDate) && dataDate <= parseISO(endDate);
+        return dataDate >= start && dataDate <= end;
       });
-      //   const totalArchived = attendanceData.reduce(
-      //   (sum, data) => {
-      //     const dataDate = parseISO(data.date);
-      //     if (dataDate >= parseISO(startDate) && dataDate <= parseISO(endDate)) {
-      //       return sum + (Number(data.dailyArchived) || 0);
-      //     }
-      //     return sum;
-      //   },
-      //   0
-      // );
+
       const totalArchived = selectedAttendance.reduce(
         (sum, data) => sum + (Number(data.dailyArchived) || 0),
         0
       );
 
-      // Apply rule based on totalArchived count
       if (totalArchived > 3) {
         present = selectedAttendance.length;
         absent = 0;
@@ -826,9 +819,6 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
         present = 0;
         absent = selectedAttendance.length;
       }
-
-      // attendanceData.forEach((data) => {
-      //   const date = parseISO(data.date);
 
       selectedAttendance.forEach((data) => {
         const loginTime = (data.loginTime || "").trim();
@@ -841,47 +831,47 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
           loginTime !== "0:00" &&
           loginTime !== "00:00:00";
 
-
         if (hasLogin) {
           totalWorkingHours += getHoursWorked(loginTime, logoutTime);
         }
-
-        // if (hasLogin) {
-        //   present++;
-        //   totalWorkingHours += getHoursWorked(loginTime, logoutTime); 
-        // } else {
-        //   absent++;
-        // }
       });
+    } else {
+      alert("⚠️ Invalid or reversed date interval:", startDate, endDate);
+      return; //  stop execution
     }
+  } else {
+    alert("⚠️ Missing startDate or endDate:", startDate, endDate);
+    return; //  stop execution
+  }
 
-    const archived = attendanceData.reduce(
-      (sum, data) => sum + (Number(data.dailyArchived) || 0),
-      0
-    );
-    const pending = attendanceData.reduce(
-      (sum, data) => sum + (Number(data.dailyPending) || 0),
-      0
-    );
-    const totalTarget = archived + pending;
-    const { status, achievementRate } = categorizePerformance(
-      totalTarget,
-      archived
-    );
+  const archived = attendanceData.reduce(
+    (sum, data) => sum + (Number(data.dailyArchived) || 0),
+    0
+  );
+  const pending = attendanceData.reduce(
+    (sum, data) => sum + (Number(data.dailyPending) || 0),
+    0
+  );
+  const totalTarget = archived + pending;
 
-    setSummary({
-      workingDays,
-      totalTarget,
-      totalWorkingHours,
-      archived,
-      pending,
-      present,
-      absent,
-      weekends,
-      achievementRate,
-      performanceStatus: status,
-    });
-  };
+  const { status, achievementRate } = categorizePerformance(
+    totalTarget,
+    archived
+  );
+
+  setSummary({
+    workingDays,
+    totalTarget,
+    totalWorkingHours,
+    archived,
+    pending,
+    present,
+    absent,
+    weekends,
+    achievementRate,
+    performanceStatus: status,
+  });
+};
 
 
 
