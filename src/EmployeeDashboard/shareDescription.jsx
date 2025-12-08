@@ -11,7 +11,7 @@ import Item from "antd/es/list/Item";
 const ShareDescription = ({ Descriptions }) => {
   const [data, setData] = useState(null);
   const { employeeId, userType } = useParams();
-console.log(Descriptions);
+  console.log(Descriptions);
 
   useEffect(() => {
     fetch(
@@ -78,10 +78,10 @@ console.log(Descriptions);
     try {
       const input = document.getElementById("job-description-share");
       const canvas = await html2canvas(input, { scale: 2, logging: true });
-  
+
       // Convert canvas to image URL
       const imgData = canvas.toDataURL("image/png");
-  
+
       // Create a temporary anchor element for downloading
       const link = document.createElement("a");
       link.href = imgData;
@@ -93,11 +93,11 @@ console.log(Descriptions);
       console.error("Error generating and downloading image:", error);
       setDownloadImg(false);
     }
-    finally{
+    finally {
       setDownloadImg(false);
     }
   };
-  
+
   const handleInputChange = (e, field) => {
     setData({
       ...data,
@@ -116,12 +116,12 @@ console.log(Descriptions);
         </button>
       </section>
       <div className="job-post-share" id="job-description-share"
-       style={{
-        backgroundColor: (employeeId === "3148" && userType === "TeamLeader")
-          ? "#7f9a40"
-          : (employeeId === "3691" && userType === "TeamLeader") 
-          && "#b3a55b"
-      }}
+        style={{
+          backgroundColor: (employeeId === "3148" && userType === "TeamLeader")
+            ? "#7f9a40"
+            : (employeeId === "3691" && userType === "TeamLeader")
+            && "#b3a55b"
+        }}
       >
         <section className="job-details-section-share">
           {Descriptions.designation && (
@@ -150,16 +150,16 @@ console.log(Descriptions);
 
             <div className="setDisplayFlexForEdm">
               <div className="job-details-firstsection-share"
-            style={{
-              borderRight:
-                employeeId === "3148" && userType === "TeamLeader"
-                  ? "2px solid #c11f21"
-                  : employeeId === "3691" && userType === "TeamLeader"
-                  ? "2px solid #3b3823"
-                  : "none"
-            }}
-            
-            
+                style={{
+                  borderRight:
+                    employeeId === "3148" && userType === "TeamLeader"
+                      ? "2px solid #c11f21"
+                      : employeeId === "3691" && userType === "TeamLeader"
+                        ? "2px solid #3b3823"
+                        : "none"
+                }}
+
+
               >
                 {/* {Descriptions.companyName && (
               <p
@@ -205,11 +205,11 @@ console.log(Descriptions);
                 )}
                 {Descriptions.skills && (
                   <p contentEditable>
-                    <b contentEditable>Key Skills:</b> {Descriptions.skills.split(",").length > 0 ? Descriptions.skills.split(",").map((item, index)=>(
+                    <b contentEditable>Key Skills:</b> {Descriptions.skills.split(",").length > 0 ? Descriptions.skills.split(",").map((item, index) => (
                       <>
-                      {item}{index < Descriptions.skills.split(",").length - 1 ? ", " : ""}
+                        {item}{index < Descriptions.skills.split(",").length - 1 ? ", " : ""}
                       </>
-                    ) ) : null}
+                    )) : null}
                   </p>
                 )}
 
@@ -231,6 +231,18 @@ console.log(Descriptions);
                     <b contentEditable>Shifts:</b> {Descriptions.shift}
                   </p>
                 )}
+                {Descriptions.position > 0 && (
+                  <p contentEditable>
+                    <b contentEditable>Number of Positions:</b>{" "}
+                    {Descriptions.position}
+                  </p>
+                )}
+                {Descriptions.jobType && (
+                  <p>
+                    <b contentEditable>Job Type:</b>{" "}
+                    <span contentEditable>{Descriptions.jobType}</span>
+                  </p>
+                )}
 
                 {Descriptions.noticePeriod && (
                   <p contentEditable>
@@ -242,24 +254,24 @@ console.log(Descriptions);
 
               <div className="job-details-secondsection-share">
                 <div className="jd-logo-div">
-                   {/* <img 
+                  {/* <img 
                    className="jd-logo"
                                 src={(employeeId === "3148" && userType === "TeamLeader") ? profileImageRtempus : LoginImage} 
                                 alt="Profile Image" 
                               /> */}
-                               <img 
-                               className="jd-logo"
-                                src={
-                                  employeeId === "3148" && userType === "TeamLeader"
-                                    ? profileImageRtempus
-                                    : employeeId === "3691" && userType === "TeamLeader"
-                                    ? profileImageVelocity
-                                    : Descriptions.image
-                                    ? `${Descriptions.image}`
-                                    : LoginImage
-                                }
-                                alt="Profile Image"
-                              />
+                  <img
+                    className="jd-logo"
+                    src={
+                      employeeId === "3148" && userType === "TeamLeader"
+                        ? profileImageRtempus
+                        : employeeId === "3691" && userType === "TeamLeader"
+                          ? profileImageVelocity
+                          : Descriptions.image
+                            ? `${Descriptions.image}`
+                            : LoginImage
+                    }
+                    alt="Profile Image"
+                  />
                 </div>
                 <div className="jd-logo-below-div">
                   {Descriptions.weekOff && (
@@ -271,18 +283,18 @@ console.log(Descriptions);
                   {/* <p>
                   <b>Incentives For Recruiters:</b> {Descriptions.incentive}
                 </p> */}
-                  {Descriptions.position > 0 && (
+                  {/* {Descriptions.position > 0 && (
                     <p contentEditable>
                       <b contentEditable>Number of Positions:</b>{" "}
                       {Descriptions.position}
                     </p>
                   )}
                   {Descriptions.jobType && (
-                    <p id="job-roles-share">
+                    <p>
                       <b contentEditable>Job Type:</b>{" "}
                       <span contentEditable>{Descriptions.jobType}</span>
                     </p>
-                  )}
+                  )} */}
                   {Descriptions.perks && (
                     <p>
                       <b contentEditable>Perks:</b>{" "}
@@ -352,7 +364,7 @@ console.log(Descriptions);
         {Descriptions.preferredQualifications &&
           Descriptions.preferredQualifications.length > 0 &&
           Descriptions.preferredQualifications[0].preferredQualificationMsg !==
-            "" && (
+          "" && (
             <section className="preferred-qualifications-share">
               <h2>
                 <b contentEditable className="jd-sub-headings">
@@ -416,16 +428,16 @@ console.log(Descriptions);
         </section>
       </div>
       <div className="setDisplayFlextShareJd">
-      <section className="apply-section-share">
-        <button className="apply-button-share" onClick={generateAndShareImage}>
-          Share Job Description
-        </button>
-      </section>
-      <section className="apply-section-share">
-        <button className="apply-button-share" onClick={generateAndDownloadImage}>
-          Download Job Description
-        </button>
-      </section>
+        <section className="apply-section-share">
+          <button className="apply-button-share" onClick={generateAndShareImage}>
+            Share Job Description
+          </button>
+        </section>
+        <section className="apply-section-share">
+          <button className="apply-button-share" onClick={generateAndDownloadImage}>
+            Download Job Description
+          </button>
+        </section>
       </div>
     </main>
   );
