@@ -298,10 +298,11 @@ const App = () => {
             element={<JDTemplateGen></JDTemplateGen>}
           ></Route> */}
             <Route path="/previousQuestion" element={<PreviousQuestion />} />
+            <Route path="/manage-attendance" element={<AttendanceForm />} />
+
           </Routes>
 
-          <Route path="/manage-attendance" element={<AttendanceForm/>}/>
-          
+
           {loginEmployeeName && <ChatBot />}
 
         </div>

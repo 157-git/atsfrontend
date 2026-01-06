@@ -76,9 +76,8 @@ const AddTeamLeader = ({loginEmployeeName, updateEmployeeIdForForm}) => {
     profileImage: null,
     document: null,
     resumeFile: null,
-    maritalStatus: "",
-    tlPassword: "",
-  tlConfirmPassword: ""
+    maritalStatus: ""
+
   });
 
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -570,7 +569,6 @@ if (!formDataToSend.has("teamLeaderId")) {
 
 const emitData = {
   // teamLeaderId:"0",
-  employeeId: newId,
   //userType: "TeamLeader",
   teamLeaderName: formData.teamLeaderName,
   userName: formData.userName,
