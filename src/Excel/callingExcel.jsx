@@ -282,7 +282,7 @@ if (responseUploadExcel.status === 200) {
         `${API_BASE_URL}/add-multiple-resume/${employeeId}/${userType}`,
         formData
       );
-      console.log(response);
+      console.log("Response:-",response);
       
       setprogressLength(80)
       await new Promise((resolve) => setTimeout(resolve, 500)); // Simulated delay

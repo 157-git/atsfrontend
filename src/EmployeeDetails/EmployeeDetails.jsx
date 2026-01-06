@@ -29,17 +29,22 @@ const EmployeeDetails = () => {
   const [updateJobRole, setUpdateJobRole] = useState("");
   const [updateEmployeeIdForForm, setUpdateEmployeeIdForForm] = useState(null);
 
-  const [pageSize, setPageSize] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+  const [currentPage, setCurrentPage] = useState(2);
   const [totalRecords, setTotalRecords] = useState(0);
 
   useEffect(() => {
-    const fetchData = async (page,size) => {
+    const fetchData = async (page, size) => {
       try {
         const response = await axios.get(
           `${API_BASE_URL}/fetch-Team-details/${employeeId}/${userType}?page=${page}&size=${size}`
         );
+
         setEmployeeData(response.data.content);
+
+        // 🔥 ADD THESE
+        setTotalRecords(response.data.totalElements);
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -47,8 +52,9 @@ const EmployeeDetails = () => {
       }
     };
 
-    fetchData(currentPage,pageSize);
-  }, [currentPage,pageSize]);
+
+    fetchData(currentPage - 1, pageSize);
+  }, [currentPage, pageSize]);
 
   const handleBlock = (employeeId) => {
     console.log(`Blocking employee with ID: ${employeeId}`);
@@ -62,12 +68,12 @@ const EmployeeDetails = () => {
   const handleUpdate = (employeeIdForUpdate, employeeroleForUpdate) => {
     console.log(`Updating employee with ID: ${employeeIdForUpdate}`);
     console.log(`Updating employee with role: ${employeeroleForUpdate}`);
-setUpdateJobRole(employeeroleForUpdate);
-setShowEmployee(true);
-setUpdateEmployeeIdForForm(employeeIdForUpdate);
+    setUpdateJobRole(employeeroleForUpdate);
+    setShowEmployee(true);
+    setUpdateEmployeeIdForForm(employeeIdForUpdate);
 
   };
-console.log(employeeData);
+  console.log(employeeData);
 
   const isDeleted = (employeeId) => deletedEmployees.includes(employeeId);
   const isBlocked = (employeeId) => blockedEmployees.includes(employeeId);
@@ -110,7 +116,6 @@ console.log(employeeData);
     }
   };
 
-  
   const convertToDocumentLink = (byteCode, fileName) => {
     if (byteCode) {
       try {
@@ -278,18 +283,18 @@ console.log(employeeData);
                       </td>
 
                       <td className="tabledata">
-                          <button
-                            onClick={() => openResumeModal(employee.resume)}
-                            style={{ background: "none", border: "none" }}
-                          >
-                            <i
-                              className="fas fa-eye"
-                              style={{
-                                color: employee.resume ? "green" : "inherit",
-                              }}
-                            ></i>
-                          </button>
-                        </td>
+                        <button
+                          onClick={() => openResumeModal(employee.resume)}
+                          style={{ background: "none", border: "none" }}
+                        >
+                          <i
+                            className="fas fa-eye"
+                            style={{
+                              color: employee.resume ? "green" : "inherit",
+                            }}
+                          ></i>
+                        </button>
+                      </td>
 
                       <td
                         className="tabledata"
@@ -325,11 +330,50 @@ console.log(employeeData);
                   ))}
                 </tbody>
               </table>
+
+              <div className="pagination-container">
+  <span className="pagination-info">
+    Showing {(currentPage - 1) * pageSize + 1}–
+    {Math.min(currentPage * pageSize, totalRecords)} of {totalRecords}
+  </span>
+
+  <div className="pagination-buttons">
+    <button
+      disabled={currentPage === 1}
+      onClick={() => setCurrentPage(currentPage - 1)}
+    >
+      Prev
+    </button>
+
+    {Array.from(
+      { length: Math.ceil(totalRecords / pageSize) },
+      (_, index) => index + 1
+    ).map((page) => (
+      <button
+        key={page}
+        className={page === currentPage ? "active" : ""}
+        onClick={() => setCurrentPage(page)}
+      >
+        {page}
+      </button>
+    ))}
+
+    <button
+      disabled={currentPage === Math.ceil(totalRecords / pageSize)}
+      onClick={() => setCurrentPage(currentPage + 1)}
+    >
+      Next
+    </button>
+  </div>
+</div>
+
             </div>
           ) : (
             showEmployee && updateEmployeeIdForForm && (
-              updateJobRole === "Manager" ? (
-                <AddManager updateEmployeeIdForForm = {updateEmployeeIdForForm} />
+              userType === "superuser" ? (
+                <AddManager updateEmployeeIdForForm={updateEmployeeIdForForm} />
+              ) : updateJobRole === "Manager" ? (
+                <AddManager updateEmployeeIdForForm={updateEmployeeIdForForm} />
               ) : updateJobRole === "TeamLeader" ? (
                 <AddTeamLeader updateEmployeeIdForForm={updateEmployeeIdForForm} />
               ) : updateJobRole === "Recruiters" ? (
@@ -337,20 +381,20 @@ console.log(employeeData);
               ) : null
             )
           )
-          
-          
-          
-          // (
-          //   <>
-          //     <div>
-          //       <UpdateEmployee id={employeeId} userType={employeeRole} />
-          //     </div>
-          //   </>
-          // )
-          
+
+
+
+            // (
+            //   <>
+            //     <div>
+            //       <UpdateEmployee id={employeeId} userType={employeeRole} />
+            //     </div>
+            //   </>
+            // )
+
           }
-          
-          
+
+
           {" "}
         </>
       ) : (

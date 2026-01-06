@@ -12,14 +12,15 @@ function ShareEDM({ Descriptions, onShareEdm, descriptionFromTempGen }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const { employeeId, userType } = useParams();
-console.log(data);
+  console.log(data);
 
   useEffect(() => {
-    if((Descriptions || employeeId || userType) === undefined){
-setData({
-  ...descriptionFromTempGen,
-  skills: descriptionFromTempGen.skills.join(", ")
-});    }else{
+    if ((Descriptions || employeeId || userType) === undefined) {
+      setData({
+        ...descriptionFromTempGen,
+        skills: descriptionFromTempGen.skills.join(", ")
+      });
+    } else {
       fetch(
         `${API_BASE_URL}/edm-details/${Descriptions}/${employeeId}/${userType}`
       )
@@ -32,10 +33,10 @@ setData({
             employeeName: data.employeeName.split(" ")[0],
           });
         })
-  
+
         .catch((error) => console.error("Error fetching data:", error));
     }
-  
+
   }, []);
 
   // line 27 to 49 added by sahil karnekar date 30-10-2024
@@ -146,10 +147,10 @@ setData({
       }
       const input = document.getElementById("shareEMD");
       const canvas = await html2canvas(input, { scale: 2, logging: true });
-  
+
       // Convert canvas to image URL
       const imgData = canvas.toDataURL("image/png");
-  
+
       // Create a temporary anchor element for downloading
       const link = document.createElement("a");
       link.href = imgData;
@@ -158,15 +159,15 @@ setData({
       link.click();
       document.body.removeChild(link); // Cleanup
 
-       // line 77 to 85 added by sahil karnekar date 30-10-2024
-       inputH3_1.style.display = "block";
-       inputH3_2.style.display = "block";
-       inputH3_3.style.display = "block";
+      // line 77 to 85 added by sahil karnekar date 30-10-2024
+      inputH3_1.style.display = "block";
+      inputH3_2.style.display = "block";
+      inputH3_3.style.display = "block";
     } catch (error) {
       console.error("Error generating and downloading image:", error);
       setDownloadImg(false);
     }
-    finally{
+    finally {
       setDownloadImg(false);
       inputH3_1.style.display = "block";
       inputH3_2.style.display = "block";
@@ -188,29 +189,29 @@ setData({
             </div>
             <div className="job-posting" id="shareEMD">
               <div className="image-container">
-              {/* <img 
+                {/* <img 
   src={(employeeId === "3148" && userType === "TeamLeader") ? profileImageRtempus : profileImage} 
   alt="Profile Image" 
 /> */}
- <img 
-  src={
-    employeeId === "3148" && userType === "TeamLeader"
-      ? profileImageRtempus
-      : employeeId === "3691" && userType === "TeamLeader"
-      ? profileImageVelocity
-       : data.image
-      ? `${data.image}`
-      : profileImage
-  }
-  alt="Profile Image"
-/>
+                <img
+                  src={
+                    employeeId === "3148" && userType === "TeamLeader"
+                      ? profileImageRtempus
+                      : employeeId === "3691" && userType === "TeamLeader"
+                        ? profileImageVelocity
+                        : data.image
+                          ? `${data.image}`
+                          : profileImage
+                  }
+                  alt="Profile Image"
+                />
 
               </div>
               {/* here are some code updated by sahil karnekar from line 114 to 330 date 30-10-2024 */}
               <div style={{ marginLeft: "10px", marginRight: "10px" }}>
                 <h3
                   className="share-edm-black-bold"
-                  contentEditable
+                  contentEditable="true"
                   suppressContentEditableWarning={true}
                   onBlur={(e) => handleContentChange(e, "headingText")}
                 >
@@ -229,6 +230,7 @@ setData({
                 <div className="details">
                   <h3
                     className="share-edm-black-skill"
+                    // style={{ "lineHeight": "1.8px" }}
                     contentEditable
                     suppressContentEditableWarning={true}
                     onBlur={(e) =>
@@ -269,7 +271,7 @@ setData({
                           onBlur={(e) =>
                             handleContentChange(e, "experienceUpto")
                           }
-                        >
+                        ><br></br>
                           {data.experienceUpto || "Experience Upto "}
                         </span>
                         <span
@@ -423,44 +425,44 @@ setData({
                       <br />
                       <h3 className="share-edm-black-skill">For Details</h3>
                       <h4 className="share-edm-contact">
-  {
-    (employeeId === "3148" && userType === "TeamLeader") 
-      ? "Contact - Rtempus Consulting Services" 
-      : "Contact - 157 Careers"
-  }
-</h4>
+                        {
+                          (employeeId === "3148" && userType === "TeamLeader")
+                            ? "Contact - Rtempus Consulting Services"
+                            : "Contact - 157 Careers"
+                        }
+                      </h4>
 
                       <div className="share-edm-contact-detaisl">
-  <div
-    id="employeeName"
-    contentEditable
-    suppressContentEditableWarning
-    onInput={(e) => handleInputChange(e, "employeeName")}
-    className="share-edm-input newClassnameForSolveSoniaMaanProblem"
-  >
-    {data.employeeName}
-  </div>
-  {" | "}
-  <div
-    id="officialMail"
-    contentEditable
-    suppressContentEditableWarning
-    onInput={(e) => handleInputChange(e, "officialMail")}
-    className="share-edm-input newClassnameForSolveSoniaMaanProblem"
-  >
-    {data.officialMail}
-  </div>
-  {" | "}
-  <div
-    id="officialContactNo"
-    contentEditable
-    suppressContentEditableWarning
-    onInput={(e) => handleInputChange(e, "officialContactNo")}
-    className="share-edm-input newClassnameForSolveSoniaMaanProblem"
-  >
-    {data.officialContactNo}
-  </div>
-</div>
+                        <div
+                          id="employeeName"
+                          contentEditable
+                          suppressContentEditableWarning
+                          onInput={(e) => handleInputChange(e, "employeeName")}
+                          className="share-edm-input newClassnameForSolveSoniaMaanProblem"
+                        >
+                          {data.employeeName}
+                        </div>
+                        {" | "}
+                        <div
+                          id="officialMail"
+                          contentEditable
+                          suppressContentEditableWarning
+                          onInput={(e) => handleInputChange(e, "officialMail")}
+                          className="share-edm-input newClassnameForSolveSoniaMaanProblem"
+                        >
+                          {data.officialMail}
+                        </div>
+                        {" | "}
+                        <div
+                          id="officialContactNo"
+                          contentEditable
+                          suppressContentEditableWarning
+                          onInput={(e) => handleInputChange(e, "officialContactNo")}
+                          className="share-edm-input newClassnameForSolveSoniaMaanProblem"
+                        >
+                          {data.officialContactNo}
+                        </div>
+                      </div>
 
                     </div>
                   </div>
@@ -468,17 +470,17 @@ setData({
               </div>
             </div>
             <div className="setDisplayFlextShareJd">
-      <section className="apply-section-share">
-        <button className="apply-button-share" onClick={generateAndShareEDMImage}>
-          Share Job Description
-        </button>
-      </section>
-      <section className="apply-section-share">
-        <button className="apply-button-share" onClick={generateAndDownloadEdmImage}>
-          Download Job Description
-        </button>
-      </section>
-      </div>
+              <section className="apply-section-share">
+                <button className="apply-button-share" onClick={generateAndShareEDMImage}>
+                  Share Job Description
+                </button>
+              </section>
+              <section className="apply-section-share">
+                <button className="apply-button-share" onClick={generateAndDownloadEdmImage}>
+                  Download Job Description
+                </button>
+              </section>
+            </div>
           </div>
         </div>
       )}

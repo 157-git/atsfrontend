@@ -453,11 +453,11 @@ const AddManager = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
             // ✅ All other values — stringified and trimmed
             formDataToSend.append(key, value?.toString().trim() ?? "");
 
-            for (const [key, val] of formDataToSend.entries()) {
-                if (val === "") {
-                    console.warn(`❗ Field '${key}' is being sent as empty string`);
-                }
-            }
+            // for (const [key, val] of formDataToSend.entries()) {
+            //     if (val === "") {
+            //         console.warn(`❗ Field '${key}' is being sent as empty string`);
+            //     }
+            // }
 
         });
 
@@ -478,8 +478,8 @@ const AddManager = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
             let newId = responseBody.id;
             if (response.ok) {
                 console.log(formData);
-                
-                toast.success( "Manager Data Added Successfully.");
+
+                toast.success("Manager Data Added Successfully.");
 
 
                 const emitData = {

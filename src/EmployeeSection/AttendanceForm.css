@@ -1,0 +1,430 @@
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== BODY & CONTAINER ===== */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f7fb;
+  color: #333;
+  position: relative;
+}
+
+.form-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 35px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+.main-heading {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 25px;
+  color: #222;
+  font-weight: 700;
+}
+
+/* ===== COMPANY TIME SECTION (button + inline inputs) ===== */
+.company-time-section {
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.company-time-section button {
+  background: #007bff;
+  border: none;
+  padding: 10px 18px;
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.company-time-section button:hover {
+  background: #0056b3;
+}
+
+.company-time-inputs {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.company-time-inputs label {
+  font-weight: 600;
+  color: #444;
+}
+
+.company-time-inputs input {
+  padding: 8px 12px;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+/* ===== SELECT DROPDOWN ===== */
+select {
+  padding: 10px 14px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===== TABLE STYLING ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 25px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+table th,
+table td {
+  padding: 12px 14px;
+  text-align: left;
+}
+
+table th {
+  background: #007bff;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+table tr:nth-child(even) {
+  background: #f8f9fb;
+}
+
+table tr:hover {
+  background: #eaf2ff;
+  transition: 0.2s;
+}
+
+/* ===== GLOBAL BUTTONS ===== */
+button {
+  background: #007bff;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin: 5px;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+/* ===== FORM STYLING ===== */
+.attendance-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+}
+
+.attendance-form label {
+  font-weight: 600;
+  color: #444;
+  min-width: 140px;
+}
+
+.attendance-form input[type="text"],
+.attendance-form input[type="date"],
+.attendance-form input[type="time"],
+.attendance-form select {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+.attendance-form input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* ===== NON-EDITABLE SECTION ===== */
+.non-editable-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.non-editable-section label {
+  font-weight: 600;
+  width: 150px;
+}
+
+.non-editable-section input {
+  background: #302e2e;
+  cursor: not-allowed;
+}
+
+/* ===== HOLIDAY SECTION ===== */
+.holiday-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px 30px;
+  margin-top: 10px;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.holiday-section .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.holiday-section label {
+  font-weight: 600;
+}
+
+.holiday-section input,
+.holiday-section select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.holiday-reason-group {
+  grid-column: span 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.holiday-reason-group input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* ===== SUBMIT BUTTON ===== */
+.attendance-form button[type="submit"] {
+  padding: 14px;
+  background: #28a745;
+  font-size: 17px;
+  font-weight: 700;
+  border-radius: 8px;
+}
+
+.attendance-form button[type="submit"]:hover {
+  background: #218838;
+}
+
+/* ===== MODAL OVERLAYS ===== */
+.modal-overlay-right {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: flex-end; /* Right side */
+  align-items: flex-start;
+  padding: 20px;
+  z-index: 9999;
+}
+
+.modal-overlay-left {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: flex-start; /* Left side */
+  align-items: flex-start;
+  padding: 20px;
+  z-index: 9999;
+}
+
+/* ===== SHARED MODAL BOX STYLE ===== */
+.daily-target-box,
+.company-time-modal {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: 16px;
+  width: 340px;
+  max-width: 95%;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.25);
+  z-index: 10000;
+  position: relative;
+}
+
+/* ===== ANIMATIONS ===== */
+.modal-overlay-right .daily-target-box {
+  animation: slideInRight 0.4s ease forwards;
+}
+
+.modal-overlay-left .company-time-modal {
+  animation: slideInLeft 0.4s ease forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ===== POPUP HEADINGS ===== */
+.daily-target-box h3,
+.company-time-modal h3 {
+  font-size: 20px;
+  margin-bottom: 18px;
+  font-weight: 700;
+  color: #222;
+  text-align: center;
+}
+
+/* ===== LABELS & INPUTS ===== */
+.daily-target-box label,
+.company-time-modal label {
+  font-weight: 600;
+  color: #444;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.daily-target-box input,
+.company-time-modal input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 18px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  transition: border 0.2s;
+}
+
+.daily-target-box input:focus,
+.company-time-modal input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0px 0px 6px rgba(0, 123, 255, 0.3);
+}
+
+/* ===== BUTTONS ===== */
+.daily-target-box button,
+.company-time-modal button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.daily-target-box button {
+  background: #28a745;
+  color: white;
+}
+
+.daily-target-box button:hover {
+  background: #0056b3;
+}
+
+.daily-target-close {
+  background: #dc3545 !important;
+}
+
+.company-time-modal button {
+  background: #28a745;
+  color: white;
+}
+
+.company-time-modal button:hover {
+  background: #1e7e34;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .holiday-section {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .attendance-form label {
+    min-width: auto;
+  }
+
+  table th,
+  table td {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .daily-target-box,
+  .company-time-modal {
+    width: 90%;
+  }
+}
+
+/* ===== PREVENT SCROLL ON MODAL OPEN ===== */
+body.modal-open {
+  overflow: hidden;
+}
+

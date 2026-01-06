@@ -53,6 +53,7 @@ function ForcefullyLogoutTask() {
   // Function to verify OTP and forcefully logout
   const verifyOtpAndLogout = async () => {
     setLoading(true);
+
     if (!otp.trim()) {
       toast.error("Please enter the OTP.");
       setLoading(false);
@@ -65,24 +66,34 @@ function ForcefullyLogoutTask() {
         { email, otp }
       );
 
-      // Use response.data.message as the success message
+      console.log("OTP VERIFY RESPONSE 👉", response.data);
+
       toast.success(response.data.message);
 
-      // Reset form after successful logout
+      // ✅ NEW: AUTO LOGIN
+const { employeeId, userType: role } = response.data;
+
+// Mimic normal login exactly
+localStorage.setItem("employeeId", employeeId);
+localStorage.setItem("userType", role);
+
+
+      // Reset form
       setEmail("");
       setOtp("");
       setOtpSent(false);
-      const newEmployeeId = response.data.employeeId
-      navigate(`/Dashboard/${newEmployeeId}/${userType}`);
+
+      // ✅ Directly go to dashboard
+      navigate(`/Dashboard/${employeeId}/${userType}`);
     } catch (error) {
-      // Handle error response from backend
-      const errorMessage =
-        error.response?.data?.message || "Error verifying OTP.";
-      toast.error(errorMessage);
-      setLoading(false);
+      toast.error(
+        error.response?.data?.message || "Error verifying OTP."
+      );
     }
+
     setLoading(false);
   };
+
 
   return (
     <>

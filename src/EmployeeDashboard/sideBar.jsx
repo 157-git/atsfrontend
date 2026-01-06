@@ -256,7 +256,7 @@ function Sidebar({
       } catch (error1) {
         console.log(error1);
       }
-localStorage.removeItem(`user_${userType}${employeeId}`);
+      localStorage.removeItem(`user_${userType}${employeeId}`);
       if (socket && typeof socket.emit === "function") {
         socket.emit("user_logout_event", requestBody);
         console.log(
@@ -400,6 +400,12 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
     window.open("https://in.indeed.com/?from=gnav-homepage", "_blank");
   };
 
+  // sakshi added below code on 17-12-25
+  const openRGPlatform = () => {
+    window.open("http://localhost:5173", "_blank"); // replace with actual RG Portal URL
+  };
+
+
   //Arshad Attar Added New Cement button Logic as per, Fetch Subscription Status
   //Subscription Status Logic Added - On 28-11-2024 Start Line- 255 to 271
   // Fetch `paymentMade` from local storage
@@ -476,6 +482,7 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
     "addCompany",
     "capex",
   ].includes(activeButton);
+
   const isSuperUserActive = [
     "admin-section",
     "sendCandidate",
@@ -549,9 +556,8 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
           {isActive && <span className="active-dot"></span>}
           {item.arrow && (
             <i
-              className={`arrow ph-bold ph-caret-${
-                activeSubMenu === item.key ? "up" : "down"
-              }`}
+              className={`arrow ph-bold ph-caret-${activeSubMenu === item.key ? "up" : "down"
+                }`}
             ></i>
           )}
         </a>
@@ -702,7 +708,7 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
       const response = await axios.get(
         `${API_BASE_URL}/today-interview/${getFormattedDateISOYMDformat()}/${employeeId}/${userType}`
       );
-    {/*  console.log(response);*/}
+      {/*  console.log(response);*/ }
 
       setInterviewsForToday(response.data);
     } catch (error) {
@@ -795,9 +801,9 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                       onClick={
                         paymentMade
                           ? handleButtonClick(
-                              "subscription",
-                              toggelSubscriptions
-                            )
+                            "subscription",
+                            toggelSubscriptions
+                          )
                           : (e) => e.preventDefault()
                       }
                       className={
@@ -830,11 +836,11 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                   ) : null}
 
                   <>
-                  {userType != "Recruiters" && (
-                  <li
+                    {userType != "Recruiters" && (
+                      <li
                         onClick={handleButtonClick(
                           "activeTeamMembers",
-                          toggleactiveTeamMembers 
+                          toggleactiveTeamMembers
                         )}
                         className={
                           activeButton === "activeTeamMembers" ? "active" : ""
@@ -847,8 +853,8 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                           <span className="sidebar-text">Active Team Members </span>
                         </a>
                       </li>
-                  ) 
-                }
+                    )
+                    }
                     {userType != "SuperUser" && userType != "Vendor" ? (
                       <li
                         onClick={handleButtonClick(
@@ -887,12 +893,11 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
 
                   {userType != "SuperUser" ? (
                     <li
-                      className={`${
-                        activeSubMenu === "candidate" ||
+                      className={`${activeSubMenu === "candidate" ||
                         isCandidateSectionActive
-                          ? "active"
-                          : ""
-                      }`}
+                        ? "active"
+                        : ""
+                        }`}
                       onClick={toggleSubMenu("candidate")}
                     >
                       <a href="#">
@@ -909,9 +914,8 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                       </a>
 
                       <ul
-                        className={`sub-menu ${
-                          activeSubMenu === "candidate" ? "active" : ""
-                        }`}
+                        className={`sub-menu ${activeSubMenu === "candidate" ? "active" : ""
+                          }`}
                       >
                         <li
                           style={{ marginLeft: "10px" }}
@@ -1071,11 +1075,10 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                 {/* Arshad Attar Added New Cement button Logic as per, Subscription Status- On 28-11-2024 Start Line- 630 to 600 */}
 
                 <li
-                  className={`${
-                    activeSubMenu === "Jobdiscription" || isJobDescriptionActive
-                      ? "active"
-                      : ""
-                  }`}
+                  className={`${activeSubMenu === "Jobdiscription" || isJobDescriptionActive
+                    ? "active"
+                    : ""
+                    }`}
                   onClick={
                     paymentMade
                       ? toggleSubMenu("Jobdiscription")
@@ -1108,9 +1111,8 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                   </a>
 
                   <ul
-                    className={`sub-menu ${
-                      activeSubMenu === "Jobdiscription" ? "active" : ""
-                    }`}
+                    className={`sub-menu ${activeSubMenu === "Jobdiscription" ? "active" : ""
+                      }`}
                   >
                     <li
                       style={{ marginLeft: "10px" }}
@@ -1134,30 +1136,30 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                     {
                       userType === "Recruiters" && (
                         <li
-                        style={{ marginLeft: "10px" }}
-                        onClick={handleButtonClick(
-                          "sentProfileAccess",
-                          toggleSentProfileAccess
-                        )}
-                        className={
-                          activeButton === "sentProfileAccess" ? "active" : ""
-                        }
-                      >
-                        <a href="#">
-                          {/* <img src={Circle} style={{ width: "10px" }} alt="" /> */}
-                          <span className="sidebar-text">
-                            {" "}
-                           Permited Sent Profiles
-                          </span>
-                        </a>
-                      </li>
+                          style={{ marginLeft: "10px" }}
+                          onClick={handleButtonClick(
+                            "sentProfileAccess",
+                            toggleSentProfileAccess
+                          )}
+                          className={
+                            activeButton === "sentProfileAccess" ? "active" : ""
+                          }
+                        >
+                          <a href="#">
+                            {/* <img src={Circle} style={{ width: "10px" }} alt="" /> */}
+                            <span className="sidebar-text">
+                              {" "}
+                              Permited Sent Profiles
+                            </span>
+                          </a>
+                        </li>
                       )
                     }
 
                     {(userType != "Recruiters" &&
                       userType != "SuperUser" &&
                       userType != "Vendor") ||
-                    (userType === "TeamLeader" && userType === "Manager") ? (
+                      (userType === "TeamLeader" && userType === "Manager") ? (
                       <li
                         style={{ marginLeft: "10px" }}
                         onClick={handleButtonClick(
@@ -1197,9 +1199,8 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                       </a> */}
 
                       <ul
-                        className={`sub-menu sub-menu1 ${
-                          activeSubMenu === "employee" ? "active" : ""
-                        }`}
+                        className={`sub-menu sub-menu1 ${activeSubMenu === "employee" ? "active" : ""
+                          }`}
                       >
                         <li
                           style={{ marginLeft: "10px" }}
@@ -1242,12 +1243,11 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                   <>
                     {userType != "Recruiters" && userType != "Vendor" ? (
                       <li
-                        className={`${
-                          activeSubMenu === "TeamLeader-section" ||
+                        className={`${activeSubMenu === "TeamLeader-section" ||
                           isTeamLeaderActive
-                            ? "active"
-                            : ""
-                        }`}
+                          ? "active"
+                          : ""
+                          }`}
                         // {
                         //   activeButton === "TeamLeader-section" || isTeamLeaderActive ? "active" : ""
                         // }
@@ -1261,11 +1261,10 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                           <i className="arrow ph-bold ph-caret-down"></i>
                         </a>
                         <ul
-                          className={`sub-menu sub-menu1 ${
-                            activeSubMenu === "TeamLeader-section"
-                              ? "active"
-                              : ""
-                          }`}
+                          className={`sub-menu sub-menu1 ${activeSubMenu === "TeamLeader-section"
+                            ? "active"
+                            : ""
+                            }`}
                         >
                           <li
                             onClick={handleButtonClick(
@@ -1426,11 +1425,10 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
 
                 {userType === "Manager" ? (
                   <li
-                    className={`${
-                      activeSubMenu === "admin-section" || isManagerActive
-                        ? "active"
-                        : ""
-                    }`}
+                    className={`${activeSubMenu === "admin-section" || isManagerActive
+                      ? "active"
+                      : ""
+                      }`}
                     onClick={toggleSubMenu("admin-section")}
                   >
                     <a href="#">
@@ -1440,9 +1438,8 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                       <i className="arrow ph-bold ph-caret-down"></i>
                     </a>
                     <ul
-                      className={`sub-menu sub-menu1 ${
-                        activeSubMenu === "admin-section" ? "active" : ""
-                      }`}
+                      className={`sub-menu sub-menu1 ${activeSubMenu === "admin-section" ? "active" : ""
+                        }`}
                     >
                       <>
                         <li
@@ -1524,7 +1521,7 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                         >
                           <a href="#">
                             <span className="sidebar-text">
-                            Company Offer Form
+                              Company Offer Form
                             </span>
                           </a>
                         </li>
@@ -1694,6 +1691,22 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
 
                       <li
                         onClick={handleButtonClick(
+                          "attendance",
+                          toggleAttendance
+                        )}
+                        style={{ marginLeft: "10px" }}
+                        className={activeButton === "attendance" ? "active" : ""}
+                      >
+                        <a href="#">
+                          <span className="sidebar-text">
+                            Attendance
+                          </span>
+                        </a>
+                      </li>
+
+
+                      <li
+                        onClick={handleButtonClick(
                           "addCompany",
                           toggleAddCompany
                         )}
@@ -1727,17 +1740,16 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                 {/* Arshad Attar Added New Cement button Logic as per, Subscription Status- On 28-11-2024 Start Line- 1166 to 12000 */}
                 {userType === "SuperUser" ? (
                   <li
-                    className={`${
-                      activeSubMenu === "SuperUser" || isSuperUserActive
-                        ? "active"
-                        : ""
-                    }`}
+                    className={`${activeSubMenu === "SuperUser" || isSuperUserActive
+                      ? "active"
+                      : ""
+                      }`}
                     onClick={
                       paymentMade
                         ? handleButtonClick(
-                            "SuperUser",
-                            toggleSubMenu("SuperUser")
-                          )
+                          "SuperUser",
+                          toggleSubMenu("SuperUser")
+                        )
                         : (e) => e.preventDefault()
                     }
                     style={{
@@ -1765,9 +1777,8 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                       <i className="arrow ph-bold ph-caret-down"></i>
                     </a>
                     <ul
-                      className={`sub-menu sub-menu1 sub-menu2 ${
-                        activeSubMenu === "SuperUser" ? "active" : ""
-                      }`}
+                      className={`sub-menu sub-menu1 sub-menu2 ${activeSubMenu === "SuperUser" ? "active" : ""
+                        }`}
                     >
                       {/* <li
                         style={{ marginLeft: "10px" }}
@@ -1787,6 +1798,19 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                           <span className="sidebar-text">
                             Billing Dashboard
                           </span>
+                        </a>
+                      </li>
+                      <li
+                        style={{ marginLeft: "10px" }}
+                        className={activeButton === "masterTracker" ? "active" : ""}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActiveButton("masterTracker");
+                          toggleEmployeeMasterSheet();
+                        }}
+                      >
+                        <a href="#">
+                          <span className="sidebar-text">Master Tracker</span>
                         </a>
                       </li>
                       <li
@@ -1917,9 +1941,8 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                       <i className="arrow ph-bold ph-caret-down"></i>
                     </a>
                     <ul
-                      className={`sub-menu sub-menu1 sub-menu2 ${
-                        activeSubMenu === "database" ? "active" : ""
-                      }`}
+                      className={`sub-menu sub-menu1 sub-menu2 ${activeSubMenu === "database" ? "active" : ""
+                        }`}
                     >
                       <li
                         onClick={handleButtonClick(
@@ -2066,9 +2089,8 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                       <i className="arrow ph-bold ph-caret-down"></i>
                     </a>
                     <ul
-                      className={`sub-menu sub-menu1 sub-menu2 ${
-                        activeSubMenu === "portal" ? "active" : ""
-                      }`}
+                      className={`sub-menu sub-menu1 sub-menu2 ${activeSubMenu === "portal" ? "active" : ""
+                        }`}
                     >
                       <li
                         style={{ marginLeft: "10px" }}
@@ -2134,6 +2156,23 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                           </span>
                         </a>
                       </li>
+                      <li
+                        style={{ marginLeft: "10px" }}
+                        className={activeButton === "rgPortal" ? "active" : ""}
+                      >
+                        <a href="#">
+                          <span
+                            className="sidebar-text"
+                            onClick={handleButtonClick(
+                              "rgPortal",
+                              openRGPlatform
+                            )}
+                          >
+                            RG Portal
+                          </span>
+                        </a>
+                      </li>
+
                     </ul>
                   </li>
                 ) : null}
@@ -2148,9 +2187,8 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                       <i className="arrow ph-bold ph-caret-down"></i>
                     </a>
                     <ul
-                      className={`sub-menu sub-menu1 sub-menu2 ${
-                        activeSubMenu === "aboutus" ? "active" : ""
-                      }`}
+                      className={`sub-menu sub-menu1 sub-menu2 ${activeSubMenu === "aboutus" ? "active" : ""
+                        }`}
                     >
                       <li
                         style={{ marginLeft: "10px" }}
@@ -2231,9 +2269,8 @@ localStorage.removeItem(`user_${userType}${employeeId}`);
                       <i className="arrow ph-bold ph-caret-down"></i>
                     </a>
                     <ul
-                      className={`sub-menu sub-menu1 sub-menu2 ${
-                        activeSubMenu === "help" ? "active" : ""
-                      }`}
+                      className={`sub-menu sub-menu1 sub-menu2 ${activeSubMenu === "help" ? "active" : ""
+                        }`}
                     >
                       <li
                         style={{ marginLeft: "10px" }}

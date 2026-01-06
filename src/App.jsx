@@ -25,6 +25,8 @@ import PreviousQuestion from "./EmployeeSection/PreviousQuestion.jsx";
 // import ChatModal from "./ChatBot/ChatModal.jsx"
 import AttendanceShare from "./EmployeeSection/AttendanceShare.jsx";
 import ChatBot from "./ChatBot/ChatBot.jsx";
+import { API_BASE_URL } from "./api/api.js";
+import AttendanceForm from "./EmployeeSection/AttendanceForm.jsx";
 
 
 const applySavedColors = () => {
@@ -109,6 +111,103 @@ const App = () => {
   useEffect(() => {
     applySavedColors();
   }, []);
+
+  //SAKSHI 09-10-25 SESSION TIMEOUT CODE LINE 116 TO 209
+  // useEffect(() => {
+  //   const TIMEOUT_MS = 10 * 60 * 1000; // 10 min
+  //   let idleTimer;
+
+  //   const getCurrentUserFromStorage = () => {
+  //     // Iterate over all keys in localStorage
+  //     for (let i = 0; i < localStorage.length; i++) {
+  //       const key = localStorage.key(i);
+  //       if (key.startsWith("user_")) {
+  //         try {
+  //           const value = JSON.parse(localStorage.getItem(key));
+  //           if (value && value.employeeId && value.userType) {
+  //             return value; // return the first matching user
+  //           }
+  //         } catch (e) {
+  //           // skip invalid JSON
+  //           continue;
+  //         }
+  //       }
+  //     }
+  //     return null; // no user found
+  //   };
+
+  //   const getLogoutPayload = (userType, employeeId) => {
+  //     switch (userType) {
+  //       case "SuperUser":
+  //         return { superUserId: employeeId };
+  //       case "Manager":
+  //         return { managerId: employeeId };
+  //       case "TeamLeader":
+  //         return { teamLeaderId: employeeId };
+  //       default:
+  //         return { employeeId };
+  //     }
+  //   };
+
+  //   const logoutUser = async () => {
+  //     try {
+  //       const currentUser = getCurrentUserFromStorage();
+  //       if (!currentUser) {
+  //         console.warn("No current user found in localStorage");
+  //         window.location.href = `/employee-login`; // fallback
+  //         return;
+  //       }
+
+  //       const { employeeId, userType } = currentUser;
+  //       const payload = getLogoutPayload(userType, employeeId);
+
+  //       // Call logout API
+  //       await fetch(
+  //         `${API_BASE_URL}/user-logout-157/${userType}`,
+  //         {
+  //           method: "POST",
+  //           headers: { "Content-Type": "application/json" },
+  //           body: JSON.stringify(payload),
+  //         }
+  //       );
+
+  //       // Close WebSocket if exists
+  //       if (window.mySocket) window.mySocket.close();
+
+  //       // Clear storage
+  //       localStorage.clear();
+  //       sessionStorage.clear();
+
+  //       // Redirect to login with userType
+  //       window.location.href = `/login/${userType}`;
+  //     } catch (err) {
+  //       console.error("Error logging out:", err);
+  //       localStorage.clear();
+  //       sessionStorage.clear();
+  //       window.location.href = `/employee-login`;
+  //     }
+  //   };
+
+  //   const resetTimer = () => {
+  //     clearTimeout(idleTimer);
+  //     idleTimer = setTimeout(() => {
+  //       alert("Session expired due to inactivity.");
+  //       logoutUser();
+  //     }, TIMEOUT_MS);
+  //   };
+
+  //   // Track user activity
+  //   window.onload = resetTimer;
+  //   document.onmousemove = resetTimer;
+  //   document.onkeypress = resetTimer;
+  //   document.onscroll = resetTimer;
+  //   document.onclick = resetTimer;
+
+  //   return () => {
+  //     clearTimeout(idleTimer);
+  //   };
+  // }, []);
+
 
   return (
     <div>
@@ -201,6 +300,8 @@ const App = () => {
             <Route path="/previousQuestion" element={<PreviousQuestion />} />
           </Routes>
 
+          <Route path="/manage-attendance" element={<AttendanceForm/>}/>
+          
           {loginEmployeeName && <ChatBot />}
 
         </div>

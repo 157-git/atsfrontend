@@ -297,7 +297,7 @@ const ShareDescription = ({ Descriptions }) => {
                   )} */}
                   {Descriptions.perks && (
                     <p>
-                      <b contentEditable>Perks:</b>{" "}
+                      {/* <b contentEditable>Perks:</b>{" "} */}
                       <span contentEditable>{Descriptions.perks}</span>
                     </p>
                   )}

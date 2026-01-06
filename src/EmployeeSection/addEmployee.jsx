@@ -9,10 +9,13 @@ import { fetchCompleteProfileData } from "../HandlerFunctions/fetchCompleteProfi
 import Loader from "../EmployeeSection/loader"
 
 const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
+  // const API_BASE_URL="https://rg.157careers.in/api/ats/157industries"
   const { employeeId, userType } = useParams();
   const [socket, setSocket] = useState(null);
+  // const employeeId = 4234
+  // const userType="TeamLeader"
   const [formData, setFormData] = useState({
-    employeeId: "0",
+    //employeeId: "0",
     employeeName: "",
     dateOfJoining: "",
     userName: "",
@@ -316,13 +319,13 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
-    for (const key in formData) {
-      if (formData[key] instanceof File) {
-        formDataToSend.append(key, formData[key]);
-      } else {
-        formDataToSend.append(key, formData[key]);
-      }
+     for (const key in formData) {
+    if (formData[key] !== "" && formData[key] !== null) {
+      formDataToSend.append(key, formData[key]);
     }
+  }
+
+  formDataToSend.append("employeeId", employeeId);
 
     try {
       const response = await fetch(
@@ -505,7 +508,7 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
           encType="multipart/form-data"
         >
           <div className="addRec-form-row">
-            <label>Recruiter Name:</label>
+            <label>Recruiter Name: <span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               name="employeeName"
@@ -513,6 +516,7 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
               placeholder="Enter Employee Full Name"
               value={formData.employeeName}
               onChange={handleInputChange}
+              required
             />
             {errors.employeeName && (
               <div className="error">{errors.employeeName}</div>
@@ -527,23 +531,25 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
             onChange={handleInputChange}
           />
           <div className="addRec-form-row">
-            <label>Date of Joining:</label>
+            <label>Date of Joining: <span style={{ color: "red" }}>*</span></label>
             <input
               type="date"
               name="dateOfJoining"
               value={formData.dateOfJoining}
               onChange={handleInputChange}
+              required
             />
           </div>
 
           <div className="addRec-form-row">
-            <label>Designation:</label>
+            <label>Designation: <span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               name="designation"
               placeholder="Eg: FrontEnd Developer"
               value={formData.designation}
               onChange={handleInputChange}
+              required
             />
             {errors.designation && (
               <div className="error">{errors.designation}</div>
@@ -565,12 +571,14 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
           </div>
 
           <div className="addRec-form-row">
-            <label>Job Role:</label>
+            <label>Job Role: <span style={{ color: "red" }}>*</span></label>
             <select
               name="jobRole"
               value={formData.jobRole}
               onChange={handleInputChange}
+              required
               className="readonly-input"
+
             >
               <option value="">Select</option>
               <option value="Recruiters">Recruiters</option>
@@ -578,13 +586,14 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
           </div>
 
           <div className="addRec-form-row">
-            <label>Official Email:</label>
+            <label>Official Email: <span style={{ color: "red" }}>*</span></label>
             <input
               type="email"
               name="officialMail"
               placeholder="Enter Official Email"
               value={formData.officialMail}
               onChange={handleInputChange}
+              required
             />
           </div>
 
@@ -600,13 +609,14 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
           </div>
 
           <div className="addRec-form-row">
-            <label>User Name </label>
+            <label>User Name: <span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               name="userName"
               placeholder="Enter User Name"
               value={formData.userName}
               onChange={handleInputChange}
+              required
             />
             {errors.userName && (
               <div className="error">{errors.userName}</div>
@@ -630,7 +640,7 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
           </div>
 
           <div className="addRec-form-row">
-            <label>Official Contact Number:</label>
+            <label>Official Contact Number: <span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               accept="0-9"
@@ -638,6 +648,7 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
               placeholder="Enter Company Mobile Number"
               value={formData.officialContactNumber}
               onChange={handleInputChange}
+              required
             />
             {errors.officialContactNumber && (
               <div className="error">{errors.officialContactNumber}</div>
@@ -793,13 +804,14 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
             />
           </div>
           <div className="addRec-form-row">
-            <label>Aadhaar Number:</label>
+            <label>Aadhaar Number: <span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               name="aadhaarNo"
               placeholder="Enter Aadhaar Number"
               value={formData.aadhaarNo}
               onChange={handleInputChange}
+              required
             />
             {errors.aadhaarNo && (
               <div className="error">{errors.aadhaarNo}</div>
@@ -807,13 +819,14 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
           </div>
 
           <div className="addRec-form-row">
-            <label>PAN Card Number:</label>
+            <label>PAN Card Number: <span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               name="panNo"
               placeholder="Enter PAN Card Number"
               value={formData.panNo}
               onChange={handleInputChange}
+              required
             />
           </div>
 
@@ -843,13 +856,14 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
           </div>
 
           <div className="addRec-form-row">
-            <label>Employee Present Address:</label>
+            <label>Employee Present Address: <span style={{ color: "red" }}>*</span></label>
             <input
               type="text"
               name="employeePresentAddress"
               placeholder="Enter Present Address"
               value={formData.employeePresentAddress}
               onChange={handleInputChange}
+              required
             />
           </div>
 
@@ -1229,13 +1243,14 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
           </div>
 
           <div className="addRec-form-row">
-            <label>Upload Resume:</label>
+            <label>Upload Resume:<span style={{ color: "red" }}>*</span> </label>
             <div className="wraptickindiv">
               <input
                 type="file"
                 multiple
                 name="resumeFile"
                 onChange={handleInputChange}
+                required
               />
               {
                 formData.resumeFile && (
@@ -1247,12 +1262,13 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
           </div>
 
           <div className="addRec-form-row">
-            <label>Upload Profile Image:</label>
+            <label>Upload Profile Image: <span style={{ color: "red" }}>*</span></label>
             <div className="wraptickindiv">
               <input
                 type="file"
                 name="profileImage"
                 onChange={handleInputChange}
+                required
               />
               {
                 formData.profileImage && (
@@ -1286,13 +1302,14 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
           </div>
 
           <div className="addRec-form-row">
-            <label>Password:</label>
+            <label>Password: <span style={{ color: "red" }}>*</span></label>
 
             <div class="wrapper-eye">
               <div
                 className="password-eye-icon"
                 onMouseEnter={showPassword}
                 onMouseLeave={hidePassword}
+                
               >
                 <i className="fas fa-eye"></i>
               </div>
@@ -1302,6 +1319,8 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
                 placeholder="Enter Password"
                 value={formData.employeePassword}
                 onChange={handleInputChange}
+                required
+
               />
               {errors.employeePassword && (
   <div className="error">{errors.employeePassword}</div>
@@ -1311,7 +1330,7 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
           </div>
 
           <div className="addRec-form-row">
-            <label>Confirm Password:</label>
+            <label>Confirm Password: <span style={{ color: "red" }}>*</span></label>
             <div class="wrapper-eye">
               <div
                 className="password-eye-icon"
@@ -1327,6 +1346,7 @@ const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
                 onBlur={handleConfirmPasswordBlur}
+                required
               />
             </div>
 

@@ -11,7 +11,7 @@ import PieChart from "./PieChartReport";
 import PDFGenerator from "./PDFMain";
 import SliderReport from "./SliderReports";
 import axios from "axios";
-import { API_BASE_URL } from "../api/api";
+// import { API_BASE_URL } from "../api/api";
 import { PDFDocument } from "pdf-lib";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -41,6 +41,7 @@ const Attendance = ({
     finalEndDatePropState,
     loginEmployeeName
   );
+  const API_BASE_URL="https://rg.157careers.in/api/ats/157industries"
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

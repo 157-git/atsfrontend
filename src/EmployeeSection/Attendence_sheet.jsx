@@ -108,11 +108,12 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
   
 };
 
+// const API_BASE_URL = "http://192.168.1.48:9090/api/ats/157industries";
+ const API_BASE_URL = "https://rg.157careers.in/api/ats/157industries";
 
-
-  const { employeeId, userType } = useParams();
-  // const employeeId=976;
-  // const userType="TeamLeader";
+  // const { employeeId, userType } = useParams();
+  const employeeId=2280;
+  const userType="Manager";
   //const [attendanceData, setAttendanceData] = useState([]);
   const [attendanceDataNew, setAttendanceDataNew] = useState([]);
   const [loading, setLoading] = useState(true);

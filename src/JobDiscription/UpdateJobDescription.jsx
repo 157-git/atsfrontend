@@ -3,18 +3,18 @@ import "./addJobDescription.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API_BASE_URL } from "../api/api";
-import {useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getSocket } from "../EmployeeDashboard/socket";
 import { getFormattedDateTime } from "../EmployeeSection/getFormattedDateTime";
 
 // sahil karnekar line 9_  date : 10-10-2024
-const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp,loginEmployeeName}) => {
+const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp, loginEmployeeName }) => {
   const { employeeId, userType } = useParams();
   const [socket, setSocket] = useState(null);
   const [formData, setFormData] = useState({
-    employeeId:employeeId,
+    employeeId: employeeId,
     userType: userType,
-    employee:loginEmployeeName,
+    employee: loginEmployeeName,
     companyName: onAddJD.companyName || "",
     designation: onAddJD.designation || "",
     position: onAddJD.position || "",
@@ -56,11 +56,11 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp,loginEmployeeName}
       : [{ employeeId: "", preferredQualificationMsg: "" }],
   });
 
-    // establishing socket for emmiting event
-      useEffect(() => {
-        const newSocket = getSocket();
-        setSocket(newSocket);
-      }, []);
+  // establishing socket for emmiting event
+  useEffect(() => {
+    const newSocket = getSocket();
+    setSocket(newSocket);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -305,6 +305,9 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp,loginEmployeeName}
                     <option value="">Select Job Type</option>
                     <option value="Full-Time">Full-Time</option>
                     <option value="Part-Time">Part-Time</option>
+                    <option value="Hybrid">Hybrid</option>
+                    <option value="OnSite">On-site</option>
+                    <option value="Remote">Remote</option>
                     <option value="Contract">Contract</option>
                     <option value="Internship">Internship</option>
                   </select>

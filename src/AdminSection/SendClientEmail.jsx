@@ -76,19 +76,19 @@ const SendClientEmail = ({ clientEmailSender }) => {
       console.error('Error fetching assigned job IDs:', error);
     }
   };
-  useEffect(()=>{
-    if(userType === "Manager"){
+  useEffect(() => {
+    if (userType === "Manager") {
       getAllAssignedIds();
     }
 
-  },[])
+  }, [])
   const handleScroll = () => {
     if (!tableContainerRef.current) return
     setIsHorizontallyScrolling(tableContainerRef.current.scrollLeft > 0)
   }
   const navigator = useNavigate();
-// need to be changed after implementation of api
-  const [pageSize, setPageSize] = useState(userType === "Recruiters" ? 100000 : 20);
+  // need to be changed after implementation of api
+const [pageSize, setPageSize] = useState(1000);
   const [currentPage, setCurrentPage] = useState(1)
   const [totalRecords, setTotalRecords] = useState(0)
   const [triggerFetch, setTriggerFetch] = useState(false)
@@ -118,47 +118,135 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const fetchAccessedIds = async () => {
     try {
       const resp = await axios.get(`${API_BASE_URL}/employee-permissions/${employeeId}`);
+      console.log("RESPONSE DATA:", resp.data);
 
       if (resp.status === 200 && Array.isArray(resp.data)) {
-        const ids = resp.data.map(item => item.jobId.toString());
+        // const ids = resp.data
+        //   .filter(item => item.requirementId !== undefined && item.requirementId !== null)
+        //   .map(item => item.requirementId.toString());
+
+              const ids = resp.data
+  .filter(item => item.requirementId !== undefined && item.requirementId !== null && item.requirementId !== 0)
+  .map(item => item.requirementId.toString());
+console.log("Filtered Access IDs:", ids);
+
+        // console.log("ACCESS ID", ids);
         setAccessedIds(ids);
       } else {
-        setAccessedIds([]); // fallback in case of unexpected response
+        setAccessedIds([]);
       }
     } catch (error) {
       console.error("Error fetching accessed IDs:", error);
-      setAccessedIds([]); // fallback in case of error
+      setAccessedIds([]);
     }
   };
-  useEffect(()=>{
-if(userType === "Recruiters"){
-  fetchAccessedIds();
-}
-  },[])
-  
 
-  const fetchCallingList = (page, size) => {
-    const newRequirmentIds = accessedIds.length > 0 ? accessedIds.join(',') : "";
-    fetch(`${API_BASE_URL}/calling-lineup/${employeeId}/${userType}?searchTerm=${searchTerm}&requirementIds=${newRequirmentIds}&requirmentParamKey=${userType === "Recruiters" ? "yes" : "no"}&page=${page}&size=${size}`)
-      .then((response) => response.json())
-      .then((data) => {
-     console.log(data);
-     
-          setFilteredCallingList(data.content)
-          setCallingList(data.content)
-          setTotalRecords(data.totalElements)
-          setSearchCount(data.content.length)
-        
-      
-        setLoading(false)
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error)
-        setLoading(false)
-      })
-  }
+  useEffect(() => {
+    if (userType === "Recruiters") {
+      fetchAccessedIds();
+    }
+  }, [])
 
-// Rajlaxmi Jagadale Added that code Date 14/04/2025 line 119/201
+
+const fetchCallingList = (page, size) => {
+  setLoading(true);
+
+  // ✅ FIX 1: clean + unique + numeric requirementIds
+  const newRequirmentIds = [
+    ...new Set(accessedIds.map(id => Number(id)).filter(id => !isNaN(id)))
+  ].join(",");
+
+  fetch(
+    `${API_BASE_URL}/calling-lineup/${employeeId}/${userType}` +
+    `?searchTerm=${searchTerm}` +
+    `&requirementIds=${newRequirmentIds}` +
+    `&requirmentParamKey=${userType === "Recruiters" ? "yes" : "no"}` +
+    `&page=${page}` +
+    `&size=${size}`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("DATA::", data);
+
+      // ✅ handle pageable + non-pageable response
+      const rawList = Array.isArray(data) ? data : data.content || [];
+
+      // ✅ FIX 2: normalize backend (nested → flat) for UI
+      const list = rawList.map(item => ({
+        // ids
+        candidateId: item.candidate?.candidateId ?? item.candidateId,
+        empId: item.empId,
+
+        // candidate info
+        candidateName: item.candidate?.fullName ?? item.candidateName ?? "",
+        candidateEmail: item.candidate?.email ?? item.candidateEmail ?? "",
+        contactNumber: item.candidate?.mobileNo ?? item.contactNumber ?? "",
+        alternateNumber: item.alternateNumber ?? "",
+
+        // recruiter / employee
+        recruiterName: item.recruiter?.employeeName ?? item.recruiterName ?? "",
+
+        // job / requirement
+        requirementId: item.requirement?.requirementId ?? item.requirementId,
+        requirementCompany: item.requirement?.companyName ?? item.requirementCompany ?? "",
+        jobDesignation: item.jobDesignation ?? "",
+
+        // location & experience
+        currentLocation: item.basicDetails?.currentLocation ?? item.currentLocation ?? "",
+        fullAddress: item.basicDetails?.fullAddress ?? item.fullAddress ?? "",
+        experienceYear: item.basicDetails?.experienceYear ?? item.experienceYear ?? 0,
+        experienceMonth: item.basicDetails?.experienceMonth ?? item.experienceMonth ?? 0,
+        relevantExperience: item.relevantExperience ?? "",
+
+        // CTC
+        currentCTCLakh: item.currentCTCLakh ?? 0,
+        currentCTCThousand: item.currentCTCThousand ?? 0,
+        expectedCTCLakh: item.expectedCTCLakh ?? 0,
+        expectedCTCThousand: item.expectedCTCThousand ?? 0,
+
+        // misc
+        sourceName: item.sourceName ?? "",
+        communicationRating: item.communicationRating ?? "",
+        callingFeedback: item.callingFeedback ?? "",
+        incentive: item.incentive ?? 0,
+        selectYesOrNo: item.selectYesOrNo ?? "",
+        companyName: item.companyName ?? "",
+        date: item.date ?? "",
+        candidateAddedTime: item.candidateAddedTime ?? "",
+
+        // status
+        finalStatus: item.finalStatus ?? "",
+        profileStatus: item.profileStatus ?? "",
+
+        // documents / extras
+        resume: item.resume ?? null,
+        noticePeriod: item.noticePeriod ?? "",
+        msgForTeamLeader: item.msgForTeamLeader ?? "",
+        availabilityForInterview: item.availabilityForInterview ?? "",
+        interviewTime: item.interviewTime ?? "",
+        gender: item.gender ?? "",
+        qualification: item.qualification ?? "",
+        yearOfPassing: item.yearOfPassing ?? "",
+        extraCertification: item.extraCertification ?? "",
+        holdingAnyOffer: item.holdingAnyOffer ?? "",
+        offerLetterMsg: item.offerLetterMsg ?? "",
+      }));
+
+      // ✅ set states ONCE with clean data
+      setCallingList(list);
+      setFilteredCallingList(list);
+      setTotalRecords(Array.isArray(data) ? list.length : data.totalElements ?? list.length);
+      setSearchCount(list.length);
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+    });
+};
+
+
+  // Rajlaxmi Jagadale Added that code Date 14/04/2025 line 119/201
   const handleOpenDownArrowContentForRecruiters = async (teamLeaderId, teamLeaderName) => {
     setDisplayRecruiters(false)
     setAllImagesForRecruiters([])
@@ -207,7 +295,7 @@ if(userType === "Recruiters"){
   //   setActiveFilterOption(activeFilterOption === key ? null : key);
   //   setSelectedFilters((prev) => ({ ...prev, [key]: [] }));
   // };
-// Rajlaxmi added taht code DAte 14/04/2025 Fech Image line 168/239
+  // Rajlaxmi added taht code DAte 14/04/2025 Fech Image line 168/239
   useEffect(() => {
     const fetchAllImagesForRecruiters = async () => {
       if (recruitersList && recruitersList.length > 0) {
@@ -279,7 +367,7 @@ if(userType === "Recruiters"){
 
     fetchAllImagesForTeamLeaders()
   }, [teamLeadersList])
-// Rajlaxmi jagadale added taht code and Toastify Date 14/04/2025 
+  // Rajlaxmi jagadale added taht code and Toastify Date 14/04/2025 
   const handleOkey = async () => {
     try {
       if (selectedRecruiters.length === 0) {
@@ -292,14 +380,14 @@ if(userType === "Recruiters"){
         return
       }
 
-      const response = await axios.post(`${API_BASE_URL}/permissions`,[
+      const response = await axios.post(`${API_BASE_URL}/permissions`, [
         {
           empId: selectedRecruiters[0].recruiterId,
           jobIds: selectedRowsPermissionIds,
           managerId: employeeId
         }
       ])
-      
+
 
       // Here you would typically make an API call to grant permissions
       // For example:
@@ -544,7 +632,7 @@ if(userType === "Recruiters"){
     }
   }, [sortCriteria, sortOrder])
 
-  const handleSearchClick = (e)=>{
+  const handleSearchClick = (e) => {
     e.preventDefault();
     setCurrentPage(1) // Reset to the first page when searching
     fetchCallingList(1, pageSize)
@@ -844,14 +932,14 @@ if(userType === "Recruiters"){
   const getAllJobs = async () => {
     const responseGetAllJobs = await axios.get(`${API_BASE_URL}/fetch-all-job-descriptions/${employeeId}/${userType}`)
 
-    if(responseGetAllJobs.data.length > 0){
+    if (responseGetAllJobs.data.length > 0) {
       const sortedJobs = responseGetAllJobs.data.sort((a, b) => b.requirementId - a.requirementId) // descending order
 
       setNewAllJobIdsForPermission(sortedJobs)
-    }else{
+    } else {
       toast.info("No jobs available for permission assignment.");
     }
-  
+
   }
   useEffect(() => {
     if (userType === "Manager") {
@@ -877,8 +965,8 @@ if(userType === "Recruiters"){
       setSelectedRowsPermissionIds([]);
     }
   };
-  
-  
+
+
 
   const handleCheckboxChange = (role, id, completeValueObject) => {
     const isSelected = selectedCheckboxes.some((item) => item.id === id && item.role === role)
@@ -915,12 +1003,12 @@ if(userType === "Recruiters"){
         prev.some((item) => item.managerId === manager.managerId)
           ? prev.filter((item) => item.managerId !== manager.managerId)
           : [
-              ...prev,
-              {
-                managerId: manager.managerId,
-                managerJobRole: manager.jobRole,
-              },
-            ],
+            ...prev,
+            {
+              managerId: manager.managerId,
+              managerJobRole: manager.jobRole,
+            },
+          ],
       )
     } else if (role === "TeamLeader") {
       const teamLeader = completeValueObject
@@ -928,12 +1016,12 @@ if(userType === "Recruiters"){
         prev.some((item) => item.teamLeaderId === teamLeader.teamLeaderId)
           ? prev.filter((item) => item.teamLeaderId !== teamLeader.teamLeaderId)
           : [
-              ...prev,
-              {
-                teamLeaderId: teamLeader.teamLeaderId,
-                teamLeaderJobRole: teamLeader.jobRole,
-              },
-            ],
+            ...prev,
+            {
+              teamLeaderId: teamLeader.teamLeaderId,
+              teamLeaderJobRole: teamLeader.jobRole,
+            },
+          ],
       )
     } else if (role === "Recruiters") {
       const recruiter = completeValueObject
@@ -941,12 +1029,12 @@ if(userType === "Recruiters"){
         prev.some((item) => item.recruiterId === recruiter.employeeId)
           ? prev.filter((item) => item.recruiterId !== recruiter.employeeId)
           : [
-              ...prev,
-              {
-                recruiterId: recruiter.employeeId,
-                recruiterJobRole: recruiter.jobRole,
-              },
-            ],
+            ...prev,
+            {
+              recruiterId: recruiter.employeeId,
+              recruiterJobRole: recruiter.jobRole,
+            },
+          ],
       )
     }
   }
@@ -956,15 +1044,15 @@ if(userType === "Recruiters"){
       prev.some((item) => item.recruiterId === recruiter.employeeId)
         ? prev.filter((item) => item.recruiterId !== recruiter.employeeId)
         : [
-            ...prev,
-            {
-              recruiterId: recruiter.employeeId,
-              recruiterJobRole: recruiter.jobRole,
-            },
-          ],
+          ...prev,
+          {
+            recruiterId: recruiter.employeeId,
+            recruiterJobRole: recruiter.jobRole,
+          },
+        ],
     )
   }
-// Rajlaxmi JAgadale adeed taht code Date 14/04/2025
+  // Rajlaxmi JAgadale adeed taht code Date 14/04/2025
   const handleClearSelection = (userType) => {
     if (userType) {
       setSelectedRole("")
@@ -1011,7 +1099,7 @@ if(userType === "Recruiters"){
   }
   const [displayBigSkeletonForManagers, setDisplayBigSkeletonForManagers] = useState(false)
   const [managersList, setManagersList] = useState([])
-// Rajlaxmi Jagadale Added taht code date 14/04/2025
+  // Rajlaxmi Jagadale Added taht code date 14/04/2025
   const handleDisplayManagers = async () => {
     setDisplayModalContainer(true)
     if (userType === "SuperUser") {
@@ -1050,15 +1138,15 @@ if(userType === "Recruiters"){
       employeeCount: 0,
     })
   }, [])
-  const handleDeletePermission = async(permissionId)=>{
+  const handleDeletePermission = async (permissionId) => {
     setLoading(true);
     try {
       const response = await axios.delete(`${API_BASE_URL}/delete-permission/${permissionId}`);
-getAllAssignedIds();
-toast.success(response.data);
+      getAllAssignedIds();
+      toast.success(response.data);
     } catch (error) {
       toast.error(error);
-    }finally{
+    } finally {
       setLoading(false);
     }
   }
@@ -1072,7 +1160,7 @@ toast.success(response.data);
           <div className="search">
             <div style={{ display: "flex" }}>
               <i className="fa-solid fa-magnifying-glass" style={{ alignContent: "center", marginRight: "10px" }}></i>
-              <form onSubmit={(e) => handleSearchClick(e)}> 
+              <form onSubmit={(e) => handleSearchClick(e)}>
                 <div className="search-input-div" style={{ width: `${calculateWidth()}px` }}>
                   <div className="forxmarkdiv">
                     <input
@@ -1103,7 +1191,7 @@ toast.success(response.data);
                 </div>
                 <button
                   className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
-                   type="submit"
+                  type="submit"
                 >
                   Search
                 </button>
@@ -1121,18 +1209,18 @@ toast.success(response.data);
               }}
             >
               {userType === "Manager" && (
-  <button
-  className="SCE-share-btn"
-  onClick={() => {
-    getAllAssignedIds();
-    setShowPermissionModal(true)
-    handleDisplayManagers() // Fetch team leaders when opening the modal
-  }}
->
-  Permission Recruiter
-</button>
+                <button
+                  className="SCE-share-btn"
+                  onClick={() => {
+                    getAllAssignedIds();
+                    setShowPermissionModal(true)
+                    handleDisplayManagers() // Fetch team leaders when opening the modal
+                  }}
+                >
+                  Permission Recruiter
+                </button>
               )}
-            
+
               {showShareButton ? (
                 <button className="SCE-share-btn" onClick={() => setShowShareButton(false)}>
                   Share
@@ -1242,12 +1330,11 @@ toast.success(response.data);
                       {/* Rajlaxmi jagadle  Added countSelectedValues that code date 20-02-2025 line 987/1003 */}
                       <div className="filter-option">
                         <button
-                          className={`white-Btn ${
-                            (selectedFilters[optionKey] && selectedFilters[optionKey].length > 0) ||
-                            activeFilterOption === optionKey
+                          className={`white-Btn ${(selectedFilters[optionKey] && selectedFilters[optionKey].length > 0) ||
+                              activeFilterOption === optionKey
                               ? "selected glow"
                               : ""
-                          }`}
+                            }`}
                           onClick={() => handleFilterOptionClick(optionKey)}
                         >
                           {optionLabel}
@@ -1554,18 +1641,16 @@ toast.success(response.data);
                       <td className="tabledata" onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
                         {`${item.currentCTCLakh || 0} Lakh ${item.currentCTCThousand || 0} Thousand`}
                         <div className="tooltip">
-                          <span className="tooltiptext">{`${item.expectedCTCLakh || 0} Lakh ${
-                            item.expectedCTCThousand || 0
-                          } Thousand`}</span>
+                          <span className="tooltiptext">{`${item.expectedCTCLakh || 0} Lakh ${item.expectedCTCThousand || 0
+                            } Thousand`}</span>
                         </div>
                       </td>
 
                       <td className="tabledata" onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
                         {`${item.expectedCTCLakh || 0} Lakh ${item.expectedCTCThousand || 0} Thousand`}
                         <div className="tooltip">
-                          <span className="tooltiptext">{`${item.expectedCTCLakh || 0} Lakh ${
-                            item.expectedCTCThousand || 0
-                          } Thousand`}</span>
+                          <span className="tooltiptext">{`${item.expectedCTCLakh || 0} Lakh ${item.expectedCTCThousand || 0
+                            } Thousand`}</span>
                         </div>
                       </td>
 
@@ -1691,8 +1776,7 @@ toast.success(response.data);
 
                       <td className="tabledata" onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
                         <button
-                          className={`profile-btn ${
-                            item.profileStatus === "Profile Pending"
+                          className={`profile-btn ${item.profileStatus === "Profile Pending"
                               ? "pending"
                               : item.profileStatus === "Profile Sent"
                                 ? "sent"
@@ -1705,7 +1789,7 @@ toast.success(response.data);
                                       : item.profileStatus === "Profile On Hold"
                                         ? "on-hold"
                                         : ""
-                          }`}
+                            }`}
                         >
                           {item.profileStatus}
                         </button>
@@ -1831,29 +1915,29 @@ toast.success(response.data);
             </Modal>
           </div>
 
-{
-  userType !== "Recruiters" && (
-    <>
-       <div className="search-count-last-div">Search Results : {totalRecords}</div>
+          {
+            userType !== "Recruiters" && (
+              <>
+                <div className="search-count-last-div">Search Results : {totalRecords}</div>
 
-<Pagination
-  current={currentPage}
-  total={totalRecords}
-  pageSize={pageSize}
-  showSizeChanger
-  showQuickJumper
-  onShowSizeChange={handleSizeChange}
-  onChange={handlePageChange}
-  style={{
-    justifyContent: "center",
-  }}
-/>
-    </>
-  )
-}
-       
+                <Pagination
+                  current={currentPage}
+                  total={totalRecords}
+                  pageSize={pageSize}
+                  showSizeChanger
+                  showQuickJumper
+                  onShowSizeChange={handleSizeChange}
+                  onChange={handlePageChange}
+                  style={{
+                    justifyContent: "center",
+                  }}
+                />
+              </>
+            )
+          }
+
           <AntdModal
-          width={1000}
+            width={1000}
             title="Send Clients Permission To Recruiter"
             open={showPermissionModal}
             okText="Give Permission !"
@@ -1867,8 +1951,9 @@ toast.success(response.data);
             }}
             onCancel={() => {
               setSelectedRowsPermissionIds([])
-              setShowPermissionModal(false)}}
-           
+              setShowPermissionModal(false)
+            }}
+
           >
             <div
               className="attendanceTableData"
@@ -1890,15 +1975,15 @@ toast.success(response.data);
                         name="selectAll"
                       /> */}
                       <input
-  type="checkbox"
-  onChange={handleSelectAllJobIds}
-  checked={
-    newAllJobIdsForPermission
-      .filter((item) => !alreadyAssignedJids.some(obj => obj.jobId === item.requirementId))
-      .every((row) => selectedRowsPermissionIds.includes(row.requirementId))
-  }  
-  name="selectAll"
-/>
+                        type="checkbox"
+                        onChange={handleSelectAllJobIds}
+                        checked={
+                          newAllJobIdsForPermission
+                            .filter((item) => !alreadyAssignedJids.some(obj => obj.jobId === item.requirementId))
+                            .every((row) => selectedRowsPermissionIds.includes(row.requirementId))
+                        }
+                        name="selectAll"
+                      />
 
                     </th>
                     <th className="attendanceheading">Job Id</th>
@@ -1924,52 +2009,53 @@ toast.success(response.data);
                       <td className="tabledata">{item.companyName}</td>
                       <td className="tabledata">{item.designation}</td>
                       <td className="tabledata">{(() => {
-  const matched = alreadyAssignedJids.find(obj => obj.jobId === item.requirementId);
-  return matched && (
-      <span>{matched.employeeName}</span>
-  );
-})()}
+                        const matched = alreadyAssignedJids.find(obj => obj.jobId === item.requirementId);
+                        return matched && (
+                          <span>{matched.employeeName}</span>
+                        );
+                      })()}
 
-</td>
+                      </td>
                       <td className="tabledata">{(() => {
-  const matched = alreadyAssignedJids.find(obj => obj.jobId === item.requirementId);
-  return matched ? (
+                        const matched = alreadyAssignedJids.find(obj => obj.jobId === item.requirementId);
+                        return matched ? (
 
-        <Popconfirm
-          placement="bottomRight"
-          title="Delete Permission !"
-          description="Are you sure to delete this permission?"
-          okText="Delete"
-          cancelText="Cancel"
-          onConfirm={() => {
-            handleDeletePermission(matched.id)
-          }}
-        >
-        < DeleteOutlined />
-        </Popconfirm>
-  ) : null;
-})()}
+                          <Popconfirm
+                            placement="bottomRight"
+                            title="Delete Permission !"
+                            description="Are you sure to delete this permission?"
+                            okText="Delete"
+                            cancelText="Cancel"
+                            onConfirm={() => {
+                              handleDeletePermission(matched.id)
+                            }}
+                          >
+                            < DeleteOutlined />
+                          </Popconfirm>
+                        ) : null;
+                      })()}
 
-</td>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           </AntdModal>
-                    {/* Rajlaxmi JAgadale added taht modal code date 14/04/2025 */}
+          {/* Rajlaxmi JAgadale added taht modal code date 14/04/2025 */}
           <AntdModal
             title="Select Recruiter"
             open={showSelectPermissionRecruiters}
             onOk={handleOkey}
             onCancel={() => {
               setSelectedRowsPermissionIds([])
-              setShowSelectPermissionRecruiters(false)}}
+              setShowSelectPermissionRecruiters(false)
+            }}
             width={800}
           >
             <div className="mainForListsteamperformance">
               <Card
-              id="classforamit"
+                id="classforamit"
                 hoverable
                 style={{
                   width: 300,
@@ -2017,7 +2103,7 @@ toast.success(response.data);
 
               {displayRecruiters && (
                 <Card
-                id="classforamit"
+                  id="classforamit"
                   hoverable
                   style={{
                     width: 300,
@@ -2082,21 +2168,21 @@ const SendEmailPopup = ({
   onSuccessFullEmailSend,
   clientEmailSender,
   fetchCallingList,
-  
-}) => {
 
-//line number 2096 to 2167 added by Shweta Jagdale
+}) => {
+  console.log("Popup received IDs:--", selectedCandidateIds);
+  //line number 2096 to 2167 added by Shweta Jagdale
   const [to, setTo] = useState("");
   const [cc, setCc] = useState("");
-  const [bcc, setBcc] = useState("");  
-const [toError, setToError] = useState("");
-const [ccError, setCcError] = useState("");
- const [bccError, setBccError] = useState("");
- const [subject, setSubject] = useState("");
-const [subjectError, setSubjectError] = useState("");
+  const [bcc, setBcc] = useState("");
+  const [toError, setToError] = useState("");
+  const [ccError, setCcError] = useState("");
+  const [bccError, setBccError] = useState("");
+  const [subject, setSubject] = useState("");
+  const [subjectError, setSubjectError] = useState("");
 
-const handleChange = (e) => {
-  const { name, value } = e.target;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     e.preventDefault();
 
@@ -2143,21 +2229,21 @@ const handleChange = (e) => {
       }
     }
     if (name === "subject") {
-    setSubject(value);
-    if (!value.trim()) {
-      setSubjectError("Subject is required");
-    } else if (value.length > 100) {
-      setSubjectError("Subject cannot exceed 100 characters");
-    } else {
-      setSubjectError("");
+      setSubject(value);
+      if (!value.trim()) {
+        setSubjectError("Subject is required");
+      } else if (value.length > 100) {
+        setSubjectError("Subject cannot exceed 100 characters");
+      } else {
+        setSubjectError("");
+      }
     }
-  }
-};
+  };
 
   const [emailFooter, setEmailFooter] = useState("Best Regards,\n157 Careers.");
   // const [subject, setSubject] = useState("");
 
-  const {employeeId, userType} = useParams();
+  const { employeeId, userType } = useParams();
   const [signatureImage, setSignatureImage] = useState(
     "https://lh3.googleusercontent.com/fife/ALs6j_HDFuzYstiAW8Rt_7NmtAoegg6nGerpkvbiAITq-mNL70gNXONQuJwnZdbiAbsKMNAYMt9iBnvsFWx8EaOOWV43cjOjDvFOAiw1XacANQb0MDBtFO1ag1TuVwCbwbzrLDnOiniRQ5hD7kGCCVjTNGsNdx6RQLsrKyZlpJ6meA1NIT1vXloRcFwlfbTjDBG14YC809U_0FGn9pOII8lbH-I_ZZLBI6kfh0Q43j4evix8AbIxnvw0Soesevgycz4jRqrAA4Fjjd67Pb0vIVBkeEgSp_Sfz_v9joDcBiMe2sLP6_iEvB7N4il1qgBgTHBRM6qp6IuNFov7hMdcyx8Jp1oCfQX7753pO2x3FGg3tyW5RI0l-1h01JWKdybFECo19c7o3Z_01lJ-dF1TABxyPTdT9eztvkSfDXOvfoQIP_oEny3ORR-8wfjijnlUFylwT7MhsCwTcaeQR6tWaPYJ9rX7AQVGOmMyJbLS_0tFLn0_UzX7NuQx6-W2TeC9aXM0ajJYJ5cLPusvMlAhgFBB0WdZfbtuOat0-rd2qP_L0MqJPfTYBdTgYyO4LoTD0dV6QRo5UJhvyDW5Ru8IBz-bB4QWhPMjs2_PFnQ9K-GLvAPCOYIk4TQPhkCK4UgOyGL8bRE4bPBIYMddVxfWdePCOb6V5JhGmYfvsYzEhAwquNmsZkMv9lEJfQV-Frs0DrF63XWlD5ieprbz4CLMs3WHh42I06Kpw2aCXfQchCDoJawTYljfozJ_QHq58UIAdMniaLvrKKYRyYfZohAFVdekMzArxrobd4e3Pac9cHm1Orz2_lAob5diRJCZxapdTOPfiT_ro-1qhbtmKua4kXr5Z_TWgBV9CwaactlqLFMnnbN3TtDOqKNDEFBGhg1pKC2NUu2Jw6IyawDyCU6VCdrnhizrHhvhPY8u0uXOxspsqfvQaU_PT0e0v-f2RPDESxSwIz3H6DEzmk5hOrbOmXFCPG8Q9bUu_5I3kL11z_loIveKwfWD3YGIkOjOvXAUomdEqw7DIXIbjcfDQflq7L45gJ3-BWuTkRmicaQL3GAtwVpYbmNUi649NpUC5JvKN_iqIxeNzhKdn1jBXEGl2-rbmzYXbPolNUmrQWwaFYKBzVzgWIcCjaaKpgSR444mFTx3mFEuSJxfjMTJtumbYGZkGrFkEE1rNaXMvF6XFT6JO63BtAfQzd5nFl31OctaJ6nf7_UbshOlPFeUNoRFpc-gB9LWyZck_V9jIToDHY8mij11-IK-9DFLdZZfNxeOhbha8DYljvTj9R6spXM006lRZmBsP6WugvIvvG5Pv_kiXoORCBbrCFAIk3vpZIEx3zDoayqgUNwctyrf7cJvfSiyWokjM0NNHRTCy0eldMfb0LLX5X6BftzMt128n5f6-Q60zmQ_kyuHSnyLGJawrCATfhHu-_ABtuuTWopOBib9gG__Vsa06z5SKZs5LM8eD8TwgUMeIRfWGfZBAy2qobuMt9ZVDrQDlPejp1tBg3Dm8Ke85TK7HFFfDqA-dJ2jCwzOq2ipybePn2kxLg911_lfaHPIXpF0LJdNwNyzfH_6IuB3IGI0nelUgtPnQbxXFMYd8xLaiVhfx9f0GLlDLkalvTQ8UPk92nprBDiYn8GdmV3zoVuWZbXwqQ4nmLaB9LIxDieP2kLO7V2igrEsBxXZHT309KauEgReDc1p7ahNkSiDjAOt3cDoEnlXhXjLXiBy"
   );
@@ -2172,21 +2258,27 @@ const handleChange = (e) => {
 
   const fetchCandidateData = async (selectedCandidateIds = []) => {
     const newIdsMultipleData = selectedCandidateIds?.join(",");
-  
+
     try {
       const response = await axios.get(`${API_BASE_URL}/get-candidates-details?ids=${newIdsMultipleData}`);
       setSelectedCandidate(response.data);
+      console.log("RESPONSEEE--", response.data)
     } catch (error) {
       console.log("Error fetching candidate data:", error);
     }
   };
-  
+
   // Call API when component mounts
   useEffect(() => {
-    fetchCandidateData(selectedCandidateIds);
-  }, []);
-  
-  
+    console.log("Effect running with IDs:", selectedCandidateIds);
+    if (selectedCandidateIds && selectedCandidateIds.length > 0) {
+      fetchCandidateData(selectedCandidateIds);
+    }
+  }, [selectedCandidateIds]);
+
+
+
+
 
 
   const handleStoreClientInformation = async () => {
@@ -2229,10 +2321,10 @@ const handleChange = (e) => {
 
   const [socket, setSocket] = useState(null);
 
-  useEffect(()=>{
-const newSocket = getSocket();
-setSocket(newSocket);
-  },[]);
+  useEffect(() => {
+    const newSocket = getSocket();
+    setSocket(newSocket);
+  }, []);
 
   const handleSendEmail = () => {
 
@@ -2245,12 +2337,12 @@ setSocket(newSocket);
     setIsMailSending(true);
 
     //addded by shweta jagdale line no 2266 to 2272
-   const filteredAttachments = selectedCandidate
-  .filter((can) => can.resume) // only include if resume exists
-  .map((can) => ({
-    fileName: `${can.candidateName}_${can.jobDesignation}.pdf`,
-    fileContent: can.resume,
-  }));
+    const filteredAttachments = selectedCandidate
+      .filter((can) => can.resume) // only include if resume exists
+      .map((can) => ({
+        fileName: `${can.candidateName}_${can.jobDesignation}.pdf`,
+        fileContent: can.resume,
+      }));
 
 
     const emailData = {
@@ -2279,8 +2371,8 @@ setSocket(newSocket);
         perDayBillingSentToClient: "300",
       })),
       candidateIds: selectedCandidate.map((can) => can.candidateId),
-    };    
-    
+    };
+
     axios
       .post(`${API_BASE_URL}/send-email/${employeeId}/${userType}`, emailData)
       .then((response) => {
@@ -2292,7 +2384,7 @@ setSocket(newSocket);
           socket.emit("share_profile", emailData);
         } else {
           toast.success(message); // For cases where profiles are shared successfully
-          
+
         }
 
         selectedCandidate.forEach(async (can) => {
@@ -2345,80 +2437,80 @@ setSocket(newSocket);
           <Form.Group style={{ display: "flex", gap: "5px" }}>
             <div style={{ width: "100%" }}>
               {/*addded by shweta jagdale line no 2363 to 2437 */}
-             <Form.Label>
-          <strong><span style={{ color: "red" }}>*</span>TO:</strong>
-    </Form.Label>
-    <Form.Control
-      type="email"
-      className="text-secondary"
-      value={to}
-      name="email"
-      onChange={handleChange}
-      placeholder="Enter a valid email"
-    />
-    {toError && (
-      <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
-        {toError}
-      </div>
-        )}
-      
+              <Form.Label>
+                <strong><span style={{ color: "red" }}>*</span>TO:</strong>
+              </Form.Label>
+              <Form.Control
+                type="email"
+                className="text-secondary"
+                value={to}
+                name="email"
+                onChange={handleChange}
+                placeholder="Enter a valid email"
+              />
+              {toError && (
+                <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
+                  {toError}
+                </div>
+              )}
+
 
             </div>
             <div style={{ width: "100%" }}>
-        <Form.Label>
-          <strong>CC:</strong>
-        </Form.Label>
-        <Form.Control
-          type="text" // Allow multiple emails
-          className="text-secondary"
-          value={cc}
-          name="cc"
-          onChange={handleChange}
-          placeholder="Ex:abc@gmail.com,xyz@gmail.com"
-        />
-        {ccError && (
-          <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
-            {ccError}
-          </div>
-        )}
-      </div>
+              <Form.Label>
+                <strong>CC:</strong>
+              </Form.Label>
+              <Form.Control
+                type="text" // Allow multiple emails
+                className="text-secondary"
+                value={cc}
+                name="cc"
+                onChange={handleChange}
+                placeholder="Ex:abc@gmail.com,xyz@gmail.com"
+              />
+              {ccError && (
+                <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
+                  {ccError}
+                </div>
+              )}
+            </div>
           </Form.Group>
           <Form.Group style={{ display: "flex", gap: "5px" }}>
             <div style={{ width: "100%" }}>
-          <Form.Label><strong>BCC:</strong></Form.Label>
-          <Form.Control
-            type="text"
-            className="text-secondary"
-            value={bcc}
-            name="bcc"
-            onChange={handleChange}
-            placeholder="Ex:abc@gmail.com,xyz@gmail.com"
-          />
-          {bccError && (
-            <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
-              {bccError}
+              <Form.Label><strong>BCC:</strong></Form.Label>
+              <Form.Control
+                type="text"
+                className="text-secondary"
+                value={bcc}
+                name="bcc"
+                onChange={handleChange}
+                placeholder="Ex:abc@gmail.com,xyz@gmail.com"
+              />
+              {bccError && (
+                <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
+                  {bccError}
+                </div>
+              )}
             </div>
-          )}
-        </div>
             <div style={{ width: "100%" }}>
-            <Form.Label>
-      <strong><span style={{ color: "red" }}>*</span>Subject:</strong>
-    </Form.Label>
-    <Form.Control
-      type="text"
-      className="text-secondary"
-      value={subject}
-      name="subject"
-      onChange={handleChange}
-      placeholder="Enter subject (max 100 characters)"
-      maxLength={100}
-    />
-    {subjectError && (
-      <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
-        {subjectError}
-      </div>
-    )}
-  </div>
+              <Form.Label>
+                <strong><span style={{ color: "red" }}>*</span>Subject:</strong>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                className="text-secondary"
+                value={subject}
+                name="subject"
+                onChange={handleChange}
+                placeholder="Enter subject (max 100 characters)"
+                maxLength={100}
+              />
+              {subjectError && (
+                <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
+                  {subjectError}
+                </div>
+              )}
+            </div>
           </Form.Group>
           <Form.Label className="mt-2">
             <strong>Email Body:</strong>
@@ -2491,30 +2583,30 @@ setSocket(newSocket);
                 </Table>
               </div>
             </Form.Group>
-          {/* Added by Shweta Jagdale line no 2511 to 2534 */}
+            {/* Added by Shweta Jagdale line no 2511 to 2534 */}
             <div className="flex-wrap gap-1 mt-3 d-flex">
               <Form.Label className="mr-1">
                 <strong>Attachments:</strong>{" "}
               </Form.Label>
-             {selectedCandidate
-  .filter((item) => item.resume) // Only show if resume is present
-  .map((item, index) => (
-    <a
-      key={index}
-      className="items-center justify-center d-flex"
-      style={{
-        border: "1px solid gray",
-        borderRadius: "15px",
-        padding: "0px 4px",
-      }}
-      href={`data:application/pdf;base64,${item.resume}`}
-      download={`${item.candidateName}_${item.jobDesignation}.pdf`}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {`${item.candidateName}_${item.jobDesignation}.pdf`}
-    </a>
-))}
+              {selectedCandidate
+                .filter((item) => item.resume) // Only show if resume is present
+                .map((item, index) => (
+                  <a
+                    key={index}
+                    className="items-center justify-center d-flex"
+                    style={{
+                      border: "1px solid gray",
+                      borderRadius: "15px",
+                      padding: "0px 4px",
+                    }}
+                    href={`data:application/pdf;base64,${item.resume}`}
+                    download={`${item.candidateName}_${item.jobDesignation}.pdf`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {`${item.candidateName}_${item.jobDesignation}.pdf`}
+                  </a>
+                ))}
 
             </div>
             <Form.Group controlId="formBasicFooter">
@@ -2536,16 +2628,16 @@ setSocket(newSocket);
                 <strong>Signature:</strong>
                 <br />
                 <img
-  src={
-    employeeId === "3148" && userType === "TeamLeader"
-      ? profileImageRtempus
-      : employeeId === "3691" && userType === "TeamLeader"
-      ? profileImageVelocity
-      : signatureImage
-  }
-  alt="Signature"
-  style={{ maxWidth: "100%", maxHeight: "200px" }}
-/>
+                  src={
+                    employeeId === "3148" && userType === "TeamLeader"
+                      ? profileImageRtempus
+                      : employeeId === "3691" && userType === "TeamLeader"
+                        ? profileImageVelocity
+                        : signatureImage
+                  }
+                  alt="Signature"
+                  style={{ maxWidth: "100%", maxHeight: "200px" }}
+                />
 
               </div>
             )}
@@ -2583,7 +2675,7 @@ setSocket(newSocket);
         <div className="SCE_Loading_Animation">
           <Loader size={50} color="#ffb281" />
         </div>
-      )}      
+      )}
     </>
   );
 };

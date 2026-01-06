@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 import "../EmployeeSection/Incentive.css";
-import EmployeeProfileData from "./employeeProfileData";
+
 
 const Incentive = ({onCloseIncentive}) => {
   const [data, setData] = useState([]);

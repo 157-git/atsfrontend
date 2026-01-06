@@ -8,7 +8,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import { Alert, Modal as AntdModal, Steps } from "antd";
-const {Step}=Steps;
+const { Step } = Steps;
 import moment from "moment";
 import Loader from "../EmployeeSection/loader";
 import { Pagination } from "antd";
@@ -22,8 +22,8 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   const [showFilterSection, setShowFilterSection] = useState(false);
   const [uniqueValues, setUniqueValues] = useState({});
   const [searchCount, setSearchCount] = useState(0);
-    const [showPerformanceModal, setShowPerformanceModal] = useState(true);
-    const [selectedPerformanceData, setSelectedPerformanceData] = useState(null);
+  const [showPerformanceModal, setShowPerformanceModal] = useState(true);
+  const [selectedPerformanceData, setSelectedPerformanceData] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState({
     candidateId: [],
     alternateNumber: [],
@@ -185,16 +185,16 @@ const EmployeeMasterSheet = ({ loginEmployeeName }) => {
   const [triggerFetch, setTriggerFetch] = useState(false);
   const filterRef = useRef(null);
   //// line number 198 to 206 updated by Shweta Jagdale 18-06-2025
-const [selectedEntry, setSelectedEntry] = useState(null);
-const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
+  const [selectedEntry, setSelectedEntry] = useState(null);
+  const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
 
-   const [isHorizontallyScrolling, setIsHorizontallyScrolling] = useState(false);
-          const tableContainerRef = useRef(null);
-        
-          const handleScroll = () => {
-            if (!tableContainerRef.current) return;
-            setIsHorizontallyScrolling(tableContainerRef.current.scrollLeft > 0);
-          };
+  const [isHorizontallyScrolling, setIsHorizontallyScrolling] = useState(false);
+  const tableContainerRef = useRef(null);
+
+  const handleScroll = () => {
+    if (!tableContainerRef.current) return;
+    setIsHorizontallyScrolling(tableContainerRef.current.scrollLeft > 0);
+  };
 
 
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_39
@@ -264,9 +264,9 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
     }
   };
   const handleUpdate = (entry) => {
-  setSelectedEntry(entry); 
-  setShowUpdateCallingTracker(true);
-};
+    setSelectedEntry(entry);
+    setShowUpdateCallingTracker(true);
+  };
   useEffect(() => {
     if (userType === "SuperUser") {
       fetchManager();
@@ -277,27 +277,33 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
     }
   }, []);
   //akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_98
-  const fetchData = async (page, size) => {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        // sahil karnekar line 244 set employeeId and usertType in Api at the time of deployement this url is just for testing
-        `${API_BASE_URL}/master-sheet/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
-      );
-      const data = await response.json();
-      setData(data.content);
-      // sahil karnekar line 249
-      extractUniqueValues(data.content);
-      setTotalRecords(data.totalElements);
-      setSearchCount(Object.keys(data.content).length);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching shortlisted data:", error);
-      setLoading(false);
-    }finally{
-      setLoading(false);
+const fetchData = async (page, size) => {
+  setLoading(true);
+  try {
+    let url = "";
+
+    if (userType === "SuperUser") {
+      // ✅ SuperUser API
+      url = `${API_BASE_URL}/superuser/master-sheet?superUserId=${employeeId}&searchTerm=${searchTerm}&page=${page}&size=${size}`;
+    } else {
+      // ✅ Existing flow (DO NOT TOUCH)
+      url = `${API_BASE_URL}/master-sheet/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`;
     }
-  };
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    setData(data.content);
+    extractUniqueValues(data.content);
+    setTotalRecords(data.totalElements);
+    setSearchCount(data.content.length);
+
+  } catch (error) {
+    console.error("Error fetching master tracker data:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleViewFile = async (url) => {
     if (!url) {
@@ -335,25 +341,25 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
   //   setAllSelected(!allSelected);
   // };
 
-    const handleSelectAll = () => {
-      if (allSelected) {
-        setSelectedRows((prevSelectedRows) => 
-          prevSelectedRows.filter((id) => !data.map((item) => item[0]).includes(id))
-        );
-      } else {
-        const allRowIds = data.map((item) => item[0]);
-        setSelectedRows((prevSelectedRows) => [...new Set([...prevSelectedRows, ...allRowIds])]);
-      }
-      setAllSelected(!allSelected);
-    };
-  
-      const areAllRowsSelectedOnPage = data.every((item) =>
-          selectedRows.includes(item[0])
-        );
-      
-        useEffect(() => {
-          setAllSelected(areAllRowsSelectedOnPage);
-        }, [data, selectedRows]);  
+  const handleSelectAll = () => {
+    if (allSelected) {
+      setSelectedRows((prevSelectedRows) =>
+        prevSelectedRows.filter((id) => !data.map((item) => item[0]).includes(id))
+      );
+    } else {
+      const allRowIds = data.map((item) => item[0]);
+      setSelectedRows((prevSelectedRows) => [...new Set([...prevSelectedRows, ...allRowIds])]);
+    }
+    setAllSelected(!allSelected);
+  };
+
+  const areAllRowsSelectedOnPage = data.every((item) =>
+    selectedRows.includes(item[0])
+  );
+
+  useEffect(() => {
+    setAllSelected(areAllRowsSelectedOnPage);
+  }, [data, selectedRows]);
 
   const handleSelectRow = (candidateId) => {
     setSelectedRows((prevSelectedRows) => {
@@ -387,9 +393,9 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
     }
   };
 
-  const handleSearchClick = (e)=>{
+  const handleSearchClick = (e) => {
     e.preventDefault();
-    setCurrentPage(1); 
+    setCurrentPage(1);
     fetchData(1, pageSize);
   }
 
@@ -537,7 +543,7 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
 
   const getSteps = () => {
     if (!selectedPerformanceData) return [];
-  
+
     const processSteps = [
       {
         title: "Form Filled",
@@ -554,48 +560,48 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
       { title: "Joining Process", time: selectedPerformanceData.joiningProcess },
       { title: "Expected Join Date", time: selectedPerformanceData.joinDate }
     ];
-  
+
     const interviewSteps = (selectedPerformanceData.interviewRoundsList || []).map((round) => ({
       title: round.round,
       time: round.time,
       response: round.response
     }));
-  
+
     // Combine all steps
     const allSteps = [...processSteps, ...interviewSteps];
-  
+
     // Safely parse and filter only valid dates
     const parseDate = (val) => {
       const date = moment(val);
       return date.isValid() ? date : null;
     };
-  
+
     // Remove steps with invalid/missing dates
     const validSteps = allSteps.filter((step) => parseDate(step.time));
-  
+
     // Sort chronologically
     validSteps.sort((a, b) => parseDate(a.time).diff(parseDate(b.time)));
-  
+
     // Attach readable descriptions with diff between steps
     for (let i = 0; i < validSteps.length; i++) {
       const current = parseDate(validSteps[i].time);
       const prev = i > 0 ? parseDate(validSteps[i - 1].time) : null;
-  
+
       const diff = prev ? moment.duration(current.diff(prev)) : null;
       console.log(diff);
-      
+
       const diffStr = diff
         ? `${diff.days()}d ${diff.hours()}h ${diff.minutes()}m ${diff.seconds()}s`
         : "First step";
-  
+
       validSteps[i].description =
         (validSteps[i].response ? `Response: ${validSteps[i].response} | ` : "") +
         `${current.format("DD MMM YYYY, hh:mm A")} | ⏱ ${diffStr} since last step`;
     }
-  
+
     return validSteps;
   };
-  
+
 
   const closeDocumentModal = () => {
     setSelectedCandidateDocument("");
@@ -646,18 +652,18 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
     });
   };
 
-  const handleViewPerformance = async (candidate) => {  
+  const handleViewPerformance = async (candidate) => {
     try {
       const response = await fetch(`${API_BASE_URL}/fetchPerformanceByCanId/${candidate[0]}`);
-  const text = await response.text();
-  
-  if (!response.ok) {
-    console.error("API Response Text:", text);
-    throw new Error(`HTTP ${response.status}: ${text}`);
-  }
-  
-  const data = JSON.parse(text);
-  
+      const text = await response.text();
+
+      if (!response.ok) {
+        console.error("API Response Text:", text);
+        throw new Error(`HTTP ${response.status}: ${text}`);
+      }
+
+      const data = JSON.parse(text);
+
       setSelectedPerformanceData(data);
       setShowPerformanceModal(true);
     } catch (error) {
@@ -727,22 +733,22 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
     });
   };
 
-   useEffect(() => {
-     const handleClickOutside = (event) => {
-       if (
-         filterRef.current &&
-         !filterRef.current.contains(event.target) &&
-         !event.target.closest(".filter-option button") // Prevent closing when clicking inside the button
-       ) {
-         setExpandedFilters({});
-       }
-     };
-   
-     document.addEventListener("mousedown", handleClickOutside);
-     return () => {
-       document.removeEventListener("mousedown", handleClickOutside);
-     };
-   }, []);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        filterRef.current &&
+        !filterRef.current.contains(event.target) &&
+        !event.target.closest(".filter-option button") // Prevent closing when clicking inside the button
+      ) {
+        setExpandedFilters({});
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // this applyFilters method updated by sahil karnekar date 22-10-2024
   const applyFilters = (data) => {
@@ -839,1337 +845,1337 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
 
   return (
     <>
-    {
-      !selectedEntry && !showUpdateCallingTracker && (
-      <div className="calling-list-container">
-        {loading ? (
-          <div className="register">
-            <Loader></Loader>
-          </div>
-        ) : (
-          <>
-            <div className="search newaddforalignheaderofemployeermastersheet">
-              {/* line 590 to 610 added by sahil karnekar date 30-10-2024 */}
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <i
-                  className="fa-solid fa-magnifying-glass"
-                  style={{ margin: "10px", width: "auto", fontSize: "15px" }}
-                ></i>
-                {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
+      {
+        !selectedEntry && !showUpdateCallingTracker && (
+          <div className="calling-list-container">
+            {loading ? (
+              <div className="register">
+                <Loader></Loader>
+              </div>
+            ) : (
+              <>
+                <div className="search newaddforalignheaderofemployeermastersheet">
+                  {/* line 590 to 610 added by sahil karnekar date 30-10-2024 */}
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <i
+                      className="fa-solid fa-magnifying-glass"
+                      style={{ margin: "10px", width: "auto", fontSize: "15px" }}
+                    ></i>
+                    {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
 
-                <form onSubmit={(e) => handleSearchClick(e)}> 
-                <div
-                  className="search-input-div"
-                  style={{ width: `${calculateWidth()}px` }}
-                >
-                  <div className="forxmarkdiv">
-                    <input
-                      type="text"
-                      className="search-input removeBorderForSearchInput"
-                      placeholder="Search here..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    {searchTerm && (
-                      <div className="svgimagesetinInput">
-                        <svg
-                          onClick={() => {
-                            setSearchTerm("")
-                            handleTriggerFetch();
-                          }}
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="24px"
-                          viewBox="0 -960 960 960"
-                          width="24px"
-                          fill="#000000"
-                        >
-                          <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-                        </svg>
+                    <form onSubmit={(e) => handleSearchClick(e)}>
+                      <div
+                        className="search-input-div"
+                        style={{ width: `${calculateWidth()}px` }}
+                      >
+                        <div className="forxmarkdiv">
+                          <input
+                            type="text"
+                            className="search-input removeBorderForSearchInput"
+                            placeholder="Search here..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                          />
+                          {searchTerm && (
+                            <div className="svgimagesetinInput">
+                              <svg
+                                onClick={() => {
+                                  setSearchTerm("")
+                                  handleTriggerFetch();
+                                }}
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="24px"
+                                viewBox="0 -960 960 960"
+                                width="24px"
+                                fill="#000000"
+                              >
+                                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <button
+                        className="search-btns lineUp-share-btn"
+                        type="submit"
+                      >
+                        Search
+                      </button>
+                    </form>
+                  </div>
+
+                  <div className="master-sheet-header">
+                    <h3 style={{ color: "gray", fontSize: "18px" }}>
+                      Employee Master Sheet
+                    </h3>
+                  </div>
+
+                  <div className="master-sheet-share-btn">
+                    {/* sahil karnekar line 526 to 536 */}
+                    {userType !== "Recruiters" && (
+                      <div>
+                        {showShareButton ? (
+                          <button
+                            className="lineUp-Filter-btn"
+                            onClick={() => setShowShareButton(false)}
+                          >
+                            Share
+                          </button>
+                        ) : (
+                          <div style={{ display: "flex", gap: "5px" }}>
+
+                            <button
+                              className="lineUp-share-close-btn"
+                              onClick={() => setShowShareButton(true)}
+                            >
+                              Close
+                            </button>
+                            {/* akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_331 */}
+                            {userType === "TeamLeader" && (
+                              <button
+                                className="lineUp-share-btn"
+                                onClick={handleSelectAll}
+                              >
+                                {allSelected ? "Deselect All" : "Select All"}
+                              </button>
+                            )}
+                            {/* akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_339 */}
+                            <button
+                              className="lineUp-forward-btn"
+                              onClick={forwardSelectedCandidate}
+                            >
+                              Forward
+                            </button>
+                          </div>
+                        )}
                       </div>
                     )}
+                    {/* sahil karnekar line 531 to 536 */}
+                    <button
+                      className="lineUp-Filter-btn"
+                      onClick={toggleFilterSection}
+                    >
+                      Filter <i className="fa-solid fa-filter"></i>
+                    </button>
                   </div>
                 </div>
-                <button
-                  className="search-btns lineUp-share-btn"
-                 type="submit"
-                >
-                  Search
-                </button>
-                </form>
-              </div>
 
-              <div className="master-sheet-header">
-                <h3 style={{ color: "gray", fontSize: "18px" }}>
-                  Employee Master Sheet
-                </h3>
-              </div>
+                {/* sahil karnekar line 593 to 573 */}
+                <div className="filter-dropdowns">
+                  {showFilterSection && (
+                    <div className="filter-section">
+                      {Object.keys(uniqueValues).map((field) => (
+                        <div className="filter-option" key={field}>
+                          <button
+                            className="white-Btn"
+                            onClick={() => toggleFilter(field)}
+                            style={{
+                              cursor: "pointer",
+                              backgroundColor: selectedFilters[field]?.length > 0 ? "gray" : "transparent",
+                            }}
+                          >
+                            {displayNameMap[field] || field}
+                            <span className="filter-icon">&#x25bc;</span>
+                            {selectedFilters[field]?.length > 0 ? ` ${selectedFilters[field].length}` : ""}
+                          </button>
 
-              <div className="master-sheet-share-btn">
-                {/* sahil karnekar line 526 to 536 */}
-                {userType !== "Recruiters" && (
-                  <div>
-                    {showShareButton ? (
+                          {expandedFilters[field] && (
+                            <div className="city-filter" ref={filterRef}>
+                              {/* sahil karnekar filter edition line 552 to 567 date : 10-10-2024 */}
+                              {/* this complete optiondiv is updated by sahil karnekar date 22-10-2024 */}
+                              <div className="optionDiv">
+                                {uniqueValues[field] &&
+                                  uniqueValues[field].map((value, index) => {
+                                    // Check if the field is "alternateNumber" and value is 0, or if value is falsy (null, undefined)
+                                    if (
+                                      (field === "alternateNumber" && value === 0) ||
+                                      value === null ||
+                                      value === undefined ||
+                                      value === ""
+                                    ) {
+                                      return null; // Skip rendering for this value
+                                    }
+
+                                    return (
+                                      <label
+                                        className="selfcalling-filter-value"
+                                        key={index}
+                                      >
+                                        <input
+                                          name="testName"
+                                          style={{ marginRight: "5px" }}
+                                          type="checkbox"
+                                          checked={selectedFilters[field].includes(
+                                            value
+                                          )}
+                                          onChange={() =>
+                                            handleFilterChange(field, value)
+                                          }
+                                        />
+                                        {value}
+                                      </label>
+                                    );
+                                  })}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
                       <button
                         className="lineUp-Filter-btn"
-                        onClick={() => setShowShareButton(false)}
+                        onClick={clearAllFilters}
+
                       >
-                        Share
+                        Clear Filters
                       </button>
-                    ) : (
-                      <div style={{ display: "flex", gap: "5px" }}>
-
-                        <button
-                          className="lineUp-share-close-btn"
-                          onClick={() => setShowShareButton(true)}
-                        >
-                          Close
-                        </button>
-                        {/* akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_331 */}
-                        {userType === "TeamLeader" && (
-                          <button
-                            className="lineUp-share-btn"
-                            onClick={handleSelectAll}
-                          >
-                            {allSelected ? "Deselect All" : "Select All"}
-                          </button>
-                        )}
-                        {/* akash_pawar_EmployeeMasterSheet_ShareFunctionality_18/07_339 */}
-                        <button
-                          className="lineUp-forward-btn"
-                          onClick={forwardSelectedCandidate}
-                        >
-                          Forward
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
-                {/* sahil karnekar line 531 to 536 */}
-                <button
-                  className="lineUp-Filter-btn"
-                  onClick={toggleFilterSection}
-                >
-                  Filter <i className="fa-solid fa-filter"></i>
-                </button>
-              </div>
-            </div>
-
-            {/* sahil karnekar line 593 to 573 */}
-            <div className="filter-dropdowns">
-              {showFilterSection && (
-                <div className="filter-section">
-                  {Object.keys(uniqueValues).map((field) => (
-                    <div className="filter-option" key={field}>
-                      <button
-                        className="white-Btn"
-                        onClick={() => toggleFilter(field)}
-                        style={{
-                          cursor: "pointer",
-                          backgroundColor: selectedFilters[field]?.length > 0 ? "gray" : "transparent",
-                        }}
-                      >
-                        {displayNameMap[field] || field}
-                        <span className="filter-icon">&#x25bc;</span>
-                        {selectedFilters[field]?.length > 0 ? ` ${selectedFilters[field].length}` : ""}
-                      </button>
-
-                      {expandedFilters[field] && (
-                        <div className="city-filter" ref={filterRef}>
-                          {/* sahil karnekar filter edition line 552 to 567 date : 10-10-2024 */}
-                          {/* this complete optiondiv is updated by sahil karnekar date 22-10-2024 */}
-                          <div className="optionDiv">
-                            {uniqueValues[field] &&
-                              uniqueValues[field].map((value, index) => {
-                                // Check if the field is "alternateNumber" and value is 0, or if value is falsy (null, undefined)
-                                if (
-                                  (field === "alternateNumber" && value === 0) ||
-                                  value === null ||
-                                  value === undefined ||
-                                  value === ""
-                                ) {
-                                  return null; // Skip rendering for this value
-                                }
-
-                                return (
-                                  <label
-                                    className="selfcalling-filter-value"
-                                    key={index}
-                                  >
-                                    <input
-                                      name="testName"
-                                      style={{ marginRight: "5px" }}
-                                      type="checkbox"
-                                      checked={selectedFilters[field].includes(
-                                        value
-                                      )}
-                                      onChange={() =>
-                                        handleFilterChange(field, value)
-                                      }
-                                    />
-                                    {value}
-                                  </label>
-                                );
-                              })}
-                          </div>
-                        </div>
-                      )}
                     </div>
-                  ))}
-                  <button 
-      className="lineUp-Filter-btn" 
-      onClick={clearAllFilters} 
-  
-    >
-      Clear Filters
-    </button>
+                  )}
                 </div>
-              )}
-            </div>
 
 
-            {error && <div className="alert alert-danger">{error}</div>}
+                {error && <div className="alert alert-danger">{error}</div>}
 
-            <div className="attendanceTableData"
-            onScroll={handleScroll}
-            ref={tableContainerRef}
-            >
-              <table className="attendance-table">
-                <thead>
-                  <tr className="attendancerows-head">
-                    {!showShareButton && userType === "TeamLeader" ? (
-                      <th className="attendanceheading" style={{ position: "sticky",left:0, zIndex: 10 }}>
-                        {/* <input
+                <div className="attendanceTableData"
+                  onScroll={handleScroll}
+                  ref={tableContainerRef}
+                >
+                  <table className="attendance-table">
+                    <thead>
+                      <tr className="attendancerows-head">
+                        {!showShareButton && (userType === "TeamLeader" || userType === "Manager" || userType === "Recruiters") && (
+                          <th className="attendanceheading" style={{ position: "sticky", left: 0, zIndex: 10 }}>
+                            {/* <input
                           type="checkbox"
                           onChange={handleSelectAll}
                           checked={selectedRows.length === data.length}
                           name="selectAll"
                         /> */}
-                        <input
-                            type="checkbox"
-                            onChange={handleSelectAll}
-                            checked={
-                              data.every((row) => selectedRows.includes(row[0]))
-                            }
-                            name="selectAll"
-                          />
+                            <input
+                              type="checkbox"
+                              onChange={handleSelectAll}
+                              checked={
+                                data.every((row) => selectedRows.includes(row[0]))
+                              }
+                              name="selectAll"
+                            />
 
-                      </th>
-                    ) : null}
-                    <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>Sr No.</th>
+                          </th>
+                        )}
+                        <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10 }}>Sr No.</th>
 
-                    <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10}}>Candidate ID</th>
-                    <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "140px" : "190px", zIndex: 10 }}>Candidate Name</th>
-                    <th className="attendanceheading">Candidate Email</th>
-                    <th className="attendanceheading">Contact Number</th>
-                    <th className="attendanceheading">Alternate Number</th>
-                    <th className="attendanceheading">Calling Feedback</th>
-                    <th className="attendanceheading">Communication Rating</th>
-                    <th className="attendanceheading">Current Location</th>
-                    <th className="attendanceheading">Added Date & time </th>
-                    <th className="attendanceheading">Job Designation</th>
-                    {(userType === "TeamLeader" || userType === "Manager") && (
-                      <th className="attendanceheading">Team Leader Id</th>
-                    )}
-                    <th className="attendanceheading">Emp ID</th>
-                    <th className="attendanceheading">Recruiter Name</th>
-                    <th className="attendanceheading">Applying Company</th>
-                    <th className="attendanceheading">Job Id</th>
-                    <th className="attendanceheading">Interested Or Not</th>
-                    <th className="attendanceheading">Source Name</th>
-                    <th className="attendanceheading">Line Up ID</th>
+                        <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10 }}>Candidate ID</th>
+                        <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "140px" : "190px", zIndex: 10 }}>Candidate Name</th>
+                        <th className="attendanceheading">Candidate Email</th>
+                        <th className="attendanceheading">Contact Number</th>
+                        <th className="attendanceheading">Alternate Number</th>
+                        <th className="attendanceheading">Calling Feedback</th>
+                        <th className="attendanceheading">Communication Rating</th>
+                        <th className="attendanceheading">Current Location</th>
+                        <th className="attendanceheading">Added Date & time </th>
+                        <th className="attendanceheading">Job Designation</th>
+                        {(userType === "TeamLeader" || userType === "Manager") && (
+                          <th className="attendanceheading">Team Leader Id</th>
+                        )}
+                        <th className="attendanceheading">Emp ID</th>
+                        <th className="attendanceheading">Recruiter Name</th>
+                        <th className="attendanceheading">Applying Company</th>
+                        <th className="attendanceheading">Job Id</th>
+                        <th className="attendanceheading">Interested Or Not</th>
+                        <th className="attendanceheading">Source Name</th>
+                        <th className="attendanceheading">Line Up ID</th>
 
-                    <th className="attendanceheading">Full Address</th>
-                    <th className="attendanceheading">Incentive</th>
-                    <th className="attendanceheading">Old Employee Id</th>
-                    <th className="attendanceheading">
-                      Availability for Interview
-                    </th>
-                    <th className="attendanceheading">Company Name</th>
-                    <th className="attendanceheading">Date of Birth</th>
-                    <th className="attendanceheading">Working Status</th>
-                    <th className="attendanceheading">Feedback</th>
-                    <th className="attendanceheading">Final Status</th>
-                    <th className="attendanceheading">Gender</th>
-                    <th className="attendanceheading">Holding Any Offer</th>
-                    {userType === "Recruiters" && (
-                      <th className="attendanceheading">
-                        Message For Team Leader
-                      </th>
-                    )}
-                    {userType === "TeamLeader" && (
-                      <th className="attendanceheading">Message For Manager</th>
-                    )}
-                    {userType === "Manager" && (
-                      <th className="attendanceheading">
-                        Message Form Team Leader
-                      </th>
-                    )}
-                    <th className="attendanceheading">Notice Period</th>
+                        <th className="attendanceheading">Full Address</th>
+                        <th className="attendanceheading">Incentive</th>
+                        <th className="attendanceheading">Old Employee Id</th>
+                        <th className="attendanceheading">
+                          Availability for Interview
+                        </th>
+                        <th className="attendanceheading">Company Name</th>
+                        <th className="attendanceheading">Date of Birth</th>
+                        <th className="attendanceheading">Working Status</th>
+                        <th className="attendanceheading">Feedback</th>
+                        <th className="attendanceheading">Final Status</th>
+                        <th className="attendanceheading">Gender</th>
+                        <th className="attendanceheading">Holding Any Offer</th>
+                        {userType === "Recruiters" && (
+                          <th className="attendanceheading">
+                            Message For Team Leader
+                          </th>
+                        )}
+                        {userType === "TeamLeader" && (
+                          <th className="attendanceheading">Message For Manager</th>
+                        )}
+                        {userType === "Manager" && (
+                          <th className="attendanceheading">
+                            Message Form Team Leader
+                          </th>
+                        )}
+                        <th className="attendanceheading">Notice Period</th>
 
-                    <th className="attendanceheading">Qualification</th>
-                    <th className="attendanceheading">Year of Passing</th>
-                    <th className="attendanceheading">Interview Time</th>
+                        <th className="attendanceheading">Qualification</th>
+                        <th className="attendanceheading">Year of Passing</th>
+                        <th className="attendanceheading">Interview Time</th>
 
-                    <th className="attendanceheading">Current CTC Lakh</th>
-                    <th className="attendanceheading">Current CTC Thousand</th>
-                    <th className="attendanceheading">Expected CTC Lakh</th>
-                    <th className="attendanceheading">Expected CTC Thousand</th>
-                    <th className="attendanceheading">Experience In Month</th>
-                    <th className="attendanceheading">Experience In Year</th>
-                    <th className="attendanceheading">Offer Letter Msg</th>
-                    <th className="attendanceheading">Relevant Experince</th>
-                    <th className="attendanceheading">Link Verified Status</th>
+                        <th className="attendanceheading">Current CTC Lakh</th>
+                        <th className="attendanceheading">Current CTC Thousand</th>
+                        <th className="attendanceheading">Expected CTC Lakh</th>
+                        <th className="attendanceheading">Expected CTC Thousand</th>
+                        <th className="attendanceheading">Experience In Month</th>
+                        <th className="attendanceheading">Experience In Year</th>
+                        <th className="attendanceheading">Offer Letter Msg</th>
+                        <th className="attendanceheading">Relevant Experince</th>
+                        <th className="attendanceheading">Link Verified Status</th>
 
-                    <th className="attendanceheading">Response Update ID</th>
-                    <th className="attendanceheading">Interview Response</th>
-                    <th className="attendanceheading">Interview Round</th>
-                    <th className="attendanceheading">Comment For TL</th>
-                    <th className="attendanceheading">Next Interview Date</th>
-                    <th className="attendanceheading">Response Updated Date</th>
-                    <th className="attendanceheading">Next Interview Timing</th>
+                        <th className="attendanceheading">Response Update ID</th>
+                        <th className="attendanceheading">Interview Response</th>
+                        <th className="attendanceheading">Interview Round</th>
+                        <th className="attendanceheading">Comment For TL</th>
+                        <th className="attendanceheading">Next Interview Date</th>
+                        <th className="attendanceheading">Response Updated Date</th>
+                        <th className="attendanceheading">Next Interview Timing</th>
 
-                    <th className="attendanceheading">Details ID</th>
-                    <th className="attendanceheading">Mail Received</th>
+                        <th className="attendanceheading">Details ID</th>
+                        <th className="attendanceheading">Mail Received</th>
 
-                    <th className="attendanceheading">Resume</th>
-                    <th className="attendanceheading">Aadhaar Card</th>
-                    <th className="attendanceheading">PAN Card</th>
-                    <th className="attendanceheading">Driving License</th>
-                    <th className="attendanceheading">Degree Mark Sheet</th>
-                    <th className="attendanceheading">HSC Mark Sheet</th>
-                    <th className="attendanceheading">SSC Mark Sheet</th>
+                        <th className="attendanceheading">Resume</th>
+                        <th className="attendanceheading">Aadhaar Card</th>
+                        <th className="attendanceheading">PAN Card</th>
+                        <th className="attendanceheading">Driving License</th>
+                        <th className="attendanceheading">Degree Mark Sheet</th>
+                        <th className="attendanceheading">HSC Mark Sheet</th>
+                        <th className="attendanceheading">SSC Mark Sheet</th>
 
-                    <th className="attendanceheading">Offer Letter Received</th>
-                    <th className="attendanceheading">Offer Letter Accepted</th>
-                    <th className="attendanceheading">
-                      Reason for Rejection Offer Letter
-                    </th>
-                    <th className="attendanceheading">Join Status</th>
-                    <th className="attendanceheading">Reason for Not Join</th>
-                    <th className="attendanceheading">Join Date</th>
-                    {/* <th className="attendanceheading">Interview History</th> */}
-                    <th className="attendanceheading">Inquiry ID</th>
-                    <th className="attendanceheading">Active Status</th>
-                    <th className="attendanceheading">Any Problem</th>
-                    <th className="attendanceheading">Call Date</th>
-                    <th className="attendanceheading">Daily Impact</th>
-                    <th className="attendanceheading">Inactive Reason</th>
-                    <th className="attendanceheading">Office Environment</th>
-                    <th className="attendanceheading">Staff Behavior</th>
-                    {/* <th className="attendanceheading">FollowUp History</th> */}
-                    <th className="attendanceheading">View Performance</th>
-                    <th className="attendanceheading">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* sahil karnekar line 695 */}
-                  {applyFilters(data).map((entry, index) => (
-                    <tr key={index} className="attendancerows">
-                      {!showShareButton && userType === "TeamLeader" ? (
-                        <td className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`} style={{ position: "sticky",left:0, zIndex: 1 }} >
+                        <th className="attendanceheading">Offer Letter Received</th>
+                        <th className="attendanceheading">Offer Letter Accepted</th>
+                        <th className="attendanceheading">
+                          Reason for Rejection Offer Letter
+                        </th>
+                        <th className="attendanceheading">Join Status</th>
+                        <th className="attendanceheading">Reason for Not Join</th>
+                        <th className="attendanceheading">Join Date</th>
+                        {/* <th className="attendanceheading">Interview History</th> */}
+                        <th className="attendanceheading">Inquiry ID</th>
+                        <th className="attendanceheading">Active Status</th>
+                        <th className="attendanceheading">Any Problem</th>
+                        <th className="attendanceheading">Call Date</th>
+                        <th className="attendanceheading">Daily Impact</th>
+                        <th className="attendanceheading">Inactive Reason</th>
+                        <th className="attendanceheading">Office Environment</th>
+                        <th className="attendanceheading">Staff Behavior</th>
+                        {/* <th className="attendanceheading">FollowUp History</th> */}
+                        <th className="attendanceheading">View Performance</th>
+                        <th className="attendanceheading">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {/* sahil karnekar line 695 */}
+                      {applyFilters(data).map((entry, index) => (
+                        <tr key={index} className="attendancerows">
+                          {!showShareButton && (userType === "TeamLeader" || userType === "Manager" || userType === "Recruiters") && (
+                            <td className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`} style={{ position: "sticky", left: 0, zIndex: 1 }} >
 
-                          <input
-                            type="checkbox"
-                            checked={selectedRows.includes(entry[0])}
-                            onChange={() => handleSelectRow(entry[0])}
-                          />
+                              <input
+                                type="checkbox"
+                                checked={selectedRows.includes(entry[0])}
+                                onChange={() => handleSelectRow(entry[0])}
+                              />
 
-                        </td>
-                      ) : null}
-                      <td
-                     className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                        style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1 }}
-                      >
-                        {calculateRowIndex(index)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            </td>
+                          )}
+                          <td
+                            className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                            style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1 }}
+                          >
                             {calculateRowIndex(index)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                      className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                        style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1 }}
-                      >
-                        {highlightText(entry[0], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {calculateRowIndex(index)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                            style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1 }}
+                          >
                             {highlightText(entry[0], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[0], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                        style={{ position: "sticky", left: showShareButton ? "140px" : "190px", zIndex: 1 }}
-                      >
-                        {highlightText(entry[4], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                            style={{ position: "sticky", left: showShareButton ? "140px" : "190px", zIndex: 1 }}
+                          >
                             {highlightText(entry[4], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[4], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[3], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[3], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[3], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[6], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[6], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[6], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[1], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[1], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[1], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[2], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[2], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[2], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[5], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[5], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[5], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[7], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[7], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[7], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[8], searchTerm)}{" "}
-                        {highlightText(entry[17], searchTerm)}
-                        {/* {entry[8]} {""} {entry[17]} */}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[8], searchTerm)}{" "}
                             {highlightText(entry[17], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            {/* {entry[8]} {""} {entry[17]} */}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[8], searchTerm)}{" "}
+                                {highlightText(entry[17], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[9], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[9], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      {(userType === "TeamLeader" || userType === "Manager") && (
-                        <td className="tabledata">{entry[73]}</td>
-                      )}
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[9], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          {(userType === "TeamLeader" || userType === "Manager") && (
+                            <td className="tabledata">{entry[73]}</td>
+                          )}
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {entry[15]}
-                        <div className="tooltip">
-                          <span className="tooltiptext">{entry[15]}</span>
-                        </div>
-                      </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
+                            {entry[15]}
+                            <div className="tooltip">
+                              <span className="tooltiptext">{entry[15]}</span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[10], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[10], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[10], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
 
-                      >
-                        {highlightText(entry[11], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          >
                             {highlightText(entry[11], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[11], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[12], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[12], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[12], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[13], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[13], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[13], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[14], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[14], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[14], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[16], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[16], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[16], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[18], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[18], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[18], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[19], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[19], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[19], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[20], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[20], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[20], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[21], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[21], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[21], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[22], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[22], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[22], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[23], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[23], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[23], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[24], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[24], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[24], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[25], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[25], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[25], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[26], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[26], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[26], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[27], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[27], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[27], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[28], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[28], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[28], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[29], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[29], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[29], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[30], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[30], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[30], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[31], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[31], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[31], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[32], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[32], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[32], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[33], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[33], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[34], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[33], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[34], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[34], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[35], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[35], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[35], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[36], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[36], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[36], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[37], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[37], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[38], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[37], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[38], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[39], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[38], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[39], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[40], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[39], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[40], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[40], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[41], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[41], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[41], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[42], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[42], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[43], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[42], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[43], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[44], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[43], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[44], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[45], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[44], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[45], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[46], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[45], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[46], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[47], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[46], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[47], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[48], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[47], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[48], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[49], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[48], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[49], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[50], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[49], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[50], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[51], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[50], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[51], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[51], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                  Subcategory:-ResumeViewButton(added) start LineNo:-340
                  Date:-02/07 */}
-                      <td
-                        className="tabledata"
-                        // style={{
-                        //   backgroundColor: entry[52] ? "#80ff80" : "transparent",
-                        // }}
-                      >
-                        <button
-                          className="text-secondary"
-                          onClick={() => openDocumentModal(entry[52])}
-                        >
-                          <i className="fas fa-eye" style={{
-                          color: entry[52] ? "#80ff80" : "transparent",
-                        }}></i>
-                        </button>
-                      </td>
-                      {/* Name:-Akash Pawar Component:-EmployeeMarkSheet
+                          <td
+                            className="tabledata"
+                          // style={{
+                          //   backgroundColor: entry[52] ? "#80ff80" : "transparent",
+                          // }}
+                          >
+                            <button
+                              className="text-secondary"
+                              onClick={() => openDocumentModal(entry[52])}
+                            >
+                              <i className="fas fa-eye" style={{
+                                color: entry[52] ? "#80ff80" : "transparent",
+                              }}></i>
+                            </button>
+                          </td>
+                          {/* Name:-Akash Pawar Component:-EmployeeMarkSheet
                  Subcategory:-ResumeViewButton(added) End LineNo:-354
                  Date:-02/07 */}
-                      {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
+                          {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                  Subcategory:-ResumeViewButton(added) start LineNo:-378
                  Date:-02/07 */}
-                      <td
-                        className="tabledata"
-                        style={{
-                          backgroundColor: entry[53] ? "#80ff80" : "transparent",
-                        }}
-                      >
-                        <button
-                          className="text-secondary"
-                          onClick={() => openDocumentModal(entry[53])}
-                        >
-                          <i className="fas fa-eye"></i>
-                        </button>
-                      </td>
-                      {/* Name:-Akash Pawar Component:-Rejected
+                          <td
+                            className="tabledata"
+                            style={{
+                              backgroundColor: entry[53] ? "#80ff80" : "transparent",
+                            }}
+                          >
+                            <button
+                              className="text-secondary"
+                              onClick={() => openDocumentModal(entry[53])}
+                            >
+                              <i className="fas fa-eye"></i>
+                            </button>
+                          </td>
+                          {/* Name:-Akash Pawar Component:-Rejected
                  Subcategory:-ResumeViewButton(added) End LineNo:-389
                  Date:-02/07 */}
 
-                      {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
+                          {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                  Subcategory:-ResumeViewButton(added) start LineNo:-391
                  Date:-02/07 */}
-                      <td
-                        className="tabledata"
-                        style={{
-                          backgroundColor: entry[54] ? "#80ff80" : "transparent",
-                        }}
-                      >
-                        <button
-                          className="text-secondary"
-                          onClick={() => openDocumentModal(entry[54])}
-                        >
-                          <i className="fas fa-eye"></i>
-                        </button>
-                      </td>
-                      {/* Name:-Akash Pawar Component:-Rejected
+                          <td
+                            className="tabledata"
+                            style={{
+                              backgroundColor: entry[54] ? "#80ff80" : "transparent",
+                            }}
+                          >
+                            <button
+                              className="text-secondary"
+                              onClick={() => openDocumentModal(entry[54])}
+                            >
+                              <i className="fas fa-eye"></i>
+                            </button>
+                          </td>
+                          {/* Name:-Akash Pawar Component:-Rejected
                  Subcategory:-ResumeViewButton(added) End LineNo:-403
                  Date:-02/07 */}
 
-                      {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
+                          {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                  Subcategory:-ResumeViewButton(added) start LineNo:-407
                  Date:-02/07 */}
-                      <td
-                        className="tabledata"
-                        style={{
-                          backgroundColor: entry[55] ? "#80ff80" : "transparent",
-                        }}
-                      >
-                        <button
-                          className="text-secondary"
-                          onClick={() => openDocumentModal(entry[55])}
-                        >
-                          <i className="fas fa-eye"></i>
-                        </button>
-                      </td>
-                      {/* Name:-Akash Pawar Component:-EmployeeMarksheet
+                          <td
+                            className="tabledata"
+                            style={{
+                              backgroundColor: entry[55] ? "#80ff80" : "transparent",
+                            }}
+                          >
+                            <button
+                              className="text-secondary"
+                              onClick={() => openDocumentModal(entry[55])}
+                            >
+                              <i className="fas fa-eye"></i>
+                            </button>
+                          </td>
+                          {/* Name:-Akash Pawar Component:-EmployeeMarksheet
                  Subcategory:-ResumeViewButton(added) End LineNo:-418
                  Date:-02/07 */}
 
-                      {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
+                          {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                  Subcategory:-ResumeViewButton(added) start LineNo:-422
                  Date:-02/07 */}
-                      <td
-                        className="tabledata"
-                        style={{
-                          backgroundColor: entry[56] ? "#80ff80" : "transparent",
-                        }}
-                      >
-                        <button
-                          className="text-secondary"
-                          onClick={() => openDocumentModal(entry[56])}
-                        >
-                          <i className="fas fa-eye"></i>
-                        </button>
-                      </td>
-                      {/* Name:-Akash Pawar Component:-EmployeeMarkSheet
+                          <td
+                            className="tabledata"
+                            style={{
+                              backgroundColor: entry[56] ? "#80ff80" : "transparent",
+                            }}
+                          >
+                            <button
+                              className="text-secondary"
+                              onClick={() => openDocumentModal(entry[56])}
+                            >
+                              <i className="fas fa-eye"></i>
+                            </button>
+                          </td>
+                          {/* Name:-Akash Pawar Component:-EmployeeMarkSheet
                  Subcategory:-ResumeViewButton(added) End LineNo:-433
                  Date:-02/07 */}
 
-                      {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
+                          {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                  Subcategory:-ResumeViewButton(added) start LineNo:-437
                  Date:-02/07 */}
-                      <td
-                        className="tabledata"
-                        style={{
-                          backgroundColor: entry[57] ? "#80ff80" : "transparent",
-                        }}
-                      >
-                        <button
-                          className="text-secondary"
-                          onClick={() => openDocumentModal(entry[57])}
-                        >
-                          <i className="fas fa-eye"></i>
-                        </button>
-                      </td>
-                      {/* Name:-Akash Pawar Component:-Rejected
+                          <td
+                            className="tabledata"
+                            style={{
+                              backgroundColor: entry[57] ? "#80ff80" : "transparent",
+                            }}
+                          >
+                            <button
+                              className="text-secondary"
+                              onClick={() => openDocumentModal(entry[57])}
+                            >
+                              <i className="fas fa-eye"></i>
+                            </button>
+                          </td>
+                          {/* Name:-Akash Pawar Component:-Rejected
                  Subcategory:-ResumeViewButton(added) End LineNo:-448
                  Date:-02/07 */}
 
-                      {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
+                          {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
                  Subcategory:-ResumeViewButton(added) start LineNo:-451
                  Date:-02/07 */}
-                      <td
-                        className="tabledata"
-                        style={{
-                          backgroundColor: entry[58] ? "#80ff80" : "transparent",
-                        }}
-                      >
-                        <button
-                          className="text-secondary"
-                          onClick={() => openDocumentModal(entry[58])}
-                        >
-                          <i className="fas fa-eye"></i>
-                        </button>
-                      </td>
-                      {/* Name:-Akash Pawar Component:-EmployeeMarksheet
+                          <td
+                            className="tabledata"
+                            style={{
+                              backgroundColor: entry[58] ? "#80ff80" : "transparent",
+                            }}
+                          >
+                            <button
+                              className="text-secondary"
+                              onClick={() => openDocumentModal(entry[58])}
+                            >
+                              <i className="fas fa-eye"></i>
+                            </button>
+                          </td>
+                          {/* Name:-Akash Pawar Component:-EmployeeMarksheet
                  Subcategory:-ResumeViewButton(added) End LineNo:-463
                  Date:-02/07 */}
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[59], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[59], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[60], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[59], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[60], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[60], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[61], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[61], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[61], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[62], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[62], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[63], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[62], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[63], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[64], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[63], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[64], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      {/* <td className="tabledata">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[64], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          {/* <td className="tabledata">
                  <button className="View-Interview-History">View</button>
                </td> */}
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[65], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[65], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[66], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[65], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[66], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[67], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[66], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[67], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[68], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[67], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[68], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[69], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[68], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[69], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[70], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[69], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[70], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[71], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[70], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[71], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tabledata"
-                        onMouseOver={handleMouseOver}
-                        onMouseOut={handleMouseOut}
-                      >
-                        {highlightText(entry[72], searchTerm)}
-                        <div className="tooltip">
-                          <span className="tooltiptext">
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[71], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
+                          <td
+                            className="tabledata"
+                            onMouseOver={handleMouseOver}
+                            onMouseOut={handleMouseOut}
+                          >
                             {highlightText(entry[72], searchTerm)}
-                          </span>
-                        </div>
-                      </td>
+                            <div className="tooltip">
+                              <span className="tooltiptext">
+                                {highlightText(entry[72], searchTerm)}
+                              </span>
+                            </div>
+                          </td>
 
-                        <td className="tabledata">
+                          <td className="tabledata">
                             <button className="table-icon-div">
-                             
+
                               <EyeOutlined onClick={() => handleViewPerformance(entry)} />
-                            
+
 
                             </button>
                           </td>
 
-                      <td className="tabledata">
+                          <td className="tabledata">
                             <button className="table-icon-div">
                               {" "}
                               <i
@@ -2179,406 +2185,405 @@ const [showUpdateCallingTracker, setShowUpdateCallingTracker] = useState(false);
                             </button>
                           </td>
 
-                      {/* <td className="tabledata">
+                          {/* <td className="tabledata">
                  <button className="FollowUp-History">View</button>
                </td> */}
-                      {/* <td className="tabledata">
+                          {/* <td className="tabledata">
                  <i className="fa-regular fa-pen-to-square"></i>
                </td> */}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
 
-              {showForwardPopup ? (
-                <>
-                  <AntdModal
-                    className="newclassforantdAlignFront"
-                    title="Share Data" open={displayShareConfirm} onOk={handleShare} onCancel={handleCancelcloseshare}>
-                    <Alert message="Are You Sure ? You Want To Send ?" type="info" showIcon />
-                  </AntdModal>
-                  <div
-                    className="bg-black bg-opacity-50 modal show newclassforsendback"
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      position: "fixed",
-                      width: "100%",
-                      height: "100vh",
-                    }}
-                  >
-                    <Modal.Dialog
-                      style={{
-                        width: "500px",
-                        height: "800px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginTop: "100px",
-                      }}
-                    >
-                      <Modal.Header
-                        style={{ fontSize: "18px", backgroundColor: "#f2f2f2" }}
-                      >
-                        Forward To
-                      </Modal.Header>
-                      <Modal.Body
+                  {showForwardPopup ? (
+                    <>
+                      <AntdModal
+                        className="newclassforantdAlignFront"
+                        title="Share Data" open={displayShareConfirm} onOk={handleShare} onCancel={handleCancelcloseshare}>
+                        <Alert message="Are You Sure ? You Want To Send ?" type="info" showIcon />
+                      </AntdModal>
+                      <div
+                        className="bg-black bg-opacity-50 modal show newclassforsendback"
                         style={{
-                          backgroundColor: "#f2f2f2",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          position: "fixed",
+                          width: "100%",
+                          height: "100vh",
                         }}
                       >
-                        {/* akash_pawar_RejectedCandidate_ShareFunctionality_18/07_1007 */}
-                        <div className="accordion">
-                          {fetchAllManager && userType === "SuperUser" && (
-                            <div className="manager-data-transfer">
-                              <div className="old-manager-data">
-                                <center>
-                                  <h1>Old Managers</h1>
-                                </center>
-                                {fetchAllManager.map((managers) => (
-                                  <div
-                                    className="accordion-item-SU"
-                                    key={managers.managerId}
-                                  >
-                                    <div className="accordion-header-SU">
-                                      <label
-                                        htmlFor={`old-${managers.managerId}`}
-                                        className="accordion-title"
-                                      >
-                                        <input
-                                          type="radio"
-                                          name="oldmanagers"
-                                          id={`old-${managers.managerId}`}
-                                          value={managers.managerId}
-                                          checked={
-                                            oldSelectedManager.oldManagerId ===
-                                            managers.managerId
-                                          }
-                                          onChange={() =>
-                                            setOldSelectedManager({
-                                              oldManagerId: managers.managerId,
-                                              oldManagerJobRole:
-                                                managers.managerJobRole,
-                                            })
-                                          }
-                                        />{" "}
-                                        {managers.managerName}
-                                      </label>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-
-                              <div className="new-manager-data">
-                                <center>
-                                  <h1>New Managers</h1>
-                                </center>
-                                {fetchAllManager
-                                  .filter(
-                                    (item) =>
-                                      item.managerId !==
-                                      oldSelectedManager.oldManagerId
-                                  )
-                                  .map((managers) => (
-                                    <div
-                                      className="accordion-item-SU"
-                                      key={managers.managerId}
-                                    >
-                                      <div className="accordion-header-SU">
-                                        <label
-                                          htmlFor={`new-${managers.managerId}`}
-                                          className="accordion-title"
-                                        >
-                                          <input
-                                            type="radio"
-                                            name="newmanagers"
-                                            id={`new-${managers.managerId}`}
-                                            value={managers.managerId}
-                                            checked={
-                                              newSelectedManager.newManagerId ===
-                                              managers.managerId
-                                            }
-                                            onChange={() =>
-                                              setNewSelectedManager({
-                                                newManagerId: managers.managerId,
-                                                newManagerJobRole:
-                                                  managers.managerJobRole,
-                                              })
-                                            }
-                                          />{" "}
-                                          {managers.managerName}
-                                        </label>
-                                      </div>
-                                    </div>
-                                  ))}
-                              </div>
-                            </div>
-                          )}
-
-                          {fetchTeamleader && userType === "Manager" && (
-                            <div className="teamleader-data-transfer">
-                              <div className="old-teamleader-data">
-                                <center>
-                                  <h1>Old Team Leaders</h1>
-                                </center>
-                                {fetchTeamleader.map((teamleaders) => (
-                                  <div
-                                    className="accordion-item-M"
-                                    key={teamleaders.teamLeaderId}
-                                  >
-                                    <div className="accordion-header-M">
-                                      <label
-                                        htmlFor={`old-${teamleaders.teamLeaderId}`}
-                                        className="accordion-title"
-                                      >
-                                        <input
-                                          type="radio"
-                                          name="oldteamleaders"
-                                          id={`old-${teamleaders.teamLeaderId}`}
-                                          value={teamleaders.teamLeaderId}
-                                          checked={
-                                            oldselectedTeamLeader.oldTeamLeaderId ===
-                                            teamleaders.teamLeaderId
-                                          }
-                                          onChange={() =>
-                                            setOldSelectedTeamLeader({
-                                              oldTeamLeaderId:
-                                                teamleaders.teamLeaderId,
-                                              oldTeamLeaderJobRole:
-                                                teamleaders.teamLeaderJobRole,
-                                            })
-                                          }
-                                        />{" "}
-                                        {teamleaders.teamLeaderName}
-                                      </label>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-
-                              <div className="new-teamleader-data">
-                                <center>
-                                  <h1>New Team Leaders</h1>
-                                </center>
-                                {fetchTeamleader
-                                  .filter(
-                                    (item) =>
-                                      item.teamLeaderId !==
-                                      oldselectedTeamLeader.oldTeamLeaderId
-                                  )
-                                  .map((teamleaders) => (
-                                    <div
-                                      className="accordion-item-M"
-                                      key={teamleaders.managerId}
-                                    >
-                                      <div className="accordion-header-SU">
-                                        <label
-                                          htmlFor={`new-${teamleaders.teamLeaderId}`}
-                                          className="accordion-title"
-                                        >
-                                          <input
-                                            type="radio"
-                                            name="newteamleaders"
-                                            id={`new-${teamleaders.teamLeaderId}`}
-                                            value={teamleaders.teamLeaderId}
-                                            checked={
-                                              newselectedTeamLeader.newTeamLeaderId ===
-                                              teamleaders.teamLeaderId
-                                            }
-                                            onChange={() =>
-                                              setNewSelectedTeamLeader({
-                                                newTeamLeaderId:
-                                                  teamleaders.teamLeaderId,
-                                                newTeamLeaderJobRole:
-                                                  teamleaders.teamLeaderJobRole,
-                                              })
-                                            }
-                                          />{" "}
-                                          {teamleaders.teamLeaderName}
-                                        </label>
-                                      </div>
-                                    </div>
-                                  ))}
-                              </div>
-                            </div>
-                          )}
-                          {userType === "TeamLeader" && (
-                            <div className="accordion-item">
-                              <div className="accordion-header">
-                                <label className="accordion-title">
-                                  {loginEmployeeName}
-                                </label>
-                              </div>
-                              <div className="accordion-content newHegightSetForAlignment">
-                                <form>
-                                  {recruiterUnderTeamLeader &&
-                                    recruiterUnderTeamLeader.map((recruiters) => (
+                        <Modal.Dialog
+                          style={{
+                            width: "500px",
+                            height: "800px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            marginTop: "100px",
+                          }}
+                        >
+                          <Modal.Header
+                            style={{ fontSize: "18px", backgroundColor: "#f2f2f2" }}
+                          >
+                            Forward To
+                          </Modal.Header>
+                          <Modal.Body
+                            style={{
+                              backgroundColor: "#f2f2f2",
+                            }}
+                          >
+                            {/* akash_pawar_RejectedCandidate_ShareFunctionality_18/07_1007 */}
+                            <div className="accordion">
+                              {fetchAllManager && userType === "SuperUser" && (
+                                <div className="manager-data-transfer">
+                                  <div className="old-manager-data">
+                                    <center>
+                                      <h1>Old Managers</h1>
+                                    </center>
+                                    {fetchAllManager.map((managers) => (
                                       <div
-                                        key={recruiters.recruiterId}
-                                        className="form-group"
+                                        className="accordion-item-SU"
+                                        key={managers.managerId}
                                       >
-                                        <label htmlFor={recruiters.employeeId}>
-                                          <input
-                                            style={{ width: "auto" }}
-                                            type="radio"
-                                            id={recruiters.employeeId}
-                                            name="recruiter"
-                                            value={recruiters.employeeId}
-                                            checked={
-                                              selectedRecruiters.recruiterId ===
-                                              recruiters.employeeId
-                                            }
-                                            onChange={() =>
-                                              setSelectedRecruiters({
-                                                index: 1,
-                                                recruiterId:
-                                                  recruiters.employeeId,
-                                                recruiterJobRole:
-                                                  recruiters.jobRole,
-                                              })
-                                            }
-                                          />{" "}
-                                          {recruiters.employeeName}
-                                        </label>
+                                        <div className="accordion-header-SU">
+                                          <label
+                                            htmlFor={`old-${managers.managerId}`}
+                                            className="accordion-title"
+                                          >
+                                            <input
+                                              type="radio"
+                                              name="oldmanagers"
+                                              id={`old-${managers.managerId}`}
+                                              value={managers.managerId}
+                                              checked={
+                                                oldSelectedManager.oldManagerId ===
+                                                managers.managerId
+                                              }
+                                              onChange={() =>
+                                                setOldSelectedManager({
+                                                  oldManagerId: managers.managerId,
+                                                  oldManagerJobRole:
+                                                    managers.managerJobRole,
+                                                })
+                                              }
+                                            />{" "}
+                                            {managers.managerName}
+                                          </label>
+                                        </div>
                                       </div>
                                     ))}
-                                </form>
-                              </div>
+                                  </div>
+
+                                  <div className="new-manager-data">
+                                    <center>
+                                      <h1>New Managers</h1>
+                                    </center>
+                                    {fetchAllManager
+                                      .filter(
+                                        (item) =>
+                                          item.managerId !==
+                                          oldSelectedManager.oldManagerId
+                                      )
+                                      .map((managers) => (
+                                        <div
+                                          className="accordion-item-SU"
+                                          key={managers.managerId}
+                                        >
+                                          <div className="accordion-header-SU">
+                                            <label
+                                              htmlFor={`new-${managers.managerId}`}
+                                              className="accordion-title"
+                                            >
+                                              <input
+                                                type="radio"
+                                                name="newmanagers"
+                                                id={`new-${managers.managerId}`}
+                                                value={managers.managerId}
+                                                checked={
+                                                  newSelectedManager.newManagerId ===
+                                                  managers.managerId
+                                                }
+                                                onChange={() =>
+                                                  setNewSelectedManager({
+                                                    newManagerId: managers.managerId,
+                                                    newManagerJobRole:
+                                                      managers.managerJobRole,
+                                                  })
+                                                }
+                                              />{" "}
+                                              {managers.managerName}
+                                            </label>
+                                          </div>
+                                        </div>
+                                      ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {fetchTeamleader && userType === "Manager" && (
+                                <div className="teamleader-data-transfer">
+                                  <div className="old-teamleader-data">
+                                    <center>
+                                      <h1>Old Team Leaders</h1>
+                                    </center>
+                                    {fetchTeamleader.map((teamleaders) => (
+                                      <div
+                                        className="accordion-item-M"
+                                        key={teamleaders.teamLeaderId}
+                                      >
+                                        <div className="accordion-header-M">
+                                          <label
+                                            htmlFor={`old-${teamleaders.teamLeaderId}`}
+                                            className="accordion-title"
+                                          >
+                                            <input
+                                              type="radio"
+                                              name="oldteamleaders"
+                                              id={`old-${teamleaders.teamLeaderId}`}
+                                              value={teamleaders.teamLeaderId}
+                                              checked={
+                                                oldselectedTeamLeader.oldTeamLeaderId ===
+                                                teamleaders.teamLeaderId
+                                              }
+                                              onChange={() =>
+                                                setOldSelectedTeamLeader({
+                                                  oldTeamLeaderId:
+                                                    teamleaders.teamLeaderId,
+                                                  oldTeamLeaderJobRole:
+                                                    teamleaders.teamLeaderJobRole,
+                                                })
+                                              }
+                                            />{" "}
+                                            {teamleaders.teamLeaderName}
+                                          </label>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+
+                                  <div className="new-teamleader-data">
+                                    <center>
+                                      <h1>New Team Leaders</h1>
+                                    </center>
+                                    {fetchTeamleader
+                                      .filter(
+                                        (item) =>
+                                          item.teamLeaderId !==
+                                          oldselectedTeamLeader.oldTeamLeaderId
+                                      )
+                                      .map((teamleaders) => (
+                                        <div
+                                          className="accordion-item-M"
+                                          key={teamleaders.managerId}
+                                        >
+                                          <div className="accordion-header-SU">
+                                            <label
+                                              htmlFor={`new-${teamleaders.teamLeaderId}`}
+                                              className="accordion-title"
+                                            >
+                                              <input
+                                                type="radio"
+                                                name="newteamleaders"
+                                                id={`new-${teamleaders.teamLeaderId}`}
+                                                value={teamleaders.teamLeaderId}
+                                                checked={
+                                                  newselectedTeamLeader.newTeamLeaderId ===
+                                                  teamleaders.teamLeaderId
+                                                }
+                                                onChange={() =>
+                                                  setNewSelectedTeamLeader({
+                                                    newTeamLeaderId:
+                                                      teamleaders.teamLeaderId,
+                                                    newTeamLeaderJobRole:
+                                                      teamleaders.teamLeaderJobRole,
+                                                  })
+                                                }
+                                              />{" "}
+                                              {teamleaders.teamLeaderName}
+                                            </label>
+                                          </div>
+                                        </div>
+                                      ))}
+                                  </div>
+                                </div>
+                              )}
+                              {userType === "TeamLeader" && (
+                                <div className="accordion-item">
+                                  <div className="accordion-header">
+                                    <label className="accordion-title">
+                                      {loginEmployeeName}
+                                    </label>
+                                  </div>
+                                  <div className="accordion-content newHegightSetForAlignment">
+                                    <form>
+                                      {recruiterUnderTeamLeader &&
+                                        recruiterUnderTeamLeader.map((recruiters) => (
+                                          <div
+                                            key={recruiters.recruiterId}
+                                            className="form-group"
+                                          >
+                                            <label htmlFor={recruiters.employeeId}>
+                                              <input
+                                                style={{ width: "auto" }}
+                                                type="radio"
+                                                id={recruiters.employeeId}
+                                                name="recruiter"
+                                                value={recruiters.employeeId}
+                                                checked={
+                                                  selectedRecruiters.recruiterId ===
+                                                  recruiters.employeeId
+                                                }
+                                                onChange={() =>
+                                                  setSelectedRecruiters({
+                                                    index: 1,
+                                                    recruiterId:
+                                                      recruiters.employeeId,
+                                                    recruiterJobRole:
+                                                      recruiters.jobRole,
+                                                  })
+                                                }
+                                              />{" "}
+                                              {recruiters.employeeName}
+                                            </label>
+                                          </div>
+                                        ))}
+                                    </form>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                            {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_1225 */}
+                          </Modal.Body>
+                          {errorForShare && (
+                            <div style={{ textAlign: "center", color: "red" }}>
+                              {errorForShare}
                             </div>
                           )}
-                        </div>
-                        {/* akash_pawar_ShortlistedCandidate_ShareFunctionality_18/07_1225 */}
-                      </Modal.Body>
-                      {errorForShare && (
-                        <div style={{ textAlign: "center", color: "red" }}>
-                          {errorForShare}
-                        </div>
-                      )}
 
-                      <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
+                          <Modal.Footer style={{ backgroundColor: "#f2f2f2" }}>
 
-                        <button
-                          onClick={handleDisplayShareConfirmClick}
-                          className="EmployeeMasterSheet-share-forward-popup-btn"
-                        >
-                          Share
-                        </button>
-                        <button
-                          onClick={() => setShowForwardPopup(false)}
-                          className="EmployeeMasterSheet-close-forward-popup-btn"
-                        >
-                          Close
-                        </button>
-                      </Modal.Footer>
-                    </Modal.Dialog>
+                            <button
+                              onClick={handleDisplayShareConfirmClick}
+                              className="EmployeeMasterSheet-share-forward-popup-btn"
+                            >
+                              Share
+                            </button>
+                            <button
+                              onClick={() => setShowForwardPopup(false)}
+                              className="EmployeeMasterSheet-close-forward-popup-btn"
+                            >
+                              Close
+                            </button>
+                          </Modal.Footer>
+                        </Modal.Dialog>
 
-                  </div>
+                      </div>
 
-                </>
-              ) : null}
+                    </>
+                  ) : null}
 
-            </div>
+                </div>
 
-            <div className="search-count-last-div">
-              Total Results : {totalRecords}
-            </div>
+                <div className="search-count-last-div">
+                  Total Results : {totalRecords}
+                </div>
 
-            <Pagination
-              current={currentPage}
-              total={totalRecords}
-              pageSize={pageSize}
-              showSizeChanger
-              showQuickJumper
-              onShowSizeChange={handleSizeChange}
-              onChange={handlePageChange}
-              style={{
-                justifyContent: "center",
-              }}
-            />
-            {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
+                <Pagination
+                  current={currentPage}
+                  total={totalRecords}
+                  pageSize={pageSize}
+                  showSizeChanger
+                  showQuickJumper
+                  onShowSizeChange={handleSizeChange}
+                  onChange={handlePageChange}
+                  style={{
+                    justifyContent: "center",
+                  }}
+                />
+                {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
          Subcategory:-ResumeModel(added) End LineNo:-567 Date:-02/07 */}
-            <Modal show={showDocumentModal} onHide={closeDocumentModal} size="md">
-              <Modal.Header closeButton>
-                <Modal.Title>Document</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                {selectedCandidateDocument ? (
-                  <iframe
-                    src={convertToDocumentLink(
-                      selectedCandidateDocument,
-                      "Document.pdf"
+                <Modal show={showDocumentModal} onHide={closeDocumentModal} size="md">
+                  <Modal.Header closeButton>
+                    <Modal.Title>Document</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    {selectedCandidateDocument ? (
+                      <iframe
+                        src={convertToDocumentLink(
+                          selectedCandidateDocument,
+                          "Document.pdf"
+                        )}
+                        width="100%"
+                        height="550px"
+                        title="PDF Viewer"
+                      ></iframe>
+                    ) : (
+                      <p>No Document available</p>
                     )}
-                    width="100%"
-                    height="550px"
-                    title="PDF Viewer"
-                  ></iframe>
-                ) : (
-                  <p>No Document available</p>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={closeDocumentModal}>
+                      Close
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+
+                {selectedPerformanceData && (
+                  <AntdModal
+                    title={`Performance Timeline - ${selectedPerformanceData?.candidateName}`}
+                    open={showPerformanceModal}
+                    onCancel={() => setShowPerformanceModal(false)}
+                    footer={null}
+                    width={800}
+                  >
+                    <Steps direction="vertical" size="small" current={getSteps().length - 1}>
+                      {getSteps().map((step, index) => (
+                        <Step key={index} title={step.title} description={step.description} />
+                      ))}
+                    </Steps>
+
+
+                  </AntdModal>
                 )}
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={closeDocumentModal}>
-                  Close
-                </Button>
-              </Modal.Footer>
-            </Modal>
 
-  {selectedPerformanceData && (
-  <AntdModal
-    title={`Performance Timeline - ${selectedPerformanceData?.candidateName}`}
-    open={showPerformanceModal}
-    onCancel={() => setShowPerformanceModal(false)}
-    footer={null}
-    width={800}
-  >
-    <Steps direction="vertical" size="small" current={getSteps().length - 1}>
-  {getSteps().map((step, index) => (
-    <Step key={index} title={step.title} description={step.description} />
-  ))}
-</Steps>
-
-
-  </AntdModal>
-)}
-
-            {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
+                {/* Name:-Akash Pawar Component:-EmployeeMasterSheet
          Subcategory:-ResumeModel(added) End LineNo:-592 Date:-02/07 */}
-            {isDataSending && (
-              <div className="ShareFunc_Loading_Animation">
-                <ClipLoader size={50} color="#ffb281" />
-              </div>
+                {isDataSending && (
+                  <div className="ShareFunc_Loading_Animation">
+                    <ClipLoader size={50} color="#ffb281" />
+                  </div>
+                )}
+              </>
             )}
-          </>
-        )}
-      </div>
+          </div>
         )
-    }
+      }
 
-{/* //// line number 2460 to 2475 updated by Shweta Jagdale 18-06-2025
+      {/* //// line number 2460 to 2475 updated by Shweta Jagdale 18-06-2025
  */}
       {selectedEntry && showUpdateCallingTracker && (
-          <UpdateCallingTracker
-            candidateId={selectedEntry}
-            employeeId={employeeId}
-            // fromCallingList={true}
-            onSuccess={() => 
-            {
-              fetchData(1, 20)
+        <UpdateCallingTracker
+          candidateId={selectedEntry}
+          employeeId={employeeId}
+          // fromCallingList={true}
+          onSuccess={() => {
+            fetchData(1, 20)
             setSelectedEntry(null);
             setShowUpdateCallingTracker(false);
-            }
-            }
-            onCancel={() => {
-              setShowUpdateCallingTracker(false)
+          }
+          }
+          onCancel={() => {
+            setShowUpdateCallingTracker(false)
             setSelectedEntry(null);
-            }}
-            // onsuccessfulDataUpdation={onsuccessfulDataUpdation}
-            loginEmployeeName={loginEmployeeName}
-            triggerFetch={handleTriggerFetch}
-          />
+          }}
+          // onsuccessfulDataUpdation={onsuccessfulDataUpdation}
+          loginEmployeeName={loginEmployeeName}
+          triggerFetch={handleTriggerFetch}
+        />
 
-)}
+      )}
 
     </>
   );

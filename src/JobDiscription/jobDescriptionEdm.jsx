@@ -17,31 +17,31 @@ function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm, descriptionFromT
   const [voices, setVoices] = useState([]);
   const [voiceLoaded, setVoiceLoaded] = useState(false);
   const { employeeId, userType } = useParams()
-console.log(descriptionFromTempGen);
+  console.log(descriptionFromTempGen);
 
   useEffect(() => {
 
-    if((Descriptions || employeeId || userType) === undefined){
+    if ((Descriptions || employeeId || userType) === undefined) {
       setData({
-  ...descriptionFromTempGen,
-  skills: descriptionFromTempGen.skills.join(", ")
-});
-    }else{
+        ...descriptionFromTempGen,
+        skills: descriptionFromTempGen.skills.join(", ")
+      });
+    } else {
       fetch(`${API_BASE_URL}/edm-details/${Descriptions}/${employeeId}/${userType}`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setData(data);
-        setData({
-          ...data,
-          employeeName: data.employeeName.split(" ")[0] 
-        });
-      })
-      .catch((error) => console.error("Error fetching data:", error));
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setData(data);
+          setData({
+            ...data,
+            employeeName: data.employeeName.split(" ")[0]
+          });
+        })
+        .catch((error) => console.error("Error fetching data:", error));
     }
   }, []);
 
-console.log(data);
+  console.log(data);
 
 
   useEffect(() => {
@@ -114,11 +114,34 @@ console.log(data);
         synth.cancel();
       }
 
+      // const utterance = new SpeechSynthesisUtterance(text);
+      // if (voices.length > 0) {
+      //   utterance.voice = voices[0]; // Use the first available voice
+      // } else {
+      //   console.warn('No voices available.');
+      // }
+
       const utterance = new SpeechSynthesisUtterance(text);
       if (voices.length > 0) {
-        utterance.voice = voices[0]; // Use the first available voice
+        // 1. Prefer Indian voice (hi-IN)
+        const indianVoice = voices.find(v => v.lang.toLowerCase() === "hi-in");
+
+        // 2. Fallback: UK English Female
+        const ukFemaleVoice = voices.find(v =>
+          v.name.toLowerCase().includes("female") && v.lang.toLowerCase().includes("en-gb")
+        );
+
+        // 3. Fallback: any US English Female (if available in future)
+        const usFemaleVoice = voices.find(v =>
+          v.name.toLowerCase().includes("female") && v.lang.toLowerCase().includes("en-us")
+        );
+
+        // Apply voice in priority order
+        utterance.voice = indianVoice || ukFemaleVoice || usFemaleVoice || voices[0];
+
+        console.log("Using voice:", utterance.voice?.name, utterance.voice?.lang);
       } else {
-        console.warn('No voices available.');
+        console.warn("No voices available.");
       }
 
       synth.speak(utterance);
@@ -144,10 +167,10 @@ console.log(data);
     try {
       const input = document.getElementById("shareEMD");
       const canvas = await html2canvas(input, { scale: 2, logging: true });
-  
+
       // Convert canvas to image URL
       const imgData = canvas.toDataURL("image/png");
-  
+
       // Create a temporary anchor element for downloading
       const link = document.createElement("a");
       link.href = imgData;
@@ -159,7 +182,7 @@ console.log(data);
       console.error("Error generating and downloading image:", error);
       setDownloadImg(false);
     }
-    finally{
+    finally {
       setDownloadImg(false);
     }
   };
@@ -171,105 +194,105 @@ console.log(data);
     <div>
       <div className="shareEDMdiv">
         <div className="main-description-share2 newpositionfixedtosharedescriptionedms">
-          <div className="job-posting" id="shareEMD">
+          <div contenteditable="true" className="job-posting" id="shareEMD">
             <div className="image-container">
-            <img 
-  src={
-    employeeId === "3148" && userType === "TeamLeader"
-      ? profileImageRtempus
-      : employeeId === "3691" && userType === "TeamLeader"
-      ? profileImageVelocity
-       : data.image
-      ? `${data.image}`
-      : profileImage
-  }
-  alt="Profile Image"
-/>
+              <img
+                src={
+                  employeeId === "3148" && userType === "TeamLeader"
+                    ? profileImageRtempus
+                    : employeeId === "3691" && userType === "TeamLeader"
+                      ? profileImageVelocity
+                      : data.image
+                        ? `${data.image}`
+                        : profileImage
+                }
+                alt="Profile Image"
+              />
 
             </div>
             <h3 className="share-edm-black-bold"> We are Hiring</h3>
             <h2 className="short-edm-heading"> "{data.designation}"</h2>
             <div className="details">
-            <h3 className="share-edm-black-skill">Required Key Skills</h3>
-                <div className="skill-content">
-                  <p className="share-edm-skill">{data.skills}</p>
-                  <h3 className="share-edm-skill">
-                    Experience Upto {data.experience}
-                  </h3>
-                  <p className="share-edm-skill">Shift :- {data.shift} </p>
-                  <p className="share-edm-skill">
-                    Week Offs : - {data.weekOff}
-                  </p>
-                  {/* <p className="share-edm-skill">
+              <h3 className="share-edm-black-skill">Required Key Skills</h3>
+              <div className="skill-content">
+                <p className="share-edm-skill">{data.skills}</p>
+                <h3 className="share-edm-skill">
+                  Experience Upto {data.experience}
+                </h3>
+                <p className="share-edm-skill">Shift :- {data.shift} </p>
+                <p className="share-edm-skill">
+                  Week Offs : - {data.weekOff}
+                </p>
+                {/* <p className="share-edm-skill">
                     Pick-up and Drop facility available.
                   </p> */}
-                </div>{" "}
-                <br />
-                <p className="share-edm-black-skill">
-                  Salary upto {data.salary}{" "}
-                </p>
-                <p className="share-edm-black-bold-location">
-                  {data.jobType}{" "}
-                  <i
-                    id="location-share-edm"
-                    class="fa-solid fa-location-dot"
-                  ></i>{" "}
-                  {data.location}
-                </p>
+              </div>{" "}
+              <br />
+              <p className="share-edm-black-skill">
+                Salary upto {data.salary}{" "}
+              </p>
+              <p className="share-edm-black-bold-location">
+                {data.jobType}{" "}
+                <i
+                  id="location-share-edm"
+                  class="fa-solid fa-location-dot"
+                ></i>{" "}
+                {data.location}
+              </p>
               <div className="contact">
                 <div className="details1">
                   <br />
                   <h3 className="share-edm-black-skill">For Details</h3>
                   <h4 className="share-edm-contact">
-                  {
-    (employeeId === "3148" && userType === "TeamLeader") 
-      ? "Contact - Rtempus Consulting Services" 
-      : "Contact - 157 Careers"
-  }
+                    {
+                      (employeeId === "3148" && userType === "TeamLeader")
+                        ? "Contact - Rtempus Consulting Services"
+                        : "Contact - 157 Careers"
+                    }
                   </h4>
                   <div className="share-edm-contact-detaisl">
-  <div
-    id="employeeName"
-    contentEditable
-    suppressContentEditableWarning
-    onInput={(e) => handleInputChange(e, "employeeName")}
-    className="share-edm-input newClassnameForSolveSoniaMaanProblem"
-  >
-    {data.employeeName}
-  </div>
-  {" | "}
-  <div
-    id="officialMail"
-    contentEditable
-    suppressContentEditableWarning
-    onInput={(e) => handleInputChange(e, "officialMail")}
-    className="share-edm-input newClassnameForSolveSoniaMaanProblem"
-  >
-    {data.officialMail}
-  </div>
-  {" | "}
-  <div
-    id="officialContactNo"
-    contentEditable
-    suppressContentEditableWarning
-    onInput={(e) => handleInputChange(e, "officialContactNo")}
-    className="share-edm-input newClassnameForSolveSoniaMaanProblem"
-  >
-    {data.officialContactNo}
-  </div>
-</div>
+                    <div
+                      id="employeeName"
+                      contentEditable
+                      suppressContentEditableWarning
+                      onInput={(e) => handleInputChange(e, "employeeName")}
+                      className="share-edm-input newClassnameForSolveSoniaMaanProblem"
+                    >
+                      {data.employeeName}
+                    </div>
+                    {" | "}
+                    <div
+                      id="officialMail"
+                      contentEditable
+                      suppressContentEditableWarning
+                      onInput={(e) => handleInputChange(e, "officialMail")}
+                      className="share-edm-input newClassnameForSolveSoniaMaanProblem"
+                    >
+                      {data.officialMail}
+                    </div>
+                    {" | "}
+                    <div
+                      id="officialContactNo"
+                      contentEditable
+                      suppressContentEditableWarning
+                      onInput={(e) => handleInputChange(e, "officialContactNo")}
+                      className="share-edm-input newClassnameForSolveSoniaMaanProblem"
+                    >
+                      {data.officialContactNo}
+                    </div>
+                  </div>
 
                 </div>
               </div>
             </div>
             <button
-            onClick={togglePlay}
-            className="mt-4 bg-[#ffcb9b] hover:bg-white text-white hover:text-[#ffcb9b] shadow font-bold py-2 px-4 rounded transition duration-300"
-          >
-            <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
-          </button>
+              onClick={togglePlay}
+              className="mt-4 bg-[#ffcb9b] hover:bg-white text-white hover:text-[#ffcb9b] shadow font-bold py-2 px-4 rounded transition duration-300"
+            >
+              <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
+            </button>
           </div>
-          
+
           <section className="apply-section-share">
             <button
               className="apply-button-share"
@@ -284,18 +307,18 @@ console.log(data);
               Download Job Description
             </button>
             <button
-             onClick={closeJobDescrptionShare}
+              onClick={closeJobDescrptionShare}
               className="apply-button-share"
             >
               &#10006;
             </button>
           </section>
-          
+
         </div>
-        
+
       </div>
-  </div>
-);
+    </div>
+  );
 }
 
 export default JobDescriptionEdm;

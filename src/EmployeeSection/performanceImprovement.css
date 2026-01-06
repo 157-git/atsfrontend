@@ -573,10 +573,7 @@ strong {
   margin-top: 0px;
 }
 
-.chartDownloaddivteamperformance {
-  margin-top: 20px;
-  width: 100%;
-}
+
 
 .containergridteamperformance {
   display: flex;
@@ -681,19 +678,55 @@ strong {
   }
 }
 /* Rajlaxmi Jagadale Updated taht code 11/04/2025 */
-.chart-display {
-  width: 70%;
-  max-width: 1000px; 
-  margin: 0 auto; 
-  padding: 30px;
-  border: 2px solid #ccc; 
-  border-radius: 10px; 
-  box-sizing: border-box; 
-  background-color: #fff; 
+.chartDownloaddivteamperformance {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.chartdispaly {
+.chart-display {
+  width: 100%;
+  max-width: 800px;
+  height: 500px; /* Fixed height for the container */
+  margin: 0 auto;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+  background-color: #fff;
+  position: relative;
+}
+
+/* .chartdispaly {
   width: 100%; 
   height: 400px; 
   object-fit: contain; 
+} */
+
+.PIE-jobId-modal-headteamperformance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.PIE-selectAll-modal-btnteamperformance {
+  font-size: 12px;          /* smaller than title */
+  padding: 4px 10px;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+  border: 1px solid #d9d9d9;
+  cursor: pointer;
+  margin-right: 50px;
+}
+
+.PIE-selectAll-modal-btnteamperformance:hover {
+  background-color: #e6f4ff;
+  border-color: #1677ff;
+}
+
+.PIE-selectAll-modal-btnteamperformance:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

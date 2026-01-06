@@ -53,7 +53,7 @@ function DailyWork({
   const [buttonColor, setButtonColor] = useState(() => {
     return localStorage.getItem("buttonColor");
   });
-  const triggerFetch = useSelector((state) => state.trigger.triggerFetch);
+  {/*const triggerFetch = useSelector((state) => state.trigger.triggerFetch);*/ }
 
   const getStoredTime = () => {
     const storedTime = localStorage.getItem(`stopwatchTime_${employeeId}`);
@@ -89,14 +89,16 @@ function DailyWork({
   const [expiryMessage, setExpiryMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [paymentMade, setPaymentMade] = useState(false);
-  const currentDateNewGlobal = getFormattedDateISOYMDformat();
-  const [messagesContext, contextHolder] = notification.useNotification({
+  //Samruddhi Patole
+  const [dailyTarget, setDailyTarget] = useState(0);
+  {/*const currentDateNewGlobal = getFormattedDateISOYMDformat();*/ }
+  {/*const [messagesContext, contextHolder] = notification.useNotification({
     stack: true
       ? {
-        threshold: 1,
-      }
+          threshold: 1,
+        }
       : false,
-  });
+  });*/}
 
   const getLoginLogoutStatus = () => {
     try {
@@ -171,7 +173,7 @@ function DailyWork({
       }
     } catch (error) {
       console.error("Error fetching employee details:", error);
-      setProfileImage(dummyUserImg);
+      {/* setProfileImage(dummyUserImg);*/ }
     }
   };
 
@@ -663,8 +665,8 @@ function DailyWork({
 
   // updated by sahil karnekar
   useEffect(() => {
-    const newSocket = initializeSocket(employeeId, userType);
-    setSocket(newSocket);
+    {/*const newSocket = initializeSocket(employeeId, userType);*/ }
+    {/*setSocket(newSocket);*/ }
   }, []);
 
   // updated by sahil karnekar date 30-12-2024
@@ -1250,21 +1252,14 @@ function DailyWork({
   const fetchNewWorkId = async () => {
     try {
       const currentDateNew = getFormattedDateISOYMDformat();
-
       const resp = await axios.get(
         `${API_BASE_URL}/fetch-work-id/${employeeId}/${userType}/${currentDateNew}`
       );
-      console.log("EMPLOYEE NAME:--", loginEmployeeName)
-
-      console.log("gtng", resp.data)
       const yesNo = resp.data;
 
       if (typeof yesNo === "string") {
         console.log("running post");
-
         try {
-                console.log("EMPLOYEE NAME222:--", loginEmployeeName)
-
           const respPost = await axios.post(
             `${API_BASE_URL}/save-daily-work/${employeeId}/${userType}`,
             {
@@ -1324,9 +1319,10 @@ function DailyWork({
         } catch (errorget) { }
       }
     } catch (error) {
-      console.error(error);
+      {/* console.error(error);*/ }
     }
   };
+  //samruddhi Patole
 
   useEffect(() => {
     fetchNewWorkId();
@@ -1371,57 +1367,35 @@ function DailyWork({
       }
     }
   };
-const handleStartClick = async (value) => {
-  if (value === true) {
-    const breakEndTime = getCurrentTimeForUpdateData();
-
-    // Wait for name availability
-    let empName = loginEmployeeName || employeeData?.name;
-
-    if (!empName) {
-      console.warn("Employee name not ready yet — retrying in 5 second...");
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      empName = loginEmployeeName || employeeData?.name;
-    }
-
-    if (!empName) {
-      console.error("Employee name still missing! Aborting startPutReq.");
-      return;
-    }
-
-    try {
-      const getDataForUpdate = {
-        attendanceRole: {
-          ...(userType === "Recruiters" && { employee: { employeeId } }),
-          ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
-          ...(userType === "Manager" && { manager: { employeeId } }),
-        },
-        employeeName: empName, // guaranteed non-empty now
-        dailyHours: [
-          {
-            breakStartTime,
-            breakEndTime,
+  const handleStartClick = async (value) => {
+    if (value === true) {
+      const breakEndTime = getCurrentTimeForUpdateData();
+      try {
+        const getDataForUpdate = {
+          attendanceRole: {
+            ...(userType === "Recruiters" && { employee: { employeeId } }),
+            ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
+            ...(userType === "Manager" && { manager: { employeeId } }),
           },
-        ],
-      };
+          dailyHours: [
+            {
+              breakStartTime,
+              breakEndTime,
+            },
+          ],
+        };
+        // console.log(getDataForUpdate);
 
-      console.log("putDataReqBody", getDataForUpdate);
-
-      const startPutReq = await putDailyworkData(
-        employeeId,
-        userType,
-        currentDateNewGlobal,
-        getDataForUpdate
-      );
-
-      console.log("startPutReq success:", startPutReq);
-    } catch (error) {
-      console.error(" Error in startPutReq:", error);
+        const startPutReq = await putDailyworkData(
+          employeeId,
+          userType,
+          currentDateNewGlobal,
+          getDataForUpdate
+        );
+        // console.log(startPutReq);
+      } catch (error) { }
     }
-  }
-};
-
-
+  };
   const fetchDailyworkGetPendingAchivedData = async () => {
     try {
       const getData = await getDailyworkData(
@@ -1449,15 +1423,15 @@ const handleStartClick = async (value) => {
     }
   };
 
-  useEffect(() => {
+  {/*useEffect(() => {
     fetchDailyworkGetPendingAchivedData();
-  }, [trigger, triggerFetch]); // Runs when 'trigger' changes
+  }, [trigger, triggerFetch]); // Runs when 'trigger' changes*/}
   return (
     <div className="daily-timeanddate">
       <a href="#">
         <div className="head" onClick={profilePageLink}>
           <div className="user-img">
-            <img src={profileImage || dummyUserImg} alt="Profile" />
+            {/* <img src={profileImage || dummyUserImg} alt="Profile" />*/}
           </div>
           <div className="user-details">
             <p>
@@ -1486,7 +1460,7 @@ const handleStartClick = async (value) => {
           <div
             className={`all-daily-btns ${!showAllDailyBtns ? "hidden" : ""}`}
           >
-            {contextHolder}
+            {/* {contextHolder}*/}
             <div className="daily-t-btn">
               <button className="daily-tr-btn" style={{ whiteSpace: "nowrap" }} id="dailyTarget">
                 Target:{" "}
@@ -1574,12 +1548,12 @@ const handleStartClick = async (value) => {
                 style={{ marginRight: "10px" }}
                 onClick={toggleNotificationBox}
               >
-                <Badge
+                {/*<Badge
                   color="var(--notification-badge-background)"
                   count={messages.length}
                 >
                   <Avatar shape="square" icon={<BellOutlined />} />
-                </Badge>
+                </Badge>*/}
               </div>
             </div>
             <div
@@ -1645,17 +1619,17 @@ const handleStartClick = async (value) => {
                 </div>
               </div>
               <div className="buttonsDivForNotifications">
-                <CloseOutlined
+                {/* <CloseOutlined
                   style={{
                     color: "red",
                   }}
                   onClick={toggleNotificationBox}
-                />
+                />*/}
                 <button
                   className="cleaarButtonOfNotifications daily-tr-btn"
                   onClick={handleClearNotifications}
                 >
-                  Clear <ClearOutlined />
+                  {/*Clear <ClearOutlined />*/}
                 </button>
               </div>
             </div>
@@ -1700,7 +1674,7 @@ const handleStartClick = async (value) => {
                     className="profile-resume-button"
                     onClick={handleResume}
                   >
-                    <LogOut size={24} color="black" />
+                    {/* <LogOut size={24} color="black" />*/}
                   </button>
                 </div>
               </Modal.Footer>

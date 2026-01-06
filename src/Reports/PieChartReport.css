@@ -124,6 +124,7 @@ border-right: 1px solid black;
 .newsahilcanvas{
   width: 500px;
   height: 450px;
+  position: none;
 }
 .newClassnameForHideAndDisplay{
   display: none;
