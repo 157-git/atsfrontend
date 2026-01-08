@@ -665,8 +665,8 @@ function DailyWork({
 
   // updated by sahil karnekar
   useEffect(() => {
-    {/*const newSocket = initializeSocket(employeeId, userType);*/ }
-    {/*setSocket(newSocket);*/ }
+    const newSocket = initializeSocket(employeeId, userType);
+    setSocket(newSocket);
   }, []);
 
   // updated by sahil karnekar date 30-12-2024
@@ -899,9 +899,9 @@ function DailyWork({
         console.log;
         ("Connection failed. Ensure your details are correct.");
       });
-      return () => {
-        socket.disconnect();
-      };
+      // return () => {
+      //   socket.disconnect();
+      // };
     }
     // console.log(messages);
   }, [socket, employeeId]);
@@ -1431,7 +1431,7 @@ function DailyWork({
       <a href="#">
         <div className="head" onClick={profilePageLink}>
           <div className="user-img">
-            {/* <img src={profileImage || dummyUserImg} alt="Profile" />*/}
+            <img src={profileImage || dummyUserImg} alt="Profile" />
           </div>
           <div className="user-details">
             <p>
@@ -1548,12 +1548,12 @@ function DailyWork({
                 style={{ marginRight: "10px" }}
                 onClick={toggleNotificationBox}
               >
-                {/*<Badge
+                <Badge
                   color="var(--notification-badge-background)"
                   count={messages.length}
                 >
                   <Avatar shape="square" icon={<BellOutlined />} />
-                </Badge>*/}
+                </Badge>
               </div>
             </div>
             <div
