@@ -51,48 +51,45 @@ function ForcefullyLogoutTask() {
   };
 
   // Function to verify OTP and forcefully logout
-  const verifyOtpAndLogout = async () => {
-    setLoading(true);
+const verifyOtpAndLogout = async () => {
+  setLoading(true);
 
-    if (!otp.trim()) {
-      toast.error("Please enter the OTP.");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        `${API_BASE_URL}/logout-verify-Otp/${userType}`,
-        { email, otp }
-      );
-
-      console.log("OTP VERIFY RESPONSE 👉", response.data);
-
-      toast.success(response.data.message);
-
-      // ✅ NEW: AUTO LOGIN
-const { employeeId, userType: role } = response.data;
-
-// Mimic normal login exactly
-localStorage.setItem("employeeId", employeeId);
-localStorage.setItem("userType", role);
-
-
-      // Reset form
-      setEmail("");
-      setOtp("");
-      setOtpSent(false);
-
-      // ✅ Directly go to dashboard
-      navigate(`/Dashboard/${employeeId}/${userType}`);
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Error verifying OTP."
-      );
-    }
-
+  if (!otp.trim()) {
+    toast.error("Please enter the OTP.");
     setLoading(false);
-  };
+    return;
+  }
+
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/logout-verify-Otp/${userType}`,
+      { email, otp }
+    );
+
+    console.log("OTP VERIFY RESPONSE 👉", response.data);
+
+    const { action, employeeId, userType: role, message } = response.data;
+
+    toast.success(message);
+
+    if (action === "AUTO_LOGIN") {
+      localStorage.setItem("employeeId", employeeId);
+      localStorage.setItem("userType", role);
+      navigate(`/Dashboard/${employeeId}/${role}`);
+    } else {
+      navigate("/login/:userType");
+    }
+
+    setEmail("");
+    setOtp("");
+    setOtpSent(false);
+
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Error verifying OTP.");
+  }
+
+  setLoading(false);
+};
 
 
   return (

@@ -8,14 +8,12 @@ import { getFormattedDateTime } from "./getFormattedDateTime";
 import { fetchCompleteProfileData } from "../HandlerFunctions/fetchCompleteProfileData";
 import Loader from "./loader";
 
-const AddTeamLeader = ({loginEmployeeName, updateEmployeeIdForForm}) => {
-    // const API_BASE_URL="https://rg.157careers.in/api/ats/157industries"
+const AddTeamLeader = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
 
   const { employeeId, userType } = useParams();
-  // const employeeId=869
-  // const userType="Manager"
+
   const [formData, setFormData] = useState({
-    teamLeaderId:"0",
+    teamLeaderId: "0",
     teamLeaderName: "",
     userName: "",
     tlDateOfJoining: "",
@@ -86,298 +84,298 @@ const AddTeamLeader = ({loginEmployeeName, updateEmployeeIdForForm}) => {
   const [passwordError, setPasswordError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errors, setErrors] = useState({});
-   const [socket, setSocket] = useState(null);
-   const [loading, setLoading] = useState(false);
+  const [socket, setSocket] = useState(null);
+  const [loading, setLoading] = useState(false);
 
 
 
-     useEffect(() => {
-       const fetchData = async () => {
-         if (updateEmployeeIdForForm) {
-           setLoading(true);
-           try {
-             const resp = await fetchCompleteProfileData(updateEmployeeIdForForm, "TeamLeader");
-             setFormData((prevFormData) => ({
-               ...resp,
-               tlAadhaarNo: resp.aadhaarNo,
-               tlAddress : resp.address,
-               tlAlternateContactNo: resp.alternateContactNo,
-               tlAnniversaryDate : resp.anniversaryDate,
-               tlCompanyMobileNo: resp.companyMobileNo,
-               tlConfirmPassword: resp.confirmPassword,
-               tlDateOfBirth : resp.dateOfBirth,
-               tlDateOfJoining: resp.dateOfJoining,
-               tlDepartment: resp.department,
-               tlDesignation : resp.designation,
-               editDeleteAuthority: resp.editDeleteAuthority,
-               tlEmergencyContactNo: resp.emergencyContactNo,
-               tlEmergencyContactPerson: resp.emergencyContactPerson,
-               tlEmergencyPersonRelation: resp.emergencyPersonRelation,
-               tlEntrySource: resp.entrySource,
-               esIcNo: resp.esIcNo,
-               tlExperience: resp.experience,
-               faceBookURL: resp.faceBookURL,
-               tlGender: resp.gender,
-               tlInductionComment: resp.inductionComment,
-               tlInductionYesOrNo: resp.inductionYesOrNo,
-               tlInsuranceNumber: resp.insuranceNumber,
-               tlInterviewTakenPerson: resp.interviewTakenPerson,
-               jobLevel: resp.jobRole,
-               tlLastCompany: resp.lastCompany,
-               linkedInURL: resp.linkedInURL,
-               tlMaritalStatus: resp.maritalStatus,
-               messageForAdmin: resp.messageForAdmin,
-               teamLeaderName: resp.name,
-               tlOfficialContactNo: resp.officialContactNo,
-               tlOfficialMail: resp.officialMail,
-               tlPanNo: resp.panNo,
-               tlPassword: resp.password,
-               tlPerformanceIndicator: resp.performanceIndicator,
-               tlPerks: resp.perks,
-               tlPersonalEmailId: resp.personalEmailId,
-               tlPresentAddress: resp.presentAddress,
-               professionalPtNo: resp.professionalPtNo,
-               tlQualification: resp.qualification,
-               tlReasonForLeaving: resp.reasonForLeaving,
-               reportingAdminDesignation: resp.reportingPersonDesignation,
-               reportingAdminName: resp.reportingPersonName,
-               tlRoundsOfInterview: resp.roundsOfInterview,
-               tlSalary: resp.salary,
-               teamLeaderStatus: resp.status,
-               tlTrainingCompleted:resp.trainingCompletedYesOrNo,
-               tlTrainingSource: resp.trainingSource,
-               tlTrainingTakenCount: resp.trainingTakenCount,
-               tlTShirtSize: resp.tshirtSize,
-               twitterURL: resp.twitterURL,
-               tlWarningComments: resp.warningComments,
-               tlWhatsAppNo: resp.whatsAppNo,
-               tlWorkLocation: resp.workLocation,
-               lastWorkingDate: resp.workingDate
+  useEffect(() => {
+    const fetchData = async () => {
+      if (updateEmployeeIdForForm) {
+        setLoading(true);
+        try {
+          const resp = await fetchCompleteProfileData(updateEmployeeIdForForm, "TeamLeader");
+          setFormData((prevFormData) => ({
+            ...resp,
+            tlAadhaarNo: resp.aadhaarNo,
+            tlAddress: resp.address,
+            tlAlternateContactNo: resp.alternateContactNo,
+            tlAnniversaryDate: resp.anniversaryDate,
+            tlCompanyMobileNo: resp.companyMobileNo,
+            tlConfirmPassword: resp.confirmPassword,
+            tlDateOfBirth: resp.dateOfBirth,
+            tlDateOfJoining: resp.dateOfJoining,
+            tlDepartment: resp.department,
+            tlDesignation: resp.designation,
+            editDeleteAuthority: resp.editDeleteAuthority,
+            tlEmergencyContactNo: resp.emergencyContactNo,
+            tlEmergencyContactPerson: resp.emergencyContactPerson,
+            tlEmergencyPersonRelation: resp.emergencyPersonRelation,
+            tlEntrySource: resp.entrySource,
+            esIcNo: resp.esIcNo,
+            tlExperience: resp.experience,
+            faceBookURL: resp.faceBookURL,
+            tlGender: resp.gender,
+            tlInductionComment: resp.inductionComment,
+            tlInductionYesOrNo: resp.inductionYesOrNo,
+            tlInsuranceNumber: resp.insuranceNumber,
+            tlInterviewTakenPerson: resp.interviewTakenPerson,
+            jobLevel: resp.jobRole,
+            tlLastCompany: resp.lastCompany,
+            linkedInURL: resp.linkedInURL,
+            tlMaritalStatus: resp.maritalStatus,
+            messageForAdmin: resp.messageForAdmin,
+            teamLeaderName: resp.name,
+            tlOfficialContactNo: resp.officialContactNo,
+            tlOfficialMail: resp.officialMail,
+            tlPanNo: resp.panNo,
+            tlPassword: resp.password,
+            tlPerformanceIndicator: resp.performanceIndicator,
+            tlPerks: resp.perks,
+            tlPersonalEmailId: resp.personalEmailId,
+            tlPresentAddress: resp.presentAddress,
+            professionalPtNo: resp.professionalPtNo,
+            tlQualification: resp.qualification,
+            tlReasonForLeaving: resp.reasonForLeaving,
+            reportingAdminDesignation: resp.reportingPersonDesignation,
+            reportingAdminName: resp.reportingPersonName,
+            tlRoundsOfInterview: resp.roundsOfInterview,
+            tlSalary: resp.salary,
+            teamLeaderStatus: resp.status,
+            tlTrainingCompleted: resp.trainingCompletedYesOrNo,
+            tlTrainingSource: resp.trainingSource,
+            tlTrainingTakenCount: resp.trainingTakenCount,
+            tlTShirtSize: resp.tshirtSize,
+            twitterURL: resp.twitterURL,
+            tlWarningComments: resp.warningComments,
+            tlWhatsAppNo: resp.whatsAppNo,
+            tlWorkLocation: resp.workLocation,
+            lastWorkingDate: resp.workingDate
 
-           }));
-             console.log("Response from API:", resp);
-           } catch (error) {
-             console.error("Error fetching employee data:", error);
-           }finally{
-             setLoading(false);
-           }
-         }
-       };
-     
-       fetchData();
-     }, [updateEmployeeIdForForm, employeeId, userType]);
-//-----------SAKSHI KASHID 09/07/2025------------------
-     const validateField = (name, value, file = null) => {
-  switch (name) {
-    case "teamLeaderName":
-      const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
-      if (value.trim() !== value) return "No space at start or end.";
-      if (!nameRegex.test(value)) return "Only alphabets allowed. No special chars. One space between words.";
-      if (value.length > 30) return "Max 30 characters allowed.";
-      break;
-
-    case "tlOfficialMail":
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(value)) return "Invalid email format.";
-      break;
-
-    case "userName":
-    const userRegex = /^(?![.])[a-zA-Z0-9._]+(?<![.])$/;
-    if (value.trim() !== value) return "No space at start or end.";
-    if (!userRegex.test(value)) return "Only letters, numbers and symbols( . and _ ) allowed, . not allowed at start and end.";
-    if (value.length > 15) return "Max 15 characters allowed.";
-    break;
-
-
-    case "tlOfficialContactNo":
-      if (!/^\d{10}$/.test(value)) return "Must be exactly 10 digits.";
-      break;
-
-    case "tlAadhaarNo":
-      if (!/^\d{12}$/.test(value)) return "Must be exactly 12 digits.";
-      break;
-
-    case "tlPanNo":
-      if (!/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(value)) return "PAN must be in format: ABCDE1234F";
-      break;
-
-    case "tlPresentAddress":
-      if (value.length > 100) return "Max 100 characters allowed.";
-      break;
-
-    case "profileImage":
-      const allowedImageTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif"];
-      if (file && !allowedImageTypes.includes(file.type)) return "Only PNG, JPG, JPEG, GIF allowed.";
-      break;
-
-    case "resumeFile":
-      const allowedDocTypes = [
-        "application/pdf",
-        "application/msword",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      ];
-      if (file && !allowedDocTypes.includes(file.type)) return "Only PDF or Word files allowed.";
-      break;
-
-    case "tlPassword":
-      const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$/;
-      if (!passwordRegex.test(value)) return "Min 8 chars, 1 capital, 1 number, 1 special char.";
-      break;
-
-    case "tlConfirmPassword":
-      if (value !== formData.tlPassword) return "Passwords do not match.";
-      break;
-
-    case "tlDesignation":
-      if (value.length > 30) return "Max 30 characters allowed.";
-      break;
-
-    case "tlAlternateContactNo":
-    case "tlCompanyMobileNo":
-    case "tlWhatsAppNo":
-    case "tlEmergencyContactNo":
-      if (value && !/^\d{10}$/.test(value)) return "Must be exactly 10 digits.";
-      break;
-
-    case "tlInsuranceNumber":
-    case "professionalPtNo":
-    case "esIcNo":
-    case "pfNo":
-      if (value && !/^\d{6,20}$/.test(value)) return "Only digits allowed (6 to 20 digits).";
-      break;
-
-    case "tlTrainingTakenCount":
-    case "tlRoundsOfInterview":
-      if (value && !/^\d+$/.test(value)) return "Must be a valid number.";
-      break;
-
-    case "tlQualification":
-    case "bloodGroup":
-    case "reportingAdminName":
-    case "reportingAdminDesignation":
-      if (value && /\d/.test(value)) return "Numbers not allowed.";
-      break;
-
-    case "editDeleteAuthority":
-    case "messageForAdmin":
-      if (value && value.length > 100) return "Max 100 characters allowed.";
-      break;
-
-
-    default:
-      return "";
-  }
-};
-
-//-----------SAKSHI KASHID 09/07/2025------------
-  const handleInputChange = (e) => {
-  const { name, value, type, files } = e.target;
-
-  if (type === "file") {
-    const file = files[0];
-    if (!file) return;
-  
-    // File size limits (in bytes)
-    const maxSizes = {
-      profileImage: 2 * 1024 * 1024,     // 2 MB
-      resumeFile: 5 * 1024 * 1024,       // 5 MB
-      document: 5 * 1024 * 1024    // 5 MB
+          }));
+          console.log("Response from API:", resp);
+        } catch (error) {
+          console.error("Error fetching employee data:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
     };
-  
-    // Check size limit if applicable
-    if (maxSizes[name] && file.size > maxSizes[name]) {
-      const readableSize = maxSizes[name] / (1024 * 1024);
-      // toast.error(`${name} should not exceed ${readableSize} MB.`);
-      setErrors((prev) => ({
-        ...prev,
-        [name]: `File size must be ≤ ${readableSize} MB.`,
-      }));
+
+    fetchData();
+  }, [updateEmployeeIdForForm, employeeId, userType]);
+  //-----------SAKSHI KASHID 09/07/2025------------------
+  const validateField = (name, value, file = null) => {
+    switch (name) {
+      case "teamLeaderName":
+        const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+        if (value.trim() !== value) return "No space at start or end.";
+        if (!nameRegex.test(value)) return "Only alphabets allowed. No special chars. One space between words.";
+        if (value.length > 30) return "Max 30 characters allowed.";
+        break;
+
+      case "tlOfficialMail":
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) return "Invalid email format.";
+        break;
+
+      case "userName":
+        const userRegex = /^(?![.])[a-zA-Z0-9._]+(?<![.])$/;
+        if (value.trim() !== value) return "No space at start or end.";
+        if (!userRegex.test(value)) return "Only letters, numbers and symbols( . and _ ) allowed, . not allowed at start and end.";
+        if (value.length > 15) return "Max 15 characters allowed.";
+        break;
+
+
+      case "tlOfficialContactNo":
+        if (!/^\d{10}$/.test(value)) return "Must be exactly 10 digits.";
+        break;
+
+      case "tlAadhaarNo":
+        if (!/^\d{12}$/.test(value)) return "Must be exactly 12 digits.";
+        break;
+
+      case "tlPanNo":
+        if (!/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(value)) return "PAN must be in format: ABCDE1234F";
+        break;
+
+      case "tlPresentAddress":
+        if (value.length > 100) return "Max 100 characters allowed.";
+        break;
+
+      case "profileImage":
+        const allowedImageTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif"];
+        if (file && !allowedImageTypes.includes(file.type)) return "Only PNG, JPG, JPEG, GIF allowed.";
+        break;
+
+      case "resumeFile":
+        const allowedDocTypes = [
+          "application/pdf",
+          "application/msword",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ];
+        if (file && !allowedDocTypes.includes(file.type)) return "Only PDF or Word files allowed.";
+        break;
+
+      case "tlPassword":
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$/;
+        if (!passwordRegex.test(value)) return "Min 8 chars, 1 capital, 1 number, 1 special char.";
+        break;
+
+      case "tlConfirmPassword":
+        if (value !== formData.tlPassword) return "Passwords do not match.";
+        break;
+
+      case "tlDesignation":
+        if (value.length > 30) return "Max 30 characters allowed.";
+        break;
+
+      case "tlAlternateContactNo":
+      case "tlCompanyMobileNo":
+      case "tlWhatsAppNo":
+      case "tlEmergencyContactNo":
+        if (value && !/^\d{10}$/.test(value)) return "Must be exactly 10 digits.";
+        break;
+
+      case "tlInsuranceNumber":
+      case "professionalPtNo":
+      case "esIcNo":
+      case "pfNo":
+        if (value && !/^\d{6,20}$/.test(value)) return "Only digits allowed (6 to 20 digits).";
+        break;
+
+      case "tlTrainingTakenCount":
+      case "tlRoundsOfInterview":
+        if (value && !/^\d+$/.test(value)) return "Must be a valid number.";
+        break;
+
+      case "tlQualification":
+      case "bloodGroup":
+      case "reportingAdminName":
+      case "reportingAdminDesignation":
+        if (value && /\d/.test(value)) return "Numbers not allowed.";
+        break;
+
+      case "editDeleteAuthority":
+      case "messageForAdmin":
+        if (value && value.length > 100) return "Max 100 characters allowed.";
+        break;
+
+
+      default:
+        return "";
+    }
+  };
+
+  //-----------SAKSHI KASHID 09/07/2025------------
+  const handleInputChange = (e) => {
+    const { name, value, type, files } = e.target;
+
+    if (type === "file") {
+      const file = files[0];
+      if (!file) return;
+
+      // File size limits (in bytes)
+      const maxSizes = {
+        profileImage: 2 * 1024 * 1024,     // 2 MB
+        resumeFile: 5 * 1024 * 1024,       // 5 MB
+        document: 5 * 1024 * 1024    // 5 MB
+      };
+
+      // Check size limit if applicable
+      if (maxSizes[name] && file.size > maxSizes[name]) {
+        const readableSize = maxSizes[name] / (1024 * 1024);
+        // toast.error(`${name} should not exceed ${readableSize} MB.`);
+        setErrors((prev) => ({
+          ...prev,
+          [name]: `File size must be ≤ ${readableSize} MB.`,
+        }));
+        return;
+      }
+      const error = validateField(name, "", file);
+      if (error) {
+        setErrors((prev) => ({ ...prev, [name]: error }));
+      } else {
+        setErrors((prev) => ({ ...prev, [name]: "" }));
+        setFormData((prev) => ({ ...prev, [name]: file }));
+      }
       return;
     }
-    const error = validateField(name, "", file);
+
+    // Run custom validation for required fields
+    const error = validateField(name, value);
     if (error) {
       setErrors((prev) => ({ ...prev, [name]: error }));
     } else {
       setErrors((prev) => ({ ...prev, [name]: "" }));
-      setFormData((prev) => ({ ...prev, [name]: file }));
     }
-    return;
-  }
 
-  // Run custom validation for required fields
-  const error = validateField(name, value);
-  if (error) {
-    setErrors((prev) => ({ ...prev, [name]: error }));
-  } else {
-    setErrors((prev) => ({ ...prev, [name]: "" }));
-  }
-
-  // Existing text-only field checks
-  if (
-    [
-      "teamLeaderName",
-      "tlDesignation",
-      "tlDepartment",
-      "tlPerks",
-      "tlLastCompany",
-      "tlWorkLocation",
-      "tlEntrySource",
-      "tlReasonForLeaving",
-      "tlInductionComment",
-      "tlTrainingSource",
-      "tlEmergencyContactPerson",
-      "tlEmergencyPersonRelation",
-      "tlInterviewTakenPerson",
-      "tlWarningComments",
-      "tlPerformanceIndicator",
-      "messageForAdmin",
-      "editDeleteAuthority",
-      "bloodGroup",
-      "tlQualification",
-      "reportingAdminName",
-      "reportingAdminDesignation"
-    ].includes(name)
-  ) {
-    if (/\d/.test(value)) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "Please enter character value only.",
-      }));
+    // Existing text-only field checks
+    if (
+      [
+        "teamLeaderName",
+        "tlDesignation",
+        "tlDepartment",
+        "tlPerks",
+        "tlLastCompany",
+        "tlWorkLocation",
+        "tlEntrySource",
+        "tlReasonForLeaving",
+        "tlInductionComment",
+        "tlTrainingSource",
+        "tlEmergencyContactPerson",
+        "tlEmergencyPersonRelation",
+        "tlInterviewTakenPerson",
+        "tlWarningComments",
+        "tlPerformanceIndicator",
+        "messageForAdmin",
+        "editDeleteAuthority",
+        "bloodGroup",
+        "tlQualification",
+        "reportingAdminName",
+        "reportingAdminDesignation"
+      ].includes(name)
+    ) {
+      if (/\d/.test(value)) {
+        setErrors((prev) => ({
+          ...prev,
+          [name]: "Please enter character value only.",
+        }));
+      }
     }
-  }
 
-  // Existing numeric-only field checks
-  if (
-    [
-      "tlOfficialContactNo",
-      "tlAlternateContactNo",
-      "tlCompanyMobileNo",
-      "tlWhatsAppNo",
-      "tlEmergencyContactNo",
-      "tlInsuranceNumber",
-      "tlAadhaarNo",
-      "tlSalary",
-      "tlTrainingTakenCount",
-      "professionalPtNo",
-      "esIcNo",
-      "pfNo",
-      "tlRoundsOfInterview"
-    ].includes(name)
-  ) {
-    if (/[^0-9]/.test(value)) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "Please enter numeric value only.",
-      }));
+    // Existing numeric-only field checks
+    if (
+      [
+        "tlOfficialContactNo",
+        "tlAlternateContactNo",
+        "tlCompanyMobileNo",
+        "tlWhatsAppNo",
+        "tlEmergencyContactNo",
+        "tlInsuranceNumber",
+        "tlAadhaarNo",
+        "tlSalary",
+        "tlTrainingTakenCount",
+        "professionalPtNo",
+        "esIcNo",
+        "pfNo",
+        "tlRoundsOfInterview"
+      ].includes(name)
+    ) {
+      if (/[^0-9]/.test(value)) {
+        setErrors((prev) => ({
+          ...prev,
+          [name]: "Please enter numeric value only.",
+        }));
+      }
     }
-  }
 
-  // Always update formData
-  setFormData((prev) => ({
-    ...prev,
-    [name]: value,
-  }));
-};
+    // Always update formData
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
 
   const handleConfirmPasswordBlur = () => {
@@ -395,162 +393,162 @@ const AddTeamLeader = ({loginEmployeeName, updateEmployeeIdForForm}) => {
   }, []);
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const fieldMapping = {
-  teamLeaderName: "teamLeaderName",
-  userName: "userName",
-  tlDateOfJoining: "tlDateOfJoining",
-  tlDesignation: "tlDesignation",
-  tlDepartment: "tlDepartment",
-  tlOfficialMail: "tlOfficialMail",
-  tlPersonalEmailId: "tlPersonalEmailId",
-  tlOfficialContactNo: "tlOfficialContactNo",
-  tlAlternateContactNo: "tlAlternateContactNo",
-  tlDateOfBirth: "tlDateOfBirth",
-  tlGender: "tlGender",
-  jobLevel: "jobLevel",
-  tlCompanyMobileNo: "tlCompanyMobileNo",
-  tlWhatsAppNo: "tlWhatsAppNo",
-  tlEmergencyContactPerson: "tlEmergencyContactPerson",
-  tlEmergencyContactNo: "tlEmergencyContactNo",
-  tlEmergencyPersonRelation: "tlEmergencyPersonRelation",
-  tlPresentAddress: "tlPresentAddress",
-  tlExperience: "tlExperience",
-  tlPerks: "tlPerks",
-  tlMaritalStatus: "tlMaritalStatus",
-  tlAnniversaryDate: "tlAnniversaryDate",
-  tlTShirtSize: "tlTShirtSize",
-  tlLastCompany: "tlLastCompany",
-  tlWorkLocation: "tlWorkLocation",
-  tlEntrySource: "tlEntrySource",
-  teamLeaderStatus: "teamLeaderStatus",
-  lastWorkingDate: "lastWorkingDate",
-  tlReasonForLeaving: "tlReasonForLeaving",
-  tlInductionYesOrNo: "tlInductionYesOrNo",
-  tlInductionComment: "tlInductionComment",
-  tlTrainingSource: "tlTrainingSource",
-  tlTrainingCompleted: "tlTrainingCompleted",
-  tlTrainingTakenCount: "tlTrainingTakenCount",
-  tlRoundsOfInterview: "tlRoundsOfInterview",
-  tlInterviewTakenPerson: "tlInterviewTakenPerson",
-  tlWarningComments: "tlWarningComments",
-  tlPerformanceIndicator: "tlPerformanceIndicator",
-  messageForAdmin: "messageForAdmin",
-  editDeleteAuthority: "editDeleteAuthority",
-  linkedInURL: "linkedInURL",
-  faceBookURL: "faceBookURL",
-  twitterURL: "twitterURL",
-  tlAddress: "tlAddress",
-  bloodGroup: "bloodGroup",
-  tlAadhaarNo: "tlAadhaarNo",
-  tlPanNo: "tlPanNo",
-  tlQualification: "tlQualification",
-  tlSalary: "tlSalary",
-  professionalPtNo: "professionalPtNo",
-  esIcNo: "esIcNo",
-  pfNo: "pfNo",
-  tlInsuranceNumber: "tlInsuranceNumber",
-  reportingAdminName: "reportingAdminName",
-  reportingAdminDesignation: "reportingAdminDesignation",
-  tlPassword: "tlPassword",
-  tlConfirmPassword: "tlConfirmPassword",
-  profileImage: "profileImage",
-  document: "document",
-  resumeFile: "resumeFile"
-};
+    const fieldMapping = {
+      teamLeaderName: "teamLeaderName",
+      userName: "userName",
+      tlDateOfJoining: "tlDateOfJoining",
+      tlDesignation: "tlDesignation",
+      tlDepartment: "tlDepartment",
+      tlOfficialMail: "tlOfficialMail",
+      tlPersonalEmailId: "tlPersonalEmailId",
+      tlOfficialContactNo: "tlOfficialContactNo",
+      tlAlternateContactNo: "tlAlternateContactNo",
+      tlDateOfBirth: "tlDateOfBirth",
+      tlGender: "tlGender",
+      jobLevel: "jobLevel",
+      tlCompanyMobileNo: "tlCompanyMobileNo",
+      tlWhatsAppNo: "tlWhatsAppNo",
+      tlEmergencyContactPerson: "tlEmergencyContactPerson",
+      tlEmergencyContactNo: "tlEmergencyContactNo",
+      tlEmergencyPersonRelation: "tlEmergencyPersonRelation",
+      tlPresentAddress: "tlPresentAddress",
+      tlExperience: "tlExperience",
+      tlPerks: "tlPerks",
+      tlMaritalStatus: "tlMaritalStatus",
+      tlAnniversaryDate: "tlAnniversaryDate",
+      tlTShirtSize: "tlTShirtSize",
+      tlLastCompany: "tlLastCompany",
+      tlWorkLocation: "tlWorkLocation",
+      tlEntrySource: "tlEntrySource",
+      teamLeaderStatus: "teamLeaderStatus",
+      lastWorkingDate: "lastWorkingDate",
+      tlReasonForLeaving: "tlReasonForLeaving",
+      tlInductionYesOrNo: "tlInductionYesOrNo",
+      tlInductionComment: "tlInductionComment",
+      tlTrainingSource: "tlTrainingSource",
+      tlTrainingCompleted: "tlTrainingCompleted",
+      tlTrainingTakenCount: "tlTrainingTakenCount",
+      tlRoundsOfInterview: "tlRoundsOfInterview",
+      tlInterviewTakenPerson: "tlInterviewTakenPerson",
+      tlWarningComments: "tlWarningComments",
+      tlPerformanceIndicator: "tlPerformanceIndicator",
+      messageForAdmin: "messageForAdmin",
+      editDeleteAuthority: "editDeleteAuthority",
+      linkedInURL: "linkedInURL",
+      faceBookURL: "faceBookURL",
+      twitterURL: "twitterURL",
+      tlAddress: "tlAddress",
+      bloodGroup: "bloodGroup",
+      tlAadhaarNo: "tlAadhaarNo",
+      tlPanNo: "tlPanNo",
+      tlQualification: "tlQualification",
+      tlSalary: "tlSalary",
+      professionalPtNo: "professionalPtNo",
+      esIcNo: "esIcNo",
+      pfNo: "pfNo",
+      tlInsuranceNumber: "tlInsuranceNumber",
+      reportingAdminName: "reportingAdminName",
+      reportingAdminDesignation: "reportingAdminDesignation",
+      tlPassword: "tlPassword",
+      tlConfirmPassword: "tlConfirmPassword",
+      profileImage: "profileImage",
+      document: "document",
+      resumeFile: "resumeFile"
+    };
 
 
-  const requiredFields = [
-    "teamLeaderName",
-    "userName",
-    "tlDateOfJoining",
-    "tlOfficialMail",
-    "tlOfficialContactNo",
-    "tlPresentAddress",
-    "tlAadhaarNo",
-    "tlPanNo",
-    "tlPassword",
-    "tlConfirmPassword",
-    "profileImage",
-    "resumeFile"
-  ];
+    const requiredFields = [
+      "teamLeaderName",
+      "userName",
+      "tlDateOfJoining",
+      "tlOfficialMail",
+      "tlOfficialContactNo",
+      "tlPresentAddress",
+      "tlAadhaarNo",
+      "tlPanNo",
+      "tlPassword",
+      "tlConfirmPassword",
+      "profileImage",
+      "resumeFile"
+    ];
 
-  let missingFields = [];
+    let missingFields = [];
 
-  requiredFields.forEach((field) => {
-    const value = formData[field];
+    requiredFields.forEach((field) => {
+      const value = formData[field];
 
-    if (field === "profileImage" || field === "resumeFile") {
-      if (!(value instanceof File)) {
+      if (field === "profileImage" || field === "resumeFile") {
+        if (!(value instanceof File)) {
+          missingFields.push(field);
+        }
+      } else if (
+        value === undefined ||
+        value === null ||
+        (typeof value === "string" && value.trim() === "")
+      ) {
         missingFields.push(field);
       }
-    } else if (
-      value === undefined ||
-      value === null ||
-      (typeof value === "string" && value.trim() === "")
-    ) {
-      missingFields.push(field);
-    }
-  });
-
-  console.log("Missing fields:", missingFields);
-
-  if (missingFields.length > 0) {
-    let fieldErrors = {};
-    missingFields.forEach((field) => {
-      fieldErrors[field] = "This field is required.";
     });
-    setErrors(fieldErrors);
-    toast.error("Please fill all required fields.");
-    return;
-  }
 
-  if (!passwordMatch) {
-    setPasswordError("Passwords do not match");
-    return;
-  }
-   const numericFields = [
-  "tlOfficialContactNo",
-  "tlAlternateContactNo",
-  "tlCompanyMobileNo",
-  "tlWhatsAppNo",
-  "tlEmergencyContactNo",
-  "tlAadhaarNo",
-  "tlSalary",
-  "tlTrainingTakenCount",
-  "professionalPtNo",
-  "esIcNo",
-  "pfNo",
-  "tlInsuranceNumber",
-  "tlRoundsOfInterview",
-  "teamLeaderId"
-];
+    console.log("Missing fields:", missingFields);
 
-const formDataToSend = new FormData();
-
-for (const key in formData) {
-  let value = formData[key];
-
-  if (numericFields.includes(key)) {
-    // ✅ Always send numeric, fallback to "0"
-    if (value === "" || value === null || value === undefined) {
-      value = "0";
+    if (missingFields.length > 0) {
+      let fieldErrors = {};
+      missingFields.forEach((field) => {
+        fieldErrors[field] = "This field is required.";
+      });
+      setErrors(fieldErrors);
+      toast.error("Please fill all required fields.");
+      return;
     }
-  } else {
-    // For non-numeric fields, skip if empty
-    if (value === "" || value === null || value === undefined) {
-      continue;
+
+    if (!passwordMatch) {
+      setPasswordError("Passwords do not match");
+      return;
     }
-  }
+    const numericFields = [
+      "tlOfficialContactNo",
+      "tlAlternateContactNo",
+      "tlCompanyMobileNo",
+      "tlWhatsAppNo",
+      "tlEmergencyContactNo",
+      "tlAadhaarNo",
+      "tlSalary",
+      "tlTrainingTakenCount",
+      "professionalPtNo",
+      "esIcNo",
+      "pfNo",
+      "tlInsuranceNumber",
+      "tlRoundsOfInterview",
+      "teamLeaderId"
+    ];
 
-  const backendKey = fieldMapping[key] || key;
-  formDataToSend.append(backendKey, value.toString()); // force string
-}
+    const formDataToSend = new FormData();
 
-if (!formDataToSend.has("teamLeaderId")) {
-  formDataToSend.append("teamLeaderId", "0");
-}
+    for (const key in formData) {
+      let value = formData[key];
+
+      if (numericFields.includes(key)) {
+        // ✅ Always send numeric, fallback to "0"
+        if (value === "" || value === null || value === undefined) {
+          value = "0";
+        }
+      } else {
+        // For non-numeric fields, skip if empty
+        if (value === "" || value === null || value === undefined) {
+          continue;
+        }
+      }
+
+      const backendKey = fieldMapping[key] || key;
+      formDataToSend.append(backendKey, value.toString()); // force string
+    }
+
+    if (!formDataToSend.has("teamLeaderId")) {
+      formDataToSend.append("teamLeaderId", "0");
+    }
 
     try {
       const response = await fetch(
@@ -561,151 +559,151 @@ if (!formDataToSend.has("teamLeaderId")) {
         }
       );
 
-  const responseBody = await response.json();
-  console.log("Response Body:", responseBody);
-  let newId = responseBody.id;
-  if (response.ok) {
-    console.log(loginEmployeeName);
+      const responseBody = await response.json();
+      console.log("Response Body:", responseBody);
+      let newId = responseBody.id;
+      if (response.ok) {
+        console.log(loginEmployeeName);
 
-const emitData = {
-  // teamLeaderId:"0",
-  //userType: "TeamLeader",
-  teamLeaderName: formData.teamLeaderName,
-  userName: formData.userName,
-  tlDateOfJoining: getFormattedDateTime(),
-  tlDesignation: "",
-  tlDepartment: "",
-  tlOfficialMail: "",
-  tlPersonalEmailId: "",
-  tlOfficialContactNo: "",
-  tlAlternateContactNo: "",
-  tlDateOfBirth: "",
-  tlGender: "",
-  tlCompanyMobileNo: "",
-  tlWhatsAppNo: "",
-  tlEmergencyContactPerson: "",
-  tlEmergencyContactNo: "",
-  tlEmergencyPersonRelation: "",
-  tlPresentAddress: "",
-  tlExperience: "",
-  tlPerks: "",
-  tlMaritalStatus: "",
-  tlAnniversaryDate: "",
-  tlTShirtSize: "",
-  tlLastCompany: "",
-  tlWorkLocation: "",
-  tlEntrySource: "",
-  teamLeaderStatus: "",
-  lastWorkingDate: "",
-  tlReasonForLeaving: "",
-  tlInductionYesOrNo: "",
-  tlInductionComment: "",
-  tlTrainingSource: "",
-  tlTrainingCompleted: "",
-  tlTrainingTakenCount: "",
-  tlRoundsOfInterview: "",
-  tlInterviewTakenPerson: "",
-  tlWarningComments: "",
-  tlPerformanceIndicator: "",
-  messageForAdmin: "",
-  editDeleteAuthority: "",
-  linkedInURL: "",
-  faceBookURL: "",
-  twitterURL: "",
-  tlAddress: "",
-  bloodGroup: "",
-  tlAadhaarNo: "",
-  tlPanNo: "",
-  tlQualification: "",
-  tlSalary: "",
-  jobLevel: formData.jobLevel,
-  professionalPtNo: "",
-  esIcNo: "",
-  pfNo: "",
-  tlPassword: "",
-  tlConfirmPassword: "",
-  tlInsuranceNumber: "",
-  reportingAdminName: loginEmployeeName,
-  reportingAdminDesignation: "",
-  employeeId:newId,
-  userType: "TeamLeader",
-};
+        const emitData = {
+          // teamLeaderId:"0",
+          //userType: "TeamLeader",
+          teamLeaderName: formData.teamLeaderName,
+          userName: formData.userName,
+          tlDateOfJoining: getFormattedDateTime(),
+          tlDesignation: "",
+          tlDepartment: "",
+          tlOfficialMail: "",
+          tlPersonalEmailId: "",
+          tlOfficialContactNo: "",
+          tlAlternateContactNo: "",
+          tlDateOfBirth: "",
+          tlGender: "",
+          tlCompanyMobileNo: "",
+          tlWhatsAppNo: "",
+          tlEmergencyContactPerson: "",
+          tlEmergencyContactNo: "",
+          tlEmergencyPersonRelation: "",
+          tlPresentAddress: "",
+          tlExperience: "",
+          tlPerks: "",
+          tlMaritalStatus: "",
+          tlAnniversaryDate: "",
+          tlTShirtSize: "",
+          tlLastCompany: "",
+          tlWorkLocation: "",
+          tlEntrySource: "",
+          teamLeaderStatus: "",
+          lastWorkingDate: "",
+          tlReasonForLeaving: "",
+          tlInductionYesOrNo: "",
+          tlInductionComment: "",
+          tlTrainingSource: "",
+          tlTrainingCompleted: "",
+          tlTrainingTakenCount: "",
+          tlRoundsOfInterview: "",
+          tlInterviewTakenPerson: "",
+          tlWarningComments: "",
+          tlPerformanceIndicator: "",
+          messageForAdmin: "",
+          editDeleteAuthority: "",
+          linkedInURL: "",
+          faceBookURL: "",
+          twitterURL: "",
+          tlAddress: "",
+          bloodGroup: "",
+          tlAadhaarNo: "",
+          tlPanNo: "",
+          tlQualification: "",
+          tlSalary: "",
+          jobLevel: formData.jobLevel,
+          professionalPtNo: "",
+          esIcNo: "",
+          pfNo: "",
+          tlPassword: "",
+          tlConfirmPassword: "",
+          tlInsuranceNumber: "",
+          reportingAdminName: loginEmployeeName,
+          reportingAdminDesignation: "",
+          employeeId: newId,
+          userType: "TeamLeader",
+        };
 
-console.log(emitData);
+        console.log(emitData);
 
-toast.success("Employee Data Added Successfully.");
+        toast.success("Employee Data Added Successfully.");
         // socket.emit("add_teamLeader_event", emitData);
         setFormData({
-            teamLeaderId:"0",
-            teamLeaderName: "",
-            userName: "",
-            tlDateOfJoining: "",
-            tlDesignation: "",
-            tlDepartment: "",
-            tlOfficialMail: "",
-            tlPersonalEmailId: "",
-            tlOfficialContactNo: "",
-            tlAlternateContactNo: "",
-            tlDateOfBirth: "",
-            tlGender: "",
-            tlCompanyMobileNo: "",
-            tlWhatsAppNo: "",
-            tlEmergencyContactPerson: "",
-            tlEmergencyContactNo: "",
-            tlEmergencyPersonRelation: "",
-            tlPresentAddress: "",
-            tlExperience: "",
-            tlPerks: "",
-            tlMaritalStatus: "",
-            tlAnniversaryDate: "",
-            tlTShirtSize: "",
-            tlLastCompany: "",
-            tlWorkLocation: "",
-            tlEntrySource: "",
-            teamLeaderStatus: "",
-            lastWorkingDate: "",
-            tlReasonForLeaving: "",
-            tlInductionYesOrNo: "",
-            tlInductionComment: "",
-            tlTrainingSource: "",
-            tlTrainingCompleted: "",
-            tlTrainingTakenCount: "",
-            tlRoundsOfInterview: "",
-            tlInterviewTakenPerson: "",
-            tlWarningComments: "",
-            tlPerformanceIndicator: "",
-            messageForAdmin: "",
-            editDeleteAuthority: "",
-            linkedInURL: "",
-            faceBookURL: "",
-            twitterURL: "",
-            tlAddress: "",
-            bloodGroup: "",
-            tlAadhaarNo: "",
-            tlPanNo: "",
-            tlQualification: "",
-            tlSalary: "",
-            jobLevel: "",
-            professionalPtNo: "",
-            esIcNo: "",
-            pfNo: "",
-            tlPassword: "",
-            tlConfirmPassword: "",
-            tlInsuranceNumber: "",
-            reportingAdminName: "",
-            reportingAdminDesignation: "",
-            profileImage: null,
-            document: null,
-            resumeFile: null,
+          teamLeaderId: "0",
+          teamLeaderName: "",
+          userName: "",
+          tlDateOfJoining: "",
+          tlDesignation: "",
+          tlDepartment: "",
+          tlOfficialMail: "",
+          tlPersonalEmailId: "",
+          tlOfficialContactNo: "",
+          tlAlternateContactNo: "",
+          tlDateOfBirth: "",
+          tlGender: "",
+          tlCompanyMobileNo: "",
+          tlWhatsAppNo: "",
+          tlEmergencyContactPerson: "",
+          tlEmergencyContactNo: "",
+          tlEmergencyPersonRelation: "",
+          tlPresentAddress: "",
+          tlExperience: "",
+          tlPerks: "",
+          tlMaritalStatus: "",
+          tlAnniversaryDate: "",
+          tlTShirtSize: "",
+          tlLastCompany: "",
+          tlWorkLocation: "",
+          tlEntrySource: "",
+          teamLeaderStatus: "",
+          lastWorkingDate: "",
+          tlReasonForLeaving: "",
+          tlInductionYesOrNo: "",
+          tlInductionComment: "",
+          tlTrainingSource: "",
+          tlTrainingCompleted: "",
+          tlTrainingTakenCount: "",
+          tlRoundsOfInterview: "",
+          tlInterviewTakenPerson: "",
+          tlWarningComments: "",
+          tlPerformanceIndicator: "",
+          messageForAdmin: "",
+          editDeleteAuthority: "",
+          linkedInURL: "",
+          faceBookURL: "",
+          twitterURL: "",
+          tlAddress: "",
+          bloodGroup: "",
+          tlAadhaarNo: "",
+          tlPanNo: "",
+          tlQualification: "",
+          tlSalary: "",
+          jobLevel: "",
+          professionalPtNo: "",
+          esIcNo: "",
+          pfNo: "",
+          tlPassword: "",
+          tlConfirmPassword: "",
+          tlInsuranceNumber: "",
+          reportingAdminName: "",
+          reportingAdminDesignation: "",
+          profileImage: null,
+          document: null,
+          resumeFile: null,
         })
       } else {
-              toast.error("Please Fill All Inputs.");
-            }
-          } catch (error) {
-            console.error("Error:", error);
-            toast.error("Error occurred while adding teamleader data.");
-          }
-        };
+        toast.error("Please Fill All Inputs.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error occurred while adding teamleader data.");
+    }
+  };
 
 
   const togglePasswordVisibility = () => {
@@ -728,9 +726,9 @@ toast.success("Employee Data Added Successfully.");
         encType="multipart/form-data"
       >
         <input type="text" name="teamLeaderId" value={formData.teamLeaderId} hidden id="" />
-    
+
         <div className="addRec-form-row">
-<label>Team Leader Name: <span style={{ color: "red" }}>&nbsp;*</span></label>
+          <label>Team Leader Name: <span style={{ color: "red" }}>&nbsp;*</span></label>
           <input
             type="text"
             name="teamLeaderName"
@@ -745,7 +743,7 @@ toast.success("Employee Data Added Successfully.");
         </div>
 
         <div className="addRec-form-row">
-<label>Date of Joining: <span style={{ color: "red" }}>&nbsp;*</span></label>
+          <label>Date of Joining: <span style={{ color: "red" }}>&nbsp;*</span></label>
           <input
             type="date"
             name="tlDateOfJoining"
@@ -758,7 +756,7 @@ toast.success("Employee Data Added Successfully.");
         </div>
 
         <div className="addRec-form-row">
-<label>Designation: <span style={{ color: "red" }}>&nbsp;*</span></label>
+          <label>Designation: <span style={{ color: "red" }}>&nbsp;*</span></label>
           <input
             type="text"
             name="tlDesignation"
@@ -785,28 +783,28 @@ toast.success("Employee Data Added Successfully.");
           )}
         </div>
 
-       
-        <div className="addRec-form-row">
-<label>Job Role: <span style={{ color: "red" }}>&nbsp;*</span></label>
-  <select
-  name="jobLevel"
-  value={formData.jobLevel}
-  onChange={handleInputChange}
-  className={`readonly-input ${errors.jobLevel ? "input-error" : ""}`}
->
-  <option value="">Select</option>
-  <option value="TeamLeader">Team Leader</option>
-</select>
-
-{errors.jobLevel && (
-  <span className="error-message">{errors.jobLevel}</span>
-)}
-
-</div>
-
 
         <div className="addRec-form-row">
-<label>Official Email: <span style={{ color: "red" }}>&nbsp;*</span></label>
+          <label>Job Role: <span style={{ color: "red" }}>&nbsp;*</span></label>
+          <select
+            name="jobLevel"
+            value={formData.jobLevel}
+            onChange={handleInputChange}
+            className={`readonly-input ${errors.jobLevel ? "input-error" : ""}`}
+          >
+            <option value="">Select</option>
+            <option value="TeamLeader">Team Leader</option>
+          </select>
+
+          {errors.jobLevel && (
+            <span className="error-message">{errors.jobLevel}</span>
+          )}
+
+        </div>
+
+
+        <div className="addRec-form-row">
+          <label>Official Email: <span style={{ color: "red" }}>&nbsp;*</span></label>
           <input
             type="email"
             name="tlOfficialMail"
@@ -832,7 +830,7 @@ toast.success("Employee Data Added Successfully.");
         </div>
 
         <div className="addRec-form-row">
-<label>User Name: <span style={{ color: "red" }}>&nbsp;*</span></label>
+          <label>User Name: <span style={{ color: "red" }}>&nbsp;*</span></label>
           <input
             type="text"
             name="userName"
@@ -861,7 +859,7 @@ toast.success("Employee Data Added Successfully.");
         </div>
 
         <div className="addRec-form-row">
-<label>Official Contact Number: <span style={{ color: "red" }}>&nbsp;*</span></label>
+          <label>Official Contact Number: <span style={{ color: "red" }}>&nbsp;*</span></label>
           <input
             type="text"
             accept="0-9"
@@ -947,17 +945,17 @@ toast.success("Employee Data Added Successfully.");
 
         <div className="addRec-form-row">
           {formData.maritalStatus === "Married" && (
-          <div className="form-group">
-            <label>Anniversary Date:</label>
-            <input
-              type="date"
-              name="anniversaryDate"
-              value={formData.anniversaryDate}
-              onChange={handleInputChange}
-              className="form-control"
-            />
-          </div>
-        )}
+            <div className="form-group">
+              <label>Anniversary Date:</label>
+              <input
+                type="date"
+                name="anniversaryDate"
+                value={formData.anniversaryDate}
+                onChange={handleInputChange}
+                className="form-control"
+              />
+            </div>
+          )}
 
         </div>
 
@@ -1036,7 +1034,7 @@ toast.success("Employee Data Added Successfully.");
 
         </div>
         <div className="addRec-form-row">
-<label>Aadhaar Number: <span style={{ color: "red" }}>&nbsp;*</span></label>
+          <label>Aadhaar Number: <span style={{ color: "red" }}>&nbsp;*</span></label>
           <input
             type="text"
             name="tlAadhaarNo"
@@ -1048,7 +1046,7 @@ toast.success("Employee Data Added Successfully.");
         </div>
 
         <div className="addRec-form-row">
-<label>PAN Card Number: <span style={{ color: "red" }}>&nbsp;*</span></label>
+          <label>PAN Card Number: <span style={{ color: "red" }}>&nbsp;*</span></label>
           <input
             type="text"
             name="tlPanNo"
@@ -1085,7 +1083,7 @@ toast.success("Employee Data Added Successfully.");
         </div>
 
         <div className="addRec-form-row">
-<label>Employee Present Address: <span style={{ color: "red" }}>&nbsp;*</span></label>
+          <label>Employee Present Address: <span style={{ color: "red" }}>&nbsp;*</span></label>
           <input
             type="text"
             name="tlPresentAddress"
@@ -1473,154 +1471,154 @@ toast.success("Employee Data Added Successfully.");
           )}
         </div>
         <div className="addRec-form-row">
-  <label>
-    Upload Resume: <span style={{ color: "red" }}>&nbsp;*</span>
-  </label>
-  <div className="wraptickindiv">
-    <input
-      type="file"
-      name="resumeFile"
-      accept=".pdf, .docx"
-      onChange={handleInputChange}
-    />
+          <label>
+            Upload Resume: <span style={{ color: "red" }}>&nbsp;*</span>
+          </label>
+          <div className="wraptickindiv">
+            <input
+              type="file"
+              name="resumeFile"
+              accept=".pdf, .docx"
+              onChange={handleInputChange}
+            />
 
-    {errors.resumeFile && (
-      <div className="error">{errors.resumeFile}</div>
-    )}
+            {errors.resumeFile && (
+              <div className="error">{errors.resumeFile}</div>
+            )}
 
-    {formData.resumeFile && (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="24px"
-        viewBox="0 -960 960 960"
-        width="24px"
-        fill="#78A75A"
-      >
-        <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z" />
-      </svg>
-    )}
-  </div>
-</div>
-
-        <div className="addRec-form-row">
-  <label>
-    Upload Profile Image: <span style={{ color: "red" }}>&nbsp;*</span>
-  </label>
-
-  <div className="wraptickindiv">
-    <input
-      type="file"
-      name="profileImage"
-      accept=".png, .jpg, .jpeg, .gif" // ✅ Restrict to image formats
-      onChange={handleInputChange}
-    />
-
-    {errors.profileImage && (
-      <div className="error">{errors.profileImage}</div>
-    )}
-
-    {formData.profileImage && (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="24px"
-        viewBox="0 -960 960 960"
-        width="24px"
-        fill="#78A75A"
-      >
-        <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z" />
-      </svg>
-    )}
-  </div>
-</div>
-
+            {formData.resumeFile && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#78A75A"
+              >
+                <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z" />
+              </svg>
+            )}
+          </div>
+        </div>
 
         <div className="addRec-form-row">
-  <label>Upload Document:</label>
+          <label>
+            Upload Profile Image: <span style={{ color: "red" }}>&nbsp;*</span>
+          </label>
 
-  <div className="wraptickindiv">
-    <input
-      type="file"
-      name="document"
-      accept=".pdf, .docx"
-      multiple
-      onChange={handleInputChange}
-    />
+          <div className="wraptickindiv">
+            <input
+              type="file"
+              name="profileImage"
+              accept=".png, .jpg, .jpeg, .gif" // ✅ Restrict to image formats
+              onChange={handleInputChange}
+            />
 
-    {errors.document && (
-      <div className="error">{errors.document}</div>
-    )}
+            {errors.profileImage && (
+              <div className="error">{errors.profileImage}</div>
+            )}
 
-    {formData.document && (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="24px"
-        viewBox="0 -960 960 960"
-        width="24px"
-        fill="#78A75A"
-      >
-        <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/>
-      </svg>
-    )}
-  </div>
-</div>
+            {formData.profileImage && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#78A75A"
+              >
+                <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z" />
+              </svg>
+            )}
+          </div>
+        </div>
 
 
-<div className="addRec-form-row">
-  <label>Password: <span style={{ color: "red" }}>&nbsp;*</span></label>
-  <div className="wrapper-eye">
-    <div
-      className="password-eye-icon"
-      onMouseEnter={() => setPasswordVisible(true)}
-      onMouseLeave={() => setPasswordVisible(false)}
-    >
-      <i className={`bi ${passwordVisible ? "bi-eye-slash" : "bi-eye"}`}></i>
-    </div>
-    <input
-      type={passwordVisible ? "text" : "password"}
-      name="tlPassword"
-      placeholder="Enter Password"
-      value={formData.tlPassword}
-      onChange={handleInputChange}
-    />
-    {errors.tlPassword && (
-      <div className="error">{errors.tlPassword}</div>
-    )}
-  </div>
-</div>
+        <div className="addRec-form-row">
+          <label>Upload Document:</label>
 
-<div className="addRec-form-row">
-  <label>Confirm Password: <span style={{ color: "red" }}>&nbsp;*</span></label>
-  <div className="wrapper-eye">
-    <div
-      className="password-eye-icon"
-      onMouseEnter={() => setPasswordVisible(true)}
-      onMouseLeave={() => setPasswordVisible(false)}
-    >
-      <i className={`bi ${passwordVisible ? "bi-eye-slash" : "bi-eye"}`}></i>
-    </div>
-    <input
-      type={passwordVisible ? "text" : "password"}
-      name="tlConfirmPassword"
-      placeholder="Confirm Password"
-      value={formData.tlConfirmPassword}
-      onChange={handleInputChange}
-      onBlur={handleConfirmPasswordBlur}
-    />
-    {errors.tlConfirmPassword && (
-      <div className="error">{errors.tlConfirmPassword}</div>
-    )}
-  </div>
+          <div className="wraptickindiv">
+            <input
+              type="file"
+              name="document"
+              accept=".pdf, .docx"
+              multiple
+              onChange={handleInputChange}
+            />
 
-  {/* {!passwordMatch && <div className="error">{passwordError}</div>} */}
-</div>
+            {errors.document && (
+              <div className="error">{errors.document}</div>
+            )}
+
+            {formData.document && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#78A75A"
+              >
+                <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z" />
+              </svg>
+            )}
+          </div>
+        </div>
+
+
+        <div className="addRec-form-row">
+          <label>Password: <span style={{ color: "red" }}>&nbsp;*</span></label>
+          <div className="wrapper-eye">
+            <div
+              className="password-eye-icon"
+              onMouseEnter={() => setPasswordVisible(true)}
+              onMouseLeave={() => setPasswordVisible(false)}
+            >
+              <i className={`bi ${passwordVisible ? "bi-eye-slash" : "bi-eye"}`}></i>
+            </div>
+            <input
+              type={passwordVisible ? "text" : "password"}
+              name="tlPassword"
+              placeholder="Enter Password"
+              value={formData.tlPassword}
+              onChange={handleInputChange}
+            />
+            {errors.tlPassword && (
+              <div className="error">{errors.tlPassword}</div>
+            )}
+          </div>
+        </div>
+
+        <div className="addRec-form-row">
+          <label>Confirm Password: <span style={{ color: "red" }}>&nbsp;*</span></label>
+          <div className="wrapper-eye">
+            <div
+              className="password-eye-icon"
+              onMouseEnter={() => setPasswordVisible(true)}
+              onMouseLeave={() => setPasswordVisible(false)}
+            >
+              <i className={`bi ${passwordVisible ? "bi-eye-slash" : "bi-eye"}`}></i>
+            </div>
+            <input
+              type={passwordVisible ? "text" : "password"}
+              name="tlConfirmPassword"
+              placeholder="Confirm Password"
+              value={formData.tlConfirmPassword}
+              onChange={handleInputChange}
+              onBlur={handleConfirmPasswordBlur}
+            />
+            {errors.tlConfirmPassword && (
+              <div className="error">{errors.tlConfirmPassword}</div>
+            )}
+          </div>
+
+          {/* {!passwordMatch && <div className="error">{passwordError}</div>} */}
+        </div>
 
 
 
         <div className="add-employee-submit-div">
           <button type="submit" className="submit-button-add-emp">
             {
-          updateEmployeeIdForForm ? "Update" : "Submit"
-          }
+              updateEmployeeIdForForm ? "Update" : "Submit"
+            }
           </button>
         </div>
         {successMessage && (
@@ -1628,14 +1626,14 @@ toast.success("Employee Data Added Successfully.");
         )}
       </form>
 
-       {
-              loading && (
-                <Loader/>
-              )
-            }
+      {
+        loading && (
+          <Loader />
+        )
+      }
     </div>
 
-    
+
   );
 };
 

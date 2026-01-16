@@ -11,7 +11,7 @@ import PieChart from "./PieChartReport";
 import PDFGenerator from "./PDFMain";
 import SliderReport from "./SliderReports";
 import axios from "axios";
-// import { API_BASE_URL } from "../api/api";
+import { API_BASE_URL } from "../api/api";
 import { PDFDocument } from "pdf-lib";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -41,7 +41,6 @@ const Attendance = ({
     finalEndDatePropState,
     loginEmployeeName
   );
-  const API_BASE_URL="https://rg.157careers.in/api/ats/157industries"
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -181,7 +180,7 @@ const Attendance = ({
       await delay(100);
       if (newClassnameForHideAndDisplay.length > 0) {
         newClassnameForHideAndDisplay[0].style.display = "none";
-      } 
+      }
       await delay(100);
       if (newclassforalignitemscenter.length > 0) {
         newclassforalignitemscenter[0].style.alignItems = "center";
@@ -229,7 +228,7 @@ const Attendance = ({
   };
 
 
-  
+
   const closeModal = () => {
     // Clear the PDF URL and close the modal
     setPdfUrl("");
@@ -266,7 +265,7 @@ const Attendance = ({
     setLoading(true);
     console.log(finalStartDatePropState);
     try {
-     
+
       const response = await axios.get(
         `${API_BASE_URL}/candidate-category/${newIdsString}/${selectedJobRole}/${finalStartDatePropState}/${finalEndDatePropState}`,
         {

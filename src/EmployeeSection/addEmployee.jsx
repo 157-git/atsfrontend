@@ -9,7 +9,6 @@ import { fetchCompleteProfileData } from "../HandlerFunctions/fetchCompleteProfi
 import Loader from "../EmployeeSection/loader"
 
 const AddEmployee = ({ loginEmployeeName, updateEmployeeIdForForm }) => {
-  // const API_BASE_URL="https://rg.157careers.in/api/ats/157industries"
   const { employeeId, userType } = useParams();
   const [socket, setSocket] = useState(null);
   // const employeeId = 4234

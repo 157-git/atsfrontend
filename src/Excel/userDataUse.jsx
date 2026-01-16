@@ -13,7 +13,6 @@ import { API_BASE_URL } from "../api/api"
 
 const userDataUse = ({ loginEmployeeName, onCloseIncentive }) => {
 
-  // const API_BASE_URL = "https://rg.157careers.in/api/ats/157industries"
 
   // State variables for managing UI and data
   const [displayModalContainer, setDisplayModalContainer] = useState(false)
@@ -119,22 +118,22 @@ const userDataUse = ({ loginEmployeeName, onCloseIncentive }) => {
     } else if (role === "TeamLeader") {
       // Fetch team leaders data
 
-      
-setDisplayBigSkeletonForTeamLeaders(true)
-try {
-  const response = await axios.get(`${API_BASE_URL}/tl-namesIds/${employeeId}`)
-  setTeamLeadersList(response.data)
 
-  // 👇 Add this short delay before flipping the actual list on
-  setTimeout(() => {
-    setDisplayBigSkeletonForTeamLeaders(false)
-    setDisplayTeamLeaders(true)
-  }, 300)
-} catch (error) {
-  console.error("Error fetching team leaders:", error)
-  setDisplayBigSkeletonForTeamLeaders(false)
-  toast.error("Failed to fetch team leaders")
-}
+      setDisplayBigSkeletonForTeamLeaders(true)
+      try {
+        const response = await axios.get(`${API_BASE_URL}/tl-namesIds/${employeeId}`)
+        setTeamLeadersList(response.data)
+
+        // 👇 Add this short delay before flipping the actual list on
+        setTimeout(() => {
+          setDisplayBigSkeletonForTeamLeaders(false)
+          setDisplayTeamLeaders(true)
+        }, 300)
+      } catch (error) {
+        console.error("Error fetching team leaders:", error)
+        setDisplayBigSkeletonForTeamLeaders(false)
+        toast.error("Failed to fetch team leaders")
+      }
 
     } else if (role === "Recruiter") {
       // Fetch recruiters data
@@ -237,7 +236,7 @@ try {
   const handleOpenDownArrowContent = async (managerid) => {
     setDisplayTeamLeaders(false)
     setAllImagesForTeamLeaders([])
-    
+
     try {
       // API call to get team leaders for a specific manager
       const response = await axios.get(`${API_BASE_URL}/tl-namesIds/${managerid}`)
@@ -558,7 +557,7 @@ try {
       const totalLimit = showInMB ? 10240 : 10;
       const usagePercent = Math.min((displayedStorage / totalLimit) * 100, 100);
       const usedPercent = Math.min((mbStorage / 5120) * 100, 100); // percentage
-const remainingPercent = 100 - usedPercent;
+      const remainingPercent = 100 - usedPercent;
 
       return (
         <div className="storage-card-content">
@@ -587,54 +586,54 @@ const remainingPercent = 100 - usedPercent;
           </div>
           <div className="chart-container">
             <ResponsiveContainer width={200} height={200}>
-  <PieChart>
-    
-  <Pie
-  data={[
-    { name: "Used", value: usedPercent },
-    { name: "Remaining", value: remainingPercent },
-  ]}
+              <PieChart>
 
-      cx="50%"
-      cy="50%"
-      innerRadius={48}
-      outerRadius={74}
-      cornerRadius={10}
-      startAngle={90}
-      endAngle={-270}
-      paddingAngle={2}
-      dataKey="value"
-      animationDuration={700}
-    >
-      <Cell fill="#90c824" />  {/* Indigo - used */}
-      <Cell fill="#e0e7ff" />  {/* Soft lavender - free */}
-    </Pie>
-    
+                <Pie
+                  data={[
+                    { name: "Used", value: usedPercent },
+                    { name: "Remaining", value: remainingPercent },
+                  ]}
 
-    {/* Center Label */}
-  <text
-  x="50%"
-  y="50%"
-  textAnchor="middle"
-  dominantBaseline="middle"
-  style={{ fontSize: "14px", fontWeight: 600, fill: "#333" }}
->
-  {usedPercent.toFixed(1)}%
-</text>
-
-<text
-  x="50%"
-  y="58%"
-  textAnchor="middle"
-  dominantBaseline="middle"
-  style={{ fontSize: "16px", fill: "#888" }}
->
-  used
-</text>
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={48}
+                  outerRadius={74}
+                  cornerRadius={10}
+                  startAngle={90}
+                  endAngle={-270}
+                  paddingAngle={2}
+                  dataKey="value"
+                  animationDuration={700}
+                >
+                  <Cell fill="#90c824" />  {/* Indigo - used */}
+                  <Cell fill="#e0e7ff" />  {/* Soft lavender - free */}
+                </Pie>
 
 
-  </PieChart>
-</ResponsiveContainer>
+                {/* Center Label */}
+                <text
+                  x="50%"
+                  y="50%"
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  style={{ fontSize: "14px", fontWeight: 600, fill: "#333" }}
+                >
+                  {usedPercent.toFixed(1)}%
+                </text>
+
+                <text
+                  x="50%"
+                  y="58%"
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  style={{ fontSize: "16px", fill: "#888" }}
+                >
+                  used
+                </text>
+
+
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </div>
       );
@@ -645,7 +644,7 @@ const remainingPercent = 100 - usedPercent;
 
 
   const filteredUserData = userData.filter((user) => user.employeeId !== employeeId);
-  const dataUsageCardsLength=filteredUserData.length
+  const dataUsageCardsLength = filteredUserData.length
 
 
   return (
@@ -936,43 +935,43 @@ const remainingPercent = 100 - usedPercent;
       )}
 
       {/* Display storage cards after selection */}
-    {isLoading ? (
-  // ✅ Show skeletons in grid format
-  <div className="storage-cards-container">
-    <div className="storage-cards-grid">
-      {Array.from({ length: 6 }).map((_, index) => (
-        <Card key={index} className="storage-card" hoverable>
-          <Skeleton active avatar paragraph={{ rows: 3 }} />
-        </Card>
-      ))}
-    </div>
-  </div>
-) : (showSelfCard || filteredUserData.length > 0) ? (
-  <div className="storage-cards-container">
-    <div className="storage-cards-grid">
+      {isLoading ? (
+        // ✅ Show skeletons in grid format
+        <div className="storage-cards-container">
+          <div className="storage-cards-grid">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <Card key={index} className="storage-card" hoverable>
+                <Skeleton active avatar paragraph={{ rows: 3 }} />
+              </Card>
+            ))}
+          </div>
+        </div>
+      ) : (showSelfCard || filteredUserData.length > 0) ? (
+        <div className="storage-cards-container">
+          <div className="storage-cards-grid">
 
-      {/* ✅ Your own card */}
-      {showSelfCard && selfUserData && (
-        <Card className="storage-card" hoverable>
-          <div className="self-label">You</div>
-          {renderStorageCard(selfUserData)}
-        </Card>
+            {/* ✅ Your own card */}
+            {showSelfCard && selfUserData && (
+              <Card className="storage-card" hoverable>
+                <div className="self-label">You</div>
+                {renderStorageCard(selfUserData)}
+              </Card>
+            )}
+
+            {/* ✅ Everyone else */}
+            {filteredUserData.map((user, index) => (
+              <Card key={index} className="storage-card" hoverable>
+                {renderStorageCard(user)}
+              </Card>
+            ))}
+
+          </div>
+        </div>
+      ) : (
+        <div style={{ textAlign: "center", padding: 40 }}>
+          <p>No data available</p>
+        </div>
       )}
-
-      {/* ✅ Everyone else */}
-      {filteredUserData.map((user, index) => (
-        <Card key={index} className="storage-card" hoverable>
-          {renderStorageCard(user)}
-        </Card>
-      ))}
-
-    </div>
-  </div>
-) : (
-  <div style={{ textAlign: "center", padding: 40 }}>
-    <p>No data available</p>
-  </div>
-)}
 
 
 

@@ -7,7 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import HashLoader from "react-spinners/HashLoader";
 import ClipLoader from "react-spinners/ClipLoader";
-import {Alert, Modal as AntdModal, Badge, Empty} from "antd";
+import { Alert, Modal as AntdModal, Badge, Empty } from "antd";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../api/api";
 import Loader from "./loader";
@@ -63,16 +63,16 @@ const LineUpList = ({
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
-   const [displayShareConfirm, setDisplayShareConfirm]= useState(false);
-     const filterRef=useRef(null);
+  const [displayShareConfirm, setDisplayShareConfirm] = useState(false);
+  const filterRef = useRef(null);
 
-       const [isHorizontallyScrolling, setIsHorizontallyScrolling] = useState(false);
-        const tableContainerRef = useRef(null);
-      
-        const handleScroll = () => {
-          if (!tableContainerRef.current) return;
-          setIsHorizontallyScrolling(tableContainerRef.current.scrollLeft > 0);
-        };
+  const [isHorizontallyScrolling, setIsHorizontallyScrolling] = useState(false);
+  const tableContainerRef = useRef(null);
+
+  const handleScroll = () => {
+    if (!tableContainerRef.current) return;
+    setIsHorizontallyScrolling(tableContainerRef.current.scrollLeft > 0);
+  };
   //akash_pawar_LineUpList_ShareFunctionality_16/07_128
   const fetchCallingTrackerData = async (page, size) => {
     setLoading(true);
@@ -93,7 +93,7 @@ const LineUpList = ({
     } catch (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -182,7 +182,7 @@ const LineUpList = ({
         setActiveFilterOption(null);
       }
     };
-  
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -237,7 +237,7 @@ const LineUpList = ({
     });
     setFilteredCallingList(filteredData);
   };
-  const handleSearchClick = (e)=>{
+  const handleSearchClick = (e) => {
     e.preventDefault(); // Prevents the form from submitting and causing the page to refresh
     setCurrentPage(1); // Reset to the first page when a new search is performed
     fetchCallingTrackerData(1, pageSize);
@@ -297,7 +297,7 @@ const LineUpList = ({
   // };
   const handleSelectAll = () => {
     if (allSelected) {
-      setSelectedRows((prevSelectedRows) => 
+      setSelectedRows((prevSelectedRows) =>
         prevSelectedRows.filter((id) => !callingList.map((item) => item.candidateId).includes(id))
       );
     } else {
@@ -307,13 +307,13 @@ const LineUpList = ({
     setAllSelected(!allSelected);
   };
 
-    const areAllRowsSelectedOnPage = callingList.every((item) =>
-        selectedRows.includes(item.candidateId)
-      );
-    
-      useEffect(() => {
-        setAllSelected(areAllRowsSelectedOnPage);
-      }, [callingList, selectedRows]);  
+  const areAllRowsSelectedOnPage = callingList.every((item) =>
+    selectedRows.includes(item.candidateId)
+  );
+
+  useEffect(() => {
+    setAllSelected(areAllRowsSelectedOnPage);
+  }, [callingList, selectedRows]);
 
   const handleSelectRow = (candidateId) => {
     setSelectedRows((prevSelectedRows) => {
@@ -349,17 +349,17 @@ const LineUpList = ({
     setSelectedCandidateResume(byteCode);
     setShowResumeModal(true);
   };
-  const handleDisplayShareConfirmClick = ()=>{
+  const handleDisplayShareConfirmClick = () => {
     setDisplayShareConfirm(true);
   }
-const handleCancelcloseshare = ()=>{
-  setDisplayShareConfirm(false);
-}
+  const handleCancelcloseshare = () => {
+    setDisplayShareConfirm(false);
+  }
   const closeResumeModal = () => {
     setSelectedCandidateResume("");
     setShowResumeModal(false);
   };
-  const onClose = () => {};
+  const onClose = () => { };
   //Name:-Akash Pawar Component:-ShortListedCandidate Subcategory:-ResumeViewButton(added) End LineNo:-196 Date:-02/07
 
   //Mohini_Raut_LineUpList_columnsToInclude_columnsToExclude_16/07/2024//
@@ -431,16 +431,13 @@ const handleCancelcloseshare = ()=>{
         "Recruiter Incentive": item.incentive || "-",
         "Interested or Not": item.selectYesOrNo || "-",
         "Current Company": item.companyName || "-",
-        "Total Experience": `${item.experienceYear || 0} Years ${
-          item.experienceMonth || 0
-        } Months`,
+        "Total Experience": `${item.experienceYear || 0} Years ${item.experienceMonth || 0
+          } Months`,
         "Relevant Experience": item.relevantExperience || "-",
-        "Current CTC": `${item.currentCtcLakh || 0} Lakh ${
-          item.currentCtcThousand || 0
-        } Thousand`,
-        "Expected CTC": `${item.expectedCtcLakh || 0} Lakh ${
-          item.expectedCtcThousand || 0
-        } Thousand`,
+        "Current CTC": `${item.currentCtcLakh || 0} Lakh ${item.currentCtcThousand || 0
+          } Thousand`,
+        "Expected CTC": `${item.expectedCtcLakh || 0} Lakh ${item.expectedCtcThousand || 0
+          } Thousand`,
         "Date Of Birth": item.dateOfBirth || "-",
         Gender: item.gender || "-",
         Education: item.qualification || "-",
@@ -581,7 +578,7 @@ const handleCancelcloseshare = ()=>{
     } catch (error) {
       setIsDataSending(false);
       console.error("Error while forwarding candidates:", error);
-    }finally{
+    } finally {
       setDisplayShareConfirm(false);
     }
   };
@@ -706,44 +703,45 @@ const handleCancelcloseshare = ()=>{
               ></i>
               {/* line 727 to 736 added by sahil karnekar date 24-10-2024 */}
 
-              <form onSubmit={(e) => handleSearchClick(e)}> 
-              <div
-                className="search-input-div"
-                style={{ width: `${calculateWidth()}px` }}
-              >
-                <div className="forxmarkdiv">
-                  <input
-                    type="text"
-                    className="search-input removeBorderForSearchInput"
-                    placeholder="Search here..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                  {searchTerm && (
-                    <div className="svgimagesetinInput">
-                      <svg
-                        onClick={() => {setSearchTerm("")
-                          handleTriggerFetch();
-                        }}
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24px"
-                        viewBox="0 -960 960 960"
-                        width="24px"
-                        fill="#000000"
-                      >
-                        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-                      </svg>
-                    </div>
-                  )}
+              <form onSubmit={(e) => handleSearchClick(e)}>
+                <div
+                  className="search-input-div"
+                  style={{ width: `${calculateWidth()}px` }}
+                >
+                  <div className="forxmarkdiv">
+                    <input
+                      type="text"
+                      className="search-input removeBorderForSearchInput"
+                      placeholder="Search here..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    {searchTerm && (
+                      <div className="svgimagesetinInput">
+                        <svg
+                          onClick={() => {
+                            setSearchTerm("")
+                            handleTriggerFetch();
+                          }}
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="24px"
+                          viewBox="0 -960 960 960"
+                          width="24px"
+                          fill="#000000"
+                        >
+                          <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <button
-        className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
-  type="submit"
-      >
-        Search 
-      </button>
-      </form>
+                <button
+                  className="search-btns lineUp-share-btn newSearchButtonMarginLeft"
+                  type="submit"
+                >
+                  Search
+                </button>
+              </form>
             </div>
             <h5 className="newclassnameforpageheader">Lineup Tracker</h5>
 
@@ -757,17 +755,17 @@ const handleCancelcloseshare = ()=>{
               }}
             >
               <div>
-              {
-                    !showShareButton && (
-                      <Badge
-                  color="var(--notification-badge-background)"
-                  count={selectedRows.length}
-                  className="newBadgeselectedcandidatestyle"
-                >
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M222-200 80-342l56-56 85 85 170-170 56 57-225 226Zm0-320L80-662l56-56 85 85 170-170 56 57-225 226Zm298 240v-80h360v80H520Zm0-320v-80h360v80H520Z"/></svg>
-                </Badge>
-                    )
-                  }
+                {
+                  !showShareButton && (
+                    <Badge
+                      color="var(--notification-badge-background)"
+                      count={selectedRows.length}
+                      className="newBadgeselectedcandidatestyle"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M222-200 80-342l56-56 85 85 170-170 56 57-225 226Zm0-320L80-662l56-56 85 85 170-170 56 57-225 226Zm298 240v-80h360v80H520Zm0-320v-80h360v80H520Z" /></svg>
+                    </Badge>
+                  )
+                }
                 {(userType === "Manager" || userType === "TeamLeader") && (
                   <button className="lineUp-share-btn" onClick={showPopup}>
                     Create Excel
@@ -841,156 +839,90 @@ const handleCancelcloseshare = ()=>{
           </div>
 
           <div className="filter-dropdowns">
-            {/* updated this filter section by sahil karnekar date 22-10-2024 */}
-            {/* {showFilterSection && (
+
+
+            {showFilterSection && (
               <div className="filter-section">
                 {limitedOptions.map(([optionKey, optionLabel]) => {
+
                   const uniqueValues = Array.from(
                     new Set(
                       callingList
                         .map((item) =>
-                          // console.log(item, item[optionKey]),
                           item[optionKey]?.toString().toLowerCase()
                         )
                         .filter(
                           (value) =>
                             value &&
                             value !== "-" &&
-                            !(optionKey === "alternateNumber" && value === "0")
+                            !(
+                              optionKey === "alternateNumber" &&
+                              value === "0"
+                            )
+
+
                         )
+
                     )
                   );
 
-                  return (
-                    <div key={optionKey} className="filter-option">
-                      <button
-                        className="white-Btn"
-                        onClick={() => handleFilterOptionClick(optionKey)}
-                      >
-                        {optionLabel}
-                        <span className="filter-icon">&#x25bc;</span>
-                      </button>
 
-                      {activeFilterOption === optionKey && (
-                        <div className="city-filter">
-                          <div className="optionDiv">
-                            {uniqueValues.length > 0 ? (
-                              (console.log(uniqueValues),
-                              uniqueValues.map((value) => (
-                                <label
-                                  key={value}
-                                  className="selfcalling-filter-value"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    checked={
-                                      selectedFilters[optionKey]?.includes(
-                                        value
-                                      ) || false
-                                    }
-                                    onChange={() =>
-                                      handleFilterSelect(optionKey, value)
-                                    }
-                                    style={{ marginRight: "5px" }}
-                                  />
-                                  {value}
-                                </label>
-                              )))
-                            ) : (
-                              <div>No values</div>
-                            )}
+
+                  return (
+                    <div>
+                      {/* Rajlaxmi jagadle  Added countSelectedValues that code date 20-02-2025 line 987/1003 */}
+                      <div key={optionKey} className="filter-option">
+                        <button
+                          className={`white-Btn ${(selectedFilters[optionKey] && selectedFilters[optionKey].length > 0) || activeFilterOption === optionKey
+                            ? "selected glow"
+                            : ""
+                            }`}
+                          onClick={() => handleFilterOptionClick(optionKey)}
+                        >
+                          {optionLabel}
+                          {selectedFilters[optionKey]?.length > 0 && (
+                            <span className="selected-count">
+                              ({countSelectedValues(optionKey)})
+                            </span>
+                          )}
+                          <span className="filter-icon">&#x25bc;</span>
+                        </button>
+                        {/* rajlaxmi Jagadle Changes That code date 20-02-2025 line 1003/1027 */}
+
+                        {activeFilterOption === optionKey && (
+                          <div ref={filterRef} className="city-filter">
+                            <div className="optionDiv">
+                              {uniqueValues.length > 0 ? (
+                                uniqueValues.map((value) => (
+                                  <label key={value} className="selfcalling-filter-value">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedFilters[optionKey]?.includes(value) || false}
+                                      onChange={() => handleFilterSelect(optionKey, value)}
+                                      style={{ marginRight: "5px" }}
+
+                                    />
+                                    {value}
+                                  </label>
+                                ))
+                              ) : (
+                                <div>No values</div>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
+
+
                     </div>
                   );
                 })}
+
+                <button className="clr-button lineUp-Filter-btn" onClick={handleClearAll}>Clear Filters</button>
+
               </div>
-            )} */}
 
-{showFilterSection && (
-                  <div className="filter-section">
-                    {limitedOptions.map(([optionKey, optionLabel]) => {
-                      
-                      const uniqueValues = Array.from(
-                        new Set(
-                          callingList
-                            .map((item) =>
-                              item[optionKey]?.toString().toLowerCase()
-                            )
-                            .filter(
-                              (value) =>
-                                value &&
-                                value !== "-" &&
-                                !(
-                                  optionKey === "alternateNumber" &&
-                                  value === "0"
-                                )
-                                
-
-                            )
-                            
-                        )
-                      );
-                        
-
-
-                      return (
-                        <div>
-                          {/* Rajlaxmi jagadle  Added countSelectedValues that code date 20-02-2025 line 987/1003 */}
-                        <div key={optionKey} className="filter-option">
-  <button
-    className={`white-Btn ${
-      (selectedFilters[optionKey] && selectedFilters[optionKey].length > 0) || activeFilterOption === optionKey
-        ? "selected glow"
-        : ""
-    }`}
-    onClick={() => handleFilterOptionClick(optionKey)}
-  >
-    {optionLabel}
-    {selectedFilters[optionKey]?.length > 0 && (
-      <span className="selected-count">
-        ({countSelectedValues(optionKey)})
-      </span>
-    )}
-    <span className="filter-icon">&#x25bc;</span>
-  </button>
-{/* rajlaxmi Jagadle Changes That code date 20-02-2025 line 1003/1027 */}
-
-  {activeFilterOption === optionKey && (
-    <div ref={filterRef} className="city-filter">
-      <div className="optionDiv">
-        {uniqueValues.length > 0 ? (
-          uniqueValues.map((value) => (
-            <label key={value} className="selfcalling-filter-value">
-              <input
-                type="checkbox"
-                checked={selectedFilters[optionKey]?.includes(value) || false}
-                onChange={() => handleFilterSelect(optionKey, value)}
-                style={{ marginRight: "5px" }}
-                
-              />
-              {value}
-            </label>
-          ))
-        ) : (
-          <div>No values</div>
-        )}
-      </div>
-    </div>
-  )}
-</div>
-
-                          
-                          </div>
-                          );
-                    })}
-                    
-                    <button className="clr-button lineUp-Filter-btn" onClick={handleClearAll}>Clear Filters</button>
-
-                  </div>
-                  
-                )}
+            )}
           </div>
         </>
       )}
@@ -1003,15 +935,15 @@ const handleCancelcloseshare = ()=>{
           {!showUpdateCallingTracker ? (
             <>
               <div className="attendanceTableData"
-              onScroll={handleScroll}
-              ref={tableContainerRef}
+                onScroll={handleScroll}
+                ref={tableContainerRef}
               >
                 <table className="attendance-table">
                   <thead>
                     <tr className="attendancerows-head">
                       {(!showShareButton && userType === "TeamLeader") ||
-                      (!showShareButton && userType === "Manager") ? (
-                        <th className="attendanceheading" style={{ position: "sticky",left:0, zIndex: 10 }}>
+                        (!showShareButton && userType === "Manager") ? (
+                        <th className="attendanceheading" style={{ position: "sticky", left: 0, zIndex: 10 }}>
                           <input
                             type="checkbox"
                             onChange={handleSelectAll}
@@ -1020,12 +952,12 @@ const handleCancelcloseshare = ()=>{
                             }
                             name="selectAll"
                           />
-                          
+
                         </th>
                       ) : null}
 
-                      <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10}}>Sr No.</th>
-                      <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10}}>Candidate Id</th>
+                      <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10 }}>Sr No.</th>
+                      <th className="attendanceheading" style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10 }}>Candidate Id</th>
 
                       <th
                         className="attendanceheading"
@@ -1115,8 +1047,8 @@ const handleCancelcloseshare = ()=>{
                     {filteredCallingList.map((item, index) => (
                       <tr key={item.candidateId} className="attendancerows">
                         {(!showShareButton && userType === "TeamLeader") ||
-                        (!showShareButton && userType === "Manager") ? (
-                          <td className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`} style={{ position: "sticky",left:0, zIndex: 1 }}>
+                          (!showShareButton && userType === "Manager") ? (
+                          <td className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`} style={{ position: "sticky", left: 0, zIndex: 1 }}>
                             <input
                               type="checkbox"
                               checked={selectedRows.includes(item.candidateId)}
@@ -1126,7 +1058,7 @@ const handleCancelcloseshare = ()=>{
                         ) : null}
 
                         <td
-                         className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
+                          className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                           style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1 }}
@@ -1140,7 +1072,7 @@ const handleCancelcloseshare = ()=>{
                         </td>
 
                         <td
-                         className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
+                          className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                           style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1 }}
@@ -1178,7 +1110,7 @@ const handleCancelcloseshare = ()=>{
                         </td>
 
                         <td
-                         className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
+                          className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                           onMouseOver={handleMouseOver}
                           onMouseOut={handleMouseOut}
                           style={{ position: "sticky", left: showShareButton ? "140px" : "190px", zIndex: 1 }}
@@ -1788,7 +1720,7 @@ const handleCancelcloseshare = ()=>{
                             >
                               {highlightText(
                                 item.teamLeaderId.toString().toLowerCase() ||
-                                  "",
+                                "",
                                 searchTerm
                               )}
                               <div className="tooltip">
@@ -1845,9 +1777,9 @@ const handleCancelcloseshare = ()=>{
                           </div>
 
                           <div className="custom-modal-footer">
-                          <AntdModal title="Share Data" open={displayShareConfirm} onOk={handleShare} onCancel={handleCancelcloseshare}>
-                          <Alert message="Are You Sure ? You Want To Send ?" type="info" showIcon />
-      </AntdModal>
+                            <AntdModal title="Share Data" open={displayShareConfirm} onOk={handleShare} onCancel={handleCancelcloseshare}>
+                              <Alert message="Are You Sure ? You Want To Send ?" type="info" showIcon />
+                            </AntdModal>
                             <button
                               onClick={handleDisplayShareConfirmClick}
                               className="daily-tr-btn"
@@ -1933,7 +1865,7 @@ const handleCancelcloseshare = ()=>{
           )}
         </>
       ) : filteredCallingList.length === 0 && (
-        <Empty/>
+        <Empty />
       )}
 
       {isDataSending && (

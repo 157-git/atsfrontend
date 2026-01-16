@@ -845,10 +845,30 @@ if (
     }
   };
 
-  useEffect(() => {
-    const newSocket = getSocket();
-    setSocket(newSocket);
-  }, []);
+// useEffect(() => {
+//   const newSocket = getSocket();
+
+//   if (!newSocket) {
+//     console.error("❌ Socket instance is NULL");
+//     return;
+//   }
+
+//   // ✅ ADD THESE LOGS
+//   newSocket.on("connect", () => {
+//     console.log("✅ SOCKET CONNECTED", newSocket.id);
+//   });
+
+//   newSocket.on("disconnect", (reason) => {
+//     console.log("⚠️ SOCKET DISCONNECTED", reason);
+//   });
+
+//   newSocket.on("connect_error", (err) => {
+//     console.error("❌ SOCKET CONNECT ERROR", err.message);
+//   });
+
+//   setSocket(newSocket);
+// }, []);
+
 
   const handleDisplayConfirmBox = () => {
     setDisplayEmailConfirm(true);
@@ -1005,11 +1025,20 @@ if (
           finalStatus: callingTracker.lineUp.finalStatus,
         },
       };
-      if (callingTracker.selectYesOrNo === "Interested") {
-        console.log("emit called", callingTrackerObjectForEmit);
-        socket.emit("update_candidate", callingTrackerObjectForEmit);
+if (callingTracker.selectYesOrNo === "Interested") {
+  if (!socket) {
+    console.error("❌ Socket is NULL at emit time");
+  } else {
+    console.log("🔔 EMITTING update_candidate", {
+      socketId: socket.id,
+      to: "TeamLeader",
+      candidateId: callingTracker.candidateId
+    });
 
-      }
+    socket.emit("update_candidate", callingTrackerObjectForEmit);
+  }
+}
+
 
       if (response.ok) {
         if (initialSelecteYesNoState !== "Interested" && callingTracker.selectYesOrNo === "Interested") {

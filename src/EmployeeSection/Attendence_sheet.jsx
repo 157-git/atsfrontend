@@ -36,84 +36,81 @@ import jsPDF from "jspdf";
 
 const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
 
-//Nikita Shirsath - 08-07-2025
- const tableRef = useRef();
+  //Nikita Shirsath - 08-07-2025
+  const tableRef = useRef();
 
- const [attendanceData, setAttendanceData] = useState([]);
+  const [attendanceData, setAttendanceData] = useState([]);
 
- const handleDownloadPdf = () => {
-  if (!attendanceData || attendanceData.length === 0) {
-    toast.error("No attendance data available to export.");
-    return;
-  }
+  const handleDownloadPdf = () => {
+    if (!attendanceData || attendanceData.length === 0) {
+      toast.error("No attendance data available to export.");
+      return;
+    }
 
-  const doc = new jsPDF("l", "mm", "a4");
+    const doc = new jsPDF("l", "mm", "a4");
 
-  const headers = [
-    [
-      "Sr No",
-      "Working Date",
-      "Employee Name",
-      "Job Role",
-      "Login Time",
-      "Late Mark",
-      "Calling Count",
-      "Target",
-      "Archived",
-      "Pending",
-      "Leave Type",
-      "Half Days",
-      "Holiday Leave",
-      "Work Type",
-      "Day Status",
-      "Working Hours",
-      "Logout Time",
-      "Employee Id",
-      "Team Leader Id",
-    ],
-  ];
+    const headers = [
+      [
+        "Sr No",
+        "Working Date",
+        "Employee Name",
+        "Job Role",
+        "Login Time",
+        "Late Mark",
+        "Calling Count",
+        "Target",
+        "Archived",
+        "Pending",
+        "Leave Type",
+        "Half Days",
+        "Holiday Leave",
+        "Work Type",
+        "Day Status",
+        "Working Hours",
+        "Logout Time",
+        "Employee Id",
+        "Team Leader Id",
+      ],
+    ];
 
-  const rows = attendanceData.map((data, index) => [
-    index + 1,
-    data.date || "",
-    data.employeeName || "",
-    data.jobRole || "",
-    data.loginTime || "",
-    data.lateMark || "",
-    data.callingCount || "",
-    data.dailyTarget || "",
-    data.dailyArchived || "",
-    data.dailyPending || "",
-    data.leaveType || "",
-    data.halfDay || "",
-    data.holidayLeave || "",
-    data.remoteWork || "",
-    data.dayPresentStatus || "",
-    data.totalHoursWork || "",
-    data.logoutTime || "",
-    data.employeeId || "",
-    data.teamLeader || "",
-  ]);
+    const rows = attendanceData.map((data, index) => [
+      index + 1,
+      data.date || "",
+      data.employeeName || "",
+      data.jobRole || "",
+      data.loginTime || "",
+      data.lateMark || "",
+      data.callingCount || "",
+      data.dailyTarget || "",
+      data.dailyArchived || "",
+      data.dailyPending || "",
+      data.leaveType || "",
+      data.halfDay || "",
+      data.holidayLeave || "",
+      data.remoteWork || "",
+      data.dayPresentStatus || "",
+      data.totalHoursWork || "",
+      data.logoutTime || "",
+      data.employeeId || "",
+      data.teamLeader || "",
+    ]);
 
-  autoTable(doc, {
-    head: headers,
-    body: rows,
-    startY: 10,
-    styles: { fontSize: 6 },
-    headStyles: { fillColor: [41, 128, 185] },
-  });
+    autoTable(doc, {
+      head: headers,
+      body: rows,
+      startY: 10,
+      styles: { fontSize: 6 },
+      headStyles: { fillColor: [41, 128, 185] },
+    });
 
-  doc.save("attendance-sheet.pdf");
+    doc.save("attendance-sheet.pdf");
 
-  
-};
 
-// const API_BASE_URL = "http://192.168.1.48:9090/api/ats/157industries";
- const API_BASE_URL = "https://rg.157careers.in/api/ats/157industries";
+  };
 
-  // const { employeeId, userType } = useParams();
-  const employeeId=2280;
-  const userType="Manager";
+
+  const { employeeId, userType } = useParams();
+
   //const [attendanceData, setAttendanceData] = useState([]);
   const [attendanceDataNew, setAttendanceDataNew] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -239,32 +236,32 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
 
   // Fixed function to handle the display of managers
   // rajlaxmi jagadale update that code
-   const handleDisplayManagers = async () => {
-      setDisplayModalContainer(true);
-      if (userType === "SuperUser") {
-        setDisplayBigSkeletonForManagers(true);
-        const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
-        setManagersList(response.data);
-        setDisplayBigSkeletonForManagers(false);
-        setDisplayManagers(true);
-      } else if (userType === "Manager") {
-        setDisplayBigSkeletonForTeamLeaders(true);
-        const response = await axios.get(
-          `${API_BASE_URL}/tl-namesIds/${employeeId}`
-        );
-        setTeamLeadersList(response.data);
-        setDisplayBigSkeletonForTeamLeaders(false);
-        setDisplayTeamLeaders(true);
-      } else if (userType === "TeamLeader") {
-        setDisplayBigSkeletonForRecruiters(true);
-        const response = await axios.get(
-          `${API_BASE_URL}/employeeId-names/${employeeId}`
-        );
-        setRecruitersList(response.data);
-        setDisplayBigSkeletonForRecruiters(false);
-        setDisplayRecruiters(true);
-      }
-    };
+  const handleDisplayManagers = async () => {
+    setDisplayModalContainer(true);
+    if (userType === "SuperUser") {
+      setDisplayBigSkeletonForManagers(true);
+      const response = await axios.get(`${API_BASE_URL}/get-all-managers`);
+      setManagersList(response.data);
+      setDisplayBigSkeletonForManagers(false);
+      setDisplayManagers(true);
+    } else if (userType === "Manager") {
+      setDisplayBigSkeletonForTeamLeaders(true);
+      const response = await axios.get(
+        `${API_BASE_URL}/tl-namesIds/${employeeId}`
+      );
+      setTeamLeadersList(response.data);
+      setDisplayBigSkeletonForTeamLeaders(false);
+      setDisplayTeamLeaders(true);
+    } else if (userType === "TeamLeader") {
+      setDisplayBigSkeletonForRecruiters(true);
+      const response = await axios.get(
+        `${API_BASE_URL}/employeeId-names/${employeeId}`
+      );
+      setRecruitersList(response.data);
+      setDisplayBigSkeletonForRecruiters(false);
+      setDisplayRecruiters(true);
+    }
+  };
 
   // Fixed function to handle opening recruiters for a team leader
   const handleOpenDownArrowContentForRecruiters = async (
@@ -712,12 +709,12 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
     });
     return { weekendCount, holidayCount };
   };
-//  const samruddhhiAPI="http://localhost:8080"
+  //  const samruddhhiAPI="http://localhost:8080"
 
   const fetchData = async (id, roles, startDate, endDate) => {
     try {
       const response = await fetch(
-         `${API_BASE_URL}/attendance-data/${id}/${roles}/${startDate}/${endDate}`
+        `${API_BASE_URL}/attendance-data/${id}/${roles}/${startDate}/${endDate}`
         // `${samruddhhiAPI}/attendance-data/${id}/${roles}/${startDate}/${endDate}`
       );
       if (!response.ok) {
@@ -727,7 +724,7 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
       const data = await response.json();
       setAttendanceData(data);
       setAttendanceDataNew(data);
-      console.log("data",data);
+      console.log("data", data);
       setShowCalculation(true);
       setLoading(false);
     } catch (error) {
@@ -754,130 +751,130 @@ const Attendance = ({ loginEmployeeName, onCloseIncentive }) => {
   };
   //samruddhi Patole 03/09 
   // ✅ Fixed version — Samruddhi Patole & Rajlaxmi Jagadale update
-const calculateSummary = () => {
-  if (!startDate || !endDate || attendanceData.length === 0) return;
+  const calculateSummary = () => {
+    if (!startDate || !endDate || attendanceData.length === 0) return;
 
-  let workingDays = 0;
-  let weekends = 0;
-  let totalPresent = 0;
-  let totalAbsent = 0;
-  let totalNotLogin = 0;
-  let totalWorkingHours = 0;
+    let workingDays = 0;
+    let weekends = 0;
+    let totalPresent = 0;
+    let totalAbsent = 0;
+    let totalNotLogin = 0;
+    let totalWorkingHours = 0;
 
-  const getHoursWorked = (loginTime, logoutTime) => {
-    if (!loginTime || !logoutTime) return 0;
+    const getHoursWorked = (loginTime, logoutTime) => {
+      if (!loginTime || !logoutTime) return 0;
 
-    const parseTime = (t) => {
-      try {
-        let [hours, minutes] = t.split(":").map(Number);
-        return hours * 60 + minutes;
-      } catch {
-        return 0;
-      }
+      const parseTime = (t) => {
+        try {
+          let [hours, minutes] = t.split(":").map(Number);
+          return hours * 60 + minutes;
+        } catch {
+          return 0;
+        }
+      };
+
+      const loginMin = parseTime(loginTime.trim());
+      const logoutMin = parseTime(logoutTime.trim());
+      return logoutMin > loginMin ? Math.floor((logoutMin - loginMin) / 60) : 0;
     };
 
-    const loginMin = parseTime(loginTime.trim());
-    const logoutMin = parseTime(logoutTime.trim());
-    return logoutMin > loginMin ? Math.floor((logoutMin - loginMin) / 60) : 0;
-  };
-
-  const interval = eachDayOfInterval({
-    start: parseISO(startDate),
-    end: parseISO(endDate),
-  });
-
-  workingDays = interval.filter((d) => !isWeekend(d)).length;
-  weekends = interval.filter((d) => isWeekend(d)).length;
-
-  const selectedAttendance = attendanceData.filter((data) => {
-    const dataDate = parseISO(data.date);
-    return dataDate >= parseISO(startDate) && dataDate <= parseISO(endDate);
-  });
-
-  // Create per-user summary
-  const perUserSummary = {};
-
-  const userIds = Array.from(new Set(attendanceData.map((d) => d.employeeId)));
-
-  userIds.forEach((id) => {
-    const records = selectedAttendance.filter(
-      (data) => data.employeeId.toString() === id.toString()
-    );
-
-    let present = 0;
-    let absent = 0;
-    let notLogin = 0;
-    let workingHours = 0;
-
-    records.forEach((data) => {
-      const loginTime = (data.loginTime || "").trim();
-      const archived = Number(data.dailyArchived) || 0;
-
-      const hasLogin =
-        loginTime &&
-        loginTime !== "00:00" &&
-        loginTime !== "00:00:00" &&
-        loginTime !== "0" &&
-        loginTime !== "0:00";
-
-      if (hasLogin) {
-        if (archived >= 3) present++;
-        else absent++;
-        workingHours += getHoursWorked(loginTime, data.logoutTime);
-      } else {
-        notLogin++;
-      }
+    const interval = eachDayOfInterval({
+      start: parseISO(startDate),
+      end: parseISO(endDate),
     });
 
-    notLogin += workingDays - (present + absent + notLogin);
+    workingDays = interval.filter((d) => !isWeekend(d)).length;
+    weekends = interval.filter((d) => isWeekend(d)).length;
 
-    perUserSummary[id] = {
-      present,
-      absent,
-      notLogin,
-      workingHours,
-    };
+    const selectedAttendance = attendanceData.filter((data) => {
+      const dataDate = parseISO(data.date);
+      return dataDate >= parseISO(startDate) && dataDate <= parseISO(endDate);
+    });
 
-    totalPresent += present;
-    totalAbsent += absent;
-    totalNotLogin += notLogin;
-    totalWorkingHours += workingHours;
-  });
+    // Create per-user summary
+    const perUserSummary = {};
 
-  const archived = attendanceData.reduce(
-    (sum, d) => sum + (Number(d.dailyArchived) || 0),
-    0
-  );
+    const userIds = Array.from(new Set(attendanceData.map((d) => d.employeeId)));
 
-  const pending = attendanceData.reduce(
-    (sum, d) => sum + (Number(d.dailyPending) || 0),
-    0
-  );
+    userIds.forEach((id) => {
+      const records = selectedAttendance.filter(
+        (data) => data.employeeId.toString() === id.toString()
+      );
 
-  const totalTarget = archived + pending;
+      let present = 0;
+      let absent = 0;
+      let notLogin = 0;
+      let workingHours = 0;
 
-  const { status, achievementRate } = categorizePerformance(
-    totalTarget,
-    archived
-  );
+      records.forEach((data) => {
+        const loginTime = (data.loginTime || "").trim();
+        const archived = Number(data.dailyArchived) || 0;
 
-  setSummary({
-    workingDays,
-    weekends,
-    totalPresent,
-    totalAbsent,
-    totalNotLogin,
-    totalWorkingHours,
-    archived,
-    pending,
-    totalTarget,
-    achievementRate,
-    performanceStatus: status,
-    perUserSummary, 
-  });
-};
+        const hasLogin =
+          loginTime &&
+          loginTime !== "00:00" &&
+          loginTime !== "00:00:00" &&
+          loginTime !== "0" &&
+          loginTime !== "0:00";
 
-  
+        if (hasLogin) {
+          if (archived >= 3) present++;
+          else absent++;
+          workingHours += getHoursWorked(loginTime, data.logoutTime);
+        } else {
+          notLogin++;
+        }
+      });
+
+      notLogin += workingDays - (present + absent + notLogin);
+
+      perUserSummary[id] = {
+        present,
+        absent,
+        notLogin,
+        workingHours,
+      };
+
+      totalPresent += present;
+      totalAbsent += absent;
+      totalNotLogin += notLogin;
+      totalWorkingHours += workingHours;
+    });
+
+    const archived = attendanceData.reduce(
+      (sum, d) => sum + (Number(d.dailyArchived) || 0),
+      0
+    );
+
+    const pending = attendanceData.reduce(
+      (sum, d) => sum + (Number(d.dailyPending) || 0),
+      0
+    );
+
+    const totalTarget = archived + pending;
+
+    const { status, achievementRate } = categorizePerformance(
+      totalTarget,
+      archived
+    );
+
+    setSummary({
+      workingDays,
+      weekends,
+      totalPresent,
+      totalAbsent,
+      totalNotLogin,
+      totalWorkingHours,
+      archived,
+      pending,
+      totalTarget,
+      achievementRate,
+      performanceStatus: status,
+      perUserSummary,
+    });
+  };
+
+
   // rajlaxmi jagadale updated that code line 669 to 761
   const [showFilterButton, setShowFilterButton] = useState(false);
   const [showCloseButton, setShowCloseButton] = useState(false);
@@ -1036,12 +1033,12 @@ const calculateSummary = () => {
       prev.some((item) => item.managerId === manager.managerId)
         ? prev.filter((item) => item.managerId !== manager.managerId)
         : [
-            ...prev,
-            {
-              managerId: manager.managerId,
-              managerJobRole: manager.jobRole,
-            },
-          ]
+          ...prev,
+          {
+            managerId: manager.managerId,
+            managerJobRole: manager.jobRole,
+          },
+        ]
     );
   };
   const getStatusClassName = (status) => {
@@ -1091,12 +1088,12 @@ const calculateSummary = () => {
       prev.some((item) => item.teamLeaderId === teamLeader.teamLeaderId)
         ? prev.filter((item) => item.teamLeaderId !== teamLeader.teamLeaderId)
         : [
-            ...prev,
-            {
-              teamLeaderId: teamLeader.teamLeaderId,
-              teamLeaderJobRole: teamLeader.jobRole,
-            },
-          ]
+          ...prev,
+          {
+            teamLeaderId: teamLeader.teamLeaderId,
+            teamLeaderJobRole: teamLeader.jobRole,
+          },
+        ]
     );
     // Update the selected team leader name when checking/unchecking
     if (
@@ -1115,12 +1112,12 @@ const calculateSummary = () => {
       prev.some((item) => item.recruiterId === recruiter.employeeId)
         ? prev.filter((item) => item.recruiterId !== recruiter.employeeId)
         : [
-            ...prev,
-            {
-              recruiterId: recruiter.employeeId,
-              recruiterJobRole: recruiter.jobRole,
-            },
-          ]
+          ...prev,
+          {
+            recruiterId: recruiter.employeeId,
+            recruiterJobRole: recruiter.jobRole,
+          },
+        ]
     );
   };
 
@@ -1187,7 +1184,8 @@ const calculateSummary = () => {
 
   useEffect(() => {
     filterData();
-  }, [selectedFilters, attendanceData]);
+  }, [selectedFilters]); // ✅ remove attendanceData
+
 
   const toggleFilterSection = () => {
     setShowFilterSection(!showFilterSection);
@@ -1337,11 +1335,10 @@ const calculateSummary = () => {
           >
             {manager.managerName}
             <i
-              className={`fa-solid ${
-                expandedManagerId === manager.managerId
+              className={`fa-solid ${expandedManagerId === manager.managerId
                   ? "fa-angle-up"
                   : "fa-angle-down"
-              }`}
+                }`}
             ></i>
           </label>
         </div>
@@ -1384,11 +1381,10 @@ const calculateSummary = () => {
           >
             {teamLeader.teamLeaderName}
             <i
-              className={`fa-solid ${
-                expandedTeamLeaderId === teamLeader.teamLeaderId
+              className={`fa-solid ${expandedTeamLeaderId === teamLeader.teamLeaderId
                   ? "fa-angle-up"
                   : "fa-angle-down"
-              }`}
+                }`}
             ></i>
           </label>
         </div>
@@ -1455,8 +1451,8 @@ const calculateSummary = () => {
       {/* rajlaxmi jagadale addthat line toastify */}
       {/*<ToastContainer position="top-right" autoClose={5000} />*/}
       <div className="attendance-headingattendanceform">
-      <h1>Attendance Data</h1>
-    </div>
+        <h1>Attendance Data</h1>
+      </div>
       <div className="PI-full-width-PI-half-heightattendanceform">
         <div className="PI-containerattendanceform">
           <div
@@ -1478,7 +1474,7 @@ const calculateSummary = () => {
               <span className="attendanceform">Super User</span>
             )}
             <div className="PI-dropdown-containerattendanceform">
-<div
+              <div
                 className="PI-Dropdownattendanceform"
                 onClick={toggleDropdown}
               >
@@ -1492,8 +1488,8 @@ const calculateSummary = () => {
                     {selectedRole === "TeamLeader" && selectedIds.length > 0
                       ? `Selected ${selectedIds.length} Team Leader`
                       : selectedRole === "Recruiters" && selectedIds.length > 0
-                      ? `Selected ${selectedIds.length} Recruiter`
-                      : "Select TL / Recruiters"}
+                        ? `Selected ${selectedIds.length} Recruiter`
+                        : "Select TL / Recruiters"}
                   </span>
                 )}
                 {userType === "TeamLeader" && (
@@ -1504,9 +1500,8 @@ const calculateSummary = () => {
                 )}
                 <span className={`dropdown-iconattendanceform`} />
                 <i
-                  className={`fa-solid ${
-                    dropdownOpen ? "fa-angle-up" : "fa-angle-down"
-                  }`}
+                  className={`fa-solid ${dropdownOpen ? "fa-angle-up" : "fa-angle-down"
+                    }`}
                 ></i>
               </div>
               {/* rajlaxmi jagadale added that model */}
@@ -1540,14 +1535,14 @@ const calculateSummary = () => {
                               {!managersList.every((manager) =>
                                 selectedIds.includes(manager.managerId)
                               ) && (
-                                <Button
-                                  color="primary"
-                                  variant="outlined"
-                                  onClick={() => handleSelectAllNew("Manager")}
-                                >
-                                  Select All
-                                </Button>
-                              )}
+                                  <Button
+                                    color="primary"
+                                    variant="outlined"
+                                    onClick={() => handleSelectAllNew("Manager")}
+                                  >
+                                    Select All
+                                  </Button>
+                                )}
                               {selectedRole === "Manager" &&
                                 selectedIds.length > 0 && (
                                   <button
@@ -1662,16 +1657,16 @@ const calculateSummary = () => {
                                       teamLeader.teamLeaderId
                                     )
                                   ) && (
-                                    <Button
-                                      color="primary"
-                                      variant="outlined"
-                                      onClick={() =>
-                                        handleSelectAllNew("TeamLeader")
-                                      }
-                                    >
-                                      Select All
-                                    </Button>
-                                  )}
+                                      <Button
+                                        color="primary"
+                                        variant="outlined"
+                                        onClick={() =>
+                                          handleSelectAllNew("TeamLeader")
+                                        }
+                                      >
+                                        Select All
+                                      </Button>
+                                    )}
                                   {selectedRole === "TeamLeader" &&
                                     selectedIds.length > 0 && (
                                       <button
@@ -1727,11 +1722,11 @@ const calculateSummary = () => {
                                             src={
                                               allImagesForTeamLeaders.length > 0
                                                 ? allImagesForTeamLeaders[
-                                                    index
-                                                  ] !== null
+                                                  index
+                                                ] !== null
                                                   ? allImagesForTeamLeaders[
-                                                      index
-                                                    ]
+                                                  index
+                                                  ]
                                                   : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
                                                 : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
                                             }
@@ -1757,7 +1752,7 @@ const calculateSummary = () => {
                                       fill="#000000"
                                       className={
                                         activeTeamLeader ===
-                                        teamLeader.teamLeaderId
+                                          teamLeader.teamLeaderId
                                           ? "rotate-iconattendanceform"
                                           : ""
                                       }
@@ -1799,16 +1794,16 @@ const calculateSummary = () => {
                                   {!recruitersList.every((recruiter) =>
                                     selectedIds.includes(recruiter.employeeId)
                                   ) && (
-                                    <Button
-                                      color="primary"
-                                      variant="outlined"
-                                      onClick={() =>
-                                        handleSelectAllNew("Recruiters")
-                                      }
-                                    >
-                                      Select All
-                                    </Button>
-                                  )}
+                                      <Button
+                                        color="primary"
+                                        variant="outlined"
+                                        onClick={() =>
+                                          handleSelectAllNew("Recruiters")
+                                        }
+                                      >
+                                        Select All
+                                      </Button>
+                                    )}
                                   {selectedRole === "Recruiters" &&
                                     selectedIds.length > 0 && (
                                       <button
@@ -1854,11 +1849,11 @@ const calculateSummary = () => {
                                             src={
                                               allImagesForRecruiters.length > 0
                                                 ? allImagesForRecruiters[
-                                                    index
-                                                  ] !== null
+                                                  index
+                                                ] !== null
                                                   ? allImagesForRecruiters[
-                                                      index
-                                                    ]
+                                                  index
+                                                  ]
                                                   : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
                                                 : `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`
                                             }
@@ -1902,7 +1897,7 @@ const calculateSummary = () => {
                     {selectedRole === "TeamLeader"
                       ? selectedIds.length
                       : employeeCount.teamLeaderCount ||
-                        selectedTeamLeaders.length}
+                      selectedTeamLeaders.length}
                   </p>
                   <p className="attendanceform">
                     Recruiter :{" "}
@@ -1919,7 +1914,7 @@ const calculateSummary = () => {
                     {selectedRole === "TeamLeader"
                       ? selectedIds.length
                       : selectedTeamLeaders.length ||
-                        employeeCount.teamLeaderCount}
+                      employeeCount.teamLeaderCount}
                   </p>
                   <p className="attendanceform">
                     Recruiter :{" "}
@@ -1942,8 +1937,8 @@ const calculateSummary = () => {
             </div>
           </div>
           {/* rajlaxmi jagadale some change that div */}
-          <div  className="PI-attendance-formattendanceform">
-            
+          <div className="PI-attendance-formattendanceform">
+
             <div className="PI-radio-buttonsattendanceform">
               <div className="attendanceform">
                 <label className="PI-radio-labelattendanceform">
@@ -2098,214 +2093,214 @@ const calculateSummary = () => {
 
             {/*<ToastContainer position="top-right" autoClose={5000} />*/}
 
-  {/* Samruddhi Patole 08/09/25 */}
-<div className="grid-containerattendanceform">
-  <div className="grid-itemattendanceform compact-block">
-    <p className="item-titleattendanceform">Working <br /> Days</p>
-    <p className="attendanceform">{summary.workingDays}</p>
-  </div>
-  <div className="grid-itemattendanceform compact-block">
-    <p className="item-titleattendanceform">Total<br /> Hours</p>
-    <p className="attendanceform">{summary.totalWorkingHours}</p>
-  </div>
-  <div className="grid-itemattendanceform compact-block">
-    <p className="item-titleattendanceform">Total <br />Target</p>
-    <p className="attendanceform">{summary.totalTarget}</p>
-  </div>
-  {(() => {
-    // Determine which IDs to display
-    const filteredIds =
-      selectedFilters.employeeId && selectedFilters.employeeId.length > 0
-        ? selectedFilters.employeeId
-        : selectedIds && selectedIds.length > 0
-        ? selectedIds
-        : [];
-    if (filteredIds.length === 0) {
-      let totalPresent = 0;
-      let totalAbsent = 0;
-      let totalNotLogin = 0;
+            {/* Samruddhi Patole 08/09/25 */}
+            <div className="grid-containerattendanceform">
+              <div className="grid-itemattendanceform compact-block">
+                <p className="item-titleattendanceform">Working <br /> Days</p>
+                <p className="attendanceform">{summary.workingDays}</p>
+              </div>
+              <div className="grid-itemattendanceform compact-block">
+                <p className="item-titleattendanceform">Total<br /> Hours</p>
+                <p className="attendanceform">{summary.totalWorkingHours}</p>
+              </div>
+              <div className="grid-itemattendanceform compact-block">
+                <p className="item-titleattendanceform">Total <br />Target</p>
+                <p className="attendanceform">{summary.totalTarget}</p>
+              </div>
+              {(() => {
+                // Determine which IDs to display
+                const filteredIds =
+                  selectedFilters.employeeId && selectedFilters.employeeId.length > 0
+                    ? selectedFilters.employeeId
+                    : selectedIds && selectedIds.length > 0
+                      ? selectedIds
+                      : [];
+                if (filteredIds.length === 0) {
+                  let totalPresent = 0;
+                  let totalAbsent = 0;
+                  let totalNotLogin = 0;
 
-      attendanceDataNew.forEach((data) => {
-        const loginTime = (data.loginTime || "").trim();
-        const archived = Number(data.dailyArchived) || 0;
+                  attendanceDataNew.forEach((data) => {
+                    const loginTime = (data.loginTime || "").trim();
+                    const archived = Number(data.dailyArchived) || 0;
 
-        const hasLogin =
-          loginTime &&
-          loginTime !== "00:00" &&
-          loginTime !== "0" &&
-          loginTime !== "0:00" &&
-          loginTime !== "00:00:00";
+                    const hasLogin =
+                      loginTime &&
+                      loginTime !== "00:00" &&
+                      loginTime !== "0" &&
+                      loginTime !== "0:00" &&
+                      loginTime !== "00:00:00";
 
-        
-      if (hasLogin) {
-        if (archived >= 3) totalPresent++;
-        else totalAbsent++;
-      } else {
-        totalNotLogin++;
-      }
-    });
-     const workingDays = summary.workingDays;
-    totalNotLogin += workingDays - (totalPresent + totalAbsent);
 
-      return (
-        <>
-          <div className="grid-itemattendanceform compact-block">
-            <p className="item-titleattendanceform">Present</p>
-            <p className="attendanceform">{totalPresent}</p>
-          </div>
-          <div className="grid-itemattendanceform compact-block">
-            <p className="item-titleattendanceform">Absent</p>
-            <p className="attendanceform">{totalAbsent}</p>
-          </div>
-           <div className="grid-itemattendanceform compact-block">
-          <p className="item-titleattendanceform">Not Login Days</p>
-          <p className="attendanceform">{totalNotLogin}</p>
-        </div>
-        </>
-      );
-    }
-    // Single user → show blocks
-        if (filteredIds.length === 1) {
-        const userId = filteredIds[0];
-        const userRecords = attendanceDataNew.filter(
-        (item) => item.employeeId.toString() === userId.toString()
-      );
-// const dailyArchived = userRecords.reduce(
-//     (sum, data) => sum + (Number(data.dailyArchived) || 0),
-//     0
-//   );
-      let present = 0;
-      let absent = 0;
-    let notLogin = 0;
+                    if (hasLogin) {
+                      if (archived >= 3) totalPresent++;
+                      else totalAbsent++;
+                    } else {
+                      totalNotLogin++;
+                    }
+                  });
+                  const workingDays = summary.workingDays;
+                  totalNotLogin += workingDays - (totalPresent + totalAbsent);
 
-      // userRecords.forEach((data) => {
-      //   const loginTime = (data.loginTime || "").trim();
-      //   const hasLogin =
-      //     loginTime &&
-      //     loginTime !== "00:00" &&
-      //     loginTime !== "0" &&
-      //     loginTime !== "0:00" &&
-      //     loginTime !== "00:00:00";
+                  return (
+                    <>
+                      <div className="grid-itemattendanceform compact-block">
+                        <p className="item-titleattendanceform">Present</p>
+                        <p className="attendanceform">{totalPresent}</p>
+                      </div>
+                      <div className="grid-itemattendanceform compact-block">
+                        <p className="item-titleattendanceform">Absent</p>
+                        <p className="attendanceform">{totalAbsent}</p>
+                      </div>
+                      <div className="grid-itemattendanceform compact-block">
+                        <p className="item-titleattendanceform">Not Login Days</p>
+                        <p className="attendanceform">{totalNotLogin}</p>
+                      </div>
+                    </>
+                  );
+                }
+                // Single user → show blocks
+                if (filteredIds.length === 1) {
+                  const userId = filteredIds[0];
+                  const userRecords = attendanceDataNew.filter(
+                    (item) => item.employeeId.toString() === userId.toString()
+                  );
+                  // const dailyArchived = userRecords.reduce(
+                  //     (sum, data) => sum + (Number(data.dailyArchived) || 0),
+                  //     0
+                  //   );
+                  let present = 0;
+                  let absent = 0;
+                  let notLogin = 0;
 
-      //   if (hasLogin) present++;
-      //   else absent++;
+                  // userRecords.forEach((data) => {
+                  //   const loginTime = (data.loginTime || "").trim();
+                  //   const hasLogin =
+                  //     loginTime &&
+                  //     loginTime !== "00:00" &&
+                  //     loginTime !== "0" &&
+                  //     loginTime !== "0:00" &&
+                  //     loginTime !== "00:00:00";
 
-      // });
- userRecords.forEach((data) => {
-      const loginTime = (data.loginTime || "").trim();
-      const archived = Number(data.dailyArchived) || 0;
+                  //   if (hasLogin) present++;
+                  //   else absent++;
 
-      const hasLogin =
-        loginTime &&
-        loginTime !== "00:00" &&
-        loginTime !== "00:00:00" &&
-        loginTime !== "0" &&
-        loginTime !== "0:00";
+                  // });
+                  userRecords.forEach((data) => {
+                    const loginTime = (data.loginTime || "").trim();
+                    const archived = Number(data.dailyArchived) || 0;
 
-      if (hasLogin) {
-        if (archived >= 3) present++;
-        else absent++;
-      } else {
-        notLogin++;
-      }
-    });
+                    const hasLogin =
+                      loginTime &&
+                      loginTime !== "00:00" &&
+                      loginTime !== "00:00:00" &&
+                      loginTime !== "0" &&
+                      loginTime !== "0:00";
 
-    notLogin += summary.workingDays - (present + absent + notLogin);
+                    if (hasLogin) {
+                      if (archived >= 3) present++;
+                      else absent++;
+                    } else {
+                      notLogin++;
+                    }
+                  });
 
-      return (
-        <>
-          <div className="grid-itemattendanceform compact-block">
-            <p className="item-titleattendanceform">Present</p>
-            <p className="attendanceform">{present}</p>
-          </div>
-          <div className="grid-itemattendanceform compact-block">
-            <p className="item-titleattendanceform">Absent</p>
-            <p className="attendanceform">{absent}</p>
-          </div>
-            <div className="grid-itemattendanceform compact-block">
-            <p className="item-titleattendanceform">Not Login Days</p>
-            <p className="attendanceform">{notLogin}</p>
-          </div>
-        </>
-      );
-    }
-   // Multiple users or filtered IDs → show table
-return (
-    <div className="grid-itemattendanceform merged-box">
-      <div className="attendance-table-container">
-        <table className="attendance-summary-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Present</th>
-              <th>Absent</th>
-              <th>Not Login Days</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredIds
-              .map((id) => id)
-              .sort((a, b) => Number(a) - Number(b))
-              .map((id) => {
-                const userRecords = attendanceDataNew.filter(
-                  (item) => item.employeeId.toString() === id.toString()
-                );
+                  notLogin += summary.workingDays - (present + absent + notLogin);
 
-                let present = 0;
-                let absent = 0;
-                let notLogin = 0;
-
-                userRecords.forEach((data) => {
-                  const loginTime = (data.loginTime || "").trim();
-                  const archived = Number(data.dailyArchived) || 0;
-
-                  const hasLogin =
-                    loginTime &&
-                    loginTime !== "00:00" &&
-                    loginTime !== "00:00:00" &&
-                    loginTime !== "0" &&
-                    loginTime !== "0:00";
-
-                  if (hasLogin) {
-                    if (archived >= 3) present++;
-                    else absent++;
-                  } else {
-                    notLogin++;
-                  }
-                });
-
-                notLogin += summary.workingDays - (present + absent + notLogin);
-
+                  return (
+                    <>
+                      <div className="grid-itemattendanceform compact-block">
+                        <p className="item-titleattendanceform">Present</p>
+                        <p className="attendanceform">{present}</p>
+                      </div>
+                      <div className="grid-itemattendanceform compact-block">
+                        <p className="item-titleattendanceform">Absent</p>
+                        <p className="attendanceform">{absent}</p>
+                      </div>
+                      <div className="grid-itemattendanceform compact-block">
+                        <p className="item-titleattendanceform">Not Login Days</p>
+                        <p className="attendanceform">{notLogin}</p>
+                      </div>
+                    </>
+                  );
+                }
+                // Multiple users or filtered IDs → show table
                 return (
-                  <tr key={id}>
-                    <td>{id}</td>
-                    <td>{present}</td>
-                    <td>{absent}</td>
-                    <td>{notLogin}</td>
-                  </tr>
+                  <div className="grid-itemattendanceform merged-box">
+                    <div className="attendance-table-container">
+                      <table className="attendance-summary-table">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Present</th>
+                            <th>Absent</th>
+                            <th>Not Login Days</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filteredIds
+                            .map((id) => id)
+                            .sort((a, b) => Number(a) - Number(b))
+                            .map((id) => {
+                              const userRecords = attendanceDataNew.filter(
+                                (item) => item.employeeId.toString() === id.toString()
+                              );
+
+                              let present = 0;
+                              let absent = 0;
+                              let notLogin = 0;
+
+                              userRecords.forEach((data) => {
+                                const loginTime = (data.loginTime || "").trim();
+                                const archived = Number(data.dailyArchived) || 0;
+
+                                const hasLogin =
+                                  loginTime &&
+                                  loginTime !== "00:00" &&
+                                  loginTime !== "00:00:00" &&
+                                  loginTime !== "0" &&
+                                  loginTime !== "0:00";
+
+                                if (hasLogin) {
+                                  if (archived >= 3) present++;
+                                  else absent++;
+                                } else {
+                                  notLogin++;
+                                }
+                              });
+
+                              notLogin += summary.workingDays - (present + absent + notLogin);
+
+                              return (
+                                <tr key={id}>
+                                  <td>{id}</td>
+                                  <td>{present}</td>
+                                  <td>{absent}</td>
+                                  <td>{notLogin}</td>
+                                </tr>
+                              );
+                            })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 );
-              })}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-})()}
-  <div className="grid-itemattendanceform compact-block">
-    <p className="item-titleattendanceform">Weekends</p>
-    <p className="attendanceform">{summary.weekends}</p>
-  </div>
-  <div className="grid-itemattendanceform compact-block">
-    <p className="item-titleattendanceform">Archived</p>
-    <p className="attendanceform">{summary.archived}</p>
-  </div>
-  <div className="grid-itemattendanceform compact-block">
-    <p className="item-titleattendanceform">Pending</p>
-    <p className="attendanceform">{summary.pending}</p>
-  </div>
-</div>
-</div>
-</div>
+              })()}
+              <div className="grid-itemattendanceform compact-block">
+                <p className="item-titleattendanceform">Weekends</p>
+                <p className="attendanceform">{summary.weekends}</p>
+              </div>
+              <div className="grid-itemattendanceform compact-block">
+                <p className="item-titleattendanceform">Archived</p>
+                <p className="attendanceform">{summary.archived}</p>
+              </div>
+              <div className="grid-itemattendanceform compact-block">
+                <p className="item-titleattendanceform">Pending</p>
+                <p className="attendanceform">{summary.pending}</p>
+              </div>
+            </div>
+          </div>
+        </div>
         {/* {showFilterButton && (
             <button
               className="lineUp-Filter-btnattendanceform"
@@ -2337,13 +2332,12 @@ return (
                 <div>
                   <div key={optionKey} className="filter-option">
                     <button
-                      className={`white-Btn ${
-                        (selectedFilters[optionKey] &&
+                      className={`white-Btn ${(selectedFilters[optionKey] &&
                           selectedFilters[optionKey].length > 0) ||
-                        activeFilterOption === optionKey
+                          activeFilterOption === optionKey
                           ? "selected glow"
                           : ""
-                      }`}
+                        }`}
                       onClick={() => handleFilterOptionClick(optionKey)}
                     >
                       {optionLabel}
@@ -2397,8 +2391,8 @@ return (
             >
               Clear Filters
             </button>
-                {/* Nikita Shirsath - 08-07-2025 */}
-      {/*<button
+            {/* Nikita Shirsath - 08-07-2025 */}
+            {/*<button
         onClick={handleDownloadPdf}
         className="clr-button lineUp-Filter-btn setMarginleftnewbysahilinaattendance"
       >
@@ -2408,7 +2402,7 @@ return (
           {/* )} */}
         </div>
       </div>
-{/* Nikita Shirsath - 08-07-2025 */}
+      {/* Nikita Shirsath - 08-07-2025 */}
 
 
       <div ref={tableRef} className="PI-attendance-containerattendanceform" >
@@ -2492,12 +2486,12 @@ return (
                   onMouseOver={handleMouseOver}
                   onMouseOut={handleMouseOut}
                 >
-                   {data.employeeName}
+                  {data.employeeName}
                   <div className="tooltipattendanceform">
                     <span className="tooltiptextattendanceform">
                       {data.employeeName}
                     </span>
-                  </div>  
+                  </div>
                 </td>
                 <td
                   className="tabledataattendanceform"
@@ -2695,9 +2689,9 @@ return (
             ))}
           </tbody>
         </table>
-      </div>  
-  </div> 
-   
+      </div>
+    </div>
+
   );
 };
 

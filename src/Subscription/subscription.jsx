@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./subscription.css";
-import AddUser from "./AddUser";
+// import AddUser from "./AddUser";
 import { API_BASE_URL } from "../api/api";
 // import "@fortawesome/fontawesome-free/css/all.min.css";
 import QRCode from "react-qr-code";

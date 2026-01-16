@@ -6,7 +6,7 @@ import { API_BASE_URL } from "../api/api";
 import "./jobDescriptionEdm.css";
 import profileImageRtempus from "../assets/rtempus.jpeg";
 import profileImageVelocity from "../assets/velocityHr.png";
-
+import "./shareEDM.css"
 
 
 function JobDescriptionEdm({ Descriptions, onJobDescriptionEdm, descriptionFromTempGen }) {

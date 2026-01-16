@@ -50,9 +50,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
   const [selectedFilters, setSelectedFilters] = useState({})
   const [loading, setLoading] = useState(true) // Add loading state
   const [activeFilterOption, setActiveFilterOption] = useState(null)
-  const [showShareButton, setShowShareButton] = useState(true)
   const [showPermissionModal, setShowPermissionModal] = useState(false)
-
   const [selectedRows, setSelectedRows] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [difference, setDifference] = useState()
@@ -88,7 +86,7 @@ const SendClientEmail = ({ clientEmailSender }) => {
   }
   const navigator = useNavigate();
   // need to be changed after implementation of api
-const [pageSize, setPageSize] = useState(1000);
+  const [pageSize, setPageSize] = useState(1000);
   const [currentPage, setCurrentPage] = useState(1)
   const [totalRecords, setTotalRecords] = useState(0)
   const [triggerFetch, setTriggerFetch] = useState(false)
@@ -111,140 +109,183 @@ const [pageSize, setPageSize] = useState(1000);
   const [showSelectionCards, setShowSelectionCards] = useState(false)
   const [imageLoadErrors, setImageLoadErrors] = useState({})
   const [selectedRecruiters, setSelectedRecruiters] = useState([])
-  const [accessedIds, setAccessedIds] = useState([]);
+  // const [accessedIds, setAccessedIds] = useState([]);
   const managerToTeamLeaders = {}
 
+  // const [selectedCandidateIds, setSelectedCandidateIds] = useState([]);
+  const [selectedPermissionIds, setSelectedPermissionIds] = useState([]);
+  const [isAcceptMode, setIsAcceptMode] = useState(true);
 
-  const fetchAccessedIds = async () => {
-    try {
-      const resp = await axios.get(`${API_BASE_URL}/employee-permissions/${employeeId}`);
-      console.log("RESPONSE DATA:", resp.data);
 
-      if (resp.status === 200 && Array.isArray(resp.data)) {
-        // const ids = resp.data
-        //   .filter(item => item.requirementId !== undefined && item.requirementId !== null)
-        //   .map(item => item.requirementId.toString());
+  //------------------------------------------------------------------------------------------------------------------------------
 
-              const ids = resp.data
-  .filter(item => item.requirementId !== undefined && item.requirementId !== null && item.requirementId !== 0)
-  .map(item => item.requirementId.toString());
-console.log("Filtered Access IDs:", ids);
+  // const fetchAccessedIds = async () => {
+  //   try {
+  //     const resp = await axios.get(`${API_BASE_URL}/employee-permissions/${employeeId}`);
+  //     console.log("RESPONSE DATA:", resp.data);
 
-        // console.log("ACCESS ID", ids);
-        setAccessedIds(ids);
-      } else {
-        setAccessedIds([]);
-      }
-    } catch (error) {
-      console.error("Error fetching accessed IDs:", error);
-      setAccessedIds([]);
-    }
+  //     if (resp.status === 200 && Array.isArray(resp.data)) {
+  //       // const ids = resp.data
+  //       //   .filter(item => item.requirementId !== undefined && item.requirementId !== null)
+  //       //   .map(item => item.requirementId.toString());
+
+  //       const ids = resp.data
+  //         .filter(item => item.requirementId !== undefined && item.requirementId !== null && item.requirementId !== 0)
+  //         .map(item => item.requirementId.toString());
+  //       console.log("Filtered Access IDs:", ids);
+
+  //       // console.log("ACCESS ID", ids);
+  //       setAccessedIds(ids);
+  //     } else {
+  //       setAccessedIds([]);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching accessed IDs:", error);
+  //     setAccessedIds([]);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (userType === "Recruiters") {
+  //     fetchAccessedIds();
+  //   }
+  // }, [])
+
+  //-----------------------------------------------------------------------------------------------------------
+
+
+  const fetchCallingList = (page, size) => {
+    //   setLoading(true);
+
+    //   // ✅ FIX 1: clean + unique + numeric requirementIds
+    //   const newRequirmentIds = [
+    //     ...new Set(accessedIds.map(id => Number(id)).filter(id => !isNaN(id)))
+    //   ].join(",");
+
+    //   fetch(
+    //     `${API_BASE_URL}/calling-lineup/${employeeId}/${userType}` +
+    //     `?searchTerm=${searchTerm}` +
+    //     `&requirementIds=${newRequirmentIds}` +
+    //     `&requirmentParamKey=${userType === "Recruiters" ? "yes" : "no"}` +
+    //     `&page=${page}` +
+    //     `&size=${size}`
+    //   )
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       console.log("DATA::", data);
+
+    //       // ✅ handle pageable + non-pageable response
+    //       const rawList = Array.isArray(data) ? data : data.content || [];
+
+    //       // ✅ FIX 2: normalize backend (nested → flat) for UI
+    //       const list = rawList.map(item => ({
+
+    //         // ids
+    //         candidateId: item.candidate?.candidateId ?? item.candidateId,
+    //         empId: item.empId,
+
+    //         // candidate info
+    //         candidateName: item.candidate?.fullName ?? item.candidateName ?? "",
+    //         candidateEmail: item.candidate?.email ?? item.candidateEmail ?? "",
+    //         contactNumber: item.candidate?.mobileNo ?? item.contactNumber ?? "",
+    //         alternateNumber: item.alternateNumber ?? "",
+
+    //         // recruiter / employee
+    //         recruiterName: item.recruiter?.employeeName ?? item.recruiterName ?? "",
+
+    //         // job / requirement
+    //         requirementId: item.requirement?.requirementId ?? item.requirementId,
+    //         requirementCompany: item.requirement?.companyName ?? item.requirementCompany ?? "",
+    //         jobDesignation: item.jobDesignation ?? "",
+
+    //         // location & experience
+    //         currentLocation: item.basicDetails?.currentLocation ?? item.currentLocation ?? "",
+    //         fullAddress: item.basicDetails?.fullAddress ?? item.fullAddress ?? "",
+    //         experienceYear: item.basicDetails?.experienceYear ?? item.experienceYear ?? 0,
+    //         experienceMonth: item.basicDetails?.experienceMonth ?? item.experienceMonth ?? 0,
+    //         relevantExperience: item.relevantExperience ?? "",
+
+    //         // CTC
+    //         currentCTCLakh: item.currentCTCLakh ?? 0,
+    //         currentCTCThousand: item.currentCTCThousand ?? 0,
+    //         expectedCTCLakh: item.expectedCTCLakh ?? 0,
+    //         expectedCTCThousand: item.expectedCTCThousand ?? 0,
+
+    //         // misc
+    //         sourceName: item.sourceName ?? "",
+    //         communicationRating: item.communicationRating ?? "",
+    //         callingFeedback: item.callingFeedback ?? "",
+    //         incentive: item.incentive ?? 0,
+    //         selectYesOrNo: item.selectYesOrNo ?? "",
+    //         companyName: item.companyName ?? "",
+    //         date: item.date ?? "",
+    //         candidateAddedTime: item.candidateAddedTime ?? "",
+
+    //         // status
+    //         finalStatus: item.finalStatus ?? "",
+    //         profileStatus: item.profileStatus ?? "",
+
+    //         // documents / extras
+    //         resume: item.resume ?? null,
+    //         noticePeriod: item.noticePeriod ?? "",
+    //         msgForTeamLeader: item.msgForTeamLeader ?? "",
+    //         availabilityForInterview: item.availabilityForInterview ?? "",
+    //         interviewTime: item.interviewTime ?? "",
+    //         gender: item.gender ?? "",
+    //         qualification: item.qualification ?? "",
+    //         yearOfPassing: item.yearOfPassing ?? "",
+    //         extraCertification: item.extraCertification ?? "",
+    //         holdingAnyOffer: item.holdingAnyOffer ?? "",
+    //         offerLetterMsg: item.offerLetterMsg ?? "",
+    //       }));
+
+    //       console.log("FIRST ROW 👉", list[0]);
+
+
+    //       // ✅ set states ONCE with clean data
+    //       setCallingList(list);
+    //       setFilteredCallingList(list);
+    //       setTotalRecords(Array.isArray(data) ? list.length : data.totalElements ?? list.length);
+    //       setSearchCount(list.length);
+    //       setLoading(false);
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error fetching data:", error);
+    //       setLoading(false);
+    //     });
+  };
+
+  //--------------------------------------------------------------------------------------------------------------
+
+  const fetchPermittedSentProfiles = (page, size) => {
+    setLoading(true);
+
+    fetch(
+      `${API_BASE_URL}/permitted-sent-profiles/${employeeId}?page=${page}&size=${size}`
+    )
+      .then(res => res.json())
+      .then(data => {
+        console.log("PERMITTED DATA 👉", data);
+
+        const list = data.content || [];
+
+        console.log("FIRST ROW 👉", list[0]); // MUST show permissionId
+
+        setCallingList(list);
+        setFilteredCallingList(list);
+        setTotalRecords(data.totalElements ?? list.length);
+        setSearchCount(list.length);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Error fetching permitted profiles:", err);
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
-    if (userType === "Recruiters") {
-      fetchAccessedIds();
-    }
-  }, [])
-
-
-const fetchCallingList = (page, size) => {
-  setLoading(true);
-
-  // ✅ FIX 1: clean + unique + numeric requirementIds
-  const newRequirmentIds = [
-    ...new Set(accessedIds.map(id => Number(id)).filter(id => !isNaN(id)))
-  ].join(",");
-
-  fetch(
-    `${API_BASE_URL}/calling-lineup/${employeeId}/${userType}` +
-    `?searchTerm=${searchTerm}` +
-    `&requirementIds=${newRequirmentIds}` +
-    `&requirmentParamKey=${userType === "Recruiters" ? "yes" : "no"}` +
-    `&page=${page}` +
-    `&size=${size}`
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("DATA::", data);
-
-      // ✅ handle pageable + non-pageable response
-      const rawList = Array.isArray(data) ? data : data.content || [];
-
-      // ✅ FIX 2: normalize backend (nested → flat) for UI
-      const list = rawList.map(item => ({
-        // ids
-        candidateId: item.candidate?.candidateId ?? item.candidateId,
-        empId: item.empId,
-
-        // candidate info
-        candidateName: item.candidate?.fullName ?? item.candidateName ?? "",
-        candidateEmail: item.candidate?.email ?? item.candidateEmail ?? "",
-        contactNumber: item.candidate?.mobileNo ?? item.contactNumber ?? "",
-        alternateNumber: item.alternateNumber ?? "",
-
-        // recruiter / employee
-        recruiterName: item.recruiter?.employeeName ?? item.recruiterName ?? "",
-
-        // job / requirement
-        requirementId: item.requirement?.requirementId ?? item.requirementId,
-        requirementCompany: item.requirement?.companyName ?? item.requirementCompany ?? "",
-        jobDesignation: item.jobDesignation ?? "",
-
-        // location & experience
-        currentLocation: item.basicDetails?.currentLocation ?? item.currentLocation ?? "",
-        fullAddress: item.basicDetails?.fullAddress ?? item.fullAddress ?? "",
-        experienceYear: item.basicDetails?.experienceYear ?? item.experienceYear ?? 0,
-        experienceMonth: item.basicDetails?.experienceMonth ?? item.experienceMonth ?? 0,
-        relevantExperience: item.relevantExperience ?? "",
-
-        // CTC
-        currentCTCLakh: item.currentCTCLakh ?? 0,
-        currentCTCThousand: item.currentCTCThousand ?? 0,
-        expectedCTCLakh: item.expectedCTCLakh ?? 0,
-        expectedCTCThousand: item.expectedCTCThousand ?? 0,
-
-        // misc
-        sourceName: item.sourceName ?? "",
-        communicationRating: item.communicationRating ?? "",
-        callingFeedback: item.callingFeedback ?? "",
-        incentive: item.incentive ?? 0,
-        selectYesOrNo: item.selectYesOrNo ?? "",
-        companyName: item.companyName ?? "",
-        date: item.date ?? "",
-        candidateAddedTime: item.candidateAddedTime ?? "",
-
-        // status
-        finalStatus: item.finalStatus ?? "",
-        profileStatus: item.profileStatus ?? "",
-
-        // documents / extras
-        resume: item.resume ?? null,
-        noticePeriod: item.noticePeriod ?? "",
-        msgForTeamLeader: item.msgForTeamLeader ?? "",
-        availabilityForInterview: item.availabilityForInterview ?? "",
-        interviewTime: item.interviewTime ?? "",
-        gender: item.gender ?? "",
-        qualification: item.qualification ?? "",
-        yearOfPassing: item.yearOfPassing ?? "",
-        extraCertification: item.extraCertification ?? "",
-        holdingAnyOffer: item.holdingAnyOffer ?? "",
-        offerLetterMsg: item.offerLetterMsg ?? "",
-      }));
-
-      // ✅ set states ONCE with clean data
-      setCallingList(list);
-      setFilteredCallingList(list);
-      setTotalRecords(Array.isArray(data) ? list.length : data.totalElements ?? list.length);
-      setSearchCount(list.length);
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-      setLoading(false);
-    });
-};
-
+    fetchPermittedSentProfiles(currentPage, pageSize);
+  }, [employeeId, currentPage, pageSize]);
 
   // Rajlaxmi Jagadale Added that code Date 14/04/2025 line 119/201
   const handleOpenDownArrowContentForRecruiters = async (teamLeaderId, teamLeaderName) => {
@@ -277,11 +318,11 @@ const fetchCallingList = (page, size) => {
     }
   }
 
-  useEffect(() => {
-    fetchCallingList(currentPage, pageSize)
-    // setSelectedRows([]);
-    // setAllSelected(false);
-  }, [employeeId, currentPage, pageSize, triggerFetch, accessedIds])
+  // useEffect(() => {
+  //   fetchCallingList(currentPage, pageSize)
+  //   // setSelectedRows([]);
+  //   // setAllSelected(false);
+  // }, [employeeId, currentPage, pageSize, triggerFetch])
 
   useEffect(() => {
     const options = limitedOptions
@@ -563,57 +604,6 @@ const fetchCallingList = (page, size) => {
     filterData()
   }, [selectedFilters, callingList])
 
-  // useEffect(() => {
-  //   const filtered = callingList.filter((item) => {
-  //     const searchTermLower = searchTerm.toLowerCase()
-  //     return (
-  //       (item.date && item.date.toLowerCase().includes(searchTermLower)) ||
-  //       (item.recruiterName && item.recruiterName.toLowerCase().includes(searchTermLower)) ||
-  //       (item.candidateName && item.candidateName.toLowerCase().includes(searchTermLower)) ||
-  //       (item.candidateEmail && item.candidateEmail.toLowerCase().includes(searchTermLower)) ||
-  //       (item.contactNumber && item.contactNumber.toString().includes(searchTermLower)) ||
-  //       (item.alternateNumber && item.alternateNumber.toString().includes(searchTermLower)) ||
-  //       (item.sourceName && item.sourceName.toLowerCase().includes(searchTermLower)) ||
-  //       (item.requirementId && item.requirementId.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.requirementCompany && item.requirementCompany.toLowerCase().includes(searchTermLower)) ||
-  //       (item.communicationRating && item.communicationRating.toLowerCase().includes(searchTermLower)) ||
-  //       (item.currentLocation && item.currentLocation.toLowerCase().includes(searchTermLower)) ||
-  //       (item.personalFeedback && item.personalFeedback.toLowerCase().includes(searchTermLower)) ||
-  //       (item.callingFeedback && item.callingFeedback.toLowerCase().includes(searchTermLower)) ||
-  //       (item.jobDesignation && item.jobDesignation.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.requirementId && item.requirementId.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.fullAddress && item.fullAddress.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.experienceYear && item.experienceYear.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.experienceMonth && item.experienceMonth.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.relevantExperience && item.relevantExperience.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.currentCTCLakh && item.currentCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.currentCTCThousand && item.currentCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.expectedCTCLakh && item.expectedCTCLakh.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.expectedCTCThousand && item.expectedCTCThousand.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.yearOfPassing && item.yearOfPassing.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.extraCertification && item.extraCertification.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.holdingAnyOffer && item.holdingAnyOffer.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.offerLetterMsg && item.offerLetterMsg.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.noticePeriod && item.noticePeriod.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.msgForTeamLeader && item.msgForTeamLeader.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.availabilityForInterview &&
-  //         item.availabilityForInterview.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.interviewTime && item.interviewTime.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.finalStatus && item.finalStatus.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.dateOfBirth && item.dateOfBirth.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.gender && item.gender.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.qualification && item.qualification.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.incentive && item.incentive.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.candidateId && item.candidateId.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.empId && item.empId.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.teamLeaderId && item.teamLeaderId.toString().toLowerCase().includes(searchTermLower)) ||
-  //       (item.selectYesOrNo && item.selectYesOrNo.toLowerCase().includes(searchTermLower))
-  //     )
-  //   })
-  //   setFilteredCallingList(filtered)
-  //   setSearchCount(filtered.length)
-  // }, [callingList])
-
   useEffect(() => {
     if (sortCriteria) {
       const sortedList = [...filteredCallingList].sort((a, b) => {
@@ -882,12 +872,15 @@ const fetchCallingList = (page, size) => {
   const handleClose = () => setShowModal(false)
 
   const handleSuccessEmailSend = (res) => {
-    if (res) {
-      setSelectedRows([])
-      setShowShareButton(true)
-      fetchCallingList(currentPage, pageSize) // Refresh the calling list after sending emails
-    }
-  }
+    if (!res) return;
+
+    // clear selected permissions
+    setSelectedPermissionIds([]);
+
+    // refresh permitted sent profiles list
+    fetchPermittedSentProfiles(currentPage, pageSize);
+  };
+
 
   const calculateWidth = () => {
     const baseWidth = 250
@@ -1151,6 +1144,33 @@ const fetchCallingList = (page, size) => {
     }
   }
 
+  const handleBulkAccept = async () => {
+
+
+    try {
+      for (const permissionId of selectedPermissionIds) {
+        await fetch(
+          `${API_BASE_URL}/permissions/accept/${permissionId}/${employeeId}`,
+          {
+            method: "PUT",
+          }
+        );
+      }
+
+      toast.success("Candidates moved to Calling Tracker successfully");
+
+      // clear selection after accept
+      setSelectedPermissionIds([]);
+
+      // refresh list
+      fetchPermittedSentProfiles(currentPage, pageSize);
+
+    } catch (error) {
+      console.error("Error accepting permissions:", error);
+      toast.error("Something went wrong while accepting candidates");
+    }
+  };
+
   return (
     <div className="SCE-list-container">
       {loading ? (
@@ -1221,43 +1241,15 @@ const fetchCallingList = (page, size) => {
                 </button>
               )}
 
-              {showShareButton ? (
-                <button className="SCE-share-btn" onClick={() => setShowShareButton(false)}>
-                  Share
-                </button>
-              ) : (
-                <div style={{ display: "flex", gap: "5px" }}>
-                  {!showShareButton && (
-                    <Badge
-                      color="var(--notification-badge-background)"
-                      count={selectedRows.length}
-                      className="newBadgeselectedcandidatestyle"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24px"
-                        viewBox="0 -960 960 960"
-                        width="24px"
-                        fill="#000000"
-                      >
-                        <path d="M222-200 80-342l56-56 85 85 170-170 56 57-225 226Zm0-320L80-662l56-56 85 85 170-170 56 57-225 226Zm298 240v-80h360v80H520Zm0-320v-80h360v80H520Z" />
-                      </svg>
-                    </Badge>
-                  )}
-                  <button
-                    className="SCE-share-close-btn"
-                    onClick={() => {
-                      setShowShareButton(true)
-                      setSelectedRows([])
-                    }}
-                  >
-                    Close
-                  </button>
-                  <button className="SCE-forward-btn" onClick={handleShow}>
-                    Send
-                  </button>
-                </div>
-              )}
+              <button
+                className="SCE-forward-btn"
+                disabled={selectedPermissionIds.length === 0}
+                onClick={handleBulkAccept}
+              >
+                Move to Calling Tracker
+              </button>
+
+
               <button className="SCE-Filter-btn" onClick={toggleFilterSection}>
                 Filter <i className="fa-solid fa-filter"></i>
               </button>
@@ -1331,9 +1323,9 @@ const fetchCallingList = (page, size) => {
                       <div className="filter-option">
                         <button
                           className={`white-Btn ${(selectedFilters[optionKey] && selectedFilters[optionKey].length > 0) ||
-                              activeFilterOption === optionKey
-                              ? "selected glow"
-                              : ""
+                            activeFilterOption === optionKey
+                            ? "selected glow"
+                            : ""
                             }`}
                           onClick={() => handleFilterOptionClick(optionKey)}
                         >
@@ -1382,30 +1374,37 @@ const fetchCallingList = (page, size) => {
             <table className="attendance-table">
               <thead>
                 <tr className="attendancerows-head">
-                  {!showShareButton ? (
-                    <th className="attendanceheading" style={{ position: "sticky", left: 0, zIndex: 10 }}>
-                      <input
-                        type="checkbox"
-                        onChange={handleSelectAll}
-                        checked={filteredCallingList.every((row) => selectedRows.includes(row.candidateId))}
-                        name="selectAll"
-                      />
-                    </th>
-                  ) : null}
-                  <th
-                    className="attendanceheading"
-                    style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 10 }}
-                  >
+                  <th className="attendanceheading" style={{ position: "sticky", left: 0, zIndex: 10 }}>
+                    <input
+                      type="checkbox"
+                      checked={
+                        filteredCallingList.length > 0 &&
+                        filteredCallingList.every(row =>
+                          selectedPermissionIds.includes(row.permissionId)
+                        )
+                      }
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedPermissionIds(
+                            filteredCallingList.map(r => r.permissionId)
+                          );
+                        } else {
+                          setSelectedPermissionIds([]);
+                        }
+                      }}
+                    />
+                  </th>
+
+                  <th className="attendanceheading" style={{ position: "sticky", left: "25px", zIndex: 10 }}>
+
                     Sr No.
                   </th>
                   <th className="attendanceheading" onClick={() => handleSort("date")}>
                     Added Date Time
                   </th>
                   {/* <th className="attendanceheading">Time</th> */}
-                  <th
-                    className="attendanceheading"
-                    style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 10 }}
-                  >
+                  <th className="attendanceheading" style={{ position: "sticky", left: "75px", zIndex: 10 }}>
+
                     Candidate Id
                   </th>
                   <th className="attendanceheading" onClick={() => handleSort("recruiterName")}>
@@ -1455,25 +1454,28 @@ const fetchCallingList = (page, size) => {
               </thead>
               <tbody>
                 {filteredCallingList.map((item, index) => (
-                  <tr key={item.candidateId} className="attendancerows">
-                    {!showShareButton ? (
-                      <td
-                        className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
-                        style={{ position: "sticky", left: 0, zIndex: 1 }}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedRows.includes(item.candidateId)}
-                          onChange={() => handleSelectRow(item)}
-                        />
-                      </td>
-                    ) : null}
-
+                  <tr key={`permission-${item.permissionId}`} className="attendancerows">
+                    <td
+                      className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
+                      style={{ position: "sticky", left: 0, zIndex: 1 }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedPermissionIds.includes(item.permissionId)}
+                        onChange={() => {
+                          setSelectedPermissionIds(prev =>
+                            prev.includes(item.permissionId)
+                              ? prev.filter(id => id !== item.permissionId)
+                              : [...prev, item.permissionId]
+                          );
+                        }}
+                      />
+                    </td>
                     <td
                       className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
-                      style={{ position: "sticky", left: showShareButton ? 0 : "25px", zIndex: 1 }}
+                      style={{ position: "sticky", left: "25px", zIndex: 1 }}
                     >
                       {calculateRowIndex(index)}
                       <div className="tooltip">
@@ -1495,7 +1497,7 @@ const fetchCallingList = (page, size) => {
                       className={`tabledata sticky-cell ${isHorizontallyScrolling ? "sticky-cell-scrolled" : ""}`}
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
-                      style={{ position: "sticky", left: showShareButton ? "50px" : "75px", zIndex: 1 }}
+                      style={{ position: "sticky", left: "75px", zIndex: 1 }}
                     >
                       {highlightText(item.candidateId.toString().toLowerCase() || "", searchTerm)}
                       <div className="tooltip">
@@ -1777,18 +1779,18 @@ const fetchCallingList = (page, size) => {
                       <td className="tabledata" onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
                         <button
                           className={`profile-btn ${item.profileStatus === "Profile Pending"
-                              ? "pending"
-                              : item.profileStatus === "Profile Sent"
-                                ? "sent"
-                                : item.profileStatus === "Profile Rejected"
-                                  ? "rejected"
-                                  : item.profileStatus === "Profile Shortlisted"
-                                    ? "selected"
-                                    : item.profileStatus === "No Response"
-                                      ? "no-response"
-                                      : item.profileStatus === "Profile On Hold"
-                                        ? "on-hold"
-                                        : ""
+                            ? "pending"
+                            : item.profileStatus === "Profile Sent"
+                              ? "sent"
+                              : item.profileStatus === "Profile Rejected"
+                                ? "rejected"
+                                : item.profileStatus === "Profile Shortlisted"
+                                  ? "selected"
+                                  : item.profileStatus === "No Response"
+                                    ? "no-response"
+                                    : item.profileStatus === "Profile On Hold"
+                                      ? "on-hold"
+                                      : ""
                             }`}
                         >
                           {item.profileStatus}

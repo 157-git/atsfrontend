@@ -12,7 +12,6 @@ import { toast } from 'react-toastify';
 
 
 function PreviousQuestion() {
-  // const API_BASE_URL = 'https://rg.157careers.in/api/ats/157industries';
 
   const [companyName, setCompanyName] = useState("");
   const [interviewRound, setInterviewRound] = useState("");

@@ -8,7 +8,6 @@ import CryptoJS from "crypto-js";
 import { API_BASE_URL } from "../api/api.js";
 
 const AttendanceShare = () => {
-  // const API_BASE_URL = 'https://rg.157careers.in/api/ats/157industries';
   const [activeRecruiters, setActiveRecruiters] = useState([]);
   const [inactiveRecruiters, setInactiveRecruiters] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");

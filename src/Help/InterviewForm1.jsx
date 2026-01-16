@@ -11,7 +11,6 @@ import { Modal } from "antd";
 import { Link } from "react-router-dom";
 
 const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
-    // const API_BASE_URL = 'https://rg.157careers.in/api/ats/157industries';
 
   const [jobId, setJobId] = useState("");
   const [designation, setDesignation] = useState("");
@@ -166,7 +165,7 @@ const InterviewForm1 = ({ toggleAllInterviewResponse }) => {
   console.log(requirementOptions);
   const [openAttachmentModal, setOpenAttachmentModal] = useState(false);
   const [attachmentUrl, setAttachmentUrl] = useState("");
-  
+
   const handleViewAttachment = (attachmentBase64String) => {
     if (attachmentBase64String) {
       setOpenAttachmentModal(true);

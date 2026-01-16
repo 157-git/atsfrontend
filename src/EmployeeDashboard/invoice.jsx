@@ -4,11 +4,10 @@ import React, { useState } from "react";
 import "./invoice.css";
 import axios from "axios";
 import { toast } from "react-toastify";
-// import { API_BASE_URL } from "../api/api";
+import { API_BASE_URL } from "../api/api";
 // SwapnilRokade_InvoiceTable_StroreFormDateToDatabase__07_to_654_12/07
 // SwapnilRokade_InvoiceTable_StoringSupplierSection_09To664_15/07
 const InvoiceTable = () => {
-  const API_BASE_URL = "https://rg.157careers.in/api/ats/157industries";
   const [formData, setFormData] = useState({
     invoiceDate: "",
     clientName: "",
