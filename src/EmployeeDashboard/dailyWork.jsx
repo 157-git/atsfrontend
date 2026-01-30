@@ -92,13 +92,13 @@ function DailyWork({
   //Samruddhi Patole
   const [dailyTarget, setDailyTarget] = useState(0);
   {/*const currentDateNewGlobal = getFormattedDateISOYMDformat();*/ }
-  {/*const [messagesContext, contextHolder] = notification.useNotification({
+  const [messagesContext, contextHolder] = notification.useNotification({
     stack: true
       ? {
           threshold: 1,
         }
       : false,
-  });*/}
+  });
 
   const getLoginLogoutStatus = () => {
     try {
@@ -792,6 +792,8 @@ function DailyWork({
       });
 
       socket.on("receive_user_login_event", (message) => {
+            console.log("🔔 LOGIN NOTIFICATION RECEIVED", message);
+
         console.log(message);
 
         setMessages((prevMessages) => {
@@ -807,6 +809,8 @@ function DailyWork({
       });
 
       socket.on("receive_user_logout_event", (message) => {
+            console.log("🔔 LOGout NOTIFICATION RECEIVED", message);
+
         console.log(message);
 
         setMessages((prevMessages) => {
