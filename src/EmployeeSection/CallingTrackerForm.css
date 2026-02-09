@@ -12,16 +12,20 @@
 
   margin-top: 10px;
 }
+
 .update-main-div {
   padding-top: 10px;
 }
+
 .calling-tracker-main::-webkit-scrollbar {
   display: none;
 }
+
 .calling-tracker-submain {
   width: 100%;
   height: 100%;
 }
+
 .calling-tracker-form {
   width: 100%;
   margin-bottom: 20px;
@@ -105,7 +109,7 @@
   justify-content: center;
 }
 
-.calling-tracker-field .calling-tracker-field-sub-div .css-dev-only-do-not-override-1htoz2s .css-dev-only-do-not-override-1htoz2s{
+.calling-tracker-field .calling-tracker-field-sub-div .css-dev-only-do-not-override-1htoz2s .css-dev-only-do-not-override-1htoz2s {
   border-right: none;
 }
 
@@ -247,17 +251,16 @@
   font-size: 1em;
 }
 
-.customprogressForCallingTracker
-  .ant-progress-outer
-  .ant-progress-text
-  .anticon-check-circle {
+.customprogressForCallingTracker .ant-progress-outer .ant-progress-text .anticon-check-circle {
   width: 10px;
 }
+
 .sameascontactnumbersize {
   font-size: 14px;
   margin-left: 5px;
   color: green;
 }
+
 .buttons {
   display: flex;
   flex-direction: row;
@@ -622,6 +625,7 @@ strong {
   border: 1px solid #dee2e6;
   color: var(--sidebar-txt);
 }
+
 .sidebar-item {
   cursor: pointer;
   padding: 10px;
@@ -657,6 +661,7 @@ strong {
   justify-content: space-evenly;
   align-items: center;
 }
+
 .help-form-group {
   margin-bottom: 15px;
   /* border: 1px solid  ; */
@@ -707,6 +712,7 @@ strong {
   gap: 5px;
   margin-top: 10px;
 }
+
 .sal-cal-th {
   color: var(--table-header-txt);
   background-color: var(--table-header-bg) !important;
@@ -784,6 +790,7 @@ strong {
   justify-content: space-between;
   align-items: center;
 }
+
 /* updated date 23-10-2024 */
 .requiredFieldStar {
   align-content: center;
@@ -796,9 +803,7 @@ strong {
 }
 
 /* Arshad Attar Added CSS 27-10-2024 */
-:where(.css-dev-only-do-not-override-ni1kz0).ant-picker-dropdown
-  .ant-picker-panel-container
-  .ant-picker-panel-layout {
+:where(.css-dev-only-do-not-override-ni1kz0).ant-picker-dropdown .ant-picker-panel-container .ant-picker-panel-layout {
   border: 2px solid gray;
   border-radius: 10px;
 }
@@ -855,55 +860,66 @@ strong {
   width: 100%;
 }
 
-.help-salary-input-div{
+.help-salary-input-div {
   gap: 20px;
 }
 
- 
-.nighlightincentivesinputnew{
+
+.nighlightincentivesinputnew {
   color: black;
   font-weight: bold;
   border: 1px dashed black;
   height: 24px;
   /* background-color: rgb(244, 244, 5) */
 }
-.uploadantdc{
+
+.uploadantdc {
   line-height: 0.1;
 }
-.newpaddingrightinputforhelp{
+
+.newpaddingrightinputforhelp {
   margin-right: 3px;
 }
-.addtrnaslateproptospan{
+
+.addtrnaslateproptospan {
   transform: translateX(-50px);
 }
-.addtrnaslateproptospanForMonths{
+
+.addtrnaslateproptospanForMonths {
   transform: translateX(-60px);
 }
-.wrapdivforctcs{
+
+.wrapdivforctcs {
   display: flex;
 }
-.setDisplayBlockForctcs{
+
+.setDisplayBlockForctcs {
   display: block;
 }
-.newhightforincentivesdiv{
+
+.newhightforincentivesdiv {
   height: 18px;
 }
-.newalignstyleforincentivesandjdid{
+
+.newalignstyleforincentivesandjdid {
   align-items: baseline;
 
 }
-.applyborderforinputs{
+
+.applyborderforinputs {
   border: 1px solid #f2f2f2;
   border-radius: 5px;
 }
-.calling-tracker-field-sub-div .ant-radio-group .ant-radio-wrapper{
-  border-right: none;
-}
-.update-calling-tracker-field-sub-div .ant-radio-group .ant-radio-wrapper{
+
+.calling-tracker-field-sub-div .ant-radio-group .ant-radio-wrapper {
   border-right: none;
 }
 
-.sendemailornot{
+.update-calling-tracker-field-sub-div .ant-radio-group .ant-radio-wrapper {
+  border-right: none;
+}
+
+.sendemailornot {
   display: flex;
   align-items: center;
   padding: 5px;
@@ -912,29 +928,38 @@ strong {
 }
 
 .radio-button-email-confirmation {
-  width: 18px;  
-  height: 20px; 
-  accent-color: #007bff; 
-  cursor: pointer; 
+  width: 18px;
+  height: 20px;
+  accent-color: #007bff;
+  cursor: pointer;
 }
 
 .sendemailornot label {
-  font-size: 16px; 
-  font-weight: 500; 
-  margin-right: 15px; 
+  font-size: 16px;
+  font-weight: 500;
+  margin-right: 15px;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.enter-customer-location{
+.enter-customer-location {
   margin-top: 5px;
   border: 1px solid gray;
   border-radius: 5px;
   padding-left: 5px;
 }
 
-.setwidthandmarginforratings{
+.setwidthandmarginforratings {
   width: 75%;
 }
 
+.job-id-popup {
+  width: max-content !important;
+  max-width: 600px;
+  /* safety limit */
+}
+
+.job-id-popup .ant-select-item-option-content {
+  white-space: nowrap;
+}

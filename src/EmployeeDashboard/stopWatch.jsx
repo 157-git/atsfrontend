@@ -16,6 +16,10 @@ const StopWatch = ({ startTimer: startProp, onStopClick, onStartClick, onResumeC
   const startTimeRef = useRef(null); // ✅ useRef instead of state
   const intervalRef = useRef(null);
 
+  useEffect(() => {
+  console.log("startProp on load:", startProp);
+}, [startProp]);
+
   /* ---------- Load saved time ---------- */
   useEffect(() => {
     if (startProp) {
