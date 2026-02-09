@@ -68,15 +68,16 @@ const verifyOtpAndLogout = async () => {
 
     console.log("OTP VERIFY RESPONSE 👉", response.data);
 
-    const { action, employeeId, userType: role, message } = response.data;
+const { action, userId, userType: role, message } = response.data;
 
     toast.success(message);
 
-    if (action === "AUTO_LOGIN") {
-      localStorage.setItem("employeeId", employeeId);
-      localStorage.setItem("userType", role);
-      navigate(`/Dashboard/${employeeId}/${role}`);
-    } else {
+if (action === "AUTO_LOGIN") {
+  localStorage.setItem("userId", userId);
+  localStorage.setItem("userType", role);
+  navigate(`/Dashboard/${userId}/${role}`);
+}
+else {
       navigate("/login/:userType");
     }
 
