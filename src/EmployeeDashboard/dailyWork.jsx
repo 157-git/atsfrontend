@@ -1623,7 +1623,7 @@ const fetchNewWorkId = async () => {
                   className="cleaarButtonOfNotifications daily-tr-btn"
                   onClick={handleClearNotifications}
                 >
-                  {/*Clear <ClearOutlined />*/}
+                  Clear <ClearOutlined />
                 </button>
               </div>
             </div>
