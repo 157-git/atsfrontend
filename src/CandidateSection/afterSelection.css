@@ -204,3 +204,24 @@
 .join-close-icon:hover {
   color: #ff0000;
 }
+
+.after-file-input {
+  width: 260px;                 /* fixed box */
+}
+
+.after-file-input::-webkit-file-upload-button {
+  margin-right: 8px;
+}
+
+/* Chrome / Edge */
+.after-file-input {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Firefox */
+.after-file-input {
+  text-overflow: clip;
+}
+
+

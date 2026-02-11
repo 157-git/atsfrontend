@@ -402,7 +402,7 @@ function Sidebar({
 
   // sakshi added below code on 17-12-25
   const openRGPlatform = () => {
-    window.open("http://localhost:5173", "_blank"); // replace with actual RG Portal URL
+    window.open("http://93.127.199.85:8087", "_blank"); // replace with actual RG Portal URL
   };
 
 

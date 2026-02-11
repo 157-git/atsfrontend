@@ -129,6 +129,22 @@ const AfterSelection = ({
     return { formattedJoinDate, formattedDateAfter90Days, remainingDays };
   };
 
+  const openBase64Pdf = (base64) => {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: "application/pdf" });
+
+    const url = URL.createObjectURL(blob);
+    window.open(url);
+  };
+
+
   const fetchCandidateData = async () => {
     try {
       const response = await fetch(
@@ -456,6 +472,7 @@ const AfterSelection = ({
   };
 
   const populateFormData = (data) => {
+    console.log("DOCUMENT::", data.aadhaarCard);
     setFormData({
       ...formData,
       mailReceived: data.mailReceived || "",
@@ -503,12 +520,12 @@ const AfterSelection = ({
         id === "offerLetterReceived"
           ? { issueOfferLetter: new Date() }
           : id === "offerLetterAccepted"
-          ? { letterResponse: new Date() }
-          : id === "joinStatus"
-          ? { joiningProcess: new Date() }
-          : id === "joinDate"
-          ? { joinDate: value }
-          : {}; // Use `value` instead of `formData.joinDate` to get the updated value
+            ? { letterResponse: new Date() }
+            : id === "joinStatus"
+              ? { joiningProcess: new Date() }
+              : id === "joinDate"
+                ? { joinDate: value }
+                : {}; // Use `value` instead of `formData.joinDate` to get the updated value
 
       updatePerformanceForAfterSelectionapi(updateData, performanceId);
     }
@@ -652,7 +669,7 @@ const AfterSelection = ({
             {!isActiveInquiry ? (
               <div
                 className="after-main-div"
-                style={{ width: "-webkit-fill-available"}}
+                style={{ width: "-webkit-fill-available" }}
               >
                 <form
                   className="Join-form-data"
@@ -697,193 +714,297 @@ const AfterSelection = ({
                         style={{ height: "auto" }}
                       >
                         <div className="after-document-files">
-                          <label htmlFor="adharCard" className="after-label">
-                            Aadhar Card:
+                          <label htmlFor="aadhaarCard" className="after-label">
+                            Aadhaar Card:
                           </label>
-                          <input
-                            style={{
-                              flexGrow: "0",
-                            }}
-                            type="file"
-                            className="after-file-input"
-                            name="aadhaarCard"
-                            onChange={handleFileChange}
-                            id=""
-                          />{" "}
-                          {documents.aadhaarCard && (
-                            <span className="text-green-500">
-                              {" "}
-                              <span>
-                                <img
-                                  style={{ width: "20px" }}
-                                  src={RightTick}
-                                  alt=""
-                                />
-                              </span>
-                            </span>
-                          )}
+
+                          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                            <input
+                              style={{ flexGrow: "0" }}
+                              type="file"
+                              className="after-file-input"
+                              name="aadhaarCard"
+                              id="aadhaarCard"
+                              onChange={handleFileChange}
+                            />
+
+                            {documents.aadhaarCard && (
+                              <>
+                                <img style={{ width: "18px" }} src={RightTick} alt="" />
+
+                                <button
+                                  type="button"
+                                  style={{
+                                    border: "none",
+                                    background: "transparent",
+                                    cursor: "pointer",
+                                    padding: 0,
+                                  }}
+                                  title="View Document"
+                                  onClick={() =>
+                                    documents.aadhaarCard instanceof File
+                                      ? window.open(URL.createObjectURL(documents.aadhaarCard))
+                                      : openBase64Pdf(documents.aadhaarCard)
+                                  }
+                                >
+                                  👁
+                                </button>
+                              </>
+                            )}
+                          </div>
                         </div>
 
                         <div className="after-document-files">
                           <label htmlFor="panCard" className="after-label">
                             Pan Card:
                           </label>
-                          <input
-                            style={{
-                              flexGrow: "0",
-                            }}
-                            type="file"
-                            className="after-file-input"
-                            name="panCard"
-                            onChange={handleFileChange}
-                            id=""
-                          />
-                          {documents.panCard && (
-                            <span>
-                              <span>
-                                <img
-                                  style={{ width: "20px", marginLeft: "10px" }}
-                                  src={RightTick}
-                                  alt=""
-                                />
-                              </span>
-                            </span>
-                          )}
+
+                          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                            <input
+                              style={{ flexGrow: "0" }}
+                              type="file"
+                              className="after-file-input"
+                              name="panCard"
+                              id="panCard"
+                              onChange={handleFileChange}
+                            />
+
+                            {documents.panCard && (
+                              <>
+                                <img style={{ width: "18px" }} src={RightTick} alt="" />
+
+                                <button
+                                  type="button"
+                                  style={{
+                                    border: "none",
+                                    background: "transparent",
+                                    cursor: "pointer",
+                                    padding: 0,
+                                  }}
+                                  title="View PAN Card"
+                                  onClick={() =>
+                                    documents.panCard instanceof File
+                                      ? window.open(URL.createObjectURL(documents.panCard))
+                                      : openBase64Pdf(documents.panCard)
+                                  }
+                                >
+                                  👁
+                                </button>
+                              </>
+                            )}
+                          </div>
                         </div>
 
                         <div className="after-document-files">
-                          <label
-                            htmlFor="degreeMarksheet"
-                            className="after-label"
-                          >
+                          <label htmlFor="drivingLicense" className="after-label">
                             Driving License:
                           </label>
-                          <input
-                            style={{
-                              flexGrow: "0",
-                            }}
-                            className="after-file-input"
-                            type="file"
-                            name="drivingLicense"
-                            onChange={handleFileChange}
-                            id=""
-                          />
-                          {documents.drivingLicense && (
-                            <span>
-                              {" "}
-                              <span>
-                                <img
-                                  style={{ width: "20px", marginLeft: "10px" }}
-                                  src={RightTick}
-                                  alt=""
-                                />
-                              </span>
-                            </span>
-                          )}
+
+                          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                            <input
+                              style={{ flexGrow: "0" }}
+                              type="file"
+                              className="after-file-input"
+                              name="drivingLicense"
+                              id="drivingLicense"
+                              onChange={handleFileChange}
+                            />
+
+                            {documents.drivingLicense && (
+                              <>
+                                <img style={{ width: "18px" }} src={RightTick} alt="" />
+
+                                <button
+                                  type="button"
+                                  style={{
+                                    border: "none",
+                                    background: "transparent",
+                                    cursor: "pointer",
+                                    padding: 0,
+                                  }}
+                                  title="View Driving License"
+                                  onClick={() =>
+                                    documents.drivingLicense instanceof File
+                                      ? window.open(URL.createObjectURL(documents.drivingLicense))
+                                      : openBase64Pdf(documents.drivingLicense)
+                                  }
+                                >
+                                  👁
+                                </button>
+                              </>
+                            )}
+                          </div>
                         </div>
 
                         <div className="after-document-files">
-                          <label htmlFor="sscMarksheet" className="after-label">
+                          <label htmlFor="degreeMarkSheet" className="after-label">
                             Degree Marksheet:
                           </label>
-                          <input
-                            style={{
-                              flexGrow: "0",
-                            }}
-                            type="file"
-                            name="degreeMarkSheet"
-                            onChange={handleFileChange}
-                            className="after-file-input"
-                            id=""
-                          />
-                          {documents.degreeMarkSheet && (
-                            <span>
-                              {" "}
-                              <span>
-                                <img
-                                  style={{ width: "20px", marginLeft: "10px" }}
-                                  src={RightTick}
-                                  alt=""
-                                />
-                              </span>
-                            </span>
-                          )}
+
+                          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                            <input
+                              style={{ flexGrow: "0" }}
+                              type="file"
+                              className="after-file-input"
+                              name="degreeMarkSheet"
+                              id="degreeMarkSheet"
+                              onChange={handleFileChange}
+                            />
+
+                            {documents.degreeMarkSheet && (
+                              <>
+                                <img style={{ width: "18px" }} src={RightTick} alt="" />
+
+                                <button
+                                  type="button"
+                                  style={{
+                                    border: "none",
+                                    background: "transparent",
+                                    cursor: "pointer",
+                                    padding: 0,
+                                  }}
+                                  title="View Degree Marksheet"
+                                  onClick={() =>
+                                    documents.degreeMarkSheet instanceof File
+                                      ? window.open(URL.createObjectURL(documents.degreeMarkSheet))
+                                      : openBase64Pdf(documents.degreeMarkSheet)
+                                  }
+                                >
+                                  👁
+                                </button>
+                              </>
+                            )}
+                          </div>
                         </div>
 
                         <div className="after-document-files">
-                          <label htmlFor="hscMarksheet" className="after-label">
+                          <label htmlFor="hscMarkSheet" className="after-label">
                             HSC Marksheet:
                           </label>
-                          <input
-                            style={{
-                              flexGrow: "0",
-                            }}
-                            type="file"
-                            name="hscMarkSheet"
-                            onChange={handleFileChange}
-                            className="after-file-input"
-                            id=""
-                          />
-                          {documents.hscMarkSheet && (
-                            <span>
-                              <img
-                                style={{ width: "20px", marginLeft: "10px" }}
-                                src={RightTick}
-                                alt=""
-                              />
-                            </span>
-                          )}
+
+                          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                            <input
+                              style={{ flexGrow: "0" }}
+                              type="file"
+                              className="after-file-input"
+                              name="hscMarkSheet"
+                              id="hscMarkSheet"
+                              onChange={handleFileChange}
+                            />
+
+                            {documents.hscMarkSheet && (
+                              <>
+                                <img style={{ width: "18px" }} src={RightTick} alt="" />
+
+                                <button
+                                  type="button"
+                                  style={{
+                                    border: "none",
+                                    background: "transparent",
+                                    cursor: "pointer",
+                                    padding: 0,
+                                  }}
+                                  title="View HSC Marksheet"
+                                  onClick={() =>
+                                    documents.hscMarkSheet instanceof File
+                                      ? window.open(URL.createObjectURL(documents.hscMarkSheet))
+                                      : openBase64Pdf(documents.hscMarkSheet)
+                                  }
+                                >
+                                  👁
+                                </button>
+                              </>
+                            )}
+                          </div>
                         </div>
 
                         <div className="after-document-files">
-                          <label htmlFor="sscMarksheet" className="after-label">
+                          <label htmlFor="sscMarkSheet" className="after-label">
                             SSC Marksheet:
                           </label>
-                          <input
-                            style={{
-                              flexGrow: "0",
-                            }}
-                            type="file"
-                            className="after-file-input"
-                            name="sscMarkSheet"
-                            onChange={handleFileChange}
-                            id=""
-                          />
-                          {documents.sscMarkSheet && (
-                            <span>
-                              <img
-                                style={{ width: "20px", marginLeft: "10px" }}
-                                src={RightTick}
-                                alt=""
-                              />
-                            </span>
-                          )}
+
+                          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                            <input
+                              style={{ flexGrow: "0" }}
+                              type="file"
+                              className="after-file-input"
+                              name="sscMarkSheet"
+                              id="sscMarkSheet"
+                              onChange={handleFileChange}
+                            />
+
+                            {documents.sscMarkSheet && (
+                              <>
+                                <img style={{ width: "18px" }} src={RightTick} alt="" />
+
+                                <button
+                                  type="button"
+                                  style={{
+                                    border: "none",
+                                    background: "transparent",
+                                    cursor: "pointer",
+                                    padding: 0,
+                                  }}
+                                  title="View SSC Marksheet"
+                                  onClick={() =>
+                                    documents.sscMarkSheet instanceof File
+                                      ? window.open(URL.createObjectURL(documents.sscMarkSheet))
+                                      : openBase64Pdf(documents.sscMarkSheet)
+                                  }
+                                >
+                                  👁
+                                </button>
+                              </>
+                            )}
+                          </div>
                         </div>
+
                         <div className="after-document-files">
-                          <label htmlFor="sscMarksheet" className="after-label">
+                          <label htmlFor="optionalDocuments" className="after-label">
                             Optional Document:
                           </label>
-                          <input
-                            style={{
-                              flexGrow: "0",
-                            }}
-                            type="file"
-                            className="after-file-input"
-                            name="optionalDocuments"
-                            multiple
-                            onChange={handleFileChange}
-                            id=""
-                          />
-                          {/* {documents.optionalDocuments && (
-                            <span>
-                              <img
-                                style={{ width: "20px", marginLeft: "10px" }}
-                                src={RightTick}
-                                alt=""
-                              />
-                            </span>
-                          )} */}
+
+                          <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+                            <input
+                              style={{ flexGrow: "0" }}
+                              type="file"
+                              className="after-file-input"
+                              name="optionalDocuments"
+                              id="optionalDocuments"
+                              multiple
+                              onChange={handleFileChange}
+                            />
+
+                            {documents.optionalDocuments?.length > 0 && (
+                              <>
+                                <img style={{ width: "18px" }} src={RightTick} alt="" />
+
+                                {documents.optionalDocuments.map((doc, index) => (
+                                  <button
+                                    key={index}
+                                    type="button"
+                                    style={{
+                                      border: "none",
+                                      background: "transparent",
+                                      cursor: "pointer",
+                                      padding: 0,
+                                      marginLeft: "4px",
+                                    }}
+                                    title={`View Document ${index + 1}`}
+                                    onClick={() =>
+                                      doc instanceof File
+                                        ? window.open(URL.createObjectURL(doc))
+                                        : openBase64Pdf(doc)
+                                    }
+                                  >
+                                    👁{index + 1}
+                                  </button>
+                                ))}
+                              </>
+                            )}
+                          </div>
                         </div>
+
                       </div>
 
                       <div className="after-document-fisrt">

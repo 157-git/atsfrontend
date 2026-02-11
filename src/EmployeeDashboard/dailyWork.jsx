@@ -1253,79 +1253,69 @@ function DailyWork({
   const [dailyWorkDataNew, setDailyWorkDataNew] = useState(null); // State to store getData
   const [displayStopWatch, setDisplayStopWatch] = useState(false);
 
-  const fetchNewWorkId = async () => {
-    try {
-      const currentDateNew = getFormattedDateISOYMDformat();
-      const resp = await axios.get(
-        `${API_BASE_URL}/fetch-work-id/${employeeId}/${userType}/${currentDateNew}`
+const fetchNewWorkId = async () => {
+  try {
+    const currentDate = getFormattedDateISOYMDformat();
+
+    // Step 1: Check if daily work record exists
+    const resp = await axios.get(
+      `${API_BASE_URL}/fetch-work-id/${employeeId}/${userType}/${currentDate}`
+    );
+
+    
+    const result = resp.data;
+
+    console.log("fetch-work-id response:", result, typeof result);
+
+    /* =====================================================
+       CASE 1: No record exists → create new daily work
+       ===================================================== */
+    if (typeof result === "string") {
+      await axios.post(
+        `${API_BASE_URL}/save-daily-work/${employeeId}/${userType}`,
+        {
+          dailyArchived: 0,
+          dailyPending: 20,
+          dailyTarget: 20,
+          date: currentDate,
+          employeeName: loginEmployeeName,
+          jobRole: userType,
+          lateMark: getLateMark(),
+          loginTime: getCurrentLogTime(),
+          totalHoursWork: "00:00:00",
+        }
       );
-      const yesNo = resp.data;
 
-      if (typeof yesNo === "string") {
-        console.log("running post");
-        try {
-          const respPost = await axios.post(
-            `${API_BASE_URL}/save-daily-work/${employeeId}/${userType}`,
-            {
-              // callingCount:20,
-              dailyArchived: 0,
-              dailyPending: 20,
-              dailyTarget: 20,
-              date: `${currentDateNew}`,
-              // dayPresentStatus:"Present",
-              employeeName: `${loginEmployeeName}`,
-              // halfDay:"No",
-              // holidayLeave:"NO",
-              jobRole: `${userType}`,
-              lateMark: `${getLateMark()}`,
-              // leaveType:"Unpaid",
-              loginTime: `${getCurrentLogTime()}`,
-              // logoutTime:"00:00:00 am",
-              // remoteWork:"WFO",
-              totalHoursWork: "00:00:00",
-            }
-          );
-          console.log(respPost);
-          setLoginHoursTimerStart("00:00:00");
-          setDisplayStopWatch(true);
-        } catch (error1) { }
-      } else if (typeof yesNo === "number") {
-        // console.log("running put");
-        try {
-          const getData = await getDailyworkData(
-            employeeId,
-            userType,
-            currentDateNew
-          );
-          // console.log(getData);
-          setDailyWorkDataNew(getData);
-
-          const loginHoursTimerString = getData.totalHoursWork;
-
-          const getDataForUpdate = {
-            totalHoursWork: loginHoursTimerString,
-            attendanceRole: {
-              ...(userType === "Recruiters" && { employee: { employeeId } }),
-              ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
-              ...(userType === "Manager" && { manager: { employeeId } }),
-            },
-          };
-          // console.log(getDataForUpdate);
-          try {
-            const putData = await putDailyworkData(
-              employeeId,
-              userType,
-              currentDateNew,
-              getDataForUpdate
-            );
-            // console.log(putData);
-          } catch (errorPut) { }
-        } catch (errorget) { }
-      }
-    } catch (error) {
-      {/* console.error(error);*/ }
+      // Start fresh timer
+      setLoginHoursTimerStart("00:00:00");
+      setDisplayStopWatch(true);
+      return;
     }
-  };
+
+    /* =====================================================
+       CASE 2: Record exists → FETCH ONLY (NO PUT ❌)
+       ===================================================== */
+    if (typeof result === "number") {
+      const getData = await getDailyworkData(
+        employeeId,
+        userType,
+        currentDate
+      );
+
+      if (getData?.totalHoursWork) {
+        setLoginHoursTimerStart(getData.totalHoursWork);
+      } else {
+        setLoginHoursTimerStart("00:00:00");
+      }
+
+      setDailyWorkDataNew(getData);
+      setDisplayStopWatch(true);
+    }
+  } catch (error) {
+    console.error("fetchNewWorkId error:", error);
+  }
+};
+
   //samruddhi Patole
 
   useEffect(() => {
@@ -1633,7 +1623,7 @@ function DailyWork({
                   className="cleaarButtonOfNotifications daily-tr-btn"
                   onClick={handleClearNotifications}
                 >
-                  {/*Clear <ClearOutlined />*/}
+                  Clear <ClearOutlined />
                 </button>
               </div>
             </div>
