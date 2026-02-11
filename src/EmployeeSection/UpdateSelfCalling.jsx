@@ -845,29 +845,29 @@ if (
     }
   };
 
-// useEffect(() => {
-//   const newSocket = getSocket();
+useEffect(() => {
+  const newSocket = getSocket();
 
-//   if (!newSocket) {
-//     console.error("❌ Socket instance is NULL");
-//     return;
-//   }
+  if (!newSocket) {
+    console.error("❌ Socket instance is NULL");
+    return;
+  }
 
-//   // ✅ ADD THESE LOGS
-//   newSocket.on("connect", () => {
-//     console.log("✅ SOCKET CONNECTED", newSocket.id);
-//   });
+  // ✅ ADD THESE LOGS
+  newSocket.on("connect", () => {
+    console.log("✅ SOCKET CONNECTED", newSocket.id);
+  });
 
-//   newSocket.on("disconnect", (reason) => {
-//     console.log("⚠️ SOCKET DISCONNECTED", reason);
-//   });
+  newSocket.on("disconnect", (reason) => {
+    console.log("⚠️ SOCKET DISCONNECTED", reason);
+  });
 
-//   newSocket.on("connect_error", (err) => {
-//     console.error("❌ SOCKET CONNECT ERROR", err.message);
-//   });
+  newSocket.on("connect_error", (err) => {
+    console.error("❌ SOCKET CONNECT ERROR", err.message);
+  });
 
-//   setSocket(newSocket);
-// }, []);
+  setSocket(newSocket);
+}, []);
 
 
   const handleDisplayConfirmBox = () => {

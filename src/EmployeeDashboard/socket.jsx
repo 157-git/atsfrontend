@@ -72,7 +72,7 @@ export const initializeSocket = (userId, userType) => {
   }
 
   socket = io(CHAT_BASE_URL, {
-    path: "/chat-socket",
+    path: "/socket.io",
     query: {
       userId,
       role: userType,
