@@ -78,38 +78,26 @@ const CallingExcelList = ({
     setIsHorizontallyScrolling(tableContainerRef.current.scrollLeft > 0);
   };
   console.log(dataFromUploadExcelCalling);
-  const fetchUpdatedData = (page, size) => {
-    setLoading(true);
 
-    if (dataFromUploadExcelCalling?.length > 0) {
-      setCallingList(dataFromUploadExcelCalling);
-      setFilteredCallingList(dataFromUploadExcelCalling);
-      setTotalRecords(dataFromUploadExcelCalling?.length);
-      console.log("running first");
+const fetchUpdatedData = (page, size) => {
+  setLoading(true);
 
-    } else if (dataFromUploadExcelCalling === undefined) {
-      console.log("running second");
+  fetch(
+    `${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      setCallingList(data.content);
+      setFilteredCallingList(data.content);
+      setTotalRecords(data.totalElements);
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+    });
+};
 
-      fetch(
-        `${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          setCallingList(data.content);
-          setFilteredCallingList(data.content);
-          setTotalRecords(data.totalElements);
-          setSearchCount(data.length);
-          setLoading(false); // Set loading to false when data is successfully fetched
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          setLoading(false); // Set loading to false in case of an error
-        });
-    }
-    setLoading(false);
-
-  };
 
   // establishing socket for emmiting event
   useEffect(() => {
@@ -117,9 +105,14 @@ const CallingExcelList = ({
     setSocket(newSocket);
   }, []);
 
+  //SAKSHI KASHID-remove
+  // useEffect(() => {
+  //   fetchUpdatedData(currentPage, pageSize);
+  // }, [employeeId, userType, currentPage, pageSize, triggerFetch, dataFromUploadExcelCalling]);
   useEffect(() => {
-    fetchUpdatedData(currentPage, pageSize);
-  }, [employeeId, userType, currentPage, pageSize, triggerFetch, dataFromUploadExcelCalling]);
+  fetchUpdatedData(currentPage, pageSize);
+}, [employeeId, userType, currentPage, pageSize, triggerFetch, searchTerm]);
+
 
   useEffect(() => {
     const options = Object.keys(filteredCallingList[0] || {}).filter(
@@ -195,11 +188,13 @@ const CallingExcelList = ({
     filterData();
   }, [selectedFilters, callingList]);
 
-  useEffect(() => {
-    const filtered = FilterData(callingList, searchTerm);
-    setFilteredCallingList(filtered);
-    setSearchCount(filtered.length);
-  }, [callingList, searchTerm]);
+  //SAKSHI KASHID
+  // useEffect(() => {
+  //   const filtered = FilterData(callingList, searchTerm);
+  //   setFilteredCallingList(filtered);
+  //   setSearchCount(filtered.length);
+  // }, [callingList, searchTerm]);
+
   const handleDisplayShareConfirmClick = () => {
     setDisplayShareConfirm(true);
   };
@@ -426,8 +421,9 @@ const CallingExcelList = ({
       setTotalRecords(dataFromUploadExcelCalling?.length);
     } else {
       fetch(
-        `${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?page=${page}&size=${size}`
+        `${API_BASE_URL}/fetch-excel-data/${employeeId}/${userType}?searchTerm=${searchTerm}&page=${page}&size=${size}`
       )
+
         .then((response) => response.json())
         .then((data) => {
           setCallingList(data.content);

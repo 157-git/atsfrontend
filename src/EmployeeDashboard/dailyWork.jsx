@@ -39,6 +39,7 @@ function DailyWork({
   trigger,
   sendOfficailMailToQr,
 }) {
+  // const currentDateNewGlobal = getFormattedDateISOYMDformat();
   const { employeeId, userType } = useParams();
   const [fetchWorkId, setFetchWorkId] = useState(null);
   const [employeeData, setEmployeeData] = useState({});
@@ -91,7 +92,7 @@ function DailyWork({
   const [paymentMade, setPaymentMade] = useState(false);
   //Samruddhi Patole
   const [dailyTarget, setDailyTarget] = useState(0);
-  {/*const currentDateNewGlobal = getFormattedDateISOYMDformat();*/ }
+  const currentDateNewGlobal = getFormattedDateISOYMDformat();
   const [messagesContext, contextHolder] = notification.useNotification({
     stack: true
       ? {
@@ -407,54 +408,87 @@ function DailyWork({
   }, [running, employeeId]);
 
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-updateArchievedPendingCount(changed) Start LineNo:-441 Date:-01/07
-  const updateArchievedPendingCount = (archivedIncrement, pendingDecrement) => {
-    let updatedData;
-    if (data.pending > 0) {
-      updatedData = {
-        archived: archivedIncrement + 1,
-        pending: pendingDecrement - 1,
-      };
-    } else {
-      updatedData = {
-        archived: archivedIncrement + 1,
-        pending: 0,
-      };
-    }
-    setData(updatedData);
-    console.log("Updated Data:", updatedData);
-    if (updatedData.archived >= 3) {
-      setDayPresentPaid("Yes");
-      setDayPresentUnpaid("No");
-    } else {
-      setDayPresentPaid("No");
-      setDayPresentUnpaid("Yes");
-    }
+  // const updateArchievedPendingCount = (archivedIncrement, pendingDecrement) => {
+  //   let updatedData;
+  //   if (data.pending > 0) {
+  //     updatedData = {
+  //       archived: archivedIncrement + 1,
+  //       pending: pendingDecrement - 1,
+  //     };
+  //   } else {
+  //     updatedData = {
+  //       archived: archivedIncrement + 1,
+  //       pending: 0,
+  //     };
+  //   }
+  //   setData(updatedData);
+  //   console.log("Updated Data:", updatedData);
+  //   if (updatedData.archived >= 3) {
+  //     setDayPresentPaid("Yes");
+  //     setDayPresentUnpaid("No");
+  //   } else {
+  //     setDayPresentPaid("No");
+  //     setDayPresentUnpaid("Yes");
+  //   }
 
-    localStorage.setItem(
-      `dailyWorkData_${employeeId}`,
-      JSON.stringify(updatedData)
-    );
-    return updatedData;
-  };
+  //   localStorage.setItem(
+  //     `dailyWorkData_${employeeId}`,
+  //     JSON.stringify(updatedData)
+  //   );
+  //   return updatedData;
+  // };
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-updateArchievedPendingCount(changed) End LineNo:-470 Date:-01/07
 
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-updateArchieved(changed) Start LineNo:-334 Date:-01/07
-  const updateArchieved = () => {
-    // console.log(successfulDataUpdation);
+  // const updateArchieved = () => {
+  //   // console.log(successfulDataUpdation);
 
-    if (successfulDataAdditions || successfulDataUpdation) {
-      // Assuming updateCount is a function that updates states like archived and pending
-      const updatedData = JSON.parse(
-        localStorage.getItem(`dailyWorkData_${employeeId}`)
-      );
-      if (updatedData) {
-        updateArchievedPendingCount(updatedData.archived, updatedData.pending);
-      }
-    }
-  };
+  //   if (successfulDataAdditions || successfulDataUpdation) {
+  //     // Assuming updateCount is a function that updates states like archived and pending
+  //     const updatedData = JSON.parse(
+  //       localStorage.getItem(`dailyWorkData_${employeeId}`)
+  //     );
+  //     if (updatedData) {
+  //       updateArchievedPendingCount(updatedData.archived, updatedData.pending);
+  //     }
+  //   }
+  // };
+  // useEffect(() => {
+  //   updateArchieved();
+  // }, [successfulDataAdditions, successfulDataUpdation]);
+
   useEffect(() => {
-    updateArchieved();
-  }, [successfulDataAdditions, successfulDataUpdation]);
+  if (successfulDataAdditions || successfulDataUpdation) {
+    increaseArchivedInBackend();
+  }
+}, [successfulDataAdditions, successfulDataUpdation]);
+
+const increaseArchivedInBackend = async () => {
+  try {
+    const currentDate = getFormattedDateISOYMDformat();
+
+    const getData = await getDailyworkData(employeeId, userType, currentDate);
+    if (!getData) return;
+
+    const updatedPayload = {
+      dailyArchived: (getData.dailyArchived || 0) + 1,
+      dailyPending: Math.max((getData.dailyPending || 0) - 1, 0),
+    };
+
+    // PUT update
+    await putDailyworkData(employeeId, userType, currentDate, updatedPayload);
+
+    // 🔥 IMMEDIATE REFRESH FROM BACKEND
+    const refreshed = await getDailyworkData(employeeId, userType, currentDate);
+
+    setDailyWorkDataNew(refreshed);   // <-- THIS WAS MISSING
+
+  } catch (err) {
+    console.error("Archived update failed:", err);
+  }
+};
+
+
 
   //Name:-Akash Pawar Component:-DailyWork Subcategory:-updateArchieved(changed) End LineNo:-351 Date:-01/07
   const handlePause = () => {
@@ -1255,6 +1289,7 @@ function DailyWork({
 
 const fetchNewWorkId = async () => {
   try {
+    
     const currentDate = getFormattedDateISOYMDformat();
 
     // Step 1: Check if daily work record exists
@@ -1295,22 +1330,27 @@ const fetchNewWorkId = async () => {
     /* =====================================================
        CASE 2: Record exists → FETCH ONLY (NO PUT ❌)
        ===================================================== */
-    if (typeof result === "number") {
-      const getData = await getDailyworkData(
-        employeeId,
-        userType,
-        currentDate
-      );
+if (typeof result === "number") {
+  const getData = await getDailyworkData(
+    employeeId,
+    userType,
+    currentDate
+  );
 
-      if (getData?.totalHoursWork) {
-        setLoginHoursTimerStart(getData.totalHoursWork);
-      } else {
-        setLoginHoursTimerStart("00:00:00");
-      }
+  console.log("getData =", getData);
+  console.log("totalHoursWork from DB =", getData?.totalHoursWork);
 
-      setDailyWorkDataNew(getData);
-      setDisplayStopWatch(true);
-    }
+  if (getData?.totalHoursWork) {
+    console.log("Setting timer from DB:", getData.totalHoursWork);
+    setLoginHoursTimerStart(getData.totalHoursWork);
+  } else {
+    console.log("No timer found in DB, setting 00:00:00");
+    setLoginHoursTimerStart("00:00:00");
+  }
+
+  setDailyWorkDataNew(getData);
+  setDisplayStopWatch(true);
+}
   } catch (error) {
     console.error("fetchNewWorkId error:", error);
   }
@@ -1321,6 +1361,36 @@ const fetchNewWorkId = async () => {
   useEffect(() => {
     fetchNewWorkId();
   }, []);
+
+//   useEffect(() => {
+//   fetchNewWorkId();
+
+//   const interval = setInterval(() => {
+//     fetchNewWorkId(); // resync every 30 sec
+//   }, 30000);
+
+//   return () => clearInterval(interval);
+// }, []);
+
+const autoSaveTimer = async (value) => {
+  try {
+    const currentDate = getFormattedDateISOYMDformat();
+
+    const payload = {
+      totalHoursWork: value,
+      attendanceRole: {
+        ...(userType === "Recruiters" && { employee: { employeeId } }),
+        ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
+        ...(userType === "Manager" && { manager: { employeeId } }),
+      },
+    };
+
+    await putDailyworkData(employeeId, userType, currentDate, payload);
+  } catch (e) {
+    console.log("autosave failed");
+  }
+};
+
 
   useEffect(() => {
     if (dailyWorkDataNew && dailyWorkDataNew.totalHoursWork) {
@@ -1334,7 +1404,14 @@ const fetchNewWorkId = async () => {
   }, [dailyWorkDataNew]);
 
   const [breakStartTime, setBreakStartTime] = useState("");
+
+  useEffect(() => {
+  console.log("showPauseModal =", showPauseModal);
+}, [showPauseModal]);
+
   const handleStopClick = async (value) => {
+      console.log("handleStopClick called", value);
+
     if (value) {
       try {
         setBreakStartTime(getCurrentTimeForUpdateData());
@@ -1502,7 +1579,9 @@ const fetchNewWorkId = async () => {
                 startTimer={loginHoursTimerStart}
                 onStopClick={handleStopClick}
                 onStartClick={handleStartClick}
-                onResumeClick={startResumeNewTimer}
+  onResumeClick={startResumeNewTimer}
+                  onTick={autoSaveTimer}
+
               />
             )}
 
@@ -1668,7 +1747,7 @@ const fetchNewWorkId = async () => {
                     className="profile-resume-button"
                     onClick={handleResume}
                   >
-                    {/* <LogOut size={24} color="black" />*/}
+                    <LogOut size={24} color="black" />
                   </button>
                 </div>
               </Modal.Footer>

@@ -27,6 +27,8 @@ import AttendanceShare from "./EmployeeSection/AttendanceShare.jsx";
 import ChatBot from "./ChatBot/ChatBot.jsx";
 import { API_BASE_URL } from "./api/api.js";
 import AttendanceForm from "./EmployeeSection/AttendanceForm.jsx";
+import JobApplicationForm from "./Job-Portal/JobApplicationForm.jsx";
+import ExamPage from "./EmployeeDashboard/ExamPage.jsx";
 
 
 const applySavedColors = () => {
@@ -300,6 +302,9 @@ const App = () => {
             <Route path="/previousQuestion" element={<PreviousQuestion />} />
             <Route path="/manage-attendance" element={<AttendanceForm />} />
 
+            <Route path="/candidate-test" element={<JobApplicationForm />} />
+
+            <Route path="/examPage/:reqId/:candidateId" element={<ExamPage />} />
           </Routes>
 
 

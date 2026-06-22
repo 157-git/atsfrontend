@@ -16,34 +16,80 @@ const StopWatch = ({ startTimer: startProp, onStopClick, onStartClick, onResumeC
   const startTimeRef = useRef(null); // ✅ useRef instead of state
   const intervalRef = useRef(null);
 
+  
   useEffect(() => {
-  console.log("startProp on load:", startProp);
+  // console.log("startProp on load:", startProp);
 }, [startProp]);
 
   /* ---------- Load saved time ---------- */
-  useEffect(() => {
-    if (startProp) {
-      setElapsedTime(timeStringToMilliseconds(startProp));
-    }
-  }, [startProp]);
+useEffect(() => {
+  if (startProp) {
+    const ms = timeStringToMilliseconds(startProp);
+
+    setElapsedTime(ms);
+
+    startTimeRef.current = Date.now() - ms;
+  }
+}, [startProp]);
+
+/* ---------- Debug elapsedTime ---------- */
+useEffect(() => {
+  // console.log(
+  //   "elapsedTime state:",
+  //   elapsedTime,
+  //   "=>",
+  //   millisecondsToTimeString(elapsedTime)
+  // );
+}, [elapsedTime]);
 
   /* ---------- Timer logic (FIXED) ---------- */
-  useEffect(() => {
-    if (!isRunning) {
-      clearInterval(intervalRef.current);
-      return;
-    }
+useEffect(() => {
+  if (!isRunning) {
+    clearInterval(intervalRef.current);
+    return;
+  }
 
+  if (startTimeRef.current === null) {
     startTimeRef.current = Date.now() - elapsedTime;
+  }
 
-    intervalRef.current = setInterval(() => {
-      const newElapsedTime = Date.now() - startTimeRef.current;
-      setElapsedTime(newElapsedTime);
-      dispatch(updateTime(millisecondsToTimeString(newElapsedTime)));
-    }, 1000);
+  intervalRef.current = setInterval(() => {
+    const newElapsedTime = Date.now() - startTimeRef.current;
 
-    return () => clearInterval(intervalRef.current);
-  }, [isRunning]); // ✅ ONLY isRunning
+    setElapsedTime(newElapsedTime);
+    dispatch(updateTime(millisecondsToTimeString(newElapsedTime)));
+  }, 1000);
+
+  return () => clearInterval(intervalRef.current);
+}, [isRunning]);
+
+  useEffect(() => {
+  if (!isRunning) return;
+
+  const autoSaveInterval = setInterval(async () => {
+    try {
+      const payload = {
+        totalHoursWork: millisecondsToTimeString(elapsedTime),
+        attendanceRole: {
+          ...(userType === "Recruiters" && { employee: { employeeId } }),
+          ...(userType === "TeamLeader" && { teamLeader: { employeeId } }),
+          ...(userType === "Manager" && { manager: { employeeId } }),
+        },
+      };
+
+      await putDailyworkData(
+        employeeId,
+        userType,
+        currentDateNewGlobal,
+        payload
+      );
+    } catch (e) {
+      console.log("autosave failed");
+    }
+  }, 15000); // every 15 sec
+
+  return () => clearInterval(autoSaveInterval);
+}, [isRunning]);
 
   /* ---------- Save on refresh ---------- */
   useEffect(() => {
@@ -82,6 +128,29 @@ const StopWatch = ({ startTimer: startProp, onStopClick, onStartClick, onResumeC
     startTimeRef.current = Date.now() - elapsedTime;
     onStartClick(true);
   };
+
+
+// useEffect(() => {
+//   console.log("onResumeClick changed:", onResumeClick);
+
+//   if (onResumeClick) {
+//     dispatch(startTimer());
+//     startTimeRef.current = Date.now() - elapsedTime;
+//   }
+// }, [onResumeClick]);
+
+const firstResumeRender = useRef(true);
+
+useEffect(() => {
+  if (firstResumeRender.current) {
+    firstResumeRender.current = false;
+    return;
+  }
+
+  dispatch(startTimer());
+  startTimeRef.current = Date.now() - elapsedTime;
+}, [onResumeClick]);
+
 
   const stopTimerFunc = () => {
     dispatch(stopTimer());

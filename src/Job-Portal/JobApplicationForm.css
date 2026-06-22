@@ -1,0 +1,2036 @@
+/* This is done by vaibhavi kawarkhe Date: 10-12-2024
+   Task: Applicant Form */
+
+.form-container-December {
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #fff;
+
+  /* ADD THESE */
+  height: auto;
+  overflow: visible;
+  position: fixed;
+}
+
+
+
+.headingDivForApplicantNewHeading {
+  margin-left: 5px;
+}
+
+.setWidth100formakesubdives50 {
+  width: 100%;
+}
+
+.setwidth50onlyforthis2 {
+  width: 50%;
+}
+
+.newclassforfontsizechnges {
+  font-size: 16px;
+  color: #000000;
+}
+
+.classnameforsetwidthforlogpimage {
+  width: 170px;
+
+  height: 38px;
+
+  margin: 0;
+}
+
+.newclassnamefor157header {
+  color: white;
+}
+
+.newclassheadapplicantfor {
+  color: white;
+}
+
+.forNewUanandRefFlexwidth50 {
+  width: 50%;
+}
+
+.makeDisplayFlexForYopApplicantForm {
+  display: flex;
+}
+
+.newclassnameforlinkblue {
+  color: #0000FF;
+  text-decoration: underline;
+}
+
+.forNewUanandRefFlex {
+  width: 100%;
+  display: flex;
+}
+
+.form-heading-December-main-div {
+  height: 60px;
+  background: white;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  /* border: 4px solid #f2f2f2; */
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.form-label {
+  width: 120px;
+  /* Adjust as needed to align all labels */
+  font-weight: 500;
+  font-size: 16px;
+  font-family: "Roboto", sans-serif;
+  color: black;
+}
+
+.notice-gender-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  flex-wrap: nowrap;
+  /* Important: prevents wrapping */
+  width: 100%;
+}
+
+.notice-box,
+.gender-box {
+  flex: 1;
+  min-width: 200px;
+}
+
+.gender-radio-group {
+  padding-top: 9px;
+}
+
+#applicant-form-heading {
+  text-align: center;
+  font-size: 20px;
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  color: white;
+}
+
+/*Altamash Malnas
+    Date : 2 april 2024 
+    Banner Styling above the Form */
+/* Container for the banner */
+.maincontforimagediv {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: #a7b8d4;
+}
+
+.banner-container-December {
+  /* width: 100%; */
+  display: flex;
+  align-items: center;
+}
+
+/* Styling for the banner image */
+.banner-container-December img {
+  width: 150px;
+  height: auto;
+  margin-right: 20px;
+  border-radius: 10px;
+}
+
+/* Description text styling */
+.banner-description {
+  /* flex: 1; */
+  font-size: 18px;
+  color: #333;
+  line-height: 0.5;
+  padding-left: 20px;
+  text-align: center;
+}
+
+.banner-description h1 {
+  line-height: 1;
+  text-align: center;
+}
+
+.banner-description h1 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #1d3a5d;
+}
+
+.banner-description h2 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #1d3a5d;
+}
+
+.banner-description h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #1d3a5d;
+}
+
+/* Fix for laptop view */
+@media (max-width: 1000px) {
+  .banner-container-December {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .forNewUanandRefFlexwidth50 {
+    width: 50%;
+  }
+
+  .banner-container-December img {
+    width: 150px;
+    /* Smaller image for mobile */
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .banner-description {
+    font-size: 16px;
+    padding-right: 30px;
+  }
+}
+
+
+/* Fix for Tablet  view or smaller screen laptop*/
+@media (max-width: 992px) {
+  .banner-container-December {
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+  }
+
+  .setwidth50onlyforthis2 {
+    width: 100%;
+  }
+
+  .setMargintop10pxforref {
+    margin-top: 10px;
+  }
+
+  .newmargintop10pxformobile {
+    margin-top: 10px;
+  }
+
+  .newclassforfontsizechnges {
+    font-size: 11px;
+  }
+
+  .form-heading-December-main-div {
+    justify-content: left;
+    padding-left: 65px;
+  }
+
+  .newclasstosetthisasdisplayflex {
+    display: flex;
+    align-items: baseline;
+  }
+
+  .makeDisplayFlexForYopApplicantForm {
+    display: block;
+  }
+
+  .forNewUanandRefFlexwidth50 {
+    width: 100%;
+  }
+
+  .banner-container-December img {
+    width: 130px;
+    /* Smaller image for mobile */
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .banner-description {
+    font-size: 16px;
+    padding-right: 30px;
+  }
+}
+
+/* Fix for mobile view */
+@media (max-width: 768px) {
+  .forNewUanandRefFlex {
+    display: block;
+  }
+
+  .setwidth50onlyforthis2 {
+    width: 100%;
+  }
+
+  .setMargintop10pxforref {
+    margin-top: 10px;
+  }
+
+  .newmargintop10pxformobile {
+    margin-top: 10px;
+  }
+
+  .newclassforfontsizechnges {
+    font-size: 11px;
+  }
+
+  .form-heading-December-main-div {
+    justify-content: left;
+    padding-left: 65px;
+  }
+
+  .newclasstosetthisasdisplayflex {
+    display: flex;
+    align-items: baseline;
+  }
+
+  .makeDisplayFlexForYopApplicantForm {
+    display: block;
+  }
+
+  .maincontforimagediv {
+    display: flow;
+
+  }
+
+  .forNewUanandRefFlexwidth50 {
+    width: 100%;
+  }
+
+  .banner-container-December {
+    /* flex-direction: row; */
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .banner-container-December img {
+    width: 80px;
+    /* Smaller image for mobile */
+    margin-right: 0;
+    /* margin-bottom: 10px; */
+  }
+
+  .banner-description {
+    font-size: 60%;
+    padding-right: 30px;
+    padding: 0%
+  }
+
+  .banner-description h1 {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .banner-description h2 {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .banner-description h3 {
+    font-size: 18px;
+    font-weight: bold;
+  }
+}
+
+
+/* Fix for ensuring image visibility in all views */
+.banner-container-December img {
+  display: inline-block;
+}
+
+/* End Of banner */
+
+.applicant-form-December {
+  display: flex;
+  flex-direction: column;
+  background-color: #a7b8d4;
+  height: 100vh;
+  overflow-y: auto;
+  /* ✅ add vertical scroll */
+
+}
+
+.form-grid-December {
+  display: flex;
+  align-items: top;
+  justify-content: center;
+  gap: 20px;
+  padding: 10px;
+}
+
+.form-column-December {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.experience-words {
+  font-size: 13px;
+  padding-left: 10px;
+  padding-top: 2px;
+  color: black;
+}
+
+.form-group-December {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group-December label {
+  font-weight: bold;
+  font-size: 16px;
+  font-family: "Roboto", sans-serif;
+  color: black;
+}
+
+.certificate-item-December {
+  /* border: 1px solid black; */
+  display: flex;
+}
+
+.certificate-inputs-December-sub-div {
+  /* border: 1px solid red; */
+  display: flex;
+}
+
+.certificate-buttons-December-button-div {
+  /* border: 1px solid blue; */
+  display: flex;
+}
+
+/* Input with icon container */
+.input-with-icon-December {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Input styling */
+.input-with-icon-December input {
+  width: 100%;
+  padding: 10px 10px 10px 30px;
+  border: 1px solid #1d3a5d;
+  border-radius: 10px;
+  outline: none;
+  background-color: #f7f9fc;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Roboto", sans-serif;
+  color: black;
+}
+
+.input-with-icon-December-add-new {
+  /* border: 1px solid red; */
+  display: flex;
+  align-items: center;
+}
+
+.remove-btn {
+  margin-left: 20px;
+  border: 1px solid #1d3a5d;
+  border-radius: 4px;
+  outline: none;
+  background-color: #f7f9fc;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Roboto", sans-serif;
+  color: black;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.remove-btn-icon {
+  font-size: 17px;
+  cursor: pointer;
+}
+
+/* Input icon styling */
+.input-icon-December {
+  position: absolute;
+  left: 10px;
+  font-size: 16px;
+  color: #666;
+}
+
+input[type="file"] {
+  flex-grow: 1;
+  /* Make the input field take up the remaining space */
+}
+
+.success-December {
+  color: green;
+  margin-left: 8px;
+  /* Space between input and the tick */
+}
+
+.genratepdficon {
+  color: #4b4545;
+  font-size: large;
+}
+
+/* Submit button styling */
+.click-December {
+  display: flex;
+  justify-content: center;
+  /* margin-top: 20px; */
+}
+
+.click-December button {
+  background-color: #1d3a5d;
+  color: #fff;
+  border: 1px solid gray;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  width: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.click-December button:hover {
+  background-color: linear-gradient(to bottom right, #1d3a5d 2%, #f7f9fc);
+  color: gray;
+}
+
+#resumeUpload,
+#photoUpload {
+  padding-left: 35px;
+}
+
+.error {
+  color: darkred;
+  font-size: 14px;
+}
+
+.form-textfield {
+  border: 2px solid #1d3a5d;
+  border-radius: 10px;
+}
+
+.add-btn {
+  color: black;
+  height: 35px;
+  width: 10%;
+  margin-left: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.input-with-icon-December input {
+  margin-right: 10px;
+}
+
+.disability-dropdown label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.disability-dropdown select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 10px;
+  border: 1px solid #1d3a5d;
+}
+
+.input-with-icon-December input[type="file"] {
+  width: 40%;
+  padding: 10px 10px 10px 30px;
+  border: 1px solid #1d3a5d;
+  border-radius: 10px;
+  outline: none;
+  background-color: #f7f9fc;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Roboto", sans-serif;
+}
+
+#input-with-icon-December-certificates {
+  width: 50%;
+}
+
+/* For large screens (max-width: 1200px) */
+@media (max-width: 1200px) {
+  .form-grid-December {
+    gap: 15px;
+    /* padding: 5px; */
+  }
+
+  .forNewUanandRefFlexwidth50 {
+    width: 50%;
+  }
+
+  .form-column-December {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .input-with-icon-December input {
+    padding-left: 35px;
+  }
+
+  .click-December button {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+}
+
+/* For tablets and smaller laptops (max-width: 992px) */
+@media (max-width: 992px) {
+  .form-grid-December {
+    flex-direction: column;
+  }
+
+  .setwidth50onlyforthis2 {
+    width: 100%;
+  }
+
+  .newmargintop10pxformobile {
+    margin-top: 10px;
+  }
+
+  .newclassforfontsizechnges {
+    font-size: 11px;
+  }
+
+  .form-heading-December-main-div {
+    justify-content: left;
+    padding-left: 65px;
+  }
+
+  .newclasstosetthisasdisplayflex {
+    display: flex;
+    align-items: baseline;
+  }
+
+  .makeDisplayFlexForYopApplicantForm {
+    display: block;
+  }
+
+  .forNewUanandRefFlexwidth50 {
+    width: 100%;
+  }
+
+  .form-column-December {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .click-December button {
+    width: 80%;
+    margin: 10px auto;
+  }
+}
+
+/* For mobile screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .forNewUanandRefFlex {
+    display: block;
+  }
+
+  .newmargintop10pxformobile {
+    margin-top: 10px;
+  }
+
+  .setwidth50onlyforthis2 {
+    width: 100%;
+  }
+
+  .newclassforfontsizechnges {
+    font-size: 11px;
+  }
+
+  .form-heading-December-main-div {
+    justify-content: left;
+    padding-left: 65px;
+  }
+
+  .newclasstosetthisasdisplayflex {
+    display: flex;
+    align-items: baseline;
+  }
+
+  .makeDisplayFlexForYopApplicantForm {
+    display: block;
+  }
+
+  .form-grid-December {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .forNewUanandRefFlexwidth50 {
+    width: 100%;
+  }
+
+  .form-column-December {
+    width: 100%;
+  }
+
+  .input-with-icon-December input {
+    width: 100%;
+    padding-left: 35px;
+  }
+
+  .click-December button {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+
+/* For small mobile screens (max-width: 500px) */
+@media (max-width: 500px) {
+  .forNewUanandRefFlex {
+    display: block;
+  }
+
+  .setMargintop10pxforref {
+    margin-top: 10px;
+  }
+
+  .setwidth50onlyforthis2 {
+    width: 100%;
+  }
+
+  .newclassforfontsizechnges {
+    font-size: 11px;
+  }
+
+  .newmargintop10pxformobile {
+    margin-top: 10px;
+  }
+
+  .form-heading-December-main-div {
+    justify-content: left;
+    padding-left: 65px;
+  }
+
+  .newclasstosetthisasdisplayflex {
+    display: flex;
+    align-items: baseline;
+  }
+
+  .makeDisplayFlexForYopApplicantForm {
+    display: block;
+  }
+
+  .form-grid-December {
+    flex-direction: column;
+    /* margin-top: 15px; */
+  }
+
+  .forNewUanandRefFlexwidth50 {
+    width: 100%;
+  }
+
+  #input-with-icon-December-certificates {
+    width: 100%;
+    /* border: 1px solid green; */
+  }
+
+  .input-with-icon-December {
+    gap: 4px;
+    padding: 2px;
+  }
+
+  .form-group-December label {
+    font-size: 16px;
+  }
+
+  .input-with-icon-December input {
+    padding-left: 35px;
+    /* width: 360px; */
+  }
+
+  .certificate-item-December {
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: center;
+  }
+
+  .click-December button {
+    width: 150px;
+    height: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    /* padding: 10px; */
+  }
+
+  .applicant-form-December {
+    padding-bottom: 10px;
+    height: auto;
+  }
+
+  .form-container-December {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .add-fields-container {
+    display: block;
+    margin-top: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .forNewUanandRefFlex {
+    display: block;
+  }
+
+  .setMargintop10pxforref {
+    margin-top: 10px;
+  }
+
+  .newclassforfontsizechnges {
+    font-size: 11px;
+  }
+
+  .setwidth50onlyforthis2 {
+    width: 100%;
+  }
+
+  .newmargintop10pxformobile {
+    margin-top: 10px;
+  }
+
+  .form-heading-December-main-div {
+    justify-content: left;
+    padding-left: 65px;
+  }
+
+  .newclasstosetthisasdisplayflex {
+    display: flex;
+    flex-direction: column;
+
+  }
+
+  .makeDisplayFlexForYopApplicantForm {
+    display: block;
+  }
+
+  .form-grid-December {
+    flex-direction: column;
+  }
+
+  .forNewUanandRefFlexwidth50 {
+    width: 100%;
+  }
+
+  .form-column-December {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .input-with-icon-December input {
+    margin-right: 0;
+  }
+}
+
+.inputfield {
+  width: 100%;
+  padding: 10px 10px 10px 40px;
+  border: 1px solid #1d3a5d;
+  border-radius: 10px;
+  outline: none;
+  background-color: #f7f9fc;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Roboto", sans-serif;
+}
+
+.input-icon-Decembers {
+  position: absolute;
+  left: 10px;
+  font-size: 16px;
+  color: #666;
+  margin-top: 90px;
+}
+
+.setRequiredAstricColorRed {
+  color: rgb(189, 3, 3);
+  font-size: 12px;
+  padding-left: 2px;
+}
+
+.reference-links {
+
+  text-align: center;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.newclassforradiogrouantd {
+  margin-left: 180px;
+  align-content: right;
+  height: 43px;
+}
+
+.styled-link {
+  color: #0077b5;
+  /* LinkedIn blue color */
+  font-weight: bold;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+.styled-link:hover {
+  color: white;
+  background-color: #0077b5;
+  text-decoration: underline;
+}
+
+.classnameforsetwidthforlogpimage {
+  width: 65px;
+
+  height: 48px;
+
+}
+
+.classnameforsetwidthforlogpimage {
+  width: 65px;
+  height: 48px;
+  margin-right: 10px;
+}
+
+.form-heading-December-main-div div {
+  /* display: flex; */
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  line-height: normal;
+}
+
+.form-heading-December-main-div p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #6c6c6c;
+}
+
+.form-heading-December-main-div br {
+  content: "";
+  display: block;
+  margin: 5px 0;
+}
+
+.createresumebutton {
+  display: inline-block;
+  /* Keep the button inline */
+  height: 46px;
+}
+
+.createresumebutton {
+  background-color: #f7f9fc;
+  border: 1px solid #1d3a5d;
+  padding: 7px;
+  font-size: 14px;
+  width: 40%;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  margin-top: 9%;
+}
+
+.createresumebutton button:hover {
+  background-color: #99adcf;
+  color: black;
+}
+
+/* This centers the modal content if needed */
+/* .cvtemplatemaindivinapplicantfor {
+      max-height: 70vh;
+      overflow-y: auto;
+    } */
+.cvtemplatemaindivinapplicantfor {
+  max-height: 70vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 0;
+  padding-top: 0;
+  box-sizing: border-box;
+  width: 100%;
+
+
+}
+
+.ant-modal-close-x {
+  margin-bottom: 20px;
+
+}
+
+.createresumebutton {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.custom-resume-modal .ant-modal-content {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* .cvtemplatemaindivinapplicantfor {
+    padding: 0;
+    padding-top: 0;
+    box-sizing: border-box;
+  } */
+.right-align {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 0;
+
+  padding: 0;
+}
+
+.closebutton {
+  background-color: #1d3a5d;
+  color: white;
+}
+
+
+.modal-container {
+  text-align: center;
+  margin: 40px 0;
+}
+
+.modal-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+}
+
+.button-container {
+  margin-top: 24px;
+}
+
+.modal-button {
+  margin: 0 12px;
+  padding: 10px 24px;
+  border-radius: 8px;
+  background-color: #1d5fa6;
+  font-weight: 500;
+  width: 150px;
+  /* Adjust the width as needed */
+}
+
+.modal-close-button {
+  text-align: right;
+  margin: 10px 10px 0 0;
+}
+
+.modal-close-button .ant-btn {
+  background-color: #ff4d4f;
+  color: #fff;
+  border-radius: 6px;
+  font-weight: bold;
+  padding: 6px 16px;
+}
+
+.icon-padding {
+  padding: 8px;
+}
+
+/* Skills Select box with black border and slightly rounded corners */
+.skills-select .ant-select-selector {
+  border: 1px solid rgb(43, 41, 41) !important;
+  /* black border */
+  border-radius: 10px !important;
+  /* little round corner */
+  padding-left: 35px !important;
+  /* space for icon */
+  height: 46px !important;
+  display: flex;
+  align-items: center;
+  background-color: #fff !important;
+}
+
+/* Search input inside */
+.skills-select .ant-select-selection-search-input {
+  padding-left: 5px !important;
+}
+
+/* Tag chips inside the Skills box */
+.skills-select .ant-select-selection-item {
+  background-color: #f0f0f0;
+  border-radius: 3px;
+  padding: 2px 8px;
+  margin-top: 2px;
+}
+
+/* Hover border effect */
+.skills-select .ant-select-selector:hover {
+  border-color: #000 !important;
+}
+
+
+.newmargin0forbuttongenarate {
+  margin-top: 0;
+}
+
+/* === MCQ Test Modal Styling (New Additions) === */
+.mcq-modal-December {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 15, 35, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.mcq-box-December {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  max-width: 800px;
+  width: 90%;
+  overflow-y: auto;
+  max-height: 90vh;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.mcq-box-December h2 {
+  text-align: center;
+  color: #004080;
+  margin-bottom: 20px;
+}
+
+.mcq-question-December {
+  background: #f0f8ff;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.mcq-option-December {
+  display: block;
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.mcq-option-December input {
+  margin-right: 10px;
+}
+
+.mcq-box-December .click-December {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.mcq-box-December button {
+  padding: 12px 30px;
+  background-color: #004080;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.mcq-box-December button:hover {
+  background-color: #0066cc;
+}
+
+/* Optional Test Modal */
+.testPrompt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.testPrompt-modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.testPrompt-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.start-test-btn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.start-test-btn:hover {
+  background-color: #0056b3;
+}
+
+.close-btn {
+  background-color: #ccc;
+  color: #333;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.testPrompt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.testPrompt-modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px 40px;
+  width: 450px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.testPrompt-modal h2 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.testPrompt-modal p {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.testPrompt-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.start-test-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.close-btn {
+  background-color: #ccc;
+  color: black;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.testPrompt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.testPrompt-modal {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  width: 450px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.testPrompt-modal h2 {
+  margin-bottom: 10px;
+  color: #1d3a5d;
+}
+
+.testPrompt-modal p {
+  color: #333;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.testPrompt-buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+.start-test-btn {
+  background: #1d3a5d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.close-btn {
+  background: #ccc;
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ✅ Optional Test Modal */
+.testPrompt-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.testPrompt-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 30px 40px;
+  width: 420px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+.testPrompt-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+.start-test-btn,
+.close-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.start-test-btn {
+  background-color: #1d3a5d;
+  color: white;
+}
+
+.close-btn {
+  background-color: #eee;
+  color: #333;
+}
+
+.start-test-btn:hover {
+  background-color: #2a4f83;
+}
+
+/* ✅ MCQ Modal */
+.mcq-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2500;
+}
+
+.mcq-modal {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 30px 40px;
+  width: 80%;
+  max-height: 85%;
+  overflow-y: auto;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  animation: scaleIn 0.3s ease;
+}
+
+.mcq-question-block {
+  margin-bottom: 18px;
+  background: #f8f9fc;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.mcq-options label {
+  display: block;
+  margin: 4px 0;
+}
+
+.mcq-progress-container {
+  height: 8px;
+  background: #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.mcq-progress-bar {
+  height: 100%;
+  background: #1d3a5d;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.mcq-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.mcq-score {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 600;
+  color: #1d3a5d;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.mcq-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.mcq-modal {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  width: 60%;
+  max-width: 700px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.3s ease;
+}
+
+.mcq-progress-container {
+  width: 100%;
+  background: #eef2f7;
+  height: 6px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.mcq-progress-bar {
+  height: 6px;
+  background: #1d3a5d;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.mcq-question {
+  font-weight: 600;
+  color: #1d3a5d;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.mcq-options label {
+  display: block;
+  margin: 6px 0;
+  font-size: 15px;
+  color: #333;
+}
+
+.mcq-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.nav-btn,
+.submit-btn,
+.close-btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.nav-btn {
+  background: #eef3fa;
+  color: #1d3a5d;
+}
+
+.nav-btn:hover {
+  background: #dce3f0;
+}
+
+.submit-btn {
+  background: #1d3a5d;
+  color: white;
+}
+
+.submit-btn:hover {
+  background: #274a7d;
+}
+
+.close-btn {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.close-btn:hover {
+  background: #f5c6cb;
+}
+
+.mcq-score {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+  color: #1d3a5d;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.Toastify__toast--success {
+  background: linear-gradient(135deg, #1d3a5d, #3f5b96);
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.question-section-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 25px;
+  color: #333;
+  border-bottom: 2px solid #ffb281;
+  padding-bottom: 6px;
+}
+
+.question-block {
+  margin: 15px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.question-label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: #222;
+}
+
+.question-textarea {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  resize: vertical;
+  font-size: 14px;
+  line-height: 1.4;
+  transition: border 0.2s ease;
+}
+
+.question-textarea:focus {
+  border-color: #ffb281;
+  outline: none;
+}
+
+.no-questions-text {
+  color: #777;
+  font-style: italic;
+  margin: 10px 0;
+}
+
+/* Scrollbar for full page */
+body {
+  overflow-y: auto;
+}
+
+/* Job-Specific Questions Section */
+.question-section-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 5px;
+}
+
+.question-block {
+  margin-bottom: 20px;
+}
+
+.question-block label {
+  font-weight: 500;
+  color: #444;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.question-block textarea {
+  width: 100%;
+  min-height: 80px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  resize: vertical;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.submit-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin: 20px auto;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* === Move Upload Resume input & icon slightly upward === */
+/* === Final Alignment & Height Fix for Upload Resume === */
+.input-with-icon-December.resume-upload {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  top: -12px;
+  /* slight upward adjustment */
+  left: -1px;
+  /* slight horizontal shift */
+}
+
+/* Icon sits perfectly inside the input */
+.input-with-icon-December.resume-upload .input-icon-December {
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #555;
+  font-size: 17px;
+  pointer-events: none;
+  /* allow clicking the input */
+}
+
+/* Upload input box with same height as all other fields */
+.input-with-icon-December.resume-upload input[type="file"] {
+  width: 100%;
+  height: 37px;
+  /* ✅ consistent height */
+  border: 1px solid #1d3a5d;
+  border-radius: 10px;
+  padding: 10px 12px 10px 40px;
+  /* left padding leaves space for icon */
+  background-color: #f7f9fc;
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+  color: #000;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+/* Label alignment */
+label[for="resumeUpload"] {
+  display: inline-block;
+  position: relative;
+  top: -10px;
+  /* move slightly up */
+  left: -8px;
+  /* align horizontally */
+  font-weight: 600;
+  color: #1d3a5d;
+  margin-bottom: 6px;
+}
+
+.mcq-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.mcq-modal {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  width: 600px;
+  max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.mcq-questions-container {
+  margin-top: 20px;
+}
+
+.mcq-options div {
+  background: #f7f9fc;
+  /* border: 1px solid #dce3f0; */
+  border-radius: 8px;
+  padding: 10px;
+  margin: 5px 0;
+}
+
+.mcq-options input {
+  margin-right: 8px;
+}
+
+.nav-button,
+.submit-btn,
+.close-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  margin: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.nav-button {
+  background-color: #1d3a5d;
+  color: white;
+}
+
+.nav-button:hover {
+  background-color: #274b7c;
+}
+
+.submit-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.submit-btn:hover {
+  background-color: #45a049;
+}
+
+.close-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.close-btn:hover {
+  background-color: #c0392b;
+}
+
+.mcq-progress-container {
+  background-color: #e5e9f0;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.mcq-progress-bar {
+  height: 8px;
+  background-color: #1d3a5d;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.mcq-score {
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1d3a5d;
+  text-align: center;
+}
+
+/* Container that holds both buttons */
+.testPrompt-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+/* Reset any absolute positioning from other .close-btn uses */
+.testPrompt-box .close-btn {
+  position: static !important;
+  margin: 0;
+}
+
+/* Keep your button styles */
+.testPrompt-box .close-btn {
+  background-color: #ccc;
+  color: #333;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.testPrompt-box .close-btn:hover {
+  background-color: #bbb;
+}
+
+.testPrompt-box .start-test-btn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.testPrompt-box .start-test-btn:hover {
+  background-color: #0056b3;
+}
+
+.buyPlanOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.buyPlanModal {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.buyPlanButtons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.buyNowBtn {
+  background-color: #1d3a5d;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+}
+
+.cancelBtn {
+  background: #ddd;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+}
+
+
+.step-navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 945px;
+}
+
+.next-step-btn {
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.next-step-btn {
+  background-color: #1d3a5d;
+  color: white;
+}
+
+.back-step-btn {
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.back-step-btn:hover {
+  background-color: #d5d5d5;
+}
+
+
+.question-pagination-controls {
+  display: flex;
+  justify-content: flex-start;
+  /* align nicely to left */
+  gap: 12px;
+  /* space between buttons */
+  margin: 30px 0 10px 0;
+}
+
+.question-pagination-controls button {
+  background-color: #1d3a5d;
+  color: white;
+  padding: 8px 16px;
+  /* smaller height */
+  border-radius: 6px;
+  /* softer corners */
+  border: none;
+  font-size: 14px;
+  /* smaller text */
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 140px;
+  /* keeps buttons same width */
+}
+
+.question-pagination-controls button:hover {
+  background-color: #16324d;
+  transform: translateY(-1px);
+  /* small lift effect */
+}
+
+.question-pagination-controls button:disabled {
+  background-color: #c7c7c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.applicantFormBackButton {
+  background: #ebe5ff;
+  color: #526d82;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 10px;
+}
+
+.applicantFormBackButton:hover{
+    background: #526d82;
+  color: #fff;
+}

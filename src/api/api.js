@@ -6,11 +6,13 @@ import axios from "axios";
 
 
 //Use local system Ip address for testing
-export const API_BASE_URL = "http://192.168.1.43:9090/api/ats/157industries";
-export const CHAT_BASE_URL = "http://192.168.1.43";
+// export const API_BASE_URL = "http://192.168.1.43:9090/api/ats/157industries";
+// export const CHAT_BASE_URL = "http://192.168.1.43";
 
-// export const API_BASE_URL = "http://localhost:9090/api/ats/157industries";
-// export const CHAT_BASE_URL = "http://localhost:9092";
+export const API_BASE_URL = "http://localhost:9090/api/ats/157industries";
+export const CHAT_BASE_URL = "http://localhost:9092";
+
+export const API_BASE_PORTAL="http://93.127.199.85:8087"
 
 export const addEmployee = (employee) => {
   return axios.post(`${API_BASE_URL}/add-payroll-details`, employee);

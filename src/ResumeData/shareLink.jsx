@@ -60,19 +60,19 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName, sendOfficailMailForQr 
 
 
   const secretKey = "157industries_pvt_ltd"; // Use a consistent key across components
-  const userTypeKey = ()=>{
+  const userTypeKey = () => {
     if (userType === "Recruiters") {
       return "R-";
     } else if (userType === "TeamLeader") {
       return "T-";
     } else if (userType === "Manager") {
       return "M-";
-    }else if (userType === "SuperUser") {
+    } else if (userType === "SuperUser") {
       return "S-";
     }
   }
 
-  const shareUrl = `https://rg.157careers.in/applicant-form/${userTypeKey()}${firstName}+${userUrlString}`;
+  const shareUrl = `http://localhost:3000/applicant-form/${userTypeKey()}${firstName}+${userUrlString}`;
 
   // Share using Web Share API
   const handleShareLink = async () => {
@@ -132,20 +132,20 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName, sendOfficailMailForQr 
         <div className="shareLink-share-btn-Div">
 
 
-<QRCodeGenerate shareUrl={shareUrl} loginEmployeeName={loginEmployeeName} sendOfficailMailForQr={sendOfficailMailForQr}/>
+          <QRCodeGenerate shareUrl={shareUrl} loginEmployeeName={loginEmployeeName} sendOfficailMailForQr={sendOfficailMailForQr} />
 
-<span style={{ color: "var(--sidebar-txt)", fontSize: "14px" }}>
+          <span style={{ color: "var(--sidebar-txt)", fontSize: "14px" }}>
             Share this link with the candidate so they can fill in their
             information through the link.
           </span>
-<div className="share-copy-div">
-<button className="shareLink-share-btn" onClick={handleCopyLink}>
+          <div className="share-copy-div">
+            <button className="shareLink-share-btn" onClick={handleCopyLink}>
               Copy Link 🔗
             </button>
             <button className="shareLink-share-btn" onClick={handleShareLink}>
               Share Link 🔗
             </button>
-            
+
           </div>
           {copyMessage && (
             <div className="copyMessage">

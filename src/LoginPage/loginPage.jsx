@@ -7,10 +7,14 @@ import LoginImage from "../assets/rgLogo.png";
 import { getPasswordFromDB } from "../api/api";
 import ForgotPasswordForm from "./ForgotPasswordForm"; // Import the ForgotPasswordForm component
 import JobList from "../EmployeeDashboard/JobList";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
+
 
 
 
 const LoginSignup = () => {
+  console.log("LOGINPAGE COMPONENT LOADED");
   const { userType } = useParams();
   console.log("➡ userType from URL:", userType);
 
@@ -20,20 +24,85 @@ const LoginSignup = () => {
   const [error, setError] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+const params = new URLSearchParams(window.location.search);
+const candidateIdFromPortal = params.get("candidateId");
+const jobIdFromPortal = params.get("jobId");
+// useEffect(() => {
+//   if (candidateIdFromPortal) {
+//     setEmployeeId(candidateIdFromPortal);   // auto fill login field
+//     localStorage.setItem("jobId", jobIdFromPortal); // save jobId
+//   }
+// }, []);
+// console.log("CandidateId:", candidateIdFromPortal);
+// console.log("JobId:", jobIdFromPortal);
+//   useEffect(() => {
+//     AOS.init({ duration: 3000 });
+//   }, []);
 
   useEffect(() => {
-    AOS.init({ duration: 3000 });
-  }, []);
+  if (candidateIdFromPortal) {
+    console.log("CandidateId:", candidateIdFromPortal);
+    setEmployeeId(candidateIdFromPortal);
+  }
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (!employeeId || !password) {
-      setError("Please fill in both fields.");
-      return;
+  if (jobIdFromPortal) {
+    console.log("JobId:", jobIdFromPortal);
+    localStorage.setItem("jobId", jobIdFromPortal);
+  }
+}, [candidateIdFromPortal, jobIdFromPortal]);
+
+  //ORIGINAL CODE COMMENTED BY SAKSHI FOR CHECKING JOB PORTAL INTEGRATION
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   if (!employeeId || !password) {
+  //     setError("Please fill in both fields.");
+  //     return;
+  //   }
+  //   alert(`Logged in as ${role} with EmployeeId: ${employeeId}`);
+  //   navigate(`/Dashboard/${employeeId}`);
+  // };
+
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+
+  if (!employeeId || !password) {
+    setError("Please fill in both fields.");
+    return;
+  }
+
+  try {
+    if (role === "job-portal") {
+      // 🔥 Call Job Portal API
+      const response = await axios.post(
+        "http://93.127.199.85:8087/api/jobportal/loginUser",
+        {
+          candidateId: employeeId,  // treating employeeId as candidateId
+          password: password,
+        }
+      );
+
+      // ✅ Success handling
+      const userData = response.data;
+
+      // store in localStorage (important for next steps)
+      localStorage.setItem("candidate", JSON.stringify(userData));
+
+      // navigate to applicant form (or test directly)
+      navigate(`/jobportal-test/${employeeId}`);
+
+    } else {
+      // existing ATS login logic
+      alert(`Logged in as ${role} with EmployeeId: ${employeeId}`);
+      navigate(`/candidate-test/${employeeId}`);
     }
-    alert(`Logged in as ${role} with EmployeeId: ${employeeId}`);
-    navigate(`/Dashboard/${employeeId}`);
-  };
+
+  } catch (error) {
+    console.error(error);
+    setError("Invalid credentials or login failed.");
+  }
+};
 
   return (
     <div className="main-body" style={{ background: "yellow", color: "black", minHeight: "100vh" }}>

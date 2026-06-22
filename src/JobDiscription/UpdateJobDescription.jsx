@@ -123,7 +123,7 @@ const UpdateJobDescription = ({ onAddJD, toggleUpdateCompProp, loginEmployeeName
       );
       console.log(response);
       if (response.ok) {
-        console.log("API Object 001 :", JSON.stringify(formData, null, 2));
+        // console.log("API Object 001 :", JSON.stringify(formData, null, 2));
         socket.emit("update_job_description", formData);
         const result = await response.text();
         console.log(result);

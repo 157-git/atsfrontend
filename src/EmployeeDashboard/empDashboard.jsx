@@ -78,7 +78,12 @@ import CompanyOfferForm from "../EmployeeSection/CompanyOfferForm";
 // import { SearchOutlined } from "@ant-design/icons";
 // import AttendanceLoginLogout from "../EmployeeSection/AttendanceLoginLogout";
 
-const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => {
+import QuestionManagement from "./QuestionManagement.jsx"
+import ViewReports from "./ViewReports.jsx";
+import Questions from "./Questions.jsx";
+import ExamPage from "./ExamPage.jsx";
+
+const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName }) => {
   const { userType } = useParams();
   const [showInterviewDate, setShowInterviewDate] = useState(
     userType === "SuperUser" ? false : true
@@ -156,6 +161,11 @@ const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => 
       false
     ); /*Akash_Pawar_EmpDashboard_AddedAddCompanyToggle_11/07_LineNo_91*/
   const [showQuestionpaper, setShowQuestionpaper] = useState(false);
+
+  const [showViewReports, setShowViewReports] = useState(false);
+  const [showQuestions, setShowQuestions] = useState(false);
+  // const [showExamPage, setShowExamPage] = useState(false);
+
   const [showCapex, setShowCapex] = useState(false);
   const [showEmployeeDetails, setShowEmployeeDetails] = useState(false);
   const { employeeId } = useParams();
@@ -181,10 +191,10 @@ const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => 
   const [showAddTeamLeader, setShowAddTeamLeader] = useState(false);
   const [callFunction, setCallFunction] = useState(false);
   const [showApplicantForm, setShowApplicantForm] = useState(false);
-  const [showSharedProfile,setShowSharedProfile] = useState(false);
-  const [showIssueLetter,setShowIssueLetter] = useState(false);
-  const [showCompanyOfferForm,setShowCompanyOfferForm] = useState(false);
-  const [showActiveTeamMemebers,setShowActiveTeamMEmbers] = useState(false);
+  const [showSharedProfile, setShowSharedProfile] = useState(false);
+  const [showIssueLetter, setShowIssueLetter] = useState(false);
+  const [showCompanyOfferForm, setShowCompanyOfferForm] = useState(false);
+  const [showActiveTeamMemebers, setShowActiveTeamMEmbers] = useState(false);
 
 
   // Arshad Attar Added this 30-10-2024
@@ -304,6 +314,21 @@ const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => 
   };
   /*Akash_Pawar_EmpDashboard_toggleShowShortListedCandidateData_23/07_LineNo_220*/
 
+  const toggleViewReports = () => {
+    resetAllToggles();
+    setShowViewReports(true);
+  };
+
+  const toggleQuestions = () => {
+    resetAllToggles();
+    setShowQuestions(true);
+  };
+
+  // const toggleExamPage = () => {
+  //   resetAllToggles();
+  //   setShowExamPage(true);
+  // };
+
   const viewUpdatedPage = () => {
     setShortlistedCandidateData(false);
     setShowUpdateCallingTracker(true);
@@ -361,6 +386,9 @@ const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => 
     ); /*Akash_Pawar_EmpDashboard_AddedAddCompanyToggle_11/07_LineNo_221*/
     setShowProfitLoss(false);
     setShowQuestionpaper(false);
+    setShowViewReports(false);
+    setShowQuestions(false);
+    // setShowExamPage(false);
     setShowCapex(false);
     setShowEmployeeDetails(false); /*Swapnil_AddedEmployeeDetails_16/07*/
     setShowSubscription(false); /*Arbaz_AddSubscriptions_19/07*/
@@ -655,41 +683,40 @@ const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => 
     setShowAddTeamLeader(true);
   };
 
-  const toggleSharedProfiles = ()=>{
+  const toggleSharedProfiles = () => {
     resetAllToggles();
     setShowSharedProfile(true)
   };
-  const toggleIssueLetter = ()=>{
+  const toggleIssueLetter = () => {
     resetAllToggles();
     setShowIssueLetter(true);
   };
-  const toggleCompanyOfferForm = ()=>{
+  const toggleCompanyOfferForm = () => {
     resetAllToggles();
     setShowCompanyOfferForm(true)
   }
-  const toggleactiveTeamMembers = () =>{
+  const toggleactiveTeamMembers = () => {
     resetAllToggles();
     setShowActiveTeamMEmbers(true)
   }
   const [triggerForChildTwo, setTriggerForChildTwo] = useState(false);
-  const handleSetRefresPropForDailyWork = ()=>{
+  const handleSetRefresPropForDailyWork = () => {
     setTriggerForChildTwo((prev) => !prev);
   }
-  
-  const handleSendOfficailMailToQr = (mail)=>{
+
+  const handleSendOfficailMailToQr = (mail) => {
     setOfficialMail(mail);
   }
 
   return (
     <div
-      className={`grid-container ${
-        openSidebarToggle ? "sidebar-open" : "sidebar-closed"
-      }`}
+      className={`grid-container ${openSidebarToggle ? "sidebar-open" : "sidebar-closed"
+        }`}
       style={{ backgroundColor: "white", minHeight: "100vh" }}
     >
-        
+
       <Sidebar
-       loginEmployeeName={loginEmployeeName}
+        loginEmployeeName={loginEmployeeName}
         userGroup={userGroup}
         openSidebarToggle={openSidebarToggle}
         OpenSidebar={() => setOpenSidebarToggle(!openSidebarToggle)}
@@ -702,7 +729,7 @@ const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => 
         toggleHoldCandidate={toggleHoldCandidate}
         toggleExcelCalling={toggleExcelCalling}
         toggleResumeData={toggelResumeData}
-        toggleJobDescription={toggleJobDescription} 
+        toggleJobDescription={toggleJobDescription}
         toggleSentProfileAccess={toggleSentProfileAccess}
         toggleEmployeeMasterSheet={toggleEmployeeMasterSheet}
         toggleShortListedCandidates={toggleShortListedCandidates}
@@ -738,6 +765,9 @@ const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => 
           toggleAddCompany
         } /*Akash_Pawar_EmpDashboard_AddedAddCompanyToggle_11/07_LineNo_444*/
         toggleQuestionPaper={toggleQuestionPaper}
+        toggleViewReports={toggleViewReports}
+toggleQuestions={toggleQuestions}
+// toggleExamPage={toggleExamPage}
         toggleCapex={toggleCapex}
         toggleEmployeeDetails={toggleEmployeeDetails}
         toggleShowShortListedCandidateData={
@@ -815,7 +845,7 @@ const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => 
               loginEmployeeName={loginEmployeeName}
               toggleShortListed={toggleShortListed}
               onsuccessfulDataUpdation={handleSuccessfulDataUpdation}
-              /*Akash_Pawar_EmpDashboard_toggleShortListed(show interview candidate)_23/07_LineNo_636*/
+            /*Akash_Pawar_EmpDashboard_toggleShortListed(show interview candidate)_23/07_LineNo_636*/
             />
           )}
         </div>
@@ -834,7 +864,14 @@ const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => 
 
         {/* ArshadAttar_EmpDashboard_Added_LineGraph_11/07/2024_OnlyLineGraph_Div_LineNo_488-489 */}
         <div>{showProfitLoss && <LineGraph></LineGraph>}</div>
-        <div>{showQuestionpaper && <QuestionPaper />}</div>
+        {/* <div>{showQuestionpaper && <QuestionPaper />}</div> */}
+        <div>{showQuestionpaper && <QuestionManagement />}</div>
+
+        <div>{showViewReports && <ViewReports />}</div>
+
+        <div>{showQuestions && <Questions />}</div>
+
+
 
         <div>
           {showEmployeeMasterSheet && (
@@ -874,8 +911,8 @@ const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => 
         </div>
         <div className="calling-excel-div">
           {showCallingExcel && (
-            <CallingExcel loginEmployeeName={loginEmployeeName} 
-            onsuccessfulDataAdditions={handleSuccessfulDataAdditions}
+            <CallingExcel loginEmployeeName={loginEmployeeName}
+              onsuccessfulDataAdditions={handleSuccessfulDataAdditions}
             />
           )}
         </div>
@@ -909,7 +946,7 @@ const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => 
         <div>{showMainReportDatapage && <MainReportDatapage loginEmployeeName={loginEmployeeName} />}</div>
         <div>{showChatRoom && <ChatRoom />}</div>
         <div>
-          {showShareLink && <ShareLink toggleResumeLink={toggleResumeLink} loginEmployeeName={loginEmployeeName} sendOfficailMailForQr={officialMail}/>}
+          {showShareLink && <ShareLink toggleResumeLink={toggleResumeLink} loginEmployeeName={loginEmployeeName} sendOfficailMailForQr={officialMail} />}
         </div>
         <div>
           {showDataUse && <UserDataUse loginEmployeeName={loginEmployeeName} />}
@@ -925,14 +962,14 @@ const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => 
           )}
         </div>
 
-        <div>{addJobDescription && <AddJobDescription  loginEmployeeName={loginEmployeeName}  />}</div>
-        <div>{showJobDiscriptions && <Home loginEmployeeName={loginEmployeeName}  />}</div>
+        <div>{addJobDescription && <AddJobDescription loginEmployeeName={loginEmployeeName} />}</div>
+        <div>{showJobDiscriptions && <Home loginEmployeeName={loginEmployeeName} />}</div>
         <div>
           {showAccessedSentProfile && (
             <SendClientEmail clientEmailSender={clientEmailSender} />
           )}
         </div>
-        <div>{showHome && <Home loginEmployeeName={loginEmployeeName}  />}</div>
+        <div>{showHome && <Home loginEmployeeName={loginEmployeeName} />}</div>
         <div>{showAddedResumes && <AddResumes></AddResumes>}</div>
         <div>{showInvoice && <InvoiceTable />}</div>
         <div>
@@ -1014,11 +1051,11 @@ const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => 
           {showSharedProfile && <ShareProfileData></ShareProfileData>}
         </div>
         <div>
-        {showIssueLetter && <IssueOfferLetter></IssueOfferLetter>}
-        {showCompanyOfferForm && <CompanyOfferForm></CompanyOfferForm>}
+          {showIssueLetter && <IssueOfferLetter></IssueOfferLetter>}
+          {showCompanyOfferForm && <CompanyOfferForm></CompanyOfferForm>}
         </div>
         <div>
-          {showActiveTeamMemebers && <AttendanceLoginLogout></AttendanceLoginLogout> }
+          {showActiveTeamMemebers && <AttendanceLoginLogout></AttendanceLoginLogout>}
         </div>
       </div>
 
@@ -1030,7 +1067,7 @@ const EmpDashboard = ({ userGroup, loginEmployeeName, setLoginEmployeeName}) => 
         zIndex:9999
       }} /> */}
 
-{/* <Popover content={<AttendanceLoginLogout/>} title="Title" trigger="click">
+      {/* <Popover content={<AttendanceLoginLogout/>} title="Title" trigger="click">
 <motion.div
       {...bindDrag()}
       style={{

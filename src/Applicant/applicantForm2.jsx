@@ -36,7 +36,7 @@ import {
 import { FormControlLabel, Radio } from "@mui/material";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { API_BASE_URL } from "../api/api";
 import CryptoJS from "crypto-js";
 import { getSocket } from "../EmployeeDashboard/socket";
@@ -52,6 +52,13 @@ function ApplicantForm2({ loginEmployeeName }) {
   {/*const [messageApi, contextHolder] = message.useMessage()*/ }
 
   const { encodedParams } = useParams()
+
+  const [searchParams] = useSearchParams();
+
+  const isExamFlow = searchParams.get("exam") === "true";
+
+  const reqId = searchParams.get("reqId");
+
   const extractedParam = encodedParams?.split("+")[1]
   const [socket, setSocket] = useState(null)
   const [salaryInWords, setSalaryInWords] = useState("")
@@ -877,6 +884,7 @@ function ApplicantForm2({ loginEmployeeName }) {
     }
     console.log(dataToSend)
 
+    console.log("Usertype---",userType);
     try {
       const response = await axios.post(`${API_BASE_URL}/save-applicant/${userType}`, dataToSend, {
         headers: {
@@ -884,16 +892,24 @@ function ApplicantForm2({ loginEmployeeName }) {
         },
       })
 
+      const candidateId = response.data.candidateId;
+
       if (response.status === 200) {
-        toast.success("Form submitted successfully!")
-        setIsSubmitted(true)
-        navigator("/thank-you")
+        toast.success("Form submitted successfully!");
+        setIsSubmitted(true);
+
+if (isExamFlow && reqId) {
+    navigator(`/examPage/${reqId}/${candidateId}`);
+} else {
+    navigator("/thank-you");
+}
+
         setTimeout(() => {
-          setFormData(initialFormData)
-          setResumeSelected(false)
-          setPhotoSelected(false)
-          setIsSubmitted(false)
-        }, 3000)
+          setFormData(initialFormData);
+          setResumeSelected(false);
+          setPhotoSelected(false);
+          setIsSubmitted(false);
+        }, 3000);
       } else {
         toast.error("Error submitting form.")
       }
@@ -1765,7 +1781,9 @@ function ApplicantForm2({ loginEmployeeName }) {
               </div>
 
               <div className="form-group-December">
-                <label> Upload resume {/* <span className="setRequiredAstricColorRed">*</span> */}</label>
+                <label>
+                  Upload Resume<span className="setRequiredAstricColorRed">*</span>
+                </label>
                 <div className="input-with-icon-December">
                   <FontAwesomeIcon icon={faUpload} className="input-icon-December" />
                   <input
