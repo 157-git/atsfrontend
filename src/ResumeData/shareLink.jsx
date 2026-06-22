@@ -72,7 +72,7 @@ const ShareLink = ({ toggleResumeLink, loginEmployeeName, sendOfficailMailForQr 
     }
   }
 
-  const shareUrl = `http://localhost:3000/applicant-form/${userTypeKey()}${firstName}+${userUrlString}`;
+  const shareUrl = `https://rg.157careers.in/applicant-form/${userTypeKey()}${firstName}+${userUrlString}`;
 
   // Share using Web Share API
   const handleShareLink = async () => {

@@ -49,7 +49,7 @@ function CopyLink({ selectedRequirement }) {
         }
 
         const shareUrl =
-            `http://localhost:3000/applicant-form/${userTypeKey()}abc+${userUrlString}?exam=true&reqId=${selectedRequirement.requirementId}`;
+            `https://rg.157careers.in/applicant-form/${userTypeKey()}abc+${userUrlString}?exam=true&reqId=${selectedRequirement.requirementId}`;
 
         await navigator.clipboard.writeText(shareUrl);
 
